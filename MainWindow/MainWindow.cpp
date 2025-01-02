@@ -12,10 +12,10 @@ MainWindow::MainWindow(QObject *parent)
     bool darkMode;
     if (Utils::getTheme() == "light") {
         darkMode = true;
-        accentColor = Utils::getAccentColor("normal");
+        accentColor = Utils::getAccentColor("light2");
     } else {
         darkMode = false;
-        accentColor = Utils::getAccentColor("normal");
+        accentColor = Utils::getAccentColor("dark2");
     }
     engine->rootContext()->setContextProperty("mainWindow", this);
     engine->rootContext()->setContextProperty("isDarkMode", darkMode);

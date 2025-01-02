@@ -1,17 +1,14 @@
 import QtQuick 2.15
-import QtQuick.Controls.Universal 2.15
+import QtQuick.Controls.FluentWinUI3 2.15
 import QtQuick.Layouts 1.15
 import QtMultimedia
 
 ApplicationWindow {
     id: root
     visible: true
-    width: 400
-    height: 460
+    width: (cellSize + cellSpacing) * gridSizeX + 40
+    height: (cellSize + cellSpacing) * gridSizeY + 100
     title: "Retr0Mine"
-
-    Universal.theme: Universal.System
-    Universal.accent: accentColor
 
     property bool playSound: soundEffects
     property int difficulty: gameDifficulty
@@ -19,7 +16,6 @@ ApplicationWindow {
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
-    property int cellSpacing: 2
     property int firstClickIndex: -1
     property bool gameStarted: false
     property int gridSizeX: 8
@@ -29,6 +25,9 @@ ApplicationWindow {
     property var numbers: []
     property bool timerActive: false
     property int elapsedTime: 0
+    property int cellSize: 30
+    property int cellSpacing: 2
+
 
     function formatTime(seconds) {
         let hours = Math.floor(seconds / 3600)
@@ -44,8 +43,8 @@ ApplicationWindow {
         interval: 1000
         repeat: true
         onTriggered: {
-            elapsedTime++
-            elapsedTimeLabel.text = formatTime(elapsedTime)
+            root.elapsedTime++
+            elapsedTimeLabel.text = root.formatTime(root.elapsedTime)
         }
     }
 
@@ -102,46 +101,26 @@ ApplicationWindow {
                 id: difficultyGroup
                 onCheckedButtonChanged: {
                     if (checkedButton === easyButton) {
-                        root.width = 400
-                        root.height = 460
-                        //root.maximumWidth = 400
-                        //root.maximumHeight = 460
                         root.gridSizeX = 8
                         root.gridSizeY = 8
                         root.mineCount = 10
                         mainWindow.saveDifficulty(0)
                     } else if (checkedButton === mediumButton) {
-                        root.width = 600
-                        root.height = 660
-                        //root.maximumWidth = 600
-                        //root.maximumHeight = 660
                         root.gridSizeX = 16
                         root.gridSizeY = 16
                         root.mineCount = 40
                         mainWindow.saveDifficulty(1)
                     } else if (checkedButton === hardButton) {
-                        root.width = 800
-                        root.height = 460
-                        //root.maximumWidth = 800
-                        //root.maximumHeight = 460
                         root.gridSizeX = 32
                         root.gridSizeY = 16
                         root.mineCount = 99
                         mainWindow.saveDifficulty(2)
                     } else if (checkedButton === retroButton) {
-                        root.width = 800
-                        root.height = 800
-                        //root.maximumWidth = 800
-                        //root.maximumHeight = 800
                         root.gridSizeX = 100
                         root.gridSizeY = 100
                         root.mineCount = 2000
                         mainWindow.saveDifficulty(3)
                     } else if (checkedButton === debugButton) {
-                        root.width = 400
-                        root.height = 460
-                        //root.maximumWidth = 800
-                        //root.maximumHeight = 800
                         root.gridSizeX = 8
                         root.gridSizeY = 8
                         root.mineCount = 1
@@ -194,7 +173,7 @@ ApplicationWindow {
 
             RadioButton {
                 id: retroButton
-                enabled: false
+                //enabled: false
                 text: "Retr0 (100×100, 2000 mines)"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 3
@@ -400,6 +379,7 @@ ApplicationWindow {
         return true
     }
 
+
     function calculateNumbers() {
         numbers = []
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
@@ -534,92 +514,118 @@ ApplicationWindow {
     }
 
     ColumnLayout {
-        anchors.fill: parent
+        id:topBar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: 60
         spacing: 10
 
         RowLayout {
+            Layout.fillHeight: true
             Layout.topMargin: 15
             Layout.leftMargin: 12
             Layout.rightMargin: 12
-            Layout.alignment: Qt.AlignHCenter
-            spacing: 20
+            Layout.alignment: Qt.AlignTop
+            Layout.preferredWidth: root.width
 
             Button {
+                Layout.alignment: Qt.AlignLeft
+                text: "Menu"
+                onClicked: menu.open()
 
-                id: settingsButton
-                text: "Settings"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignLeft
-                onClicked: {
-                    settingsPage.visible = true
+                Menu {
+                    id: menu
+                    MenuItem {
+                        text: "New game"
+                        onTriggered: root.initGame()
+                    }
+                    MenuItem {
+                        text: "Settings"
+                        onTriggered: settingsPage.visible = true
+                    }
+                    MenuItem {
+                        text: "Exit"
+                        onTriggered: Qt.quit()
+                    }
                 }
+
             }
 
-            //Item {
-            //    Layout.fillWidth: true
-            //}
-
-            Text {
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                text: "Mines: " + (mineCount - flaggedCount)
-                color: darkMode ? "white" : "black"
-                font.pixelSize: 18
+            Item {
+                Layout.fillWidth: true
             }
-
-            //Item {
-            //    Layout.fillWidth: true
-            //}
 
             Text {
                 id: elapsedTimeLabel
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 text: "HH:MM:SS"
-                color: darkMode ? "white" : "black"
+                color: root.darkMode ? "white" : "black"
                 font.pixelSize: 18
             }
-            //Item {
-            //    Layout.fillWidth: true
-            //}
 
-            Button {
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Row {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignRight
-                text: "New Game"
 
-                onClicked: {
-                    initGame()
+                Image {
+                    source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
+                    width: 18
+                    height: 18
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Text {
+                    text: ": " + (root.mineCount - root.flaggedCount)
+                    color: root.darkMode ? "white" : "black"
+                    font.pixelSize: 18
                 }
             }
         }
+    }
+
+    ColumnLayout {
+        id: gameLayout
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.top: topBar.bottom
+        spacing: 10
 
         Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: (root.cellSize + root.cellSpacing) * root.gridSizeX
+            Layout.preferredHeight: (root.cellSize + root.cellSpacing) * root.gridSizeY
             Layout.margins: 10
 
             GridView {
                 id: grid
                 anchors.fill: parent
-                cellWidth: width / gridSizeX
-                cellHeight: height / gridSizeY
-                model: gridSizeX * gridSizeY
+                cellWidth: root.cellSize + root.cellSpacing
+                cellHeight: root.cellSize + root.cellSpacing
+                model: root.gridSizeX * root.gridSizeY
                 interactive: false
 
                 delegate: Item {
                     id: cellItem
-                    width: grid.cellWidth
-                    height: grid.cellHeight
+                    width: cellSize
+                    height: cellSize
 
                     property bool revealed: false
                     property bool flagged: false
 
                     Button {
-                        id: cellButton
                         anchors.fill: parent
-                        anchors.margins: cellSpacing
+                        anchors.margins: cellSpacing / 2
                         flat: parent.revealed
 
                         Rectangle {
                             anchors.fill: parent
                             border.width: 2
+                            radius: 4
                             border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                             visible: parent.flat
                             color: "transparent"
