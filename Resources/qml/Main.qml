@@ -14,6 +14,7 @@ ApplicationWindow {
     maximumHeight: (cellSize + cellSpacing) * gridSizeY + 60
     title: "Retr0Mine"
 
+    property bool invertLRClick: invertClick
     property bool playSound: soundEffects
     property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
@@ -94,11 +95,11 @@ ApplicationWindow {
         id: settingsPage
         title: "Settings"
         width: 300
-        height: 370
+        height: settingsLayout.implicitHeight + 30
         maximumWidth: 300
-        maximumHeight: 370
+        maximumHeight: settingsLayout.implicitHeight + 30
         minimumWidth: 300
-        minimumHeight: 370
+        minimumHeight: settingsLayout.implicitHeight + 30
         visible: false
 
         property int selectedGridSizeX: 8
@@ -149,15 +150,10 @@ ApplicationWindow {
                         root.mineCount = 99
                         mainWindow.saveDifficulty(2)
                     } else if (checkedButton === retroButton) {
-                        root.gridSizeX = 100
-                        root.gridSizeY = 100
-                        root.mineCount = 2000
+                        root.gridSizeX = 50
+                        root.gridSizeY = 32
+                        root.mineCount = 320
                         mainWindow.saveDifficulty(3)
-                    } else if (checkedButton === debugButton) {
-                        root.gridSizeX = 8
-                        root.gridSizeY = 8
-                        root.mineCount = 1
-                        mainWindow.saveDifficulty(4)
                     }
                     initGame()
                 }
@@ -165,6 +161,7 @@ ApplicationWindow {
         }
 
         ColumnLayout {
+            id: settingsLayout
             anchors.fill: parent
             anchors.topMargin: 5
             anchors.bottomMargin: 15
@@ -209,7 +206,7 @@ ApplicationWindow {
 
             RadioButton {
                 id: retroButton
-                enabled: false
+                enabled: true
                 text: "Retr0 (100×100, 2000 mines)"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 3
@@ -217,8 +214,8 @@ ApplicationWindow {
 
             RadioButton {
                 id: debugButton
-                enabled: false
-                visible: false
+                enabled: true
+                visible: true
                 text: "Debug (8×8, 1 mine)"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 4
@@ -229,7 +226,6 @@ ApplicationWindow {
             }
 
             Label {
-                //Layout.topMargin: 10
                 text: "Sound"
                 font.bold: true
                 font.pixelSize: 18
@@ -253,6 +249,33 @@ ApplicationWindow {
             }
 
             Item {
+                Layout.preferredHeight: 5
+            }
+
+            Label {
+                text: "Controls"
+                font.bold: true
+                font.pixelSize: 18
+            }
+
+            Rectangle {
+                Layout.topMargin: 5
+                Layout.bottomMargin: 5
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
+            }
+
+            Switch {
+                text: "Invert left and right click"
+                checked: root.invertLRClick
+                onCheckedChanged: {
+                    mainWindow.saveControlsSettings(checked);
+                    root.invertLRClick = checked
+                }
+            }
+
+            Item {
                 Layout.fillHeight: true
             }
 
@@ -262,6 +285,8 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignRight
                 onClicked: settingsPage.close()
             }
+
+
         }
     }
 
@@ -671,7 +696,7 @@ ApplicationWindow {
 
                         contentItem: Text {
                             text: parent.text
-                            font.pixelSize: parent.width * 0.5
+                            font.pixelSize: parent.width * 0.65
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
@@ -694,13 +719,24 @@ ApplicationWindow {
                             anchors.fill: parent
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: (mouse) => {
-                                           if (mouse.button === Qt.LeftButton && !parent.flagged) {
-                                               reveal(index)
-                                               playClick()
-                                           } else if (mouse.button === Qt.RightButton) {
-                                               toggleFlag(index)
-                                           }
-                                       }
+                                if (root.invertLRClick) {
+                                    // Swap left and right click actions
+                                    if (mouse.button === Qt.RightButton && !parent.flagged) {
+                                        reveal(index)
+                                        playClick()
+                                    } else if (mouse.button === Qt.LeftButton) {
+                                        toggleFlag(index)
+                                    }
+                                } else {
+                                    // Default behavior
+                                    if (mouse.button === Qt.LeftButton && !parent.flagged) {
+                                        reveal(index)
+                                        playClick()
+                                    } else if (mouse.button === Qt.RightButton) {
+                                        toggleFlag(index)
+                                    }
+                                }
+                            }
                         }
                     }
                 }

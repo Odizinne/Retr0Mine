@@ -13,6 +13,8 @@ public:
 
     Q_INVOKABLE void saveDifficulty(int difficulty);
     Q_INVOKABLE void saveSoundSettings(bool soundEffects);
+    Q_INVOKABLE void saveControlsSettings(bool invertLRClick);
+
 
 signals:
 
