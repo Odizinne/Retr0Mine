@@ -207,18 +207,9 @@ ApplicationWindow {
             RadioButton {
                 id: retroButton
                 enabled: true
-                text: "Retr0 (100×100, 2000 mines)"
+                text: "Retr0 (50×32, 320 mines)"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 3
-            }
-
-            RadioButton {
-                id: debugButton
-                enabled: true
-                visible: true
-                text: "Debug (8×8, 1 mine)"
-                ButtonGroup.group: difficultyGroup
-                checked: root.difficulty === 4
             }
 
             Item {
