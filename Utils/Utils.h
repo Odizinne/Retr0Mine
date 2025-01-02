@@ -10,6 +10,9 @@ namespace Utils
 QString getTheme();
 QString getAccentColor(const QString &accentKey);
 QIcon recolorIcon(QIcon icon, QColor color);
+bool isWindows10();
+bool isWindows11();
+bool isLinux();
 };
 
 #endif // UTILS_H

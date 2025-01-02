@@ -1,10 +1,17 @@
 #include "Utils.h"
 #include <QDebug>
-#include <Windows.h>
 #include <QSettings>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <QGuiApplication>
+#include <QPalette>
+#endif
 
 QString Utils::getTheme()
 {
+#ifdef _WIN32
     // Determine the theme based on registry value
     QSettings settings(
         "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
@@ -12,8 +19,23 @@ QString Utils::getTheme()
     int value = settings.value("AppsUseLightTheme", 1).toInt();
 
     return (value == 0) ? "light" : "dark";
+#else
+    QPalette palette = QGuiApplication::palette();
+    QColor backgroundColor = palette.color(QPalette::Window);
+
+    bool isDark = backgroundColor.lightness() < 128;
+    QString theme;
+    if (isDark) {
+        theme = "light";
+    } else {
+        theme = "dark";
+    }
+
+    return theme;
+#endif
 }
 
+#ifdef _WIN32
 QString toHex(BYTE value)
 {
     const char* hexDigits = "0123456789ABCDEF";
@@ -21,9 +43,11 @@ QString toHex(BYTE value)
         .arg(hexDigits[value >> 4])
         .arg(hexDigits[value & 0xF]);
 }
+#endif
 
 QString Utils::getAccentColor(const QString &accentKey)
 {
+#ifdef _WIN32
     HKEY hKey;
     BYTE accentPalette[32];  // AccentPalette contains 32 bytes
     DWORD bufferSize = sizeof(accentPalette);
@@ -60,6 +84,9 @@ QString Utils::getAccentColor(const QString &accentKey)
     }
 
     return "#FFFFFF";
+#else
+    return "#0000FF";
+#endif
 }
 
 QIcon Utils::recolorIcon(QIcon icon, QColor color) {
@@ -77,4 +104,54 @@ QIcon Utils::recolorIcon(QIcon icon, QColor color) {
     }
 
     return QIcon(QPixmap::fromImage(img));
+}
+
+#ifdef _WIN32
+int getBuildNumber()
+{
+    QSettings registry("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", QSettings::NativeFormat);
+    QVariant buildVariant = registry.value("CurrentBuild");
+
+    if (!buildVariant.isValid()) {
+        buildVariant = registry.value("CurrentBuildNumber");
+    }
+
+    if (buildVariant.isValid() && buildVariant.canConvert<QString>()) {
+        bool ok;
+        int buildNumber = buildVariant.toString().toInt(&ok);
+        if (ok) {
+            return buildNumber;
+        }
+    }
+
+    qDebug() << "Failed to retrieve build number from the registry.";
+    return -1;
+}
+#endif
+
+bool Utils::isWindows10()
+{
+#ifdef _WIN32
+    int buildNumber = getBuildNumber();
+    return (buildNumber >= 10240 && buildNumber < 22000);
+#else
+    return false;
+#endif
+}
+
+bool Utils::isWindows11() {
+#ifdef _WIN32
+    int buildNumber = getBuildNumber();
+    return (buildNumber >= 22000);
+#else
+    return false;
+#endif
+}
+
+bool Utils::isLinux() {
+#ifdef __linux__
+    return true;
+#else
+    return false;
+#endif
 }

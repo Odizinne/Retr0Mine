@@ -1,19 +1,28 @@
 import QtQuick 2.15
-import QtQuick.Controls.FluentWinUI3 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtMultimedia
+import QtQuick.Window 2.15
 
 ApplicationWindow {
     id: root
     visible: true
-    width: (cellSize + cellSpacing) * gridSizeX + 22
-    height: (cellSize + cellSpacing) * gridSizeY + 60
-    minimumWidth: (cellSize + cellSpacing) * gridSizeX + 22
-    minimumHeight: (cellSize + cellSpacing) * gridSizeY + 60
-    maximumWidth: (cellSize + cellSpacing) * gridSizeX + 22
-    maximumHeight: (cellSize + cellSpacing) * gridSizeY + 60
+    width: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 0.9)
+    height: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 0.9)
+    minimumWidth: Math.min((cellSize + cellSpacing) * 8 + 22, Screen.width * 0.9)
+    minimumHeight: Math.min((cellSize + cellSpacing) * 8 + 60, Screen.height * 0.9)
     title: "Retr0Mine"
 
+    onVisibleChanged: {
+        if (Universal !== undefined) {
+            Universal.theme = Universal.System
+            Universal.accent = accentColor
+        }
+    }
+
+    property bool isLinux: linux
+    property bool isWindows11: windows11
+    property bool isWindows10: windows10
     property bool invertLRClick: invertClick
     property bool playSound: soundEffects
     property int difficulty: gameDifficulty
@@ -33,7 +42,6 @@ ApplicationWindow {
     property int cellSize: 30
     property int cellSpacing: 2
 
-
     function formatTime(seconds) {
         let hours = Math.floor(seconds / 3600)
         let minutes = Math.floor((seconds % 3600) / 60)
@@ -41,7 +49,6 @@ ApplicationWindow {
 
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
     }
-
 
     Timer {
         id: gameTimer
@@ -52,7 +59,6 @@ ApplicationWindow {
             elapsedTimeLabel.text = root.formatTime(root.elapsedTime)
         }
     }
-
 
     Popup {
         anchors.centerIn: parent
@@ -76,6 +82,7 @@ ApplicationWindow {
 
             Button {
                 text: "Retry"
+                Layout.fillWidth: true
                 onClicked: {
                     gameOverWindow.close()
                     root.initGame()
@@ -84,6 +91,7 @@ ApplicationWindow {
 
             Button {
                 text: "Close"
+                Layout.fillWidth: true
                 onClicked: {
                     gameOverWindow.close()
                 }
@@ -151,10 +159,16 @@ ApplicationWindow {
                         mainWindow.saveDifficulty(2)
                     } else if (checkedButton === retroButton) {
                         root.gridSizeX = 50
-                        root.gridSizeY = 32
-                        root.mineCount = 320
+                        root.gridSizeY = 30
+                        root.mineCount = 300
                         mainWindow.saveDifficulty(3)
+                    } else if (checkedButton === retroPlusButton) {
+                        root.gridSizeX = 100
+                        root.gridSizeY = 100
+                        root.mineCount = 2000
+                        mainWindow.saveDifficulty(4)
                     }
+
                     initGame()
                 }
             }
@@ -210,6 +224,15 @@ ApplicationWindow {
                 text: "Retr0 (50×32, 320 mines)"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 3
+            }
+
+            RadioButton {
+                id: retroPlusButton
+                enabled: false
+                visible: false
+                text: "Retr0+ (100x100, 2000 mines (Lag))"
+                ButtonGroup.group: difficultyGroup
+                checked: root.difficulty === 4
             }
 
             Item {
@@ -276,8 +299,6 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignRight
                 onClicked: settingsPage.close()
             }
-
-
         }
     }
 
@@ -405,7 +426,6 @@ ApplicationWindow {
         return true
     }
 
-
     function calculateNumbers() {
         numbers = []
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
@@ -518,7 +538,6 @@ ApplicationWindow {
         }
     }
 
-
     function checkWin() {
         if (revealedCount === (gridSizeX * gridSizeY - mineCount)) {
             gameOver = true
@@ -553,7 +572,7 @@ ApplicationWindow {
 
         RowLayout {
             Layout.fillHeight: true
-            Layout.topMargin: 5
+            Layout.topMargin: 10
             Layout.leftMargin: 12
             Layout.rightMargin: 12
             Layout.alignment: Qt.AlignTop
@@ -581,7 +600,6 @@ ApplicationWindow {
                         onTriggered: Qt.quit()
                     }
                 }
-
             }
 
             Item {
@@ -619,115 +637,128 @@ ApplicationWindow {
         }
     }
 
-    ColumnLayout {
-        id: gameLayout
+    ScrollView {
+        id: scrollView
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.top: topBar.bottom
-        spacing: 10
+        clip: true
+        ScrollBar.horizontal.policy: ScrollBar.AsNeeded
+        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+        contentWidth: gameLayout.implicitWidth
+        contentHeight: gameLayout.implicitHeight
 
-        Item {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.preferredWidth: (root.cellSize + root.cellSpacing) * root.gridSizeX
-            Layout.preferredHeight: (root.cellSize + root.cellSpacing) * root.gridSizeY
-            Layout.margins: 10
 
-            GridView {
-                id: grid
-                anchors.fill: parent
-                cellWidth: root.cellSize + root.cellSpacing
-                cellHeight: root.cellSize + root.cellSpacing
-                model: root.gridSizeX * root.gridSizeY
-                interactive: false
+        ColumnLayout {
+            id: gameLayout
+            width: Math.max(scrollView.width, (root.cellSize + root.cellSpacing) * root.gridSizeX + 20)
+            height: Math.max(scrollView.height, (root.cellSize + root.cellSpacing) * root.gridSizeY + 20)
 
-                delegate: Item {
-                    id: cellItem
-                    width: cellSize
-                    height: cellSize
+            spacing: 10
 
-                    property bool revealed: false
-                    property bool flagged: false
+            Item {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.preferredWidth: (root.cellSize + root.cellSpacing) * root.gridSizeX
+                Layout.preferredHeight: (root.cellSize + root.cellSpacing) * root.gridSizeY
+                Layout.margins: 10
 
-                    Button {
-                        anchors.fill: parent
-                        anchors.margins: cellSpacing / 2
-                        flat: parent.revealed
+                GridView {
+                    id: grid
+                    anchors.fill: parent
+                    cellWidth: root.cellSize + root.cellSpacing
+                    cellHeight: root.cellSize + root.cellSpacing
+                    model: root.gridSizeX * root.gridSizeY
+                    interactive: false
 
-                        Rectangle {
+                    delegate: Item {
+                        id: cellItem
+                        width: cellSize
+                        height: cellSize
+
+                        property bool revealed: false
+                        property bool flagged: false
+
+                        Button {
                             anchors.fill: parent
-                            border.width: 2
-                            radius: 4
-                            border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
-                            visible: parent.flat
-                            color: "transparent"
-                        }
+                            anchors.margins: cellSpacing / 2
+                            flat: parent.revealed
 
-                        Image {
-                            anchors.centerIn: parent
-                            source: darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
-                            visible: cellItem.revealed && mines.includes(index)
-                            sourceSize.width: cellItem.width / 2
-                            sourceSize.height: cellItem.height / 2
-                        }
-
-                        Image {
-                            anchors.centerIn: parent
-                            source: flagIcon
-                            visible: cellItem.flagged
-                            sourceSize.width: cellItem.width / 2
-                            sourceSize.height: cellItem.height / 2
-                        }
-
-                        text: {
-                            if (!parent.revealed || parent.flagged) return ""
-                            if (mines.includes(index)) return ""
-                            return numbers[index] === 0 ? "" : numbers[index]
-                        }
-
-                        contentItem: Text {
-                            text: parent.text
-                            font.pixelSize: parent.width * 0.65
-                            font.bold: true
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            color: {
-                                if (!parent.parent.revealed) return "black"
-                                if (mines.includes(index)) return "transparent"
-                                if (numbers[index] === 1) return "#069ecc"
-                                if (numbers[index] === 2) return "#28d13c"
-                                if (numbers[index] === 3) return "#d12844"
-                                if (numbers[index] === 4) return "#9328d1"
-                                if (numbers[index] === 5) return "#ebc034"
-                                if (numbers[index] === 6) return "#34ebb1"
-                                if (numbers[index] === 7) return "#eb8634"
-                                if (numbers[index] === 8 && darkMode) return "white"
-                                if (numbers[index] === 8 && !darkMode) return "black"
-                                return "black"
+                            Rectangle {
+                                anchors.fill: parent
+                                border.width: 2
+                                radius: isWindows10 ? 0 : (isWindows11 ? 4 : (isLinux ? 3 : 2))
+                                border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                                visible: parent.flat
+                                color: "transparent"
                             }
-                        }
 
-                        MouseArea {
-                            anchors.fill: parent
-                            acceptedButtons: Qt.LeftButton | Qt.RightButton
-                            onClicked: (mouse) => {
-                                if (root.invertLRClick) {
-                                    // Swap left and right click actions
-                                    if (mouse.button === Qt.RightButton && !parent.flagged) {
-                                        reveal(index)
-                                        playClick()
-                                    } else if (mouse.button === Qt.LeftButton) {
-                                        toggleFlag(index)
-                                    }
-                                } else {
-                                    // Default behavior
-                                    if (mouse.button === Qt.LeftButton && !parent.flagged) {
-                                        reveal(index)
-                                        playClick()
-                                    } else if (mouse.button === Qt.RightButton) {
-                                        toggleFlag(index)
-                                    }
+                            Image {
+                                anchors.centerIn: parent
+                                source: darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
+                                visible: cellItem.revealed && mines.includes(index)
+                                sourceSize.width: cellItem.width / 2
+                                sourceSize.height: cellItem.height / 2
+                            }
+
+                            Image {
+                                anchors.centerIn: parent
+                                source: flagIcon
+                                visible: cellItem.flagged
+                                sourceSize.width: cellItem.width / 2
+                                sourceSize.height: cellItem.height / 2
+                            }
+
+                            text: {
+                                if (!parent.revealed || parent.flagged) return ""
+                                if (mines.includes(index)) return ""
+                                return numbers[index] === 0 ? "" : numbers[index]
+                            }
+
+                            contentItem: Text {
+                                text: parent.text
+                                font.pixelSize: parent.width * 0.65
+                                font.bold: true
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                color: {
+                                    if (!parent.parent.revealed) return "black"
+                                    if (mines.includes(index)) return "transparent"
+                                    if (numbers[index] === 1) return "#069ecc"
+                                    if (numbers[index] === 2) return "#28d13c"
+                                    if (numbers[index] === 3) return "#d12844"
+                                    if (numbers[index] === 4) return "#9328d1"
+                                    if (numbers[index] === 5) return "#ebc034"
+                                    if (numbers[index] === 6) return "#34ebb1"
+                                    if (numbers[index] === 7) return "#eb8634"
+                                    if (numbers[index] === 8 && darkMode) return "white"
+                                    if (numbers[index] === 8 && !darkMode) return "black"
+                                    return "black"
                                 }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                onClicked: (mouse) => {
+                                               if (root.invertLRClick) {
+                                                   // Swap left and right click actions
+                                                   if (mouse.button === Qt.RightButton && !parent.flagged) {
+                                                       reveal(index)
+                                                       playClick()
+                                                   } else if (mouse.button === Qt.LeftButton) {
+                                                       toggleFlag(index)
+                                                   }
+                                               } else {
+                                                   // Default behavior
+                                                   if (mouse.button === Qt.LeftButton && !parent.flagged) {
+                                                       reveal(index)
+                                                       playClick()
+                                                   } else if (mouse.button === Qt.RightButton) {
+                                                       toggleFlag(index)
+                                                   }
+                                               }
+                                           }
                             }
                         }
                     }

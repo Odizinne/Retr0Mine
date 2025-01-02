@@ -7,16 +7,37 @@ MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
     , settings("Odizinne", "Retr0Mine")
     , engine(new QQmlApplicationEngine)
+    , isWindows10(Utils::isWindows10())
+    , isWindows11(Utils::isWindows11())
+    , isLinux(Utils::isLinux())
 {
     QColor accentColor;
     bool darkMode;
     if (Utils::getTheme() == "light") {
         darkMode = true;
-        accentColor = Utils::getAccentColor("light2");
+        if (isWindows10) {
+            accentColor = Utils::getAccentColor("normal");
+        } else if (isWindows11) {
+            accentColor = Utils::getAccentColor("light2");
+        } else {
+            accentColor = "#0000FF";
+        }
     } else {
         darkMode = false;
-        accentColor = Utils::getAccentColor("dark2");
+        if (isWindows10) {
+            accentColor = Utils::getAccentColor("normal");
+        } else if (isWindows11) {
+            accentColor = Utils::getAccentColor("dark2");
+        } else {
+            accentColor = "#0000FF";
+        }
     }
+
+    qDebug() << isWindows10 << isWindows11 << isLinux;
+
+    engine->rootContext()->setContextProperty("isWindows10", isWindows10);
+    engine->rootContext()->setContextProperty("isWindows11", isWindows11);
+    engine->rootContext()->setContextProperty("isLinux", isLinux);
     engine->rootContext()->setContextProperty("mainWindow", this);
     engine->rootContext()->setContextProperty("isDarkMode", darkMode);
     engine->rootContext()->setContextProperty("accentColor", accentColor);

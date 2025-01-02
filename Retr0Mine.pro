@@ -1,4 +1,4 @@
-QT       += core gui qml quick multimedia
+QT       += core gui qml quick multimedia quickcontrols2
 
 CONFIG += c++17
 

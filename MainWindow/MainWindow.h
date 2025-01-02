@@ -15,12 +15,12 @@ public:
     Q_INVOKABLE void saveSoundSettings(bool soundEffects);
     Q_INVOKABLE void saveControlsSettings(bool invertLRClick);
 
-
-signals:
-
 private:
     QSettings settings;
     QQmlApplicationEngine* engine;
+    bool isWindows10;
+    bool isWindows11;
+    bool isLinux;
 };
 
 #endif // MAINWINDOW_H
