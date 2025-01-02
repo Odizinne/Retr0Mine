@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Main.qml</file>
+        <file>sounds/bomb.wav</file>
+        <file>sounds/click.wav</file>
+        <file>sounds/win.wav</file>
+        <file>icons/bomb_light.png</file>
+        <file>icons/bomb_dark.png</file>
+        <file>icons/flag.png</file>
+    </qresource>
+</RCC>
