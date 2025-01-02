@@ -707,10 +707,11 @@ ApplicationWindow {
                                 if (numbers[index] === 2) return "#28d13c"
                                 if (numbers[index] === 3) return "#d12844"
                                 if (numbers[index] === 4) return "#9328d1"
-                                if (numbers[index] === 5) return "#9328d1"
-                                if (numbers[index] === 6) return "#9328d1"
-                                if (numbers[index] === 7) return "#9328d1"
-                                if (numbers[index] === 8) return "#9328d1"
+                                if (numbers[index] === 5) return "#ebc034"
+                                if (numbers[index] === 6) return "#34ebb1"
+                                if (numbers[index] === 7) return "#eb8634"
+                                if (numbers[index] === 8 && darkMode) return "white"
+                                if (numbers[index] === 8 && !darkMode) return "black"
                                 return "black"
                             }
                         }
