@@ -52,7 +52,7 @@ MainWindow::MainWindow(QObject *parent)
     int difficulty = settings.value("difficulty", 0).toInt();
     engine->rootContext()->setContextProperty("gameDifficulty", difficulty);
 
-    bool invertLRClick = settings.value("invertLRClick", true).toBool();
+    bool invertLRClick = settings.value("invertLRClick", false).toBool();
     engine->rootContext()->setContextProperty("invertClick", invertLRClick);
 
     bool soundEffects = settings.value("soundEffects", true).toBool();
