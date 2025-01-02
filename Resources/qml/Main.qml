@@ -62,6 +62,10 @@ ApplicationWindow {
         title: "Settings"
         width: 300
         height: 400
+        maximumWidth: 300
+        maximumHeight: 400
+        minimumWidth: 300
+        minimumHeight: 400
         visible: false
 
         property int selectedGridSizeX: 8
@@ -116,8 +120,8 @@ ApplicationWindow {
                         root.mineCount = 2000
                         mainWindow.saveDifficulty(3)
                     } else if (checkedButton === debugButton) {
-                        root.width = 800
-                        root.height = 800
+                        root.width = 400
+                        root.height = 460
                         //root.maximumWidth = 800
                         //root.maximumHeight = 800
                         root.gridSizeX = 8
@@ -145,7 +149,7 @@ ApplicationWindow {
                 Layout.bottomMargin: 5
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
-                color: Qt.rgba (1, 1, 1, 0.15)
+                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
             }
 
             RadioButton {
@@ -185,7 +189,12 @@ ApplicationWindow {
                 checked: root.difficulty === 4
             }
 
+            Item {
+                Layout.fillHeight: true
+            }
+
             Label {
+                //Layout.topMargin: 10
                 text: "Sound"
                 font.bold: true
                 font.pixelSize: 18
@@ -196,7 +205,7 @@ ApplicationWindow {
                 Layout.bottomMargin: 5
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
-                color: Qt.rgba (1, 1, 1, 0.15)
+                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
             }
 
             Switch {
@@ -491,9 +500,11 @@ ApplicationWindow {
                     settingsPage.visible = true
                 }
             }
+
             Item {
                 Layout.fillWidth: true
             }
+
             Text {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 text: "Mines: " + (mineCount - flaggedCount)
