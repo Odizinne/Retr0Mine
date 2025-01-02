@@ -112,3 +112,39 @@ jobs:
         with:
           name: Retr0Mine_msvc_64
           path: build/Retr0Mine_msvc_64.zip
+
+  linux-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.6.2'
+          host: 'linux'
+          add-tools-to-path: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libgl1-mesa-dev
+
+      - name: Build with qmake
+        run: |
+          mkdir build
+          cd build
+          qmake ../Retr0Mine.pro CONFIG+=release
+          make -j$(nproc)
+
+      - name: Zip binaries folder
+        run: |
+          zip build/Retr0Mine_linux_64.zip build/Retr0Mine
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Retr0Mine_linux_64
+          path: Retr0Mine_linux_64.zip
