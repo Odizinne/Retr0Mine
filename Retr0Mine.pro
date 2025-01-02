@@ -17,6 +17,6 @@ HEADERS +=                                  \
 
 RESOURCES += Resources/resources.qrc
 
-LIBS += -ladvapi32
+win32:LIBS += -ladvapi32
 
 RC_FILE = Resources/appicon.rc
