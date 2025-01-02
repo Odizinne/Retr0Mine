@@ -48,31 +48,41 @@ ApplicationWindow {
         }
     }
 
-    ApplicationWindow {
-        title: " "
+
+    Popup {
+        anchors.centerIn: parent
         id: gameOverWindow
         height: 100
-        width: 200
+        width: 250
         visible: false
 
-        Label {
-            anchors.centerIn: parent
-            text: "Game Over!"
-            Layout.fillWidth: true
-        }
-    }
+        GridLayout {
+            anchors.fill: parent
+            columns: 2
+            rowSpacing: 10
+            Label {
+                id: gameOverLabel
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                text: "Game Over :("
+                Layout.columnSpan: 2
+                font.bold: true
+                font.pixelSize: 16
+            }
 
-    ApplicationWindow {
-        title: " "
-        id: winWindow
-        height: 100
-        width: 200
-        visible: false
+            Button {
+                text: "Retry"
+                onClicked: {
+                    gameOverWindow.close()
+                    root.initGame()
+                }
+            }
 
-        Label {
-            anchors.centerIn: parent
-            text: "Victory!"
-            Layout.fillWidth: true
+            Button {
+                text: "Close"
+                onClicked: {
+                    gameOverWindow.close()
+                }
+            }
         }
     }
 
@@ -80,11 +90,11 @@ ApplicationWindow {
         id: settingsPage
         title: "Settings"
         width: 300
-        height: 500
+        height: 370
         maximumWidth: 300
-        maximumHeight: 500
+        maximumHeight: 370
         minimumWidth: 300
-        minimumHeight: 500
+        minimumHeight: 370
         visible: false
 
         property int selectedGridSizeX: 8
@@ -133,7 +143,10 @@ ApplicationWindow {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 15
+            anchors.topMargin: 5
+            anchors.bottomMargin: 15
+            anchors.leftMargin: 15
+            anchors.rightMargin: 15
             spacing: 4
 
             Label {
@@ -173,7 +186,7 @@ ApplicationWindow {
 
             RadioButton {
                 id: retroButton
-                //enabled: false
+                enabled: false
                 text: "Retr0 (100×100, 2000 mines)"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 3
@@ -181,14 +194,15 @@ ApplicationWindow {
 
             RadioButton {
                 id: debugButton
-                enabled: true
+                enabled: false
+                visible: false
                 text: "Debug (8×8, 1 mine)"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 4
             }
 
             Item {
-                Layout.fillHeight: true
+                Layout.preferredHeight: 5
             }
 
             Label {
@@ -221,6 +235,7 @@ ApplicationWindow {
 
             Button {
                 text: "Close"
+                Layout.preferredWidth: 70
                 Layout.alignment: Qt.AlignRight
                 onClicked: settingsPage.close()
             }
@@ -230,19 +245,19 @@ ApplicationWindow {
     SoundEffect {
         id: looseEffect
         source: "qrc:/sounds/bomb.wav"
-        volume: 0.5
+        volume: 1
     }
 
     SoundEffect {
         id: clickEffect
         source: "qrc:/sounds/click.wav"
-        volume: 0.5
+        volume: 1
     }
 
     SoundEffect {
         id: winEffect
         source: "qrc:/sounds/win.wav"
-        volume: 0.5
+        volume: 1
     }
 
     function playLoose() {
@@ -425,6 +440,8 @@ ApplicationWindow {
             gameTimer.stop()
             revealAllMines()
             playLoose()
+            gameOverLabel.text = "Game over :("
+            gameOverLabel.color = "#d12844"
             gameOverWindow.visible = true
             return
         }
@@ -467,7 +484,9 @@ ApplicationWindow {
         if (revealedCount === (gridSizeX * gridSizeY - mineCount)) {
             gameOver = true
             gameTimer.stop()
-            winWindow.visible = true
+            gameOverLabel.text = "Victory :)"
+            gameOverLabel.color = "#28d13c"
+            gameOverWindow.visible = true
             playWin()
         }
     }
