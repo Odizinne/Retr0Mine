@@ -6,8 +6,12 @@ import QtMultimedia
 ApplicationWindow {
     id: root
     visible: true
-    width: (cellSize + cellSpacing) * gridSizeX + 40
-    height: (cellSize + cellSpacing) * gridSizeY + 100
+    width: (cellSize + cellSpacing) * gridSizeX + 22
+    height: (cellSize + cellSpacing) * gridSizeY + 60
+    minimumWidth: (cellSize + cellSpacing) * gridSizeX + 22
+    minimumHeight: (cellSize + cellSpacing) * gridSizeY + 60
+    maximumWidth: (cellSize + cellSpacing) * gridSizeX + 22
+    maximumHeight: (cellSize + cellSpacing) * gridSizeY + 60
     title: "Retr0Mine"
 
     property bool playSound: soundEffects
@@ -100,6 +104,25 @@ ApplicationWindow {
         property int selectedGridSizeX: 8
         property int selectedGridSizeY: 8
         property int selectedMineCount: 10
+
+        onVisibleChanged: {
+            if (settingsPage.visible) {
+                // Check if there is enough space on the right side
+                if (root.x + root.width + settingsPage.width + 10 <= screen.width) {
+                    // Position on the right side with a 10px margin
+                    settingsPage.x = root.x + root.width + 10
+                } else if (root.x - settingsPage.width - 10 >= 0) {
+                    // If there is no space on the right, position on the left with a 10px margin
+                    settingsPage.x = root.x - settingsPage.width - 10
+                } else {
+                    // If the root window is too close to the left edge, use a fallback
+                    settingsPage.x = screen.width - settingsPage.width - 10
+                }
+
+                // Center vertically relative to the root window
+                settingsPage.y = root.y + (root.height - settingsPage.height) / 2
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
@@ -509,12 +532,12 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: 60
+        height: 40
         spacing: 10
 
         RowLayout {
             Layout.fillHeight: true
-            Layout.topMargin: 15
+            Layout.topMargin: 5
             Layout.leftMargin: 12
             Layout.rightMargin: 12
             Layout.alignment: Qt.AlignTop
