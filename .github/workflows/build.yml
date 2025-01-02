@@ -126,6 +126,7 @@ jobs:
           version: '6.6.2'
           host: 'linux'
           add-tools-to-path: true
+          modules: 'qtmultimedia'
 
       - name: Install dependencies
         run: |
