@@ -27,7 +27,27 @@ ApplicationWindow {
     property int mineCount: 10
     property var mines: []
     property var numbers: []
+    property bool timerActive: false
+    property int elapsedTime: 0
 
+    function formatTime(seconds) {
+        let hours = Math.floor(seconds / 3600)
+        let minutes = Math.floor((seconds % 3600) / 60)
+        let remainingSeconds = seconds % 60
+
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+    }
+
+
+    Timer {
+        id: gameTimer
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            elapsedTime++
+            elapsedTimeLabel.text = formatTime(elapsedTime)
+        }
+    }
 
     ApplicationWindow {
         title: " "
@@ -61,11 +81,11 @@ ApplicationWindow {
         id: settingsPage
         title: "Settings"
         width: 300
-        height: 400
+        height: 500
         maximumWidth: 300
-        maximumHeight: 400
+        maximumHeight: 500
         minimumWidth: 300
-        minimumHeight: 400
+        minimumHeight: 500
         visible: false
 
         property int selectedGridSizeX: 8
@@ -74,10 +94,8 @@ ApplicationWindow {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
-            spacing: 15
-
-
+            anchors.margins: 0
+            spacing: 10
 
             ButtonGroup {
 
@@ -136,7 +154,8 @@ ApplicationWindow {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 10
+            anchors.margins: 15
+            spacing: 4
 
             Label {
                 text: "Difficulty"
@@ -214,6 +233,34 @@ ApplicationWindow {
                 onCheckedChanged: {
                     mainWindow.saveSoundSettings(checked);
                     root.playSound = checked
+                }
+            }
+
+            Item {
+                Layout.fillHeight: true
+            }
+
+            Label {
+                //Layout.topMargin: 10
+                text: "Theme"
+                font.bold: true
+                font.pixelSize: 18
+            }
+
+            Rectangle {
+                Layout.topMargin: 5
+                Layout.bottomMargin: 5
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
+            }
+
+            ComboBox {
+                id: themeComboBox
+                model: ["System", "Light", "Dark"]
+
+                onCurrentIndexChanged: {
+                    mainWindow.saveThemeSettings(themeComboBox.currentIndex)
                 }
             }
 
@@ -389,6 +436,9 @@ ApplicationWindow {
         flaggedCount = 0
         firstClickIndex = -1
         gameStarted = false
+        elapsedTime = 0
+        gameTimer.stop()
+        elapsedTimeLabel.text = "00:00:00"
 
         // Reset all cells
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
@@ -411,6 +461,7 @@ ApplicationWindow {
                 return
             }
             gameStarted = true
+            gameTimer.start()
         }
 
         let cell = grid.itemAtIndex(index)
@@ -419,6 +470,7 @@ ApplicationWindow {
 
         if (mines.includes(index)) {
             gameOver = true
+            gameTimer.stop()
             revealAllMines()
             playLoose()
             gameOverWindow.visible = true
@@ -462,6 +514,7 @@ ApplicationWindow {
     function checkWin() {
         if (revealedCount === (gridSizeX * gridSizeY - mineCount)) {
             gameOver = true
+            gameTimer.stop()
             winWindow.visible = true
             playWin()
         }
@@ -501,9 +554,9 @@ ApplicationWindow {
                 }
             }
 
-            Item {
-                Layout.fillWidth: true
-            }
+            //Item {
+            //    Layout.fillWidth: true
+            //}
 
             Text {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -512,9 +565,20 @@ ApplicationWindow {
                 font.pixelSize: 18
             }
 
-            Item {
-                Layout.fillWidth: true
+            //Item {
+            //    Layout.fillWidth: true
+            //}
+
+            Text {
+                id: elapsedTimeLabel
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                text: "HH:MM:SS"
+                color: darkMode ? "white" : "black"
+                font.pixelSize: 18
             }
+            //Item {
+            //    Layout.fillWidth: true
+            //}
 
             Button {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignRight
@@ -552,6 +616,14 @@ ApplicationWindow {
                         anchors.fill: parent
                         anchors.margins: cellSpacing
                         flat: parent.revealed
+
+                        Rectangle {
+                            anchors.fill: parent
+                            border.width: 2
+                            border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                            visible: parent.flat
+                            color: "transparent"
+                        }
 
                         Image {
                             anchors.centerIn: parent
