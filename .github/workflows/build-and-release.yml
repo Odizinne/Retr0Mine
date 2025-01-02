@@ -151,7 +151,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, linux-build]
 
     steps:
       - name: Checkout repository
@@ -218,9 +218,9 @@ jobs:
       - name: List files in directory
         run: ls -la
 
-      - name: Zip binaries folder
-        run: |
-          zip ./Retr0Mine_linux_64.zip ./Retr0Mine
+      #- name: Zip binaries folder
+      #  run: |
+      #    zip ./Retr0Mine_linux_64.zip ./Retr0Mine
 
       - name: Upload Linux release asset
         uses: actions/upload-release-asset@v1
