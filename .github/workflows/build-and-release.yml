@@ -112,6 +112,43 @@ jobs:
           name: Retr0Mine_msvc_64
           path: build/Retr0Mine_msvc_64.zip
 
+  linux-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.6.2'
+          host: 'linux'
+          add-tools-to-path: true
+          modules: 'qtmultimedia'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libgl1-mesa-dev
+
+      - name: Build with qmake
+        run: |
+          mkdir build
+          cd build
+          qmake ../Retr0Mine.pro CONFIG+=release
+          make -j$(nproc)
+
+      - name: Zip binaries folder
+        run: |
+          zip build/Retr0Mine_linux_64.zip build/Retr0Mine
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Retr0Mine_linux_64
+          path: build/Retr0Mine_linux_64.zip
+
   release:
     runs-on: ubuntu-latest
     needs: build
@@ -124,6 +161,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_msvc_64
+
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Retr0Mine_linux_64
 
       - name: Bump version and create release
         id: bump_release
@@ -170,5 +212,22 @@ jobs:
           asset_path: Retr0Mine_msvc_64.zip
           asset_name: Retr0Mine_msvc_64.zip
           asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List files in directory
+        run: ls -la
+
+      - name: Zip binaries folder
+        run: |
+          zip ./Retr0Mine_linux_64.zip ./Retr0Mine
+
+      - name: Upload Linux release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_name: Retr0Mine_linux_64.zip
+          asset_path: Retr0Mine_linux_64.zip
+          asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
