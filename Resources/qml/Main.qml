@@ -219,34 +219,6 @@ ApplicationWindow {
                 Layout.fillHeight: true
             }
 
-            Label {
-                //Layout.topMargin: 10
-                text: "Theme"
-                font.bold: true
-                font.pixelSize: 18
-            }
-
-            Rectangle {
-                Layout.topMargin: 5
-                Layout.bottomMargin: 5
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
-            }
-
-            ComboBox {
-                id: themeComboBox
-                model: ["System", "Light", "Dark"]
-
-                onCurrentIndexChanged: {
-                    mainWindow.saveThemeSettings(themeComboBox.currentIndex)
-                }
-            }
-
-            Item {
-                Layout.fillHeight: true
-            }
-
             Button {
                 text: "Close"
                 Layout.alignment: Qt.AlignRight
@@ -532,6 +504,8 @@ ApplicationWindow {
             Button {
                 Layout.alignment: Qt.AlignLeft
                 text: "Menu"
+                Layout.preferredWidth: 70
+                Layout.rightMargin: -25
                 onClicked: menu.open()
 
                 Menu {

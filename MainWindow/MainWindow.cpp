@@ -45,7 +45,3 @@ void MainWindow::saveDifficulty(int difficulty) {
 void MainWindow::saveSoundSettings(bool soundEffects) {
     settings.setValue("soundEffects", soundEffects);
 }
-
-void MainWindow::saveThemeSettings(int theme) {
-    settings.setValue("theme", theme);
-}
