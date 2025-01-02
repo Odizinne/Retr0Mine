@@ -22,6 +22,8 @@ jobs:
           version: '6.8.1'
           add-tools-to-path: true
           cache: true
+          modules: 'qtmultimedia'
+
 
       - name: Install jom
         id: jom-setup
