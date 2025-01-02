@@ -144,6 +144,10 @@ jobs:
         run: |
           zip build/Retr0Mine_linux_64.zip build/Retr0Mine
 
+      - name: List files for debug
+        run: |
+          ls -lh build/
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
