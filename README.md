@@ -12,3 +12,4 @@ Modern UI minesweeper created for a friend.
 ## To-Do
 - Custom difficulty
 - Scrolling
+- CrossPlatform
