@@ -57,6 +57,9 @@ MainWindow::MainWindow(QObject *parent)
     bool invertLRClick = settings.value("invertLRClick", false).toBool();
     engine->rootContext()->setContextProperty("invertClick", invertLRClick);
 
+    bool autoreveal = settings.value("autoreveal", false).toBool();
+    engine->rootContext()->setContextProperty("revealConnectedCell", autoreveal);
+
     bool soundEffects = settings.value("soundEffects", true).toBool();
     engine->rootContext()->setContextProperty("soundEffects", soundEffects);
 
@@ -72,8 +75,9 @@ void MainWindow::saveSoundSettings(bool soundEffects) {
     settings.setValue("soundEffects", soundEffects);
 }
 
-void MainWindow::saveControlsSettings(bool invertLRClick) {
+void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal) {
     settings.setValue("invertLRClick", invertLRClick);
+    settings.setValue("autoreveal", autoreveal);
 }
 
 QString MainWindow::getWindowsPath() const {

@@ -39,6 +39,7 @@ ApplicationWindow {
     property bool isLinux: linux
     property bool isWindows11: windows11
     property bool isWindows10: windows10
+    property bool revealConnected: revealConnectedCell
     property bool invertLRClick: invertClick
     property bool playSound: soundEffects
     property int difficulty: gameDifficulty
@@ -406,10 +407,21 @@ ApplicationWindow {
 
             Switch {
                 text: "Invert left and right click"
+                id: invert
                 checked: root.invertLRClick
                 onCheckedChanged: {
-                    mainWindow.saveControlsSettings(checked);
+                    mainWindow.saveControlsSettings(invert.checked, autoreveal.checked);
                     root.invertLRClick = checked
+                }
+            }
+
+            Switch {
+                id: autoreveal
+                text: "Quick reveal connected cells"
+                checked: root.revealConnected
+                onCheckedChanged: {
+                    mainWindow.saveControlsSettings(invert.checked, autoreveal.checked);
+                    root.revealConnected = checked
                 }
             }
 
@@ -458,6 +470,45 @@ ApplicationWindow {
     function playWin() {
         if (!root.playSound) return
         winEffect.play()
+    }
+
+    function revealConnectedCells(index) {
+        if (!root.revealConnected || !gameStarted || gameOver) return;
+
+        let cell = grid.itemAtIndex(index);
+        if (!cell.revealed || numbers[index] <= 0) return;
+
+        let row = Math.floor(index / gridSizeX);
+        let col = index % gridSizeX;
+        let flaggedCount = 0;
+        let adjacentCells = [];
+
+        // Check adjacent cells for flags and collect non-flagged cells
+        for (let r = -1; r <= 1; r++) {
+            for (let c = -1; c <= 1; c++) {
+                if (r === 0 && c === 0) continue;
+
+                let newRow = row + r;
+                let newCol = col + c;
+                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
+
+                let pos = newRow * gridSizeX + newCol;
+                let adjacentCell = grid.itemAtIndex(pos);
+
+                if (adjacentCell.flagged) {
+                    flaggedCount++;
+                } else if (!adjacentCell.revealed) {
+                    adjacentCells.push(pos);
+                }
+            }
+        }
+
+        // If the number of flags matches the cell's number, reveal adjacent non-flagged cells
+        if (flaggedCount === numbers[index]) {
+            for (let pos of adjacentCells) {
+                reveal(pos);
+            }
+        }
     }
 
     function isValidMinePlacement(minePositions, index) {
@@ -1052,24 +1103,32 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: (mouse) => {
-                                               if (root.invertLRClick) {
-                                                   // Swap left and right click actions
-                                                   if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                       reveal(index)
-                                                       playClick()
-                                                   } else if (mouse.button === Qt.LeftButton) {
-                                                       toggleFlag(index)
-                                                   }
-                                               } else {
-                                                   // Default behavior
-                                                   if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                       reveal(index)
-                                                       playClick()
-                                                   } else if (mouse.button === Qt.RightButton) {
-                                                       toggleFlag(index)
-                                                   }
-                                               }
-                                           }
+                                    if (root.invertLRClick) {
+                                        // Swap left and right click actions
+                                        if (mouse.button === Qt.RightButton) {
+                                            if (cellItem.revealed) {
+                                                revealConnectedCells(index);
+                                            } else if (!cellItem.flagged && !cellItem.questioned) {
+                                                reveal(index);
+                                                playClick();
+                                            }
+                                        } else if (mouse.button === Qt.LeftButton) {
+                                            toggleFlag(index);
+                                        }
+                                    } else {
+                                        // Default behavior
+                                        if (mouse.button === Qt.LeftButton) {
+                                            if (cellItem.revealed) {
+                                                revealConnectedCells(index);
+                                            } else if (!cellItem.flagged && !cellItem.questioned) {
+                                                reveal(index);
+                                                playClick();
+                                            }
+                                        } else if (mouse.button === Qt.RightButton) {
+                                            toggleFlag(index);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
