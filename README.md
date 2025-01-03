@@ -23,6 +23,13 @@ Runs on windows | linux.
 
 # Download
 
+| OS |  Platform | Download |
+|----------|----------|----------|
+| Windows Installer    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)     |
+| Windows Portable    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)     |
+| Linux Appimage   | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine-x86_64.AppImage)     |
+| Linux Bin    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_linux_64.zip)     |
+
 You can find latest release [here](https://github.com/Odizinne/Retr0Mine/releases).
 
 Extract the archive and run `Retr0Mine.exe`.
