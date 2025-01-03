@@ -960,7 +960,12 @@ ApplicationWindow {
                             Rectangle {
                                 anchors.fill: parent
                                 border.width: 2
-                                radius: isWindows10 ? 0 : (isWindows11 ? 4 : (isLinux ? 3 : 2))
+                                radius: {
+                                    if (isWindows10) return 0
+                                    else if (isWindows11) return 4
+                                    else if (isLinux) return 3
+                                    else return 2
+                                }
                                 border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                                 visible: parent.flat
                                 color: "transparent"
