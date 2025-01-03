@@ -21,6 +21,22 @@ ApplicationWindow {
         }
     }
 
+    Shortcut {
+        sequence: StandardKey.Quit
+        onActivated: Qt.quit()
+    }
+
+    Shortcut {
+        sequence: StandardKey.Save
+        enabled: root.gameStarted
+        onActivated: saveWindow.visible = true
+    }
+
+    Shortcut {
+        sequence: "Ctrl+N"
+        onActivated: root.initGame()
+    }
+
     property bool isLinux: linux
     property bool isWindows11: windows11
     property bool isWindows10: windows10
@@ -685,6 +701,7 @@ ApplicationWindow {
 
                 Menu {
                     id: menu
+                    width: 150
                     MenuItem {
                         text: "New game"
                         onTriggered: root.initGame()
@@ -694,7 +711,7 @@ ApplicationWindow {
 
                     MenuItem {
                         text: "Save game"
-                        enabled: gameStarted
+                        enabled: root.gameStarted
                         onTriggered: saveWindow.visible = true
                     }
                     Menu {
