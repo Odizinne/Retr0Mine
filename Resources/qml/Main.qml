@@ -56,7 +56,7 @@ ApplicationWindow {
     property var numbers: []
     property bool timerActive: false
     property int elapsedTime: 0
-    property int cellSize: 30
+    property int cellSize: 35
     property int cellSpacing: 2
     property string savePath: {
         if (Qt.platform.os === "windows")
@@ -737,6 +737,8 @@ ApplicationWindow {
                             onObjectAdded: (index, object) => loadMenu.insertItem(index, object)
                             onObjectRemoved: (index, object) => loadMenu.removeItem(object)
                         }
+
+                        MenuSeparator { }
 
                         MenuItem {
                             text: "Open save folder"
