@@ -76,6 +76,7 @@ ApplicationWindow {
                 numbers: numbers,
                 revealedCells: [],
                 flaggedCells: [],
+                questionedCells: [],
                 elapsedTime: elapsedTime,
                 gameOver: gameOver,
                 gameStarted: gameStarted,
@@ -83,11 +84,12 @@ ApplicationWindow {
             }
         }
 
-        // Collect revealed and flagged cells
+        // Collect revealed, flagged, and questioned cells
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell.revealed) saveData.gameState.revealedCells.push(i)
             if (cell.flagged) saveData.gameState.flaggedCells.push(i)
+            if (cell.questioned) saveData.gameState.questionedCells.push(i)
         }
 
         mainWindow.saveGameState(JSON.stringify(saveData), filename)
@@ -125,10 +127,11 @@ ApplicationWindow {
                 if (cell) {
                     cell.revealed = false
                     cell.flagged = false
+                    cell.questioned = false
                 }
             }
 
-            // Apply revealed and flagged states
+            // Apply revealed, flagged, and questioned states
             data.gameState.revealedCells.forEach(index => {
                 let cell = grid.itemAtIndex(index)
                 if (cell) cell.revealed = true
@@ -138,6 +141,14 @@ ApplicationWindow {
                 let cell = grid.itemAtIndex(index)
                 if (cell) cell.flagged = true
             })
+
+            // Handle questioned cells if they exist in the save data
+            if (data.gameState.questionedCells) {
+                data.gameState.questionedCells.forEach(index => {
+                    let cell = grid.itemAtIndex(index)
+                    if (cell) cell.questioned = true
+                })
+            }
 
             // Update counters
             revealedCount = data.gameState.revealedCells.length
@@ -586,6 +597,7 @@ ApplicationWindow {
             if (cell) {
                 cell.revealed = false
                 cell.flagged = false
+                cell.questioned = false
             }
         }
     }
@@ -667,10 +679,23 @@ ApplicationWindow {
         if (gameOver) return
         let cell = grid.itemAtIndex(index)
         if (!cell.revealed) {
-            cell.flagged = !cell.flagged
-            flaggedCount += cell.flagged ? 1 : -1
+            if (!cell.flagged && !cell.questioned) {
+                // Empty -> Flag
+                cell.flagged = true
+                cell.questioned = false
+                flaggedCount++
+            } else if (cell.flagged) {
+                // Flag -> Question
+                cell.flagged = false
+                cell.questioned = true
+                flaggedCount--
+            } else {
+                // Question -> Empty
+                cell.questioned = false
+            }
         }
     }
+
 
     Component.onCompleted: {
         initGame()
@@ -951,6 +976,7 @@ ApplicationWindow {
 
                         property bool revealed: false
                         property bool flagged: false
+                        property bool questioned: false
 
                         Button {
                             anchors.fill: parent
@@ -975,6 +1001,14 @@ ApplicationWindow {
                                 anchors.centerIn: parent
                                 source: darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
                                 visible: cellItem.revealed && mines.includes(index)
+                                sourceSize.width: cellItem.width / 2
+                                sourceSize.height: cellItem.height / 2
+                            }
+
+                            Image {
+                                anchors.centerIn: parent
+                                source: darkMode ? "qrc:/icons/questionmark_light.png" : "qrc:/icons/questionmark_dark.png"
+                                visible: cellItem.questioned
                                 sourceSize.width: cellItem.width / 2
                                 sourceSize.height: cellItem.height / 2
                             }
@@ -1021,7 +1055,7 @@ ApplicationWindow {
                                 onClicked: (mouse) => {
                                                if (root.invertLRClick) {
                                                    // Swap left and right click actions
-                                                   if (mouse.button === Qt.RightButton && !parent.flagged) {
+                                                   if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
                                                        reveal(index)
                                                        playClick()
                                                    } else if (mouse.button === Qt.LeftButton) {
@@ -1029,7 +1063,7 @@ ApplicationWindow {
                                                    }
                                                } else {
                                                    // Default behavior
-                                                   if (mouse.button === Qt.LeftButton && !parent.flagged) {
+                                                   if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
                                                        reveal(index)
                                                        playClick()
                                                    } else if (mouse.button === Qt.RightButton) {
