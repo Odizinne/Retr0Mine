@@ -37,8 +37,6 @@ MainWindow::MainWindow(QObject *parent)
         }
     }
 
-    qDebug() << isWindows10 << isWindows11 << isLinux;
-
     engine->rootContext()->setContextProperty("windows10", isWindows10);
     engine->rootContext()->setContextProperty("windows11", isWindows11);
     engine->rootContext()->setContextProperty("linux", isLinux);

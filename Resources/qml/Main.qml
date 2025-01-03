@@ -3,7 +3,6 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtMultimedia
 import QtQuick.Window 2.15
-//import Qt.labs.platform 1.1
 
 ApplicationWindow {
     id: root
