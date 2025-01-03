@@ -1,6 +1,10 @@
 #include "MainWindow.h"
 #include <QQmlContext>
+#include <QStandardPaths>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QDesktopServices>
 #include "Utils.h"
 
 MainWindow::MainWindow(QObject *parent)
@@ -72,5 +76,73 @@ void MainWindow::saveSoundSettings(bool soundEffects) {
 
 void MainWindow::saveControlsSettings(bool invertLRClick) {
     settings.setValue("invertLRClick", invertLRClick);
+}
 
+QString MainWindow::getWindowsPath() const {
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+}
+
+QString MainWindow::getLinuxPath() const {
+    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+}
+
+bool MainWindow::saveGameState(const QString &data, const QString &filename) const {
+    QString savePath = QStandardPaths::writableLocation(
+        QStandardPaths::AppDataLocation
+        );
+
+    QDir saveDir(savePath);
+    if (!saveDir.exists()) {
+        saveDir.mkpath(".");
+    }
+
+    QFile file(saveDir.filePath(filename));
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << data;
+        file.close();
+        return true;
+    }
+    return false;
+}
+
+QString MainWindow::loadGameState(const QString &filename) const {
+    QString savePath = QStandardPaths::writableLocation(
+        QStandardPaths::AppDataLocation
+        );
+
+    QFile file(QDir(savePath).filePath(filename));
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        QString data = stream.readAll();
+        file.close();
+        return data;
+    }
+    return QString();
+}
+
+QStringList MainWindow::getSaveFiles() const {
+    QString savePath = QStandardPaths::writableLocation(
+        QStandardPaths::AppDataLocation
+        );
+
+    QDir saveDir(savePath);
+    if (!saveDir.exists()) {
+        saveDir.mkpath(".");
+    }
+
+    return saveDir.entryList(QStringList() << "*.json", QDir::Files);
+}
+
+void MainWindow::openSaveFolder() const {
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir saveDir(savePath);
+
+    // Create the directory if it doesn't exist
+    if (!saveDir.exists()) {
+        saveDir.mkpath(".");
+    }
+
+    // Open the folder in the system's file browser
+    QDesktopServices::openUrl(QUrl::fromLocalFile(savePath));
 }

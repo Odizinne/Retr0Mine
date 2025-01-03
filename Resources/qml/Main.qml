@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtMultimedia
 import QtQuick.Window 2.15
+import Qt.labs.platform 1.1
+import QtCore
 
 ApplicationWindow {
     id: root
@@ -41,6 +43,103 @@ ApplicationWindow {
     property int elapsedTime: 0
     property int cellSize: 30
     property int cellSpacing: 2
+    property string savePath: {
+        if (Qt.platform.os === "windows")
+            return mainWindow.getWindowsPath() + "/Retr0Mine"
+        return mainWindow.getLinuxPath() + "/Retr0Mine"
+    }
+
+    function saveGame(filename) {
+        let saveData = {
+            version: "1.0",
+            timestamp: new Date().toISOString(),
+            gameState: {
+                gridSizeX: gridSizeX,
+                gridSizeY: gridSizeY,
+                mineCount: mineCount,
+                mines: mines,
+                numbers: numbers,
+                revealedCells: [],
+                flaggedCells: [],
+                elapsedTime: elapsedTime,
+                gameOver: gameOver,
+                gameStarted: gameStarted,
+                firstClickIndex: firstClickIndex
+            }
+        }
+
+        // Collect revealed and flagged cells
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            let cell = grid.itemAtIndex(i)
+            if (cell.revealed) saveData.gameState.revealedCells.push(i)
+            if (cell.flagged) saveData.gameState.flaggedCells.push(i)
+        }
+
+        mainWindow.saveGameState(JSON.stringify(saveData), filename)
+    }
+
+    function loadGame(saveData) {
+        try {
+            let data = JSON.parse(saveData)
+
+            // Verify version compatibility
+            if (!data.version || !data.version.startsWith("1.")) {
+                console.error("Incompatible save version")
+                return false
+            }
+
+            // Reset game state
+            gameTimer.stop()
+
+            // Load grid configuration
+            gridSizeX = data.gameState.gridSizeX
+            gridSizeY = data.gameState.gridSizeY
+            mineCount = data.gameState.mineCount
+
+            // Load game progress
+            mines = data.gameState.mines
+            numbers = data.gameState.numbers
+            elapsedTime = data.gameState.elapsedTime
+            gameOver = data.gameState.gameOver
+            gameStarted = data.gameState.gameStarted
+            firstClickIndex = data.gameState.firstClickIndex
+
+            // Reset all cells first
+            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+                let cell = grid.itemAtIndex(i)
+                if (cell) {
+                    cell.revealed = false
+                    cell.flagged = false
+                }
+            }
+
+            // Apply revealed and flagged states
+            data.gameState.revealedCells.forEach(index => {
+                let cell = grid.itemAtIndex(index)
+                if (cell) cell.revealed = true
+            })
+
+            data.gameState.flaggedCells.forEach(index => {
+                let cell = grid.itemAtIndex(index)
+                if (cell) cell.flagged = true
+            })
+
+            // Update counters
+            revealedCount = data.gameState.revealedCells.length
+            flaggedCount = data.gameState.flaggedCells.length
+
+            // Resume timer if game was in progress
+            if (gameStarted && !gameOver) {
+                gameTimer.start()
+            }
+
+            elapsedTimeLabel.text = formatTime(elapsedTime)
+            return true
+        } catch (e) {
+            console.error("Error loading save:", e)
+            return false
+        }
+    }
 
     function formatTime(seconds) {
         let hours = Math.floor(seconds / 3600)
@@ -591,6 +690,52 @@ ApplicationWindow {
                         text: "New game"
                         onTriggered: root.initGame()
                     }
+                    //MenuSeparator { }
+                    MenuItem {
+                        text: "Save game..."
+                        enabled: gameStarted
+                        onTriggered: saveWindow.visible = true
+                    }
+                    Menu {
+                        id: loadMenu
+                        title: "Load game"
+
+                        Instantiator {
+                            id: menuInstantiator
+                            model: []
+
+                            MenuItem {
+                                text: modelData
+                                onTriggered: {
+                                    let saveData = mainWindow.loadGameState(text)
+                                    if (saveData) {
+                                        if (!loadGame(saveData)) {
+                                            errorWindow.visible = true
+                                        }
+                                    }
+                                }
+                            }
+
+                            onObjectAdded: (index, object) => loadMenu.insertItem(index, object)
+                            onObjectRemoved: (index, object) => loadMenu.removeItem(object)
+                        }
+
+                        MenuItem {
+                            text: "Open save folder"
+                            onTriggered: mainWindow.openSaveFolder()
+                        }
+
+                        onAboutToShow: {
+                            let saves = mainWindow.getSaveFiles()
+                            if (saves.length === 0) {
+                                menuInstantiator.model = ["No saves found"]
+                                menuInstantiator.objectAt(0).enabled = false
+                            } else {
+                                menuInstantiator.model = saves
+                            }
+                        }
+                    }
+                    //MenuSeparator { }
                     MenuItem {
                         text: "Settings"
                         onTriggered: settingsPage.visible = true
@@ -598,6 +743,88 @@ ApplicationWindow {
                     MenuItem {
                         text: "Exit"
                         onTriggered: Qt.quit()
+                    }
+                }
+
+
+                ApplicationWindow {
+                    id: saveWindow
+                    title: "Save Game"
+                    width: 300
+                    height: 150
+                    minimumWidth: 300
+                    minimumHeight: 150
+                    flags: Qt.Dialog
+                    modality: Qt.ApplicationModal
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        spacing: 10
+
+                        TextField {
+                            id: saveNameField
+                            placeholderText: "Enter save name"
+                            text: new Date().toISOString().slice(0,19).replace(/[-:]/g, "").replace("T", "_")
+                            Layout.fillWidth: true
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignRight
+                            spacing: 10
+
+                            Button {
+                                text: "Cancel"
+                                onClicked: saveWindow.close()
+                            }
+
+                            Button {
+                                text: "Save"
+                                enabled: saveNameField.text.trim() !== ""
+                                onClicked: {
+                                    if (saveNameField.text.trim()) {
+                                        saveGame(saveNameField.text.trim() + ".json")
+                                        saveWindow.close()
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    onVisibleChanged: {
+                        if (visible) {
+                            saveNameField.text = new Date().toISOString().slice(0,19).replace(/[-:]/g, "").replace("T", "_")
+                        }
+                    }
+                }
+
+                Window {
+                    id: errorWindow
+                    title: "Error"
+                    width: 300
+                    height: 150
+                    minimumWidth: 300
+                    minimumHeight: 150
+                    flags: Qt.Dialog
+                    modality: Qt.ApplicationModal
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        spacing: 10
+
+                        Label {
+                            text: "Failed to load save file. The file might be corrupted or incompatible."
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+
+                        Button {
+                            text: "OK"
+                            Layout.alignment: Qt.AlignRight
+                            onClicked: errorWindow.close()
+                        }
                     }
                 }
             }
