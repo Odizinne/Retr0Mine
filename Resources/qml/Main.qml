@@ -693,7 +693,7 @@ ApplicationWindow {
                     MenuSeparator { }
 
                     MenuItem {
-                        text: "Save game..."
+                        text: "Save game"
                         enabled: gameStarted
                         onTriggered: saveWindow.visible = true
                     }
@@ -749,7 +749,6 @@ ApplicationWindow {
                     }
                 }
 
-
                 ApplicationWindow {
                     id: saveWindow
                     title: "Save Game"
@@ -758,7 +757,6 @@ ApplicationWindow {
                     minimumWidth: 300
                     minimumHeight: 150
                     flags: Qt.Dialog
-                    modality: Qt.ApplicationModal
 
                     ColumnLayout {
                         anchors.fill: parent
@@ -767,9 +765,32 @@ ApplicationWindow {
 
                         TextField {
                             id: saveNameField
-                            placeholderText: "Enter save name"
-                            text: new Date().toISOString().slice(0,19).replace(/[-:]/g, "").replace("T", "_")
+                            placeholderText: "Enter save file name"
                             Layout.fillWidth: true
+                            onTextChanged: {
+                                // Check for invalid characters: \ / : * ? " < > |
+                                let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
+                                invalidCharsLabel.visible = hasInvalidChars
+                                spaceFiller.visible = !hasInvalidChars
+                                saveButton.enabled = text.trim() !== "" && !hasInvalidChars
+                            }
+                        }
+
+                        Label {
+                            id: invalidCharsLabel
+                            text: "Filename cannot contain: \\ / : * ? \" < > |"
+                            color: "#f7c220"
+                            visible: true
+                            Layout.preferredHeight: 12
+                            Layout.leftMargin: 3
+                            font.pointSize: 10
+                            Layout.fillWidth: true
+                        }
+
+                        Item {
+                            id: spaceFiller
+                            Layout.preferredHeight: 12
+                            visible: true
                         }
 
                         RowLayout {
@@ -783,8 +804,9 @@ ApplicationWindow {
                             }
 
                             Button {
+                                id: saveButton
                                 text: "Save"
-                                enabled: saveNameField.text.trim() !== ""
+                                enabled: false
                                 onClicked: {
                                     if (saveNameField.text.trim()) {
                                         saveGame(saveNameField.text.trim() + ".json")
@@ -797,12 +819,14 @@ ApplicationWindow {
 
                     onVisibleChanged: {
                         if (visible) {
-                            saveNameField.text = new Date().toISOString().slice(0,19).replace(/[-:]/g, "").replace("T", "_")
+                            saveNameField.text = ""
+                            invalidCharsLabel.visible = false
+                            spaceFiller.visible = true
                         }
                     }
                 }
 
-                Window {
+                ApplicationWindow {
                     id: errorWindow
                     title: "Error"
                     width: 300
@@ -810,7 +834,7 @@ ApplicationWindow {
                     minimumWidth: 300
                     minimumHeight: 150
                     flags: Qt.Dialog
-                    modality: Qt.ApplicationModal
+                    //modality: Qt.ApplicationModal
 
                     ColumnLayout {
                         anchors.fill: parent

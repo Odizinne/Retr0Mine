@@ -3,9 +3,12 @@
 #include <QQuickStyle>
 #include <Utils.h>
 
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+
+    QGuiApplication::setWindowIcon(QIcon(":/icons/icon.png"));
 
     if (Utils::isWindows10()) {
         QQuickStyle::setStyle("Universal");
