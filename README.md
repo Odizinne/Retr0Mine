@@ -4,12 +4,29 @@
 [![Github All Releases](https://img.shields.io/github/downloads/odizinne/Retr0Mine/total.svg)]()
 [![license](https://img.shields.io/github/license/odizinne/Retr0Mine)]()
 
-Modern UI minesweeper created for a friend.
+Modern UI minesweeper created for a friend.  
+Runs on windows | linux.
 
-![image](https://github.com/user-attachments/assets/01b0c75e-07b9-4edc-9689-36cbe929774e)
+![image](.assets/screenshot.png)
 
+# Features
 
-## To-Do
-- Custom difficulty
-- Scrolling
-- CrossPlatform
+- You can save / load game state
+- You cannot hit a mine on first click
+- Use pure logic (if my algo is not fxcked up)
+
+# Shortcuts
+
+- `Ctrl+Q` Quit
+- `Ctrl+N` New game
+- `Ctrl+S` Save dialog
+
+# Download
+
+You can find latest release [here](https://github.com/Odizinne/Retr0Mine/releases).
+
+Extract the archive and run `Retr0Mine.exe`.
+
+# To-do
+
+- Package appimage for linux
