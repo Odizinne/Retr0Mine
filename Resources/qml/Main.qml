@@ -8,10 +8,10 @@ import QtQuick.Window 2.15
 ApplicationWindow {
     id: root
     visible: true
-    width: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 0.9)
-    height: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 0.9)
-    minimumWidth: Math.min((cellSize + cellSpacing) * 8 + 22, Screen.width * 0.9)
-    minimumHeight: Math.min((cellSize + cellSpacing) * 8 + 60, Screen.height * 0.9)
+    width: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
+    height: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 1)
+    minimumWidth: Math.min((cellSize + cellSpacing) * 8 + 22, Screen.width * 1)
+    minimumHeight: Math.min((cellSize + cellSpacing) * 8 + 60, Screen.height * 1)
     title: "Retr0Mine"
 
     onVisibleChanged: {
