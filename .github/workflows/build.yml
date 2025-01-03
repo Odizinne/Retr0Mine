@@ -113,6 +113,18 @@ jobs:
           name: Retr0Mine_msvc_64
           path: build/Retr0Mine_msvc_64.zip
 
+      - name: Create Installer
+        shell: pwsh
+        run: |
+          $env:Path += ";${env:ProgramFiles(x86)}\Inno Setup 6"
+          iscc.exe installer.iss
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Retr0Mine_Setup
+          path: Output/Retr0Mine_Setup.exe
+
   linux-build:
     runs-on: ubuntu-latest
 
