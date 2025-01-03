@@ -3,8 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtMultimedia
 import QtQuick.Window 2.15
-import Qt.labs.platform 1.1
-import QtCore
+//import Qt.labs.platform 1.1
 
 ApplicationWindow {
     id: root
@@ -690,7 +689,9 @@ ApplicationWindow {
                         text: "New game"
                         onTriggered: root.initGame()
                     }
-                    //MenuSeparator { }
+
+                    MenuSeparator { }
+
                     MenuItem {
                         text: "Save game..."
                         enabled: gameStarted
@@ -735,7 +736,9 @@ ApplicationWindow {
                             }
                         }
                     }
-                    //MenuSeparator { }
+
+                    MenuSeparator { }
+
                     MenuItem {
                         text: "Settings"
                         onTriggered: settingsPage.visible = true
