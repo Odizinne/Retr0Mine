@@ -162,7 +162,7 @@ jobs:
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
           cp build/Retr0Mine AppDir/usr/bin/
           
-          # Create .desktop file without env in Exec
+          # Create .desktop file
           cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
           [Desktop Entry]
           Name=Retr0Mine
@@ -171,22 +171,7 @@ jobs:
           Type=Application
           Categories=Game;
           Comment=Minesweeper game
-          X-AppImage-Integrate=false
           EOF
-          
-          # Create wrapper script to set QT_QPA_PLATFORM
-          cat > AppDir/usr/bin/Retr0Mine.wrapper << EOF
-          #!/bin/bash
-          export QT_QPA_PLATFORM=xcb
-          exec "\$(dirname "\${BASH_SOURCE[0]}")/Retr0Mine.real" "\$@"
-          EOF
-          
-          # Make wrapper executable
-          chmod +x AppDir/usr/bin/Retr0Mine.wrapper
-          
-          # Rename original executable and make wrapper the main executable
-          mv AppDir/usr/bin/Retr0Mine AppDir/usr/bin/Retr0Mine.real
-          mv AppDir/usr/bin/Retr0Mine.wrapper AppDir/usr/bin/Retr0Mine
           
           # Copy application icon
           cp Resources/icons/icon.png AppDir/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
