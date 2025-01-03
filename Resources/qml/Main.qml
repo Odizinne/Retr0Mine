@@ -1113,6 +1113,11 @@ ApplicationWindow {
                                                 playClick();
                                             }
                                         } else if (mouse.button === Qt.LeftButton) {
+                                            if (mouse.button === Qt.RightButton) {
+                                                if (cellItem.revealed) {
+                                                    revealConnectedCells(index);
+                                                }
+                                            }
                                             toggleFlag(index);
                                         }
                                     } else {
@@ -1125,6 +1130,11 @@ ApplicationWindow {
                                                 playClick();
                                             }
                                         } else if (mouse.button === Qt.RightButton) {
+                                            if (mouse.button === Qt.LeftButton) {
+                                                if (cellItem.revealed) {
+                                                    revealConnectedCells(index);
+                                                }
+                                            }
                                             toggleFlag(index);
                                         }
                                     }
