@@ -1103,39 +1103,27 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: (mouse) => {
-                                    if (root.invertLRClick) {
-                                        // Swap left and right click actions
-                                        if (mouse.button === Qt.RightButton) {
-                                            if (cellItem.revealed) {
-                                                revealConnectedCells(index);
-                                            } else if (!cellItem.flagged && !cellItem.questioned) {
-                                                reveal(index);
-                                                playClick();
-                                            }
-                                        } else if (mouse.button === Qt.LeftButton) {
-                                            if (mouse.button === Qt.RightButton) {
-                                                if (cellItem.revealed) {
-                                                    revealConnectedCells(index);
-                                                }
-                                            }
-                                            toggleFlag(index);
-                                        }
+                                    if (cellItem.revealed) {
+                                        // If cell is revealed, both left and right click will trigger chord
+                                        revealConnectedCells(index);
                                     } else {
-                                        // Default behavior
-                                        if (mouse.button === Qt.LeftButton) {
-                                            if (cellItem.revealed) {
-                                                revealConnectedCells(index);
-                                            } else if (!cellItem.flagged && !cellItem.questioned) {
+                                        // If cell is not revealed, follow normal click behavior
+                                        if (root.invertLRClick) {
+                                            // Swap left and right click actions
+                                            if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
                                                 reveal(index);
                                                 playClick();
+                                            } else if (mouse.button === Qt.LeftButton) {
+                                                toggleFlag(index);
                                             }
-                                        } else if (mouse.button === Qt.RightButton) {
-                                            if (mouse.button === Qt.LeftButton) {
-                                                if (cellItem.revealed) {
-                                                    revealConnectedCells(index);
-                                                }
+                                        } else {
+                                            // Default behavior
+                                            if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                                reveal(index);
+                                                playClick();
+                                            } else if (mouse.button === Qt.RightButton) {
+                                                toggleFlag(index);
                                             }
-                                            toggleFlag(index);
                                         }
                                     }
                                 }
