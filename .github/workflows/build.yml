@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -140,11 +139,49 @@ jobs:
           qmake ../Retr0Mine.pro CONFIG+=release
           make -j$(nproc)
 
-      - name: Zip binaries folder
+      - name: Create AppDir structure
         run: |
-          zip build/Retr0Mine_linux_64.zip build/Retr0Mine
+          mkdir -p AppDir/usr/bin
+          mkdir -p AppDir/usr/lib
+          mkdir -p AppDir/usr/share/applications
+          mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
+          cp build/Retr0Mine AppDir/usr/bin/
+          
+          # Create .desktop file
+          cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
+          [Desktop Entry]
+          Name=Retr0Mine
+          Exec=Retr0Mine
+          Icon=Retr0Mine
+          Type=Application
+          Categories=Game;
+          Comment=Minesweeper game
+          EOF
+          
+          # Copy application icon
+          cp Resources/icons/icon.png AppDir/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
 
-      - name: Upload Artifacts
+      - name: Download linuxdeploy and plugins
+        run: |
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+
+      - name: Create AppImage
+        env:
+          QMAKE: ${{ env.Qt6_DIR }}/bin/qmake6
+          QML_SOURCES_PATHS: ${{ github.workspace }}/Resources/qml
+        run: |
+          export OUTPUT="Retr0Mine-x86_64.AppImage"
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: Retr0Mine_AppImage
+          path: Retr0Mine-x86_64.AppImage
+
+      - name: Upload plain binary (as before)
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_linux_64
