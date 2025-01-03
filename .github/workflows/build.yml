@@ -162,17 +162,30 @@ jobs:
           mkdir -p AppDir/usr/lib
           mkdir -p AppDir/usr/share/applications
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
-          cp build/Retr0Mine AppDir/usr/bin/
+          
+          # Copy and rename the executable first
+          cp build/Retr0Mine AppDir/usr/bin/Retr0Mine.bin
+          
+          # Create wrapper script
+          cat > AppDir/usr/bin/Retr0Mine << EOF
+          #!/bin/bash
+          export QT_QPA_PLATFORM=xcb
+          exec "\$APPDIR/usr/bin/Retr0Mine.bin" "\$@"
+          EOF
+          
+          # Make wrapper executable
+          chmod +x AppDir/usr/bin/Retr0Mine
           
           # Create .desktop file
           cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
           [Desktop Entry]
           Name=Retr0Mine
-          Exec=env QT_QPA_PLATFORM=xcb Retr0Mine
+          Exec=Retr0Mine
           Icon=Retr0Mine
           Type=Application
           Categories=Game;
           Comment=Minesweeper game
+          X-AppImage-Integrate=false
           EOF
           
           # Copy application icon
