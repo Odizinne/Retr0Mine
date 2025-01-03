@@ -143,9 +143,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgl1-mesa-dev fuse libfuse2 \
-            libwayland-dev libwayland-client0 libwayland-cursor0 libwayland-egl1 \
-            libwayland-server0 wayland-protocols libxkbcommon-dev qt6-wayland
+          sudo apt-get install -y build-essential libgl1-mesa-dev fuse libfuse2
           # Configure FUSE for the current user
           sudo modprobe fuse
           sudo groupadd fuse || true
@@ -170,7 +168,7 @@ jobs:
           cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
           [Desktop Entry]
           Name=Retr0Mine
-          Exec=Retr0Mine
+          Exec=env QT_QPA_PLATFORM=xcb Retr0Mine
           Icon=Retr0Mine
           Type=Application
           Categories=Game;
@@ -188,14 +186,17 @@ jobs:
 
       - name: Create AppImage
         run: |
+          # Debug Qt installation
+          which qmake
+          which qmake6
+          echo "Current PATH: $PATH"
+          
           # Set environment variables
           export QMAKE=$(which qmake6)
           export QML_SOURCES_PATHS=${{ github.workspace }}/Resources/qml
           export OUTPUT="Retr0Mine-x86_64.AppImage"
           
-          # Tell linuxdeploy to include Wayland plugins
-          export QT_PLUGIN_PATH=/home/runner/work/Retr0Mine/Qt/6.6.2/gcc_64/plugins
-          export LD_LIBRARY_PATH=/home/runner/work/Retr0Mine/Qt/6.6.2/gcc_64/lib:$LD_LIBRARY_PATH
+          echo "Using QMAKE: $QMAKE"
           
           # Create AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage
