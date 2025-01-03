@@ -143,7 +143,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgl1-mesa-dev fuse libfuse2
+          sudo apt-get install -y build-essential libgl1-mesa-dev fuse libfuse2 libwayland-dev qt6-wayland
           # Configure FUSE for the current user
           sudo modprobe fuse
           sudo groupadd fuse || true
