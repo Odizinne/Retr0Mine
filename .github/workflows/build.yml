@@ -122,7 +122,7 @@ jobs:
       - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
-          name: Retr0Mine_Setup
+          name: Retr0Mine_Installer
           path: Output/Retr0Mine_Installer.exe
 
   linux-build:
