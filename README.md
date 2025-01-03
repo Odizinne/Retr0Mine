@@ -30,10 +30,6 @@ Runs on windows | linux.
 | Linux Appimage   | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine-x86_64.AppImage)     |
 | Linux Bin    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_linux_64.zip)     |
 
-You can find latest release [here](https://github.com/Odizinne/Retr0Mine/releases).
-
-Extract the archive and run `Retr0Mine.exe`.
-
 # To-do
 
 - Package appimage for linux
