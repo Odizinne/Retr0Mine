@@ -508,11 +508,14 @@ ApplicationWindow {
             for (let pos of adjacentCells) {
                 reveal(pos);
             }
+            root.playClick()
         }
     }
 
+    // These are the only validation-related functions you need
+
     function isValidConfiguration(mines, gridSizeX, gridSizeY) {
-        let numbers = calculateNumbersForValidation(mines, gridSizeX, gridSizeY);
+        let numbers = calculateNumbersForValidation(mines, gridSizeX, gridSizeY); // We need to keep this function
         let revealed = new Array(gridSizeX * gridSizeY).fill(false);
         let stack = [];
 
@@ -576,7 +579,7 @@ ApplicationWindow {
 
                 let checkPos = checkRow * gridSizeX + checkCol;
                 if (revealed[checkPos]) {
-                    // Count revealed and flagged cells around this neighbor
+                    // Count revealed and mine cells around this neighbor
                     let adjacentRevealed = 0;
                     let adjacentMines = 0;
                     let unknownCells = [];
@@ -605,7 +608,8 @@ ApplicationWindow {
                         return true;
                     }
 
-                    // If this cell has all but one mine accounted for and only one unknown cell, that cell must be a mine
+                    // If this cell has all but one mine accounted for and only one unknown cell
+                    // that cell must be a mine
                     if (numbers[checkPos] === adjacentMines + 1 && unknownCells.length === 1 && unknownCells[0] === pos) {
                         return mines.includes(pos);
                     }
@@ -616,36 +620,7 @@ ApplicationWindow {
         return false;
     }
 
-    function calculateNumbersForValidation(mines, gridSizeX, gridSizeY) {
-        let numbers = [];
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (mines.includes(i)) {
-                numbers[i] = -1;
-                continue;
-            }
-
-            let count = 0;
-            let row = Math.floor(i / gridSizeX);
-            let col = i % gridSizeX;
-
-            for (let r = -1; r <= 1; r++) {
-                for (let c = -1; c <= 1; c++) {
-                    if (r === 0 && c === 0) continue;
-
-                    let newRow = row + r;
-                    let newCol = col + c;
-                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
-
-                    let pos = newRow * gridSizeX + newCol;
-                    if (mines.includes(pos)) count++;
-                }
-            }
-            numbers[i] = count;
-        }
-        return numbers;
-    }
-
-    // Updated placeMines function
+    // Keep your existing placeMines function, but it uses these validation functions
     function placeMines(firstClickIndex) {
         const maxAttempts = 1000;
         let attempt = 0;
@@ -720,6 +695,35 @@ ApplicationWindow {
             }
             numbers[i] = count
         }
+    }
+
+    function calculateNumbersForValidation(mines, gridSizeX, gridSizeY) {
+        let numbers = [];
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            if (mines.includes(i)) {
+                numbers[i] = -1;
+                continue;
+            }
+
+            let count = 0;
+            let row = Math.floor(i / gridSizeX);
+            let col = i % gridSizeX;
+
+            for (let r = -1; r <= 1; r++) {
+                for (let c = -1; c <= 1; c++) {
+                    if (r === 0 && c === 0) continue;
+
+                    let newRow = row + r;
+                    let newCol = col + c;
+                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
+
+                    let pos = newRow * gridSizeX + newCol;
+                    if (mines.includes(pos)) count++;
+                }
+            }
+            numbers[i] = count;
+        }
+        return numbers;
     }
 
     function initGame() {
