@@ -338,6 +338,11 @@ ApplicationWindow {
                         root.gridSizeY = 100
                         root.mineCount = 2000
                         mainWindow.saveDifficulty(4)
+                    } else if (checkedButton === debugButton) {
+                        root.gridSizeX = 10
+                        root.gridSizeY = 10
+                        root.mineCount = 50
+                        mainWindow.saveDifficulty(5)
                     }
                     root.width = root.minimumWidth
                     root.height = root.minimumHeight
@@ -401,6 +406,15 @@ ApplicationWindow {
                 text: "Retr0+ (100x100, 2000 mines (Lag))"
                 ButtonGroup.group: difficultyGroup
                 checked: root.difficulty === 4
+            }
+
+            RadioButton {
+                id: debugButton
+                enabled: false
+                visible: false
+                text: "debug (10x10, 91 mines)"
+                ButtonGroup.group: difficultyGroup
+                checked: root.difficulty === 5
             }
 
             Item {
@@ -600,165 +614,126 @@ ApplicationWindow {
         }
     }
 
-    function isLogicallySolvable(mines, gridSizeX, gridSizeY) {
-        const numbers = calculateNumbersForValidation(mines, gridSizeX, gridSizeY);
+    function testSolvability(testMines, firstClickIndex) {
         const revealed = new Set();
         const flagged = new Set();
         let changed = true;
 
-        // Helper function to get adjacent cells
-        function getAdjacentCells(pos) {
-            const row = Math.floor(pos / gridSizeX);
-            const col = pos % gridSizeX;
-            const adjacent = [];
+        // Calculate numbers for the test configuration
+        let testNumbers = calculateNumbersForValidation(testMines, gridSizeX, gridSizeY);
 
-            for (let r = -1; r <= 1; r++) {
-                for (let c = -1; c <= 1; c++) {
-                    if (r === 0 && c === 0) continue;
-
-                    const newRow = row + r;
-                    const newCol = col + c;
-
-                    if (newRow >= 0 && newRow < gridSizeY && newCol >= 0 && newCol < gridSizeX) {
-                        adjacent.push(newRow * gridSizeX + newCol);
-                    }
-                }
-            }
-
-            return adjacent;
-        }
-
-        // Helper function to get number of adjacent mines
-        function getAdjacentMineCount(pos) {
-            return getAdjacentCells(pos).filter(adj => mines.includes(adj)).length;
-        }
-
-        // Reveal a cell and its consequences
-        function revealCell(pos) {
-            if (!revealed.has(pos) && !mines.includes(pos)) {
-                revealed.add(pos);
-                changed = true;
-
-                // If it's a 0, reveal all adjacent cells
-                if (numbers[pos] === 0) {
-                    getAdjacentCells(pos).forEach(adj => revealCell(adj));
-                }
-            }
-        }
-
-        // Flag a cell as mine
-        function flagCell(pos) {
-            if (!flagged.has(pos) && mines.includes(pos)) {
-                flagged.add(pos);
-                changed = true;
-            }
-        }
-
-        // Try to deduce cell state using logical rules
-        function canDeduce(pos) {
-            const adjacentCells = getAdjacentCells(pos);
-            const revealedAdjacent = adjacentCells.filter(adj => revealed.has(adj));
-
-            for (const revealedCell of revealedAdjacent) {
-                const adjacentToRevealed = getAdjacentCells(revealedCell);
-                const unknownAdjacent = adjacentToRevealed.filter(adj => !revealed.has(adj) && !flagged.has(adj));
-                const flaggedAdjacent = adjacentToRevealed.filter(adj => flagged.has(adj));
-
-                // If all mines are found, remaining cells must be safe
-                if (numbers[revealedCell] === flaggedAdjacent.length && unknownAdjacent.includes(pos)) {
-                    revealCell(pos);
-                    return true;
-                }
-
-                // If remaining unknown cells equal remaining mines, they must all be mines
-                const remainingMines = numbers[revealedCell] - flaggedAdjacent.length;
-                if (remainingMines === unknownAdjacent.length && unknownAdjacent.includes(pos)) {
-                    flagCell(pos);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        // Start with all empty cells adjacent to 0s
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (!mines.includes(i) && getAdjacentMineCount(i) === 0) {
-                revealCell(i);
-            }
-        }
+        // Start with first click and its surroundings
+        revealCell(firstClickIndex);
 
         // Keep applying logical rules until no more progress can be made
         while (changed) {
             changed = false;
-
-            // Try each logical rule for each cell
             for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-                if (!revealed.has(i) && !flagged.has(i)) {
-                    if (canDeduce(i)) {
+                if (!revealed.has(i) && !flagged.has(i) && !testMines.includes(i)) {
+                    if (canDeduce(i, revealed, testMines, testNumbers)) {
+                        revealCell(i);
                         changed = true;
                     }
                 }
             }
         }
 
-        // Check if all non-mine cells were revealed
+        // Count solvable cells
+        let solvableCells = 0;
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (!mines.includes(i) && !revealed.has(i)) {
-                return false; // Found an unrevealed safe cell
+            if (!testMines.includes(i) && revealed.has(i)) {
+                solvableCells++;
             }
         }
 
-        return true;
+        // Calculate solvability percentage
+        let totalNonMineCells = gridSizeX * gridSizeY - testMines.length;
+        let percentage = (solvableCells / totalNonMineCells) * 100;
+
+        return {
+            solvableCells: solvableCells,
+            percentage: percentage
+        };
+
+        // Helper function for the test
+        function revealCell(pos) {
+            if (!revealed.has(pos) && !testMines.includes(pos)) {
+                revealed.add(pos);
+                changed = true;
+
+                if (testNumbers[pos] === 0) {
+                    let row = Math.floor(pos / gridSizeX);
+                    let col = pos % gridSizeX;
+
+                    for (let r = -1; r <= 1; r++) {
+                        for (let c = -1; c <= 1; c++) {
+                            if (r === 0 && c === 0) continue;
+
+                            let newRow = row + r;
+                            let newCol = col + c;
+                            if (newRow >= 0 && newRow < gridSizeY &&
+                                newCol >= 0 && newCol < gridSizeX) {
+                                let newPos = newRow * gridSizeX + newCol;
+                                if (!revealed.has(newPos)) {
+                                    revealCell(newPos);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    function canDeduce(pos, revealed, mines, numbers, gridSizeX, gridSizeY) {
+    function canDeduce(pos, revealed, mines, numbers) {
         let row = Math.floor(pos / gridSizeX);
         let col = pos % gridSizeX;
 
-        // Check if any revealed neighbor provides enough information
+        // Check all revealed neighbors
         for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
                 if (r === 0 && c === 0) continue;
 
                 let checkRow = row + r;
                 let checkCol = col + c;
-                if (checkRow < 0 || checkRow >= gridSizeY || checkCol < 0 || checkCol >= gridSizeX) continue;
+                if (checkRow < 0 || checkRow >= gridSizeY ||
+                    checkCol < 0 || checkCol >= gridSizeX) continue;
 
                 let checkPos = checkRow * gridSizeX + checkCol;
-                if (revealed[checkPos]) {
-                    // Count revealed and mine cells around this neighbor
-                    let adjacentRevealed = 0;
-                    let adjacentMines = 0;
-                    let unknownCells = [];
+                if (revealed.has(checkPos)) {
+                    let surroundingMines = 0;
+                    let hiddenCells = [];
 
+                    // Count surrounding mines and hidden cells
                     for (let dr = -1; dr <= 1; dr++) {
                         for (let dc = -1; dc <= 1; dc++) {
                             if (dr === 0 && dc === 0) continue;
 
                             let adjacentRow = checkRow + dr;
                             let adjacentCol = checkCol + dc;
-                            if (adjacentRow < 0 || adjacentRow >= gridSizeY || adjacentCol < 0 || adjacentCol >= gridSizeX) continue;
+                            if (adjacentRow < 0 || adjacentRow >= gridSizeY ||
+                                adjacentCol < 0 || adjacentCol >= gridSizeX) continue;
 
                             let adjacentPos = adjacentRow * gridSizeX + adjacentCol;
-                            if (revealed[adjacentPos]) {
-                                adjacentRevealed++;
-                            } else if (mines.includes(adjacentPos)) {
-                                adjacentMines++;
-                            } else {
-                                unknownCells.push(adjacentPos);
+
+                            if (mines.includes(adjacentPos)) {
+                                surroundingMines++;
+                            } else if (!revealed.has(adjacentPos)) {
+                                hiddenCells.push(adjacentPos);
                             }
                         }
                     }
 
-                    // If this cell has all its mines accounted for, any unknown cell must be safe
-                    if (numbers[checkPos] === adjacentMines && unknownCells.includes(pos)) {
+                    // If all mines are found, remaining cells are safe
+                    if (numbers[checkPos] === surroundingMines &&
+                        hiddenCells.includes(pos)) {
                         return true;
                     }
 
-                    // If this cell has all but one mine accounted for and only one unknown cell
-                    // that cell must be a mine
-                    if (numbers[checkPos] === adjacentMines + 1 && unknownCells.length === 1 && unknownCells[0] === pos) {
+                    // If remaining hidden cells equal remaining mines, all are mines
+                    let remainingMines = numbers[checkPos] - surroundingMines;
+                    if (remainingMines === hiddenCells.length &&
+                        hiddenCells.includes(pos)) {
                         return mines.includes(pos);
                     }
                 }
@@ -769,11 +744,19 @@ ApplicationWindow {
     }
 
     function placeMines(firstClickIndex) {
-        const maxAttempts = 1000;
+        const maxAttempts = 1;
         let attempt = 0;
+        //console.log("Starting mine placement...");
+
+        console.log("Starting mine placement...");
+        //console.log(`Grid size: ${gridSizeX}x${gridSizeY}, Mines: ${mineCount}`);
+        //console.log(`First click index: ${firstClickIndex}`);
 
         while (attempt < maxAttempts) {
-            mines = [];
+            attempt++;
+            //console.log(`\nAttempt ${attempt}/${maxAttempts}`);
+
+            let currentMines = [];
             let firstClickRow = Math.floor(firstClickIndex / gridSizeX);
             let firstClickCol = firstClickIndex % gridSizeX;
 
@@ -790,20 +773,32 @@ ApplicationWindow {
             }
 
             // Place mines randomly
-            while (mines.length < mineCount) {
+            while (currentMines.length < mineCount) {
                 let pos = Math.floor(Math.random() * (gridSizeX * gridSizeY));
-                if (!safeZone.includes(pos) && !mines.includes(pos)) {
-                    mines.push(pos);
+                if (!safeZone.includes(pos) && !currentMines.includes(pos)) {
+                    currentMines.push(pos);
                 }
             }
 
-            // Verify the configuration is logically solvable
-            if (isLogicallySolvable(mines, gridSizeX, gridSizeY)) {
+            // Test configuration solvability
+            let solvabilityResult = testSolvability(currentMines, firstClickIndex);
+            //console.log(`Solvability test results:`);
+            //console.log(`- Fully solvable cells: ${solvabilityResult.solvableCells}`);
+            //console.log(`- Total non-mine cells: ${gridSizeX * gridSizeY - mineCount}`);
+            console.log(`- Solvability percentage: ${solvabilityResult.percentage.toFixed(2)}%`);
+
+            if (solvabilityResult.percentage === 100) {
+                console.log("Found perfect configuration!");
+                //console.log(`Total attempts needed: ${attempt}`);
+                mines = currentMines;
                 calculateNumbers();
                 return true;
             }
 
-            attempt++;
+            // If not 100% solvable and attempts remain, continue trying
+            if (attempt < maxAttempts) {
+                console.log("Configuration not perfectly solvable, trying again...");
+            }
         }
 
         return false;
@@ -936,7 +931,7 @@ ApplicationWindow {
                 }
             }
         }
-        printGrid()
+        //printGrid()
         checkWin()
     }
 
