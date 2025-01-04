@@ -63,6 +63,9 @@ MainWindow::MainWindow(QObject *parent)
     bool soundEffects = settings.value("soundEffects", true).toBool();
     engine->rootContext()->setContextProperty("soundEffects", soundEffects);
 
+    bool animations = settings.value("animations", true).toBool();
+    engine->rootContext()->setContextProperty("animations", animations);
+
     QString uiFile = "qrc:/qml/Main.qml";
     engine->load(QUrl(uiFile));
 }
@@ -78,6 +81,10 @@ void MainWindow::saveSoundSettings(bool soundEffects) {
 void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal) {
     settings.setValue("invertLRClick", invertLRClick);
     settings.setValue("autoreveal", autoreveal);
+}
+
+void MainWindow::saveVisualSettings(bool animations) {
+    settings.setValue("animations", animations);
 }
 
 QString MainWindow::getWindowsPath() const {

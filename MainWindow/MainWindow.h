@@ -15,6 +15,7 @@ public:
     Q_INVOKABLE void saveDifficulty(int difficulty);
     Q_INVOKABLE void saveSoundSettings(bool soundEffects);
     Q_INVOKABLE void saveControlsSettings(bool invertLRClick, bool autoreveal);
+    Q_INVOKABLE void saveVisualSettings(bool animations);
 
     Q_INVOKABLE QString getWindowsPath() const;
     Q_INVOKABLE QString getLinuxPath() const;

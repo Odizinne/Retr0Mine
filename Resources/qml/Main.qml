@@ -36,9 +36,15 @@ ApplicationWindow {
         onActivated: root.initGame()
     }
 
+    Shortcut {
+        sequence: "Ctrl+P"
+        onActivated: settingsPage.visible = true
+    }
+
     property bool isLinux: linux
     property bool isWindows11: windows11
     property bool isWindows10: windows10
+    property bool enableAnimations: animations
     property bool revealConnected: revealConnectedCell
     property bool invertLRClick: invertClick
     property bool playSound: soundEffects
@@ -314,12 +320,8 @@ ApplicationWindow {
                 font.pixelSize: 18
             }
 
-            Rectangle {
-                Layout.topMargin: 5
-                Layout.bottomMargin: 5
+            MenuSeparator {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
             }
 
             RadioButton {
@@ -370,12 +372,8 @@ ApplicationWindow {
                 font.pixelSize: 18
             }
 
-            Rectangle {
-                Layout.topMargin: 5
-                Layout.bottomMargin: 5
+            MenuSeparator {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
             }
 
             Switch {
@@ -392,17 +390,42 @@ ApplicationWindow {
             }
 
             Label {
+                text: "Visuals"
+                font.bold: true
+                font.pixelSize: 18
+            }
+
+            MenuSeparator {
+                Layout.fillWidth: true
+            }
+
+            Switch {
+                text: "Enable animations"
+                checked: root.enableAnimations
+                onCheckedChanged: {
+                    mainWindow.saveVisualSettings(checked);
+                    root.enableAnimations = checked
+                    for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
+                        let cell = grid.itemAtIndex(i)
+                        if (cell) {
+                            cell.opacity = 1
+                        }
+                    }
+                }
+            }
+
+            Item {
+                Layout.preferredHeight: 5
+            }
+
+            Label {
                 text: "Controls"
                 font.bold: true
                 font.pixelSize: 18
             }
 
-            Rectangle {
-                Layout.topMargin: 5
-                Layout.bottomMargin: 5
+            MenuSeparator {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: root.darkMode ? Qt.rgba (1, 1, 1, 0.15) : Qt.rgba (0, 0, 0, 0.15)
             }
 
             Switch {
@@ -1132,7 +1155,7 @@ ApplicationWindow {
                         readonly property int diagonalSum: row + col
 
                         // Initial state: invisible
-                        opacity: 0
+                        opacity: enableAnimations ? 0 : 1
 
                         // Animation for fade in
                         NumberAnimation {
@@ -1149,12 +1172,14 @@ ApplicationWindow {
                             id: fadeTimer
                             interval: diagonalSum * 20
                             repeat: false
-                            onTriggered: fadeAnimation.start()
+                            onTriggered: {
+                                if (enableAnimations) fadeAnimation.start()
+                            }
                         }
 
                         // Start initial animation
                         Component.onCompleted: {
-                            fadeTimer.start()
+                            if (enableAnimations) fadeTimer.start()
                         }
 
                         Button {
@@ -1261,6 +1286,10 @@ ApplicationWindow {
 
                         // Function to trigger fade in animation
                         function startFadeIn() {
+                            if (!enableAnimations) {
+                                opacity = 1
+                                return
+                            }
                             opacity = 0
                             fadeTimer.restart()
                         }
