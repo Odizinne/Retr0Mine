@@ -13,6 +13,45 @@ ApplicationWindow {
     minimumHeight: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 1)
     title: "Retr0Mine"
 
+    function printGrid() {
+        console.log("Current Grid State (8x8, 10 mines):");
+        console.log("M = Mine, F = Flagged, ? = Question Mark");
+        console.log("R = Revealed (with number), . = Hidden");
+        console.log(""); // Empty line for readability
+
+        let output = "";
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                let index = row * 8 + col;
+                let cell = grid.itemAtIndex(index);
+                if (cell.revealed) {
+                    if (mines.includes(index)) {
+                        output += "M ";
+                    } else {
+                        output += (numbers[index] === 0 ? "R " : numbers[index] + " ");
+                    }
+                } else if (cell.flagged) {
+                    output += "F ";
+                } else if (cell.questioned) {
+                    output += "? ";
+                } else {
+                    output += ". ";
+                }
+            }
+            output += "\n";
+        }
+
+        // Print mine positions (for debugging)
+        console.log(output);
+        console.log("\nMine positions:", mines.sort((a, b) => a - b).join(", "));
+
+        // Print revealed count and flagged count
+        console.log(`Revealed cells: ${revealedCount}`);
+        console.log(`Flagged cells: ${flaggedCount}`);
+        console.log(`Game started: ${gameStarted}`);
+        console.log(`Game over: ${gameOver}`);
+    }
+
     onVisibleChanged: {
         if (Universal !== undefined) {
             Universal.theme = Universal.System
@@ -536,43 +575,103 @@ ApplicationWindow {
         }
     }
 
-    // These are the only validation-related functions you need
+    function isLogicallySolvable(mines, gridSizeX, gridSizeY) {
+        const numbers = calculateNumbersForValidation(mines, gridSizeX, gridSizeY);
+        const revealed = new Set();
+        const flagged = new Set();
+        let changed = true;
 
-    function isValidConfiguration(mines, gridSizeX, gridSizeY) {
-        let numbers = calculateNumbersForValidation(mines, gridSizeX, gridSizeY); // We need to keep this function
-        let revealed = new Array(gridSizeX * gridSizeY).fill(false);
-        let stack = [];
+        // Helper function to get adjacent cells
+        function getAdjacentCells(pos) {
+            const row = Math.floor(pos / gridSizeX);
+            const col = pos % gridSizeX;
+            const adjacent = [];
 
-        // Start with obvious moves (cells with 0 adjacent mines)
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (!mines.includes(i) && numbers[i] === 0) {
-                stack.push(i);
-                revealed[i] = true;
-            }
-        }
-
-        // Process obvious moves
-        while (stack.length > 0) {
-            let pos = stack.pop();
-            let row = Math.floor(pos / gridSizeX);
-            let col = pos % gridSizeX;
-
-            // Check adjacent cells
             for (let r = -1; r <= 1; r++) {
                 for (let c = -1; c <= 1; c++) {
                     if (r === 0 && c === 0) continue;
 
-                    let newRow = row + r;
-                    let newCol = col + c;
-                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
+                    const newRow = row + r;
+                    const newCol = col + c;
 
-                    let newPos = newRow * gridSizeX + newCol;
-                    if (!revealed[newPos] && !mines.includes(newPos)) {
-                        // Check if we can deduce this cell
-                        if (canDeduce(newPos, revealed, mines, numbers, gridSizeX, gridSizeY)) {
-                            revealed[newPos] = true;
-                            stack.push(newPos);
-                        }
+                    if (newRow >= 0 && newRow < gridSizeY && newCol >= 0 && newCol < gridSizeX) {
+                        adjacent.push(newRow * gridSizeX + newCol);
+                    }
+                }
+            }
+
+            return adjacent;
+        }
+
+        // Helper function to get number of adjacent mines
+        function getAdjacentMineCount(pos) {
+            return getAdjacentCells(pos).filter(adj => mines.includes(adj)).length;
+        }
+
+        // Reveal a cell and its consequences
+        function revealCell(pos) {
+            if (!revealed.has(pos) && !mines.includes(pos)) {
+                revealed.add(pos);
+                changed = true;
+
+                // If it's a 0, reveal all adjacent cells
+                if (numbers[pos] === 0) {
+                    getAdjacentCells(pos).forEach(adj => revealCell(adj));
+                }
+            }
+        }
+
+        // Flag a cell as mine
+        function flagCell(pos) {
+            if (!flagged.has(pos) && mines.includes(pos)) {
+                flagged.add(pos);
+                changed = true;
+            }
+        }
+
+        // Try to deduce cell state using logical rules
+        function canDeduce(pos) {
+            const adjacentCells = getAdjacentCells(pos);
+            const revealedAdjacent = adjacentCells.filter(adj => revealed.has(adj));
+
+            for (const revealedCell of revealedAdjacent) {
+                const adjacentToRevealed = getAdjacentCells(revealedCell);
+                const unknownAdjacent = adjacentToRevealed.filter(adj => !revealed.has(adj) && !flagged.has(adj));
+                const flaggedAdjacent = adjacentToRevealed.filter(adj => flagged.has(adj));
+
+                // If all mines are found, remaining cells must be safe
+                if (numbers[revealedCell] === flaggedAdjacent.length && unknownAdjacent.includes(pos)) {
+                    revealCell(pos);
+                    return true;
+                }
+
+                // If remaining unknown cells equal remaining mines, they must all be mines
+                const remainingMines = numbers[revealedCell] - flaggedAdjacent.length;
+                if (remainingMines === unknownAdjacent.length && unknownAdjacent.includes(pos)) {
+                    flagCell(pos);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Start with all empty cells adjacent to 0s
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            if (!mines.includes(i) && getAdjacentMineCount(i) === 0) {
+                revealCell(i);
+            }
+        }
+
+        // Keep applying logical rules until no more progress can be made
+        while (changed) {
+            changed = false;
+
+            // Try each logical rule for each cell
+            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+                if (!revealed.has(i) && !flagged.has(i)) {
+                    if (canDeduce(i)) {
+                        changed = true;
                     }
                 }
             }
@@ -580,8 +679,8 @@ ApplicationWindow {
 
         // Check if all non-mine cells were revealed
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (!mines.includes(i) && !revealed[i]) {
-                return false; // Found a cell that couldn't be logically deduced
+            if (!mines.includes(i) && !revealed.has(i)) {
+                return false; // Found an unrevealed safe cell
             }
         }
 
@@ -644,7 +743,6 @@ ApplicationWindow {
         return false;
     }
 
-    // Keep your existing placeMines function, but it uses these validation functions
     function placeMines(firstClickIndex) {
         const maxAttempts = 1000;
         let attempt = 0;
@@ -667,22 +765,15 @@ ApplicationWindow {
             }
 
             // Place mines randomly
-            for (let i = 0; i < mineCount; i++) {
-                let pos;
-                let attempts = 0;
-                do {
-                    pos = Math.floor(Math.random() * (gridSizeX * gridSizeY));
-                    attempts++;
-                } while ((safeZone.includes(pos) || mines.includes(pos)) && attempts < 100);
-
-                if (attempts < 100) {
+            while (mines.length < mineCount) {
+                let pos = Math.floor(Math.random() * (gridSizeX * gridSizeY));
+                if (!safeZone.includes(pos) && !mines.includes(pos)) {
                     mines.push(pos);
-                } else {
-                    break;
                 }
             }
 
-            if (mines.length === mineCount && isValidConfiguration(mines, gridSizeX, gridSizeY)) {
+            // Verify the configuration is logically solvable
+            if (isLogicallySolvable(mines, gridSizeX, gridSizeY)) {
                 calculateNumbers();
                 return true;
             }
@@ -820,7 +911,7 @@ ApplicationWindow {
                 }
             }
         }
-
+        printGrid()
         checkWin()
     }
 
@@ -837,7 +928,7 @@ ApplicationWindow {
     }
 
     function checkWin() {
-        if (revealedCount === (gridSizeX * gridSizeY - mineCount && !gameOver)) {
+        if (revealedCount === gridSizeX * gridSizeY - mineCount && !gameOver) {
             gameOver = true
             gameTimer.stop()
             gameOverLabel.text = "Victory :)"
