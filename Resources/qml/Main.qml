@@ -28,17 +28,17 @@ ApplicationWindow {
     Shortcut {
         sequence: StandardKey.Save
         enabled: root.gameStarted
-        onActivated: saveWindow.visible = true
+        onActivated: saveWindow.show()
     }
 
     Shortcut {
-        sequence: "Ctrl+N"
+        sequence: StandardKey.New
         onActivated: root.initGame()
     }
 
     Shortcut {
-        sequence: "Ctrl+P"
-        onActivated: settingsPage.visible = true
+        sequence: StandardKey.Print
+        onActivated: !settingsPage.visible ? settingsPage.show() : settingsPage.close()
     }
 
     property bool isLinux: linux
