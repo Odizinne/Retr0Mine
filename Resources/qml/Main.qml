@@ -504,7 +504,7 @@ ApplicationWindow {
         }
 
         // If the number of flags matches the cell's number, reveal adjacent non-flagged cells
-        if (flaggedCount === numbers[index]) {
+        if (flaggedCount === numbers[index] && adjacentCells.length > 0) {
             for (let pos of adjacentCells) {
                 reveal(pos);
             }
@@ -812,7 +812,7 @@ ApplicationWindow {
     }
 
     function checkWin() {
-        if (revealedCount === (gridSizeX * gridSizeY - mineCount)) {
+        if (revealedCount === (gridSizeX * gridSizeY - mineCount && !gameOver)) {
             gameOver = true
             gameTimer.stop()
             gameOverLabel.text = "Victory :)"
