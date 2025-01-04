@@ -86,6 +86,7 @@ ApplicationWindow {
     property bool enableAnimations: animations
     property bool revealConnected: revealConnectedCell
     property bool invertLRClick: invertClick
+    property bool cellFrame: showCellFrame
     property bool enableQuestionMarks: true
     property bool playSound: soundEffects
     property int difficulty: gameDifficulty
@@ -456,9 +457,10 @@ ApplicationWindow {
 
             Switch {
                 text: "Enable animations"
+                id: animationsSettings
                 checked: root.enableAnimations
                 onCheckedChanged: {
-                    mainWindow.saveVisualSettings(checked);
+                    mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked);
                     root.enableAnimations = checked
                     for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
                         let cell = grid.itemAtIndex(i)
@@ -466,6 +468,16 @@ ApplicationWindow {
                             cell.opacity = 1
                         }
                     }
+                }
+            }
+
+            Switch {
+                text: "Reveled cells frame"
+                id: cellFrameSettings
+                checked: root.cellFrame
+                onCheckedChanged: {
+                    mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked);
+                    root.cellFrame = checked
                 }
             }
 
@@ -1357,7 +1369,7 @@ ApplicationWindow {
                                     else return 2
                                 }
                                 border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
-                                visible: parent.flat
+                                visible: parent.flat && cellFrame
                                 color: "transparent"
                             }
 

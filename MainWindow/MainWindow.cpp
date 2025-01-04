@@ -69,6 +69,9 @@ MainWindow::MainWindow(QObject *parent)
     bool animations = settings.value("animations", true).toBool();
     engine->rootContext()->setContextProperty("animations", animations);
 
+    bool showCellFrame = settings.value("cellFrame", true).toBool();
+    engine->rootContext()->setContextProperty("showCellFrame", showCellFrame);
+
     QString uiFile = "qrc:/qml/Main.qml";
     engine->load(QUrl(uiFile));
 }
@@ -87,8 +90,9 @@ void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal, bool 
     settings.setValue("enableQuestionMarks", enableQuestionMarks);
 }
 
-void MainWindow::saveVisualSettings(bool animations) {
+void MainWindow::saveVisualSettings(bool animations, bool cellFrame) {
     settings.setValue("animations", animations);
+    settings.setValue("cellFrame", cellFrame);
 }
 
 QString MainWindow::getWindowsPath() const {
