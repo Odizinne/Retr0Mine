@@ -1071,7 +1071,11 @@ ApplicationWindow {
                                     else return 2
                                 }
                                 border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
-                                visible: parent.flat && cellFrame
+                                visible: {
+                                    if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))//parent.flat && cellFrame
+                                        return true
+                                    return parent.flat && cellFrame
+                                }
                                 color: {
                                     // Add red background for the clicked bomb
                                     if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))

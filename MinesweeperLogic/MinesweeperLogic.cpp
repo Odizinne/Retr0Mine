@@ -22,544 +22,334 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
     return true;
 }
 
-bool MinesweeperLogic::isValid(int x, int y) const
-{
-    return x >= 0 && x < m_width && y >= 0 && y < m_height;
-}
-
-int MinesweeperLogic::toIndex(int x, int y) const
-{
-    return y * m_width + x;
-}
-
-QPoint MinesweeperLogic::fromIndex(int index) const
-{
-    return QPoint(index % m_width, index / m_width);
-}
-
-QVector<int> MinesweeperLogic::getNeighbors(int index) const
-{
-    QVector<int> neighbors;
-    QPoint pos = fromIndex(index);
-
-    for (int dy = -1; dy <= 1; ++dy) {
-        for (int dx = -1; dx <= 1; ++dx) {
-            if (dx == 0 && dy == 0) continue;
-
-            int newX = pos.x() + dx;
-            int newY = pos.y() + dy;
-
-            if (isValid(newX, newY)) {
-                neighbors.append(toIndex(newX, newY));
-            }
-        }
-    }
-
-    return neighbors;
-}
-
 void MinesweeperLogic::calculateNumbers()
 {
     m_numbers.fill(0);
 
-    for (int mine : m_mines) {
-        QPoint pos = fromIndex(mine);
-        m_numbers[mine] = -1;
-
-        for (int dy = -1; dy <= 1; ++dy) {
-            for (int dx = -1; dx <= 1; ++dx) {
-                if (dx == 0 && dy == 0) continue;
-
-                int newX = pos.x() + dx;
-                int newY = pos.y() + dy;
-
-                if (isValid(newX, newY)) {
-                    int idx = toIndex(newX, newY);
-                    if (!m_mines.contains(idx)) {
-                        m_numbers[idx]++;
-                    }
-                }
-            }
-        }
-    }
-}
-
-struct Cell {
-    bool revealed = false;
-    bool flagged = false;
-    int number = 0;
-    QVector<int> neighbors;
-};
-
-bool MinesweeperLogic::hasUnavoidableGuess(QVector<int> numbers, QVector<bool> revealed)
-{
-    // Helper function to check if a cell has enough revealed neighbors to make a decision
-    auto hasEnoughInfo = [&](int x, int y) -> bool {
-        if (!isValid(x, y)) return false;
-        int idx = toIndex(x, y);
-        if (revealed[idx]) return true;
-
-        int revealedNeighbors = 0;
-        for (int dy = -1; dy <= 1; ++dy) {
-            for (int dx = -1; dx <= 1; ++dx) {
-                if (dx == 0 && dy == 0) continue;
-                int nx = x + dx;
-                int ny = y + dy;
-                if (isValid(nx, ny) && revealed[toIndex(nx, ny)]) {
-                    revealedNeighbors++;
-                }
-            }
-        }
-        return revealedNeighbors >= 3;  // Cell has at least 3 revealed neighbors
-    };
-
-    // Helper function to check if we have a true 50/50 situation
-    auto isTrue5050 = [&](int x1, int y1, int x2, int y2) -> bool {
-        int idx1 = toIndex(x1, y1);
-        int idx2 = toIndex(x2, y2);
-
-        if (revealed[idx1] || revealed[idx2]) return false;
-
-        // Get all revealed neighbors
-        QSet<int> neighbors1, neighbors2;
-        for (int dy = -1; dy <= 1; ++dy) {
-            for (int dx = -1; dx <= 1; ++dx) {
-                if (dx == 0 && dy == 0) continue;
-
-                if (isValid(x1 + dx, y1 + dy)) {
-                    int nIdx = toIndex(x1 + dx, y1 + dy);
-                    if (revealed[nIdx]) neighbors1.insert(nIdx);
-                }
-
-                if (isValid(x2 + dx, y2 + dy)) {
-                    int nIdx = toIndex(x2 + dx, y2 + dy);
-                    if (revealed[nIdx]) neighbors2.insert(nIdx);
-                }
-            }
-        }
-
-        // Check if both cells share the exact same revealed neighbors
-        // and those neighbors provide no distinguishing information
-        if (neighbors1 == neighbors2) {
-            bool allSameNumber = true;
-            int firstNum = -1;
-            for (int nIdx : neighbors1) {
-                if (firstNum == -1) {
-                    firstNum = numbers[nIdx];
-                } else if (numbers[nIdx] != firstNum) {
-                    allSameNumber = false;
-                    break;
-                }
-            }
-            return allSameNumber && firstNum > 0;
-        }
-        return false;
-    };
-
-    // Check for real 50/50 situations
-    // Only consider cells that have no additional information available
-    for (int y = 0; y < m_height; ++y) {
-        for (int x = 0; x < m_width; ++x) {
-            // Skip if current cell has enough information
-            if (hasEnoughInfo(x, y)) continue;
-
-            // Check horizontally adjacent cells
-            if (x < m_width - 1 && !hasEnoughInfo(x + 1, y)) {
-                if (isTrue5050(x, y, x + 1, y)) {
-                    qDebug() << "Found horizontal 50/50 at" << x << y;
-                    return true;
-                }
-            }
-
-            // Check vertically adjacent cells
-            if (y < m_height - 1 && !hasEnoughInfo(x, y + 1)) {
-                if (isTrue5050(x, y, x, y + 1)) {
-                    qDebug() << "Found vertical 50/50 at" << x << y;
-                    return true;
-                }
-            }
-        }
-    }
-
-    // Check for isolations (unreachable cells)
-    for (int i = 0; i < numbers.size(); ++i) {
-        if (revealed[i]) continue;
-
-        QPoint pos = fromIndex(i);
-        bool hasPathToRevealed = false;
-
-        // Check if there's any path to a revealed cell
-        for (int dy = -1; dy <= 1; ++dy) {
-            for (int dx = -1; dx <= 1; ++dx) {
-                if (dx == 0 && dy == 0) continue;
-                int nx = pos.x() + dx;
-                int ny = pos.y() + dy;
-                if (isValid(nx, ny)) {
-                    int nIdx = toIndex(nx, ny);
-                    if (revealed[nIdx] || hasEnoughInfo(nx, ny)) {
-                        hasPathToRevealed = true;
-                        break;
-                    }
-                }
-            }
-            if (hasPathToRevealed) break;
-        }
-
-        if (!hasPathToRevealed) {
-            qDebug() << "Found isolated cell at" << pos.x() << pos.y();
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool MinesweeperLogic::isEdge5050Pattern(int x, int y, QVector<int> numbers, QVector<bool> revealed)
-{
-    QVector<int> neighbors = getNeighbors(toIndex(x, y));
-    QVector<int> revealedNeighbors;
-
-    for (int neighbor : neighbors) {
-        if (revealed[neighbor]) {
-            revealedNeighbors.append(neighbor);
-        }
-    }
-
-    // Look for patterns that force guessing
-    if (revealedNeighbors.size() >= 2) {
-        // Check for 1-1 pattern
-        int onesCount = 0;
-        for (int neighbor : revealedNeighbors) {
-            if (numbers[neighbor] == 1) onesCount++;
-        }
-        if (onesCount >= 2) return true;
-
-        // Check for 1-2 pattern with no additional information
-        bool hasOne = false;
-        bool hasTwo = false;
-        for (int neighbor : revealedNeighbors) {
-            if (numbers[neighbor] == 1) hasOne = true;
-            if (numbers[neighbor] == 2) hasTwo = true;
-        }
-        if (hasOne && hasTwo) {
-            // Check if there's no additional information available
-            bool hasExtraInfo = false;
-            for (int neighbor : revealedNeighbors) {
-                QVector<int> secondaryNeighbors = getNeighbors(neighbor);
-                for (int secondary : secondaryNeighbors) {
-                    if (revealed[secondary] && !neighbors.contains(secondary)) {
-                        hasExtraInfo = true;
-                        break;
-                    }
-                }
-                if (hasExtraInfo) break;
-            }
-            if (!hasExtraInfo) return true;
-        }
-    }
-
-    return false;
-}
-
-bool MinesweeperLogic::simulateGame(int firstClickIndex, const QVector<int>& testMines)
-{
-    int totalCells = m_width * m_height;
-    QVector<Cell> cells(totalCells);
-
-    qDebug() << "Starting simulation with first click at index:" << firstClickIndex;
-    qDebug() << "Total mines:" << testMines.size();
-
-    // Initialize cell numbers and neighbors
-    for (int i = 0; i < totalCells; ++i) {
-        if (testMines.contains(i)) {
-            cells[i].number = -1;
+    for (int i = 0; i < m_width * m_height; ++i) {
+        if (m_mines.contains(i)) {
+            m_numbers[i] = -1;
             continue;
         }
 
-        cells[i].neighbors = getNeighbors(i);
+        int row = i / m_width;
+        int col = i % m_width;
         int count = 0;
-        for (int neighbor : cells[i].neighbors) {
-            if (testMines.contains(neighbor)) count++;
+
+        for (int r = -1; r <= 1; ++r) {
+            for (int c = -1; c <= 1; ++c) {
+                if (r == 0 && c == 0) continue;
+
+                int newRow = row + r;
+                int newCol = col + c;
+
+                if (newRow < 0 || newRow >= m_height ||
+                    newCol < 0 || newCol >= m_width) continue;
+
+                int pos = newRow * m_width + newCol;
+                if (m_mines.contains(pos)) count++;
+            }
         }
-        cells[i].number = count;
+
+        m_numbers[i] = count;
+    }
+}
+
+QVector<int> MinesweeperLogic::calculateNumbersForValidation(const QVector<int>& mines)
+{
+    QVector<int> numbers(m_width * m_height, 0);
+
+    for (int i = 0; i < m_width * m_height; ++i) {
+        if (mines.contains(i)) {
+            numbers[i] = -1;
+            continue;
+        }
+
+        int row = i / m_width;
+        int col = i % m_width;
+        int count = 0;
+
+        for (int r = -1; r <= 1; ++r) {
+            for (int c = -1; c <= 1; ++c) {
+                if (r == 0 && c == 0) continue;
+
+                int newRow = row + r;
+                int newCol = col + c;
+
+                if (newRow < 0 || newRow >= m_height ||
+                    newCol < 0 || newCol >= m_width) continue;
+
+                int pos = newRow * m_width + newCol;
+                if (mines.contains(pos)) count++;
+            }
+        }
+
+        numbers[i] = count;
     }
 
+    return numbers;
+}
+
+bool MinesweeperLogic::canDeduce(int pos, const QSet<int>& revealed,
+                                 const QVector<int>& mines,
+                                 const QVector<int>& numbers)
+{
+    int row = pos / m_width;
+    int col = pos % m_width;
+
+    // Check all revealed neighbors
+    for (int r = -1; r <= 1; ++r) {
+        for (int c = -1; c <= 1; ++c) {
+            if (r == 0 && c == 0) continue;
+
+            int checkRow = row + r;
+            int checkCol = col + c;
+
+            if (checkRow < 0 || checkRow >= m_height ||
+                checkCol < 0 || checkCol >= m_width) continue;
+
+            int checkPos = checkRow * m_width + checkCol;
+
+            if (revealed.contains(checkPos)) {
+                int surroundingMines = 0;
+                QVector<int> hiddenCells;
+
+                // Count surrounding mines and hidden cells
+                for (int dr = -1; dr <= 1; ++dr) {
+                    for (int dc = -1; dc <= 1; ++dc) {
+                        if (dr == 0 && dc == 0) continue;
+
+                        int adjacentRow = checkRow + dr;
+                        int adjacentCol = checkCol + dc;
+
+                        if (adjacentRow < 0 || adjacentRow >= m_height ||
+                            adjacentCol < 0 || adjacentCol >= m_width) continue;
+
+                        int adjacentPos = adjacentRow * m_width + adjacentCol;
+
+                        if (mines.contains(adjacentPos)) {
+                            ++surroundingMines;
+                        } else if (!revealed.contains(adjacentPos)) {
+                            hiddenCells.append(adjacentPos);
+                        }
+                    }
+                }
+
+                // If all mines are found, remaining cells are safe
+                if (numbers[checkPos] == surroundingMines &&
+                    hiddenCells.contains(pos)) {
+                    return true;
+                }
+
+                // If remaining hidden cells equal remaining mines, all are mines
+                int remainingMines = numbers[checkPos] - surroundingMines;
+                if (remainingMines == hiddenCells.size() &&
+                    hiddenCells.contains(pos)) {
+                    return mines.contains(pos);
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+MinesweeperLogic::SolvabilityResult MinesweeperLogic::testSolvability(
+    const QVector<int>& testMines, int firstClickIndex)
+{
+    QSet<int> revealed;
+    QSet<int> flagged;
+    bool changed = true;
+
+    // Calculate numbers for the test configuration
+    QVector<int> testNumbers = calculateNumbersForValidation(testMines);
+
     // Recursive reveal function
-    std::function<void(int)> revealCell = [&](int index) {
-        if (cells[index].revealed || cells[index].flagged || testMines.contains(index)) {
+    std::function<void(int)> revealCell = [&](int pos) {
+        if (revealed.contains(pos) || flagged.contains(pos) || testMines.contains(pos)) {
             return;
         }
 
-        cells[index].revealed = true;
-        if (cells[index].number == 0) {
-            for (int neighbor : cells[index].neighbors) {
-                revealCell(neighbor);
+        revealed.insert(pos);
+
+        if (testNumbers[pos] == 0) {
+            int row = pos / m_width;
+            int col = pos % m_width;
+
+            for (int r = -1; r <= 1; ++r) {
+                for (int c = -1; c <= 1; ++c) {
+                    if (r == 0 && c == 0) continue;
+
+                    int newRow = row + r;
+                    int newCol = col + c;
+
+                    if (newRow >= 0 && newRow < m_height &&
+                        newCol >= 0 && newCol < m_width) {
+                        int newPos = newRow * m_width + newCol;
+                        if (!revealed.contains(newPos)) {
+                            revealCell(newPos);
+                        }
+                    }
+                }
             }
         }
     };
 
-    // Start with first click
+    // First click
     revealCell(firstClickIndex);
 
-    bool changed;
-    int iterations = 0;
-    const int MAX_ITERATIONS = 100;
-
-    do {
+    // Keep applying logical rules until no more progress can be made
+    while (changed) {
         changed = false;
-        iterations++;
-
-        // First pass: Basic logic
-        for (int i = 0; i < totalCells; ++i) {
-            if (!cells[i].revealed || testMines.contains(i)) continue;
-
-            int hiddenCount = 0;
-            int flaggedCount = 0;
-            QVector<int> hiddenCells;
-
-            for (int neighbor : cells[i].neighbors) {
-                if (!cells[neighbor].revealed) {
-                    hiddenCount++;
-                    hiddenCells.append(neighbor);
-                }
-                if (cells[neighbor].flagged) flaggedCount++;
-            }
-
-            // Basic rule 1: All mines found
-            if (cells[i].number == flaggedCount && hiddenCount > flaggedCount) {
-                for (int neighbor : hiddenCells) {
-                    if (!cells[neighbor].flagged) {
-                        revealCell(neighbor);
-                        changed = true;
-                    }
+        for (int i = 0; i < m_width * m_height; ++i) {
+            if (!revealed.contains(i) && !flagged.contains(i) && !testMines.contains(i)) {
+                if (canDeduce(i, revealed, testMines, testNumbers)) {
+                    revealCell(i);
+                    changed = true;
                 }
             }
+        }
+    }
 
-            // Basic rule 2: All remaining hidden must be mines
-            if (cells[i].number - flaggedCount == hiddenCount - flaggedCount) {
-                for (int neighbor : hiddenCells) {
-                    if (!cells[neighbor].flagged) {
-                        cells[neighbor].flagged = true;
-                        changed = true;
+    // Count solvable cells
+    int solvableCells = 0;
+    for (int i = 0; i < m_width * m_height; ++i) {
+        if (!testMines.contains(i) && revealed.contains(i)) {
+            ++solvableCells;
+        }
+    }
+
+    // Calculate solvability percentage
+    int totalNonMineCells = m_width * m_height - testMines.size();
+    float percentage = (static_cast<float>(solvableCells) / totalNonMineCells) * 100.0f;
+
+    qDebug() << "Solvability Test:";
+    qDebug() << "- Solvable cells:" << solvableCells;
+    qDebug() << "- Total non-mine cells:" << totalNonMineCells;
+    qDebug() << "- Solvability percentage:" << percentage;
+
+    return {solvableCells, percentage};
+}
+
+bool MinesweeperLogic::isCornerPosition(int pos) {
+    int row = pos / m_width;
+    int col = pos % m_width;
+
+    // Check if position is in any corner
+    return (row == 0 && col == 0) ||                    // Top-left
+           (row == 0 && col == m_width - 1) ||          // Top-right
+           (row == m_height - 1 && col == 0) ||         // Bottom-left
+           (row == m_height - 1 && col == m_width - 1); // Bottom-right
+}
+
+bool MinesweeperLogic::wouldCreateCornerProblem(int pos, const QVector<int>& currentMines) {
+    int row = pos / m_width;
+    int col = pos % m_width;
+
+    // If this position is in a corner, check adjacent positions for mines
+    if (isCornerPosition(pos)) {
+        for (int r = -1; r <= 1; ++r) {
+            for (int c = -1; c <= 1; ++c) {
+                if (r == 0 && c == 0) continue;
+
+                int newRow = row + r;
+                int newCol = col + c;
+
+                if (newRow >= 0 && newRow < m_height &&
+                    newCol >= 0 && newCol < m_width) {
+                    int checkPos = newRow * m_width + newCol;
+                    if (currentMines.contains(checkPos)) {
+                        return true;
                     }
                 }
             }
         }
+    } else {
+        // If this is adjacent to a corner, check if the corner has a mine
+        for (int r = -1; r <= 1; ++r) {
+            for (int c = -1; c <= 1; ++c) {
+                if (r == 0 && c == 0) continue;
 
-    } while (changed && iterations < MAX_ITERATIONS);
+                int newRow = row + r;
+                int newCol = col + c;
 
-    // Create revealed state vector for scoring
-    QVector<bool> revealed(totalCells, false);
-    int revealedCount = 0;
-    for (int i = 0; i < totalCells; ++i) {
-        revealed[i] = cells[i].revealed;
-        if (cells[i].revealed) revealedCount++;
-    }
-
-    float score = calculateSolvabilityScore(revealed, testMines);
-    qDebug() << "Final solvability score:" << score;
-    qDebug() << "Total revealed cells:" << revealedCount;
-    qDebug() << "Total safe cells:" << (totalCells - testMines.size());
-
-    // Check for unavoidable guesses
-    QVector<int> numbers(totalCells);
-    for (int i = 0; i < totalCells; ++i) {
-        numbers[i] = cells[i].number;
-    }
-    bool hasGuess = hasUnavoidableGuess(numbers, revealed);
-    qDebug() << "Has unavoidable guess:" << hasGuess;
-
-    return score > 0.99 && !hasGuess;  // Allow for small floating-point errors
-}
-
-float MinesweeperLogic::calculateSolvabilityScore(const QVector<bool>& revealed, const QVector<int>& testMines) const
-{
-    int totalNonMines = m_width * m_height - testMines.size();
-    int revealedNonMines = 0;
-    int totalRevealed = 0;
-
-    for (int i = 0; i < revealed.size(); ++i) {
-        if (revealed[i]) {
-            totalRevealed++;
-            if (!testMines.contains(i)) {
-                revealedNonMines++;
+                if (newRow >= 0 && newRow < m_height &&
+                    newCol >= 0 && newCol < m_width) {
+                    int checkPos = newRow * m_width + newCol;
+                    if (isCornerPosition(checkPos) && currentMines.contains(checkPos)) {
+                        return true;
+                    }
+                }
             }
         }
     }
 
-    qDebug() << "Solvability calculation:";
-    qDebug() << "- Total non-mine cells:" << totalNonMines;
-    qDebug() << "- Total revealed cells:" << totalRevealed;
-    qDebug() << "- Revealed non-mine cells:" << revealedNonMines;
-
-    if (totalNonMines == 0) {
-        qDebug() << "Warning: No non-mine cells!";
-        return 0.0f;
-    }
-
-    float score = static_cast<float>(revealedNonMines) / totalNonMines;
-    qDebug() << "- Final score:" << score;
-    return score;
+    return false;
 }
 
-bool MinesweeperLogic::testSolvability(int firstClickIndex)
-{
-    // Create a test configuration with current mines
-    return simulateGame(firstClickIndex, m_mines);
-}
+bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
+    int firstClickIndex = firstClickY * m_width + firstClickX;
+    int maxAttempts = 10; // Increased attempts since we have more constraints
 
-bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY)
-{
-    int firstClickIndex = toIndex(firstClickX, firstClickY);
-    float mineDensity = static_cast<float>(m_mineCount) / (m_width * m_height);
-
+    qDebug() << "Starting mine placement...";
     qDebug() << "Grid size:" << m_width << "x" << m_height;
     qDebug() << "Mine count:" << m_mineCount;
-    qDebug() << "Mine density:" << (mineDensity * 100.0f) << "%";
+    qDebug() << "First click:" << firstClickX << "," << firstClickY;
 
-    // Define segment size based on grid dimensions
-    const int SEGMENT_SIZE = (m_width >= 40 || m_height >= 30) ? 6 : 8;
-    const int SAFE_RADIUS = 3;
+    for (int attempt = 0; attempt < maxAttempts; ++attempt) {
+        QVector<int> currentMines;
 
-    // Create safe zone around first click
-    QSet<int> safeZone;
-    for (int dy = -SAFE_RADIUS; dy <= SAFE_RADIUS; ++dy) {
-        for (int dx = -SAFE_RADIUS; dx <= SAFE_RADIUS; ++dx) {
-            int newX = firstClickX + dx;
-            int newY = firstClickY + dy;
-            if (isValid(newX, newY)) {
-                safeZone.insert(toIndex(newX, newY));
-            }
-        }
-    }
+        // Create safe zone around first click
+        QSet<int> safeZone;
+        for (int r = -1; r <= 1; ++r) {
+            for (int c = -1; c <= 1; ++c) {
+                int newRow = firstClickY + r;
+                int newCol = firstClickX + c;
 
-    // Calculate segments
-    int numSegmentsX = (m_width + SEGMENT_SIZE - 1) / SEGMENT_SIZE;
-    int numSegmentsY = (m_height + SEGMENT_SIZE - 1) / SEGMENT_SIZE;
-
-    // Function to get segment index
-    auto getSegmentIndex = [&](int x, int y) -> int {
-        int segX = x / SEGMENT_SIZE;
-        int segY = y / SEGMENT_SIZE;
-        return segY * numSegmentsX + segX;
-    };
-
-    // Function to check if a position is on the segment boundary
-    auto isSegmentBoundary = [&](int x, int y) -> bool {
-        return (x % SEGMENT_SIZE == 0) || (y % SEGMENT_SIZE == 0);
-    };
-
-    // Function to calculate preferred mine count for a segment
-    auto getPreferredMineCount = [&](int segX, int segY) -> int {
-        int baseCount = (m_mineCount * SEGMENT_SIZE * SEGMENT_SIZE) / (m_width * m_height);
-
-        // Reduce mines on edges
-        if (segX == 0 || segX == numSegmentsX - 1 || segY == 0 || segY == numSegmentsY - 1) {
-            baseCount = baseCount * 2 / 3;
-        }
-
-        // Increase mines in center segments
-        float distToCenter = std::sqrt(
-            std::pow(segX - numSegmentsX/2.0f, 2) +
-            std::pow(segY - numSegmentsY/2.0f, 2)
-            );
-        float centerBonus = 1.0f + 0.3f * (1.0f - distToCenter / std::max(numSegmentsX, numSegmentsY));
-
-        return static_cast<int>(baseCount * centerBonus);
-    };
-
-    QVector<int> availableCells;
-    for (int i = 0; i < m_width * m_height; ++i) {
-        if (!safeZone.contains(i)) {
-            availableCells.append(i);
-        }
-    }
-
-    // Parameters for pattern-based placement
-    const float BOUNDARY_MINE_CHANCE = 0.3f;  // Chance to place mine on segment boundary
-    const int MAX_SEGMENT_ATTEMPTS = 10;      // Attempts to place mines in each segment
-    const int MAX_TOTAL_ATTEMPTS = 1000;      // Total generation attempts
-
-    for (int attempt = 0; attempt < MAX_TOTAL_ATTEMPTS; ++attempt) {
-        QVector<int> testMines;
-        QVector<QVector<int>> segmentMines(numSegmentsX * numSegmentsY);
-        QVector<int> currentAvailable = availableCells;
-
-        // First pass: Place mines on segment boundaries
-        if (mineDensity > 0.15f) {  // Only for high density boards
-            for (int i = currentAvailable.size() - 1; i >= 0; --i) {
-                QPoint pos = fromIndex(currentAvailable[i]);
-                if (isSegmentBoundary(pos.x(), pos.y())) {
-                    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-                    if (dist(m_rng) < BOUNDARY_MINE_CHANCE) {
-                        int segIdx = getSegmentIndex(pos.x(), pos.y());
-                        segmentMines[segIdx].append(currentAvailable[i]);
-                        testMines.append(currentAvailable[i]);
-                        currentAvailable.remove(i);
-                    }
+                if (newRow >= 0 && newRow < m_height &&
+                    newCol >= 0 && newCol < m_width) {
+                    safeZone.insert(newRow * m_width + newCol);
                 }
             }
         }
 
-        // Second pass: Fill segments
-        for (int segY = 0; segY < numSegmentsY; ++segY) {
-            for (int segX = 0; segX < numSegmentsX; ++segX) {
-                int segIdx = segY * numSegmentsX + segX;
-                int targetMines = getPreferredMineCount(segX, segY);
-                int currentMines = segmentMines[segIdx].size();
+        // Place mines randomly with corner constraints
+        std::uniform_int_distribution<int> dist(0, m_width * m_height - 1);
+        int placementAttempts = 0;
+        const int maxPlacementAttempts = m_width * m_height * 10; // Prevent infinite loops
 
-                // Filter available cells for this segment
-                QVector<int> segmentAvailable;
-                for (int cell : currentAvailable) {
-                    QPoint pos = fromIndex(cell);
-                    if (getSegmentIndex(pos.x(), pos.y()) == segIdx) {
-                        segmentAvailable.append(cell);
-                    }
-                }
-
-                // Place remaining mines for this segment
-                int attemptsLeft = MAX_SEGMENT_ATTEMPTS;
-                while (currentMines < targetMines && !segmentAvailable.isEmpty() && attemptsLeft > 0) {
-                    std::uniform_int_distribution<int> dist(0, segmentAvailable.size() - 1);
-                    int idx = dist(m_rng);
-
-                    testMines.append(segmentAvailable[idx]);
-                    currentMines++;
-
-                    // Remove from available cells
-                    int globalIdx = currentAvailable.indexOf(segmentAvailable[idx]);
-                    if (globalIdx >= 0) {
-                        currentAvailable.remove(globalIdx);
-                    }
-                    segmentAvailable.remove(idx);
-                    attemptsLeft--;
-                }
+        while (currentMines.size() < m_mineCount && placementAttempts < maxPlacementAttempts) {
+            int pos = dist(m_rng);
+            if (!safeZone.contains(pos) &&
+                !currentMines.contains(pos) &&
+                !wouldCreateCornerProblem(pos, currentMines)) {
+                currentMines.append(pos);
             }
+            placementAttempts++;
         }
 
-        // Fill remaining mines if needed
-        while (testMines.size() < m_mineCount && !currentAvailable.isEmpty()) {
-            std::uniform_int_distribution<int> dist(0, currentAvailable.size() - 1);
-            int idx = dist(m_rng);
-            testMines.append(currentAvailable[idx]);
-            currentAvailable.remove(idx);
+        // If we couldn't place all mines, try again
+        if (currentMines.size() < m_mineCount) {
+            qDebug() << "Failed to place all mines with corner constraints, retrying...";
+            continue;
         }
 
-        std::sort(testMines.begin(), testMines.end());
+        // Test configuration solvability
+        auto solvabilityResult = testSolvability(currentMines, firstClickIndex);
+        qDebug() << "Solvability percentage:" << solvabilityResult.percentage;
 
-        if (simulateGame(firstClickIndex, testMines)) {
-            m_mines = testMines;
+        if (solvabilityResult.percentage == 100.0f) {
+            qDebug() << "Found perfect configuration!";
+            m_mines = currentMines;
             calculateNumbers();
-            qDebug() << "Found valid configuration on attempt" << (attempt + 1);
             return true;
         }
 
-        if ((attempt + 1) % 50 == 0) {
-            qDebug() << "Completed" << (attempt + 1) << "attempts";
+        if (attempt < maxAttempts - 1) {
+            qDebug() << "Configuration not perfectly solvable, trying again...";
         }
     }
 
-    qDebug() << "Failed to find perfectly solvable configuration after" << MAX_TOTAL_ATTEMPTS << "attempts";
-    calculateNumbers();
+    qDebug() << "Failed to find perfectly solvable configuration";
     return false;
 }

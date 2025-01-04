@@ -4,8 +4,10 @@
 #include <QObject>
 #include <QVector>
 #include <QPoint>
+#include <QSet>
 #include <random>
-#include <queue>
+#include <algorithm>
+#include <cmath>
 
 class MinesweeperLogic : public QObject {
     Q_OBJECT
@@ -17,7 +19,6 @@ public:
     Q_INVOKABLE bool placeMines(int firstClickX, int firstClickY);
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
-    Q_INVOKABLE bool testSolvability(int firstClickIndex);
 
 private:
     int m_width;
@@ -27,15 +28,17 @@ private:
     QVector<int> m_numbers;
     std::mt19937 m_rng;
 
-    bool isValid(int x, int y) const;
-    int toIndex(int x, int y) const;
-    QPoint fromIndex(int index) const;
     void calculateNumbers();
-    QVector<int> getNeighbors(int index) const;
-    bool simulateGame(int firstClickIndex, const QVector<int>& testMines);
-    float calculateSolvabilityScore(const QVector<bool>& revealed, const QVector<int>& testMines) const;
-    bool isEdge5050Pattern(int x, int y, QVector<int> numbers, QVector<bool> revealed);
-    bool hasUnavoidableGuess(QVector<int> numbers, QVector<bool> revealed);
+    struct SolvabilityResult {
+        int solvableCells;
+        float percentage;
+    };
+
+    bool isCornerPosition(int pos);
+    bool wouldCreateCornerProblem(int pos, const QVector<int>& currentMines);
+    SolvabilityResult testSolvability(const QVector<int>& testMines, int firstClickIndex);
+    bool canDeduce(int pos, const QSet<int>& revealed, const QVector<int>& mines, const QVector<int>& numbers);
+    QVector<int> calculateNumbersForValidation(const QVector<int>& mines);
 };
 
 #endif // MINESWEEPERLOGIC_H
