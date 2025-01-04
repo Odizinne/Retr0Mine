@@ -334,7 +334,7 @@ ApplicationWindow {
                     } else if (checkedButton === retroButton) {
                         root.gridSizeX = 50
                         root.gridSizeY = 30
-                        root.mineCount = 300
+                        root.mineCount = 320
                         mainWindow.saveDifficulty(3)
                     } else if (checkedButton === retroPlusButton) {
                         root.gridSizeX = 100
