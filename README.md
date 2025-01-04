@@ -22,7 +22,6 @@ Runs on windows | linux.
 
 - You can save / load game state
 - You cannot hit a mine on first click
-- Use pure logic (if my algo is not fxcked up)
 
 # Shortcuts
 
