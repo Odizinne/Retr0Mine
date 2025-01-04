@@ -8,9 +8,9 @@ ApplicationWindow {
     id: root
     visible: true
     width: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
-    height: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 1)
+    height: Math.min((cellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
     minimumWidth: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
-    minimumHeight: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 1)
+    minimumHeight: Math.min((cellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
     title: "Retr0Mine"
 
     function printGrid() {
@@ -994,244 +994,237 @@ ApplicationWindow {
         initGame()
     }
 
-    ColumnLayout {
+    RowLayout {
         id:topBar
+        height: 40
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: 40
-        spacing: 10
+        anchors.topMargin: 12
+        anchors.leftMargin: 12
+        anchors.rightMargin: 12
 
-        RowLayout {
-            Layout.fillHeight: true
-            Layout.topMargin: 10
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.alignment: Qt.AlignTop
-            Layout.preferredWidth: root.width
+        Button {
+            Layout.alignment: Qt.AlignLeft
+            Layout.preferredWidth: 35
+            Layout.preferredHeight: 35
+            onClicked: menu.open()
 
-            Button {
-                Layout.alignment: Qt.AlignLeft
-                Layout.preferredWidth: 35
-                Layout.preferredHeight: 35
-                onClicked: menu.open()
+            Image {
+                anchors.centerIn: parent
+                source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
+                height: 16
+                width: 16
+            }
 
-                Image {
-                    anchors.centerIn: parent
-                    source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
-                    height: 16
-                    width: 16
+            Menu {
+                id: menu
+                width: 150
+                MenuItem {
+                    text: "New game"
+                    onTriggered: root.initGame()
                 }
 
+                MenuSeparator { }
+
+                MenuItem {
+                    text: "Save game"
+                    enabled: root.gameStarted
+                    onTriggered: saveWindow.visible = true
+                }
                 Menu {
-                    id: menu
-                    width: 150
-                    MenuItem {
-                        text: "New game"
-                        onTriggered: root.initGame()
-                    }
+                    id: loadMenu
+                    title: "Load game"
 
-                    MenuSeparator { }
-
-                    MenuItem {
-                        text: "Save game"
-                        enabled: root.gameStarted
-                        onTriggered: saveWindow.visible = true
-                    }
-                    Menu {
-                        id: loadMenu
-                        title: "Load game"
-
-                        Instantiator {
-                            id: menuInstantiator
-                            model: []
-
-                            MenuItem {
-                                text: modelData
-                                onTriggered: {
-                                    let saveData = mainWindow.loadGameState(text)
-                                    if (saveData) {
-                                        if (!loadGame(saveData)) {
-                                            errorWindow.visible = true
-                                        }
-                                    }
-                                }
-                            }
-
-                            onObjectAdded: (index, object) => loadMenu.insertItem(index, object)
-                            onObjectRemoved: (index, object) => loadMenu.removeItem(object)
-                        }
-
-                        MenuSeparator { }
+                    Instantiator {
+                        id: menuInstantiator
+                        model: []
 
                         MenuItem {
-                            text: "Open save folder"
-                            onTriggered: mainWindow.openSaveFolder()
-                        }
-
-                        onAboutToShow: {
-                            let saves = mainWindow.getSaveFiles()
-                            if (saves.length === 0) {
-                                menuInstantiator.model = ["No saves found"]
-                                menuInstantiator.objectAt(0).enabled = false
-                            } else {
-                                menuInstantiator.model = saves
+                            text: modelData
+                            onTriggered: {
+                                let saveData = mainWindow.loadGameState(text)
+                                if (saveData) {
+                                    if (!loadGame(saveData)) {
+                                        errorWindow.visible = true
+                                    }
+                                }
                             }
                         }
+
+                        onObjectAdded: (index, object) => loadMenu.insertItem(index, object)
+                        onObjectRemoved: (index, object) => loadMenu.removeItem(object)
                     }
 
                     MenuSeparator { }
 
                     MenuItem {
-                        text: "Settings"
-                        onTriggered: settingsPage.visible = true
-                    }
-                    MenuItem {
-                        text: "Exit"
-                        onTriggered: Qt.quit()
-                    }
-                }
-
-                ApplicationWindow {
-                    id: saveWindow
-                    title: "Save Game"
-                    width: 300
-                    height: 150
-                    minimumWidth: 300
-                    minimumHeight: 150
-                    flags: Qt.Dialog
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 10
-
-                        TextField {
-                            id: saveNameField
-                            placeholderText: "Enter save file name"
-                            Layout.fillWidth: true
-                            onTextChanged: {
-                                // Check for invalid characters: \ / : * ? " < > |
-                                let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                                invalidCharsLabel.visible = hasInvalidChars
-                                spaceFiller.visible = !hasInvalidChars
-                                saveButton.enabled = text.trim() !== "" && !hasInvalidChars
-                            }
-                        }
-
-                        Label {
-                            id: invalidCharsLabel
-                            text: "Filename cannot contain: \\ / : * ? \" < > |"
-                            color: "#f7c220"
-                            visible: true
-                            Layout.preferredHeight: 12
-                            Layout.leftMargin: 3
-                            font.pointSize: 10
-                            Layout.fillWidth: true
-                        }
-
-                        Item {
-                            id: spaceFiller
-                            Layout.preferredHeight: 12
-                            visible: true
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignRight
-                            spacing: 10
-
-                            Button {
-                                text: "Cancel"
-                                onClicked: saveWindow.close()
-                            }
-
-                            Button {
-                                id: saveButton
-                                text: "Save"
-                                enabled: false
-                                onClicked: {
-                                    if (saveNameField.text.trim()) {
-                                        saveGame(saveNameField.text.trim() + ".json")
-                                        saveWindow.close()
-                                    }
-                                }
-                            }
-                        }
+                        text: "Open save folder"
+                        onTriggered: mainWindow.openSaveFolder()
                     }
 
-                    onVisibleChanged: {
-                        if (visible) {
-                            saveNameField.text = ""
-                            invalidCharsLabel.visible = false
-                            spaceFiller.visible = true
+                    onAboutToShow: {
+                        let saves = mainWindow.getSaveFiles()
+                        if (saves.length === 0) {
+                            menuInstantiator.model = ["No saves found"]
+                            menuInstantiator.objectAt(0).enabled = false
+                        } else {
+                            menuInstantiator.model = saves
                         }
                     }
                 }
 
-                ApplicationWindow {
-                    id: errorWindow
-                    title: "Error"
-                    width: 300
-                    height: 150
-                    minimumWidth: 300
-                    minimumHeight: 150
-                    flags: Qt.Dialog
-                    //modality: Qt.ApplicationModal
+                MenuSeparator { }
 
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 10
+                MenuItem {
+                    text: "Settings"
+                    onTriggered: settingsPage.visible = true
+                }
+                MenuItem {
+                    text: "Exit"
+                    onTriggered: Qt.quit()
+                }
+            }
+
+            ApplicationWindow {
+                id: saveWindow
+                title: "Save Game"
+                width: 300
+                height: 150
+                minimumWidth: 300
+                minimumHeight: 150
+                flags: Qt.Dialog
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    spacing: 10
+
+                    TextField {
+                        id: saveNameField
+                        placeholderText: "Enter save file name"
+                        Layout.fillWidth: true
+                        onTextChanged: {
+                            // Check for invalid characters: \ / : * ? " < > |
+                            let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
+                            invalidCharsLabel.visible = hasInvalidChars
+                            spaceFiller.visible = !hasInvalidChars
+                            saveButton.enabled = text.trim() !== "" && !hasInvalidChars
+                        }
+                    }
+
+                    Label {
+                        id: invalidCharsLabel
+                        text: "Filename cannot contain: \\ / : * ? \" < > |"
+                        color: "#f7c220"
+                        visible: true
+                        Layout.preferredHeight: 12
+                        Layout.leftMargin: 3
+                        font.pointSize: 10
+                        Layout.fillWidth: true
+                    }
+
+                    Item {
+                        id: spaceFiller
+                        Layout.preferredHeight: 12
+                        visible: true
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignRight
                         spacing: 10
 
-                        Label {
-                            text: "Failed to load save file. The file might be corrupted or incompatible."
-                            wrapMode: Text.WordWrap
-                            Layout.fillWidth: true
+                        Button {
+                            text: "Cancel"
+                            onClicked: saveWindow.close()
                         }
 
                         Button {
-                            text: "OK"
-                            Layout.alignment: Qt.AlignRight
-                            onClicked: errorWindow.close()
+                            id: saveButton
+                            text: "Save"
+                            enabled: false
+                            onClicked: {
+                                if (saveNameField.text.trim()) {
+                                    saveGame(saveNameField.text.trim() + ".json")
+                                    saveWindow.close()
+                                }
+                            }
                         }
+                    }
+                }
+
+                onVisibleChanged: {
+                    if (visible) {
+                        saveNameField.text = ""
+                        invalidCharsLabel.visible = false
+                        spaceFiller.visible = true
                     }
                 }
             }
 
-            Item {
-                Layout.fillWidth: true
+            ApplicationWindow {
+                id: errorWindow
+                title: "Error"
+                width: 300
+                height: 150
+                minimumWidth: 300
+                minimumHeight: 150
+                flags: Qt.Dialog
+                //modality: Qt.ApplicationModal
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    spacing: 10
+
+                    Label {
+                        text: "Failed to load save file. The file might be corrupted or incompatible."
+                        wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                    }
+
+                    Button {
+                        text: "OK"
+                        Layout.alignment: Qt.AlignRight
+                        onClicked: errorWindow.close()
+                    }
+                }
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        Text {
+            id: elapsedTimeLabel
+            text: "HH:MM:SS"
+            color: root.darkMode ? "white" : "black"
+            font.pixelSize: 18
+            Layout.alignment: Qt.AlignHCenter
+            Layout.leftMargin: 13
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        RowLayout {
+            Layout.rightMargin: 2
+            Layout.alignment: Qt.AlignRight
+
+            Image {
+                source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
+                Layout.preferredWidth: 16
+                Layout.preferredHeight: 16
             }
 
             Text {
-                id: elapsedTimeLabel
-                text: "HH:MM:SS"
+                text: ": " + (root.mineCount - root.flaggedCount)
                 color: root.darkMode ? "white" : "black"
                 font.pixelSize: 18
-                Layout.alignment: Qt.AlignHCenter
-                Layout.leftMargin: 13
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
-
-            RowLayout {
-                Layout.rightMargin: 2
-                Layout.alignment: Qt.AlignRight
-
-                Image {
-                    source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
-                    Layout.preferredWidth: 16
-                    Layout.preferredHeight: 16
-                }
-
-                Text {
-                    text: ": " + (root.mineCount - root.flaggedCount)
-                    color: root.darkMode ? "white" : "black"
-                    font.pixelSize: 18
-                    font.bold: true
-                }
+                font.bold: true
             }
         }
     }
@@ -1247,6 +1240,7 @@ ApplicationWindow {
         ScrollBar.vertical.policy: ScrollBar.AsNeeded
         contentWidth: gameLayout.implicitWidth
         contentHeight: gameLayout.implicitHeight
+
 
 
         ColumnLayout {
