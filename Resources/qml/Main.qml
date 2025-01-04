@@ -60,7 +60,7 @@ ApplicationWindow {
     }
 
     Shortcut {
-        sequence: StandardKey.Quit
+        sequence: "Ctrl+Q"
         onActivated: Qt.quit()
     }
 
@@ -86,6 +86,7 @@ ApplicationWindow {
     property bool enableAnimations: animations
     property bool revealConnected: revealConnectedCell
     property bool invertLRClick: invertClick
+    property bool enableQuestionMarks: true
     property bool playSound: soundEffects
     property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
@@ -488,6 +489,26 @@ ApplicationWindow {
                 }
             }
 
+            Switch {
+                id: questionMarks
+                text: "Enable question marks"
+                checked: root.enableQuestionMarks
+                onCheckedChanged: {
+                    mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked);
+                    root.enableQuestionMarks = checked
+
+                    // Clear all question marks when disabled
+                    if (!checked) {
+                        for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
+                            let cell = grid.itemAtIndex(i)
+                            if (cell && cell.questioned) {
+                                cell.questioned = false
+                            }
+                        }
+                    }
+                }
+            }
+
             Item {
                 Layout.fillHeight: true
             }
@@ -561,6 +582,10 @@ ApplicationWindow {
                 if (adjacentCell.flagged) {
                     flaggedCount++;
                 } else if (!adjacentCell.revealed) {
+                    // Remove question mark if present
+                    if (adjacentCell.questioned) {
+                        adjacentCell.questioned = false;
+                    }
                     adjacentCells.push(pos);
                 }
             }
@@ -948,17 +973,22 @@ ApplicationWindow {
                 cell.questioned = false
                 flaggedCount++
             } else if (cell.flagged) {
-                // Flag -> Question
-                cell.flagged = false
-                cell.questioned = true
-                flaggedCount--
-            } else {
+                if (enableQuestionMarks) {
+                    // Flag -> Question (only if question marks are enabled)
+                    cell.flagged = false
+                    cell.questioned = true
+                    flaggedCount--
+                } else {
+                    // Flag -> Empty (if question marks are disabled)
+                    cell.flagged = false
+                    flaggedCount--
+                }
+            } else if (cell.questioned) {
                 // Question -> Empty
                 cell.questioned = false
             }
         }
     }
-
 
     Component.onCompleted: {
         initGame()

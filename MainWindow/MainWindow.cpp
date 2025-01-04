@@ -60,6 +60,9 @@ MainWindow::MainWindow(QObject *parent)
     bool autoreveal = settings.value("autoreveal", false).toBool();
     engine->rootContext()->setContextProperty("revealConnectedCell", autoreveal);
 
+    bool enableQuestionMarks = settings.value("enableQuestionMarks", true).toBool();
+    engine->rootContext()->setContextProperty("enableQuestionMarks", enableQuestionMarks);
+
     bool soundEffects = settings.value("soundEffects", true).toBool();
     engine->rootContext()->setContextProperty("soundEffects", soundEffects);
 
@@ -78,9 +81,10 @@ void MainWindow::saveSoundSettings(bool soundEffects) {
     settings.setValue("soundEffects", soundEffects);
 }
 
-void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal) {
+void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks) {
     settings.setValue("invertLRClick", invertLRClick);
     settings.setValue("autoreveal", autoreveal);
+    settings.setValue("enableQuestionMarks", enableQuestionMarks);
 }
 
 void MainWindow::saveVisualSettings(bool animations) {
