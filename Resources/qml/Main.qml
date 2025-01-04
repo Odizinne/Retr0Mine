@@ -133,21 +133,21 @@ ApplicationWindow {
 
             // Apply revealed, flagged, and questioned states
             data.gameState.revealedCells.forEach(index => {
-                let cell = grid.itemAtIndex(index)
-                if (cell) cell.revealed = true
-            })
+                                                     let cell = grid.itemAtIndex(index)
+                                                     if (cell) cell.revealed = true
+                                                 })
 
             data.gameState.flaggedCells.forEach(index => {
-                let cell = grid.itemAtIndex(index)
-                if (cell) cell.flagged = true
-            })
+                                                    let cell = grid.itemAtIndex(index)
+                                                    if (cell) cell.flagged = true
+                                                })
 
             // Handle questioned cells if they exist in the save data
             if (data.gameState.questionedCells) {
                 data.gameState.questionedCells.forEach(index => {
-                    let cell = grid.itemAtIndex(index)
-                    if (cell) cell.questioned = true
-                })
+                                                           let cell = grid.itemAtIndex(index)
+                                                           if (cell) cell.questioned = true
+                                                       })
             }
 
             // Update counters
@@ -738,13 +738,14 @@ ApplicationWindow {
         gameTimer.stop()
         elapsedTimeLabel.text = "00:00:00"
 
-        // Reset all cells
+        // Reset all cells and trigger new animations
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell) {
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
+                cell.startFadeIn()
             }
         }
     }
@@ -1133,20 +1134,27 @@ ApplicationWindow {
                         // Initial state: invisible
                         opacity: 0
 
-                        // Fade in animation
-                        Behavior on opacity {
-                            NumberAnimation {
-                                duration: 150
-                            }
+                        // Animation for fade in
+                        NumberAnimation {
+                            id: fadeAnimation
+                            target: cellItem
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: 150
                         }
 
                         // Timer to trigger the fade in with diagonal delay
                         Timer {
                             id: fadeTimer
-                            interval: diagonalSum * 20  // 20ms delay per diagonal
-                            running: true
+                            interval: diagonalSum * 20
                             repeat: false
-                            onTriggered: parent.opacity = 1
+                            onTriggered: fadeAnimation.start()
+                        }
+
+                        // Start initial animation
+                        Component.onCompleted: {
+                            fadeTimer.start()
                         }
 
                         Button {
@@ -1224,31 +1232,37 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: (mouse) => {
-                                    if (cellItem.revealed) {
-                                        // If cell is revealed, both left and right click will trigger chord
-                                        revealConnectedCells(index);
-                                    } else {
-                                        // If cell is not revealed, follow normal click behavior
-                                        if (root.invertLRClick) {
-                                            // Swap left and right click actions
-                                            if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                reveal(index);
-                                                playClick();
-                                            } else if (mouse.button === Qt.LeftButton) {
-                                                toggleFlag(index);
-                                            }
-                                        } else {
-                                            // Default behavior
-                                            if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                reveal(index);
-                                                playClick();
-                                            } else if (mouse.button === Qt.RightButton) {
-                                                toggleFlag(index);
-                                            }
-                                        }
-                                    }
-                                }
+                                               if (cellItem.revealed) {
+                                                   // If cell is revealed, both left and right click will trigger chord
+                                                   revealConnectedCells(index);
+                                               } else {
+                                                   // If cell is not revealed, follow normal click behavior
+                                                   if (root.invertLRClick) {
+                                                       // Swap left and right click actions
+                                                       if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
+                                                           reveal(index);
+                                                           playClick();
+                                                       } else if (mouse.button === Qt.LeftButton) {
+                                                           toggleFlag(index);
+                                                       }
+                                                   } else {
+                                                       // Default behavior
+                                                       if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                                           reveal(index);
+                                                           playClick();
+                                                       } else if (mouse.button === Qt.RightButton) {
+                                                           toggleFlag(index);
+                                                       }
+                                                   }
+                                               }
+                                           }
                             }
+                        }
+
+                        // Function to trigger fade in animation
+                        function startFadeIn() {
+                            opacity = 0
+                            fadeTimer.restart()
                         }
                     }
                 }
