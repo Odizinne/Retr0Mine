@@ -290,13 +290,13 @@ ApplicationWindow {
                 // Check if there is enough space on the right side
                 if (root.x + root.width + settingsPage.width + 10 <= screen.width) {
                     // Position on the right side with a 10px margin
-                    settingsPage.x = root.x + root.width + 10
+                    settingsPage.x = root.x + root.width + 20
                 } else if (root.x - settingsPage.width - 10 >= 0) {
                     // If there is no space on the right, position on the left with a 10px margin
-                    settingsPage.x = root.x - settingsPage.width - 10
+                    settingsPage.x = root.x - settingsPage.width - 20
                 } else {
                     // If the root window is too close to the left edge, use a fallback
-                    settingsPage.x = screen.width - settingsPage.width - 10
+                    settingsPage.x = screen.width - settingsPage.width - 20
                 }
 
                 // Center vertically relative to the root window
@@ -1171,7 +1171,6 @@ ApplicationWindow {
                 minimumWidth: 300
                 minimumHeight: 150
                 flags: Qt.Dialog
-                //modality: Qt.ApplicationModal
 
                 ColumnLayout {
                     anchors.fill: parent
