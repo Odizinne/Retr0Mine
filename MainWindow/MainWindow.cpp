@@ -6,6 +6,7 @@
 #include <QFileInfo>
 #include <QDesktopServices>
 #include "Utils.h"
+#include "MinesweeperLogic.h"
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
@@ -71,6 +72,8 @@ MainWindow::MainWindow(QObject *parent)
 
     bool showCellFrame = settings.value("cellFrame", true).toBool();
     engine->rootContext()->setContextProperty("showCellFrame", showCellFrame);
+
+    qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
     QString uiFile = "qrc:/qml/Main.qml";
     engine->load(QUrl(uiFile));

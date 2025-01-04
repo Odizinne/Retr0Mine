@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtMultimedia
 import QtQuick.Window 2.15
+import com.odizinne.minesweeper 1.0
 
 ApplicationWindow {
     id: root
@@ -80,6 +81,7 @@ ApplicationWindow {
         onActivated: !settingsPage.visible ? settingsPage.show() : settingsPage.close()
     }
 
+    property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isLinux: linux
     property bool isWindows11: windows11
     property bool isWindows10: windows10
@@ -626,293 +628,21 @@ ApplicationWindow {
         }
     }
 
-    function testSolvability(testMines, firstClickIndex) {
-        const revealed = new Set();
-        const flagged = new Set();
-        let changed = true;
-
-        // Calculate numbers for the test configuration
-        let testNumbers = calculateNumbersForValidation(testMines, gridSizeX, gridSizeY);
-
-        // Start with first click and its surroundings
-        revealCell(firstClickIndex);
-
-        // Limit the number of inference iterations
-        const maxIterations = 50;
-        let iterationCount = 0;
-
-        while (changed && iterationCount < maxIterations) {
-            changed = false;
-            iterationCount++;
-
-            // 1. Basic number-based deductions
-            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-                if (!revealed.has(i)) continue;
-
-                const numMines = testNumbers[i];
-                const neighbors = getNeighbors(i);
-                const hiddenNeighbors = neighbors.filter(n =>
-                    !revealed.has(n) && !flagged.has(n)
-                );
-                const flaggedNeighbors = neighbors.filter(n => flagged.has(n));
-
-                // If flagged mines match number, reveal remaining hidden cells
-                if (flaggedNeighbors.length === numMines) {
-                    for (let n of hiddenNeighbors) {
-                        if (!revealed.has(n)) {
-                            revealCell(n);
-                            changed = true;
-                        }
-                    }
-                }
-
-                // If hidden cells match remaining mines, flag all of them
-                if (hiddenNeighbors.length === numMines - flaggedNeighbors.length) {
-                    for (let n of hiddenNeighbors) {
-                        if (!flagged.has(n)) {
-                            flagged.add(n);
-                            changed = true;
-                        }
-                    }
-                }
-            }
-
-            // 2. Probabilistic quick inference
-            if (!changed) {
-                quickProbabilisticInference();
-            }
-        }
-
-        // Count solvable cells
-        let solvableCells = 0;
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (!testMines.includes(i) && revealed.has(i)) {
-                solvableCells++;
-            }
-        }
-
-        // Calculate solvability percentage
-        let totalNonMineCells = gridSizeX * gridSizeY - testMines.length;
-        let percentage = (solvableCells / totalNonMineCells) * 100;
-
-        return {
-            solvableCells: solvableCells,
-            percentage: percentage
-        };
-
-        // Quick simplified probabilistic inference
-        function quickProbabilisticInference() {
-            const hiddenCells = [];
-
-            // Collect hidden cells from revealed cells' neighbors
-            for (let cell of revealed) {
-                const neighbors = getNeighbors(cell);
-                for (let n of neighbors) {
-                    if (!revealed.has(n) && !flagged.has(n) && !hiddenCells.includes(n)) {
-                        hiddenCells.push(n);
-                    }
-                }
-            }
-
-            for (let cell of hiddenCells) {
-                let mineProbability = calculateMineProbability(cell);
-
-                // Very quick decision threshold
-                if (mineProbability < 0.1) {
-                    revealCell(cell);
-                    changed = true;
-                } else if (mineProbability > 0.9) {
-                    flagged.add(cell);
-                    changed = true;
-                }
-            }
-        }
-
-        // Helper function to get neighboring cells
-        function getNeighbors(index) {
-            const row = Math.floor(index / gridSizeX);
-            const col = index % gridSizeX;
-            const neighbors = [];
-            for (let r = -1; r <= 1; r++) {
-                for (let c = -1; c <= 1; c++) {
-                    if (r === 0 && c === 0) continue;
-
-                    const newRow = row + r;
-                    const newCol = col + c;
-
-                    // Check bounds
-                    if (newRow >= 0 && newRow < gridSizeY &&
-                        newCol >= 0 && newCol < gridSizeX) {
-                        neighbors.push(newRow * gridSizeX + newCol);
-                    }
-                }
-            }
-            return neighbors;
-        }
-
-        // Calculate mine probability for a cell
-        function calculateMineProbability(cell) {
-            const neighboringRevealed = getNeighbors(cell)
-                .filter(n => revealed.has(n));
-
-            if (neighboringRevealed.length === 0) return 0.5;
-
-            let totalProbability = 0;
-            for (let revealedCell of neighboringRevealed) {
-                const numMines = testNumbers[revealedCell];
-                const neighbors = getNeighbors(revealedCell);
-                const hiddenNeighbors = neighbors.filter(n =>
-                    !revealed.has(n) && !flagged.has(n)
-                );
-                const flaggedNeighbors = neighbors.filter(n => flagged.has(n));
-
-                const remainingMines = numMines - flaggedNeighbors.length;
-                const cellProbability = remainingMines / hiddenNeighbors.length;
-
-                totalProbability += cellProbability;
-            }
-
-            return totalProbability / neighboringRevealed.length;
-        }
-
-        // Helper function for revealing cells with cascading reveal for zero cells
-        function revealCell(pos) {
-            if (!revealed.has(pos) && !testMines.includes(pos)) {
-                revealed.add(pos);
-
-                if (testNumbers[pos] === 0) {
-                    const row = Math.floor(pos / gridSizeX);
-                    const col = pos % gridSizeX;
-
-                    for (let r = -1; r <= 1; r++) {
-                        for (let c = -1; c <= 1; c++) {
-                            if (r === 0 && c === 0) continue;
-
-                            const newRow = row + r;
-                            const newCol = col + c;
-                            if (newRow >= 0 && newRow < gridSizeY &&
-                                newCol >= 0 && newCol < gridSizeX) {
-                                const newPos = newRow * gridSizeX + newCol;
-                                if (!revealed.has(newPos)) {
-                                    revealCell(newPos);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     function placeMines(firstClickIndex) {
-        const maxAttempts = 50; // Reduced attempts for faster processing
-        let attempt = 0;
+        const row = Math.floor(firstClickIndex / gridSizeX);
+        const col = firstClickIndex % gridSizeX;
 
-        console.log("Starting mine placement...");
+        // Initialize the game with current settings
+        gameLogic.initializeGame(gridSizeX, gridSizeY, mineCount);
 
-        while (attempt < maxAttempts) {
-            attempt++;
+        // Place mines using C++ backend
+        const success = gameLogic.placeMines(col, row);
 
-            let currentMines = [];
-            const firstClickRow = Math.floor(firstClickIndex / gridSizeX);
-            const firstClickCol = firstClickIndex % gridSizeX;
+        // Get mines and numbers from C++ backend
+        mines = gameLogic.getMines();
+        numbers = gameLogic.getNumbers();
 
-            // Create safe zone around first click
-            const safeZone = [];
-            for (let r = -1; r <= 1; r++) {
-                for (let c = -1; c <= 1; c++) {
-                    const newRow = firstClickRow + r;
-                    const newCol = firstClickCol + c;
-                    if (newRow >= 0 && newRow < gridSizeY && newCol >= 0 && newCol < gridSizeX) {
-                        safeZone.push(newRow * gridSizeX + newCol);
-                    }
-                }
-            }
-
-            // Place mines randomly
-            while (currentMines.length < mineCount) {
-                const pos = Math.floor(Math.random() * (gridSizeX * gridSizeY));
-                if (!safeZone.includes(pos) && !currentMines.includes(pos)) {
-                    currentMines.push(pos);
-                }
-            }
-
-            // Calculate numbers for validation
-            const testNumbers = calculateNumbersForValidation(currentMines, gridSizeX, gridSizeY);
-
-            // Test configuration solvability
-            const solvabilityResult = testSolvability(currentMines, firstClickIndex);
-
-            console.log(`Attempt ${attempt}:`);
-            console.log(`- Solvability percentage: ${solvabilityResult.percentage.toFixed(2)}%`);
-
-            if (solvabilityResult.percentage === 100) {
-                console.log("Found perfect configuration!");
-                mines = currentMines;
-                calculateNumbers();
-                return true;
-            }
-        }
-
-        console.log("Failed to find a perfectly solvable configuration.");
-        return false;
-    }
-
-    function calculateNumbers() {
-        numbers = []
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (mines.includes(i)) {
-                numbers[i] = -1
-                continue
-            }
-
-            let count = 0
-            let row = Math.floor(i / gridSizeX)
-            let col = i % gridSizeX
-
-            for (let r = -1; r <= 1; r++) {
-                for (let c = -1; c <= 1; c++) {
-                    if (r === 0 && c === 0) continue
-
-                    let newRow = row + r
-                    let newCol = col + c
-                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
-
-                    let pos = newRow * gridSizeX + newCol
-                    if (mines.includes(pos)) count++
-                }
-            }
-            numbers[i] = count
-        }
-    }
-
-    function calculateNumbersForValidation(mines, gridSizeX, gridSizeY) {
-        let numbers = [];
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            if (mines.includes(i)) {
-                numbers[i] = -1;
-                continue;
-            }
-
-            let count = 0;
-            let row = Math.floor(i / gridSizeX);
-            let col = i % gridSizeX;
-
-            for (let r = -1; r <= 1; r++) {
-                for (let c = -1; c <= 1; c++) {
-                    if (r === 0 && c === 0) continue;
-
-                    let newRow = row + r;
-                    let newCol = col + c;
-                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
-
-                    let pos = newRow * gridSizeX + newCol;
-                    if (mines.includes(pos)) count++;
-                }
-            }
-            numbers[i] = count;
-        }
-        return numbers;
+        return true;
     }
 
     function initGame() {
