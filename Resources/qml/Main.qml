@@ -1125,6 +1125,30 @@ ApplicationWindow {
                         property bool flagged: false
                         property bool questioned: false
 
+                        // Calculate diagonal distance for animation delay
+                        readonly property int row: Math.floor(index / root.gridSizeX)
+                        readonly property int col: index % root.gridSizeX
+                        readonly property int diagonalSum: row + col
+
+                        // Initial state: invisible
+                        opacity: 0
+
+                        // Fade in animation
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 150
+                            }
+                        }
+
+                        // Timer to trigger the fade in with diagonal delay
+                        Timer {
+                            id: fadeTimer
+                            interval: diagonalSum * 20  // 20ms delay per diagonal
+                            running: true
+                            repeat: false
+                            onTriggered: parent.opacity = 1
+                        }
+
                         Button {
                             anchors.fill: parent
                             anchors.margins: cellSpacing / 2
