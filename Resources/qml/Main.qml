@@ -9,8 +9,8 @@ ApplicationWindow {
     visible: true
     width: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
     height: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 1)
-    minimumWidth: Math.min((cellSize + cellSpacing) * 8 + 22, Screen.width * 1)
-    minimumHeight: Math.min((cellSize + cellSpacing) * 8 + 60, Screen.height * 1)
+    minimumWidth: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
+    minimumHeight: Math.min((cellSize + cellSpacing) * gridSizeY + 60, Screen.height * 1)
     title: "Retr0Mine"
 
     onVisibleChanged: {
@@ -299,7 +299,8 @@ ApplicationWindow {
                         root.mineCount = 2000
                         mainWindow.saveDifficulty(4)
                     }
-
+                    root.width = root.minimumWidth
+                    root.height = root.minimumHeight
                     initGame()
                 }
             }
@@ -890,10 +891,16 @@ ApplicationWindow {
 
             Button {
                 Layout.alignment: Qt.AlignLeft
-                text: "Menu"
-                Layout.preferredWidth: 70
-                Layout.rightMargin: -25
+                Layout.preferredWidth: 35
+                Layout.preferredHeight: 35
                 onClicked: menu.open()
+
+                Image {
+                    anchors.centerIn: parent
+                    source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
+                    height: 16
+                    width: 16
+                }
 
                 Menu {
                     id: menu
@@ -1077,30 +1084,32 @@ ApplicationWindow {
 
             Text {
                 id: elapsedTimeLabel
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 text: "HH:MM:SS"
                 color: root.darkMode ? "white" : "black"
                 font.pixelSize: 18
+                Layout.alignment: Qt.AlignHCenter
+                Layout.leftMargin: 13
             }
 
             Item {
                 Layout.fillWidth: true
             }
 
-            Row {
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignRight
+            RowLayout {
+                Layout.rightMargin: 2
+                Layout.alignment: Qt.AlignRight
 
                 Image {
                     source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
-                    width: 18
-                    height: 18
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.preferredWidth: 16
+                    Layout.preferredHeight: 16
                 }
 
                 Text {
                     text: ": " + (root.mineCount - root.flaggedCount)
                     color: root.darkMode ? "white" : "black"
                     font.pixelSize: 18
+                    font.bold: true
                 }
             }
         }

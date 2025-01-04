@@ -8,6 +8,8 @@
         <file>icons/bomb_dark.png</file>
         <file>icons/questionmark_light.png</file>
         <file>icons/questionmark_dark.png</file>
+        <file>icons/menu_light.png</file>
+        <file>icons/menu_dark.png</file>
         <file>icons/flag.png</file>
         <file>icons/icon.png</file>
     </qresource>
