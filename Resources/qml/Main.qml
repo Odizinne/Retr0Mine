@@ -14,45 +14,6 @@ ApplicationWindow {
     minimumHeight: Math.min((cellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
     title: "Retr0Mine"
 
-    function printGrid() {
-        console.log("Current Grid State (8x8, 10 mines):");
-        console.log("M = Mine, F = Flagged, ? = Question Mark");
-        console.log("R = Revealed (with number), . = Hidden");
-        console.log(""); // Empty line for readability
-
-        let output = "";
-        for (let row = 0; row < 8; row++) {
-            for (let col = 0; col < 8; col++) {
-                let index = row * 8 + col;
-                let cell = grid.itemAtIndex(index);
-                if (cell.revealed) {
-                    if (mines.includes(index)) {
-                        output += "M ";
-                    } else {
-                        output += (numbers[index] === 0 ? "R " : numbers[index] + " ");
-                    }
-                } else if (cell.flagged) {
-                    output += "F ";
-                } else if (cell.questioned) {
-                    output += "? ";
-                } else {
-                    output += ". ";
-                }
-            }
-            output += "\n";
-        }
-
-        // Print mine positions (for debugging)
-        console.log(output);
-        console.log("\nMine positions:", mines.sort((a, b) => a - b).join(", "));
-
-        // Print revealed count and flagged count
-        console.log(`Revealed cells: ${revealedCount}`);
-        console.log(`Flagged cells: ${flaggedCount}`);
-        console.log(`Game started: ${gameStarted}`);
-        console.log(`Game over: ${gameOver}`);
-    }
-
     onVisibleChanged: {
         if (Universal !== undefined) {
             Universal.theme = Universal.System
@@ -715,7 +676,6 @@ ApplicationWindow {
                 }
             }
         }
-        //printGrid()
         checkWin()
     }
 
