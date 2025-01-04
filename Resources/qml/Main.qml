@@ -649,6 +649,7 @@ ApplicationWindow {
         revealedCount++
 
         if (mines.includes(index)) {
+            cell.isBombClicked = true
             gameOver = true
             gameTimer.stop()
             revealAllMines()
@@ -1021,7 +1022,7 @@ ApplicationWindow {
                         property bool revealed: false
                         property bool flagged: false
                         property bool questioned: false
-
+                        property bool isBombClicked: false // New property to track clicked bomb
                         // Calculate diagonal distance for animation delay
                         readonly property int row: Math.floor(index / root.gridSizeX)
                         readonly property int col: index % root.gridSizeX
@@ -1071,7 +1072,12 @@ ApplicationWindow {
                                 }
                                 border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                                 visible: parent.flat && cellFrame
-                                color: "transparent"
+                                color: {
+                                    // Add red background for the clicked bomb
+                                    if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
+                                        return accentColor  // Red color similar to game over text
+                                    return "transparent"
+                                }
                             }
 
                             Image {
