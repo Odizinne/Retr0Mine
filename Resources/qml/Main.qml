@@ -511,94 +511,187 @@ ApplicationWindow {
         }
     }
 
-    function isValidMinePlacement(minePositions, index) {
-        let row = Math.floor(index / gridSizeX)
-        let col = index % gridSizeX
+    function isValidConfiguration(mines, gridSizeX, gridSizeY) {
+        let numbers = calculateNumbersForValidation(mines, gridSizeX, gridSizeY);
+        let revealed = new Array(gridSizeX * gridSizeY).fill(false);
+        let stack = [];
 
-        for (let r = -1; r <= 1; r++) {
-            for (let c = -1; c <= 1; c++) {
-                if (r === 0 && c === 0) continue
+        // Start with obvious moves (cells with 0 adjacent mines)
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            if (!mines.includes(i) && numbers[i] === 0) {
+                stack.push(i);
+                revealed[i] = true;
+            }
+        }
 
-                let newRow = row + r
-                let newCol = col + c
-                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+        // Process obvious moves
+        while (stack.length > 0) {
+            let pos = stack.pop();
+            let row = Math.floor(pos / gridSizeX);
+            let col = pos % gridSizeX;
 
-                let pos = newRow * gridSizeX + newCol
-                let hasAdjacentMine = false
+            // Check adjacent cells
+            for (let r = -1; r <= 1; r++) {
+                for (let c = -1; c <= 1; c++) {
+                    if (r === 0 && c === 0) continue;
 
-                for (let dr = -1; dr <= 1; dr++) {
-                    for (let dc = -1; dc <= 1; dc++) {
-                        if (dr === 0 && dc === 0) continue
+                    let newRow = row + r;
+                    let newCol = col + c;
+                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
 
-                        let checkRow = newRow + dr
-                        let checkCol = newCol + dc
-                        if (checkRow < 0 || checkRow >= gridSizeY || checkCol < 0 || checkCol >= gridSizeX) continue
-
-                        let checkPos = checkRow * gridSizeX + checkCol
-                        if (minePositions.includes(checkPos)) {
-                            hasAdjacentMine = true
-                            break
+                    let newPos = newRow * gridSizeX + newCol;
+                    if (!revealed[newPos] && !mines.includes(newPos)) {
+                        // Check if we can deduce this cell
+                        if (canDeduce(newPos, revealed, mines, numbers, gridSizeX, gridSizeY)) {
+                            revealed[newPos] = true;
+                            stack.push(newPos);
                         }
                     }
-                    if (hasAdjacentMine) break
-                }
-
-                if (!hasAdjacentMine && !minePositions.includes(pos)) {
-                    return true
                 }
             }
         }
-        return false
+
+        // Check if all non-mine cells were revealed
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            if (!mines.includes(i) && !revealed[i]) {
+                return false; // Found a cell that couldn't be logically deduced
+            }
+        }
+
+        return true;
     }
 
-    function placeMines(firstClickIndex) {
-        mines = []
-        let attemptCount = 0
-        const maxAttempts = 1000
+    function canDeduce(pos, revealed, mines, numbers, gridSizeX, gridSizeY) {
+        let row = Math.floor(pos / gridSizeX);
+        let col = pos % gridSizeX;
 
-        let firstClickRow = Math.floor(firstClickIndex / gridSizeX)
-        let firstClickCol = firstClickIndex % gridSizeX
-
-        // Create safe zone around first click
-        let safeZone = []
+        // Check if any revealed neighbor provides enough information
         for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
-                let newRow = firstClickRow + r
-                let newCol = firstClickCol + c
-                if (newRow >= 0 && newRow < gridSizeY && newCol >= 0 && newCol < gridSizeX) {
-                    safeZone.push(newRow * gridSizeX + newCol)
+                if (r === 0 && c === 0) continue;
+
+                let checkRow = row + r;
+                let checkCol = col + c;
+                if (checkRow < 0 || checkRow >= gridSizeY || checkCol < 0 || checkCol >= gridSizeX) continue;
+
+                let checkPos = checkRow * gridSizeX + checkCol;
+                if (revealed[checkPos]) {
+                    // Count revealed and flagged cells around this neighbor
+                    let adjacentRevealed = 0;
+                    let adjacentMines = 0;
+                    let unknownCells = [];
+
+                    for (let dr = -1; dr <= 1; dr++) {
+                        for (let dc = -1; dc <= 1; dc++) {
+                            if (dr === 0 && dc === 0) continue;
+
+                            let adjacentRow = checkRow + dr;
+                            let adjacentCol = checkCol + dc;
+                            if (adjacentRow < 0 || adjacentRow >= gridSizeY || adjacentCol < 0 || adjacentCol >= gridSizeX) continue;
+
+                            let adjacentPos = adjacentRow * gridSizeX + adjacentCol;
+                            if (revealed[adjacentPos]) {
+                                adjacentRevealed++;
+                            } else if (mines.includes(adjacentPos)) {
+                                adjacentMines++;
+                            } else {
+                                unknownCells.push(adjacentPos);
+                            }
+                        }
+                    }
+
+                    // If this cell has all its mines accounted for, any unknown cell must be safe
+                    if (numbers[checkPos] === adjacentMines && unknownCells.includes(pos)) {
+                        return true;
+                    }
+
+                    // If this cell has all but one mine accounted for and only one unknown cell, that cell must be a mine
+                    if (numbers[checkPos] === adjacentMines + 1 && unknownCells.length === 1 && unknownCells[0] === pos) {
+                        return mines.includes(pos);
+                    }
                 }
             }
         }
 
-        while (mines.length < mineCount && attemptCount < maxAttempts) {
-            mines = []
-            attemptCount++
+        return false;
+    }
 
+    function calculateNumbersForValidation(mines, gridSizeX, gridSizeY) {
+        let numbers = [];
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            if (mines.includes(i)) {
+                numbers[i] = -1;
+                continue;
+            }
+
+            let count = 0;
+            let row = Math.floor(i / gridSizeX);
+            let col = i % gridSizeX;
+
+            for (let r = -1; r <= 1; r++) {
+                for (let c = -1; c <= 1; c++) {
+                    if (r === 0 && c === 0) continue;
+
+                    let newRow = row + r;
+                    let newCol = col + c;
+                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
+
+                    let pos = newRow * gridSizeX + newCol;
+                    if (mines.includes(pos)) count++;
+                }
+            }
+            numbers[i] = count;
+        }
+        return numbers;
+    }
+
+    // Updated placeMines function
+    function placeMines(firstClickIndex) {
+        const maxAttempts = 1000;
+        let attempt = 0;
+
+        while (attempt < maxAttempts) {
+            mines = [];
+            let firstClickRow = Math.floor(firstClickIndex / gridSizeX);
+            let firstClickCol = firstClickIndex % gridSizeX;
+
+            // Create safe zone around first click
+            let safeZone = [];
+            for (let r = -1; r <= 1; r++) {
+                for (let c = -1; c <= 1; c++) {
+                    let newRow = firstClickRow + r;
+                    let newCol = firstClickCol + c;
+                    if (newRow >= 0 && newRow < gridSizeY && newCol >= 0 && newCol < gridSizeX) {
+                        safeZone.push(newRow * gridSizeX + newCol);
+                    }
+                }
+            }
+
+            // Place mines randomly
             for (let i = 0; i < mineCount; i++) {
-                let pos
-                let attempts = 0
+                let pos;
+                let attempts = 0;
                 do {
-                    pos = Math.floor(Math.random() * (gridSizeX * gridSizeY))
-                    attempts++
-                } while ((safeZone.includes(pos) || mines.includes(pos))
-                         && attempts < 100)
+                    pos = Math.floor(Math.random() * (gridSizeX * gridSizeY));
+                    attempts++;
+                } while ((safeZone.includes(pos) || mines.includes(pos)) && attempts < 100);
 
                 if (attempts < 100) {
-                    mines.push(pos)
+                    mines.push(pos);
                 } else {
-                    break
+                    break;
                 }
             }
+
+            if (mines.length === mineCount && isValidConfiguration(mines, gridSizeX, gridSizeY)) {
+                calculateNumbers();
+                return true;
+            }
+
+            attempt++;
         }
 
-        if (mines.length !== mineCount) {
-            initGame()
-            return false
-        }
-
-        calculateNumbers()
-        return true
+        return false;
     }
 
     function calculateNumbers() {
