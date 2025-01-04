@@ -34,6 +34,8 @@ private:
     QVector<int> getNeighbors(int index) const;
     bool simulateGame(int firstClickIndex, const QVector<int>& testMines);
     float calculateSolvabilityScore(const QVector<bool>& revealed, const QVector<int>& testMines) const;
+    bool isEdge5050Pattern(int x, int y, QVector<int> numbers, QVector<bool> revealed);
+    bool hasUnavoidableGuess(QVector<int> numbers, QVector<bool> revealed);
 };
 
 #endif // MINESWEEPERLOGIC_H
