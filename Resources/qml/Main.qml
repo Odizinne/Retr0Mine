@@ -683,9 +683,20 @@ ApplicationWindow {
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell) {
-                cell.flagged = false
                 if (mines.includes(i)) {
-                    cell.revealed = true
+                    // Keep flag if it was correctly placed on a mine
+                    if (!cell.flagged) {
+                        //cell.flagged = false
+                        cell.revealed = true
+                    } else {
+                        cell.revealed = false
+                    }
+                } else {
+                    // Remove flag if it was not on a mine
+                    if (cell.flagged) {
+                        cell.flagged = false
+                        // You could potentially add a visual indicator of incorrect flag here
+                    }
                 }
             }
         }
