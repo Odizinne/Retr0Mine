@@ -8,10 +8,10 @@ import com.odizinne.minesweeper 1.0
 ApplicationWindow {
     id: root
     visible: true
-    width: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
-    height: Math.min((cellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
-    minimumWidth: Math.min((cellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
-    minimumHeight: Math.min((cellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
+    width: Math.min((baseCellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
+    height: Math.min((baseCellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
+    minimumWidth: (baseCellSize + cellSpacing) * gridSizeX + 22
+    minimumHeight: (baseCellSize + cellSpacing) * gridSizeY + 72
     title: "Retr0Mine"
 
     onVisibleChanged: {
@@ -68,13 +68,37 @@ ApplicationWindow {
     property var numbers: []
     property bool timerActive: false
     property int elapsedTime: 0
-    property int cellSize: 35
+    property int baseCellSize: 35
+    property real currentCellSize: baseCellSize
+
+    // Calculated size without triggering rebuilds
+    property real calculatedCellSize: {
+        const availableWidth = width - 22
+        const availableHeight = height - 72
+
+        const maxWidthBasedSize = Math.floor(availableWidth / gridSizeX - cellSpacing)
+        const maxHeightBasedSize = Math.floor(availableHeight / gridSizeY - cellSpacing)
+
+        return Math.max(baseCellSize, Math.min(maxWidthBasedSize, maxHeightBasedSize))
+    }
     property int cellSpacing: 2
     property string savePath: {
         if (Qt.platform.os === "windows")
             return mainWindow.getWindowsPath() + "/Retr0Mine"
         return mainWindow.getLinuxPath() + "/Retr0Mine"
     }
+
+    Timer {
+        id: resizeTimer
+        interval: 200
+        repeat: false
+        onTriggered: {
+            currentCellSize = calculatedCellSize
+        }
+    }
+
+    onWidthChanged: resizeTimer.restart()
+    onHeightChanged: resizeTimer.restart()
 
     function saveGame(filename) {
         let saveData = {
@@ -462,8 +486,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                radioButton.userInteractionChecked = true
-                                            }
+                                                           radioButton.userInteractionChecked = true
+                                                       }
                                         }
                                     }
 
@@ -502,8 +526,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                parent.userInteractionChecked = true
-                                            }
+                                                           parent.userInteractionChecked = true
+                                                       }
                                         }
                                     }
                                 }
@@ -1220,33 +1244,35 @@ ApplicationWindow {
 
         ColumnLayout {
             id: gameLayout
-            width: Math.max(scrollView.width, (root.cellSize + root.cellSpacing) * root.gridSizeX + 20)
-            height: Math.max(scrollView.height, (root.cellSize + root.cellSpacing) * root.gridSizeY + 20)
+            width: Math.max(scrollView.width, (calculatedCellSize + cellSpacing) * gridSizeX + 20)
+            height: Math.max(scrollView.height, (calculatedCellSize + cellSpacing) * gridSizeY + 20)
 
             spacing: 10
 
             Item {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: (root.cellSize + root.cellSpacing) * root.gridSizeX
-                Layout.preferredHeight: (root.cellSize + root.cellSpacing) * root.gridSizeY
+                Layout.preferredWidth: (root.calculatedCellSize + root.cellSpacing) * root.gridSizeX
+                Layout.preferredHeight: (root.calculatedCellSize + root.cellSpacing) * root.gridSizeY
                 Layout.margins: 10
 
                 GridView {
                     id: grid
                     anchors.fill: parent
-                    cellWidth: root.cellSize + root.cellSpacing
-                    cellHeight: root.cellSize + root.cellSpacing
+                    cellWidth: root.calculatedCellSize + root.cellSpacing
+                    cellHeight: root.calculatedCellSize + root.cellSpacing
                     model: root.gridSizeX * root.gridSizeY
                     interactive: false
 
+                    // Add a property to track if the initial animation has played
+                    property bool initialAnimationPlayed: false
+
                     delegate: Item {
                         id: cellItem
-                        width: cellSize
-                        height: cellSize
+                        width: calculatedCellSize
+                        height: calculatedCellSize
 
                         property bool animatingReveal: false
-                        property bool shouldBeFlat: false  // Track desired flat state
-
+                        property bool shouldBeFlat: false
                         property bool revealed: false
                         property bool flagged: false
                         property bool questioned: false
@@ -1256,7 +1282,8 @@ ApplicationWindow {
                         readonly property int col: index % root.gridSizeX
                         readonly property int diagonalSum: row + col
 
-                        opacity: enableAnimations ? 0 : 1
+                        // Initial opacity is 1, we'll only change it when needed
+                        opacity: 1
 
                         NumberAnimation {
                             id: fadeAnimation
@@ -1288,15 +1315,24 @@ ApplicationWindow {
                             interval: diagonalSum * 20
                             repeat: false
                             onTriggered: {
-                                if (enableAnimations) fadeAnimation.start()
+                                if (enableAnimations) {
+                                    fadeAnimation.start()
+                                }
                             }
                         }
 
                         Component.onCompleted: {
-                            if (enableAnimations) fadeTimer.start()
+                            // Only play initial animation once and only for the first creation
+                            if (enableAnimations && !grid.initialAnimationPlayed) {
+                                opacity = 0
+                                fadeTimer.start()
+                                // Mark initial animation as played after the last cell is created
+                                if (index === (root.gridSizeX * root.gridSizeY - 1)) {
+                                    grid.initialAnimationPlayed = true
+                                }
+                            }
                         }
 
-                        // The border rectangle
                         Rectangle {
                             anchors.fill: cellButton
                             border.width: 2
@@ -1400,7 +1436,7 @@ ApplicationWindow {
                             }
                         }
 
-                        // Separate Text element for the number
+                        // Number display
                         Text {
                             anchors.centerIn: parent
                             text: {
@@ -1408,7 +1444,7 @@ ApplicationWindow {
                                 if (mines.includes(index)) return ""
                                 return numbers[index] === 0 ? "" : numbers[index]
                             }
-                            font.pixelSize: cellSize * 0.65
+                            font.pixelSize: calculatedCellSize * 0.65
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
@@ -1433,6 +1469,7 @@ ApplicationWindow {
                                 opacity = 1
                                 return
                             }
+                            grid.initialAnimationPlayed = false  // Reset the animation flag
                             opacity = 0
                             fadeTimer.restart()
                         }
