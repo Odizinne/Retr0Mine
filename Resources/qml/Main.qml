@@ -1239,7 +1239,7 @@ ApplicationWindow {
                             property: "opacity"
                             from: 0
                             to: 1
-                            duration: 150
+                            duration: 200
                         }
 
                         NumberAnimation {
@@ -1249,7 +1249,7 @@ ApplicationWindow {
                             from: 1
                             to: 0
                             duration: 200
-                            easing.type: Easing.OutCubic
+                            easing.type: Easing.Linear
                             onStarted: animatingReveal = true
                             onFinished: {
                                 animatingReveal = false
