@@ -21,6 +21,23 @@ ApplicationWindow {
         }
     }
 
+    Item {
+        // or in your ApplicationWindow/Window
+        focus: true
+        Keys.onPressed: (event) => {
+            if (event.key === Qt.Key_Alt && !event.isAutoRepeat) {
+                menu.visible = true
+                event.accepted = true
+            }
+        }
+        Keys.onReleased: (event) => {
+            if (event.key === Qt.Key_Alt) {
+                menu.visible = false
+                event.accepted = true
+            }
+        }
+    }
+
     Shortcut {
         sequence: "Ctrl+Q"
         onActivated: Qt.quit()
@@ -359,9 +376,9 @@ ApplicationWindow {
     ApplicationWindow {
         id: settingsPage
         title: "Settings"
-        width: 600
+        width: 500
         height: 400
-        minimumWidth: 600
+        minimumWidth: 500
         minimumHeight: 400
         visible: false
 
@@ -383,73 +400,93 @@ ApplicationWindow {
             spacing: 0
 
             Pane {
-                Layout.preferredWidth: 200
+                Layout.preferredWidth: 180
                 Layout.fillHeight: true
                 padding: 0
                 z: 2
 
-                ListView {
-                    id: sidebarList
+                ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
-                    model: [
-                        {
-                            text: "Difficulty",
-                            iconDark: "qrc:/icons/difficulty_dark.png",
-                            iconLight: "qrc:/icons/difficulty_light.png"
-                        },
-                        {
-                            text: "Controls",
-                            iconDark: "qrc:/icons/controls_dark.png",
-                            iconLight: "qrc:/icons/controls_light.png"
-                        },
-                        {
-                            text: "Visuals",
-                            iconDark: "qrc:/icons/visuals_dark.png",
-                            iconLight: "qrc:/icons/visuals_light.png"
-                        },
-                        {
-                            text: "Sound",
-                            iconDark: "qrc:/icons/audio_dark.png",
-                            iconLight: "qrc:/icons/audio_light.png"
-                        }
-                    ]
-                    currentIndex: 0
+                    anchors.rightMargin: 10
+                    spacing: 10
 
-                    delegate: ItemDelegate {
-                        width: parent.width
-                        height: 40
-                        highlighted: ListView.isCurrentItem
-
-                        contentItem: RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 12
-
-                            Image {
-                                source: darkMode ? modelData.iconLight : modelData.iconDark
-                                //sourceSize.width: 16
-                                //sourceSize.height: 16
-                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    ListView {
+                        id: sidebarList
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.margins: 10
+                        model: [
+                            {
+                                text: "Difficulty",
+                                iconDark: "qrc:/icons/difficulty_dark.png",
+                                iconLight: "qrc:/icons/difficulty_light.png"
+                            },
+                            {
+                                text: "Controls",
+                                iconDark: "qrc:/icons/controls_dark.png",
+                                iconLight: "qrc:/icons/controls_light.png"
+                            },
+                            {
+                                text: "Visuals",
+                                iconDark: "qrc:/icons/visuals_dark.png",
+                                iconLight: "qrc:/icons/visuals_light.png"
+                            },
+                            {
+                                text: "Sound",
+                                iconDark: "qrc:/icons/audio_dark.png",
+                                iconLight: "qrc:/icons/audio_light.png"
+                            },
+                            {
+                                text: "Shortcuts",
+                                iconDark: "qrc:/icons/keyboard_dark.png",
+                                iconLight: "qrc:/icons/keyboard_light.png"
                             }
-
-                            Label {
-                                text: modelData.text
-                                font.pixelSize: 14
+                        ]
+                        currentIndex: 0
+                        delegate: ItemDelegate {
+                            width: parent.width
+                            height: 40
+                            highlighted: ListView.isCurrentItem
+                            contentItem: RowLayout {
                                 Layout.fillWidth: true
-                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                            }
-                        }
-
-                        onClicked: {
-                            if (sidebarList.currentIndex !== index) {  // Only switch if actually changing pages
-                                sidebarList.currentIndex = index
-                                switch(index) {
-                                case 0: stackView.push(difficultyPaneComponent); break;
-                                case 1: stackView.push(controlsPaneComponent); break;
-                                case 2: stackView.push(visualsPaneComponent); break;
-                                case 3: stackView.push(soundPaneComponent); break;
+                                spacing: 12
+                                Image {
+                                    source: darkMode ? modelData.iconLight : modelData.iconDark
+                                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                }
+                                Label {
+                                    text: modelData.text
+                                    font.pixelSize: 14
+                                    Layout.fillWidth: true
+                                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                                 }
                             }
+                            onClicked: {
+                                if (sidebarList.currentIndex !== index) {
+                                    sidebarList.currentIndex = index
+                                    switch(index) {
+                                    case 0: stackView.push(difficultyPaneComponent); break;
+                                    case 1: stackView.push(controlsPaneComponent); break;
+                                    case 2: stackView.push(visualsPaneComponent); break;
+                                    case 3: stackView.push(soundPaneComponent); break;
+                                    case 4: stackView.push(shortcutsPaneComponent); break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Button {
+                        id: closeSettingsButton
+                        Layout.fillWidth: true
+                        Layout.bottomMargin: 15
+                        Layout.leftMargin: 15
+                        Layout.rightMargin: 15
+                        Layout.preferredHeight: 30
+                        text: "Close settings"
+                        highlighted: true
+                        onClicked: {
+                            settingsPage.close()
                         }
                     }
                 }
@@ -471,8 +508,6 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 initialItem: difficultyPaneComponent
 
-                // In the difficultyPaneComponent, update the RadioButton implementation:
-
                 Component {
                     id: difficultyPaneComponent
 
@@ -480,14 +515,13 @@ ApplicationWindow {
                         id: difficultyPane
 
                         property var difficultySettings: [
-                            { text: "Easy (8×8, 10 mines)", x: 8, y: 8, mines: 10 },
-                            { text: "Medium (16×16, 40 mines)", x: 16, y: 16, mines: 40 },
-                            { text: "Hard (32×16, 99 mines)", x: 32, y: 16, mines: 99 },
-                            { text: "Retr0 (50×32, 320 mines)", x: 50, y: 32, mines: 320 }
+                            { text: "Easy", x: 8, y: 8, mines: 10 },
+                            { text: "Medium", x: 16, y: 16, mines: 40 },
+                            { text: "Hard", x: 32, y: 16, mines: 99 },
+                            { text: "Retr0", x: 50, y: 32, mines: 320 }
                         ]
 
                         Component.onCompleted: {
-                            // Ensure initial difficulty is set correctly
                             const initialSettings = difficultySettings[root.difficulty]
                             if (initialSettings) {
                                 root.gridSizeX = initialSettings.x
@@ -508,15 +542,10 @@ ApplicationWindow {
                                         const idx = checkedButton.difficultyIndex
                                         const settings = difficultyPane.difficultySettings[idx]
 
-                                        // Update game settings
                                         root.gridSizeX = settings.x
                                         root.gridSizeY = settings.y
                                         root.mineCount = settings.mines
                                         mainWindow.saveDifficulty(idx)
-
-                                        // No need to manually set width/height here anymore
-                                        // as it's handled by the onGridSizeXChanged and onGridSizeYChanged
-
                                         initGame()
                                         root.difficulty = idx
                                     }
@@ -528,7 +557,6 @@ ApplicationWindow {
 
                                 RowLayout {
                                     Layout.fillWidth: true
-                                    spacing: 0
                                     Layout.topMargin: index === 0 && !isWindows11 ? 5 : 0
 
                                     Label {
@@ -537,8 +565,18 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                           radioButton.userInteractionChecked = true
-                                                       }
+                                                         radioButton.userInteractionChecked = true
+                                                     }
+                                        }
+                                    }
+
+                                    Label {
+                                        text: `${modelData.x}×${modelData.y}, ${modelData.mines} mines`
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: if (mouse.button === Qt.LeftButton) {
+                                                         radioButton.userInteractionChecked = true
+                                                     }
                                         }
                                     }
 
@@ -546,19 +584,15 @@ ApplicationWindow {
                                         id: radioButton
                                         property bool userInteractionChecked: false
                                         property int difficultyIndex: index
-
-                                        Layout.rightMargin: isWindows11 ? -20 : 0
-                                        padding: 0
+                                        Layout.preferredWidth: height
                                         Layout.alignment: Qt.AlignRight
                                         ButtonGroup.group: difficultyGroup
 
                                         Component.onCompleted: {
-                                            // Set initial checked state based on root.difficulty
                                             checked = root.difficulty === index
                                         }
 
                                         onCheckedChanged: {
-                                            // Handle external changes to checked state
                                             if (checked && !userInteractionChecked) {
                                                 const settings = difficultyPane.difficultySettings[difficultyIndex]
                                                 root.gridSizeX = settings.x
@@ -577,8 +611,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                           parent.userInteractionChecked = true
-                                                       }
+                                                         parent.userInteractionChecked = true
+                                                     }
                                         }
                                     }
                                 }
@@ -802,10 +836,101 @@ ApplicationWindow {
                         }
                     }
                 }
+                Component {
+                    id: shortcutsPaneComponent
+                    Pane {
+                        id: shortcutsPane
+                        ColumnLayout {
+                            spacing: 16
+                            width: parent.width
+
+
+                            Frame {
+                                Layout.fillWidth: true
+                                RowLayout {
+                                    anchors.fill: parent
+                                    Layout.topMargin: {
+                                        if (isWindows11) return 10
+                                        return 0
+                                    }
+                                    Label {
+                                        text: "Fullscreen"
+                                        Layout.fillWidth: true
+                                    }
+                                    Label {
+                                        color: accentColor
+                                        text: "F11"
+                                        font.bold: true
+                                    }
+                                }
+                            }
+                            Frame {
+                                Layout.fillWidth: true
+                                RowLayout {
+                                    anchors.fill: parent
+                                    Label {
+                                        text: "New game"
+                                        Layout.fillWidth: true
+                                    }
+                                    Label {
+                                        color: accentColor
+                                        text: "Ctrl + N"
+                                        font.bold: true
+                                    }
+                                }
+                            }
+                            Frame {
+                                Layout.fillWidth: true
+                                RowLayout {
+                                    anchors.fill: parent
+                                    Layout.fillWidth: true
+                                    Label {
+                                        text: "Save game"
+                                        Layout.fillWidth: true
+                                    }
+                                    Label {
+                                        color: accentColor
+                                        text: "Ctrl + S"
+                                        font.bold: true
+                                    }
+                                }
+                            }
+                            Frame {
+                                Layout.fillWidth: true
+                                RowLayout {
+                                    anchors.fill: parent
+                                    Label {
+                                        text: "Open settings"
+                                        Layout.fillWidth: true
+                                    }
+                                    Label {
+                                        color: accentColor
+                                        text: "Ctrl + P"
+                                        font.bold: true
+                                    }
+                                }
+                            }
+                            Frame {
+                                Layout.fillWidth: true
+                                RowLayout {
+                                    anchors.fill: parent
+                                    Label {
+                                        text: "Quit"
+                                        Layout.fillWidth: true
+                                    }
+                                    Label {
+                                        color: accentColor
+                                        text: "Ctrl + Q"
+                                        font.bold: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-
     SoundEffect {
         id: looseEffect
         source: "qrc:/sounds/bomb.wav"
@@ -1055,8 +1180,9 @@ ApplicationWindow {
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: 35
             Layout.preferredHeight: 35
-            onClicked: menu.open()
-
+            onClicked: {
+                menu.visible ? menu.close() : menu.open()
+            }
             Image {
                 anchors.centerIn: parent
                 source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
@@ -1065,8 +1191,10 @@ ApplicationWindow {
             }
 
             Menu {
+                topMargin: 60
                 id: menu
                 width: 150
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                 MenuItem {
                     text: "New game"
                     onTriggered: root.initGame()
@@ -1464,26 +1592,26 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: (mouse) => {
-                                    if (cellItem.revealed) {
-                                        revealConnectedCells(index);
-                                    } else {
-                                        if (root.invertLRClick) {
-                                            if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                reveal(index);
-                                                playClick();
-                                            } else if (mouse.button === Qt.LeftButton) {
-                                                toggleFlag(index);
-                                            }
-                                        } else {
-                                            if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                reveal(index);
-                                                playClick();
-                                            } else if (mouse.button === Qt.RightButton) {
-                                                toggleFlag(index);
-                                            }
-                                        }
-                                    }
-                                }
+                                               if (cellItem.revealed) {
+                                                   revealConnectedCells(index);
+                                               } else {
+                                                   if (root.invertLRClick) {
+                                                       if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
+                                                           reveal(index);
+                                                           playClick();
+                                                       } else if (mouse.button === Qt.LeftButton) {
+                                                           toggleFlag(index);
+                                                       }
+                                                   } else {
+                                                       if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                                           reveal(index);
+                                                           playClick();
+                                                       } else if (mouse.button === Qt.RightButton) {
+                                                           toggleFlag(index);
+                                                       }
+                                                   }
+                                               }
+                                           }
                             }
                         }
 
