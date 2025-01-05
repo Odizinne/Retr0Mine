@@ -67,7 +67,7 @@ MainWindow::MainWindow(QObject *parent)
     bool soundEffects = settings.value("soundEffects", true).toBool();
     engine->rootContext()->setContextProperty("soundEffects", soundEffects);
 
-    bool volume = settings.value("volume", 1).toFloat();
+    float volume = settings.value("volume", 1).toFloat();
     engine->rootContext()->setContextProperty("volume", volume);
 
     bool animations = settings.value("animations", true).toBool();

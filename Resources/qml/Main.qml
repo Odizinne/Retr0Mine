@@ -53,7 +53,7 @@ ApplicationWindow {
     property bool cellFrame: showCellFrame
     property bool enableQuestionMarks: true
     property bool playSound: soundEffects
-    property bool soundVolume: volume
+    property real soundVolume: volume
     property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
     property bool gameOver: false
@@ -615,8 +615,11 @@ ApplicationWindow {
                                     to: 1
                                     value: soundVolume
                                     onValueChanged: {
-                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value)
+                                        //let roundedValue = Math.round(value * 10) / 10  // Rounds to 1 decimal place
+                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, value)
                                         root.soundVolume = value
+                                        //console.log(root.roundedValue)
+                                        //console.log(root.soundVolume)
                                     }
                                 }
                             }
@@ -648,6 +651,7 @@ ApplicationWindow {
     function playLoose() {
         if (!root.playSound) return
         looseEffect.play()
+        console.log(root.soundVolume)
     }
 
     function playClick() {
