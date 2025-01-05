@@ -237,6 +237,54 @@ ApplicationWindow {
     }
 
     ApplicationWindow {
+        id: aboutPage
+        width: 180
+        height: 230
+        minimumWidth: width
+        minimumHeight: height
+        maximumWidth: width
+        maximumHeight: height
+        title: "About"
+        flags: Qt.Dialog
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 15
+            spacing: 10
+
+            Image {
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/icons/icon.png"
+                Layout.preferredWidth: 64
+                Layout.preferredHeight: 64
+            }
+
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: "Retr0Mine"
+                font.pixelSize: 24
+                font.bold: true
+            }
+
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: "by Odizinne"
+                font.pixelSize: 14
+            }
+
+            Item {
+                Layout.fillHeight: true
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignHCenter
+                text: "Check on Github"
+                onClicked: Qt.openUrlExternally("https://github.com/odizinne/Retr0Mine")
+            }
+        }
+    }
+
+    ApplicationWindow {
         id: settingsPage
         title: "Settings"
         width: 600
@@ -303,10 +351,7 @@ ApplicationWindow {
 
                         contentItem: RowLayout {
                             Layout.fillWidth: true
-
                             spacing: 12
-
-
 
                             Image {
                                 source: darkMode ? modelData.iconLight : modelData.iconDark
@@ -981,6 +1026,12 @@ ApplicationWindow {
                     text: "Settings"
                     onTriggered: settingsPage.visible = true
                 }
+
+                MenuItem {
+                    text: "About"
+                    onTriggered: aboutPage.visible = true
+                }
+
                 MenuItem {
                     text: "Exit"
                     onTriggered: Qt.quit()
