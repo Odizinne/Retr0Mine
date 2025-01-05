@@ -49,6 +49,7 @@ ApplicationWindow {
     property bool enableAnimations: animations
     property bool revealConnected: revealConnectedCell
     property bool invertLRClick: invertClick
+    property bool highContrastFlag: contrastFlag
     property bool cellFrame: showCellFrame
     property bool enableQuestionMarks: true
     property bool playSound: soundEffects
@@ -516,7 +517,7 @@ ApplicationWindow {
                                     id: animationsSettings
                                     checked: root.enableAnimations
                                     onCheckedChanged: {
-                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked)
+                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked, highContrastFlagSwitch.checked)
                                         root.enableAnimations = checked
                                         for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
                                             let cell = grid.itemAtIndex(i)
@@ -542,8 +543,28 @@ ApplicationWindow {
                                     id: cellFrameSettings
                                     checked: root.cellFrame
                                     onCheckedChanged: {
-                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked)
+                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked, highContrastFlagSwitch.checked)
                                         root.cellFrame = checked
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: "High contrast flags"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: highContrastFlagSwitch.checked = !highContrastFlagSwitch.checked
+                                    }
+                                }
+                                Switch {
+                                    id: highContrastFlagSwitch
+                                    checked: root.highContrastFlag
+                                    onCheckedChanged: {
+                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked, highContrastFlagSwitch.checked)
+                                        root.highContrastFlag = checked
                                     }
                                 }
                             }
@@ -587,10 +608,6 @@ ApplicationWindow {
                                 Label {
                                     text: "Sound effects volume"
                                     Layout.fillWidth: true
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: soundSwitch.checked = !soundSwitch.checked
-                                    }
                                 }
                                 Slider {
                                     id: soundVolumeSlider
@@ -1201,7 +1218,11 @@ ApplicationWindow {
 
                             Image {
                                 anchors.centerIn: parent
-                                source: flagIcon
+                                source: {
+                                    if(highContrastFlag)
+                                        return darkMode ? "qrc:/icons/flag.png" : "qrc:/icons/flag_dark.png"
+                                    return flagIcon
+                                }
                                 visible: cellItem.flagged
                                 sourceSize.width: cellItem.width / 2
                                 sourceSize.height: cellItem.height / 2

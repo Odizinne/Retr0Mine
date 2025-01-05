@@ -73,6 +73,9 @@ MainWindow::MainWindow(QObject *parent)
     bool animations = settings.value("animations", true).toBool();
     engine->rootContext()->setContextProperty("animations", animations);
 
+    bool contrastFlag = settings.value("contrastFlag", false).toBool();
+    engine->rootContext()->setContextProperty("contrastFlag", contrastFlag);
+
     bool showCellFrame = settings.value("cellFrame", true).toBool();
     engine->rootContext()->setContextProperty("showCellFrame", showCellFrame);
 
@@ -97,9 +100,10 @@ void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal, bool 
     settings.setValue("enableQuestionMarks", enableQuestionMarks);
 }
 
-void MainWindow::saveVisualSettings(bool animations, bool cellFrame) {
+void MainWindow::saveVisualSettings(bool animations, bool cellFrame, bool contrastFlag) {
     settings.setValue("animations", animations);
     settings.setValue("cellFrame", cellFrame);
+    settings.setValue("contrastFlag", contrastFlag);
 }
 
 QString MainWindow::getWindowsPath() const {
