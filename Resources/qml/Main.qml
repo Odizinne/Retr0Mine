@@ -8,10 +8,10 @@ import com.odizinne.minesweeper 1.0
 ApplicationWindow {
     id: root
     visible: true
-    width: getInitialWidth()
-    height: getInitialHeight()
-    minimumWidth: (baseCellSize + cellSpacing) * gridSizeX + 24
-    minimumHeight: (baseCellSize + cellSpacing) * gridSizeY + 74
+    width: (baseCellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
+    height: (baseCellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
+    minimumWidth: (baseCellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
+    minimumHeight: (baseCellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
     title: "Retr0Mine"
 
     onVisibleChanged: {
