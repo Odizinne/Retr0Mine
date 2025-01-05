@@ -279,6 +279,7 @@ ApplicationWindow {
             Button {
                 Layout.alignment: Qt.AlignHCenter
                 text: "Check on Github"
+                highlighted: true
                 onClicked: Qt.openUrlExternally("https://github.com/odizinne/Retr0Mine")
             }
         }
