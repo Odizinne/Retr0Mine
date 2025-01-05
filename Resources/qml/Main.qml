@@ -1239,7 +1239,7 @@ ApplicationWindow {
                             property: "opacity"
                             from: 0
                             to: 1
-                            duration: 200
+                            duration: 150
                         }
 
                         NumberAnimation {
@@ -1271,6 +1271,31 @@ ApplicationWindow {
                             if (enableAnimations) fadeTimer.start()
                         }
 
+                        // The border rectangle
+                        Rectangle {
+                            anchors.fill: cellButton
+                            border.width: 2
+                            radius: {
+                                if (isWindows10) return 0
+                                else if (isWindows11) return 4
+                                else if (isLinux) return 3
+                                else return 2
+                            }
+                            border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                            visible: {
+                                if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
+                                    return true
+                                if (cellItem.animatingReveal && cellFrame)
+                                    return true
+                                return cellButton.flat && cellFrame
+                            }
+                            color: {
+                                if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
+                                    return accentColor
+                                return "transparent"
+                            }
+                        }
+
                         // The button for background and interactions
                         Button {
                             id: cellButton
@@ -1280,36 +1305,18 @@ ApplicationWindow {
                             Connections {
                                 target: cellItem
                                 function onRevealedChanged() {
-                                    if (cellItem.revealed && enableAnimations) {
-                                        shouldBeFlat = true
-                                        revealFadeAnimation.start()
+                                    if (cellItem.revealed) {
+                                        if (enableAnimations) {
+                                            shouldBeFlat = true
+                                            revealFadeAnimation.start()
+                                        } else {
+                                            cellButton.flat = true
+                                        }
                                     } else {
                                         shouldBeFlat = false
                                         cellButton.opacity = 1
                                         cellButton.flat = false
                                     }
-                                }
-                            }
-
-                            Rectangle {
-                                anchors.fill: parent
-                                border.width: 2
-                                radius: {
-                                    if (isWindows10) return 0
-                                    else if (isWindows11) return 4
-                                    else if (isLinux) return 3
-                                    else return 2
-                                }
-                                border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
-                                visible: {
-                                    if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
-                                        return true
-                                    return cellButton.flat && cellFrame
-                                }
-                                color: {
-                                    if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
-                                        return accentColor
-                                    return "transparent"
                                 }
                             }
 
