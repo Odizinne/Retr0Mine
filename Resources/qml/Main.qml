@@ -10,8 +10,8 @@ ApplicationWindow {
     visible: true
     width: getInitialWidth()
     height: getInitialHeight()
-    minimumWidth: (baseCellSize + cellSpacing) * gridSizeX + 22
-    minimumHeight: (baseCellSize + cellSpacing) * gridSizeY + 72
+    minimumWidth: (baseCellSize + cellSpacing) * gridSizeX + 24
+    minimumHeight: (baseCellSize + cellSpacing) * gridSizeY + 74
     title: "Retr0Mine"
 
     onVisibleChanged: {
