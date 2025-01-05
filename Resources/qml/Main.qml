@@ -8,10 +8,10 @@ import com.odizinne.minesweeper 1.0
 ApplicationWindow {
     id: root
     visible: true
-    width: (baseCellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
-    height: (baseCellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
-    minimumWidth: (baseCellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
-    minimumHeight: (baseCellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
+    width: (cellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
+    height: (cellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
+    minimumWidth: (cellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
+    minimumHeight: (cellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
     title: "Retr0Mine"
 
     onVisibleChanged: {
@@ -70,6 +70,9 @@ ApplicationWindow {
         }
     }
 
+    property int cellSize: 35
+    property int cellSpacing: 2
+
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
@@ -98,53 +101,16 @@ ApplicationWindow {
     property var numbers: []
     property bool timerActive: false
     property int elapsedTime: 0
-    property int baseCellSize: 35
-    property real currentCellSize: baseCellSize
 
-    // Calculated size without triggering rebuilds
-    property real calculatedCellSize: {
-        const availableWidth = width - 22
-        const availableHeight = height - 72
-
-        const maxWidthBasedSize = Math.floor(availableWidth / gridSizeX - cellSpacing)
-        const maxHeightBasedSize = Math.floor(availableHeight / gridSizeY - cellSpacing)
-
-        return Math.max(baseCellSize, Math.min(maxWidthBasedSize, maxHeightBasedSize))
-    }
-    property int cellSpacing: 2
-    property string savePath: {
-        if (Qt.platform.os === "windows")
-            return mainWindow.getWindowsPath() + "/Retr0Mine"
-        return mainWindow.getLinuxPath() + "/Retr0Mine"
-    }
-
-    Timer {
-        id: resizeTimer
-        interval: 200
-        repeat: false
-        onTriggered: {
-            currentCellSize = calculatedCellSize
-        }
-    }
-
-    function getInitialWidth() {
-        return Math.min((baseCellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
-    }
-
-    function getInitialHeight() {
-        return Math.min((baseCellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
-    }
-
+    // Remove all dynamic size calculations and resizing logic
     onGridSizeXChanged: {
-        if (!isMaximized && !isFullScreen) {
-            width = getInitialWidth()
-        }
+        width = (cellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
+        minimumWidth = width
     }
 
     onGridSizeYChanged: {
-        if (!isMaximized && !isFullScreen) {
-            height = getInitialHeight()
-        }
+        height = (cellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
+        minimumHeight = height
     }
 
     onVisibilityChanged: {
@@ -1428,30 +1394,28 @@ ApplicationWindow {
 
         ColumnLayout {
             id: gameLayout
-            width: Math.max((root.calculatedCellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
-            height: Math.max((root.calculatedCellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
+            width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
+            height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
             spacing: 10
 
             Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.preferredWidth: (root.calculatedCellSize + root.cellSpacing) * root.gridSizeX
-                Layout.preferredHeight: (root.calculatedCellSize + root.cellSpacing) * root.gridSizeY
+                Layout.preferredWidth: (root.cellSize + root.cellSpacing) * root.gridSizeX
+                Layout.preferredHeight: (root.cellSize + root.cellSpacing) * root.gridSizeY
 
                 GridView {
                     id: grid
                     anchors.fill: parent
-                    cellWidth: root.calculatedCellSize + root.cellSpacing
-                    cellHeight: root.calculatedCellSize + root.cellSpacing
+                    cellWidth: cellSize + cellSpacing
+                    cellHeight: cellSize + cellSpacing
                     model: root.gridSizeX * root.gridSizeY
                     interactive: false
-
-                    // Add a property to track if the initial animation has played
                     property bool initialAnimationPlayed: false
 
                     delegate: Item {
                         id: cellItem
-                        width: calculatedCellSize
-                        height: calculatedCellSize
+                        width: cellSize
+                        height: cellSize
 
                         property bool animatingReveal: false
                         property bool shouldBeFlat: false
@@ -1464,7 +1428,6 @@ ApplicationWindow {
                         readonly property int col: index % root.gridSizeX
                         readonly property int diagonalSum: row + col
 
-                        // Initial opacity is 1, we'll only change it when needed
                         opacity: 1
 
                         NumberAnimation {
@@ -1626,7 +1589,7 @@ ApplicationWindow {
                                 if (mines.includes(index)) return ""
                                 return numbers[index] === 0 ? "" : numbers[index]
                             }
-                            font.pixelSize: calculatedCellSize * 0.65
+                            font.pixelSize: cellSize * 0.65
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
