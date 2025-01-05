@@ -8,8 +8,8 @@ import com.odizinne.minesweeper 1.0
 ApplicationWindow {
     id: root
     visible: true
-    width: Math.min((baseCellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
-    height: Math.min((baseCellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
+    width: getInitialWidth()
+    height: getInitialHeight()
     minimumWidth: (baseCellSize + cellSpacing) * gridSizeX + 22
     minimumHeight: (baseCellSize + cellSpacing) * gridSizeY + 72
     title: "Retr0Mine"
@@ -43,6 +43,7 @@ ApplicationWindow {
     }
 
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
+    property bool isMaximized: visibility === 4
     property bool isLinux: linux
     property bool isWindows11: windows11
     property bool isWindows10: windows10
@@ -88,12 +89,43 @@ ApplicationWindow {
         return mainWindow.getLinuxPath() + "/Retr0Mine"
     }
 
+    function getInitialWidth() {
+        return Math.min((baseCellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
+    }
+
+    function getInitialHeight() {
+        return Math.min((baseCellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
+    }
+
     Timer {
         id: resizeTimer
         interval: 200
         repeat: false
         onTriggered: {
             currentCellSize = calculatedCellSize
+        }
+    }
+
+    onGridSizeXChanged: {
+        if (!isMaximized) {
+            width = getInitialWidth()
+        }
+    }
+
+    onGridSizeYChanged: {
+        if (!isMaximized) {
+            height = getInitialHeight()
+        }
+    }
+
+    onVisibilityChanged: {
+        const wasMaximized = isMaximized
+        isMaximized = visibility === 4
+
+        // If we're exiting maximized state to normal state (2)
+        if (wasMaximized && visibility === 2) {
+            width = minimumWidth
+            height = minimumHeight
         }
     }
 
@@ -460,12 +492,16 @@ ApplicationWindow {
                                     if (checkedButton && (checkedButton.userInteractionChecked || checkedButton.activeFocus)) {
                                         const idx = checkedButton.difficultyIndex
                                         const settings = difficultyPane.difficultySettings[idx]
+
+                                        // Update game settings
                                         root.gridSizeX = settings.x
                                         root.gridSizeY = settings.y
                                         root.mineCount = settings.mines
                                         mainWindow.saveDifficulty(idx)
-                                        root.width = root.minimumWidth
-                                        root.height = root.minimumHeight
+
+                                        // No need to manually set width/height here anymore
+                                        // as it's handled by the onGridSizeXChanged and onGridSizeYChanged
+
                                         initGame()
                                         root.difficulty = idx
                                     }
