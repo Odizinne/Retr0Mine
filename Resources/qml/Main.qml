@@ -237,276 +237,351 @@ ApplicationWindow {
     ApplicationWindow {
         id: settingsPage
         title: "Settings"
-        width: 300
-        height: settingsLayout.implicitHeight + 30
-        maximumWidth: 300
-        maximumHeight: settingsLayout.implicitHeight + 30
-        minimumWidth: 300
-        minimumHeight: settingsLayout.implicitHeight + 30
+        width: 600
+        height: 400
+        minimumWidth: 600
+        minimumHeight: 400
         visible: false
-
-        property int selectedGridSizeX: 8
-        property int selectedGridSizeY: 8
-        property int selectedMineCount: 10
 
         onVisibleChanged: {
             if (settingsPage.visible) {
-                // Check if there is enough space on the right side
                 if (root.x + root.width + settingsPage.width + 10 <= screen.width) {
-                    // Position on the right side with a 10px margin
                     settingsPage.x = root.x + root.width + 20
                 } else if (root.x - settingsPage.width - 10 >= 0) {
-                    // If there is no space on the right, position on the left with a 10px margin
                     settingsPage.x = root.x - settingsPage.width - 20
                 } else {
-                    // If the root window is too close to the left edge, use a fallback
                     settingsPage.x = screen.width - settingsPage.width - 20
                 }
-
-                // Center vertically relative to the root window
                 settingsPage.y = root.y + (root.height - settingsPage.height) / 2
             }
         }
 
-        ColumnLayout {
+        RowLayout {
             anchors.fill: parent
-            anchors.margins: 0
-            spacing: 10
+            spacing: 0
 
-            ButtonGroup {
+            Pane {
+                Layout.preferredWidth: 200
+                Layout.fillHeight: true
+                padding: 0
+                z: 2
 
-                id: difficultyGroup
-                onCheckedButtonChanged: {
-                    if (checkedButton === easyButton) {
-                        root.gridSizeX = 8
-                        root.gridSizeY = 8
-                        root.mineCount = 10
-                        mainWindow.saveDifficulty(0)
-                    } else if (checkedButton === mediumButton) {
-                        root.gridSizeX = 16
-                        root.gridSizeY = 16
-                        root.mineCount = 40
-                        mainWindow.saveDifficulty(1)
-                    } else if (checkedButton === hardButton) {
-                        root.gridSizeX = 32
-                        root.gridSizeY = 16
-                        root.mineCount = 99
-                        mainWindow.saveDifficulty(2)
-                    } else if (checkedButton === retroButton) {
-                        root.gridSizeX = 50
-                        root.gridSizeY = 30
-                        root.mineCount = 320
-                        mainWindow.saveDifficulty(3)
-                    } else if (checkedButton === retroPlusButton) {
-                        root.gridSizeX = 100
-                        root.gridSizeY = 100
-                        root.mineCount = 2000
-                        mainWindow.saveDifficulty(4)
-                    } else if (checkedButton === debugButton) {
-                        root.gridSizeX = 10
-                        root.gridSizeY = 10
-                        root.mineCount = 50
-                        mainWindow.saveDifficulty(5)
-                    }
-                    root.width = root.minimumWidth
-                    root.height = root.minimumHeight
-                    initGame()
-                }
-            }
-        }
+                ListView {
+                    id: sidebarList
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    model: ["Difficulty", "Controls", "Visuals", "Sound"]
+                    currentIndex: 0
 
-        ColumnLayout {
-            id: settingsLayout
-            anchors.fill: parent
-            anchors.topMargin: 5
-            anchors.bottomMargin: 15
-            anchors.leftMargin: 15
-            anchors.rightMargin: 15
-            spacing: 4
+                    delegate: ItemDelegate {
+                        width: parent.width
+                        height: 40
+                        highlighted: ListView.isCurrentItem
 
-            Label {
-                text: "Difficulty"
-                font.bold: true
-                font.pixelSize: 18
-            }
+                        contentItem: RowLayout {
+                            spacing: 12
 
-            MenuSeparator {
-                Layout.fillWidth: true
-            }
-
-            RadioButton {
-                id: easyButton
-                text: "Easy (8×8, 10 mines)"
-                ButtonGroup.group: difficultyGroup
-                checked: root.difficulty === 0
-            }
-
-            RadioButton {
-                id: mediumButton
-                text: "Medium (16×16, 40 mines)"
-                ButtonGroup.group: difficultyGroup
-                checked: root.difficulty === 1
-            }
-
-            RadioButton {
-                id: hardButton
-                text: "Hard (32×16, 99 mines)"
-                ButtonGroup.group: difficultyGroup
-                checked: root.difficulty === 2
-            }
-
-            RadioButton {
-                id: retroButton
-                enabled: true
-                text: "Retr0 (50×32, 320 mines)"
-                ButtonGroup.group: difficultyGroup
-                checked: root.difficulty === 3
-            }
-
-            RadioButton {
-                id: retroPlusButton
-                enabled: false
-                visible: false
-                text: "Retr0+ (100x100, 2000 mines (Lag))"
-                ButtonGroup.group: difficultyGroup
-                checked: root.difficulty === 4
-            }
-
-            RadioButton {
-                id: debugButton
-                enabled: false
-                visible: false
-                text: "debug (10x10, 91 mines)"
-                ButtonGroup.group: difficultyGroup
-                checked: root.difficulty === 5
-            }
-
-            Item {
-                Layout.preferredHeight: 5
-            }
-
-            Label {
-                text: "Sound"
-                font.bold: true
-                font.pixelSize: 18
-            }
-
-            MenuSeparator {
-                Layout.fillWidth: true
-            }
-
-            Switch {
-                text: "Play sound effects"
-                checked: root.playSound
-                onCheckedChanged: {
-                    mainWindow.saveSoundSettings(checked);
-                    root.playSound = checked
-                }
-            }
-
-            Item {
-                Layout.preferredHeight: 5
-            }
-
-            Label {
-                text: "Visuals"
-                font.bold: true
-                font.pixelSize: 18
-            }
-
-            MenuSeparator {
-                Layout.fillWidth: true
-            }
-
-            Switch {
-                text: "Enable animations"
-                id: animationsSettings
-                checked: root.enableAnimations
-                onCheckedChanged: {
-                    mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked);
-                    root.enableAnimations = checked
-                    for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
-                        let cell = grid.itemAtIndex(i)
-                        if (cell) {
-                            cell.opacity = 1
+                            Label {
+                                text: modelData
+                                font.pixelSize: 14
+                                Layout.leftMargin: 16
+                            }
                         }
-                    }
-                }
-            }
 
-            Switch {
-                text: "Reveled cells frame"
-                id: cellFrameSettings
-                checked: root.cellFrame
-                onCheckedChanged: {
-                    mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked);
-                    root.cellFrame = checked
-                }
-            }
-
-            Item {
-                Layout.preferredHeight: 5
-            }
-
-            Label {
-                text: "Controls"
-                font.bold: true
-                font.pixelSize: 18
-            }
-
-            MenuSeparator {
-                Layout.fillWidth: true
-            }
-
-            Switch {
-                text: "Invert left and right click"
-                id: invert
-                checked: root.invertLRClick
-                onCheckedChanged: {
-                    mainWindow.saveControlsSettings(invert.checked, autoreveal.checked);
-                    root.invertLRClick = checked
-                }
-            }
-
-            Switch {
-                id: autoreveal
-                text: "Quick reveal connected cells"
-                checked: root.revealConnected
-                onCheckedChanged: {
-                    mainWindow.saveControlsSettings(invert.checked, autoreveal.checked);
-                    root.revealConnected = checked
-                }
-            }
-
-            Switch {
-                id: questionMarks
-                text: "Enable question marks"
-                checked: root.enableQuestionMarks
-                onCheckedChanged: {
-                    mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked);
-                    root.enableQuestionMarks = checked
-
-                    // Clear all question marks when disabled
-                    if (!checked) {
-                        for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
-                            let cell = grid.itemAtIndex(i)
-                            if (cell && cell.questioned) {
-                                cell.questioned = false
+                        onClicked: {
+                            if (sidebarList.currentIndex !== index) {  // Only switch if actually changing pages
+                                sidebarList.currentIndex = index
+                                switch(index) {
+                                case 0: stackView.push(difficultyPaneComponent); break;
+                                case 1: stackView.push(controlsPaneComponent); break;
+                                case 2: stackView.push(visualsPaneComponent); break;
+                                case 3: stackView.push(soundPaneComponent); break;
+                                }
                             }
                         }
                     }
                 }
             }
 
-            Item {
+            ToolSeparator {
                 Layout.fillHeight: true
+                Layout.leftMargin: {
+                    if (isWindows11) return -10
+                    return 0
+                }
+
+                z: 2
             }
 
-            Button {
-                text: "Close"
-                Layout.preferredWidth: 70
-                Layout.alignment: Qt.AlignRight
-                onClicked: settingsPage.close()
+            StackView {
+                id: stackView
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                initialItem: difficultyPaneComponent
+
+                Component {
+                    id: difficultyPaneComponent
+
+                    Pane {
+                        id: difficultyPane
+
+                        property var difficultySettings: [
+                            { text: "Easy (8×8, 10 mines)", x: 8, y: 8, mines: 10 },
+                            { text: "Medium (16×16, 40 mines)", x: 16, y: 16, mines: 40 },
+                            { text: "Hard (32×16, 99 mines)", x: 32, y: 16, mines: 99 },
+                            { text: "Retr0 (50×32, 320 mines)", x: 50, y: 32, mines: 320 }
+                        ]
+
+                        ColumnLayout {
+                            spacing: isWindows11 ? 10 : 36
+                            width: parent.width
+
+                            ButtonGroup {
+                                id: difficultyGroup
+                                exclusive: true
+                                onCheckedButtonChanged: {
+                                    if (checkedButton && (checkedButton.userInteractionChecked || checkedButton.activeFocus)) {
+                                        const idx = checkedButton.difficultyIndex
+                                        const settings = difficultyPane.difficultySettings[idx]
+
+                                        root.gridSizeX = settings.x
+                                        root.gridSizeY = settings.y
+                                        root.mineCount = settings.mines
+                                        mainWindow.saveDifficulty(idx)
+                                        root.width = root.minimumWidth
+                                        root.height = root.minimumHeight
+                                        initGame()
+                                        root.difficulty = idx
+                                    }
+                                }
+                            }
+
+                            Repeater {
+                                model: difficultySettings
+
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 0
+                                    Layout.topMargin: index === 0 && !isWindows11 ? 5 : 0
+
+                                    Label {
+                                        text: modelData.text
+                                        Layout.fillWidth: true
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: if (mouse.button === Qt.LeftButton) {
+                                                radioButton.userInteractionChecked = true
+                                            }
+                                        }
+                                    }
+
+                                    RadioButton {
+                                        id: radioButton
+                                        property bool userInteractionChecked: false
+                                        property int difficultyIndex: index
+
+                                        Layout.rightMargin: isWindows11 ? -20 : 0
+                                        padding: 0
+                                        Layout.alignment: Qt.AlignRight
+                                        ButtonGroup.group: difficultyGroup
+                                        checked: root.difficulty === index
+
+                                        onUserInteractionCheckedChanged: {
+                                            if (userInteractionChecked) {
+                                                checked = true
+                                                userInteractionChecked = false
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: if (mouse.button === Qt.LeftButton) {
+                                                parent.userInteractionChecked = true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Component {
+                    id: controlsPaneComponent
+                    Pane {
+                        id: controlsPane
+                        ColumnLayout {
+                            spacing: 26
+                            width: parent.width
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Layout.topMargin: {
+                                    if (isWindows11) return 10
+                                    return 0
+                                }
+
+                                Label {
+                                    text: "Invert left and right click"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: invert.checked = !invert.checked
+                                    }
+                                }
+                                Switch {
+                                    id: invert
+                                    checked: root.invertLRClick
+                                    onCheckedChanged: {
+                                        mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked)
+                                        root.invertLRClick = checked
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: "Quick reveal connected cells"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: autoreveal.checked = !autoreveal.checked
+                                    }
+                                }
+                                Switch {
+                                    id: autoreveal
+                                    checked: root.revealConnected
+                                    onCheckedChanged: {
+                                        mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked)
+                                        root.revealConnected = checked
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: "Enable question marks"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: questionMarks.checked = !questionMarks.checked
+                                    }
+                                }
+                                Switch {
+                                    id: questionMarks
+                                    checked: root.enableQuestionMarks
+                                    onCheckedChanged: {
+                                        mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked)
+                                        root.enableQuestionMarks = checked
+                                        if (!checked) {
+                                            for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
+                                                let cell = grid.itemAtIndex(i)
+                                                if (cell && cell.questioned) {
+                                                    cell.questioned = false
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Component {
+                    id: visualsPaneComponent
+                    Pane {
+                        id: visualsPane
+                        ColumnLayout {
+                            spacing: 26
+                            width: parent.width
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Layout.topMargin: {
+                                    if (isWindows11) return 10
+                                    return 0
+                                }
+                                Label {
+                                    text: "Enable animations"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: animationsSettings.checked = !animationsSettings.checked
+                                    }
+                                }
+                                Switch {
+                                    id: animationsSettings
+                                    checked: root.enableAnimations
+                                    onCheckedChanged: {
+                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked)
+                                        root.enableAnimations = checked
+                                        for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
+                                            let cell = grid.itemAtIndex(i)
+                                            if (cell) {
+                                                cell.opacity = 1
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: "Revealed cells frame"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: cellFrameSettings.checked = !cellFrameSettings.checked
+                                    }
+                                }
+                                Switch {
+                                    id: cellFrameSettings
+                                    checked: root.cellFrame
+                                    onCheckedChanged: {
+                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked)
+                                        root.cellFrame = checked
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Component {
+                    id: soundPaneComponent
+                    Pane {
+                        id: soundPane
+                        ColumnLayout {
+                            spacing: 26
+                            width: parent.width
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Layout.topMargin: {
+                                    if (isWindows11) return 10
+                                    return 0
+                                }
+                                Label {
+                                    text: "Play sound effects"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: soundSwitch.checked = !soundSwitch.checked
+                                    }
+                                }
+                                Switch {
+                                    checked: root.playSound
+                                    onCheckedChanged: {
+                                        mainWindow.saveSoundSettings(checked)
+                                        root.playSound = checked
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
