@@ -30,4 +30,5 @@ Runs on windows | linux.
 - `Ctrl+N` New game
 - `Ctrl+S` Save dialog
 - `Ctrl+P` Settings
+- `F11`    Fullscreen (G4m3r)
 

@@ -42,8 +42,20 @@ ApplicationWindow {
         onActivated: !settingsPage.visible ? settingsPage.show() : settingsPage.close()
     }
 
+    Shortcut {
+        sequence: "F11"
+        onActivated: {
+            if (root.visibility === 5) {
+                root.visibility = ApplicationWindow.AutomaticVisibility;
+            } else {
+                root.visibility = 5;
+            }
+        }
+    }
+
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isMaximized: visibility === 4
+    property bool isFullScreen: visibility === 5
     property bool isLinux: linux
     property bool isWindows11: windows11
     property bool isWindows10: windows10
@@ -89,14 +101,6 @@ ApplicationWindow {
         return mainWindow.getLinuxPath() + "/Retr0Mine"
     }
 
-    function getInitialWidth() {
-        return Math.min((baseCellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
-    }
-
-    function getInitialHeight() {
-        return Math.min((baseCellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
-    }
-
     Timer {
         id: resizeTimer
         interval: 200
@@ -106,24 +110,35 @@ ApplicationWindow {
         }
     }
 
+    function getInitialWidth() {
+        return Math.min((baseCellSize + cellSpacing) * gridSizeX + 22, Screen.width * 1)
+    }
+
+    function getInitialHeight() {
+        return Math.min((baseCellSize + cellSpacing) * gridSizeY + 72, Screen.height * 1)
+    }
+
     onGridSizeXChanged: {
-        if (!isMaximized) {
+        if (!isMaximized && !isFullScreen) {
             width = getInitialWidth()
         }
     }
 
     onGridSizeYChanged: {
-        if (!isMaximized) {
+        if (!isMaximized && !isFullScreen) {
             height = getInitialHeight()
         }
     }
 
     onVisibilityChanged: {
         const wasMaximized = isMaximized
-        isMaximized = visibility === 4
+        const wasFullScreen = isFullScreen
 
-        // If we're exiting maximized state to normal state (2)
-        if (wasMaximized && visibility === 2) {
+        isMaximized = visibility === 4
+        isFullScreen = visibility === 5
+
+        // If we're exiting maximized or fullscreen state to normal state (2)
+        if ((wasMaximized || wasFullScreen) && visibility === 2) {
             width = minimumWidth
             height = minimumHeight
         }
