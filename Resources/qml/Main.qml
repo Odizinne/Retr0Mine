@@ -52,6 +52,7 @@ ApplicationWindow {
     property bool cellFrame: showCellFrame
     property bool enableQuestionMarks: true
     property bool playSound: soundEffects
+    property bool soundVolume: volume
     property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
     property bool gameOver: false
@@ -572,10 +573,33 @@ ApplicationWindow {
                                     }
                                 }
                                 Switch {
+                                    id: soundEffectSwitch
                                     checked: root.playSound
                                     onCheckedChanged: {
-                                        mainWindow.saveSoundSettings(checked)
+                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value)
                                         root.playSound = checked
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: "Sound effects volume"
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: soundSwitch.checked = !soundSwitch.checked
+                                    }
+                                }
+                                Slider {
+                                    id: soundVolumeSlider
+                                    from: 0
+                                    to: 1
+                                    value: soundVolume
+                                    onValueChanged: {
+                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value)
+                                        root.soundVolume = value
                                     }
                                 }
                             }
@@ -589,19 +613,19 @@ ApplicationWindow {
     SoundEffect {
         id: looseEffect
         source: "qrc:/sounds/bomb.wav"
-        volume: 1
+        volume: root.soundVolume
     }
 
     SoundEffect {
         id: clickEffect
         source: "qrc:/sounds/click.wav"
-        volume: 1
+        volume: root.soundVolume
     }
 
     SoundEffect {
         id: winEffect
         source: "qrc:/sounds/win.wav"
-        volume: 1
+        volume: root.soundVolume
     }
 
     function playLoose() {

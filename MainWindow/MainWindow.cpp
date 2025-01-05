@@ -67,6 +67,9 @@ MainWindow::MainWindow(QObject *parent)
     bool soundEffects = settings.value("soundEffects", true).toBool();
     engine->rootContext()->setContextProperty("soundEffects", soundEffects);
 
+    bool volume = settings.value("volume", 1).toFloat();
+    engine->rootContext()->setContextProperty("volume", volume);
+
     bool animations = settings.value("animations", true).toBool();
     engine->rootContext()->setContextProperty("animations", animations);
 
@@ -83,8 +86,9 @@ void MainWindow::saveDifficulty(int difficulty) {
     settings.setValue("difficulty", difficulty);
 }
 
-void MainWindow::saveSoundSettings(bool soundEffects) {
+void MainWindow::saveSoundSettings(bool soundEffects, float volume) {
     settings.setValue("soundEffects", soundEffects);
+    settings.setValue("volume", volume);
 }
 
 void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks) {

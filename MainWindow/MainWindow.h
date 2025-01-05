@@ -13,7 +13,7 @@ public:
     explicit MainWindow(QObject *parent = nullptr);
 
     Q_INVOKABLE void saveDifficulty(int difficulty);
-    Q_INVOKABLE void saveSoundSettings(bool soundEffects);
+    Q_INVOKABLE void saveSoundSettings(bool soundEffects, float volume);
     Q_INVOKABLE void saveControlsSettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks);
     Q_INVOKABLE void saveVisualSettings(bool animations, bool cellFrame);
 
