@@ -400,6 +400,8 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 initialItem: difficultyPaneComponent
 
+                // In the difficultyPaneComponent, update the RadioButton implementation:
+
                 Component {
                     id: difficultyPaneComponent
 
@@ -413,6 +415,16 @@ ApplicationWindow {
                             { text: "Retr0 (50×32, 320 mines)", x: 50, y: 32, mines: 320 }
                         ]
 
+                        Component.onCompleted: {
+                            // Ensure initial difficulty is set correctly
+                            const initialSettings = difficultySettings[root.difficulty]
+                            if (initialSettings) {
+                                root.gridSizeX = initialSettings.x
+                                root.gridSizeY = initialSettings.y
+                                root.mineCount = initialSettings.mines
+                            }
+                        }
+
                         ColumnLayout {
                             spacing: isWindows11 ? 10 : 36
                             width: parent.width
@@ -424,7 +436,6 @@ ApplicationWindow {
                                     if (checkedButton && (checkedButton.userInteractionChecked || checkedButton.activeFocus)) {
                                         const idx = checkedButton.difficultyIndex
                                         const settings = difficultyPane.difficultySettings[idx]
-
                                         root.gridSizeX = settings.x
                                         root.gridSizeY = settings.y
                                         root.mineCount = settings.mines
@@ -451,8 +462,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                           radioButton.userInteractionChecked = true
-                                                       }
+                                                radioButton.userInteractionChecked = true
+                                            }
                                         }
                                     }
 
@@ -465,7 +476,21 @@ ApplicationWindow {
                                         padding: 0
                                         Layout.alignment: Qt.AlignRight
                                         ButtonGroup.group: difficultyGroup
-                                        checked: root.difficulty === index
+
+                                        Component.onCompleted: {
+                                            // Set initial checked state based on root.difficulty
+                                            checked = root.difficulty === index
+                                        }
+
+                                        onCheckedChanged: {
+                                            // Handle external changes to checked state
+                                            if (checked && !userInteractionChecked) {
+                                                const settings = difficultyPane.difficultySettings[difficultyIndex]
+                                                root.gridSizeX = settings.x
+                                                root.gridSizeY = settings.y
+                                                root.mineCount = settings.mines
+                                            }
+                                        }
 
                                         onUserInteractionCheckedChanged: {
                                             if (userInteractionChecked) {
@@ -477,8 +502,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                           parent.userInteractionChecked = true
-                                                       }
+                                                parent.userInteractionChecked = true
+                                            }
                                         }
                                     }
                                 }
