@@ -272,7 +272,28 @@ ApplicationWindow {
                     id: sidebarList
                     anchors.fill: parent
                     anchors.margins: 10
-                    model: ["Difficulty", "Controls", "Visuals", "Sound"]
+                    model: [
+                        {
+                            text: "Difficulty",
+                            iconDark: "qrc:/icons/difficulty_dark.png",
+                            iconLight: "qrc:/icons/difficulty_light.png"
+                        },
+                        {
+                            text: "Controls",
+                            iconDark: "qrc:/icons/controls_dark.png",
+                            iconLight: "qrc:/icons/controls_light.png"
+                        },
+                        {
+                            text: "Visuals",
+                            iconDark: "qrc:/icons/visuals_dark.png",
+                            iconLight: "qrc:/icons/visuals_light.png"
+                        },
+                        {
+                            text: "Sound",
+                            iconDark: "qrc:/icons/audio_dark.png",
+                            iconLight: "qrc:/icons/audio_light.png"
+                        }
+                    ]
                     currentIndex: 0
 
                     delegate: ItemDelegate {
@@ -281,12 +302,24 @@ ApplicationWindow {
                         highlighted: ListView.isCurrentItem
 
                         contentItem: RowLayout {
+                            Layout.fillWidth: true
+
                             spacing: 12
 
+
+
+                            Image {
+                                source: darkMode ? modelData.iconLight : modelData.iconDark
+                                //sourceSize.width: 16
+                                //sourceSize.height: 16
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                            }
+
                             Label {
-                                text: modelData
+                                text: modelData.text
                                 font.pixelSize: 14
-                                Layout.leftMargin: 16
+                                Layout.fillWidth: true
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                             }
                         }
 
@@ -606,7 +639,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Sound effects volume"
+                                    text: "Volume"
                                     Layout.fillWidth: true
                                 }
                                 Slider {
@@ -615,11 +648,8 @@ ApplicationWindow {
                                     to: 1
                                     value: soundVolume
                                     onValueChanged: {
-                                        //let roundedValue = Math.round(value * 10) / 10  // Rounds to 1 decimal place
                                         mainWindow.saveSoundSettings(soundEffectSwitch.checked, value)
                                         root.soundVolume = value
-                                        //console.log(root.roundedValue)
-                                        //console.log(root.soundVolume)
                                     }
                                 }
                             }
