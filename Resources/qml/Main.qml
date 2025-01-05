@@ -380,8 +380,10 @@ ApplicationWindow {
         height: 400
         minimumWidth: 500
         minimumHeight: 400
+        maximumWidth: 500
+        maximumHeight: 400
         visible: false
-
+        flags: Qt.Dialog
         onVisibleChanged: {
             if (settingsPage.visible) {
                 if (root.x + root.width + settingsPage.width + 10 <= screen.width) {
@@ -531,7 +533,8 @@ ApplicationWindow {
                         }
 
                         ColumnLayout {
-                            spacing: isWindows11 ? 10 : 36
+                            anchors.topMargin: index === 0 && !isWindows11 ? 10 : 0
+                            spacing: isWindows11 ? 10 : 26
                             width: parent.width
 
                             ButtonGroup {
@@ -557,7 +560,6 @@ ApplicationWindow {
 
                                 RowLayout {
                                     Layout.fillWidth: true
-                                    Layout.topMargin: index === 0 && !isWindows11 ? 5 : 0
 
                                     Label {
                                         text: modelData.text
