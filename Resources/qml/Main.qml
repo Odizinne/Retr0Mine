@@ -25,17 +25,17 @@ ApplicationWindow {
         // or in your ApplicationWindow/Window
         focus: true
         Keys.onPressed: (event) => {
-            if (event.key === Qt.Key_Alt && !event.isAutoRepeat) {
-                menu.visible = true
-                event.accepted = true
-            }
-        }
+                            if (event.key === Qt.Key_Alt && !event.isAutoRepeat) {
+                                menu.visible = true
+                                event.accepted = true
+                            }
+                        }
         Keys.onReleased: (event) => {
-            if (event.key === Qt.Key_Alt) {
-                menu.visible = false
-                event.accepted = true
-            }
-        }
+                             if (event.key === Qt.Key_Alt) {
+                                 menu.visible = false
+                                 event.accepted = true
+                             }
+                         }
     }
 
     Shortcut {
@@ -520,7 +520,8 @@ ApplicationWindow {
                             { text: "Easy", x: 8, y: 8, mines: 10 },
                             { text: "Medium", x: 16, y: 16, mines: 40 },
                             { text: "Hard", x: 32, y: 16, mines: 99 },
-                            { text: "Retr0", x: 50, y: 32, mines: 320 }
+                            { text: "Retr0", x: 50, y: 32, mines: 320 },
+                            { text: "Retr0", x: 70, y: 32, mines: 320 }
                         ]
 
                         Component.onCompleted: {
@@ -567,8 +568,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                         radioButton.userInteractionChecked = true
-                                                     }
+                                                           radioButton.userInteractionChecked = true
+                                                       }
                                         }
                                     }
 
@@ -577,8 +578,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                         radioButton.userInteractionChecked = true
-                                                     }
+                                                           radioButton.userInteractionChecked = true
+                                                       }
                                         }
                                     }
 
@@ -613,8 +614,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                         parent.userInteractionChecked = true
-                                                     }
+                                                           parent.userInteractionChecked = true
+                                                       }
                                         }
                                     }
                                 }
@@ -1413,28 +1414,28 @@ ApplicationWindow {
 
     ScrollView {
         id: scrollView
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.top: topBar.bottom
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            top: topBar.bottom
+            topMargin: 10
+            leftMargin: 12
+            rightMargin: 12
+            bottomMargin: 12
+        }
         clip: true
-        ScrollBar.horizontal.policy: ScrollBar.AsNeeded
-        ScrollBar.vertical.policy: ScrollBar.AsNeeded
-        contentWidth: gameLayout.implicitWidth
-        contentHeight: gameLayout.implicitHeight
 
         ColumnLayout {
             id: gameLayout
-            width: Math.max(scrollView.width, (calculatedCellSize + cellSpacing) * gridSizeX + 20)
-            height: Math.max(scrollView.height, (calculatedCellSize + cellSpacing) * gridSizeY + 20)
-
+            width: Math.max((root.calculatedCellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
+            height: Math.max((root.calculatedCellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
             spacing: 10
 
             Item {
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.preferredWidth: (root.calculatedCellSize + root.cellSpacing) * root.gridSizeX
                 Layout.preferredHeight: (root.calculatedCellSize + root.cellSpacing) * root.gridSizeY
-                Layout.margins: 10
 
                 GridView {
                     id: grid
@@ -1660,3 +1661,4 @@ ApplicationWindow {
         }
     }
 }
+
