@@ -451,8 +451,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                radioButton.userInteractionChecked = true
-                                            }
+                                                           radioButton.userInteractionChecked = true
+                                                       }
                                         }
                                     }
 
@@ -477,8 +477,8 @@ ApplicationWindow {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: if (mouse.button === Qt.LeftButton) {
-                                                parent.userInteractionChecked = true
-                                            }
+                                                           parent.userInteractionChecked = true
+                                                       }
                                         }
                                     }
                                 }
@@ -1193,8 +1193,6 @@ ApplicationWindow {
         contentWidth: gameLayout.implicitWidth
         contentHeight: gameLayout.implicitHeight
 
-
-
         ColumnLayout {
             id: gameLayout
             width: Math.max(scrollView.width, (root.cellSize + root.cellSpacing) * root.gridSizeX + 20)
@@ -1221,29 +1219,45 @@ ApplicationWindow {
                         width: cellSize
                         height: cellSize
 
+                        property bool animatingReveal: false
+                        property bool shouldBeFlat: false  // Track desired flat state
+
                         property bool revealed: false
                         property bool flagged: false
                         property bool questioned: false
-                        property bool isBombClicked: false // New property to track clicked bomb
-                        // Calculate diagonal distance for animation delay
+                        property bool isBombClicked: false
+
                         readonly property int row: Math.floor(index / root.gridSizeX)
                         readonly property int col: index % root.gridSizeX
                         readonly property int diagonalSum: row + col
 
-                        // Initial state: invisible
                         opacity: enableAnimations ? 0 : 1
 
-                        // Animation for fade in
                         NumberAnimation {
                             id: fadeAnimation
                             target: cellItem
                             property: "opacity"
                             from: 0
                             to: 1
-                            duration: 150
+                            duration: 200
                         }
 
-                        // Timer to trigger the fade in with diagonal delay
+                        NumberAnimation {
+                            id: revealFadeAnimation
+                            target: cellButton
+                            property: "opacity"
+                            from: 1
+                            to: 0
+                            duration: 200
+                            easing.type: Easing.OutCubic
+                            onStarted: animatingReveal = true
+                            onFinished: {
+                                animatingReveal = false
+                                cellButton.flat = shouldBeFlat
+                                cellButton.opacity = 1
+                            }
+                        }
+
                         Timer {
                             id: fadeTimer
                             interval: diagonalSum * 20
@@ -1253,15 +1267,29 @@ ApplicationWindow {
                             }
                         }
 
-                        // Start initial animation
                         Component.onCompleted: {
                             if (enableAnimations) fadeTimer.start()
                         }
 
+                        // The button for background and interactions
                         Button {
+                            id: cellButton
                             anchors.fill: parent
                             anchors.margins: cellSpacing / 2
-                            flat: parent.revealed
+
+                            Connections {
+                                target: cellItem
+                                function onRevealedChanged() {
+                                    if (cellItem.revealed && enableAnimations) {
+                                        shouldBeFlat = true
+                                        revealFadeAnimation.start()
+                                    } else {
+                                        shouldBeFlat = false
+                                        cellButton.opacity = 1
+                                        cellButton.flat = false
+                                    }
+                                }
+                            }
 
                             Rectangle {
                                 anchors.fill: parent
@@ -1274,14 +1302,13 @@ ApplicationWindow {
                                 }
                                 border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                                 visible: {
-                                    if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))//parent.flat && cellFrame
+                                    if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
                                         return true
-                                    return parent.flat && cellFrame
+                                    return cellButton.flat && cellFrame
                                 }
                                 color: {
-                                    // Add red background for the clicked bomb
                                     if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
-                                        return accentColor  // Red color similar to game over text
+                                        return accentColor
                                     return "transparent"
                                 }
                             }
@@ -1314,66 +1341,61 @@ ApplicationWindow {
                                 sourceSize.height: cellItem.height / 2
                             }
 
-                            text: {
-                                if (!parent.revealed || parent.flagged) return ""
-                                if (mines.includes(index)) return ""
-                                return numbers[index] === 0 ? "" : numbers[index]
-                            }
-
-                            contentItem: Text {
-                                text: parent.text
-                                font.pixelSize: parent.width * 0.65
-                                font.bold: true
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                color: {
-                                    if (!parent.parent.revealed) return "black"
-                                    if (mines.includes(index)) return "transparent"
-                                    if (numbers[index] === 1) return "#069ecc"
-                                    if (numbers[index] === 2) return "#28d13c"
-                                    if (numbers[index] === 3) return "#d12844"
-                                    if (numbers[index] === 4) return "#9328d1"
-                                    if (numbers[index] === 5) return "#ebc034"
-                                    if (numbers[index] === 6) return "#34ebb1"
-                                    if (numbers[index] === 7) return "#eb8634"
-                                    if (numbers[index] === 8 && darkMode) return "white"
-                                    if (numbers[index] === 8 && !darkMode) return "black"
-                                    return "black"
-                                }
-                            }
-
                             MouseArea {
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: (mouse) => {
-                                               if (cellItem.revealed) {
-                                                   // If cell is revealed, both left and right click will trigger chord
-                                                   revealConnectedCells(index);
-                                               } else {
-                                                   // If cell is not revealed, follow normal click behavior
-                                                   if (root.invertLRClick) {
-                                                       // Swap left and right click actions
-                                                       if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                           reveal(index);
-                                                           playClick();
-                                                       } else if (mouse.button === Qt.LeftButton) {
-                                                           toggleFlag(index);
-                                                       }
-                                                   } else {
-                                                       // Default behavior
-                                                       if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                           reveal(index);
-                                                           playClick();
-                                                       } else if (mouse.button === Qt.RightButton) {
-                                                           toggleFlag(index);
-                                                       }
-                                                   }
-                                               }
-                                           }
+                                    if (cellItem.revealed) {
+                                        revealConnectedCells(index);
+                                    } else {
+                                        if (root.invertLRClick) {
+                                            if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
+                                                reveal(index);
+                                                playClick();
+                                            } else if (mouse.button === Qt.LeftButton) {
+                                                toggleFlag(index);
+                                            }
+                                        } else {
+                                            if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                                reveal(index);
+                                                playClick();
+                                            } else if (mouse.button === Qt.RightButton) {
+                                                toggleFlag(index);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
 
-                        // Function to trigger fade in animation
+                        // Separate Text element for the number
+                        Text {
+                            anchors.centerIn: parent
+                            text: {
+                                if (!cellItem.revealed || cellItem.flagged) return ""
+                                if (mines.includes(index)) return ""
+                                return numbers[index] === 0 ? "" : numbers[index]
+                            }
+                            font.pixelSize: cellSize * 0.65
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: {
+                                if (!cellItem.revealed) return "black"
+                                if (mines.includes(index)) return "transparent"
+                                if (numbers[index] === 1) return "#069ecc"
+                                if (numbers[index] === 2) return "#28d13c"
+                                if (numbers[index] === 3) return "#d12844"
+                                if (numbers[index] === 4) return "#9328d1"
+                                if (numbers[index] === 5) return "#ebc034"
+                                if (numbers[index] === 6) return "#34ebb1"
+                                if (numbers[index] === 7) return "#eb8634"
+                                if (numbers[index] === 8 && darkMode) return "white"
+                                if (numbers[index] === 8 && !darkMode) return "black"
+                                return "black"
+                            }
+                        }
+
                         function startFadeIn() {
                             if (!enableAnimations) {
                                 opacity = 1
