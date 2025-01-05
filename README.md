@@ -20,12 +20,14 @@ Runs on windows | linux.
 
 # Features
 
-- You can save / load game state
+- Save / load game state
 - You cannot hit a mine on first click
+- QoL features such as reveal by clicking on connected cells
 
 # Shortcuts
 
 - `Ctrl+Q` Quit
 - `Ctrl+N` New game
 - `Ctrl+S` Save dialog
+- `Ctrl+P` Settings
 
