@@ -280,7 +280,7 @@ ApplicationWindow {
             }
 
             Button {
-                text: "Retry"
+                text: qsTr("Retry")
                 Layout.fillWidth: true
                 onClicked: {
                     gameOverWindow.close()
@@ -289,7 +289,7 @@ ApplicationWindow {
             }
 
             Button {
-                text: "Close"
+                text: qsTr("Close")
                 Layout.fillWidth: true
                 onClicked: {
                     gameOverWindow.close()
@@ -306,7 +306,7 @@ ApplicationWindow {
         minimumHeight: height
         maximumWidth: width
         maximumHeight: height
-        title: "About"
+        title: qsTr("About")
         flags: Qt.Dialog
 
         ColumnLayout {
@@ -330,7 +330,7 @@ ApplicationWindow {
 
             Label {
                 Layout.alignment: Qt.AlignHCenter
-                text: "by Odizinne"
+                text: qsTr("by Odizinne")
                 font.pixelSize: 14
             }
 
@@ -349,12 +349,12 @@ ApplicationWindow {
 
     ApplicationWindow {
         id: settingsPage
-        title: "Settings"
-        width: 500
+        title: qsTr("Settings")
+        width: 520
         height: 400
-        minimumWidth: 500
+        minimumWidth: 520
         minimumHeight: 400
-        maximumWidth: 500
+        maximumWidth: 520
         maximumHeight: 400
         visible: false
         flags: Qt.Dialog
@@ -385,14 +385,14 @@ ApplicationWindow {
                 Label {
                     id: restartLabel
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    text: "Application needs to be restarted"
+                    text: qsTr("Application needs to be restarted")
                     Layout.columnSpan: 2
                     font.bold: true
                     font.pixelSize: 16
                 }
 
                 Button {
-                    text: "Restart"
+                    text: qsTr("Restart")
                     Layout.fillWidth: true
                     Layout.preferredWidth: 80
                     onClicked: {
@@ -401,7 +401,7 @@ ApplicationWindow {
                 }
 
                 Button {
-                    text: "Later"
+                    text: qsTr("Later")
                     Layout.fillWidth: true
                     Layout.preferredWidth: 80
                     onClicked: {
@@ -433,27 +433,27 @@ ApplicationWindow {
                         Layout.margins: 10
                         model: [
                             {
-                                text: "Difficulty",
+                                text: qsTr("Difficulty"),
                                 iconDark: "qrc:/icons/difficulty_dark.png",
                                 iconLight: "qrc:/icons/difficulty_light.png"
                             },
                             {
-                                text: "Controls",
+                                text: qsTr("Controls"),
                                 iconDark: "qrc:/icons/controls_dark.png",
                                 iconLight: "qrc:/icons/controls_light.png"
                             },
                             {
-                                text: "Visuals",
+                                text: qsTr("Visuals"),
                                 iconDark: "qrc:/icons/visuals_dark.png",
                                 iconLight: "qrc:/icons/visuals_light.png"
                             },
                             {
-                                text: "Sound",
+                                text: qsTr("Sound"),
                                 iconDark: "qrc:/icons/audio_dark.png",
                                 iconLight: "qrc:/icons/audio_light.png"
                             },
                             {
-                                text: "Shortcuts",
+                                text: qsTr("Shortcuts"),
                                 iconDark: "qrc:/icons/keyboard_dark.png",
                                 iconLight: "qrc:/icons/keyboard_light.png"
                             }
@@ -499,7 +499,7 @@ ApplicationWindow {
                         Layout.leftMargin: 15
                         Layout.rightMargin: 15
                         Layout.preferredHeight: 30
-                        text: "Close settings"
+                        text: qsTr("Close settings")
                         highlighted: true
                         onClicked: {
                             settingsPage.close()
@@ -531,9 +531,9 @@ ApplicationWindow {
                         id: difficultyPane
 
                         property var difficultySettings: [
-                            { text: "Easy", x: 8, y: 8, mines: 10 },
-                            { text: "Medium", x: 16, y: 16, mines: 40 },
-                            { text: "Hard", x: 32, y: 16, mines: 99 },
+                            { text: qsTr("Easy"), x: 8, y: 8, mines: 10 },
+                            { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
+                            { text: qsTr("Hard"), x: 32, y: 16, mines: 99 },
                             { text: "Retr0", x: 50, y: 32, mines: 320 }
                         ]
 
@@ -652,7 +652,7 @@ ApplicationWindow {
                                 }
 
                                 Label {
-                                    text: "Invert left and right click"
+                                    text: qsTr("Invert left and right click")
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -672,7 +672,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Quick reveal connected cells"
+                                    text: qsTr("Quick reveal connected cells")
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -692,7 +692,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Enable question marks"
+                                    text: qsTr("Enable question marks")
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -735,7 +735,7 @@ ApplicationWindow {
                                     return 0
                                 }
                                 Label {
-                                    text: "Enable animations"
+                                    text: qsTr("Animations")
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -761,7 +761,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Revealed cells frame"
+                                    text: qsTr("Revealed cells frame")
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -781,7 +781,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "High contrast flags"
+                                    text: qsTr("High contrast flags")
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -801,13 +801,13 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Theme"
+                                    text: qsTr("Theme")
                                     Layout.fillWidth: true
                                 }
 
                                 ComboBox {
                                     id: themeComboBox
-                                    model: ["System", "Windows 10", "Windows 11", "Fusion"]
+                                    model: [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
                                     Layout.rightMargin: 5
                                     Layout.preferredWidth: {
                                         if (isUniversalTheme) return themeComboBox.implicitWidth + 5
@@ -845,7 +845,7 @@ ApplicationWindow {
                                     return 0
                                 }
                                 Label {
-                                    text: "Play sound effects"
+                                    text: qsTr("Sound effects")
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -865,7 +865,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: "Volume"
+                                    text: qsTr("Volume")
                                     Layout.fillWidth: true
                                 }
                                 Slider {
@@ -900,7 +900,7 @@ ApplicationWindow {
                                         return 0
                                     }
                                     Label {
-                                        text: "Fullscreen"
+                                        text: qsTr("Fullscreen")
                                         Layout.fillWidth: true
                                     }
                                     Label {
@@ -915,7 +915,7 @@ ApplicationWindow {
                                 RowLayout {
                                     anchors.fill: parent
                                     Label {
-                                        text: "New game"
+                                        text: qsTr("New game")
                                         Layout.fillWidth: true
                                     }
                                     Label {
@@ -931,7 +931,7 @@ ApplicationWindow {
                                     anchors.fill: parent
                                     Layout.fillWidth: true
                                     Label {
-                                        text: "Save game"
+                                        text: qsTr("Save game")
                                         Layout.fillWidth: true
                                     }
                                     Label {
@@ -946,7 +946,7 @@ ApplicationWindow {
                                 RowLayout {
                                     anchors.fill: parent
                                     Label {
-                                        text: "Open settings"
+                                        text: qsTr("Open settings")
                                         Layout.fillWidth: true
                                     }
                                     Label {
@@ -961,7 +961,7 @@ ApplicationWindow {
                                 RowLayout {
                                     anchors.fill: parent
                                     Label {
-                                        text: "Quit"
+                                        text: qsTr("Quit")
                                         Layout.fillWidth: true
                                     }
                                     Label {
@@ -1174,7 +1174,7 @@ ApplicationWindow {
         if (revealedCount === gridSizeX * gridSizeY - mineCount && !gameOver) {
             gameOver = true
             gameTimer.stop()
-            gameOverLabel.text = "Victory :)"
+            gameOverLabel.text = qsTr("Victory :)")
             gameOverLabel.color = "#28d13c"
             gameOverWindow.visible = true
             playWin()
@@ -1242,20 +1242,20 @@ ApplicationWindow {
                 width: 150
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                 MenuItem {
-                    text: "New game"
+                    text: qsTr("New game")
                     onTriggered: root.initGame()
                 }
 
                 MenuSeparator { }
 
                 MenuItem {
-                    text: "Save game"
+                    text: qsTr("Save game")
                     enabled: root.gameStarted
                     onTriggered: saveWindow.visible = true
                 }
                 Menu {
                     id: loadMenu
-                    title: "Load game"
+                    title: qsTr("Load game")
 
                     Instantiator {
                         id: menuInstantiator
@@ -1280,14 +1280,14 @@ ApplicationWindow {
                     MenuSeparator { }
 
                     MenuItem {
-                        text: "Open save folder"
+                        text: qsTr("Open save folder")
                         onTriggered: mainWindow.openSaveFolder()
                     }
 
                     onAboutToShow: {
                         let saves = mainWindow.getSaveFiles()
                         if (saves.length === 0) {
-                            menuInstantiator.model = ["No saves found"]
+                            menuInstantiator.model = [qsTr("Empty")]
                             menuInstantiator.objectAt(0).enabled = false
                         } else {
                             menuInstantiator.model = saves
@@ -1298,24 +1298,24 @@ ApplicationWindow {
                 MenuSeparator { }
 
                 MenuItem {
-                    text: "Settings"
+                    text: qsTr("Settings")
                     onTriggered: settingsPage.visible = true
                 }
 
                 MenuItem {
-                    text: "About"
+                    text: qsTr("About")
                     onTriggered: aboutPage.visible = true
                 }
 
                 MenuItem {
-                    text: "Exit"
+                    text: qsTr("Exit")
                     onTriggered: Qt.quit()
                 }
             }
 
             ApplicationWindow {
                 id: saveWindow
-                title: "Save Game"
+                title: qsTr("Save Game")
                 width: 300
                 height: 130
                 minimumWidth: 300
@@ -1338,11 +1338,11 @@ ApplicationWindow {
 
                     TextField {
                        id: saveNameField
-                       placeholderText: "Enter save file name"
+                       placeholderText: qsTr("Enter save file name")
                        Layout.fillWidth: true
                        onTextChanged: {
                            let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                           errorLabel.text = hasInvalidChars ? "Filename cannot contain: \\ / : * ? \" < > |" : ""
+                           errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
                            saveButton.enabled = text.trim() !== "" && !hasInvalidChars
                        }
                        Keys.onReturnPressed: {
@@ -1370,14 +1370,14 @@ ApplicationWindow {
 
                         Button {
                             id: cancelButton
-                            text: "Cancel"
+                            text: qsTr("Cancel")
                             Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
                             onClicked: saveWindow.close()
                         }
 
                         Button {
                             id: saveButton
-                            text: "Save"
+                            text: qsTr("Save")
                             Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
                             enabled: false
                             onClicked: {
@@ -1400,7 +1400,7 @@ ApplicationWindow {
 
             ApplicationWindow {
                 id: errorWindow
-                title: "Error"
+                title: qsTr("Error")
                 width: 300
                 height: 150
                 minimumWidth: 300
@@ -1413,13 +1413,13 @@ ApplicationWindow {
                     spacing: 10
 
                     Label {
-                        text: "Failed to load save file. The file might be corrupted or incompatible."
+                        text: qsTr("Failed to load save file. The file might be corrupted or incompatible.")
                         wrapMode: Text.WordWrap
                         Layout.fillWidth: true
                     }
 
                     Button {
-                        text: "OK"
+                        text: qsTr("OK")
                         Layout.alignment: Qt.AlignRight
                         onClicked: errorWindow.close()
                     }
