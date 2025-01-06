@@ -8,10 +8,10 @@ import com.odizinne.minesweeper 1.0
 ApplicationWindow {
     id: root
     visible: true
-    width: (cellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
-    height: (cellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
-    minimumWidth: (cellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
-    minimumHeight: (cellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
+    width: getInitialWidth()
+    height: getInitialHeight()
+    minimumWidth: getInitialWidth()
+    minimumHeight: getInitialHeight()
     title: "Retr0Mine"
 
     onVisibleChanged: {
@@ -22,7 +22,6 @@ ApplicationWindow {
     }
 
     Item {
-        // or in your ApplicationWindow/Window
         focus: true
         Keys.onPressed: (event) => {
                             if (event.key === Qt.Key_Alt && !event.isAutoRepeat) {
@@ -70,6 +69,7 @@ ApplicationWindow {
         }
     }
 
+
     property int cellSize: 35
     property int cellSpacing: 2
 
@@ -101,34 +101,50 @@ ApplicationWindow {
     property var numbers: []
     property bool timerActive: false
     property int elapsedTime: 0
+    property bool shouldUpdateSize: true
 
-    // Remove all dynamic size calculations and resizing logic
+    // Modified size calculation functions
+    function getInitialWidth() {
+        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeX + 24, Screen.width * 1) : width
+    }
+
+    function getInitialHeight() {
+        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeY + 74, Screen.height * 1) : height
+    }
+
+    // Modified grid size change handlers
     onGridSizeXChanged: {
-        width = (cellSize + cellSpacing) * gridSizeX + scrollView.anchors.leftMargin + scrollView.anchors.rightMargin
-        minimumWidth = width
+        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
+            minimumWidth = getInitialWidth()
+            width = getInitialWidth()
+        }
     }
 
     onGridSizeYChanged: {
-        height = (cellSize + cellSpacing) * gridSizeY + topBar.anchors.topMargin + topBar.height + scrollView.anchors.topMargin + scrollView.anchors.bottomMargin
-        minimumHeight = height
+        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
+            minimumHeight = getInitialHeight()
+            height = getInitialHeight()
+        }
     }
 
+    // Modified visibility change handler
     onVisibilityChanged: {
         const wasMaximized = isMaximized
-        const wasFullScreen = isFullScreen
+        isMaximized = visibility === Window.Maximized
+        isFullScreen = visibility === Window.FullScreen
 
-        isMaximized = visibility === 4
-        isFullScreen = visibility === 5
+        // Disable size updates when maximized or fullscreen
+        shouldUpdateSize = !isMaximized && !isFullScreen
 
-        // If we're exiting maximized or fullscreen state to normal state (2)
-        if ((wasMaximized || wasFullScreen) && visibility === 2) {
+        // Only reset size when returning to normal state from maximized
+        if (wasMaximized && visibility === Window.Windowed) {
+            shouldUpdateSize = true
+            minimumWidth = getInitialWidth()
+            minimumHeight = getInitialHeight()
             width = minimumWidth
             height = minimumHeight
         }
     }
-
-    onWidthChanged: resizeTimer.restart()
-    onHeightChanged: resizeTimer.restart()
 
     function saveGame(filename) {
         let saveData = {
