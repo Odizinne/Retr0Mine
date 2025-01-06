@@ -62,7 +62,7 @@ MainWindow::MainWindow(QObject *parent)
     engine->rootContext()->setContextProperty("revealConnectedCell", autoreveal);
 
     bool enableQuestionMarks = settings.value("enableQuestionMarks", true).toBool();
-    engine->rootContext()->setContextProperty("enableQuestionMarks", enableQuestionMarks);
+    engine->rootContext()->setContextProperty("questionMarks", enableQuestionMarks);
 
     bool soundEffects = settings.value("soundEffects", true).toBool();
     engine->rootContext()->setContextProperty("soundEffects", soundEffects);

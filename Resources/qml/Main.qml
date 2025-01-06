@@ -64,7 +64,7 @@ ApplicationWindow {
     property bool invertLRClick: invertClick
     property bool highContrastFlag: contrastFlag
     property bool cellFrame: showCellFrame
-    property bool enableQuestionMarks: true
+    property bool enableQuestionMarks: questionMarks
     property bool playSound: soundEffects
     property real soundVolume: volume
     property int difficulty: gameDifficulty
