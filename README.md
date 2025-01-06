@@ -18,6 +18,7 @@ Runs on windows | linux.
 | Linux Appimage   | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine-x86_64.AppImage)     |
 | Linux Bin    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_linux_64.zip)     |
 
+Linux binaries require Qt6.8
 # Features
 
 - Save / load game state
