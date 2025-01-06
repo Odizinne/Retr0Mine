@@ -12,7 +12,7 @@ Runs on windows | linux.
 If you like my work, consider supporting me!
 
 <a href="https://ko-fi.com/odizinne">
-  <img src=".assets/kofi_button.png" alt="Support me on Ko-fi" width="12%">
+  <img src=".assets/kofi_button.png" alt="Support me on Ko-fi" width="20%">
 </a>  
 <br><br>
 
