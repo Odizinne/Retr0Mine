@@ -1317,44 +1317,44 @@ ApplicationWindow {
                 id: saveWindow
                 title: "Save Game"
                 width: 300
-                height: 150
+                height: 130
                 minimumWidth: 300
-                minimumHeight: 150
+                minimumHeight: 130
+                maximumWidth: 300
+                maximumHeight: 130
                 flags: Qt.Dialog
 
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 10
-                    spacing: 10
 
                     TextField {
-                        id: saveNameField
-                        placeholderText: "Enter save file name"
-                        Layout.fillWidth: true
-                        onTextChanged: {
-                            // Check for invalid characters: \ / : * ? " < > |
-                            let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                            invalidCharsLabel.visible = hasInvalidChars
-                            spaceFiller.visible = !hasInvalidChars
-                            saveButton.enabled = text.trim() !== "" && !hasInvalidChars
-                        }
+                       id: saveNameField
+                       placeholderText: "Enter save file name"
+                       Layout.fillWidth: true
+                       onTextChanged: {
+                           let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
+                           let isReserved = text.trim() === "internalgamestate"
+                           errorLabel.text = hasInvalidChars ? "Filename cannot contain: \\ / : * ? \" < > |" :
+                                            isReserved ? "This name is reserved" : ""
+                           saveButton.enabled = text.trim() !== "" && !hasInvalidChars && !isReserved
+                       }
+                       Keys.onReturnPressed: {
+                           if (saveButton.enabled) {
+                               saveButton.clicked()
+                           }
+                       }
                     }
-
                     Label {
-                        id: invalidCharsLabel
-                        text: "Filename cannot contain: \\ / : * ? \" < > |"
-                        color: "#f7c220"
-                        visible: true
-                        Layout.preferredHeight: 12
-                        Layout.leftMargin: 3
-                        font.pointSize: 10
-                        Layout.fillWidth: true
+                       id: errorLabel
+                       color: "#f7c220"
+                       Layout.leftMargin: 3
+                       font.pointSize: 10
+                       Layout.fillWidth: true
                     }
 
                     Item {
-                        id: spaceFiller
-                        Layout.preferredHeight: 12
-                        visible: true
+                        Layout.fillHeight: true
                     }
 
                     RowLayout {
