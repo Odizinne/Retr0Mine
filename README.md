@@ -9,6 +9,13 @@ Runs on windows | linux.
 
 ![image](.assets/screenshot.png)
 
+If you like my work, consider supporting me!
+
+<a href="https://ko-fi.com/odizinne">
+  <img src=".assets/kofi_button.png" alt="Support me on Ko-fi" width="12%">
+</a>  
+<br><br>
+
 # Download
 
 | OS |  Platform | Download |
@@ -19,6 +26,7 @@ Runs on windows | linux.
 | Linux Bin    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_linux_64.zip)     |
 
 Linux binaries require Qt6.8 to use FluentWinUI3 theme
+
 # Features
 
 - Save / load game state
