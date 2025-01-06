@@ -493,8 +493,7 @@ ApplicationWindow {
                             { text: "Easy", x: 8, y: 8, mines: 10 },
                             { text: "Medium", x: 16, y: 16, mines: 40 },
                             { text: "Hard", x: 32, y: 16, mines: 99 },
-                            { text: "Retr0", x: 50, y: 32, mines: 320 },
-                            { text: "Retr0", x: 70, y: 32, mines: 320 }
+                            { text: "Retr0", x: 50, y: 32, mines: 320 }
                         ]
 
                         Component.onCompleted: {
