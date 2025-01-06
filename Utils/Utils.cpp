@@ -1,6 +1,8 @@
 #include "Utils.h"
 #include <QDebug>
 #include <QSettings>
+#include <QProcess>
+#include <QGuiApplication>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -8,6 +10,12 @@
 #include <QGuiApplication>
 #include <QPalette>
 #endif
+
+void Utils::restartApp()
+{
+    QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
+    QGuiApplication::quit();
+}
 
 QString Utils::getTheme()
 {

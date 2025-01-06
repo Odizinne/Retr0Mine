@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QQuickStyle>
 #include "Utils.h"
 #include "MinesweeperLogic.h"
 
@@ -18,6 +19,9 @@ MainWindow::MainWindow(QObject *parent)
 {
     QColor accentColor;
     bool darkMode;
+    int themeIndex = settings.value("themeIndex", 0).toInt();
+
+
     if (Utils::getTheme() == "light") {
         darkMode = true;
         if (isWindows10) {
@@ -38,9 +42,19 @@ MainWindow::MainWindow(QObject *parent)
         }
     }
 
-    engine->rootContext()->setContextProperty("windows10", isWindows10);
-    engine->rootContext()->setContextProperty("windows11", isWindows11);
-    engine->rootContext()->setContextProperty("linux", isLinux);
+    if (themeIndex == 1) {
+        setW10Theme();
+    } else if (themeIndex == 2) {
+        setW11Theme();
+    } else if (themeIndex == 3) {
+        setFusionTheme();
+    } else {
+        if (isWindows10) setW10Theme();
+        else if (isWindows11) setW11Theme();
+        else setFusionTheme();
+    }
+
+    engine->rootContext()->setContextProperty("themeIndex", themeIndex);
     engine->rootContext()->setContextProperty("mainWindow", this);
     engine->rootContext()->setContextProperty("isDarkMode", darkMode);
     engine->rootContext()->setContextProperty("accentColor", accentColor);
@@ -106,12 +120,8 @@ void MainWindow::saveVisualSettings(bool animations, bool cellFrame, bool contra
     settings.setValue("contrastFlag", contrastFlag);
 }
 
-QString MainWindow::getWindowsPath() const {
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-}
-
-QString MainWindow::getLinuxPath() const {
-    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+void MainWindow::saveThemeSettings(int index) {
+    settings.setValue("themeIndex", index);
 }
 
 bool MainWindow::saveGameState(const QString &data, const QString &filename) const {
@@ -166,11 +176,34 @@ void MainWindow::openSaveFolder() const {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
 
-    // Create the directory if it doesn't exist
     if (!saveDir.exists()) {
         saveDir.mkpath(".");
     }
 
-    // Open the folder in the system's file browser
     QDesktopServices::openUrl(QUrl::fromLocalFile(savePath));
+}
+
+void MainWindow::setW10Theme() {
+    QQuickStyle::setStyle("Universal");
+    engine->rootContext()->setContextProperty("windows10", QVariant(true));
+    engine->rootContext()->setContextProperty("windows11", QVariant(false));
+    engine->rootContext()->setContextProperty("fusion", QVariant(false));
+}
+
+void MainWindow::setW11Theme() {
+    QQuickStyle::setStyle("FluentWinUI3");
+    engine->rootContext()->setContextProperty("windows10", QVariant(false));
+    engine->rootContext()->setContextProperty("windows11", QVariant(true));
+    engine->rootContext()->setContextProperty("fusion", QVariant(false));
+}
+
+void MainWindow::setFusionTheme() {
+    QQuickStyle::setStyle("Fusion");
+    engine->rootContext()->setContextProperty("windows10", QVariant(false));
+    engine->rootContext()->setContextProperty("windows11", QVariant(false));
+    engine->rootContext()->setContextProperty("fusion", QVariant(true));
+}
+
+void MainWindow::restartRetr0Mine() const {
+    Utils::restartApp();
 }

@@ -54,11 +54,12 @@ ApplicationWindow {
     }
 
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
+    property int theme: themeIndex
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
-    property bool isLinux: linux
-    property bool isWindows11: windows11
-    property bool isWindows10: windows10
+    property bool isFusionTheme: fusion
+    property bool isFluentWinUI3Theme: windows11
+    property bool isUniversalTheme: windows10
     property bool enableAnimations: animations
     property bool revealConnected: revealConnectedCell
     property bool invertLRClick: invertClick
@@ -370,6 +371,46 @@ ApplicationWindow {
             }
         }
 
+        Popup {
+            anchors.centerIn: parent
+            id: restartWindow
+            height: 100
+            width: 300
+            visible: false
+
+            GridLayout {
+                anchors.fill: parent
+                columns: 2
+                rowSpacing: 10
+                Label {
+                    id: restartLabel
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    text: "Application needs to be restarted"
+                    Layout.columnSpan: 2
+                    font.bold: true
+                    font.pixelSize: 16
+                }
+
+                Button {
+                    text: "Restart"
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 80
+                    onClicked: {
+                        mainWindow.restartRetr0Mine()
+                    }
+                }
+
+                Button {
+                    text: "Later"
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 80
+                    onClicked: {
+                        restartWindow.visible = false
+                    }
+                }
+            }
+        }
+
         RowLayout {
             anchors.fill: parent
             spacing: 0
@@ -470,7 +511,7 @@ ApplicationWindow {
             ToolSeparator {
                 Layout.fillHeight: true
                 Layout.leftMargin: {
-                    if (isWindows11) return -10
+                    if (isFluentWinUI3Theme) return -10
                     return 0
                 }
 
@@ -506,8 +547,8 @@ ApplicationWindow {
                         }
 
                         ColumnLayout {
-                            anchors.topMargin: index === 0 && !isWindows11 ? 10 : 0
-                            spacing: isWindows11 ? 10 : 26
+                            anchors.topMargin: index === 0 && !isFluentWinUI3Theme ? 10 : 0
+                            spacing: isFluentWinUI3Theme ? 10 : 26
                             width: parent.width
 
                             ButtonGroup {
@@ -606,7 +647,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Layout.topMargin: {
-                                    if (isWindows11) return 10
+                                    if (isFluentWinUI3Theme) return 10
                                     return 0
                                 }
 
@@ -690,7 +731,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Layout.topMargin: {
-                                    if (isWindows11) return 10
+                                    if (isFluentWinUI3Theme) return 10
                                     return 0
                                 }
                                 Label {
@@ -756,9 +797,39 @@ ApplicationWindow {
                                     }
                                 }
                             }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: "Theme"
+                                    Layout.fillWidth: true
+                                }
+
+                                ComboBox {
+                                    id: themeComboBox
+                                    model: ["System", "Windows 10", "Windows 11", "Fusion"]
+                                    Layout.rightMargin: 5
+                                    Layout.preferredWidth: {
+                                        if (isUniversalTheme) return themeComboBox.implicitWidth + 5
+                                        return themeComboBox.implicitWidth
+                                    }
+
+                                    property int previousIndex: theme
+
+                                    currentIndex: theme
+                                    onActivated: function(index) {
+                                        if (currentIndex !== previousIndex) {  // Check if index actually changed
+                                            mainWindow.saveThemeSettings(currentIndex)
+                                            restartWindow.visible = true
+                                            previousIndex = currentIndex  // Update the previous index
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+
                 Component {
                     id: soundPaneComponent
                     Pane {
@@ -770,7 +841,7 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Layout.topMargin: {
-                                    if (isWindows11) return 10
+                                    if (isFluentWinUI3Theme) return 10
                                     return 0
                                 }
                                 Label {
@@ -825,7 +896,7 @@ ApplicationWindow {
                                 RowLayout {
                                     anchors.fill: parent
                                     Layout.topMargin: {
-                                        if (isWindows11) return 10
+                                        if (isFluentWinUI3Theme) return 10
                                         return 0
                                     }
                                     Label {
@@ -1489,9 +1560,9 @@ ApplicationWindow {
                             anchors.fill: cellButton
                             border.width: 2
                             radius: {
-                                if (isWindows10) return 0
-                                else if (isWindows11) return 4
-                                else if (isLinux) return 3
+                                if (isUniversalTheme) return 0
+                                else if (isFluentWinUI3Theme) return 4
+                                else if (isFusionTheme) return 3
                                 else return 2
                             }
                             border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)

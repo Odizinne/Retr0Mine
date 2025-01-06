@@ -13,6 +13,7 @@ QIcon recolorIcon(QIcon icon, QColor color);
 bool isWindows10();
 bool isWindows11();
 bool isLinux();
+void restartApp();
 };
 
 #endif // UTILS_H
