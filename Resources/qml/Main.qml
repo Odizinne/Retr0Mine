@@ -21,22 +21,6 @@ ApplicationWindow {
         }
     }
 
-    Item {
-        focus: true
-        Keys.onPressed: (event) => {
-                            if (event.key === Qt.Key_Alt && !event.isAutoRepeat) {
-                                menu.visible = true
-                                event.accepted = true
-                            }
-                        }
-        Keys.onReleased: (event) => {
-                             if (event.key === Qt.Key_Alt) {
-                                 menu.visible = false
-                                 event.accepted = true
-                             }
-                         }
-    }
-
     Shortcut {
         sequence: "Ctrl+Q"
         onActivated: Qt.quit()
@@ -69,10 +53,6 @@ ApplicationWindow {
         }
     }
 
-
-    property int cellSize: 35
-    property int cellSpacing: 2
-
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
@@ -102,8 +82,9 @@ ApplicationWindow {
     property bool timerActive: false
     property int elapsedTime: 0
     property bool shouldUpdateSize: true
+    property int cellSize: 35
+    property int cellSpacing: 2
 
-    // Modified size calculation functions
     function getInitialWidth() {
         return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeX + 24, Screen.width * 1) : width
     }
@@ -112,7 +93,6 @@ ApplicationWindow {
         return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeY + 74, Screen.height * 1) : height
     }
 
-    // Modified grid size change handlers
     onGridSizeXChanged: {
         if (!isMaximized && !isFullScreen && shouldUpdateSize) {
             minimumWidth = getInitialWidth()
@@ -127,17 +107,28 @@ ApplicationWindow {
         }
     }
 
-    // Modified visibility change handler
     onVisibilityChanged: {
         const wasMaximized = isMaximized
         isMaximized = visibility === Window.Maximized
         isFullScreen = visibility === Window.FullScreen
-
-        // Disable size updates when maximized or fullscreen
         shouldUpdateSize = !isMaximized && !isFullScreen
 
-        // Only reset size when returning to normal state from maximized
         if (wasMaximized && visibility === Window.Windowed) {
+            shouldUpdateSize = true
+            minimumWidth = getInitialWidth()
+            minimumHeight = getInitialHeight()
+            width = minimumWidth
+            height = minimumHeight
+        }
+    }
+
+    function handleVisibilityChange(newVisibility) {
+        const wasMaximized = isMaximized
+        isMaximized = newVisibility === Window.Maximized
+        isFullScreen = newVisibility === Window.FullScreen
+        shouldUpdateSize = !isMaximized && !isFullScreen
+
+        if (wasMaximized && newVisibility === Window.Windowed) {
             shouldUpdateSize = true
             minimumWidth = getInitialWidth()
             minimumHeight = getInitialHeight()
@@ -1367,8 +1358,9 @@ ApplicationWindow {
             text: "HH:MM:SS"
             color: root.darkMode ? "white" : "black"
             font.pixelSize: 18
-            Layout.alignment: Qt.AlignHCenter
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.leftMargin: 13
+
         }
 
         Item {
@@ -1377,7 +1369,7 @@ ApplicationWindow {
 
         RowLayout {
             Layout.rightMargin: 2
-            Layout.alignment: Qt.AlignRight
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             Image {
                 source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
