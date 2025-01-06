@@ -135,7 +135,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.6.2'
+          version: '6.8.1'
           host: 'linux'
           add-tools-to-path: true
           modules: 'qtmultimedia'
