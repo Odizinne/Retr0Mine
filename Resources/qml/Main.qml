@@ -1323,10 +1323,18 @@ ApplicationWindow {
                 maximumWidth: 300
                 maximumHeight: 130
                 flags: Qt.Dialog
+                Shortcut {
+                    sequence: "Esc"
+                    onActivated: {
+                        saveWindow.close()
+                    }
+                }
+
+                Keys.onEscapePressed: saveWindow.close()
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.margins: 12
 
                     TextField {
                        id: saveNameField
@@ -1334,10 +1342,8 @@ ApplicationWindow {
                        Layout.fillWidth: true
                        onTextChanged: {
                            let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                           let isReserved = text.trim() === "internalgamestate"
-                           errorLabel.text = hasInvalidChars ? "Filename cannot contain: \\ / : * ? \" < > |" :
-                                            isReserved ? "This name is reserved" : ""
-                           saveButton.enabled = text.trim() !== "" && !hasInvalidChars && !isReserved
+                           errorLabel.text = hasInvalidChars ? "Filename cannot contain: \\ / : * ? \" < > |" : ""
+                           saveButton.enabled = text.trim() !== "" && !hasInvalidChars
                        }
                        Keys.onReturnPressed: {
                            if (saveButton.enabled) {
@@ -1363,13 +1369,16 @@ ApplicationWindow {
                         spacing: 10
 
                         Button {
+                            id: cancelButton
                             text: "Cancel"
+                            Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
                             onClicked: saveWindow.close()
                         }
 
                         Button {
                             id: saveButton
                             text: "Save"
+                            Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
                             enabled: false
                             onClicked: {
                                 if (saveNameField.text.trim()) {
@@ -1384,8 +1393,7 @@ ApplicationWindow {
                 onVisibleChanged: {
                     if (visible) {
                         saveNameField.text = ""
-                        invalidCharsLabel.visible = false
-                        spaceFiller.visible = true
+                        saveNameField.forceActiveFocus()
                     }
                 }
             }
