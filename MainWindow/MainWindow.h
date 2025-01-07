@@ -46,7 +46,7 @@ private:
     void setW11Theme();
     void setFusionTheme();
     bool loadLanguage(QString languageCode);
-    int styleIndex;
+    int currentTheme;
 };
 
 #endif // MAINWINDOW_H

@@ -39,7 +39,7 @@ void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
 }
 
 void MainWindow::setupAndLoadQML() {
-    styleIndex = settings.value("themeIndex", 0).toInt();
+    int styleIndex = settings.value("themeIndex", 0).toInt();
     int colorSchemeIndex = settings.value("colorScheme", 0).toInt();
 
     if (styleIndex == 1) {
@@ -265,6 +265,7 @@ void MainWindow::openSaveFolder() const {
 }
 
 void MainWindow::setW10Theme() {
+    currentTheme = 1;
     QQuickStyle::setStyle("Universal");
     rootContext->setContextProperty("windows10", QVariant(true));
     rootContext->setContextProperty("windows11", QVariant(false));
@@ -272,6 +273,7 @@ void MainWindow::setW10Theme() {
 }
 
 void MainWindow::setW11Theme() {
+    currentTheme = 2;
     QQuickStyle::setStyle("FluentWinUI3");
     rootContext->setContextProperty("windows10", QVariant(false));
     rootContext->setContextProperty("windows11", QVariant(true));
@@ -279,6 +281,7 @@ void MainWindow::setW11Theme() {
 }
 
 void MainWindow::setFusionTheme() {
+    currentTheme = 3;
     QQuickStyle::setStyle("Fusion");
     rootContext->setContextProperty("windows10", QVariant(false));
     rootContext->setContextProperty("windows11", QVariant(false));
@@ -297,9 +300,9 @@ void MainWindow::setColorScheme(int index) {
         //light
         darkMode = false;
         QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
-        if (styleIndex == 1) {
+        if (currentTheme == 1) {
             accentColor = Utils::getAccentColor("normal");
-        } else if (styleIndex == 2) {
+        } else if (currentTheme == 2) {
             accentColor = Utils::getAccentColor("dark2");
         } else {
             accentColor = "#0000FF";
@@ -308,9 +311,9 @@ void MainWindow::setColorScheme(int index) {
         //dark
         QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
         darkMode = true;
-        if (styleIndex == 1) {
+        if (currentTheme == 1) {
             accentColor = Utils::getAccentColor("normal");
-        } else if (styleIndex == 2) {
+        } else if (currentTheme == 2) {
             accentColor = Utils::getAccentColor("light2");
         } else {
             accentColor = "#0000FF";
@@ -320,18 +323,18 @@ void MainWindow::setColorScheme(int index) {
         QGuiApplication::styleHints()->unsetColorScheme();
         if (Utils::getTheme() == "light") {
             darkMode = true;
-            if (styleIndex == 1) {
+            if (currentTheme == 1) {
                 accentColor = Utils::getAccentColor("normal");
-            } else if (styleIndex == 2) {
+            } else if (currentTheme == 2) {
                 accentColor = Utils::getAccentColor("light2");
             } else {
                 accentColor = "#0000FF";
             }
         } else {
             darkMode = false;
-            if (styleIndex == 1) {
+            if (currentTheme == 1) {
                 accentColor = Utils::getAccentColor("normal");
-            } else if (styleIndex == 2) {
+            } else if (currentTheme == 2) {
                 accentColor = Utils::getAccentColor("dark2");
             } else {
                 accentColor = "#0000FF";
