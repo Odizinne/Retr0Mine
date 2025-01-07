@@ -41,3 +41,9 @@ Linux binaries require Qt6.8 to use FluentWinUI3 theme
 - `Ctrl+P` Settings
 - `F11`    Fullscreen (G4m3r)
 
+# Translations
+
+- EN (me)
+- FR (me)
+
+Other translations were made by AI. Feel free to submit a pull request if you notice any inaccuracies.
