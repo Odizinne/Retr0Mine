@@ -15,10 +15,10 @@ MainWindow::MainWindow(QObject *parent)
     , settings("Odizinne", "Retr0Mine")
     , engine(new QQmlApplicationEngine(this))
     , rootContext(engine->rootContext())
+    , translator(new QTranslator(this))
     , isWindows10(Utils::isWindows10())
     , isWindows11(Utils::isWindows11())
     , isLinux(Utils::isLinux())
-    , translator(new QTranslator(this))
 {
     setupAndLoadQML();
 }
@@ -142,21 +142,59 @@ void MainWindow::setLanguage(int index) {
     QString languageCode;
     if (index == 0) {
         QLocale locale;
-        languageCode = locale.name().section('_', 0, 0);
+        QString fullLocale = locale.name();
+
+        // Check if the locale is Chinese
+        if (fullLocale.startsWith("zh")) {
+            languageCode = fullLocale; // Use full code for Chinese
+        } else {
+            languageCode = locale.name().section('_', 0, 0);
+        }
 
         // Try to load system language, fall back to English if not supported
         if (!loadLanguage(languageCode)) {
             languageCode = "en";
             loadLanguage(languageCode);
         }
-    } else if (index == 1) {
-        languageCode = "en";
-        loadLanguage(languageCode);
-    } else if (index == 2) {
-        languageCode = "fr";
+    } else {
+        // Map index to language codes
+        switch (index) {
+        case 1:  // English
+            languageCode = "en";
+            break;
+        case 2:  // French
+            languageCode = "fr";
+            break;
+        case 3:  // German
+            languageCode = "de";
+            break;
+        case 4:  // Spanish
+            languageCode = "es";
+            break;
+        case 5:  // Italian
+            languageCode = "it";
+            break;
+        case 6:  // Japanese
+            languageCode = "ja";
+            break;
+        case 7:  // Chinese Simplified
+            languageCode = "zh_CN";
+            break;
+        case 8:  // Chinese Traditional
+            languageCode = "zh_TW";
+            break;
+        case 9:  // Korean
+            languageCode = "ko";
+            break;
+        case 10: // Russian
+            languageCode = "ru";
+            break;
+        default:
+            languageCode = "en";  // Fallback to English
+            break;
+        }
         loadLanguage(languageCode);
     }
-
     engine->retranslate();
     rootContext->setContextProperty("languageIndex", index);
 }

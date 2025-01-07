@@ -61,7 +61,6 @@ ApplicationWindow {
     }
 
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
-    property int language: languageIndex
     property int theme: themeIndex
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
@@ -1011,15 +1010,27 @@ ApplicationWindow {
 
                                 ComboBox {
                                     id: languageComboBox
-                                    model: [qsTr("System"), "English", "Français"]
+                                    model: [qsTr("System"),
+                                            "English",        // English (index 1)
+                                            "Français",       // French (index 2)
+                                            "Deutsch",        // German (index 3)
+                                            "Español",        // Spanish
+                                            "Italiano",       // Italian
+                                            "日本語",         // Japanese
+                                            "简体中文",       // Chinese Simplified
+                                            "繁體中文",       // Chinese Traditional
+                                            "한국어",         // Korean
+                                            "Русский"         // Russian
+                                    ]
+                                    property int previousLanguageIndex: currentIndex
                                     Layout.rightMargin: 5
-                                    currentIndex: root.language
+                                    currentIndex: languageIndex
                                     Layout.preferredWidth: {
                                         if (isUniversalTheme) return languageComboBox.implicitWidth + 5
                                         return languageComboBox.implicitWidth
                                     }
 
-                                    onCurrentIndexChanged: {
+                                    onActivated: {
                                         mainWindow.saveLanguageSettings(currentIndex)
                                         mainWindow.setLanguage(currentIndex)
                                     }
