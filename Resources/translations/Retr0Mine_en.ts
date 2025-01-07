@@ -4,231 +4,238 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="283"/>
+        <location filename="../qml/Main.qml" line="291"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="292"/>
+        <location filename="../qml/Main.qml" line="300"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="309"/>
-        <location filename="../qml/Main.qml" line="1306"/>
+        <location filename="../qml/Main.qml" line="317"/>
+        <location filename="../qml/Main.qml" line="1360"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="333"/>
+        <location filename="../qml/Main.qml" line="341"/>
         <source>by Odizinne</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="352"/>
-        <location filename="../qml/Main.qml" line="1301"/>
+        <location filename="../qml/Main.qml" line="360"/>
+        <location filename="../qml/Main.qml" line="1355"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="388"/>
+        <location filename="../qml/Main.qml" line="396"/>
         <source>Application needs to be restarted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="395"/>
+        <location filename="../qml/Main.qml" line="403"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="404"/>
+        <location filename="../qml/Main.qml" line="412"/>
         <source>Later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="436"/>
+        <location filename="../qml/Main.qml" line="444"/>
         <source>Difficulty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="441"/>
+        <location filename="../qml/Main.qml" line="449"/>
         <source>Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="446"/>
+        <location filename="../qml/Main.qml" line="454"/>
         <source>Visuals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="451"/>
+        <location filename="../qml/Main.qml" line="459"/>
         <source>Sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="456"/>
+        <location filename="../qml/Main.qml" line="464"/>
         <source>Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="502"/>
+        <location filename="../qml/Main.qml" line="469"/>
+        <location filename="../qml/Main.qml" line="1008"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="516"/>
         <source>Close settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="534"/>
+        <location filename="../qml/Main.qml" line="548"/>
         <source>Easy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="535"/>
+        <location filename="../qml/Main.qml" line="549"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="536"/>
+        <location filename="../qml/Main.qml" line="550"/>
         <source>Hard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="655"/>
+        <location filename="../qml/Main.qml" line="669"/>
         <source>Invert left and right click</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="675"/>
+        <location filename="../qml/Main.qml" line="689"/>
         <source>Quick reveal connected cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="695"/>
+        <location filename="../qml/Main.qml" line="709"/>
         <source>Enable question marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="738"/>
+        <location filename="../qml/Main.qml" line="752"/>
         <source>Animations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="848"/>
+        <location filename="../qml/Main.qml" line="862"/>
         <source>Sound effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1290"/>
+        <location filename="../qml/Main.qml" line="1344"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="764"/>
+        <location filename="../qml/Main.qml" line="778"/>
         <source>Revealed cells frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="784"/>
+        <location filename="../qml/Main.qml" line="798"/>
         <source>High contrast flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="804"/>
+        <location filename="../qml/Main.qml" line="818"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="810"/>
+        <location filename="../qml/Main.qml" line="824"/>
+        <location filename="../qml/Main.qml" line="1014"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="868"/>
+        <location filename="../qml/Main.qml" line="882"/>
         <source>Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="903"/>
+        <location filename="../qml/Main.qml" line="918"/>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="918"/>
-        <location filename="../qml/Main.qml" line="1245"/>
+        <location filename="../qml/Main.qml" line="933"/>
+        <location filename="../qml/Main.qml" line="1299"/>
         <source>New game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="934"/>
-        <location filename="../qml/Main.qml" line="1252"/>
+        <location filename="../qml/Main.qml" line="949"/>
+        <location filename="../qml/Main.qml" line="1306"/>
         <source>Save game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="949"/>
+        <location filename="../qml/Main.qml" line="964"/>
         <source>Open settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="964"/>
+        <location filename="../qml/Main.qml" line="979"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1177"/>
+        <location filename="../qml/Main.qml" line="1231"/>
         <source>Victory :)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1258"/>
+        <location filename="../qml/Main.qml" line="1312"/>
         <source>Load game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1283"/>
+        <location filename="../qml/Main.qml" line="1337"/>
         <source>Open save folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1311"/>
+        <location filename="../qml/Main.qml" line="1365"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1318"/>
+        <location filename="../qml/Main.qml" line="1372"/>
         <source>Save Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1341"/>
+        <location filename="../qml/Main.qml" line="1395"/>
         <source>Enter save file name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1345"/>
+        <location filename="../qml/Main.qml" line="1399"/>
         <source>Filename cannot contain:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1373"/>
+        <location filename="../qml/Main.qml" line="1427"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1380"/>
+        <location filename="../qml/Main.qml" line="1434"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1403"/>
+        <location filename="../qml/Main.qml" line="1457"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1416"/>
+        <location filename="../qml/Main.qml" line="1470"/>
         <source>Failed to load save file. The file might be corrupted or incompatible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1422"/>
+        <location filename="../qml/Main.qml" line="1476"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>

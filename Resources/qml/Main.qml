@@ -14,6 +14,13 @@ ApplicationWindow {
     minimumHeight: getInitialHeight()
     title: "Retr0Mine"
 
+    Connections {
+        target: mainWindow
+        function onLanguageChanged() {
+            // Force a retranslation of the UI
+            root.update()  // or whatever your root item id is
+        }
+    }
     onVisibleChanged: {
         if (Universal !== undefined) {
             Universal.theme = Universal.System
@@ -54,6 +61,7 @@ ApplicationWindow {
     }
 
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
+    property int language: languageIndex
     property int theme: themeIndex
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
@@ -456,6 +464,11 @@ ApplicationWindow {
                                 text: qsTr("Shortcuts"),
                                 iconDark: "qrc:/icons/keyboard_dark.png",
                                 iconLight: "qrc:/icons/keyboard_light.png"
+                            },
+                            {
+                                text: qsTr("Language"),
+                                iconDark: "qrc:/icons/language_dark.png",
+                                iconLight: "qrc:/icons/language_light.png"
                             }
                         ]
                         currentIndex: 0
@@ -486,6 +499,7 @@ ApplicationWindow {
                                     case 2: stackView.push(visualsPaneComponent); break;
                                     case 3: stackView.push(soundPaneComponent); break;
                                     case 4: stackView.push(shortcutsPaneComponent); break;
+                                    case 5: stackView.push(languagePaneComponent); break;
                                     }
                                 }
                             }
@@ -882,6 +896,7 @@ ApplicationWindow {
                         }
                     }
                 }
+
                 Component {
                     id: shortcutsPaneComponent
                     Pane {
@@ -968,6 +983,45 @@ ApplicationWindow {
                                         color: accentColor
                                         text: "Ctrl + Q"
                                         font.bold: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Component {
+                    id: languagePaneComponent
+                    Pane {
+                        id: languagePane
+                        ColumnLayout {
+                            spacing: 16
+                            width: parent.width
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Layout.topMargin: {
+                                    if (isFluentWinUI3Theme) return 10
+                                    return 0
+                                }
+                                Label {
+                                    text: qsTr("Language")
+                                    Layout.fillWidth: true
+                                }
+
+                                ComboBox {
+                                    id: languageComboBox
+                                    model: [qsTr("System"), "English", "Français"]
+                                    Layout.rightMargin: 5
+                                    currentIndex: root.language
+                                    Layout.preferredWidth: {
+                                        if (isUniversalTheme) return languageComboBox.implicitWidth + 5
+                                        return languageComboBox.implicitWidth
+                                    }
+
+                                    onCurrentIndexChanged: {
+                                        mainWindow.saveLanguageSettings(currentIndex)
+                                        mainWindow.setLanguage(currentIndex)
                                     }
                                 }
                             }

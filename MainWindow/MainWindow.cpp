@@ -6,16 +6,19 @@
 #include <QFileInfo>
 #include <QDesktopServices>
 #include <QQuickStyle>
+#include <QGuiApplication>
 #include "Utils.h"
 #include "MinesweeperLogic.h"
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
     , settings("Odizinne", "Retr0Mine")
-    , engine(new QQmlApplicationEngine)
+    , engine(new QQmlApplicationEngine(this))
+    , rootContext(engine->rootContext())
     , isWindows10(Utils::isWindows10())
     , isWindows11(Utils::isWindows11())
     , isLinux(Utils::isLinux())
+    , translator(new QTranslator(this))
 {
     QColor accentColor;
     bool darkMode;
@@ -54,49 +57,52 @@ MainWindow::MainWindow(QObject *parent)
         else setFusionTheme();
     }
 
-    engine->rootContext()->setContextProperty("themeIndex", themeIndex);
-    engine->rootContext()->setContextProperty("mainWindow", this);
-    engine->rootContext()->setContextProperty("isDarkMode", darkMode);
-    engine->rootContext()->setContextProperty("accentColor", accentColor);
+    rootContext->setContextProperty("themeIndex", themeIndex);
+    rootContext->setContextProperty("mainWindow", this);
+    rootContext->setContextProperty("isDarkMode", darkMode);
+    rootContext->setContextProperty("accentColor", accentColor);
 
     QIcon flagIcon = Utils::recolorIcon(QIcon(":/icons/flag.png"), accentColor);
     QPixmap flagPixmap = flagIcon.pixmap(32, 32);
     QString filePath = QDir::temp().filePath("flagIcon.png");
     flagPixmap.save(filePath);
 
-    engine->rootContext()->setContextProperty("flagIcon", QUrl::fromLocalFile(filePath));
+    rootContext->setContextProperty("flagIcon", QUrl::fromLocalFile(filePath));
 
     int difficulty = settings.value("difficulty", 0).toInt();
-    engine->rootContext()->setContextProperty("gameDifficulty", difficulty);
+    rootContext->setContextProperty("gameDifficulty", difficulty);
 
     bool invertLRClick = settings.value("invertLRClick", false).toBool();
-    engine->rootContext()->setContextProperty("invertClick", invertLRClick);
+    rootContext->setContextProperty("invertClick", invertLRClick);
 
     bool autoreveal = settings.value("autoreveal", false).toBool();
-    engine->rootContext()->setContextProperty("revealConnectedCell", autoreveal);
+    rootContext->setContextProperty("revealConnectedCell", autoreveal);
 
     bool enableQuestionMarks = settings.value("enableQuestionMarks", true).toBool();
-    engine->rootContext()->setContextProperty("questionMarks", enableQuestionMarks);
+    rootContext->setContextProperty("questionMarks", enableQuestionMarks);
 
     bool soundEffects = settings.value("soundEffects", true).toBool();
-    engine->rootContext()->setContextProperty("soundEffects", soundEffects);
+    rootContext->setContextProperty("soundEffects", soundEffects);
 
     float volume = settings.value("volume", 1).toFloat();
-    engine->rootContext()->setContextProperty("volume", volume);
+    rootContext->setContextProperty("volume", volume);
 
     bool animations = settings.value("animations", true).toBool();
-    engine->rootContext()->setContextProperty("animations", animations);
+    rootContext->setContextProperty("animations", animations);
 
     bool contrastFlag = settings.value("contrastFlag", false).toBool();
-    engine->rootContext()->setContextProperty("contrastFlag", contrastFlag);
+    rootContext->setContextProperty("contrastFlag", contrastFlag);
 
     bool showCellFrame = settings.value("cellFrame", true).toBool();
-    engine->rootContext()->setContextProperty("showCellFrame", showCellFrame);
+    rootContext->setContextProperty("showCellFrame", showCellFrame);
 
+    int languageIndex = settings.value("languageIndex", 0).toInt();
+    rootContext->setContextProperty("languageIndex", languageIndex);
+
+    setLanguage(languageIndex);
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
-    QString uiFile = "qrc:/qml/Main.qml";
-    engine->load(QUrl(uiFile));
+    engine->load(QUrl("qrc:/qml/Main.qml"));
 }
 
 void MainWindow::saveDifficulty(int difficulty) {
@@ -122,6 +128,49 @@ void MainWindow::saveVisualSettings(bool animations, bool cellFrame, bool contra
 
 void MainWindow::saveThemeSettings(int index) {
     settings.setValue("themeIndex", index);
+}
+
+void MainWindow::saveLanguageSettings(int index) {
+    settings.setValue("languageIndex", index);
+}
+
+void MainWindow::setLanguage(int index) {
+    QString languageCode;
+    if (index == 0) {
+        QLocale locale;
+        languageCode = locale.name().section('_', 0, 0);
+
+        // Try to load system language, fall back to English if not supported
+        if (!loadLanguage(languageCode)) {
+            languageCode = "en";
+            loadLanguage(languageCode);
+        }
+    } else if (index == 1) {
+        languageCode = "en";
+        loadLanguage(languageCode);
+    } else if (index == 2) {
+        languageCode = "fr";
+        loadLanguage(languageCode);
+    }
+
+    engine->retranslate();
+    rootContext->setContextProperty("languageIndex", index);
+}
+
+bool MainWindow::loadLanguage(QString languageCode) {
+    qGuiApp->removeTranslator(translator);
+
+    delete translator;
+    translator = new QTranslator(this);
+
+    QString filePath = ":/translations/Retr0Mine_" + languageCode + ".qm";
+
+    if (translator->load(filePath)) {
+        qGuiApp->installTranslator(translator);
+        return true;
+    }
+
+    return false;
 }
 
 bool MainWindow::saveGameState(const QString &data, const QString &filename) const {
@@ -185,23 +234,23 @@ void MainWindow::openSaveFolder() const {
 
 void MainWindow::setW10Theme() {
     QQuickStyle::setStyle("Universal");
-    engine->rootContext()->setContextProperty("windows10", QVariant(true));
-    engine->rootContext()->setContextProperty("windows11", QVariant(false));
-    engine->rootContext()->setContextProperty("fusion", QVariant(false));
+    rootContext->setContextProperty("windows10", QVariant(true));
+    rootContext->setContextProperty("windows11", QVariant(false));
+    rootContext->setContextProperty("fusion", QVariant(false));
 }
 
 void MainWindow::setW11Theme() {
     QQuickStyle::setStyle("FluentWinUI3");
-    engine->rootContext()->setContextProperty("windows10", QVariant(false));
-    engine->rootContext()->setContextProperty("windows11", QVariant(true));
-    engine->rootContext()->setContextProperty("fusion", QVariant(false));
+    rootContext->setContextProperty("windows10", QVariant(false));
+    rootContext->setContextProperty("windows11", QVariant(true));
+    rootContext->setContextProperty("fusion", QVariant(false));
 }
 
 void MainWindow::setFusionTheme() {
     QQuickStyle::setStyle("Fusion");
-    engine->rootContext()->setContextProperty("windows10", QVariant(false));
-    engine->rootContext()->setContextProperty("windows11", QVariant(false));
-    engine->rootContext()->setContextProperty("fusion", QVariant(true));
+    rootContext->setContextProperty("windows10", QVariant(false));
+    rootContext->setContextProperty("windows11", QVariant(false));
+    rootContext->setContextProperty("fusion", QVariant(true));
 }
 
 void MainWindow::restartRetr0Mine() const {
