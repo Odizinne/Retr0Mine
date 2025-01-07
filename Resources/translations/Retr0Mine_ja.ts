@@ -4,238 +4,254 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="291"/>
+        <location filename="../qml/Main.qml" line="290"/>
         <source>Retry</source>
         <translation>リトライ</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="300"/>
+        <location filename="../qml/Main.qml" line="299"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="317"/>
-        <location filename="../qml/Main.qml" line="1360"/>
+        <location filename="../qml/Main.qml" line="316"/>
+        <location filename="../qml/Main.qml" line="1393"/>
         <source>About</source>
         <translation>情報</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="341"/>
+        <location filename="../qml/Main.qml" line="340"/>
         <source>by Odizinne</source>
         <translation>作者：Odizinne</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="360"/>
-        <location filename="../qml/Main.qml" line="1355"/>
+        <location filename="../qml/Main.qml" line="359"/>
+        <location filename="../qml/Main.qml" line="1388"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="396"/>
+        <location filename="../qml/Main.qml" line="395"/>
         <source>Application needs to be restarted</source>
         <translation>アプリケーションの再起動が必要です</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="403"/>
+        <location filename="../qml/Main.qml" line="402"/>
         <source>Restart</source>
         <translation>再起動</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="412"/>
+        <location filename="../qml/Main.qml" line="411"/>
         <source>Later</source>
         <translation>後で</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="444"/>
+        <location filename="../qml/Main.qml" line="443"/>
         <source>Difficulty</source>
         <translation>難易度</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="449"/>
+        <location filename="../qml/Main.qml" line="448"/>
         <source>Controls</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="454"/>
+        <location filename="../qml/Main.qml" line="453"/>
         <source>Visuals</source>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="459"/>
+        <location filename="../qml/Main.qml" line="458"/>
         <source>Sound</source>
         <translation>サウンド</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="464"/>
+        <location filename="../qml/Main.qml" line="463"/>
         <source>Shortcuts</source>
         <translation>ショートカット</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="469"/>
-        <location filename="../qml/Main.qml" line="1008"/>
+        <location filename="../qml/Main.qml" line="468"/>
+        <location filename="../qml/Main.qml" line="1029"/>
         <source>Language</source>
         <translation>言語</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="516"/>
+        <location filename="../qml/Main.qml" line="515"/>
         <source>Close settings</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="548"/>
+        <location filename="../qml/Main.qml" line="547"/>
         <source>Easy</source>
         <translation>かんたん</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="549"/>
+        <location filename="../qml/Main.qml" line="548"/>
         <source>Medium</source>
         <translation>普通</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="550"/>
+        <location filename="../qml/Main.qml" line="549"/>
         <source>Hard</source>
         <translation>難しい</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="669"/>
+        <location filename="../qml/Main.qml" line="668"/>
         <source>Invert left and right click</source>
         <translation>左右クリックを入れ替え</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="689"/>
+        <location filename="../qml/Main.qml" line="688"/>
         <source>Quick reveal connected cells</source>
         <translation>連結セルの高速表示</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="709"/>
+        <location filename="../qml/Main.qml" line="708"/>
         <source>Enable question marks</source>
         <translation>はてなマークを有効化</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="752"/>
+        <location filename="../qml/Main.qml" line="751"/>
         <source>Animations</source>
         <translation>アニメーション</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="862"/>
+        <location filename="../qml/Main.qml" line="817"/>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="851"/>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="851"/>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="883"/>
         <source>Sound effects</source>
         <translation>効果音</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="778"/>
+        <location filename="../qml/Main.qml" line="777"/>
         <source>Revealed cells frame</source>
         <translation>開いたセルの枠</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="798"/>
+        <location filename="../qml/Main.qml" line="797"/>
         <source>High contrast flags</source>
         <translation>ハイコントラスト旗</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="818"/>
+        <location filename="../qml/Main.qml" line="846"/>
         <source>Theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="824"/>
-        <location filename="../qml/Main.qml" line="1014"/>
+        <location filename="../qml/Main.qml" line="823"/>
+        <location filename="../qml/Main.qml" line="851"/>
+        <location filename="../qml/Main.qml" line="1035"/>
         <source>System</source>
         <translation>システム</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="882"/>
+        <location filename="../qml/Main.qml" line="903"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="918"/>
+        <location filename="../qml/Main.qml" line="939"/>
         <source>Fullscreen</source>
         <translation>全画面</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="933"/>
-        <location filename="../qml/Main.qml" line="1299"/>
+        <location filename="../qml/Main.qml" line="954"/>
+        <location filename="../qml/Main.qml" line="1332"/>
         <source>New game</source>
         <translation>新規ゲーム</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="949"/>
-        <location filename="../qml/Main.qml" line="1306"/>
+        <location filename="../qml/Main.qml" line="970"/>
+        <location filename="../qml/Main.qml" line="1339"/>
         <source>Save game</source>
         <translation>ゲームを保存</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="964"/>
+        <location filename="../qml/Main.qml" line="985"/>
         <source>Open settings</source>
         <translation>設定を開く</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="979"/>
+        <location filename="../qml/Main.qml" line="1000"/>
         <source>Quit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1231"/>
+        <location filename="../qml/Main.qml" line="1264"/>
         <source>Victory :)</source>
         <translation>勝利！ :)</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1312"/>
+        <location filename="../qml/Main.qml" line="1345"/>
         <source>Load game</source>
         <translation>ゲームを読み込む</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1337"/>
+        <location filename="../qml/Main.qml" line="1370"/>
         <source>Open save folder</source>
         <translation>保存フォルダを開く</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1344"/>
+        <location filename="../qml/Main.qml" line="1377"/>
         <source>Empty</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1365"/>
+        <location filename="../qml/Main.qml" line="1398"/>
         <source>Exit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1372"/>
+        <location filename="../qml/Main.qml" line="1405"/>
         <source>Save Game</source>
         <translation>ゲームを保存</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1395"/>
+        <location filename="../qml/Main.qml" line="1428"/>
         <source>Enter save file name</source>
         <translation>保存ファイル名を入力</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1399"/>
+        <location filename="../qml/Main.qml" line="1432"/>
         <source>Filename cannot contain:</source>
         <translation>ファイル名に使用できない文字：</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1427"/>
+        <location filename="../qml/Main.qml" line="1460"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1434"/>
+        <location filename="../qml/Main.qml" line="1467"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1457"/>
+        <location filename="../qml/Main.qml" line="1490"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1470"/>
+        <location filename="../qml/Main.qml" line="1503"/>
         <source>Failed to load save file. The file might be corrupted or incompatible.</source>
         <translation>セーブファイルの読み込みに失敗しました。ファイルが破損しているか互換性がない可能性があります。</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1476"/>
+        <location filename="../qml/Main.qml" line="1509"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
