@@ -14,13 +14,13 @@ ApplicationWindow {
     minimumHeight: getInitialHeight()
     title: "Retr0Mine"
 
-    Connections {
-        target: mainWindow
-        function onLanguageChanged() {
-            // Force a retranslation of the UI
-            root.update()  // or whatever your root item id is
-        }
-    }
+    //Connections {
+    //    target: mainWindow
+    //    function onLanguageChanged() {
+    //        // Force a retranslation of the UI
+    //        root.update()  // or whatever your root item id is
+    //    }
+    //}
     onVisibleChanged: {
         if (Universal !== undefined) {
             Universal.theme = Universal.System
@@ -273,6 +273,25 @@ ApplicationWindow {
         width: 250
         visible: false
 
+        enter: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        exit: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
         GridLayout {
             anchors.fill: parent
             columns: 2
@@ -384,6 +403,26 @@ ApplicationWindow {
             height: 100
             width: 300
             visible: false
+
+            enter: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0.0
+                    to: 1.0
+                    duration: 200  // Duration in milliseconds
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            exit: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 1.0
+                    to: 0.0
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+            }
 
             GridLayout {
                 anchors.fill: parent
