@@ -39,6 +39,7 @@ private:
     SolvabilityResult testSolvability(const QVector<int>& testMines, int firstClickIndex);
     bool canDeduce(int pos, const QSet<int>& revealed, const QVector<int>& mines, const QVector<int>& numbers);
     QVector<int> calculateNumbersForValidation(const QVector<int>& mines);
+    bool hasUnsolvablePattern(const QVector<int>& testMines, const QSet<int>& revealed);
 };
 
 #endif // MINESWEEPERLOGIC_H

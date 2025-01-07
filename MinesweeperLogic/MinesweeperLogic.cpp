@@ -22,6 +22,113 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
     return true;
 }
 
+bool MinesweeperLogic::hasUnsolvablePattern(const QVector<int>& testMines, const QSet<int>& revealed) {
+    for (int row = 0; row < m_height; ++row) {
+        for (int col = 0; col < m_width; ++col) {
+            int pos = row * m_width + col;
+
+            // Skip revealed cells
+            if (revealed.contains(pos)) {
+                continue;
+            }
+
+            // Count all surrounding cells
+            QVector<int> unrevealedNeighbors;
+            QVector<int> revealedNumbers;
+            int confirmedMines = 0;
+
+            // Check all neighbors
+            for (int r = -1; r <= 1; ++r) {
+                for (int c = -1; c <= 1; ++c) {
+                    if (r == 0 && c == 0) continue;
+
+                    int newRow = row + r;
+                    int newCol = col + c;
+
+                    if (newRow < 0 || newRow >= m_height ||
+                        newCol < 0 || newCol >= m_width) continue;
+
+                    int neighborPos = newRow * m_width + newCol;
+
+                    if (revealed.contains(neighborPos)) {
+                        revealedNumbers.append(neighborPos);
+                    } else if (!testMines.contains(neighborPos)) {
+                        unrevealedNeighbors.append(neighborPos);
+                    } else {
+                        confirmedMines++;
+                    }
+                }
+            }
+
+            // Pattern 1: Original 50-50 pattern
+            if (unrevealedNeighbors.size() == 1 && !testMines.contains(pos)) {
+                int otherCell = unrevealedNeighbors.first();
+                if (!testMines.contains(otherCell) && !revealedNumbers.isEmpty()) {
+                    // Check if one must be a mine based on surrounding numbers
+                    bool mustHaveMine = false;
+                    for (int revealedPos : revealedNumbers) {
+                        int number = calculateNumbersForValidation(testMines)[revealedPos];
+                        if (number > 0) {  // If this revealed number indicates a mine must be present
+                            mustHaveMine = true;
+                            break;
+                        }
+                    }
+                    if (mustHaveMine) {
+                        return true;  // Unsolvable pattern found
+                    }
+                }
+            }
+
+            // Pattern 2: New unsolvable pattern
+            if (!revealedNumbers.isEmpty() && !unrevealedNeighbors.isEmpty()) {
+                bool canDeduce = false;
+
+                for (int revealedPos : revealedNumbers) {
+                    int numberVal = calculateNumbersForValidation(testMines)[revealedPos];
+
+                    // Count mines and unknowns around this number
+                    int localMines = 0;
+                    int localUnknowns = 0;
+
+                    int checkRow = revealedPos / m_width;
+                    int checkCol = revealedPos % m_width;
+
+                    for (int dr = -1; dr <= 1; ++dr) {
+                        for (int dc = -1; dc <= 1; ++dc) {
+                            if (dr == 0 && dc == 0) continue;
+
+                            int adjacentRow = checkRow + dr;
+                            int adjacentCol = checkCol + dc;
+
+                            if (adjacentRow < 0 || adjacentRow >= m_height ||
+                                adjacentCol < 0 || adjacentCol >= m_width) continue;
+
+                            int adjacentPos = adjacentRow * m_width + adjacentCol;
+
+                            if (testMines.contains(adjacentPos)) {
+                                localMines++;
+                            } else if (!revealed.contains(adjacentPos)) {
+                                localUnknowns++;
+                            }
+                        }
+                    }
+
+                    // If this number can help us deduce
+                    if (numberVal - localMines == localUnknowns || localMines == numberVal) {
+                        canDeduce = true;
+                        break;
+                    }
+                }
+
+                if (!canDeduce) {
+                    return true;  // Unsolvable pattern found
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void MinesweeperLogic::calculateNumbers()
 {
     m_numbers.fill(0);
@@ -222,6 +329,10 @@ MinesweeperLogic::SolvabilityResult MinesweeperLogic::testSolvability(
     // Calculate solvability percentage
     int totalNonMineCells = m_width * m_height - testMines.size();
     float percentage = (static_cast<float>(solvableCells) / totalNonMineCells) * 100.0f;
+
+    if (hasUnsolvablePattern(testMines, revealed)) {
+        return {0, 0.0f}; // Force rejection of this configuration
+    }
 
     qDebug() << "Solvability Test:";
     qDebug() << "- Solvable cells:" << solvableCells;
