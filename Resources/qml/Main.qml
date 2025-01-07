@@ -13,14 +13,6 @@ ApplicationWindow {
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
     title: "Retr0Mine"
-
-    //Connections {
-    //    target: mainWindow
-    //    function onLanguageChanged() {
-    //        // Force a retranslation of the UI
-    //        root.update()  // or whatever your root item id is
-    //    }
-    //}
     onVisibleChanged: {
         if (Universal !== undefined) {
             Universal.theme = Universal.System

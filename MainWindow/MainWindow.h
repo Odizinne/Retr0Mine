@@ -44,9 +44,6 @@ private:
     void setFusionTheme();
     bool loadLanguage(QString languageCode);
     int styleIndex;
-
-signals:
-    void languageChanged();
 };
 
 #endif // MAINWINDOW_H
