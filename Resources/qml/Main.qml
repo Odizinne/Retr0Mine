@@ -86,11 +86,11 @@ ApplicationWindow {
     property int cellSpacing: 2
 
     function getInitialWidth() {
-        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 1) : width
+        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
     }
 
     function getInitialHeight() {
-        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeY + 74, Screen.desktopAvailableHeight * 1) : height
+        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeY + 74, Screen.desktopAvailableHeight * 0.9) : height
     }
 
     onGridSizeXChanged: {
