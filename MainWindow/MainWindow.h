@@ -25,21 +25,22 @@ public:
     Q_INVOKABLE QString loadGameState(const QString &filename) const;
     Q_INVOKABLE QStringList getSaveFiles() const;
     Q_INVOKABLE void openSaveFolder() const;
-
     Q_INVOKABLE void restartRetr0Mine() const;
 
 private:
     QSettings settings;
     QQmlApplicationEngine* engine;
     QQmlContext* rootContext;
+    QTranslator* translator;
     bool isWindows10;
     bool isWindows11;
     bool isLinux;
+
+    void setupAndLoadQML();
     void setW10Theme();
     void setW11Theme();
     void setFusionTheme();
     bool loadLanguage(QString languageCode);
-    QTranslator* translator;
 
 signals:
     void languageChanged();

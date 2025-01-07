@@ -20,6 +20,10 @@ MainWindow::MainWindow(QObject *parent)
     , isLinux(Utils::isLinux())
     , translator(new QTranslator(this))
 {
+    setupAndLoadQML();
+}
+
+void MainWindow::setupAndLoadQML() {
     QColor accentColor;
     bool darkMode;
     int themeIndex = settings.value("themeIndex", 0).toInt();
