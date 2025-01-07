@@ -86,11 +86,11 @@ ApplicationWindow {
     property int cellSpacing: 2
 
     function getInitialWidth() {
-        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeX + 24, Screen.width * 1) : width
+        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 1) : width
     }
 
     function getInitialHeight() {
-        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeY + 74, Screen.height * 1) : height
+        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeY + 74, Screen.desktopAvailableHeight * 1) : height
     }
 
     onGridSizeXChanged: {
@@ -1595,6 +1595,12 @@ ApplicationWindow {
             bottomMargin: 12
         }
         clip: true
+
+        ScrollBar.vertical.policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
+                                  ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+
+        ScrollBar.horizontal.policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
+                                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
         ColumnLayout {
             id: gameLayout
