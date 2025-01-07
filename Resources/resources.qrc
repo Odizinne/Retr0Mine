@@ -23,6 +23,7 @@
         <file>icons/menu_light.png</file>
         <file>icons/menu_dark.png</file>
         <file>icons/flag.png</file>
+        <file>icons/flag_dark.png</file>
         <file>icons/icon.png</file>
     </qresource>
 </RCC>

@@ -9,6 +9,7 @@
 #include <QGuiApplication>
 #include "Utils.h"
 #include "MinesweeperLogic.h"
+#include <QStyleHints>
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
@@ -24,30 +25,9 @@ MainWindow::MainWindow(QObject *parent)
 }
 
 void MainWindow::setupAndLoadQML() {
-    QColor accentColor;
-    bool darkMode;
+
     int themeIndex = settings.value("themeIndex", 0).toInt();
-
-
-    if (Utils::getTheme() == "light") {
-        darkMode = true;
-        if (isWindows10) {
-            accentColor = Utils::getAccentColor("normal");
-        } else if (isWindows11) {
-            accentColor = Utils::getAccentColor("light2");
-        } else {
-            accentColor = "#0000FF";
-        }
-    } else {
-        darkMode = false;
-        if (isWindows10) {
-            accentColor = Utils::getAccentColor("normal");
-        } else if (isWindows11) {
-            accentColor = Utils::getAccentColor("dark2");
-        } else {
-            accentColor = "#0000FF";
-        }
-    }
+    int colorSchemeIndex = settings.value("colorScheme", 0).toInt();
 
     if (themeIndex == 1) {
         setW10Theme();
@@ -61,17 +41,14 @@ void MainWindow::setupAndLoadQML() {
         else setFusionTheme();
     }
 
+    setColorScheme(colorSchemeIndex);
+
+
     rootContext->setContextProperty("themeIndex", themeIndex);
     rootContext->setContextProperty("mainWindow", this);
-    rootContext->setContextProperty("isDarkMode", darkMode);
-    rootContext->setContextProperty("accentColor", accentColor);
 
-    QIcon flagIcon = Utils::recolorIcon(QIcon(":/icons/flag.png"), accentColor);
-    QPixmap flagPixmap = flagIcon.pixmap(32, 32);
-    QString filePath = QDir::temp().filePath("flagIcon.png");
-    flagPixmap.save(filePath);
 
-    rootContext->setContextProperty("flagIcon", QUrl::fromLocalFile(filePath));
+
 
     int difficulty = settings.value("difficulty", 0).toInt();
     rootContext->setContextProperty("gameDifficulty", difficulty);
@@ -276,6 +253,8 @@ void MainWindow::openSaveFolder() const {
 
 void MainWindow::setW10Theme() {
     QQuickStyle::setStyle("Universal");
+    applyedTheme = 1;
+
     rootContext->setContextProperty("windows10", QVariant(true));
     rootContext->setContextProperty("windows11", QVariant(false));
     rootContext->setContextProperty("fusion", QVariant(false));
@@ -283,6 +262,8 @@ void MainWindow::setW10Theme() {
 
 void MainWindow::setW11Theme() {
     QQuickStyle::setStyle("FluentWinUI3");
+    applyedTheme = 2;
+
     rootContext->setContextProperty("windows10", QVariant(false));
     rootContext->setContextProperty("windows11", QVariant(true));
     rootContext->setContextProperty("fusion", QVariant(false));
@@ -290,6 +271,8 @@ void MainWindow::setW11Theme() {
 
 void MainWindow::setFusionTheme() {
     QQuickStyle::setStyle("Fusion");
+    applyedTheme = 3;
+
     rootContext->setContextProperty("windows10", QVariant(false));
     rootContext->setContextProperty("windows11", QVariant(false));
     rootContext->setContextProperty("fusion", QVariant(true));
@@ -297,4 +280,70 @@ void MainWindow::setFusionTheme() {
 
 void MainWindow::restartRetr0Mine() const {
     Utils::restartApp();
+}
+
+void MainWindow::saveColorSchemeSettings(int index) {
+    settings.setValue("colorScheme", index);
+}
+
+void MainWindow::setColorScheme(int index) {
+    QColor accentColor;
+    bool darkMode;
+
+    if (index == 1) {
+        //light
+        darkMode = false;
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+        if (applyedTheme == 1) {
+            accentColor = Utils::getAccentColor("normal");
+        } else if (applyedTheme == 2) {
+            accentColor = Utils::getAccentColor("dark2");
+        } else {
+            accentColor = "#0000FF";
+        }
+    } else if (index == 2) {
+        //dark
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+        darkMode = true;
+        if (isWindows10) {
+            accentColor = Utils::getAccentColor("normal");
+        } else if (isWindows11) {
+            accentColor = Utils::getAccentColor("light2");
+        } else {
+            accentColor = "#0000FF";
+        }
+    } else {
+        // 0 = System
+        QGuiApplication::styleHints()->unsetColorScheme();
+        if (Utils::getTheme() == "light") {
+            darkMode = true;
+            if (applyedTheme == 1) {
+                accentColor = Utils::getAccentColor("normal");
+            } else if (applyedTheme == 2) {
+                accentColor = Utils::getAccentColor("light2");
+            } else {
+                accentColor = "#0000FF";
+            }
+        } else {
+            darkMode = false;
+            if (applyedTheme == 1) {
+                accentColor = Utils::getAccentColor("normal");
+            } else if (applyedTheme == 2) {
+                accentColor = Utils::getAccentColor("dark2");
+            } else {
+                accentColor = "#0000FF";
+            }
+        }
+
+    }
+
+    QIcon flagIcon = Utils::recolorIcon(QIcon(":/icons/flag.png"), accentColor);
+    QPixmap flagPixmap = flagIcon.pixmap(32, 32);
+    QString filePath = QDir::temp().filePath("flagIcon.png");
+    flagPixmap.save(filePath);
+
+    rootContext->setContextProperty("flagIcon", QUrl::fromLocalFile(filePath));
+    rootContext->setContextProperty("appTheme", index);
+    rootContext->setContextProperty("isDarkMode", darkMode);
+    rootContext->setContextProperty("accentColor", accentColor);
 }

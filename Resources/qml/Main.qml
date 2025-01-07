@@ -814,17 +814,17 @@ ApplicationWindow {
                             RowLayout {
                                 Layout.fillWidth: true
                                 Label {
-                                    text: qsTr("Theme")
+                                    text: qsTr("Style")
                                     Layout.fillWidth: true
                                 }
 
                                 ComboBox {
-                                    id: themeComboBox
+                                    id: styleComboBox
                                     model: [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
                                     Layout.rightMargin: 5
                                     Layout.preferredWidth: {
-                                        if (isUniversalTheme) return themeComboBox.implicitWidth + 5
-                                        return themeComboBox.implicitWidth
+                                        if (isUniversalTheme) return styleComboBox.implicitWidth + 5
+                                        return styleComboBox.implicitWidth
                                     }
 
                                     property int previousIndex: theme
@@ -836,6 +836,28 @@ ApplicationWindow {
                                             restartWindow.visible = true
                                             previousIndex = currentIndex  // Update the previous index
                                         }
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: qsTr("Theme")
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: themeComboBox
+                                    model: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
+                                    Layout.rightMargin: 5
+                                    Layout.preferredWidth: {
+                                        if (isUniversalTheme) return themeComboBox.implicitWidth + 5
+                                        return themeComboBox.implicitWidth
+                                    }
+                                    currentIndex: appTheme
+                                    onActivated: {
+                                        mainWindow.saveColorSchemeSettings(currentIndex)
+                                        mainWindow.setColorScheme(currentIndex)
                                     }
                                 }
                             }
@@ -1011,16 +1033,16 @@ ApplicationWindow {
                                 ComboBox {
                                     id: languageComboBox
                                     model: [qsTr("System"),
-                                            "English",        // English (index 1)
-                                            "Français",       // French (index 2)
-                                            "Deutsch",        // German (index 3)
-                                            "Español",        // Spanish
-                                            "Italiano",       // Italian
-                                            "日本語",         // Japanese
-                                            "简体中文",       // Chinese Simplified
-                                            "繁體中文",       // Chinese Traditional
-                                            "한국어",         // Korean
-                                            "Русский"         // Russian
+                                        "English",        // English (index 1)
+                                        "Français",       // French (index 2)
+                                        "Deutsch",        // German (index 3)
+                                        "Español",        // Spanish
+                                        "Italiano",       // Italian
+                                        "日本語",         // Japanese
+                                        "简体中文",       // Chinese Simplified
+                                        "繁體中文",       // Chinese Traditional
+                                        "한국어",         // Korean
+                                        "Русский"         // Russian
                                     ]
                                     property int previousLanguageIndex: currentIndex
                                     Layout.rightMargin: 5
@@ -1402,26 +1424,26 @@ ApplicationWindow {
                     anchors.margins: 12
 
                     TextField {
-                       id: saveNameField
-                       placeholderText: qsTr("Enter save file name")
-                       Layout.fillWidth: true
-                       onTextChanged: {
-                           let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                           errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
-                           saveButton.enabled = text.trim() !== "" && !hasInvalidChars
-                       }
-                       Keys.onReturnPressed: {
-                           if (saveButton.enabled) {
-                               saveButton.clicked()
-                           }
-                       }
+                        id: saveNameField
+                        placeholderText: qsTr("Enter save file name")
+                        Layout.fillWidth: true
+                        onTextChanged: {
+                            let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
+                            errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
+                            saveButton.enabled = text.trim() !== "" && !hasInvalidChars
+                        }
+                        Keys.onReturnPressed: {
+                            if (saveButton.enabled) {
+                                saveButton.clicked()
+                            }
+                        }
                     }
                     Label {
-                       id: errorLabel
-                       color: "#f7c220"
-                       Layout.leftMargin: 3
-                       font.pointSize: 10
-                       Layout.fillWidth: true
+                        id: errorLabel
+                        color: "#f7c220"
+                        Layout.leftMargin: 3
+                        font.pointSize: 10
+                        Layout.fillWidth: true
                     }
 
                     Item {

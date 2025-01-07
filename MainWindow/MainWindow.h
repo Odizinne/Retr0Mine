@@ -20,6 +20,8 @@ public:
     Q_INVOKABLE void saveThemeSettings(int index);
     Q_INVOKABLE void saveLanguageSettings(int index);
     Q_INVOKABLE void setLanguage(int index);
+    Q_INVOKABLE void saveColorSchemeSettings(int index);
+    Q_INVOKABLE void setColorScheme(int index);
 
     Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename) const;
     Q_INVOKABLE QString loadGameState(const QString &filename) const;
@@ -41,6 +43,7 @@ private:
     void setW11Theme();
     void setFusionTheme();
     bool loadLanguage(QString languageCode);
+    int applyedTheme;
 
 signals:
     void languageChanged();
