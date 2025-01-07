@@ -43,7 +43,7 @@ private:
     void setW11Theme();
     void setFusionTheme();
     bool loadLanguage(QString languageCode);
-    int applyedTheme;
+    int styleIndex;
 
 signals:
     void languageChanged();
