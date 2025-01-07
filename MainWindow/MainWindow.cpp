@@ -23,6 +23,19 @@ MainWindow::MainWindow(QObject *parent)
     , isLinux(Utils::isLinux())
 {
     setupAndLoadQML();
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, &MainWindow::onColorSchemeChanged);
+}
+
+void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
+{
+    if (settings.value("colorScheme").toInt() != 0) return;
+
+    if (scheme == Qt::ColorScheme::Light) {
+        setColorScheme(1);
+    } else if (scheme == Qt::ColorScheme::Dark) {
+        setColorScheme(2);
+    }
 }
 
 void MainWindow::setupAndLoadQML() {

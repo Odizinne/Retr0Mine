@@ -29,6 +29,9 @@ public:
     Q_INVOKABLE void openSaveFolder() const;
     Q_INVOKABLE void restartRetr0Mine() const;
 
+private slots:
+    void onColorSchemeChanged(Qt::ColorScheme scheme);
+
 private:
     QSettings settings;
     QQmlApplicationEngine* engine;
