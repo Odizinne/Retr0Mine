@@ -872,20 +872,21 @@ ApplicationWindow {
                                             default: return 1;  // Default to Normal
                                         }
                                     }
+
                                     onActivated: {
-                                        switch(currentIndex) {
+                                        switch(cellSizeComboBox.currentIndex) {
                                             case 0: root.cellSize = 25; break;
                                             case 1: root.cellSize = 35; break;
                                             case 2: root.cellSize = 45; break;
                                             case 3: root.cellSize = 55; break;
                                         }
                                         if (!isMaximized && !isFullScreen) {
-                                            minimumWidth = getInitialWidth()
-                                            minimumHeight = getInitialHeight()
-                                            width = minimumWidth
-                                            height = minimumHeight
+                                            root.minimumWidth = getInitialWidth()
+                                            root.minimumHeight = getInitialHeight()
+                                            root.width = root.minimumWidth
+                                            root.height = root.minimumHeight
                                         }
-                                        mainWindow.saveCellSizeSettings(currentIndex)
+                                        mainWindow.saveCellSizeSettings(cellSizeComboBox.currentIndex)
                                     }
                                 }
                             }
