@@ -407,7 +407,7 @@ ApplicationWindow {
             anchors.centerIn: parent
             id: restoreDefaultsPopup
             height: 120
-            width: 300
+            width: 320
             visible: false
 
             enter: Transition {
@@ -431,6 +431,7 @@ ApplicationWindow {
             }
 
             GridLayout {
+                id: restoreDefaultLayout
                 anchors.fill: parent
                 columns: 2
                 rowSpacing: 10

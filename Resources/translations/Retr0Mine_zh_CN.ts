@@ -15,7 +15,7 @@
     </message>
     <message>
         <location filename="../qml/Main.qml" line="334"/>
-        <location filename="../qml/Main.qml" line="1472"/>
+        <location filename="../qml/Main.qml" line="1551"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
@@ -26,257 +26,273 @@
     </message>
     <message>
         <location filename="../qml/Main.qml" line="377"/>
-        <location filename="../qml/Main.qml" line="1467"/>
+        <location filename="../qml/Main.qml" line="1546"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="433"/>
+        <location filename="../qml/Main.qml" line="511"/>
         <source>Application needs to be restarted</source>
         <translation>应用程序需要重启</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="440"/>
+        <location filename="../qml/Main.qml" line="518"/>
         <source>Restart</source>
         <translation>重启</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="449"/>
+        <location filename="../qml/Main.qml" line="527"/>
         <source>Later</source>
         <translation>稍后</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="481"/>
+        <location filename="../qml/Main.qml" line="559"/>
         <source>Difficulty</source>
         <translation>难度</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="486"/>
+        <location filename="../qml/Main.qml" line="564"/>
         <source>Controls</source>
         <translation>控制</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="491"/>
+        <location filename="../qml/Main.qml" line="569"/>
         <source>Visuals</source>
         <translation>视觉</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="496"/>
+        <location filename="../qml/Main.qml" line="574"/>
         <source>Sound</source>
         <translation>声音</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="501"/>
+        <location filename="../qml/Main.qml" line="579"/>
         <source>Shortcuts</source>
         <translation>快捷键</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="506"/>
-        <location filename="../qml/Main.qml" line="1108"/>
+        <location filename="../qml/Main.qml" line="584"/>
+        <location filename="../qml/Main.qml" line="1187"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="553"/>
         <source>Close settings</source>
-        <translation>关闭</translation>
+        <translation type="vanished">关闭</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="585"/>
+        <location filename="../qml/Main.qml" line="663"/>
         <source>Easy</source>
         <translation>简单</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="586"/>
+        <location filename="../qml/Main.qml" line="664"/>
         <source>Medium</source>
         <translation>中等</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="587"/>
+        <location filename="../qml/Main.qml" line="665"/>
         <source>Hard</source>
         <translation>困难</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="706"/>
+        <location filename="../qml/Main.qml" line="784"/>
         <source>Invert left and right click</source>
         <translation>反转左右点击</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="726"/>
+        <location filename="../qml/Main.qml" line="804"/>
         <source>Quick reveal connected cells</source>
         <translation>快速显示相连格子</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="746"/>
+        <location filename="../qml/Main.qml" line="824"/>
         <source>Enable question marks</source>
         <translation>启用问号标记</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="789"/>
+        <location filename="../qml/Main.qml" line="867"/>
         <source>Animations</source>
         <translation>动画</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="855"/>
+        <location filename="../qml/Main.qml" line="933"/>
         <source>Cell size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="860"/>
+        <location filename="../qml/Main.qml" line="938"/>
         <source>Small</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="860"/>
+        <location filename="../qml/Main.qml" line="938"/>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="860"/>
+        <location filename="../qml/Main.qml" line="938"/>
         <source>Large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="860"/>
+        <location filename="../qml/Main.qml" line="938"/>
         <source>Extra Large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="896"/>
+        <location filename="../qml/Main.qml" line="975"/>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="930"/>
+        <location filename="../qml/Main.qml" line="1009"/>
         <source>Light</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="930"/>
+        <location filename="../qml/Main.qml" line="1009"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="962"/>
+        <location filename="../qml/Main.qml" line="1041"/>
         <source>Sound effects</source>
         <translation>音效</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="815"/>
+        <location filename="../qml/Main.qml" line="893"/>
         <source>Revealed cells frame</source>
         <translation>已显示格子边框</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="835"/>
+        <location filename="../qml/Main.qml" line="913"/>
         <source>High contrast flags</source>
         <translation>高对比度旗帜</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="925"/>
+        <location filename="../qml/Main.qml" line="1004"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="902"/>
-        <location filename="../qml/Main.qml" line="930"/>
-        <location filename="../qml/Main.qml" line="1114"/>
+        <location filename="../qml/Main.qml" line="981"/>
+        <location filename="../qml/Main.qml" line="1009"/>
+        <location filename="../qml/Main.qml" line="1193"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="982"/>
+        <location filename="../qml/Main.qml" line="441"/>
+        <source>Restore all settings to default?
+Application needs to be restarted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="449"/>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="631"/>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="1061"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1018"/>
+        <location filename="../qml/Main.qml" line="1097"/>
         <source>Fullscreen</source>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1033"/>
-        <location filename="../qml/Main.qml" line="1411"/>
+        <location filename="../qml/Main.qml" line="1112"/>
+        <location filename="../qml/Main.qml" line="1490"/>
         <source>New game</source>
         <translation>新游戏</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1049"/>
-        <location filename="../qml/Main.qml" line="1418"/>
+        <location filename="../qml/Main.qml" line="1128"/>
+        <location filename="../qml/Main.qml" line="1497"/>
         <source>Save game</source>
         <translation>保存游戏</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1064"/>
+        <location filename="../qml/Main.qml" line="1143"/>
         <source>Open settings</source>
         <translation>打开设置</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1079"/>
+        <location filename="../qml/Main.qml" line="1158"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1343"/>
+        <location filename="../qml/Main.qml" line="1422"/>
         <source>Victory :)</source>
         <translation>胜利 :)</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1424"/>
+        <location filename="../qml/Main.qml" line="1503"/>
         <source>Load game</source>
         <translation>加载游戏</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1449"/>
+        <location filename="../qml/Main.qml" line="1528"/>
         <source>Open save folder</source>
         <translation>打开存档文件夹</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1456"/>
+        <location filename="../qml/Main.qml" line="1535"/>
         <source>Empty</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1477"/>
+        <location filename="../qml/Main.qml" line="1556"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1484"/>
+        <location filename="../qml/Main.qml" line="1563"/>
         <source>Save Game</source>
         <translation>保存游戏</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1507"/>
+        <location filename="../qml/Main.qml" line="1586"/>
         <source>Enter save file name</source>
         <translation>输入存档文件名</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1511"/>
+        <location filename="../qml/Main.qml" line="1590"/>
         <source>Filename cannot contain:</source>
         <translation>文件名不能包含：</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1539"/>
+        <location filename="../qml/Main.qml" line="468"/>
+        <location filename="../qml/Main.qml" line="1618"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1546"/>
+        <location filename="../qml/Main.qml" line="1625"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1569"/>
+        <location filename="../qml/Main.qml" line="1648"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1582"/>
+        <location filename="../qml/Main.qml" line="1661"/>
         <source>Failed to load save file. The file might be corrupted or incompatible.</source>
         <translation>加载存档失败。文件可能已损坏或不兼容。</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="1588"/>
+        <location filename="../qml/Main.qml" line="1667"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
