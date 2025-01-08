@@ -944,20 +944,20 @@ ApplicationWindow {
                                     }
                                     currentIndex: {
                                         switch(cellSize) {
-                                            case 25: return 0;
-                                            case 35: return 1;
-                                            case 45: return 2;
-                                            case 55: return 3;
-                                            default: return 1;  // Default to Normal
+                                        case 25: return 0;
+                                        case 35: return 1;
+                                        case 45: return 2;
+                                        case 55: return 3;
+                                        default: return 1;  // Default to Normal
                                         }
                                     }
 
                                     onActivated: {
                                         switch(cellSizeComboBox.currentIndex) {
-                                            case 0: root.cellSize = 25; break;
-                                            case 1: root.cellSize = 35; break;
-                                            case 2: root.cellSize = 45; break;
-                                            case 3: root.cellSize = 55; break;
+                                        case 0: root.cellSize = 25; break;
+                                        case 1: root.cellSize = 35; break;
+                                        case 2: root.cellSize = 45; break;
+                                        case 3: root.cellSize = 55; break;
                                         }
                                         if (!isMaximized && !isFullScreen) {
                                             root.minimumWidth = getInitialWidth()
@@ -1479,262 +1479,278 @@ ApplicationWindow {
         anchors.leftMargin: 12
         anchors.rightMargin: 12
 
-        Button {
-            Layout.alignment: Qt.AlignLeft
-            Layout.preferredWidth: 35
-            Layout.preferredHeight: 35
-            onClicked: {
-                menu.visible ? menu.close() : menu.open()
-            }
-            Image {
-                anchors.centerIn: parent
-                source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
-                height: 16
-                width: 16
-            }
+        RowLayout {
+            spacing: 12
+            Layout.preferredWidth: parent.width / 3
 
-            Menu {
-                topMargin: 60
-                id: menu
-                width: 150
-                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                MenuItem {
-                    text: qsTr("New game")
-                    onTriggered: root.initGame()
+            Button {
+                Layout.alignment: Qt.AlignLeft
+                Layout.preferredWidth: 35
+                Layout.preferredHeight: 35
+                onClicked: {
+                    menu.visible ? menu.close() : menu.open()
+                }
+                Image {
+                    anchors.centerIn: parent
+                    source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
+                    height: 16
+                    width: 16
                 }
 
-                MenuSeparator { }
-
-                MenuItem {
-                    text: qsTr("Save game")
-                    enabled: root.gameStarted
-                    onTriggered: saveWindow.visible = true
-                }
                 Menu {
-                    id: loadMenu
-                    title: qsTr("Load game")
-
-                    Instantiator {
-                        id: menuInstantiator
-                        model: []
-
-                        MenuItem {
-                            text: modelData
-                            onTriggered: {
-                                let saveData = mainWindow.loadGameState(text)
-                                if (saveData) {
-                                    if (!loadGame(saveData)) {
-                                        errorWindow.visible = true
-                                    }
-                                }
-                            }
-                        }
-
-                        onObjectAdded: (index, object) => loadMenu.insertItem(index, object)
-                        onObjectRemoved: (index, object) => loadMenu.removeItem(object)
+                    topMargin: 60
+                    id: menu
+                    width: 150
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                    MenuItem {
+                        text: qsTr("New game")
+                        onTriggered: root.initGame()
                     }
 
                     MenuSeparator { }
 
                     MenuItem {
-                        text: qsTr("Open save folder")
-                        onTriggered: mainWindow.openSaveFolder()
+                        text: qsTr("Save game")
+                        enabled: root.gameStarted
+                        onTriggered: saveWindow.visible = true
                     }
+                    Menu {
+                        id: loadMenu
+                        title: qsTr("Load game")
 
-                    onAboutToShow: {
-                        let saves = mainWindow.getSaveFiles()
-                        if (saves.length === 0) {
-                            menuInstantiator.model = [qsTr("Empty")]
-                            menuInstantiator.objectAt(0).enabled = false
-                        } else {
-                            menuInstantiator.model = saves
+                        Instantiator {
+                            id: menuInstantiator
+                            model: []
+
+                            MenuItem {
+                                text: modelData
+                                onTriggered: {
+                                    let saveData = mainWindow.loadGameState(text)
+                                    if (saveData) {
+                                        if (!loadGame(saveData)) {
+                                            errorWindow.visible = true
+                                        }
+                                    }
+                                }
+                            }
+
+                            onObjectAdded: (index, object) => loadMenu.insertItem(index, object)
+                            onObjectRemoved: (index, object) => loadMenu.removeItem(object)
                         }
-                    }
-                }
 
-                MenuSeparator { }
+                        MenuSeparator { }
 
-                MenuItem {
-                    text: qsTr("Settings")
-                    onTriggered: settingsPage.visible = true
-                }
-
-                MenuItem {
-                    text: qsTr("About")
-                    onTriggered: aboutPage.visible = true
-                }
-
-                MenuItem {
-                    text: qsTr("Exit")
-                    onTriggered: Qt.quit()
-                }
-            }
-
-            ApplicationWindow {
-                id: saveWindow
-                title: qsTr("Save Game")
-                width: 300
-                height: 130
-                minimumWidth: 300
-                minimumHeight: 130
-                maximumWidth: 300
-                maximumHeight: 130
-                flags: Qt.Dialog
-                Shortcut {
-                    sequence: "Esc"
-                    onActivated: {
-                        saveWindow.close()
-                    }
-                }
-
-                Keys.onEscapePressed: saveWindow.close()
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 12
-
-                    TextField {
-                        id: saveNameField
-                        placeholderText: qsTr("Enter save file name")
-                        Layout.fillWidth: true
-                        onTextChanged: {
-                            let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                            errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
-                            saveButton.enabled = text.trim() !== "" && !hasInvalidChars
+                        MenuItem {
+                            text: qsTr("Open save folder")
+                            onTriggered: mainWindow.openSaveFolder()
                         }
-                        Keys.onReturnPressed: {
-                            if (saveButton.enabled) {
-                                saveButton.clicked()
+
+                        onAboutToShow: {
+                            let saves = mainWindow.getSaveFiles()
+                            if (saves.length === 0) {
+                                menuInstantiator.model = [qsTr("Empty")]
+                                menuInstantiator.objectAt(0).enabled = false
+                            } else {
+                                menuInstantiator.model = saves
                             }
                         }
                     }
-                    Label {
-                        id: errorLabel
-                        color: "#f7c220"
-                        Layout.leftMargin: 3
-                        font.pointSize: 10
-                        Layout.fillWidth: true
+
+                    MenuSeparator { }
+
+                    MenuItem {
+                        text: qsTr("Settings")
+                        onTriggered: settingsPage.visible = true
                     }
 
-                    Item {
-                        Layout.fillHeight: true
+                    MenuItem {
+                        text: qsTr("About")
+                        onTriggered: aboutPage.visible = true
                     }
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignRight
-                        spacing: 10
+                    MenuItem {
+                        text: qsTr("Exit")
+                        onTriggered: Qt.quit()
+                    }
+                }
 
-                        Button {
-                            id: cancelButton
-                            text: qsTr("Cancel")
-                            Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
-                            onClicked: saveWindow.close()
+                ApplicationWindow {
+                    id: saveWindow
+                    title: qsTr("Save Game")
+                    width: 300
+                    height: 130
+                    minimumWidth: 300
+                    minimumHeight: 130
+                    maximumWidth: 300
+                    maximumHeight: 130
+                    flags: Qt.Dialog
+                    Shortcut {
+                        sequence: "Esc"
+                        onActivated: {
+                            saveWindow.close()
+                        }
+                    }
+
+                    Keys.onEscapePressed: saveWindow.close()
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.margins: 12
+
+                        TextField {
+                            id: saveNameField
+                            placeholderText: qsTr("Enter save file name")
+                            Layout.fillWidth: true
+                            onTextChanged: {
+                                let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
+                                errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
+                                saveButton.enabled = text.trim() !== "" && !hasInvalidChars
+                            }
+                            Keys.onReturnPressed: {
+                                if (saveButton.enabled) {
+                                    saveButton.clicked()
+                                }
+                            }
+                        }
+                        Label {
+                            id: errorLabel
+                            color: "#f7c220"
+                            Layout.leftMargin: 3
+                            font.pointSize: 10
+                            Layout.fillWidth: true
                         }
 
-                        Button {
-                            id: saveButton
-                            text: qsTr("Save")
-                            Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
-                            enabled: false
-                            onClicked: {
-                                if (saveNameField.text.trim()) {
-                                    saveGame(saveNameField.text.trim() + ".json")
-                                    saveWindow.close()
+                        Item {
+                            Layout.fillHeight: true
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignRight
+                            spacing: 10
+
+                            Button {
+                                id: cancelButton
+                                text: qsTr("Cancel")
+                                Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
+                                onClicked: saveWindow.close()
+                            }
+
+                            Button {
+                                id: saveButton
+                                text: qsTr("Save")
+                                Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
+                                enabled: false
+                                onClicked: {
+                                    if (saveNameField.text.trim()) {
+                                        saveGame(saveNameField.text.trim() + ".json")
+                                        saveWindow.close()
+                                    }
                                 }
                             }
                         }
                     }
+
+                    onVisibleChanged: {
+                        if (visible) {
+                            saveNameField.text = ""
+                            saveNameField.forceActiveFocus()
+                        }
+                    }
                 }
 
-                onVisibleChanged: {
-                    if (visible) {
-                        saveNameField.text = ""
-                        saveNameField.forceActiveFocus()
+                ApplicationWindow {
+                    id: errorWindow
+                    title: qsTr("Error")
+                    width: 300
+                    height: 150
+                    minimumWidth: 300
+                    minimumHeight: 150
+                    flags: Qt.Dialog
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        spacing: 10
+
+                        Label {
+                            text: qsTr("Failed to load save file. The file might be corrupted or incompatible.")
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+
+                        Button {
+                            text: qsTr("OK")
+                            Layout.alignment: Qt.AlignRight
+                            onClicked: errorWindow.close()
+                        }
                     }
                 }
             }
 
-            ApplicationWindow {
-                id: errorWindow
-                title: qsTr("Error")
-                width: 300
-                height: 150
-                minimumWidth: 300
-                minimumHeight: 150
-                flags: Qt.Dialog
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 10
-
-                    Label {
-                        text: qsTr("Failed to load save file. The file might be corrupted or incompatible.")
-                        wrapMode: Text.WordWrap
-                        Layout.fillWidth: true
+            Button {
+                id: hintButton
+                Layout.alignment: Qt.AlignLeft
+                Layout.preferredWidth: 70
+                Layout.preferredHeight: 35
+                text: "Hint"
+                enabled: gameStarted && !gameOver
+                highlighted: gameStarted && !gameOver
+                onClicked: {
+                    let revealed = [];
+                    let flagged = [];
+                    for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+                        let cell = grid.itemAtIndex(i);
+                        if (cell.revealed) revealed.push(i);
+                        if (cell.flagged) flagged.push(i);
                     }
-
-                    Button {
-                        text: qsTr("OK")
-                        Layout.alignment: Qt.AlignRight
-                        onClicked: errorWindow.close()
+                    let mineCell = gameLogic.findMineHint(revealed, flagged);
+                    if (mineCell !== -1) {
+                        let cell = grid.itemAtIndex(mineCell);
+                        cell.highlightHint();
                     }
                 }
+            }
+
+            Item {
+                Layout.fillWidth: true
             }
         }
 
-        Button {
-            Layout.alignment: Qt.AlignLeft
-            Layout.preferredWidth: 70
-            Layout.preferredHeight: 35
-            text: "Hint"
-            enabled: gameStarted && !gameOver
-            onClicked: {
-                let revealed = [];
-                let flagged = [];
-                for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-                    let cell = grid.itemAtIndex(i);
-                    if (cell.revealed) revealed.push(i);
-                    if (cell.flagged) flagged.push(i);
-                }
-                let mineCell = gameLogic.findMineHint(revealed, flagged);
-                if (mineCell !== -1) {
-                    let cell = grid.itemAtIndex(mineCell);
-                    cell.highlightHint();
-                }
-            }
-        }
 
-        Item {
+        RowLayout {
+            Layout.preferredWidth: parent.width / 3
             Layout.fillWidth: true
-        }
 
-        Text {
-            id: elapsedTimeLabel
-            text: "HH:MM:SS"
-            color: root.darkMode ? "white" : "black"
-            font.pixelSize: 18
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.leftMargin: 13
-
-        }
-
-        Item {
-            Layout.fillWidth: true
+            Text {
+                id: elapsedTimeLabel
+                text: "HH:MM:SS"
+                color: root.darkMode ? "white" : "black"
+                font.pixelSize: 18
+                Layout.alignment: Qt.AlignCenter
+            }
         }
 
         RowLayout {
+            Layout.fillWidth: true
             Layout.rightMargin: 2
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            spacing: 12
+            Layout.preferredWidth: parent.width / 3
+
+            Item {
+                Layout.fillWidth: true
+            }
 
             Image {
+                Layout.alignment: Qt.AlignRight
+
                 source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
                 Layout.preferredWidth: 16
                 Layout.preferredHeight: 16
             }
 
             Text {
+                Layout.alignment: Qt.AlignRight
                 text: ": " + (root.mineCount - root.flaggedCount)
                 color: root.darkMode ? "white" : "black"
                 font.pixelSize: 18
@@ -1758,10 +1774,10 @@ ApplicationWindow {
         clip: true
 
         ScrollBar.vertical.policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
-                                  ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                       ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
         ScrollBar.horizontal.policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
-                                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
         ColumnLayout {
             id: gameLayout
