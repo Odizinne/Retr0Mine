@@ -2053,7 +2053,7 @@ ApplicationWindow {
                             text: {
                                 if (!cellItem.revealed || cellItem.flagged) return ""
                                 if (mines.includes(index)) return ""
-                                return numbers[index] === 0 ? "" : numbers[index]
+                                return numbers[index] === undefined || numbers[index] === 0 ? "" : numbers[index];
                             }
                             font.pixelSize: cellSize * 0.65
                             font.bold: true
