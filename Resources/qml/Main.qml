@@ -52,6 +52,11 @@ ApplicationWindow {
         }
     }
 
+    Shortcut {
+        sequence: "Ctrl+H"
+        onActivated: root.requestHint()
+    }
+
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property int theme: themeIndex
     property bool isMaximized: visibility === 4
@@ -141,6 +146,21 @@ ApplicationWindow {
             minimumHeight = getInitialHeight()
             width = minimumWidth
             height = minimumHeight
+        }
+    }
+
+    function requestHint() {
+        let revealed = [];
+        let flagged = [];
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            let cell = grid.itemAtIndex(i);
+            if (cell.revealed) revealed.push(i);
+            if (cell.flagged) flagged.push(i);
+        }
+        let mineCell = gameLogic.findMineHint(revealed, flagged);
+        if (mineCell !== -1) {
+            let cell = grid.itemAtIndex(mineCell);
+            cell.highlightHint();
         }
     }
 
@@ -376,11 +396,11 @@ ApplicationWindow {
         id: settingsPage
         title: qsTr("Settings")
         width: 520
-        height: 400
+        height: 420
         minimumWidth: 520
-        minimumHeight: 400
+        minimumHeight: 420
         maximumWidth: 520
-        maximumHeight: 400
+        maximumHeight: 420
         visible: false
         flags: Qt.Dialog
         onVisibleChanged: {
@@ -1156,6 +1176,21 @@ ApplicationWindow {
                                 RowLayout {
                                     anchors.fill: parent
                                     Label {
+                                        text: qsTr("Hint")
+                                        Layout.fillWidth: true
+                                    }
+                                    Label {
+                                        color: accentColor
+                                        text: "Ctrl + H"
+                                        font.bold: true
+                                    }
+                                }
+                            }
+                            Frame {
+                                Layout.fillWidth: true
+                                RowLayout {
+                                    anchors.fill: parent
+                                    Label {
                                         text: qsTr("Quit")
                                         Layout.fillWidth: true
                                     }
@@ -1510,6 +1545,14 @@ ApplicationWindow {
                     MenuSeparator { }
 
                     MenuItem {
+                        text: qsTr("Hint")
+                        enabled: gameStarted && !gameOver
+                        onTriggered: root.requestHint()
+                    }
+
+                    MenuSeparator { }
+
+                    MenuItem {
                         text: qsTr("Save game")
                         enabled: root.gameStarted
                         onTriggered: saveWindow.visible = true
@@ -1688,36 +1731,6 @@ ApplicationWindow {
                 }
             }
 
-            Button {
-                id: hintButton
-                Layout.alignment: Qt.AlignLeft
-                Layout.preferredWidth: 35
-                Layout.preferredHeight: 35
-                enabled: root.gameStarted && !gameOver
-                //highlighted: gameStarted && !gameOver
-                onClicked: {
-                    let revealed = [];
-                    let flagged = [];
-                    for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-                        let cell = grid.itemAtIndex(i);
-                        if (cell.revealed) revealed.push(i);
-                        if (cell.flagged) flagged.push(i);
-                    }
-                    let mineCell = gameLogic.findMineHint(revealed, flagged);
-                    if (mineCell !== -1) {
-                        let cell = grid.itemAtIndex(mineCell);
-                        cell.highlightHint();
-                    }
-                }
-
-                Image {
-                    anchors.centerIn: parent
-                    source: darkMode ? "qrc:/icons/hint_light.png" : "qrc:/icons/hint_dark.png"
-                    sourceSize.width: 16
-                    sourceSize.height: 16
-                }
-            }
-
             Item {
                 Layout.fillWidth: true
             }
@@ -1727,7 +1740,6 @@ ApplicationWindow {
         RowLayout {
             Layout.preferredWidth: parent.width / 3
             Layout.fillWidth: true
-            Layout.leftMargin: -3
             Text {
                 id: elapsedTimeLabel
                 text: "HH:MM:SS"
