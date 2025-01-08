@@ -512,9 +512,9 @@ MinesweeperLogic::SolvabilityResult MinesweeperLogic::testSolvability(
     int totalNonMineCells = m_width * m_height - testMines.size();
     float percentage = (static_cast<float>(solvableCells) / totalNonMineCells) * 100.0f;
 
-    if (hasUnsolvablePattern(testMines, revealed)) {
-        return {0, 0.0f};
-    }
+    //if (hasUnsolvablePattern(testMines, revealed)) {
+    //    return {0, 0.0f};
+    //}
 
     qDebug() << "Solvability Test:";
     qDebug() << "- Solvable cells:" << solvableCells;
@@ -661,7 +661,7 @@ bool MinesweeperLogic::wouldCreateCornerProblem(int pos, const QVector<int>& cur
 
 bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
     int firstClickIndex = firstClickY * m_width + firstClickX;
-    int maxAttempts = 100; // Increased attempts since we have more constraints
+    int maxAttempts = 1000; // Increased attempts since we have more constraints
 
     qDebug() << "Starting mine placement...";
     qDebug() << "Grid size:" << m_width << "x" << m_height;
