@@ -396,6 +396,13 @@ ApplicationWindow {
             }
         }
 
+        Shortcut {
+            sequence: "Esc"
+            onActivated: {
+                settingsPage.close()
+            }
+        }
+
         Popup {
             anchors.centerIn: parent
             id: restartWindow
