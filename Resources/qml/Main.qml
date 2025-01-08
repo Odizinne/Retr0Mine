@@ -13,11 +13,14 @@ ApplicationWindow {
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
     title: "Retr0Mine"
+
     onVisibleChanged: {
-        if (Universal !== undefined) {
-            Universal.theme = Universal.System
-            Universal.accent = accentColor
-        }
+        Qt.binding(function() {
+            if (typeof Universal !== "undefined") {
+                Universal.theme = Universal.System
+                Universal.accent = accentColor
+            }
+        })
     }
 
     Shortcut {
@@ -120,7 +123,7 @@ ApplicationWindow {
         }
     }
 
-    onVisibilityChanged: {
+    onVisibilityChanged: function(visibility) {
         const wasMaximized = isMaximized
         isMaximized = visibility === Window.Maximized
         isFullScreen = visibility === Window.FullScreen
@@ -403,11 +406,11 @@ ApplicationWindow {
     ApplicationWindow {
         id: settingsPage
         title: qsTr("Settings")
-        width: 550
+        width: 560
         height: 420
-        minimumWidth: 550
+        minimumWidth: 560
         minimumHeight: 420
-        maximumWidth: 550
+        maximumWidth: 560
         maximumHeight: 420
         visible: false
         flags: Qt.Dialog
@@ -709,7 +712,7 @@ ApplicationWindow {
                         }
 
                         ColumnLayout {
-                            anchors.topMargin: index === 0 && !isFluentWinUI3Theme ? 10 : 0
+                            anchors.topMargin: !isFluentWinUI3Theme ? 10 : 0
                             spacing: isFluentWinUI3Theme ? 10 : 20
                             width: parent.width
 
@@ -808,6 +811,11 @@ ApplicationWindow {
 
                             RowLayout {
                                 Layout.fillWidth: true
+                                Layout.topMargin: {
+                                    if (isFluentWinUI3Theme) return 10
+                                    return 0
+                                }
+
                                 Label {
                                     text: qsTr("Invert left and right click")
                                     Layout.fillWidth: true
@@ -820,7 +828,7 @@ ApplicationWindow {
                                     id: invert
                                     checked: root.invertLRClick
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked, loadLastGameSwitch.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked)
                                         root.invertLRClick = checked
                                     }
                                 }
@@ -840,7 +848,7 @@ ApplicationWindow {
                                     id: autoreveal
                                     checked: root.revealConnected
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked, loadLastGameSwitch.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked)
                                         root.revealConnected = checked
                                     }
                                 }
@@ -860,7 +868,7 @@ ApplicationWindow {
                                     id: questionMarksSwitch
                                     checked: root.enableQuestionMarks
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked, loadLastGameSwitch.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked)
                                         root.enableQuestionMarks = checked
                                         if (!checked) {
                                             for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
@@ -876,10 +884,7 @@ ApplicationWindow {
 
                             RowLayout {
                                 Layout.fillWidth: true
-                                Layout.topMargin: {
-                                    if (isFluentWinUI3Theme) return 10
-                                    return 0
-                                }
+
                                 Label {
                                     text: qsTr("Load last game on start")
                                     Layout.fillWidth: true
