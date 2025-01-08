@@ -405,6 +405,77 @@ ApplicationWindow {
 
         Popup {
             anchors.centerIn: parent
+            id: restoreDefaultsPopup
+            height: 120
+            width: 300
+            visible: false
+
+            enter: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0.0
+                    to: 1.0
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            exit: Transition {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 1.0
+                    to: 0.0
+                    duration: 200
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            GridLayout {
+                anchors.fill: parent
+                columns: 2
+                rowSpacing: 10
+
+                Label {
+                    id: restoreDefaultsLabel
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    text: qsTr("Restore all settings to default?\nApplication needs to be restarted")
+                    Layout.columnSpan: 2
+                    font.bold: true
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Button {
+                    text: qsTr("Restore")
+                    Layout.fillWidth: true
+                    onClicked: {
+                        // Save all settings with default values
+                        mainWindow.saveControlsSettings(false, false, true)
+                        mainWindow.saveVisualSettings(true, true, false)
+                        mainWindow.saveCellSizeSettings(1)
+                        mainWindow.saveThemeSettings(0)
+                        mainWindow.saveColorSchemeSettings(0)
+                        mainWindow.setColorScheme(0)
+                        mainWindow.saveSoundSettings(true, 1.0)
+                        mainWindow.saveLanguageSettings(0)
+                        mainWindow.setLanguage(0)
+
+                        mainWindow.restartRetr0Mine()
+                    }
+                }
+
+                Button {
+                    text: qsTr("Cancel")
+                    Layout.fillWidth: true
+                    onClicked: {
+                        restoreDefaultsPopup.close()
+                    }
+                }
+            }
+        }
+
+        Popup {
+            anchors.centerIn: parent
             id: restartWindow
             height: 100
             width: 300
@@ -551,16 +622,16 @@ ApplicationWindow {
                     }
 
                     Button {
-                        id: closeSettingsButton
+                        id: resetDefaultSettingsButton
                         Layout.fillWidth: true
                         Layout.bottomMargin: 15
                         Layout.leftMargin: 15
                         Layout.rightMargin: 15
                         Layout.preferredHeight: 30
-                        text: qsTr("Close settings")
+                        text: qsTr("Restore defaults")
                         highlighted: true
                         onClicked: {
-                            settingsPage.close()
+                            restoreDefaultsPopup.open()
                         }
                     }
                 }
