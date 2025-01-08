@@ -1663,8 +1663,15 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             onTextChanged: {
                                 let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                                errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
-                                saveButton.enabled = text.trim() !== "" && !hasInvalidChars
+                                let isReserved = /^internalGameState$/i.test(text.trim())
+
+                                if (isReserved) {
+                                    errorLabel.text = qsTr("This filename is reserved for internal use")
+                                    saveButton.enabled = false
+                                } else {
+                                    errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
+                                    saveButton.enabled = text.trim() !== "" && !hasInvalidChars
+                                }
                             }
                             Keys.onReturnPressed: {
                                 if (saveButton.enabled) {
