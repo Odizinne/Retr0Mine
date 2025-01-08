@@ -725,10 +725,12 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
 
         if (attempt < maxAttempts - 1) {
             qDebug() << "Configuration not perfectly solvable, trying again...";
+        } else {
+            qDebug() << "Failed to find perfectly solvable configuration after:" << placementAttempts;
+
         }
     }
 
-    qDebug() << "Failed to find perfectly solvable configuration";
     return false;
 }
 
