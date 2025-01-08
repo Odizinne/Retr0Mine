@@ -8,8 +8,7 @@ MinesweeperLogic::MinesweeperLogic(QObject *parent)
 {
 }
 
-bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
-{
+bool MinesweeperLogic::initializeGame(int width, int height, int mineCount) {
     if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
         return false;
     }
@@ -19,308 +18,237 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
     m_mineCount = mineCount;
     m_mines.clear();
     m_numbers.resize(width * height);
-    m_neighborCache.resize(width * height);
 
     return true;
 }
+// MinesweeperLogic.cpp
 
-bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY)
-{
-    const int firstClickPos = firstClickY * m_width + firstClickX;
-    qDebug() << "Starting mine placement at position:" << firstClickPos
-             << "(x:" << firstClickX << ", y:" << firstClickY << ")";
-    qDebug() << "Grid size:" << m_width << "x" << m_height << "mines:" << m_mineCount;
 
-    // Create grid representation
-    std::vector<Cell> grid(m_width * m_height);
-    for (int i = 0; i < m_width * m_height; ++i) {
-        grid[i].pos = i;
-        grid[i].isMine = false;
-        grid[i].isRevealed = false;
-        grid[i].adjacentMines = 0;
+bool MinesweeperLogic::trySolve(const QSet<int>& mines) {
+    // Reset solver state
+    m_information.clear();
+    m_informationsForSpace.clear();
+    m_solvedSpaces.clear();
 
-        // Pre-calculate neighbors for each cell
-        int row = i / m_width;
-        int col = i % m_width;
-        for (int r = -1; r <= 1; ++r) {
-            for (int c = -1; c <= 1; ++c) {
-                if (r == 0 && c == 0) continue;
-
-                int newRow = row + r;
-                int newCol = col + c;
-
-                if (newRow >= 0 && newRow < m_height &&
-                    newCol >= 0 && newCol < m_width) {
-                    grid[i].neighbors.push_back(newRow * m_width + newCol);
-                }
-            }
-        }
-    }
-
-    // Create safe zone around first click (3x3)
-    const int firstClickRow = firstClickPos / m_width;
-    const int firstClickCol = firstClickPos % m_width;
-    for (int r = -1; r <= 1; ++r) {
-        for (int c = -1; c <= 1; ++c) {
-            int newRow = firstClickRow + r;
-            int newCol = firstClickCol + c;
-
-            if (newRow >= 0 && newRow < m_height &&
-                newCol >= 0 && newCol < m_width) {
-                int pos = newRow * m_width + newCol;
-                grid[pos].isRevealed = true;
-            }
-        }
-    }
-
-    qDebug() << "Created safe zone around first click";
-
-    // Collect boundary and available positions
-    std::vector<int> boundary;
-    std::vector<int> availablePositions;
-
-    for (int i = 0; i < grid.size(); ++i) {
-        if (!grid[i].isRevealed) {
-            bool hasSafePath = false;
-            for (int neighbor : grid[i].neighbors) {
-                if (grid[neighbor].isRevealed) {
-                    hasSafePath = true;
-                    break;
-                }
-            }
-            if (hasSafePath) {
-                boundary.push_back(i);
-            } else {
-                availablePositions.push_back(i);
-            }
-        }
-    }
-
-    qDebug() << "Initial boundary size:" << boundary.size()
-             << "available positions:" << availablePositions.size();
-
-    // Place mines ensuring deducible patterns
-    int minesPlaced = 0;
-    int attempts = 0;
-    const int maxAttempts = m_width * m_height * 2;
-
-    while (minesPlaced < m_mineCount && attempts < maxAttempts) {
-        attempts++;
-        bool placedMine = false;
-
-        if (!boundary.empty()) {
-            std::uniform_int_distribution<int> dist(0, boundary.size() - 1);
-            int index = dist(m_rng);
-            int pos = boundary[index];
-
-            if (canPlaceMineAt(grid, pos)) {
-                grid[pos].isMine = true;
-                minesPlaced++;
-                placedMine = true;
-
-                for (int neighbor : grid[pos].neighbors) {
-                    grid[neighbor].adjacentMines++;
-                }
-
-                boundary.erase(boundary.begin() + index);
-                qDebug() << "Placed mine at boundary position:" << pos
-                         << "mines placed:" << minesPlaced;
-            }
-        }
-
-        if (!placedMine && !availablePositions.empty()) {
-            std::uniform_int_distribution<int> dist(0, availablePositions.size() - 1);
-            int index = dist(m_rng);
-            int pos = availablePositions[index];
-
-            grid[pos].isMine = true;
-            minesPlaced++;
-
-            for (int neighbor : grid[pos].neighbors) {
-                grid[neighbor].adjacentMines++;
-            }
-
-            availablePositions.erase(availablePositions.begin() + index);
-            qDebug() << "Placed mine at available position:" << pos
-                     << "mines placed:" << minesPlaced;
-        }
-
-        updateBoundary(grid, boundary, availablePositions);
-    }
-
-    if (minesPlaced < m_mineCount) {
-        qDebug() << "Failed to place all mines! Only placed:" << minesPlaced;
-        return false;
-    }
-
-    // Transfer final mine positions and calculate numbers
-    m_mines.clear();
-    for (const Cell& cell : grid) {
-        if (cell.isMine) {
-            m_mines.append(cell.pos);
-        }
-    }
-
-    calculateNumbers();
-
-    qDebug() << "Successfully placed all" << minesPlaced << "mines";
-    qDebug() << "Mine positions:" << m_mines;
-    return true;
-}
-
-void MinesweeperLogic::calculateNumbers()
-{
-    m_numbers.fill(0);
-
-    qDebug() << "Calculating numbers for" << m_width * m_height << "cells";
-
-    for (int i = 0; i < m_width * m_height; ++i) {
-        if (m_mines.contains(i)) {
-            m_numbers[i] = -1;
+    // Add initial information based on numbers
+    for (int i = 0; i < m_width * m_height; i++) {
+        if (mines.contains(i)) {
+            m_solvedSpaces[i] = true; // Mark mines as known
             continue;
         }
 
-        int count = countAdjacentMines(i);
-        m_numbers[i] = count;
-    }
+        // Calculate number for this cell
+        QSet<int> neighbors = getNeighbors(i);
+        int mineCount = 0;
+        for (int neighbor : neighbors) {
+            if (mines.contains(neighbor)) {
+                mineCount++;
+            }
+        }
 
-    qDebug() << "Numbers calculated:" << m_numbers;
-}
+        // Add as information if it has a number
+        if (mineCount > 0) {
+            MineSolverInfo info;
+            info.spaces = neighbors;
+            info.count = mineCount;
+            m_information.insert(info);
+            m_solvedSpaces[i] = false; // Mark revealed number as known safe
 
-int MinesweeperLogic::countAdjacentMines(int pos) const
-{
-    int row = pos / m_width;
-    int col = pos % m_width;
-    int count = 0;
-
-    for (int r = -1; r <= 1; ++r) {
-        for (int c = -1; c <= 1; ++c) {
-            if (r == 0 && c == 0) continue;
-
-            int newRow = row + r;
-            int newCol = col + c;
-
-            if (newRow < 0 || newRow >= m_height ||
-                newCol < 0 || newCol >= m_width) continue;
-
-            int checkPos = newRow * m_width + newCol;
-            if (m_mines.contains(checkPos)) count++;
+            for (int space : info.spaces) {
+                m_informationsForSpace[space].insert(info);
+            }
         }
     }
 
-    return count;
+    try {
+        solve();
+        // Success if we solved all cells or found all mines
+        int solvedCount = 0;
+        int foundMines = 0;
+        for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
+            if (it.value()) foundMines++;
+            solvedCount++;
+        }
+
+        qDebug() << "Solve attempt - Found mines:" << foundMines
+                 << "Total solved:" << solvedCount
+                 << "Expected mines:" << m_mineCount;
+
+        // Configuration is valid if we found some solutions and they're consistent
+        return solvedCount > 0 && foundMines == m_mineCount;
+    }
+    catch (...) {
+        return false;
+    }
 }
 
-struct Cell {
-    int pos;
-    int adjacentMines;
-    bool isMine;
-    bool isRevealed;
-    std::vector<int> neighbors;
-};
+void MinesweeperLogic::solve() {
+    bool changed = true;
+    while (changed) {
+        changed = false;
 
-bool MinesweeperLogic::canPlaceMineAt(const std::vector<Cell>& grid, int pos)
-{
-    // Check if placing a mine here would create a 50/50 pattern
-    const Cell& cell = grid[pos];
+        // Process each piece of information
+        for (const MineSolverInfo& info : m_information) {
+            // Count already solved spaces
+            int knownMines = 0;
+            int knownSafe = 0;
+            QSet<int> unknownSpaces;
 
-    // Don't place if it would create too many adjacent mines
-    for (int neighbor : cell.neighbors) {
-        if (grid[neighbor].adjacentMines >= 5) return false;
-    }
-
-    // Check for potential 50/50 patterns
-    for (int neighbor : cell.neighbors) {
-        if (grid[neighbor].isRevealed) {
-            // Count revealed neighbors that would have same number
-            int sameNumberCount = 0;
-            for (int n2 : grid[neighbor].neighbors) {
-                if (grid[n2].isRevealed &&
-                    grid[n2].adjacentMines == grid[neighbor].adjacentMines) {
-                    sameNumberCount++;
+            for (int space : info.spaces) {
+                if (m_solvedSpaces.contains(space)) {
+                    if (m_solvedSpaces[space]) knownMines++;
+                    else knownSafe++;
+                } else {
+                    unknownSpaces.insert(space);
                 }
             }
 
-            // If too many same numbers, might create ambiguous pattern
-            if (sameNumberCount > 2) return false;
-        }
-    }
-
-    return true;
-}
-
-void MinesweeperLogic::updateBoundary(const std::vector<Cell>& grid,
-                                      std::vector<int>& boundary,
-                                      std::vector<int>& availablePositions)
-{
-    // Find new boundary cells
-    std::vector<int> newBoundary;
-    for (int pos : availablePositions) {
-        if (!grid[pos].isMine) {
-            bool hasSafePath = false;
-            bool hasRevealedNeighbor = false;
-
-            for (int neighbor : grid[pos].neighbors) {
-                if (grid[neighbor].isRevealed) {
-                    hasRevealedNeighbor = true;
-                    if (!grid[neighbor].isMine) {
-                        hasSafePath = true;
-                        break;
+            // Simple deductions
+            if (info.count == knownMines) {
+                // All remaining spaces must be safe
+                for (int space : unknownSpaces) {
+                    if (!m_solvedSpaces.contains(space)) {
+                        m_solvedSpaces[space] = false;
+                        changed = true;
                     }
                 }
             }
-
-            if (hasRevealedNeighbor && hasSafePath) {
-                newBoundary.push_back(pos);
+            else if (info.count - knownMines == unknownSpaces.size()) {
+                // All remaining spaces must be mines
+                for (int space : unknownSpaces) {
+                    if (!m_solvedSpaces.contains(space)) {
+                        m_solvedSpaces[space] = true;
+                        changed = true;
+                    }
+                }
             }
-        }
-    }
-
-    // Update boundary with new cells
-    boundary = std::move(newBoundary);
-
-    // Remove boundary cells from available positions
-    for (int pos : boundary) {
-        auto it = std::find(availablePositions.begin(), availablePositions.end(), pos);
-        if (it != availablePositions.end()) {
-            availablePositions.erase(it);
         }
     }
 }
 
-QVector<int> MinesweeperLogic::calculateNumbersForValidation(const QVector<int>& mines) const
-{
-    QVector<int> numbers(m_width * m_height, 0);
+void MinesweeperLogic::calculateNumbers() {
+    m_numbers.fill(0, m_width * m_height);
 
-    for (int i = 0; i < m_width * m_height; ++i) {
-        if (mines.contains(i)) {
-            numbers[i] = -1;
-            continue;
+    for (int mine : m_mines) {
+        m_numbers[mine] = -1;  // Mark mine positions
+
+        // Update adjacent cell counts
+        QSet<int> neighbors = getNeighbors(mine);
+        for (int neighbor : neighbors) {
+            if (m_numbers[neighbor] >= 0) {
+                m_numbers[neighbor]++;
+            }
+        }
+    }
+}
+
+bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
+    const int firstClickPos = firstClickY * m_width + firstClickX;
+    qDebug() << "Placing mines, first click at:" << firstClickPos;
+
+    // Create safe zone around first click
+    QSet<int> safeZone;
+    int row = firstClickPos / m_width;
+    int col = firstClickPos % m_width;
+
+    for (int r = -1; r <= 1; r++) {
+        for (int c = -1; c <= 1; c++) {
+            int newRow = row + r;
+            int newCol = col + c;
+            if (newRow >= 0 && newRow < m_height &&
+                newCol >= 0 && newCol < m_width) {
+                safeZone.insert(newRow * m_width + newCol);
+            }
+        }
+    }
+
+    // Create list of available positions
+    QVector<int> allPositions;
+    for (int i = 0; i < m_width * m_height; i++) {
+        if (!safeZone.contains(i)) {
+            allPositions.append(i);
+        }
+    }
+
+    // Try placing mines until we find a valid configuration
+    int maxAttempts = 1000;
+    int attemptCount = 0;
+
+    while (maxAttempts--) {
+        attemptCount++;    // Increment counter each attempt
+        m_mines.clear();
+
+        // Shuffle all positions
+        QVector<int> positions = allPositions;
+        for (int i = positions.size() - 1; i > 0; i--) {
+            std::uniform_int_distribution<int> dist(0, i);
+            int j = dist(m_rng);
+            std::swap(positions[i], positions[j]);
         }
 
-        int row = i / m_width;
-        int col = i % m_width;
-        int count = 0;
+        // Try to place mines in shuffled order
+        for (int pos : positions) {
+            if (m_mines.size() >= m_mineCount) break;
 
-        for (int r = -1; r <= 1; ++r) {
-            for (int c = -1; c <= 1; ++c) {
-                if (r == 0 && c == 0) continue;
+            QSet<int> currentMines;
+            for (int mine : m_mines) {
+                currentMines.insert(mine);
+            }
 
-                int newRow = row + r;
-                int newCol = col + c;
-
-                if (newRow < 0 || newRow >= m_height ||
-                    newCol < 0 || newCol >= m_width) continue;
-
-                int pos = newRow * m_width + newCol;
-                if (mines.contains(pos)) count++;
+            if (canPlaceMineAt(currentMines, pos)) {
+                m_mines.append(pos);
             }
         }
 
-        numbers[i] = count;
+        if (m_mines.size() == m_mineCount) {
+            calculateNumbers();
+
+            // Convert m_mines to QSet for solver
+            QSet<int> mineSet;
+            for (int mine : m_mines) {
+                mineSet.insert(mine);
+            }
+
+            if (trySolve(mineSet)) {
+                qDebug() << "Successfully placed" << m_mineCount << "mines after" << attemptCount << "attempts";
+                qDebug() << "Mine positions:" << m_mines;
+                return true;
+            }
+            qDebug() << "Configuration not solvable, retrying...";
+        } else {
+            qDebug() << "Could only place" << m_mines.size() << "mines, retrying...";
+        }
     }
 
-    return numbers;
+    qDebug() << "Failed to generate valid mine configuration after" << maxAttempts << "attempts";
+    return false;
+}
+
+bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
+    // Get neighbors
+    QSet<int> neighbors = getNeighbors(pos);
+
+    // Count existing adjacent mines
+    int adjacentMines = 0;
+    for (int neighbor : neighbors) {
+        if (mines.contains(neighbor)) {
+            adjacentMines++;
+        }
+    }
+
+    // Make the adjacent mine check less restrictive
+    if (adjacentMines >= 4) return false; // Changed from 5 to 4
+
+    // Simplify the 50/50 pattern check
+    int unsafeNeighbors = 0;
+    for (int neighbor : neighbors) {
+        QSet<int> neighborNeighbors = getNeighbors(neighbor);
+        if (neighborNeighbors.intersect(mines).size() >= 3) {
+            unsafeNeighbors++;
+        }
+    }
+
+    return unsafeNeighbors <= 2;
 }
 
 int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells)
@@ -700,26 +628,24 @@ void MinesweeperLogic::buildConstraintsForCell(int pos,
     }
 }
 
-QSet<int> MinesweeperLogic::getNeighbors(int pos)
-{
-    if (!m_neighborCache[pos].calculated) {
-        int row = pos / m_width;
-        int col = pos % m_width;
+QSet<int> MinesweeperLogic::getNeighbors(int pos) const {
+    QSet<int> neighbors;
+    int row = pos / m_width;
+    int col = pos % m_width;
 
-        for (int r = -1; r <= 1; ++r) {
-            for (int c = -1; c <= 1; ++c) {
-                if (r == 0 && c == 0) continue;
+    for (int r = -1; r <= 1; r++) {
+        for (int c = -1; c <= 1; c++) {
+            if (r == 0 && c == 0) continue;
 
-                int newRow = row + r;
-                int newCol = col + c;
+            int newRow = row + r;
+            int newCol = col + c;
 
-                if (newRow >= 0 && newRow < m_height &&
-                    newCol >= 0 && newCol < m_width) {
-                    m_neighborCache[pos].neighbors.insert(newRow * m_width + newCol);
-                }
+            if (newRow >= 0 && newRow < m_height &&
+                newCol >= 0 && newCol < m_width) {
+                neighbors.insert(newRow * m_width + newCol);
             }
         }
-        m_neighborCache[pos].calculated = true;
     }
-    return m_neighborCache[pos].neighbors;
+
+    return neighbors;
 }

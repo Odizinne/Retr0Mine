@@ -681,9 +681,9 @@ ApplicationWindow {
                         id: difficultyPane
 
                         property var difficultySettings: [
-                            { text: qsTr("Easy"), x: 8, y: 8, mines: 10 },
+                            { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
                             { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
-                            { text: qsTr("Hard"), x: 32, y: 16, mines: 99 },
+                            { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
                             { text: "Retr0", x: 50, y: 32, mines: 320 }
                         ]
 
