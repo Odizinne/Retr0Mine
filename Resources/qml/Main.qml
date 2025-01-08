@@ -15,12 +15,10 @@ ApplicationWindow {
     title: "Retr0Mine"
 
     onVisibleChanged: {
-        Qt.binding(function() {
-            if (typeof Universal !== "undefined") {
-                Universal.theme = Universal.System
-                Universal.accent = accentColor
-            }
-        })
+        if (Universal !== undefined) {
+            Universal.theme = Universal.System
+            Universal.accent = accentColor
+        }
     }
 
     Shortcut {
@@ -123,7 +121,7 @@ ApplicationWindow {
         }
     }
 
-    onVisibilityChanged: function(visibility) {
+    onVisibilityChanged: {
         const wasMaximized = isMaximized
         isMaximized = visibility === Window.Maximized
         isFullScreen = visibility === Window.FullScreen
