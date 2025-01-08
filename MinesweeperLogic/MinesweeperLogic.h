@@ -30,6 +30,13 @@ private:
         std::vector<int> neighbors;
     };
 
+    struct NeighborInfo {
+        QSet<int> neighbors;
+        bool calculated = false;
+    };
+    QVector<NeighborInfo> m_neighborCache;
+    QSet<int> getNeighbors(int pos);
+
     void calculateNumbers();
     int countAdjacentMines(int pos) const;
 

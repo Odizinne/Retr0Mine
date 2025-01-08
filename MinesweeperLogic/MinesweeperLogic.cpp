@@ -19,6 +19,7 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
     m_mineCount = mineCount;
     m_mines.clear();
     m_numbers.resize(width * height);
+    m_neighborCache.resize(width * height);
 
     return true;
 }
@@ -417,22 +418,38 @@ bool MinesweeperLogic::tryAllCombinations(const QMap<int, QSet<int>>& constraint
                                           const QSet<int>& flagged,
                                           QVector<QSet<int>>& validConfigurations)
 {
-    QSet<int> allUnknowns;
+    QSet<int> relevantUnknowns;
     for (const QSet<int>& unknowns : constraints) {
-        allUnknowns.unite(unknowns);
+        relevantUnknowns.unite(unknowns);
+    }
+
+    if (!relevantUnknowns.contains(testPos)) {
+        return true;
+    }
+
+    int totalMinesNeeded = 0;
+    int maxPossibleMines = relevantUnknowns.size();
+
+    for (auto it = constraints.begin(); it != constraints.end(); ++it) {
+        int pos = it.key();
+        totalMinesNeeded += m_numbers[pos];
+    }
+
+    if (totalMinesNeeded > maxPossibleMines) {
+        return false;
     }
 
     bool couldBeMine = false;
     bool couldBeSafe = false;
 
     // Try all possible mine combinations
-    int totalUnknowns = allUnknowns.size();
+    int totalUnknowns = relevantUnknowns.size();
     for (int i = 0; i < (1 << totalUnknowns); i++) {
         QSet<int> testMines = flagged;
         int bit = 0;
 
         // Build test configuration
-        for (int pos : allUnknowns) {
+        for (int pos : relevantUnknowns) {
             if (i & (1 << bit)) {
                 testMines.insert(pos);
             }
@@ -464,13 +481,11 @@ bool MinesweeperLogic::tryAllCombinations(const QMap<int, QSet<int>>& constraint
             }
 
             if (couldBeMine && couldBeSafe) {
-                break;  // Cell could be either, no need to check further
+                break;
             }
         }
     }
 
-    // Return true if cell could be either mine or safe
-    // Return false only if cell MUST be safe
     return couldBeMine;
 }
 
@@ -683,4 +698,28 @@ void MinesweeperLogic::buildConstraintsForCell(int pos,
             }
         }
     }
+}
+
+QSet<int> MinesweeperLogic::getNeighbors(int pos)
+{
+    if (!m_neighborCache[pos].calculated) {
+        int row = pos / m_width;
+        int col = pos % m_width;
+
+        for (int r = -1; r <= 1; ++r) {
+            for (int c = -1; c <= 1; ++c) {
+                if (r == 0 && c == 0) continue;
+
+                int newRow = row + r;
+                int newCol = col + c;
+
+                if (newRow >= 0 && newRow < m_height &&
+                    newCol >= 0 && newCol < m_width) {
+                    m_neighborCache[pos].neighbors.insert(newRow * m_width + newCol);
+                }
+            }
+        }
+        m_neighborCache[pos].calculated = true;
+    }
+    return m_neighborCache[pos].neighbors;
 }
