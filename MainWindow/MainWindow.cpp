@@ -1,4 +1,6 @@
 #include "MainWindow.h"
+#include "Utils.h"
+#include "MinesweeperLogic.h"
 #include <QQmlContext>
 #include <QStandardPaths>
 #include <QDir>
@@ -7,10 +9,9 @@
 #include <QDesktopServices>
 #include <QQuickStyle>
 #include <QGuiApplication>
-#include "Utils.h"
-#include "MinesweeperLogic.h"
 #include <QStyleHints>
 #include <QBuffer>
+#include <QPalette>
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
@@ -323,7 +324,7 @@ void MainWindow::setColorScheme(int index) {
         } else if (currentTheme == 2) {
             accentColor = Utils::getAccentColor("dark2");
         } else {
-            accentColor = "#0000FF";
+            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         }
     } else if (index == 2) {
         //dark
@@ -334,7 +335,7 @@ void MainWindow::setColorScheme(int index) {
         } else if (currentTheme == 2) {
             accentColor = Utils::getAccentColor("light2");
         } else {
-            accentColor = "#0000FF";
+            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         }
     } else {
         // 0 = System
@@ -346,7 +347,7 @@ void MainWindow::setColorScheme(int index) {
             } else if (currentTheme == 2) {
                 accentColor = Utils::getAccentColor("light2");
             } else {
-                accentColor = "#0000FF";
+                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             }
         } else {
             darkMode = false;
@@ -355,7 +356,7 @@ void MainWindow::setColorScheme(int index) {
             } else if (currentTheme == 2) {
                 accentColor = Utils::getAccentColor("dark2");
             } else {
-                accentColor = "#0000FF";
+                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             }
         }
     }
