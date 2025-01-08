@@ -62,7 +62,7 @@ bool MinesweeperLogic::trySolve(const QSet<int>& mines) {
 
     try {
         solve();
-        // Success if we solved all cells or found all mines
+        // Count solved spaces and mines
         int solvedCount = 0;
         int foundMines = 0;
         for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
@@ -70,11 +70,20 @@ bool MinesweeperLogic::trySolve(const QSet<int>& mines) {
             solvedCount++;
         }
 
+        // If we found all mines, mark remaining cells as safe
+        if (foundMines == m_mineCount) {
+            for (int i = 0; i < m_width * m_height; i++) {
+                if (!m_solvedSpaces.contains(i)) {
+                    m_solvedSpaces[i] = false;
+                    solvedCount++;
+                }
+            }
+        }
+
         qDebug() << "Solve attempt - Found mines:" << foundMines
                  << "Total solved:" << solvedCount
                  << "Expected mines:" << m_mineCount;
 
-        // Configuration is valid if we found some solutions and they're consistent
         return solvedCount > 0 && foundMines == m_mineCount;
     }
     catch (...) {
@@ -258,43 +267,68 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
     for (int cell : revealedCells) revealed.insert(cell);
     for (int cell : flaggedCells) flagged.insert(cell);
 
-    // First try to find definite mines through basic logic
-    QSet<int> logicalMines;
-    QSet<int> logicalSafe;
-    findBasicDeductions(revealed, flagged, logicalMines, logicalSafe);
+    // First check each revealed number
+    for (int pos : revealed) {
+        // Skip if not a number
+        if (m_numbers[pos] <= 0) continue;
 
-    // If we found a definite mine, return it
-    for (int pos : logicalMines) {
+        QSet<int> neighbors = getNeighbors(pos);
+
+        // Count flags and unrevealed cells around this number
+        int flagCount = 0;
+        QSet<int> unrevealedCells;
+
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            } else if (!revealed.contains(neighbor)) {
+                unrevealedCells.insert(neighbor);
+            }
+        }
+
+        // If remaining mines equals remaining unrevealed cells, they must all be mines
+        int remainingMines = m_numbers[pos] - flagCount;
+        if (remainingMines > 0 && remainingMines == unrevealedCells.size()) {
+            // Return first unflagged mine
+            for (int minePos : unrevealedCells) {
+                if (!flagged.contains(minePos)) {
+                    qDebug() << "Found mine hint through basic deduction at:" << minePos;
+                    return minePos;
+                }
+            }
+        }
+    }
+
+    // If no mines found through basic deduction, fall back to safe spots
+    for (int pos : revealedCells) {
+        if (m_numbers[pos] <= 0) continue;
+
+        QSet<int> neighbors = getNeighbors(pos);
+        int flagCount = 0;
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            }
+        }
+
+        // If number matches flag count, all other neighbors are safe
+        if (flagCount == m_numbers[pos]) {
+            for (int neighbor : neighbors) {
+                if (!flagged.contains(neighbor) && !revealed.contains(neighbor)) {
+                    qDebug() << "Found safe hint at:" << neighbor;
+                    return neighbor;
+                }
+            }
+        }
+    }
+
+    // Last resort: use actual mine positions
+    qDebug() << "WARNING: Using actual mine positions for hint";
+    for (int pos : m_mines) {
         if (!flagged.contains(pos)) {
-            qDebug() << "Found logical mine at:" << pos;
+            qDebug() << "Found mine hint from actual positions at:" << pos;
             return pos;
         }
-    }
-
-    // Try to find a safe spot through exhaustive checking
-    QSet<int> frontier = getFrontier(revealed, flagged);
-
-    // Check each frontier cell until we find a safe one
-    for (int testPos : frontier) {
-        if (m_mines.contains(testPos)) {
-            continue;  // Skip known mines regardless of logical deduction
-        }
-
-        QVector<QSet<int>> validConfigurations;
-        QMap<int, QSet<int>> numberConstraints;
-
-        buildConstraintsForCell(testPos, revealed, flagged, numberConstraints);
-
-        if (!tryAllCombinations(numberConstraints, testPos, flagged, validConfigurations)) {
-            qDebug() << "Found definite safe cell at" << testPos;
-            return testPos;
-        }
-    }
-
-    // Last resort - use actual mine positions
-    qDebug() << "WARNING: No logical deductions possible, using actual mine positions";
-    for (int pos : m_mines) {
-        if (!flagged.contains(pos)) return pos;
     }
 
     return -1;
@@ -648,4 +682,104 @@ QSet<int> MinesweeperLogic::getNeighbors(int pos) const {
     }
 
     return neighbors;
+}
+
+int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells)
+{
+    QSet<int> revealed;
+    QSet<int> flagged;
+    for (int cell : revealedCells) revealed.insert(cell);
+    for (int cell : flaggedCells) flagged.insert(cell);
+
+    // Reset solver state
+    m_information.clear();
+    m_informationsForSpace.clear();
+    m_solvedSpaces.clear();
+
+    // Add initial information based on revealed numbers
+    for (int i = 0; i < m_width * m_height; i++) {
+        if (flagged.contains(i)) {
+            m_solvedSpaces[i] = true;  // Mark flags as mines
+            continue;
+        }
+        if (!revealed.contains(i)) {
+            continue;  // Skip unrevealed cells
+        }
+
+        QSet<int> neighbors = getNeighbors(i);
+        int mineCount = 0;
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                mineCount++;
+            }
+        }
+
+        if (mineCount > 0) {
+            MineSolverInfo info;
+            info.spaces = neighbors;
+            info.count = mineCount;
+            m_information.insert(info);
+            m_solvedSpaces[i] = false;
+
+            for (int space : info.spaces) {
+                m_informationsForSpace[space].insert(info);
+            }
+        }
+    }
+
+    // Try to solve
+    bool changed = true;
+    while (changed) {
+        changed = false;
+
+        for (const MineSolverInfo& info : m_information) {
+            int knownMines = 0;
+            int knownSafe = 0;
+            QSet<int> unknownSpaces;
+
+            for (int space : info.spaces) {
+                if (m_solvedSpaces.contains(space)) {
+                    if (m_solvedSpaces[space]) knownMines++;
+                    else knownSafe++;
+                } else {
+                    unknownSpaces.insert(space);
+                }
+            }
+
+            // Look for definite mines first
+            if (info.count - knownMines == unknownSpaces.size()) {
+                for (int space : unknownSpaces) {
+                    if (!m_solvedSpaces.contains(space) && !flagged.contains(space)) {
+                        return space; // Found a definite mine
+                    }
+                }
+            }
+
+            // Update solved spaces for future iterations
+            if (info.count == knownMines) {
+                for (int space : unknownSpaces) {
+                    if (!m_solvedSpaces.contains(space)) {
+                        m_solvedSpaces[space] = false;
+                        changed = true;
+                    }
+                }
+            }
+        }
+    }
+
+    // If no mines found, look for safe moves
+    for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
+        if (!it.value() && !revealed.contains(it.key()) && !flagged.contains(it.key())) {
+            return it.key();
+        }
+    }
+
+    // If all else fails, return a real mine position as a last resort
+    for (int pos : m_mines) {
+        if (!flagged.contains(pos)) {
+            return pos;
+        }
+    }
+
+    return -1; // No hint found
 }

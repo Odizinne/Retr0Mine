@@ -90,6 +90,8 @@ private:
                             int testPos,
                             const QSet<int>& flagged,
                             QVector<QSet<int>>& validConfigurations);
+
+    int solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells);
 };
 
 #endif // MINESWEEPERLOGIC_H

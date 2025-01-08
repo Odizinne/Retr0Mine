@@ -1546,7 +1546,7 @@ ApplicationWindow {
 
                     MenuItem {
                         text: qsTr("Hint")
-                        enabled: gameStarted && !gameOver
+                        enabled: root.gameStarted && !root.gameOver && root.flaggedCount > 0
                         onTriggered: root.requestHint()
                     }
 
