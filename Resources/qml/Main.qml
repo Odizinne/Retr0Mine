@@ -58,8 +58,9 @@ ApplicationWindow {
     }
 
     onClosing: {
-        if (saveOnExit && gameStarted && !gameOver) {
+        if (loadLastGame && gameStarted && !gameOver) {
             saveGame("internalGameState.json")
+            console.log("autosave")
         }
     }
 
@@ -80,7 +81,7 @@ ApplicationWindow {
     property real soundVolume: volume
     property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
-    property bool saveOnExit: false
+    property bool loadLastGame: loadLast
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
@@ -402,11 +403,11 @@ ApplicationWindow {
     ApplicationWindow {
         id: settingsPage
         title: qsTr("Settings")
-        width: 520
+        width: 550
         height: 420
-        minimumWidth: 520
+        minimumWidth: 550
         minimumHeight: 420
-        maximumWidth: 520
+        maximumWidth: 550
         maximumHeight: 420
         visible: false
         flags: Qt.Dialog
@@ -798,36 +799,12 @@ ApplicationWindow {
                     }
                 }
                 Component {
-                    id: gameplayPaneComponent  // Renamed from controlsPaneComponent
+                    id: gameplayPaneComponent
                     Pane {
-                        id: gameplayPane      // Renamed from controlsPane
+                        id: gameplayPane
                         ColumnLayout {
                             spacing: 26
                             width: parent.width
-
-                            RowLayout {
-                                Layout.fillWidth: true
-                                Layout.topMargin: {
-                                    if (isFluentWinUI3Theme) return 10
-                                    return 0
-                                }
-                                Label {
-                                    text: qsTr("Load last game on start")
-                                    Layout.fillWidth: true
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: loadLastGameSwitch.checked = !loadLastGameSwitch.checked
-                                    }
-                                }
-                                Switch {
-                                    id: loadLastGameSwitch
-                                    checked: loadLast
-                                    onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
-                                        root.saveOnExit = checked
-                                    }
-                                }
-                            }
 
                             RowLayout {
                                 Layout.fillWidth: true
@@ -843,7 +820,7 @@ ApplicationWindow {
                                     id: invert
                                     checked: root.invertLRClick
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked, loadLastGameSwitch.checked)
                                         root.invertLRClick = checked
                                     }
                                 }
@@ -863,7 +840,7 @@ ApplicationWindow {
                                     id: autoreveal
                                     checked: root.revealConnected
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked, loadLastGameSwitch.checked)
                                         root.revealConnected = checked
                                     }
                                 }
@@ -876,14 +853,14 @@ ApplicationWindow {
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
-                                        onClicked: questionMarks.checked = !questionMarks.checked
+                                        onClicked: questionMarksSwitch.checked = !questionMarksSwitch.checked
                                     }
                                 }
                                 Switch {
-                                    id: questionMarks
+                                    id: questionMarksSwitch
                                     checked: root.enableQuestionMarks
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked, loadLastGameSwitch.checked)
                                         root.enableQuestionMarks = checked
                                         if (!checked) {
                                             for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
@@ -893,6 +870,30 @@ ApplicationWindow {
                                                 }
                                             }
                                         }
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Layout.topMargin: {
+                                    if (isFluentWinUI3Theme) return 10
+                                    return 0
+                                }
+                                Label {
+                                    text: qsTr("Load last game on start")
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: loadLastGameSwitch.checked = !loadLastGameSwitch.checked
+                                    }
+                                }
+                                Switch {
+                                    id: loadLastGameSwitch
+                                    checked: root.loadLastGame
+                                    onCheckedChanged: {
+                                        mainWindow.saveLoadOnStartSettings(loadLastGameSwitch.checked)
+                                        root.loadLastGame = checked
                                     }
                                 }
                             }
