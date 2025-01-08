@@ -15,7 +15,7 @@ public:
 
     Q_INVOKABLE void saveDifficulty(int difficulty);
     Q_INVOKABLE void saveSoundSettings(bool soundEffects, float volume);
-    Q_INVOKABLE void saveControlsSettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks);
+    Q_INVOKABLE void saveGameplaySettings(bool invertClick, bool revealConnected, bool questionMarks, bool loadLastGame);
     Q_INVOKABLE void saveVisualSettings(bool animations, bool cellFrame, bool contrastFlag);
     Q_INVOKABLE void saveThemeSettings(int index);
     Q_INVOKABLE void saveLanguageSettings(int index);

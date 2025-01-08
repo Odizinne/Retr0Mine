@@ -57,6 +57,12 @@ ApplicationWindow {
         onActivated: root.requestHint()
     }
 
+    onClosing: {
+        if (saveOnExit && gameStarted && !gameOver) {
+            saveGame("internalGameState.json")
+        }
+    }
+
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property int theme: themeIndex
     property bool isMaximized: visibility === 4
@@ -74,6 +80,7 @@ ApplicationWindow {
     property real soundVolume: volume
     property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
+    property bool saveOnExit: false
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
@@ -586,7 +593,7 @@ ApplicationWindow {
                                 iconLight: "qrc:/icons/difficulty_light.png"
                             },
                             {
-                                text: qsTr("Controls"),
+                                text: qsTr("Gameplay"),
                                 iconDark: "qrc:/icons/controls_dark.png",
                                 iconLight: "qrc:/icons/controls_light.png"
                             },
@@ -635,7 +642,7 @@ ApplicationWindow {
                                     sidebarList.currentIndex = index
                                     switch(index) {
                                     case 0: stackView.push(difficultyPaneComponent); break;
-                                    case 1: stackView.push(controlsPaneComponent); break;
+                                    case 1: stackView.push(gameplayPaneComponent); break;
                                     case 2: stackView.push(visualsPaneComponent); break;
                                     case 3: stackView.push(soundPaneComponent); break;
                                     case 4: stackView.push(shortcutsPaneComponent); break;
@@ -791,9 +798,9 @@ ApplicationWindow {
                     }
                 }
                 Component {
-                    id: controlsPaneComponent
+                    id: gameplayPaneComponent  // Renamed from controlsPaneComponent
                     Pane {
-                        id: controlsPane
+                        id: gameplayPane      // Renamed from controlsPane
                         ColumnLayout {
                             spacing: 26
                             width: parent.width
@@ -804,7 +811,26 @@ ApplicationWindow {
                                     if (isFluentWinUI3Theme) return 10
                                     return 0
                                 }
+                                Label {
+                                    text: qsTr("Load last game on start")
+                                    Layout.fillWidth: true
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: loadLastGameSwitch.checked = !loadLastGameSwitch.checked
+                                    }
+                                }
+                                Switch {
+                                    id: loadLastGameSwitch
+                                    checked: loadLast
+                                    onCheckedChanged: {
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
+                                        root.saveOnExit = checked
+                                    }
+                                }
+                            }
 
+                            RowLayout {
+                                Layout.fillWidth: true
                                 Label {
                                     text: qsTr("Invert left and right click")
                                     Layout.fillWidth: true
@@ -817,7 +843,7 @@ ApplicationWindow {
                                     id: invert
                                     checked: root.invertLRClick
                                     onCheckedChanged: {
-                                        mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
                                         root.invertLRClick = checked
                                     }
                                 }
@@ -837,7 +863,7 @@ ApplicationWindow {
                                     id: autoreveal
                                     checked: root.revealConnected
                                     onCheckedChanged: {
-                                        mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
                                         root.revealConnected = checked
                                     }
                                 }
@@ -857,7 +883,7 @@ ApplicationWindow {
                                     id: questionMarks
                                     checked: root.enableQuestionMarks
                                     onCheckedChanged: {
-                                        mainWindow.saveControlsSettings(invert.checked, autoreveal.checked, questionMarks.checked)
+                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarks.checked, loadLastGameSwitch.checked)
                                         root.enableQuestionMarks = checked
                                         if (!checked) {
                                             for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {

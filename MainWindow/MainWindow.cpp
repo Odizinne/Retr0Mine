@@ -72,6 +72,9 @@ void MainWindow::setupAndLoadQML() {
     bool enableQuestionMarks = settings.value("enableQuestionMarks", true).toBool();
     rootContext->setContextProperty("questionMarks", enableQuestionMarks);
 
+    bool loadLastGame = settings.value("loadLastGame", false).toInt();
+    rootContext->setContextProperty("loadLast", loadLastGame);
+
     bool soundEffects = settings.value("soundEffects", true).toBool();
     rootContext->setContextProperty("soundEffects", soundEffects);
 
@@ -118,10 +121,11 @@ void MainWindow::saveSoundSettings(bool soundEffects, float volume) {
     settings.setValue("volume", volume);
 }
 
-void MainWindow::saveControlsSettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks) {
+void MainWindow::saveGameplaySettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks, bool loadLastGame) {
     settings.setValue("invertLRClick", invertLRClick);
     settings.setValue("autoreveal", autoreveal);
     settings.setValue("enableQuestionMarks", enableQuestionMarks);
+    settings.setValue("loadLastGame", loadLastGame);
 }
 
 void MainWindow::saveVisualSettings(bool animations, bool cellFrame, bool contrastFlag) {
