@@ -1305,16 +1305,27 @@ ApplicationWindow {
     function placeMines(firstClickIndex) {
         const row = Math.floor(firstClickIndex / gridSizeX);
         const col = firstClickIndex % gridSizeX;
+        console.log("QML: Placing mines, first click at:", col, row);
 
         // Initialize the game with current settings
-        gameLogic.initializeGame(gridSizeX, gridSizeY, mineCount);
+        if (!gameLogic.initializeGame(gridSizeX, gridSizeY, mineCount)) {
+            console.error("Failed to initialize game!");
+            return false;
+        }
 
         // Place mines using C++ backend
         const success = gameLogic.placeMines(col, row);
+        if (!success) {
+            console.error("Failed to place mines!");
+            return false;
+        }
 
         // Get mines and numbers from C++ backend
         mines = gameLogic.getMines();
         numbers = gameLogic.getNumbers();
+
+        console.log("QML: Mines placed:", mines.length);
+        console.log("QML: Numbers array size:", numbers.length);
 
         return true;
     }
@@ -1673,6 +1684,28 @@ ApplicationWindow {
             }
         }
 
+        Button {
+            Layout.alignment: Qt.AlignLeft
+            Layout.preferredWidth: 70
+            Layout.preferredHeight: 35
+            text: "Hint"
+            enabled: gameStarted && !gameOver
+            onClicked: {
+                let revealed = [];
+                let flagged = [];
+                for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+                    let cell = grid.itemAtIndex(i);
+                    if (cell.revealed) revealed.push(i);
+                    if (cell.flagged) flagged.push(i);
+                }
+                let mineCell = gameLogic.findMineHint(revealed, flagged);
+                if (mineCell !== -1) {
+                    let cell = grid.itemAtIndex(mineCell);
+                    cell.highlightHint();
+                }
+            }
+        }
+
         Item {
             Layout.fillWidth: true
         }
@@ -1767,6 +1800,48 @@ ApplicationWindow {
                         readonly property int diagonalSum: row + col
 
                         opacity: 1
+
+                        SequentialAnimation {
+                            id: hintAnimation
+                            loops: 3
+
+                            property bool isMine: mines.includes(index)
+
+                            ParallelAnimation {
+                                PropertyAnimation {
+                                    target: cellButton
+                                    property: "scale"
+                                    to: 1.2
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+                                PropertyAnimation {
+                                    target: cellButton
+                                    property: "background.color"
+                                    to: isMine ? "#ffcccc" : "#ccffcc"  // Light red for mines, light green for safe
+                                    duration: 200
+                                }
+                            }
+                            ParallelAnimation {
+                                PropertyAnimation {
+                                    target: cellButton
+                                    property: "scale"
+                                    to: 1.0
+                                    duration: 200
+                                    easing.type: Easing.InOutQuad
+                                }
+                                PropertyAnimation {
+                                    target: cellButton
+                                    property: "background.color"
+                                    to: "transparent"
+                                    duration: 200
+                                }
+                            }
+                        }
+
+                        function highlightHint() {
+                            hintAnimation.start();
+                        }
 
                         NumberAnimation {
                             id: fadeAnimation
