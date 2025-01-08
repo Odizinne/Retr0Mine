@@ -283,6 +283,13 @@ void MainWindow::openSaveFolder() const {
     QDesktopServices::openUrl(QUrl::fromLocalFile(savePath));
 }
 
+void MainWindow::deleteSaveFile(const QString &filename) {
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir saveDir(savePath);
+    QString fullPath = saveDir.filePath(filename);
+    QFile::remove(fullPath);
+}
+
 void MainWindow::setW10Theme() {
     currentTheme = 1;
     QQuickStyle::setStyle("Universal");

@@ -498,7 +498,7 @@ ApplicationWindow {
         Popup {
             anchors.centerIn: parent
             id: restartWindow
-            height: 100
+            height: 130
             width: 300
             visible: false
 
@@ -529,7 +529,7 @@ ApplicationWindow {
                 Label {
                     id: restartLabel
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    text: qsTr("Application needs to be restarted")
+                    text: qsTr("Application needs to be restarted\nYour current game will be saved")
                     Layout.columnSpan: 2
                     font.bold: true
                     font.pixelSize: 16
@@ -540,6 +540,10 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 80
                     onClicked: {
+                        // Save game state if there's an active game
+                        if (root.gameStarted && !root.gameOver) {
+                            saveGame("internalGameState.json")
+                        }
                         mainWindow.restartRetr0Mine()
                     }
                 }
@@ -1501,7 +1505,20 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        initGame()
+        // Check for internal save state
+        let internalSaveData = mainWindow.loadGameState("internalGameState.json")
+        if (internalSaveData) {
+            // Load the game state
+            if (loadGame(internalSaveData)) {
+                // Delete the internal save file after successful load
+                mainWindow.deleteSaveFile("internalGameState.json")
+            } else {
+                console.error("Failed to load internal game state")
+                initGame()
+            }
+        } else {
+            initGame()
+        }
     }
 
     RowLayout {
