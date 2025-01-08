@@ -1480,7 +1480,7 @@ ApplicationWindow {
         anchors.rightMargin: 12
 
         RowLayout {
-            spacing: 12
+            spacing: 6
             Layout.preferredWidth: parent.width / 3
 
             Button {
@@ -1691,11 +1691,10 @@ ApplicationWindow {
             Button {
                 id: hintButton
                 Layout.alignment: Qt.AlignLeft
-                Layout.preferredWidth: 70
+                Layout.preferredWidth: 35
                 Layout.preferredHeight: 35
-                text: "Hint"
-                enabled: gameStarted && !gameOver
-                highlighted: gameStarted && !gameOver
+                enabled: root.gameStarted && !gameOver
+                //highlighted: gameStarted && !gameOver
                 onClicked: {
                     let revealed = [];
                     let flagged = [];
@@ -1710,6 +1709,13 @@ ApplicationWindow {
                         cell.highlightHint();
                     }
                 }
+
+                Image {
+                    anchors.centerIn: parent
+                    source: darkMode ? "qrc:/icons/hint_light.png" : "qrc:/icons/hint_dark.png"
+                    sourceSize.width: 16
+                    sourceSize.height: 16
+                }
             }
 
             Item {
@@ -1721,7 +1727,7 @@ ApplicationWindow {
         RowLayout {
             Layout.preferredWidth: parent.width / 3
             Layout.fillWidth: true
-
+            Layout.leftMargin: -3
             Text {
                 id: elapsedTimeLabel
                 text: "HH:MM:SS"
@@ -1817,40 +1823,48 @@ ApplicationWindow {
 
                         opacity: 1
 
+                        NumberAnimation {
+                            id: hintRevealFadeIn
+                            target: hintOverlay
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: 200
+                        }
+
+                        NumberAnimation {
+                            id: hintRevealFadeOut
+                            target: hintOverlay
+                            property: "opacity"
+                            from: 1
+                            to: 0
+                            duration: 200
+                        }
+
                         SequentialAnimation {
                             id: hintAnimation
                             loops: 3
 
-                            property bool isMine: mines.includes(index)
+                            // Remove Component.onCompleted
+                            running: false  // Make sure animation doesn't start automatically
 
-                            ParallelAnimation {
+                            onStarted: hintRevealFadeIn.start()
+                            onFinished: hintRevealFadeOut.start()
+
+                            SequentialAnimation {
                                 PropertyAnimation {
                                     target: cellButton
                                     property: "scale"
                                     to: 1.2
-                                    duration: 200
+                                    duration: 300
                                     easing.type: Easing.InOutQuad
                                 }
-                                PropertyAnimation {
-                                    target: cellButton
-                                    property: "background.color"
-                                    to: isMine ? "#ffcccc" : "#ccffcc"  // Light red for mines, light green for safe
-                                    duration: 200
-                                }
-                            }
-                            ParallelAnimation {
                                 PropertyAnimation {
                                     target: cellButton
                                     property: "scale"
                                     to: 1.0
-                                    duration: 200
+                                    duration: 300
                                     easing.type: Easing.InOutQuad
-                                }
-                                PropertyAnimation {
-                                    target: cellButton
-                                    property: "background.color"
-                                    to: "transparent"
-                                    duration: 200
                                 }
                             }
                         }
@@ -1981,6 +1995,17 @@ ApplicationWindow {
                                 visible: cellItem.flagged
                                 sourceSize.width: cellItem.width / 2
                                 sourceSize.height: cellItem.height / 2
+                            }
+
+                            Image {
+                                id: hintOverlay
+                                anchors.centerIn: parent
+                                sourceSize.width: cellItem.width / 2
+                                sourceSize.height: cellItem.height / 2
+                                opacity: 0
+                                visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
+                                source: mines.includes(index) ?
+                                    "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
                             }
 
                             MouseArea {

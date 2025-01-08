@@ -6,8 +6,12 @@
         <file>sounds/win.wav</file>
         <file>icons/bomb_light.png</file>
         <file>icons/bomb_dark.png</file>
+        <file>icons/warning.png</file>
+        <file>icons/safe.png</file>
         <file>icons/questionmark_light.png</file>
         <file>icons/questionmark_dark.png</file>
+        <file>icons/hint_light.png</file>
+        <file>icons/hint_dark.png</file>
         <file>icons/audio_light.png</file>
         <file>icons/audio_dark.png</file>
         <file>icons/difficulty_light.png</file>
