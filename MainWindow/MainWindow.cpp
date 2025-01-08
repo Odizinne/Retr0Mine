@@ -89,6 +89,19 @@ void MainWindow::setupAndLoadQML() {
     int languageIndex = settings.value("languageIndex", 0).toInt();
     rootContext->setContextProperty("languageIndex", languageIndex);
 
+    int cellSize = settings.value("cellSize", 1).toInt();
+    if (cellSize == 0) {
+        cellSize = 25;
+    } else if (cellSize ==1) {
+        cellSize = 35;
+    } else if (cellSize ==2) {
+        cellSize = 45;
+    } else {
+        cellSize = 55;
+    }
+
+    rootContext->setContextProperty("loadedCellSize", cellSize);
+
     setLanguage(languageIndex);
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
@@ -114,6 +127,11 @@ void MainWindow::saveVisualSettings(bool animations, bool cellFrame, bool contra
     settings.setValue("animations", animations);
     settings.setValue("cellFrame", cellFrame);
     settings.setValue("contrastFlag", contrastFlag);
+}
+
+void MainWindow::saveCellSizeSettings(int index)
+{
+    settings.setValue("cellSize", index);
 }
 
 void MainWindow::saveThemeSettings(int index) {

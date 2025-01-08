@@ -82,7 +82,7 @@ ApplicationWindow {
     property bool timerActive: false
     property int elapsedTime: 0
     property bool shouldUpdateSize: true
-    property int cellSize: 35
+    property int cellSize: loadedCellSize
     property int cellSpacing: 2
 
     function getInitialWidth() {
@@ -119,10 +119,17 @@ ApplicationWindow {
             minimumHeight = getInitialHeight()
             width = minimumWidth
             height = minimumHeight
+
+            if (height >= Screen.desktopAvailableHeight * 0.9 || width >= Screen.desktopAvailableWidth * 0.9) {
+                // Center the window
+                x = Screen.width / 2 - width / 2
+                y = Screen.height / 2 - height / 2
+            }
         }
     }
 
     function handleVisibilityChange(newVisibility) {
+        console.log("pass")
         const wasMaximized = isMaximized
         isMaximized = newVisibility === Window.Maximized
         isFullScreen = newVisibility === Window.FullScreen
@@ -592,7 +599,7 @@ ApplicationWindow {
 
                         ColumnLayout {
                             anchors.topMargin: index === 0 && !isFluentWinUI3Theme ? 10 : 0
-                            spacing: isFluentWinUI3Theme ? 10 : 26
+                            spacing: isFluentWinUI3Theme ? 10 : 20
                             width: parent.width
 
                             ButtonGroup {
@@ -838,6 +845,47 @@ ApplicationWindow {
                                     onCheckedChanged: {
                                         mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked, highContrastFlagSwitch.checked)
                                         root.highContrastFlag = checked
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: qsTr("Cell size")
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: cellSizeComboBox
+                                    model: [qsTr("Small"), qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
+                                    Layout.rightMargin: 5
+                                    Layout.preferredWidth: {
+                                        if (isUniversalTheme) return cellSizeComboBox.implicitWidth + 5
+                                        return cellSizeComboBox.implicitWidth
+                                    }
+                                    currentIndex: {
+                                        switch(cellSize) {
+                                            case 25: return 0;
+                                            case 35: return 1;
+                                            case 45: return 2;
+                                            case 55: return 3;
+                                            default: return 1;  // Default to Normal
+                                        }
+                                    }
+                                    onActivated: {
+                                        switch(currentIndex) {
+                                            case 0: root.cellSize = 25; break;
+                                            case 1: root.cellSize = 35; break;
+                                            case 2: root.cellSize = 45; break;
+                                            case 3: root.cellSize = 55; break;
+                                        }
+                                        if (!isMaximized && !isFullScreen) {
+                                            minimumWidth = getInitialWidth()
+                                            minimumHeight = getInitialHeight()
+                                            width = minimumWidth
+                                            height = minimumHeight
+                                        }
+                                        mainWindow.saveCellSizeSettings(currentIndex)
                                     }
                                 }
                             }
