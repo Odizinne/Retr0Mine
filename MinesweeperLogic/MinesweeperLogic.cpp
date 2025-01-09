@@ -155,13 +155,18 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
     const int firstClickPos = firstClickY * m_width + firstClickX;
     qDebug() << "Placing mines, first click at:" << firstClickPos;
 
+    // Adjust safe zone size based on board size
+    int safeRadius = 1;  // Default for 9x9
+    if (m_width >= 30) safeRadius = 2;  // For largest board
+    else if (m_width >= 16) safeRadius = 1;  // Keep default for medium
+
     // Create safe zone around first click
     QSet<int> safeZone;
     int row = firstClickPos / m_width;
     int col = firstClickPos % m_width;
 
-    for (int r = -1; r <= 1; r++) {
-        for (int c = -1; c <= 1; c++) {
+    for (int r = -safeRadius; r <= safeRadius; r++) {
+        for (int c = -safeRadius; c <= safeRadius; c++) {
             int newRow = row + r;
             int newCol = col + c;
             if (newRow >= 0 && newRow < m_height &&
@@ -179,12 +184,15 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
         }
     }
 
-    // Try placing mines until we find a valid configuration
+    // Adjust maximum attempts based on board size
     int maxAttempts = 1000;
+    if (m_width >= 30) maxAttempts = 2000;
+    else if (m_width >= 16) maxAttempts = 1500;
+
     int attemptCount = 0;
 
     while (maxAttempts--) {
-        attemptCount++;    // Increment counter each attempt
+        attemptCount++;
         m_mines.clear();
 
         // Shuffle all positions
@@ -196,34 +204,55 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
         }
 
         // Try to place mines in shuffled order
-        for (int pos : positions) {
-            if (m_mines.size() >= m_mineCount) break;
+        QSet<int> currentMines;  // Keep track of placed mines in a set for faster lookups
 
-            QSet<int> currentMines;
-            for (int mine : m_mines) {
-                currentMines.insert(mine);
-            }
+        for (int pos : positions) {
+            if (currentMines.size() >= m_mineCount) break;
 
             if (canPlaceMineAt(currentMines, pos)) {
+                currentMines.insert(pos);
                 m_mines.append(pos);
             }
         }
 
-        if (m_mines.size() == m_mineCount) {
+        if (currentMines.size() == m_mineCount) {
             calculateNumbers();
 
-            // Convert m_mines to QSet for solver
-            QSet<int> mineSet;
-            for (int mine : m_mines) {
-                mineSet.insert(mine);
+            // First quick check: ensure no isolated areas
+            bool hasIsolatedAreas = false;
+            {
+                QSet<int> visited;
+                QQueue<int> queue;
+                queue.enqueue(firstClickPos);
+                visited.insert(firstClickPos);
+
+                while (!queue.isEmpty()) {
+                    int current = queue.dequeue();
+                    QSet<int> neighbors = getNeighbors(current);
+
+                    for (int neighbor : neighbors) {
+                        if (!currentMines.contains(neighbor) && !visited.contains(neighbor)) {
+                            visited.insert(neighbor);
+                            queue.enqueue(neighbor);
+                        }
+                    }
+                }
+
+                // Check if all non-mine cells are reachable
+                for (int i = 0; i < m_width * m_height; i++) {
+                    if (!currentMines.contains(i) && !visited.contains(i)) {
+                        hasIsolatedAreas = true;
+                        break;
+                    }
+                }
             }
 
-            if (trySolve(mineSet)) {
+            if (!hasIsolatedAreas && trySolve(currentMines)) {
                 qDebug() << "Successfully placed" << m_mineCount << "mines after" << attemptCount << "attempts";
                 qDebug() << "Mine positions:" << m_mines;
                 return true;
             }
-            qDebug() << "Configuration not solvable, retrying...";
+            qDebug() << "Configuration not solvable or has isolated areas, retrying...";
         } else {
             qDebug() << "Could only place" << m_mines.size() << "mines, retrying...";
         }
@@ -234,7 +263,6 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
 }
 
 bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
-    // Get neighbors
     QSet<int> neighbors = getNeighbors(pos);
 
     // Count existing adjacent mines
@@ -245,19 +273,32 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
         }
     }
 
-    // Make the adjacent mine check less restrictive
-    if (adjacentMines >= 4) return false; // Changed from 5 to 4
+    // Stricter adjacent mine check for larger boards
+    int maxAdjacent = 3;  // Default for 9x9
+    if (m_width >= 30) maxAdjacent = 4;  // For largest board
+    else if (m_width >= 16) maxAdjacent = 3;  // For medium boards
 
-    // Simplify the 50/50 pattern check
-    int unsafeNeighbors = 0;
+    if (adjacentMines >= maxAdjacent) return false;
+
+    // Check for patterns that create ambiguity
     for (int neighbor : neighbors) {
         QSet<int> neighborNeighbors = getNeighbors(neighbor);
-        if (neighborNeighbors.intersect(mines).size() >= 3) {
-            unsafeNeighbors++;
+
+        // Count mines around this neighbor
+        int neighborMines = 0;
+        for (int nn : neighborNeighbors) {
+            if (mines.contains(nn) || nn == pos) {
+                neighborMines++;
+            }
         }
+
+        // Prevent creating isolated high numbers
+        if (neighborMines >= 5) return false;
     }
 
-    return unsafeNeighbors <= 2;
+    if (!isValidDensity(mines, pos)) return false;
+
+    return true;
 }
 
 int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells)
@@ -322,6 +363,28 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
         }
     }
 
+    qDebug() << "\nGrid state when falling back to actual mine positions:";
+    QString gridStr;
+    for (int row = 0; row < m_height; row++) {
+        QString rowStr;
+        for (int col = 0; col < m_width; col++) {
+            int pos = row * m_width + col;
+            if (revealed.contains(pos)) {
+                if (m_numbers[pos] == -1) {
+                    rowStr += "M ";  // Mine
+                } else {
+                    rowStr += QString::number(m_numbers[pos]) + " ";  // Number
+                }
+            } else if (flagged.contains(pos)) {
+                rowStr += "F ";  // Flag
+            } else {
+                rowStr += ". ";  // Hidden
+            }
+        }
+        gridStr += rowStr.trimmed() + "\n";
+    }
+    qDebug().noquote() << gridStr;
+
     // Last resort: use actual mine positions
     qDebug() << "WARNING: Using actual mine positions for hint";
     for (int pos : m_mines) {
@@ -373,6 +436,35 @@ QSet<int> MinesweeperLogic::findSafeThroughExhaustiveCheck(const QSet<int>& reve
     }
 
     return safeCells;
+}
+
+bool MinesweeperLogic::isValidDensity(const QSet<int>& mines, int pos) {
+    // Calculate local mine density in a 5x5 area
+    int row = pos / m_width;
+    int col = pos % m_width;
+
+    int minRow = std::max(0, row - 2);
+    int maxRow = std::min(m_height - 1, row + 2);
+    int minCol = std::max(0, col - 2);
+    int maxCol = std::min(m_width - 1, col + 2);
+
+    int areaSize = (maxRow - minRow + 1) * (maxCol - minCol + 1);
+    int localMines = 0;
+
+    for (int r = minRow; r <= maxRow; r++) {
+        for (int c = minCol; c <= maxCol; c++) {
+            if (mines.contains(r * m_width + c)) {
+                localMines++;
+            }
+        }
+    }
+
+    // Maximum allowed density depends on board size
+    double maxDensity = 0.3;  // Default for 9x9
+    if (m_width >= 30) maxDensity = 0.25;
+    else if (m_width >= 16) maxDensity = 0.28;
+
+    return (static_cast<double>(localMines) / areaSize) <= maxDensity;
 }
 
 bool MinesweeperLogic::tryAllCombinations(const QMap<int, QSet<int>>& constraints,
@@ -727,7 +819,7 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         }
     }
 
-    // Try to solve
+    // Try basic solver first
     bool changed = true;
     while (changed) {
         changed = false;
@@ -767,14 +859,103 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         }
     }
 
-    // If no mines found, look for safe moves
+    // If basic solver failed, try advanced pattern matching
+    struct NeedsMine {
+        int pos;           // Position of the number
+        int minesNeeded;   // How many more mines needed
+        QSet<int> unknowns; // Available positions for those mines
+    };
+
+    QVector<NeedsMine> singleMineNeeds;
+
+    // First gather all numbers that need mines
+    for (int pos : revealed) {
+        if (m_numbers[pos] <= 0) continue;
+
+        // Count flags and unknowns
+        QSet<int> neighbors = getNeighbors(pos);
+        int flagCount = 0;
+        QSet<int> unknowns;
+
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            } else if (!revealed.contains(neighbor)) {
+                unknowns.insert(neighbor);
+            }
+        }
+
+        int minesNeeded = m_numbers[pos] - flagCount;
+        if (minesNeeded > 0) {
+            singleMineNeeds.append({pos, minesNeeded, unknowns});
+        }
+    }
+
+    // Now look for cells that satisfy multiple constraints
+    QMap<int, int> satisfiesConstraints; // cell pos -> number of constraints it satisfies
+
+    // For each pair of constraints
+    for (int i = 0; i < singleMineNeeds.size(); i++) {
+        for (int j = i + 1; j < singleMineNeeds.size(); j++) {
+            // Find shared unknown cells
+            QSet<int> shared = singleMineNeeds[i].unknowns;
+            shared.intersect(singleMineNeeds[j].unknowns);
+
+            // Count how many constraints each shared cell satisfies
+            for (int cell : shared) {
+                satisfiesConstraints[cell]++;
+            }
+        }
+    }
+
+    // If we found cells that satisfy multiple constraints
+    if (!satisfiesConstraints.isEmpty()) {
+        // Find cell that satisfies most constraints
+        int bestCell = -1;
+        int maxConstraints = 0;
+
+        for (auto it = satisfiesConstraints.begin(); it != satisfiesConstraints.end(); ++it) {
+            if (it.value() > maxConstraints) {
+                maxConstraints = it.value();
+                bestCell = it.key();
+            }
+        }
+
+        // Verify this is the only possible solution
+        bool isUniqueSolution = true;
+        for (const NeedsMine& need : singleMineNeeds) {
+            // For each constraint this cell satisfies
+            if (need.unknowns.contains(bestCell)) {
+                // Check if there's another way to satisfy it
+                QSet<int> otherOptions = need.unknowns;
+                otherOptions.remove(bestCell);
+
+                // If this constraint has no other options, good
+                // If it has other options but they don't satisfy other constraints, also good
+                for (int other : otherOptions) {
+                    if (satisfiesConstraints.contains(other) &&
+                        satisfiesConstraints[other] >= maxConstraints) {
+                        isUniqueSolution = false;
+                        break;
+                    }
+                }
+            }
+            if (!isUniqueSolution) break;
+        }
+
+        if (isUniqueSolution && maxConstraints >= 2) {
+            return bestCell;
+        }
+    }
+
+    // If all else fails, look for safe moves
     for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
         if (!it.value() && !revealed.contains(it.key()) && !flagged.contains(it.key())) {
             return it.key();
         }
     }
 
-    // If all else fails, return a real mine position as a last resort
+    // Last resort: return a real mine position
     for (int pos : m_mines) {
         if (!flagged.contains(pos)) {
             return pos;
@@ -782,4 +963,21 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     }
 
     return -1; // No hint found
+}
+
+bool MinesweeperLogic::initializeFromSave(int width, int height, int mineCount, const QVector<int>& mines) {
+    if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
+        return false;
+    }
+
+    m_width = width;
+    m_height = height;
+    m_mineCount = mineCount;
+    m_mines = mines;
+    m_numbers.resize(width * height);
+
+    // Recalculate numbers for the loaded mine positions
+    calculateNumbers();
+
+    return true;
 }

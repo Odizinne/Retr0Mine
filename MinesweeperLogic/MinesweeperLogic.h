@@ -41,6 +41,7 @@ public:
     Q_INVOKABLE bool initializeGame(int width, int height, int mineCount);
     Q_INVOKABLE bool placeMines(int firstClickX, int firstClickY);
     Q_INVOKABLE int findMineHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells);
+    Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int>& mines);
 
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
@@ -92,6 +93,7 @@ private:
                             QVector<QSet<int>>& validConfigurations);
 
     int solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells);
+    bool isValidDensity(const QSet<int>& mines, int pos);
 };
 
 #endif // MINESWEEPERLOGIC_H

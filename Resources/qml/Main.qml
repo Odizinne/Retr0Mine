@@ -226,6 +226,12 @@ ApplicationWindow {
             // Load game progress
             mines = data.gameState.mines
             numbers = data.gameState.numbers
+
+            if (!gameLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
+                console.error("Failed to initialize game logic from save")
+                return false
+            }
+
             elapsedTime = data.gameState.elapsedTime
             gameOver = data.gameState.gameOver
             gameStarted = data.gameState.gameStarted
