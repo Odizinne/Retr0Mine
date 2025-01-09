@@ -47,3 +47,7 @@ Linux binaries require Qt6.8 to use FluentWinUI3 theme
 - FR (me)
 
 Other translations were made by AI. Feel free to submit a pull request if you notice any inaccuracies.
+
+# Resources
+
+- Used PopOs sound effects from [PopOs GTK-Theme](https://github.com/pop-os/gtk-theme)
