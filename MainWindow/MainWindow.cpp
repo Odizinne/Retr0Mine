@@ -81,6 +81,9 @@ void MainWindow::setupAndLoadQML() {
     float volume = settings.value("volume", 1).toFloat();
     rootContext->setContextProperty("volume", volume);
 
+    int soundPack = settings.value("soundPackIndex", 0).toInt();
+    rootContext->setContextProperty("soundPack", soundPack);
+
     bool animations = settings.value("animations", true).toBool();
     rootContext->setContextProperty("animations", animations);
 
@@ -116,9 +119,10 @@ void MainWindow::saveDifficulty(int difficulty) {
     settings.setValue("difficulty", difficulty);
 }
 
-void MainWindow::saveSoundSettings(bool soundEffects, float volume) {
+void MainWindow::saveSoundSettings(bool soundEffects, float volume, int soundPackIndex) {
     settings.setValue("soundEffects", soundEffects);
     settings.setValue("volume", volume);
+    settings.setValue("soundPackIndex", soundPackIndex);
 }
 
 void MainWindow::saveGameplaySettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks) {

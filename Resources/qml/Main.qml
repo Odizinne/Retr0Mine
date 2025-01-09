@@ -83,6 +83,7 @@ ApplicationWindow {
     property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
     property bool loadLastGame: loadLast
+    property int soundPackIndex: soundPack
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
@@ -1104,7 +1105,7 @@ ApplicationWindow {
                                     id: soundEffectSwitch
                                     checked: root.playSound
                                     onCheckedChanged: {
-                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value)
+                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value, soundpackComboBox.currentIndex)
                                         root.playSound = checked
                                     }
                                 }
@@ -1120,10 +1121,27 @@ ApplicationWindow {
                                     id: soundVolumeSlider
                                     from: 0
                                     to: 1
-                                    value: soundVolume
+                                    value: root.soundVolume
                                     onValueChanged: {
-                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, value)
+                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value, soundpackComboBox.currentIndex)
                                         root.soundVolume = value
+                                    }
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: qsTr("Soundpack")
+                                    Layout.fillWidth: true
+                                }
+                                ComboBox {
+                                    id: soundpackComboBox
+                                    model: ["Pop", "Windows"]
+                                    currentIndex: root.soundPackIndex
+                                    onActivated: {
+                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value, soundpackComboBox.currentIndex)
+                                        root.soundPackIndex = currentIndex
                                     }
                                 }
                             }
@@ -1292,21 +1310,22 @@ ApplicationWindow {
             }
         }
     }
+
     SoundEffect {
         id: looseEffect
-        source: "qrc:/sounds/bomb.wav"
+        source: root.soundPackIndex === 0 ? "qrc:/sounds/pop_bomb.wav" : "qrc:/sounds/w11_bomb.wav"
         volume: root.soundVolume
     }
 
     SoundEffect {
         id: clickEffect
-        source: "qrc:/sounds/click.wav"
+        source: root.soundPackIndex === 0 ? "qrc:/sounds/pop_click.wav" : "qrc:/sounds/w11_click.wav"
         volume: root.soundVolume
     }
 
     SoundEffect {
         id: winEffect
-        source: "qrc:/sounds/win.wav"
+        source: root.soundPackIndex === 0 ? "qrc:/sounds/pop_win.wav" : "qrc:/sounds/w11_win.wav"
         volume: root.soundVolume
     }
 

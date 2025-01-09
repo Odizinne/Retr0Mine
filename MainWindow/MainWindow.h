@@ -14,7 +14,7 @@ public:
     explicit MainWindow(QObject *parent = nullptr);
 
     Q_INVOKABLE void saveDifficulty(int difficulty);
-    Q_INVOKABLE void saveSoundSettings(bool soundEffects, float volume);
+    Q_INVOKABLE void saveSoundSettings(bool soundEffects, float volume, int soundPackIndex);
     Q_INVOKABLE void saveGameplaySettings(bool invertClick, bool revealConnected, bool questionMarks);
     Q_INVOKABLE void saveLoadOnStartSettings(bool loadLastGame);
     Q_INVOKABLE void saveVisualSettings(bool animations, bool cellFrame, bool contrastFlag);
