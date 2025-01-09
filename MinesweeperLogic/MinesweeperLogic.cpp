@@ -21,8 +21,6 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount) {
 
     return true;
 }
-// MinesweeperLogic.cpp
-
 
 bool MinesweeperLogic::trySolve(const QSet<int>& mines) {
     // Reset solver state

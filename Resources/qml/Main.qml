@@ -1143,7 +1143,7 @@ ApplicationWindow {
                                 }
                                 ComboBox {
                                     id: soundpackComboBox
-                                    model: ["Pop", "Windows"]
+                                    model: ["Pop", "Windows", "KDE"]
                                     currentIndex: root.soundPackIndex
                                     onActivated: {
                                         mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value, soundpackComboBox.currentIndex)
@@ -1319,19 +1319,52 @@ ApplicationWindow {
 
     SoundEffect {
         id: looseEffect
-        source: root.soundPackIndex === 0 ? "qrc:/sounds/pop_bomb.wav" : "qrc:/sounds/w11_bomb.wav"
+        source: {
+            switch (root.soundPackIndex) {
+                case 0:
+                    return "qrc:/sounds/pop/pop_bomb.wav"
+                case 1:
+                    return "qrc:/sounds/w11/w11_bomb.wav"
+                case 2:
+                    return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
+                default:
+                    return "qrc:/sounds/pop/pop_bomb.wav"
+            }
+        }
         volume: root.soundVolume
     }
 
     SoundEffect {
         id: clickEffect
-        source: root.soundPackIndex === 0 ? "qrc:/sounds/pop_click.wav" : "qrc:/sounds/w11_click.wav"
+        source: {
+            switch (root.soundPackIndex) {
+                case 0:
+                    return "qrc:/sounds/pop/pop_click.wav"
+                case 1:
+                    return "qrc:/sounds/w11/w11_click.wav"
+                case 2:
+                    return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+                default:
+                    return "qrc:/sounds/pop/pop_click.wav"
+            }
+        }
         volume: root.soundVolume
     }
 
     SoundEffect {
         id: winEffect
-        source: root.soundPackIndex === 0 ? "qrc:/sounds/pop_win.wav" : "qrc:/sounds/w11_win.wav"
+        source: {
+            switch (root.soundPackIndex) {
+                case 0:
+                    return "qrc:/sounds/pop/pop_win.wav"
+                case 1:
+                    return "qrc:/sounds/w11/w11_win.wav"
+                case 2:
+                    return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
+                default:
+                    return "qrc:/sounds/pop/pop_win.wav"
+            }
+        }
         volume: root.soundVolume
     }
 

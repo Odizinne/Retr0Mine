@@ -51,3 +51,6 @@ Other translations were made by AI. Feel free to submit a pull request if you no
 # Resources
 
 - Used PopOs sound effects from [PopOs GTK-Theme](https://github.com/pop-os/gtk-theme)
+- Used KDE ocean sound effects from [ocea-sound-theme](https://github.com/KDE/ocean-sound-theme)
+
+Ocean sound effects used are licensed under [cc by sa 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
