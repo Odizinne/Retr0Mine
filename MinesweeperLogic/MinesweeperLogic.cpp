@@ -308,9 +308,8 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
     for (int cell : revealedCells) revealed.insert(cell);
     for (int cell : flaggedCells) flagged.insert(cell);
 
-    // First check each revealed number
+    // First check each revealed number for basic deductions
     for (int pos : revealed) {
-        // Skip if not a number
         if (m_numbers[pos] <= 0) continue;
 
         QSet<int> neighbors = getNeighbors(pos);
@@ -340,7 +339,39 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
         }
     }
 
-    // If no mines found through basic deduction, fall back to safe spots
+    // Then look for basic deductions - safe spots
+    for (int pos : revealed) {
+        if (m_numbers[pos] <= 0) continue;
+
+        QSet<int> neighbors = getNeighbors(pos);
+        int flagCount = 0;
+        QSet<int> unknowns;
+
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            } else if (!revealed.contains(neighbor)) {
+                unknowns.insert(neighbor);
+            }
+        }
+
+        // If number matches flag count, all other unknowns are safe
+        if (m_numbers[pos] == flagCount && !unknowns.isEmpty()) {
+            // Return first safe spot
+            return *unknowns.begin();
+        }
+    }
+
+    // Try solveForHint for more advanced pattern detection
+    int solverHint = solveForHint(revealedCells, flaggedCells);
+    if (solverHint != -1) {
+        qDebug() << "Found hint through solver at:" << solverHint;
+        return solverHint;
+    } else {
+        qDebug() << "solver failed";
+    }
+
+    // If no solution found through solver, check for safe spots
     for (int pos : revealedCells) {
         if (m_numbers[pos] <= 0) continue;
 
@@ -396,7 +427,6 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
 
     return -1;
 }
-
 QSet<int> MinesweeperLogic::findSafeThroughExhaustiveCheck(const QSet<int>& revealed,
                                                            const QSet<int>& flagged,
                                                            const QSet<int>& frontier)
@@ -859,6 +889,75 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         }
     }
 
+    qDebug() << "\nLooking for forced mine patterns:";
+    for (int pos : revealed) {
+        if (m_numbers[pos] <= 0) continue;
+
+        int row = pos / m_width;
+        int col = pos % m_width;
+
+        // Get this number's state
+        QSet<int> neighbors = getNeighbors(pos);
+        int flagCount = 0;
+        QSet<int> unknowns;
+
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            } else if (!revealed.contains(neighbor)) {
+                unknowns.insert(neighbor);
+            }
+        }
+
+        int minesNeeded = m_numbers[pos] - flagCount;
+
+        if (minesNeeded == 1 && unknowns.size() == 1) {
+            int forcedMine = *unknowns.begin();
+            int mineRow = forcedMine / m_width;
+            int mineCol = forcedMine % m_width;
+            qDebug() << "Found forced mine at" << mineCol << "," << mineRow;
+
+            // Check neighbors of this forced mine
+            QSet<int> mineNeighbors = getNeighbors(forcedMine);
+            for (int adjPos : mineNeighbors) {
+                if (!revealed.contains(adjPos) || m_numbers[adjPos] <= 0) continue;
+
+                int adjRow = adjPos / m_width;
+                int adjCol = adjPos % m_width;
+
+                // Count flags and unknowns for this adjacent number
+                QSet<int> adjNeighbors = getNeighbors(adjPos);
+                int adjFlagCount = 0;
+                QSet<int> adjUnknowns;
+
+                for (int neighbor : adjNeighbors) {
+                    if (flagged.contains(neighbor)) {
+                        adjFlagCount++;
+                    } else if (!revealed.contains(neighbor)) {
+                        adjUnknowns.insert(neighbor);
+                    }
+                }
+
+                int adjMinesNeeded = m_numbers[adjPos] - adjFlagCount;
+                //qDebug() << "Adjacent number" << m_numbers[adjPos] << "at" << adjCol << "," << adjRow
+                //         << "flags:" << adjFlagCount
+                //         << "mines needed:" << adjMinesNeeded
+                //         << "unknowns:" << adjUnknowns.size();
+
+                if (adjMinesNeeded == 1) {
+                    adjUnknowns.remove(forcedMine);
+                    if (!adjUnknowns.isEmpty()) {
+                        int safeCell = *adjUnknowns.begin();
+                        int safeRow = safeCell / m_width;
+                        int safeCol = safeCell % m_width;
+                        qDebug() << "Found safe cell at" << safeCol << "," << safeRow;
+                        return safeCell;
+                    }
+                }
+            }
+        }
+    }
+
     // If basic solver failed, try advanced pattern matching
     struct NeedsMine {
         int pos;           // Position of the number
@@ -952,13 +1051,6 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
         if (!it.value() && !revealed.contains(it.key()) && !flagged.contains(it.key())) {
             return it.key();
-        }
-    }
-
-    // Last resort: return a real mine position
-    for (int pos : m_mines) {
-        if (!flagged.contains(pos)) {
-            return pos;
         }
     }
 
