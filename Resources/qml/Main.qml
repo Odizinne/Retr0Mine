@@ -112,6 +112,11 @@ ApplicationWindow {
         if (!isMaximized && !isFullScreen && shouldUpdateSize) {
             minimumWidth = getInitialWidth()
             width = getInitialWidth()
+
+            // Add 2px margin of error
+            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
+                visibility = Window.Maximized
+            }
         }
     }
 
@@ -119,6 +124,11 @@ ApplicationWindow {
         if (!isMaximized && !isFullScreen && shouldUpdateSize) {
             minimumHeight = getInitialHeight()
             height = getInitialHeight()
+
+            // Add 2px margin of error
+            if (height + 2 >= Screen.desktopAvailableHeight * 0.9) {
+                visibility = Window.Maximized
+            }
         }
     }
 
