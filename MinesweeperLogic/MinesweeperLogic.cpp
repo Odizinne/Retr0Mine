@@ -296,7 +296,105 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
 
     if (!isValidDensity(mines, pos)) return false;
 
+    // New check: Look for potential forced 50/50 situations
+    int row = pos / m_width;
+    int col = pos % m_width;
+
+    // Check all adjacent cells
+    for (int r = -1; r <= 1; r++) {
+        for (int c = -1; c <= 1; c++) {
+            if (r == 0 && c == 0) continue;
+
+            int newRow = row + r;
+            int newCol = col + c;
+
+            if (newRow >= 0 && newRow < m_height &&
+                newCol >= 0 && newCol < m_width) {
+
+                // For each cell, check if placing mine here would create a 50/50
+                if (wouldCreate5050(mines, pos, newRow, newCol)) {
+                    return false;
+                }
+            }
+        }
+    }
+
     return true;
+}
+
+bool MinesweeperLogic::wouldCreate5050(const QSet<int>& mines, int newMinePos, int checkRow, int checkCol) {
+    // First check the original 50/50 patterns
+    // Get the position we're checking
+    int twoSpacesPos = checkRow * m_width + checkCol;
+    // Check all adjacent pairs of cells
+    QSet<int> neighbors = getNeighbors(twoSpacesPos);
+    for (int neighbor : neighbors) {
+        // Skip if it's a mine or the new mine position
+        if (mines.contains(neighbor) || neighbor == newMinePos) continue;
+        // For each pair of cells, check if they form a 50/50
+        QSet<int> sharedConstraints;
+        // Get all numbers that see both cells
+        QSet<int> cell1Numbers = getNeighbors(twoSpacesPos);
+        QSet<int> cell2Numbers = getNeighbors(neighbor);
+        // Look for numbers that constrain both cells
+        for (int num1 : cell1Numbers) {
+            if (cell2Numbers.contains(num1)) {
+                // Check if this number would create a constraining pattern
+                QSet<int> numNeighbors = getNeighbors(num1);
+                int mineCount = 0;
+                for (int n : numNeighbors) {
+                    if (mines.contains(n) || n == newMinePos) {
+                        mineCount++;
+                    }
+                }
+                // If this number would force exactly one mine between our two cells
+                if (mineCount == numNeighbors.size() - 2) {
+                    sharedConstraints.insert(num1);
+                }
+            }
+        }
+        // If we found multiple shared constraints that would force a 50/50
+        if (sharedConstraints.size() >= 2) {
+            return true;
+        }
+    }
+
+    // Now check for the new pattern with adjacent mines
+    // For each neighbor of our new mine position
+    for (int neighbor : getNeighbors(newMinePos)) {
+        // If this neighbor is already a mine
+        if (mines.contains(neighbor)) {
+            // Check cells adjacent to both mines for potential '3' cells
+            QSet<int> mine1Neighbors = getNeighbors(newMinePos);
+            QSet<int> mine2Neighbors = getNeighbors(neighbor);
+
+            // Find cells that are adjacent to both mines
+            for (int sharedCell : mine1Neighbors) {
+                if (mine2Neighbors.contains(sharedCell)) {
+                    // Get neighbors of this potentially constraining cell
+                    QSet<int> constraintNeighbors = getNeighbors(sharedCell);
+                    int mineCount = 0;
+                    int unknownCount = 0;
+
+                    // Count mines and unknown cells around it
+                    for (int n : constraintNeighbors) {
+                        if (mines.contains(n) || n == newMinePos) {
+                            mineCount++;
+                        } else if (!mines.contains(n)) {
+                            unknownCount++;
+                        }
+                    }
+
+                    // If we have 2 mines and exactly 2 unknown cells around a potential '3'
+                    if (mineCount == 2 && unknownCount == 2) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells)
@@ -811,12 +909,18 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     for (int cell : revealedCells) revealed.insert(cell);
     for (int cell : flaggedCells) flagged.insert(cell);
 
-    // Reset solver state
+    // Create a local numbers array that only contains revealed numbers
+    QVector<int> visibleNumbers(m_width * m_height, -2);  // -2 for unrevealed
+    for (int pos : revealed) {
+        visibleNumbers[pos] = m_numbers[pos];  // Only copy revealed numbers
+    }
+
+    // Reset solver state using only revealed information
     m_information.clear();
     m_informationsForSpace.clear();
     m_solvedSpaces.clear();
 
-    // Add initial information based on revealed numbers
+    // Add initial information based on revealed numbers only
     for (int i = 0; i < m_width * m_height; i++) {
         if (flagged.contains(i)) {
             m_solvedSpaces[i] = true;  // Mark flags as mines
@@ -825,6 +929,9 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         if (!revealed.contains(i)) {
             continue;  // Skip unrevealed cells
         }
+
+        // Only use visible numbers for solving
+        if (visibleNumbers[i] <= 0) continue;
 
         QSet<int> neighbors = getNeighbors(i);
         int mineCount = 0;

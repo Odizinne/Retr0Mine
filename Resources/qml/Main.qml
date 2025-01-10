@@ -160,6 +160,10 @@ ApplicationWindow {
     }
 
     function requestHint() {
+        if (!gameStarted || gameOver || flaggedCount === 0) {
+            return;
+        }
+
         let revealed = [];
         let flagged = [];
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
