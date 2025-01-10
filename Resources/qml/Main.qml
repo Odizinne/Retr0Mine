@@ -33,6 +33,11 @@ ApplicationWindow {
     }
 
     Shortcut {
+        sequence: StandardKey.Open
+        onActivated: loadWindow.show()
+    }
+
+    Shortcut {
         sequence: StandardKey.New
         onActivated: root.initGame()
     }
@@ -1331,6 +1336,100 @@ ApplicationWindow {
         }
     }
 
+    ApplicationWindow {
+        id: loadWindow
+        title: qsTr("Load Game")
+        width: 300
+        height: 320
+        minimumWidth: 300
+        minimumHeight: 320
+        maximumWidth: 300
+        maximumHeight: 320
+        flags: Qt.Dialog
+
+        Shortcut {
+            sequence: "Esc"
+            onActivated: {
+                loadWindow.close()
+            }
+        }
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 12
+            spacing: 10
+
+            ScrollView {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+
+                ScrollBar.vertical.policy: saveFilesList.model.count > 5 ?
+                                          ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+
+                ListView {
+                    id: saveFilesList
+                    model: ListModel {}
+                    delegate: ItemDelegate {
+                        width: saveFilesList.width
+                        height: 40
+                        text: name.replace(".json", "")
+                        onClicked: {
+                            let saveData = mainWindow.loadGameState(name)
+                            if (saveData) {
+                                if (!loadGame(saveData)) {
+                                    errorWindow.visible = true
+                                }
+                                loadWindow.close()
+                            }
+                        }
+                    }
+                }
+            }
+
+            Button {
+                text: qsTr("Open save folder")
+                Layout.fillWidth: true
+                onClicked: {
+                    mainWindow.openSaveFolder()
+                    loadWindow.close()
+                }
+            }
+
+            Button {
+                text: qsTr("Cancel")
+                Layout.fillWidth: true
+                onClicked: loadWindow.close()
+            }
+        }
+
+        onVisibleChanged: {
+            if (visible) {
+                // Clear the existing model
+                saveFilesList.model.clear()
+
+                // Get fresh save files list
+                let saves = mainWindow.getSaveFiles()
+
+                if (saves.length === 0) {
+                    // Add a disabled "No saves" entry
+                    saveFilesList.model.append({
+                        name: qsTr("No saved games found"),
+                        enabled: false
+                    })
+                } else {
+                    // Add each save file to the model
+                    saves.forEach(function(save) {
+                        saveFilesList.model.append({
+                            name: save,
+                            enabled: true
+                        })
+                    })
+                }
+            }
+        }
+    }
+
     SoundEffect {
         id: looseEffect
         source: {
@@ -1676,46 +1775,10 @@ ApplicationWindow {
                         enabled: root.gameStarted
                         onTriggered: saveWindow.visible = true
                     }
-                    Menu {
+                    MenuItem {
                         id: loadMenu
-                        title: qsTr("Load game")
-
-                        Instantiator {
-                            id: menuInstantiator
-                            model: []
-
-                            MenuItem {
-                                text: modelData
-                                onTriggered: {
-                                    let saveData = mainWindow.loadGameState(text)
-                                    if (saveData) {
-                                        if (!loadGame(saveData)) {
-                                            errorWindow.visible = true
-                                        }
-                                    }
-                                }
-                            }
-
-                            onObjectAdded: (index, object) => loadMenu.insertItem(index, object)
-                            onObjectRemoved: (index, object) => loadMenu.removeItem(object)
-                        }
-
-                        MenuSeparator { }
-
-                        MenuItem {
-                            text: qsTr("Open save folder")
-                            onTriggered: mainWindow.openSaveFolder()
-                        }
-
-                        onAboutToShow: {
-                            let saves = mainWindow.getSaveFiles()
-                            if (saves.length === 0) {
-                                menuInstantiator.model = [qsTr("Empty")]
-                                menuInstantiator.objectAt(0).enabled = false
-                            } else {
-                                menuInstantiator.model = saves
-                            }
-                        }
+                        text: qsTr("Load game")
+                        onTriggered: loadWindow.visible = true
                     }
 
                     MenuSeparator { }
