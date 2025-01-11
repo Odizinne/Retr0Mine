@@ -1746,8 +1746,8 @@ ApplicationWindow {
                 Image {
                     anchors.centerIn: parent
                     source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
-                    height: 16
-                    width: 16
+                    height: 24
+                    width: 24
                 }
 
                 Menu {
