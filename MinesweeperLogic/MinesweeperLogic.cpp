@@ -98,13 +98,11 @@ void MinesweeperLogic::solve() {
         for (const MineSolverInfo& info : m_information) {
             // Count already solved spaces
             int knownMines = 0;
-            int knownSafe = 0;
             QSet<int> unknownSpaces;
 
             for (int space : info.spaces) {
                 if (m_solvedSpaces.contains(space)) {
                     if (m_solvedSpaces[space]) knownMines++;
-                    else knownSafe++;
                 } else {
                     unknownSpaces.insert(space);
                 }
@@ -545,12 +543,9 @@ QSet<int> MinesweeperLogic::findSafeThroughExhaustiveCheck(const QSet<int>& reve
 
     // Check each frontier cell if it could be safe
     for (int testPos : frontier) {
-        bool mustBeMine = false;
-        bool mustBeSafe = false;
-
         // Try both possibilities for this cell
         QVector<QSet<int>> validConfigurations;
-        if (tryAllCombinations(numberConstraints, testPos, flagged, validConfigurations)) {
+        if (tryAllCombinations(numberConstraints, testPos, flagged)) {
             // If we found valid configurations where this cell is both mine and not mine,
             // we can't determine anything
             qDebug() << "Cell" << testPos << "could be either mine or safe";
@@ -595,8 +590,7 @@ bool MinesweeperLogic::isValidDensity(const QSet<int>& mines, int pos) {
 
 bool MinesweeperLogic::tryAllCombinations(const QMap<int, QSet<int>>& constraints,
                                           int testPos,
-                                          const QSet<int>& flagged,
-                                          QVector<QSet<int>>& validConfigurations)
+                                          const QSet<int>& flagged)
 {
     QSet<int> relevantUnknowns;
     for (const QSet<int>& unknowns : constraints) {
@@ -961,13 +955,11 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
 
         for (const MineSolverInfo& info : m_information) {
             int knownMines = 0;
-            int knownSafe = 0;
             QSet<int> unknownSpaces;
 
             for (int space : info.spaces) {
                 if (m_solvedSpaces.contains(space)) {
                     if (m_solvedSpaces[space]) knownMines++;
-                    else knownSafe++;
                 } else {
                     unknownSpaces.insert(space);
                 }
@@ -998,9 +990,6 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     for (int pos : revealed) {
         if (m_numbers[pos] <= 0) continue;
 
-        int row = pos / m_width;
-        int col = pos % m_width;
-
         // Get this number's state
         QSet<int> neighbors = getNeighbors(pos);
         int flagCount = 0;
@@ -1027,9 +1016,6 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             for (int adjPos : mineNeighbors) {
                 if (!revealed.contains(adjPos) || m_numbers[adjPos] <= 0) continue;
 
-                int adjRow = adjPos / m_width;
-                int adjCol = adjPos % m_width;
-
                 // Count flags and unknowns for this adjacent number
                 QSet<int> adjNeighbors = getNeighbors(adjPos);
                 int adjFlagCount = 0;
@@ -1044,10 +1030,6 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
                 }
 
                 int adjMinesNeeded = m_numbers[adjPos] - adjFlagCount;
-                //qDebug() << "Adjacent number" << m_numbers[adjPos] << "at" << adjCol << "," << adjRow
-                //         << "flags:" << adjFlagCount
-                //         << "mines needed:" << adjMinesNeeded
-                //         << "unknowns:" << adjUnknowns.size();
 
                 if (adjMinesNeeded == 1) {
                     adjUnknowns.remove(forcedMine);

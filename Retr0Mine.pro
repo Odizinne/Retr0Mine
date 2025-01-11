@@ -1,6 +1,6 @@
 QT       += core gui qml quick multimedia quickcontrols2
 
-CONFIG += c++17 lrelease embed_translations
+CONFIG += c++17 silent lrelease embed_translations
 
 QM_FILES_RESOURCE_PREFIX = /translations
 

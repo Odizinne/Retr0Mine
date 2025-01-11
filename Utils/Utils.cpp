@@ -93,7 +93,10 @@ QString Utils::getAccentColor(const QString &accentKey)
 
     return "#FFFFFF";
 #else
-    return "#0000FF";
+    Q_UNUSED(accentKey);
+    QPalette palette = QGuiApplication::palette();
+    QColor highlight = palette.color(QPalette::Highlight);
+    return highlight.name();
 #endif
 }
 

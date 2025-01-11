@@ -16,8 +16,8 @@ struct MineSolverInfo {
     }
 };
 
-inline uint qHash(const MineSolverInfo& info, uint seed = 0) {
-    uint hashValue = qHash(info.count, seed);
+inline size_t qHash(const MineSolverInfo& info, size_t seed = 0) {
+    size_t hashValue = qHash(info.count, seed);
     for (int space : info.spaces) {
         hashValue ^= qHash(space, seed);
     }
@@ -89,8 +89,7 @@ private:
 
     bool tryAllCombinations(const QMap<int, QSet<int>>& constraints,
                             int testPos,
-                            const QSet<int>& flagged,
-                            QVector<QSet<int>>& validConfigurations);
+                            const QSet<int>& flagged);
 
     int solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells);
     bool isValidDensity(const QSet<int>& mines, int pos);
