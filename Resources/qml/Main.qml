@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import QtMultimedia
 import QtQuick.Window 2.15
 import com.odizinne.minesweeper 1.0
+import QtCore
 
 ApplicationWindow {
     id: root
@@ -19,6 +20,26 @@ ApplicationWindow {
             Universal.theme = Universal.System
             Universal.accent = accentColor
         }
+    }
+
+    Settings {
+        id: settings
+
+        property int themeIndex: 0
+        property int colorScheme: 0
+        property int languageIndex: 0
+        property int difficulty: 0
+        property bool invertLRClick: false
+        property bool autoreveal: false
+        property bool enableQuestionMarks: true
+        property bool loadLastGame: false
+        property bool soundEffects: true
+        property real volume: 1.0
+        property int soundPackIndex: 0
+        property bool animations: true
+        property bool cellFrame: true
+        property bool contrastFlag: false
+        property int cellSize: 1
     }
 
     Shortcut {
@@ -64,31 +85,26 @@ ApplicationWindow {
     }
 
     onClosing: {
-        if (loadLastGame && gameStarted && !gameOver) {
+        if (settings.loadLastGame && gameStarted && !gameOver) {
             saveGame("internalGameState.json")
             console.log("autosave")
         }
     }
 
+    property var difficultySettings: [
+        { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
+        { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
+        { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
+        { text: "Retr0", x: 50, y: 32, mines: 320 }
+    ]
+
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
-    property int theme: themeIndex
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
     property bool isFusionTheme: fusion
     property bool isFluentWinUI3Theme: windows11
     property bool isUniversalTheme: windows10
-    property bool enableAnimations: animations
-    property bool revealConnected: revealConnectedCell
-    property bool invertLRClick: invertClick
-    property bool highContrastFlag: contrastFlag
-    property bool cellFrame: showCellFrame
-    property bool enableQuestionMarks: questionMarks
-    property bool playSound: soundEffects
-    property real soundVolume: volume
-    property int difficulty: gameDifficulty
     property bool darkMode: isDarkMode
-    property bool loadLastGame: loadLast
-    property int soundPackIndex: soundPack
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
@@ -106,11 +122,11 @@ ApplicationWindow {
     property int cellSpacing: 2
 
     function getInitialWidth() {
-        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
+        return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
     }
 
     function getInitialHeight() {
-        return shouldUpdateSize ? Math.min((cellSize + cellSpacing) * gridSizeY + 74, Screen.desktopAvailableHeight * 0.9) : height
+        return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeY + 74, Screen.desktopAvailableHeight * 0.9) : height
     }
 
     onGridSizeXChanged: {
@@ -505,16 +521,21 @@ ApplicationWindow {
                     text: qsTr("Restore")
                     Layout.fillWidth: true
                     onClicked: {
-                        // Save all settings with default values
-                        mainWindow.saveControlsSettings(false, false, true)
-                        mainWindow.saveVisualSettings(true, true, false)
-                        mainWindow.saveCellSizeSettings(1)
-                        mainWindow.saveThemeSettings(0)
-                        mainWindow.saveColorSchemeSettings(0)
-                        mainWindow.setColorScheme(0)
-                        mainWindow.saveSoundSettings(true, 1.0)
-                        mainWindow.saveLanguageSettings(0)
-                        mainWindow.setLanguage(0)
+                        settings.themeIndex = 0
+                        settings.colorScheme = 0
+                        settings.languageIndex = 0
+                        settings.difficulty = 0
+                        settings.invertLRClick = false
+                        settings.autoreveal = false
+                        settings.enableQuestionMarks = true
+                        settings.loadLastGame = false
+                        settings.soundEffects = true
+                        settings.volume = 1.0
+                        settings.soundPackIndex = 0
+                        settings.animations = true
+                        settings.cellFrame = true
+                        settings.contrastFlag = false
+                        settings.cellSize = 1
 
                         mainWindow.restartRetr0Mine()
                     }
@@ -719,22 +740,6 @@ ApplicationWindow {
                     Pane {
                         id: difficultyPane
 
-                        property var difficultySettings: [
-                            { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
-                            { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
-                            { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
-                            { text: "Retr0", x: 50, y: 32, mines: 320 }
-                        ]
-
-                        Component.onCompleted: {
-                            const initialSettings = difficultySettings[root.difficulty]
-                            if (initialSettings) {
-                                root.gridSizeX = initialSettings.x
-                                root.gridSizeY = initialSettings.y
-                                root.mineCount = initialSettings.mines
-                            }
-                        }
-
                         ColumnLayout {
                             anchors.topMargin: !isFluentWinUI3Theme ? 10 : 0
                             spacing: isFluentWinUI3Theme ? 10 : 20
@@ -746,21 +751,19 @@ ApplicationWindow {
                                 onCheckedButtonChanged: {
                                     if (checkedButton && (checkedButton.userInteractionChecked || checkedButton.activeFocus)) {
                                         const idx = checkedButton.difficultyIndex
-                                        const settings = difficultyPane.difficultySettings[idx]
+                                        const difficultySet = root.difficultySettings[idx]
 
-                                        root.gridSizeX = settings.x
-                                        root.gridSizeY = settings.y
-                                        root.mineCount = settings.mines
-                                        mainWindow.saveDifficulty(idx)
+                                        root.gridSizeX = difficultySet.x
+                                        root.gridSizeY = difficultySet.y
+                                        root.mineCount = difficultySet.mines
                                         initGame()
-                                        root.difficulty = idx
+                                        settings.difficulty = idx
                                     }
                                 }
                             }
 
                             Repeater {
-                                model: difficultySettings
-
+                                model: root.difficultySettings
                                 RowLayout {
                                     Layout.fillWidth: true
 
@@ -792,19 +795,7 @@ ApplicationWindow {
                                         Layout.preferredWidth: height
                                         Layout.alignment: Qt.AlignRight
                                         ButtonGroup.group: difficultyGroup
-
-                                        Component.onCompleted: {
-                                            checked = root.difficulty === index
-                                        }
-
-                                        onCheckedChanged: {
-                                            if (checked && !userInteractionChecked) {
-                                                const settings = difficultyPane.difficultySettings[difficultyIndex]
-                                                root.gridSizeX = settings.x
-                                                root.gridSizeY = settings.y
-                                                root.mineCount = settings.mines
-                                            }
-                                        }
+                                        checked: settings.difficulty === index
 
                                         onUserInteractionCheckedChanged: {
                                             if (userInteractionChecked) {
@@ -825,6 +816,7 @@ ApplicationWindow {
                         }
                     }
                 }
+
                 Component {
                     id: gameplayPaneComponent
                     Pane {
@@ -850,10 +842,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: invert
-                                    checked: root.invertLRClick
+                                    checked: settings.invertLRClick
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked)
-                                        root.invertLRClick = checked
+                                        settings.invertLRClick = checked
                                     }
                                 }
                             }
@@ -870,10 +861,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: autoreveal
-                                    checked: root.revealConnected
+                                    checked: settings.autoreveal
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked)
-                                        root.revealConnected = checked
+                                        settings.autoreveal = checked
                                     }
                                 }
                             }
@@ -890,10 +880,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: questionMarksSwitch
-                                    checked: root.enableQuestionMarks
+                                    checked: settings.enableQuestionMarks
                                     onCheckedChanged: {
-                                        mainWindow.saveGameplaySettings(invert.checked, autoreveal.checked, questionMarksSwitch.checked)
-                                        root.enableQuestionMarks = checked
+                                        settings.enableQuestionMarks = checked
                                         if (!checked) {
                                             for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
                                                 let cell = grid.itemAtIndex(i)
@@ -919,10 +908,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: loadLastGameSwitch
-                                    checked: root.loadLastGame
+                                    checked: settings.loadLastGame
                                     onCheckedChanged: {
-                                        mainWindow.saveLoadOnStartSettings(loadLastGameSwitch.checked)
-                                        root.loadLastGame = checked
+                                        settings.loadLastGame = checked
                                     }
                                 }
                             }
@@ -954,10 +942,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: animationsSettings
-                                    checked: root.enableAnimations
+                                    checked: settings.animations
                                     onCheckedChanged: {
-                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked, highContrastFlagSwitch.checked)
-                                        root.enableAnimations = checked
+                                        settings.animations = checked
                                         for (let i = 0; i < root.gridSizeX * root.gridSizeY; i++) {
                                             let cell = grid.itemAtIndex(i)
                                             if (cell) {
@@ -980,10 +967,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: cellFrameSettings
-                                    checked: root.cellFrame
+                                    checked: settings.cellFrame
                                     onCheckedChanged: {
-                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked, highContrastFlagSwitch.checked)
-                                        root.cellFrame = checked
+                                        settings.cellFrame = checked
                                     }
                                 }
                             }
@@ -1000,10 +986,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: highContrastFlagSwitch
-                                    checked: root.highContrastFlag
+                                    checked: settings.contrastFlag
                                     onCheckedChanged: {
-                                        mainWindow.saveVisualSettings(animationsSettings.checked, cellFrameSettings.checked, highContrastFlagSwitch.checked)
-                                        root.highContrastFlag = checked
+                                        settings.contrastFlag = checked
                                     }
                                 }
                             }
@@ -1023,11 +1008,11 @@ ApplicationWindow {
                                         return cellSizeComboBox.implicitWidth
                                     }
                                     currentIndex: {
-                                        switch(cellSize) {
-                                        case 25: return 0;
-                                        case 35: return 1;
-                                        case 45: return 2;
-                                        case 55: return 3;
+                                        switch(settings.cellSize) {
+                                        case 0: return 0;
+                                        case 1: return 1;
+                                        case 2: return 2;
+                                        case 3: return 3;
                                         default: return 1;  // Default to Normal
                                         }
                                     }
@@ -1045,7 +1030,7 @@ ApplicationWindow {
                                             root.width = root.minimumWidth
                                             root.height = root.minimumHeight
                                         }
-                                        mainWindow.saveCellSizeSettings(cellSizeComboBox.currentIndex)
+                                        settings.cellSize = currentIndex
                                     }
                                 }
                             }
@@ -1066,12 +1051,12 @@ ApplicationWindow {
                                         return styleComboBox.implicitWidth
                                     }
 
-                                    property int previousIndex: theme
+                                    property int previousIndex: settings.themeIndex
 
-                                    currentIndex: theme
+                                    currentIndex: settings.themeIndex
                                     onActivated: function(index) {
                                         if (currentIndex !== previousIndex) {  // Check if index actually changed
-                                            mainWindow.saveThemeSettings(currentIndex)
+                                            settings.themeIndex = currentIndex
                                             restartWindow.visible = true
                                             previousIndex = currentIndex  // Update the previous index
                                         }
@@ -1093,9 +1078,9 @@ ApplicationWindow {
                                         if (isUniversalTheme) return themeComboBox.implicitWidth + 5
                                         return themeComboBox.implicitWidth
                                     }
-                                    currentIndex: appTheme
+                                    currentIndex: settings.colorScheme
                                     onActivated: {
-                                        mainWindow.saveColorSchemeSettings(currentIndex)
+                                        settings.colorScheme = currentIndex
                                         mainWindow.setColorScheme(currentIndex)
                                     }
                                 }
@@ -1128,10 +1113,9 @@ ApplicationWindow {
                                 }
                                 Switch {
                                     id: soundEffectSwitch
-                                    checked: root.playSound
+                                    checked: settings.soundEffects
                                     onCheckedChanged: {
-                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value, soundpackComboBox.currentIndex)
-                                        root.playSound = checked
+                                        settings.soundEffects = checked
                                     }
                                 }
                             }
@@ -1146,10 +1130,9 @@ ApplicationWindow {
                                     id: soundVolumeSlider
                                     from: 0
                                     to: 1
-                                    value: root.soundVolume
+                                    value: settings.volume
                                     onValueChanged: {
-                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value, soundpackComboBox.currentIndex)
-                                        root.soundVolume = value
+                                        settings.volume = value
                                     }
                                 }
                             }
@@ -1163,10 +1146,9 @@ ApplicationWindow {
                                 ComboBox {
                                     id: soundpackComboBox
                                     model: ["Pop", "Windows", "KDE"]
-                                    currentIndex: root.soundPackIndex
+                                    currentIndex: settings.soundPackIndex
                                     onActivated: {
-                                        mainWindow.saveSoundSettings(soundEffectSwitch.checked, soundVolumeSlider.value, soundpackComboBox.currentIndex)
-                                        root.soundPackIndex = currentIndex
+                                        settings.soundPackIndex = currentIndex
                                     }
                                 }
                             }
@@ -1304,9 +1286,9 @@ ApplicationWindow {
                                 ComboBox {
                                     id: languageComboBox
                                     model: [qsTr("System"),
-                                        "English",        // English (index 1)
-                                        "Français",       // French (index 2)
-                                        "Deutsch",        // German (index 3)
+                                        "English",        // English
+                                        "Français",       // French
+                                        "Deutsch",        // German
                                         "Español",        // Spanish
                                         "Italiano",       // Italian
                                         "日本語",         // Japanese
@@ -1317,15 +1299,17 @@ ApplicationWindow {
                                     ]
                                     property int previousLanguageIndex: currentIndex
                                     Layout.rightMargin: 5
-                                    currentIndex: languageIndex
+                                    currentIndex: settings.languageIndex
                                     Layout.preferredWidth: {
                                         if (isUniversalTheme) return languageComboBox.implicitWidth + 5
                                         return languageComboBox.implicitWidth
                                     }
 
                                     onActivated: {
-                                        mainWindow.saveLanguageSettings(currentIndex)
+                                        previousLanguageIndex = currentIndex
+                                        settings.languageIndex = currentIndex
                                         mainWindow.setLanguage(currentIndex)
+                                        currentIndex = previousLanguageIndex
                                     }
                                 }
                             }
@@ -1365,7 +1349,7 @@ ApplicationWindow {
                 clip: true
 
                 ScrollBar.vertical.policy: saveFilesList.model.count > 5 ?
-                                          ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                                               ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
                 ListView {
                     id: saveFilesList
@@ -1414,16 +1398,16 @@ ApplicationWindow {
                 if (saves.length === 0) {
                     // Add a disabled "No saves" entry
                     saveFilesList.model.append({
-                        name: qsTr("No saved games found"),
-                        enabled: false
-                    })
+                                                   name: qsTr("No saved games found"),
+                                                   enabled: false
+                                               })
                 } else {
                     // Add each save file to the model
                     saves.forEach(function(save) {
                         saveFilesList.model.append({
-                            name: save,
-                            enabled: true
-                        })
+                                                       name: save,
+                                                       enabled: true
+                                                   })
                     })
                 }
             }
@@ -1433,73 +1417,72 @@ ApplicationWindow {
     SoundEffect {
         id: looseEffect
         source: {
-            switch (root.soundPackIndex) {
-                case 0:
-                    return "qrc:/sounds/pop/pop_bomb.wav"
-                case 1:
-                    return "qrc:/sounds/w11/w11_bomb.wav"
-                case 2:
-                    return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
-                default:
-                    return "qrc:/sounds/pop/pop_bomb.wav"
+            switch (settings.soundPackIndex) {
+            case 0:
+                return "qrc:/sounds/pop/pop_bomb.wav"
+            case 1:
+                return "qrc:/sounds/w11/w11_bomb.wav"
+            case 2:
+                return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
+            default:
+                return "qrc:/sounds/pop/pop_bomb.wav"
             }
         }
-        volume: root.soundVolume
+        volume: settings.volume
     }
 
     SoundEffect {
         id: clickEffect
         source: {
-            switch (root.soundPackIndex) {
-                case 0:
-                    return "qrc:/sounds/pop/pop_click.wav"
-                case 1:
-                    return "qrc:/sounds/w11/w11_click.wav"
-                case 2:
-                    return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-                default:
-                    return "qrc:/sounds/pop/pop_click.wav"
+            switch (settings.soundPackIndex) {
+            case 0:
+                return "qrc:/sounds/pop/pop_click.wav"
+            case 1:
+                return "qrc:/sounds/w11/w11_click.wav"
+            case 2:
+                return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+            default:
+                return "qrc:/sounds/pop/pop_click.wav"
             }
         }
-        volume: root.soundVolume
+        volume: settings.volume
     }
 
     SoundEffect {
         id: winEffect
         source: {
-            switch (root.soundPackIndex) {
-                case 0:
-                    return "qrc:/sounds/pop/pop_win.wav"
-                case 1:
-                    return "qrc:/sounds/w11/w11_win.wav"
-                case 2:
-                    return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
-                default:
-                    return "qrc:/sounds/pop/pop_win.wav"
+            switch (settings.soundPackIndex) {
+            case 0:
+                return "qrc:/sounds/pop/pop_win.wav"
+            case 1:
+                return "qrc:/sounds/w11/w11_win.wav"
+            case 2:
+                return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
+            default:
+                return "qrc:/sounds/pop/pop_win.wav"
             }
         }
-        volume: root.soundVolume
+        volume: settings.volume
     }
 
     function playLoose() {
-        if (!root.playSound) return
+        if (!settings.soundEffects) return
         looseEffect.play()
-        console.log(root.soundVolume)
     }
 
     function playClick() {
-        if (!root.playSound) return
+        if (!settings.soundEffects) return
         if (gameOver) return
         clickEffect.play()
     }
 
     function playWin() {
-        if (!root.playSound) return
+        if (!settings.soundEffects) return
         winEffect.play()
     }
 
     function revealConnectedCells(index) {
-        if (!root.revealConnected || !gameStarted || gameOver) return;
+        if (!settings.autoreveal || !gameStarted || gameOver) return;
 
         let cell = grid.itemAtIndex(index);
         if (!cell.revealed || numbers[index] <= 0) return;
@@ -1688,7 +1671,7 @@ ApplicationWindow {
                 cell.questioned = false
                 flaggedCount++
             } else if (cell.flagged) {
-                if (enableQuestionMarks) {
+                if (settings.enableQuestionMarks) {
                     // Flag -> Question (only if question marks are enabled)
                     cell.flagged = false
                     cell.questioned = true
@@ -1706,6 +1689,14 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        // Set initial grid size based on difficulty
+        const difficultySet = root.difficultySettings[settings.difficulty]
+        if (difficultySet) {
+            root.gridSizeX = difficultySet.x
+            root.gridSizeY = difficultySet.y
+            root.mineCount = difficultySet.mines
+        }
+
         // Check for internal save state
         let internalSaveData = mainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
@@ -1740,14 +1731,9 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignLeft
                 Layout.preferredWidth: 35
                 Layout.preferredHeight: 35
+                icon.source: "qrc:/icons/menu.png"
                 onClicked: {
                     menu.visible ? menu.close() : menu.open()
-                }
-                Image {
-                    anchors.centerIn: parent
-                    source: root.darkMode ? "qrc:/icons/menu_light.png" : "qrc:/icons/menu_dark.png"
-                    height: 24
-                    width: 24
                 }
 
                 Menu {
@@ -1943,21 +1929,14 @@ ApplicationWindow {
             Layout.rightMargin: 2
             spacing: 12
             Layout.preferredWidth: parent.width / 3
-
             Item {
                 Layout.fillWidth: true
             }
-
-            Image {
+            Label {
                 Layout.alignment: Qt.AlignRight
-
-                source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
-                Layout.preferredWidth: 16
-                Layout.preferredHeight: 16
-            }
-
-            Text {
-                Layout.alignment: Qt.AlignRight
+                icon.source: "qrc:/icons/bomb.png"
+                icon.width: 16
+                icon.height: 16
                 text: ": " + (root.mineCount - root.flaggedCount)
                 color: root.darkMode ? "white" : "black"
                 font.pixelSize: 18
@@ -2104,7 +2083,7 @@ ApplicationWindow {
                             interval: diagonalSum * 20
                             repeat: false
                             onTriggered: {
-                                if (enableAnimations) {
+                                if (settings.animations) {
                                     fadeAnimation.start()
                                 }
                             }
@@ -2112,7 +2091,7 @@ ApplicationWindow {
 
                         Component.onCompleted: {
                             // Only play initial animation once and only for the first creation
-                            if (enableAnimations && !grid.initialAnimationPlayed) {
+                            if (settings.animations && !grid.initialAnimationPlayed) {
                                 opacity = 0
                                 fadeTimer.start()
                                 // Mark initial animation as played after the last cell is created
@@ -2135,9 +2114,9 @@ ApplicationWindow {
                             visible: {
                                 if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
                                     return true
-                                if (cellItem.animatingReveal && cellFrame)
+                                if (cellItem.animatingReveal && settings.cellFrame)
                                     return true
-                                return cellButton.flat && cellFrame
+                                return cellButton.flat && settings.cellFrame
                             }
                             color: {
                                 if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
@@ -2156,7 +2135,7 @@ ApplicationWindow {
                                 target: cellItem
                                 function onRevealedChanged() {
                                     if (cellItem.revealed) {
-                                        if (enableAnimations) {
+                                        if (settings.animations) {
                                             shouldBeFlat = true
                                             revealFadeAnimation.start()
                                         } else {
@@ -2189,7 +2168,7 @@ ApplicationWindow {
                             Image {
                                 anchors.centerIn: parent
                                 source: {
-                                    if(highContrastFlag)
+                                    if(settings.contrastFlag)
                                         return darkMode ? "qrc:/icons/flag.png" : "qrc:/icons/flag_dark.png"
                                     return flagIcon
                                 }
@@ -2206,7 +2185,7 @@ ApplicationWindow {
                                 opacity: 0
                                 visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
                                 source: mines.includes(index) ?
-                                    "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+                                            "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
                             }
 
                             MouseArea {
@@ -2216,7 +2195,7 @@ ApplicationWindow {
                                                if (cellItem.revealed) {
                                                    revealConnectedCells(index);
                                                } else {
-                                                   if (root.invertLRClick) {
+                                                   if (settings.invertLRClick) {
                                                        if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
                                                            reveal(index);
                                                            playClick();
@@ -2265,7 +2244,7 @@ ApplicationWindow {
                         }
 
                         function startFadeIn() {
-                            if (!enableAnimations) {
+                            if (!settings.animations) {
                                 opacity = 1
                                 return
                             }

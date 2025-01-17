@@ -13,19 +13,9 @@ class MainWindow : public QObject
 public:
     explicit MainWindow(QObject *parent = nullptr);
 
-    Q_INVOKABLE void saveDifficulty(int difficulty);
-    Q_INVOKABLE void saveSoundSettings(bool soundEffects, float volume, int soundPackIndex);
-    Q_INVOKABLE void saveGameplaySettings(bool invertClick, bool revealConnected, bool questionMarks);
-    Q_INVOKABLE void saveLoadOnStartSettings(bool loadLastGame);
-    Q_INVOKABLE void saveVisualSettings(bool animations, bool cellFrame, bool contrastFlag);
-    Q_INVOKABLE void saveThemeSettings(int index);
-    Q_INVOKABLE void saveLanguageSettings(int index);
     Q_INVOKABLE void setLanguage(int index);
-    Q_INVOKABLE void saveColorSchemeSettings(int index);
     Q_INVOKABLE void setColorScheme(int index);
-    Q_INVOKABLE void saveCellSizeSettings(int index);
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
-
     Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename) const;
     Q_INVOKABLE QString loadGameState(const QString &filename) const;
     Q_INVOKABLE QStringList getSaveFiles() const;

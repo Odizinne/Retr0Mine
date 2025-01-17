@@ -42,6 +42,8 @@ void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
 void MainWindow::setupAndLoadQML() {
     int styleIndex = settings.value("themeIndex", 0).toInt();
     int colorSchemeIndex = settings.value("colorScheme", 0).toInt();
+    int languageIndex = settings.value("languageIndex", 0).toInt();
+    int cellSize = settings.value("cellSize", 1).toInt();
 
     if (styleIndex == 1) {
         setW10Theme();
@@ -54,49 +56,8 @@ void MainWindow::setupAndLoadQML() {
         else if (isWindows11) setW11Theme();
         else setFusionTheme();
     }
-
     setColorScheme(colorSchemeIndex);
 
-    rootContext->setContextProperty("themeIndex", styleIndex);
-    rootContext->setContextProperty("mainWindow", this);
-
-    int difficulty = settings.value("difficulty", 0).toInt();
-    rootContext->setContextProperty("gameDifficulty", difficulty);
-
-    bool invertLRClick = settings.value("invertLRClick", false).toBool();
-    rootContext->setContextProperty("invertClick", invertLRClick);
-
-    bool autoreveal = settings.value("autoreveal", false).toBool();
-    rootContext->setContextProperty("revealConnectedCell", autoreveal);
-
-    bool enableQuestionMarks = settings.value("enableQuestionMarks", true).toBool();
-    rootContext->setContextProperty("questionMarks", enableQuestionMarks);
-
-    bool loadLastGame = settings.value("loadLastGame", false).toBool();
-    rootContext->setContextProperty("loadLast", loadLastGame);
-
-    bool soundEffects = settings.value("soundEffects", true).toBool();
-    rootContext->setContextProperty("soundEffects", soundEffects);
-
-    float volume = settings.value("volume", 1).toFloat();
-    rootContext->setContextProperty("volume", volume);
-
-    int soundPack = settings.value("soundPackIndex", 0).toInt();
-    rootContext->setContextProperty("soundPack", soundPack);
-
-    bool animations = settings.value("animations", true).toBool();
-    rootContext->setContextProperty("animations", animations);
-
-    bool contrastFlag = settings.value("contrastFlag", false).toBool();
-    rootContext->setContextProperty("contrastFlag", contrastFlag);
-
-    bool showCellFrame = settings.value("cellFrame", true).toBool();
-    rootContext->setContextProperty("showCellFrame", showCellFrame);
-
-    int languageIndex = settings.value("languageIndex", 0).toInt();
-    rootContext->setContextProperty("languageIndex", languageIndex);
-
-    int cellSize = settings.value("cellSize", 1).toInt();
     if (cellSize == 0) {
         cellSize = 25;
     } else if (cellSize ==1) {
@@ -106,57 +67,13 @@ void MainWindow::setupAndLoadQML() {
     } else {
         cellSize = 55;
     }
+    setLanguage(languageIndex);
 
     rootContext->setContextProperty("loadedCellSize", cellSize);
-
-    setLanguage(languageIndex);
+    rootContext->setContextProperty("mainWindow", this);
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
     engine->load(QUrl("qrc:/qml/Main.qml"));
-}
-
-void MainWindow::saveDifficulty(int difficulty) {
-    settings.setValue("difficulty", difficulty);
-}
-
-void MainWindow::saveSoundSettings(bool soundEffects, float volume, int soundPackIndex) {
-    settings.setValue("soundEffects", soundEffects);
-    settings.setValue("volume", volume);
-    settings.setValue("soundPackIndex", soundPackIndex);
-}
-
-void MainWindow::saveGameplaySettings(bool invertLRClick, bool autoreveal, bool enableQuestionMarks) {
-    settings.setValue("invertLRClick", invertLRClick);
-    settings.setValue("autoreveal", autoreveal);
-    settings.setValue("enableQuestionMarks", enableQuestionMarks);
-}
-
-void MainWindow::saveLoadOnStartSettings(bool loadLastGame) {
-    qDebug() << loadLastGame;
-    settings.setValue("loadLastGame", loadLastGame);
-}
-
-void MainWindow::saveVisualSettings(bool animations, bool cellFrame, bool contrastFlag) {
-    settings.setValue("animations", animations);
-    settings.setValue("cellFrame", cellFrame);
-    settings.setValue("contrastFlag", contrastFlag);
-}
-
-void MainWindow::saveCellSizeSettings(int index)
-{
-    settings.setValue("cellSize", index);
-}
-
-void MainWindow::saveThemeSettings(int index) {
-    settings.setValue("themeIndex", index);
-}
-
-void MainWindow::saveColorSchemeSettings(int index) {
-    settings.setValue("colorScheme", index);
-}
-
-void MainWindow::saveLanguageSettings(int index) {
-    settings.setValue("languageIndex", index);
 }
 
 void MainWindow::setLanguage(int index) {
