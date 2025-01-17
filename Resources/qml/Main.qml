@@ -1932,11 +1932,14 @@ ApplicationWindow {
             Item {
                 Layout.fillWidth: true
             }
-            Label {
+            Image {
                 Layout.alignment: Qt.AlignRight
-                icon.source: "qrc:/icons/bomb.png"
-                icon.width: 16
-                icon.height: 16
+                source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
+                Layout.preferredWidth: 16
+                Layout.preferredHeight: 16
+            }
+            Text {
+                Layout.alignment: Qt.AlignRight
                 text: ": " + (root.mineCount - root.flaggedCount)
                 color: root.darkMode ? "white" : "black"
                 font.pixelSize: 18
