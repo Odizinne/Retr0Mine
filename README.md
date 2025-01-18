@@ -23,6 +23,10 @@ Remove `.download` extension after downloading.
 You can then click the installer on your desktop.
 After installation you can right click Retr0Mine in your application menu and select `Add to steam` if you want to be able to run it from gamemode.
 
+**Note:**
+ColorScheme cannot be forced on linux for now.  
+SteamDeck users in gamemode wont be able to enable dark mode.
+
 | OS                     | Platform  | Download                                                                                                       |
 |------------------------|-----------|----------------------------------------------------------------------------------------------------------------|
 | Windows Installer      | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
