@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Retr0Mine Steam Deck Installer
+Comment=Install, Update or Remove Retr0Mine
+Exec=bash -c 'wget -O- https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/installer.sh | bash'
+Icon=system-software-install
+Type=Application
+Categories=Utility;
+Terminal=false
