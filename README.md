@@ -18,12 +18,18 @@ If you like my work, consider supporting me!
 
 # Download
 
-| OS |  Platform | Download |
-|----------|----------|----------|
-| Windows Installer    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)     |
-| Windows Portable    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)     |
-| Linux Appimage   | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine-x86_64.AppImage)     |
-| Linux Bin    | x64     | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_linux_64.zip)     |
+**Note:** Steam deck users with firefox should right click on `Download` -> `save file as` and save to desktop.  
+Remove `.download` extension after downloading.  
+You can then click the installer on your desktop.
+After installation you can right click Retr0Mine in your application menu and select `Add to steam` if you want to be able to run it from gamemode.
+
+| OS                     | Platform  | Download                                                                                                       |
+|------------------------|-----------|----------------------------------------------------------------------------------------------------------------|
+| Windows Installer      | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
+| Windows Portable       | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)               |
+| Linux Appimage         | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine-x86_64.AppImage)           |
+| Linux Bin              | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_linux_64.zip)              |
+| SteamDeck installer    | x64       | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop)     |
 
 Linux binaries require Qt6.8 to use FluentWinUI3 theme
 

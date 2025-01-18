@@ -233,7 +233,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_Installer
-          path: installer  # Add explicit path
+          path: installer 
 
       - name: Download Linux ZIP
         uses: actions/download-artifact@v4
@@ -244,6 +244,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_AppImage
+
+      - name: Download Steam Deck Installer Desktop File
+        run: |
+          wget https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop
 
       - name: Bump version and create release
         id: bump_release
@@ -320,5 +324,15 @@ jobs:
           asset_path: Retr0Mine-x86_64.AppImage
           asset_name: Retr0Mine-x86_64.AppImage
           asset_content_type: application/x-executable
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Steam Deck Installer Desktop File
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Retr0Mine_SteamDeckInstaller.desktop
+          asset_name: Retr0Mine_SteamDeckInstaller.desktop
+          asset_content_type: application/x-desktop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
