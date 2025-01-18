@@ -15,13 +15,11 @@
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
-    , settings("Odizinne", "Retr0Mine")
     , engine(new QQmlApplicationEngine(this))
+    , settings("Odizinne", "Retr0Mine")
     , rootContext(engine->rootContext())
     , translator(new QTranslator(this))
-    , isWindows10(Utils::isWindows10())
-    , isWindows11(Utils::isWindows11())
-    , isLinux(Utils::isLinux())
+    , currentOS(Utils::getOperatingSystem())
 {
     setupAndLoadQML();
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
@@ -52,17 +50,17 @@ void MainWindow::setupAndLoadQML() {
     } else if (styleIndex == 3) {
         setFusionTheme();
     } else {
-        if (isWindows10) setW10Theme();
-        else if (isWindows11) setW11Theme();
+        if (currentOS == "windows10") setW10Theme();
+        else if (currentOS == "windows11") setW11Theme();
         else setFusionTheme();
     }
     setColorScheme(colorSchemeIndex);
 
     if (cellSize == 0) {
         cellSize = 25;
-    } else if (cellSize ==1) {
+    } else if (cellSize == 1) {
         cellSize = 35;
-    } else if (cellSize ==2) {
+    } else if (cellSize == 2) {
         cellSize = 45;
     } else {
         cellSize = 55;

@@ -13,6 +13,8 @@ class MainWindow : public QObject
 public:
     explicit MainWindow(QObject *parent = nullptr);
 
+    QQmlApplicationEngine* engine;
+
     Q_INVOKABLE void setLanguage(int index);
     Q_INVOKABLE void setColorScheme(int index);
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
@@ -27,12 +29,9 @@ private slots:
 
 private:
     QSettings settings;
-    QQmlApplicationEngine* engine;
     QQmlContext* rootContext;
     QTranslator* translator;
-    bool isWindows10;
-    bool isWindows11;
-    bool isLinux;
+    QString currentOS;
 
     void setupAndLoadQML();
     void setW10Theme();

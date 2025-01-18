@@ -3,12 +3,12 @@
 #include <QSettings>
 #include <QProcess>
 #include <QGuiApplication>
+#include <QPalette>
+#include <QStyleHints>
+#include <QOperatingSystemVersion>
 
 #ifdef _WIN32
 #include <Windows.h>
-#else
-#include <QGuiApplication>
-#include <QPalette>
 #endif
 
 void Utils::restartApp()
@@ -19,28 +19,19 @@ void Utils::restartApp()
 
 QString Utils::getTheme()
 {
-#ifdef _WIN32
-    // Determine the theme based on registry value
-    QSettings settings(
-        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-        QSettings::NativeFormat);
-    int value = settings.value("AppsUseLightTheme", 1).toInt();
+    Qt::ColorScheme colorScheme = QGuiApplication::styleHints()->colorScheme();
 
-    return (value == 0) ? "light" : "dark";
-#else
-    QPalette palette = QGuiApplication::palette();
-    QColor backgroundColor = palette.color(QPalette::Window);
-
-    bool isDark = backgroundColor.lightness() < 128;
-    QString theme;
-    if (isDark) {
-        theme = "light";
-    } else {
-        theme = "dark";
+    switch (colorScheme) {
+    case Qt::ColorScheme::Dark:
+        return "light";
+    case Qt::ColorScheme::Light:
+        return "dark";
+    default:
+        // Fallback in case Qt::ColorScheme::Unknown
+        QPalette palette = QGuiApplication::palette();
+        QColor backgroundColor = palette.color(QPalette::Window);
+        return (backgroundColor.lightness() < 128) ? "light" : "dark";
     }
-
-    return theme;
-#endif
 }
 
 #ifdef _WIN32
@@ -117,52 +108,21 @@ QIcon Utils::recolorIcon(QIcon icon, QColor color) {
     return QIcon(QPixmap::fromImage(img));
 }
 
-#ifdef _WIN32
-int getBuildNumber()
+QString Utils::getOperatingSystem()
 {
-    QSettings registry("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", QSettings::NativeFormat);
-    QVariant buildVariant = registry.value("CurrentBuild");
+    const QOperatingSystemVersion current = QOperatingSystemVersion::current();
 
-    if (!buildVariant.isValid()) {
-        buildVariant = registry.value("CurrentBuildNumber");
-    }
+    if (current.type() == QOperatingSystemVersion::Windows) {
+        const QOperatingSystemVersionBase& win11 = QOperatingSystemVersion::Windows11;
+        const QOperatingSystemVersion& win10 = QOperatingSystemVersion::Windows10;
 
-    if (buildVariant.isValid() && buildVariant.canConvert<QString>()) {
-        bool ok;
-        int buildNumber = buildVariant.toString().toInt(&ok);
-        if (ok) {
-            return buildNumber;
+        if (current >= win11) {
+            return "windows11";
+        }
+        if (current >= win10 && current < win11) {
+            return "windows10";
         }
     }
 
-    qDebug() << "Failed to retrieve build number from the registry.";
-    return -1;
-}
-#endif
-
-bool Utils::isWindows10()
-{
-#ifdef _WIN32
-    int buildNumber = getBuildNumber();
-    return (buildNumber >= 10240 && buildNumber < 22000);
-#else
-    return false;
-#endif
-}
-
-bool Utils::isWindows11() {
-#ifdef _WIN32
-    int buildNumber = getBuildNumber();
-    return (buildNumber >= 22000);
-#else
-    return false;
-#endif
-}
-
-bool Utils::isLinux() {
-#ifdef __linux__
-    return true;
-#else
-    return false;
-#endif
+    return "unknown";
 }

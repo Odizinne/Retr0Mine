@@ -14,6 +14,7 @@ bool isWindows10();
 bool isWindows11();
 bool isLinux();
 void restartApp();
+QString getOperatingSystem();
 };
 
 #endif // UTILS_H
