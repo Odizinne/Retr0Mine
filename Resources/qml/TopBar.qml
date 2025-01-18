@@ -23,6 +23,7 @@ RowLayout {
             Layout.preferredWidth: 35
             Layout.preferredHeight: 35
             icon.source: "qrc:/icons/menu.png"
+            icon.color: root.isFusionTheme && root.darkMode ? "white" : "black"
             onClicked: {
                 menu.visible ? menu.close() : menu.open()
             }
