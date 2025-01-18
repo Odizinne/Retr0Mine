@@ -1,6 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/Main.qml</file>
+        <file>qml/SettingsPage.qml</file>
+        <file>qml/GameOverPopup.qml</file>
+        <file>qml/AboutPage.qml</file>
+        <file>qml/LoadWindow.qml</file>
+        <file>qml/SaveWindow.qml</file>
+        <file>qml/ErrorWindow.qml</file>
+        <file>qml/TopBar.qml</file>
         <file>sounds/pop/pop_bomb.wav</file>
         <file>sounds/pop/pop_click.wav</file>
         <file>sounds/pop/pop_win.wav</file>
