@@ -18,7 +18,7 @@ ApplicationWindow {
 
     onVisibleChanged: {
         if (Universal !== undefined) {
-            Universal.theme = Universal.System
+            Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
     }
@@ -106,6 +106,8 @@ ApplicationWindow {
     property bool isFluentWinUI3Theme: windows11
     property bool isUniversalTheme: windows10
     property bool darkMode: isDarkMode
+    property string operatingSystem: currentOS
+    property bool isGamescope: gamescope
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0

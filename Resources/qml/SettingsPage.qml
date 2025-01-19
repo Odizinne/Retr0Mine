@@ -603,7 +603,13 @@ ApplicationWindow {
 
                                 ComboBox {
                                     id: styleComboBox
-                                    model: [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
+                                    model: {
+                                        let themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
+                                        if (root.isGamescope) {
+                                            themes.push("Deck Dark")
+                                        }
+                                        return themes
+                                    }
                                     Layout.rightMargin: 5
                                     Layout.preferredWidth: {
                                         if (isUniversalTheme) return styleComboBox.implicitWidth + 5
@@ -631,6 +637,7 @@ ApplicationWindow {
                                 }
                                 ComboBox {
                                     id: themeComboBox
+                                    enabled: root.currentOS !== "linux"
                                     model: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
                                     Layout.rightMargin: 5
                                     Layout.preferredWidth: {

@@ -49,6 +49,8 @@ void MainWindow::setupAndLoadQML() {
         setW11Theme();
     } else if (styleIndex == 3) {
         setFusionTheme();
+    } else if (styleIndex == 4) {
+        setSteamDeckDarkTheme();
     } else {
         if (currentOS == "windows10") setW10Theme();
         else if (currentOS == "windows11") setW11Theme();
@@ -67,6 +69,8 @@ void MainWindow::setupAndLoadQML() {
     }
     setLanguage(languageIndex);
 
+    rootContext->setContextProperty("gamescope", Utils::isGamescope());
+    rootContext->setContextProperty("currentOS", currentOS);
     rootContext->setContextProperty("loadedCellSize", cellSize);
     rootContext->setContextProperty("mainWindow", this);
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
@@ -241,6 +245,14 @@ void MainWindow::setFusionTheme() {
     rootContext->setContextProperty("fusion", QVariant(true));
 }
 
+void MainWindow::setSteamDeckDarkTheme() {
+    currentTheme = 4;
+    QQuickStyle::setStyle("Universal");
+    rootContext->setContextProperty("windows10", QVariant(true));
+    rootContext->setContextProperty("windows11", QVariant(false));
+    rootContext->setContextProperty("fusion", QVariant(false));
+}
+
 void MainWindow::restartRetr0Mine() const {
     Utils::restartApp();
 }
@@ -257,8 +269,11 @@ void MainWindow::setColorScheme(int index) {
             accentColor = Utils::getAccentColor("normal");
         } else if (currentTheme == 2) {
             accentColor = Utils::getAccentColor("dark2");
+        } else if (currentTheme == 3) {
+            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         } else {
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
+            darkMode = true;
         }
     } else if (index == 2) {
         //dark
@@ -268,8 +283,11 @@ void MainWindow::setColorScheme(int index) {
             accentColor = Utils::getAccentColor("normal");
         } else if (currentTheme == 2) {
             accentColor = Utils::getAccentColor("light2");
+        } else if (currentTheme == 3) {
+            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         } else {
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
+            darkMode = true;
         }
     } else {
         // 0 = System
@@ -280,8 +298,11 @@ void MainWindow::setColorScheme(int index) {
                 accentColor = Utils::getAccentColor("normal");
             } else if (currentTheme == 2) {
                 accentColor = Utils::getAccentColor("light2");
+            } else if (currentTheme == 3) {
+                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             } else {
                 accentColor = QGuiApplication::palette().color(QPalette::Highlight);
+            darkMode = true;
             }
         } else {
             darkMode = false;
@@ -289,8 +310,11 @@ void MainWindow::setColorScheme(int index) {
                 accentColor = Utils::getAccentColor("normal");
             } else if (currentTheme == 2) {
                 accentColor = Utils::getAccentColor("dark2");
+            } else if (currentTheme == 3) {
+                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             } else {
                 accentColor = QGuiApplication::palette().color(QPalette::Highlight);
+            darkMode = true;
             }
         }
     }

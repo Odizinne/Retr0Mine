@@ -37,6 +37,7 @@ private:
     void setW10Theme();
     void setW11Theme();
     void setFusionTheme();
+    void setSteamDeckDarkTheme();
     bool loadLanguage(QString languageCode);
     int currentTheme;
 };
