@@ -26,7 +26,7 @@ ApplicationWindow {
     Settings {
         id: settings
 
-        property int themeIndex: 0
+        property int themeIndex: root.isGamescope ? 4 : 0
         property int colorScheme: 0
         property int languageIndex: 0
         property int difficulty: 0
