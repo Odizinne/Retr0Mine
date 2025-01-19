@@ -637,7 +637,7 @@ ApplicationWindow {
                                 }
                                 ComboBox {
                                     id: themeComboBox
-                                    enabled: root.currentOS !== "linux"
+                                    enabled: root.operatingSystem !== "unknown"
                                     model: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
                                     Layout.rightMargin: 5
                                     Layout.preferredWidth: {
