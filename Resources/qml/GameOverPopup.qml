@@ -12,6 +12,21 @@ Popup {
     property string gameOverLabelText: "Game Over :("
     property string gameOverLabelColor: "#d12844"
 
+    Shortcut {
+        sequences: ["Return", "Q"]
+        enabled: gameOverWindow.visible
+        onActivated: {
+            gameOverWindow.close()
+            root.initGame()
+        }
+    }
+
+    Shortcut {
+        sequence: "Space"
+        enabled: gameOverWindow.visible
+        onActivated: gameOverWindow.close()
+    }
+
     enter: Transition {
         NumberAnimation {
             property: "opacity"

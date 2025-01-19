@@ -16,6 +16,19 @@ ApplicationWindow {
     minimumHeight: getInitialHeight()
     title: "Retr0Mine"
 
+    MouseArea {
+        anchors.fill: parent
+        enabled: root.selectedCell !== -1
+        onPressed: {
+            if (mouse.button === Qt.LeftButton || mouse.button === Qt.RightButton) {
+                root.selectedCell = -1
+            }
+        }
+        z: 999
+        propagateComposedEvents: true
+    }
+
+
     onVisibleChanged: {
         if (Universal !== undefined) {
             Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
@@ -23,9 +36,78 @@ ApplicationWindow {
         }
     }
 
+    Shortcut {
+       sequences: [StandardKey.MoveToNextChar, "D"]
+       onActivated: root.moveSelection("right")
+    }
+
+    Shortcut {
+       sequences: [StandardKey.MoveToPreviousChar, "A"]
+       onActivated: root.moveSelection("left")
+    }
+
+    Shortcut {
+       sequences: [StandardKey.MoveToNextLine, "S"]
+       onActivated: root.moveSelection("down")
+    }
+
+    Shortcut {
+       sequences: [StandardKey.MoveToPreviousLine, "W"]
+       onActivated: root.moveSelection("up")
+    }
+
+    Shortcut {
+        sequences: ["Return", "Q"]
+        onActivated: {
+            if (root.hasSelection) {
+                if (grid.itemAtIndex(root.selectedCell).revealed) {
+                    revealConnectedCells(root.selectedCell)
+                } else {
+                    root.reveal(root.selectedCell)
+                    root.playClick()
+                }
+            }
+        }
+    }
+
+    Shortcut {
+       sequence: "Space"
+       onActivated: {
+           if (root.hasSelection) {
+               root.toggleFlag(root.selectedCell)
+           }
+       }
+    }
+
+    function moveSelection(direction) {
+        if (!hasSelection) {
+            selectedCell = 0
+            return
+        }
+
+        let row = Math.floor(selectedCell / gridSizeX)
+        let col = selectedCell % gridSizeX
+
+        switch (direction) {
+            case "right":
+                if (col < gridSizeX - 1) selectedCell++
+                break
+            case "left":
+                if (col > 0) selectedCell--
+                break
+            case "down":
+                if (row < gridSizeY - 1) selectedCell += gridSizeX
+                break
+            case "up":
+                if (row > 0) selectedCell -= gridSizeX
+                break
+        }
+        console.log("selectedCell:", selectedCell, "hasSelection:", hasSelection)
+
+    }
+
     Settings {
         id: settings
-
         property int themeIndex: root.isGamescope ? 4 : 0
         property int colorScheme: 0
         property int languageIndex: 0
@@ -65,7 +147,7 @@ ApplicationWindow {
     }
 
     Shortcut {
-        sequence: StandardKey.Print
+        sequence: "Ctrl+P"
         onActivated: !settingsWindow.visible ? settingsWindow.show() : settingsWindow.close()
     }
 
@@ -99,6 +181,8 @@ ApplicationWindow {
         { text: "Retr0", x: 50, y: 32, mines: 320 }
     ]
 
+    property int selectedCell: -1  // Track currently selected cell
+    property bool hasSelection: selectedCell !== -1
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
@@ -505,6 +589,7 @@ ApplicationWindow {
     }
 
     function initGame() {
+        selectedCell = -1
         mines = []
         numbers = []
         gameOver = false
@@ -725,6 +810,19 @@ ApplicationWindow {
                         readonly property int diagonalSum: row + col
 
                         opacity: 1
+
+                        Rectangle {
+                            id: selectionRect
+                            anchors.centerIn: parent
+                            height: root.cellSize
+                            width: root.cellSize
+                            color: "transparent"
+                            anchors.margins: -1
+                            border.width: 3
+                            border.color: index === root.selectedCell ? accentColor : "transparent"
+                            visible: opacity > 0
+                            opacity: index === root.selectedCell ? 1 : 0
+                        }
 
                         NumberAnimation {
                             id: hintRevealFadeIn
