@@ -12,14 +12,14 @@ ApplicationWindow {
     maximumWidth: 300
     maximumHeight: 130
     flags: Qt.Dialog
+
     Shortcut {
         sequence: "Esc"
+        enabled: saveWindow.visible
         onActivated: {
             saveWindow.close()
         }
     }
-
-    Keys.onEscapePressed: saveWindow.close()
 
     ColumnLayout {
         anchors.fill: parent

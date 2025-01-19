@@ -15,6 +15,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: "Esc"
+        enabled: loadWindow.visible
         onActivated: {
             loadWindow.close()
         }

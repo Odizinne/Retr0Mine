@@ -73,9 +73,13 @@ ApplicationWindow {
     Shortcut {
        sequence: "Space"
        onActivated: {
-           if (root.hasSelection) {
-               root.toggleFlag(root.selectedCell)
-           }
+           if (grid.itemAtIndex(root.selectedCell).revealed) {
+               revealConnectedCells(root.selectedCell)
+            }
+
+            if (root.hasSelection) {
+                root.toggleFlag(root.selectedCell)
+            }
        }
     }
 
