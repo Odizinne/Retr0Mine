@@ -25,8 +25,10 @@ MainWindow::MainWindow(QObject *parent)
     m_steamIntegration = new SteamIntegration(this);
     if (!m_steamIntegration->initialize()) {
         qWarning() << "Failed to initialize Steam";
+    } else {
+        rootContext->setContextProperty("steamIntegration", m_steamIntegration);
     }
-    rootContext->setContextProperty("steamIntegration", m_steamIntegration);
+
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
             this, &MainWindow::onColorSchemeChanged);
 }

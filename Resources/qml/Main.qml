@@ -698,25 +698,26 @@ ApplicationWindow {
             gameOver = true
             gameTimer.stop()
 
-            // No-hint achievements
-            if (currentHintCount === 0) {
-                if (settings.difficulty === 0) {
-                    steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
-                } else if (settings.difficulty === 1) {
-                    steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
-                } else if (settings.difficulty === 2) {
-                    steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+            // Check if Steam integration is available before using it
+            if (typeof steamIntegration !== "undefined") {
+                // No-hint achievements
+                if (currentHintCount === 0) {
+                    if (settings.difficulty === 0) {
+                        steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
+                    } else if (settings.difficulty === 1) {
+                        steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
+                    } else if (settings.difficulty === 2) {
+                        steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+                    }
                 }
-            }
-
-            // Speed Demon achievement
-            if (settings.difficulty === 0 && elapsedTime < 15) {
-                steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
-            }
-
-            // "Was it really needed?" achievement
-            if (settings.difficulty === 0 && currentHintCount >= 20) {
-                steamIntegration.unlockAchievement("ACH_HINT_MASTER")
+                // Speed Demon achievement
+                if (settings.difficulty === 0 && elapsedTime < 15) {
+                    steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
+                }
+                // "Was it really needed?" achievement
+                if (settings.difficulty === 0 && currentHintCount >= 20) {
+                    steamIntegration.unlockAchievement("ACH_HINT_MASTER")
+                }
             }
 
             gameOverPopup.gameOverLabelText = qsTr("Victory :)")
