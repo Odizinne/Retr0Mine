@@ -4,20 +4,26 @@ CONFIG += c++17 silent lrelease embed_translations
 
 QM_FILES_RESOURCE_PREFIX = /translations
 
+STEAM_PATH = $$PWD/Dependencies/steam
+
 INCLUDEPATH +=                                  \
     MainWindow                                  \
     Utils                                       \
     MinesweeperLogic                            \
+    SteamIntegration                            \
+    Dependencies/steam                          \
 
 SOURCES +=                                      \
     MainWindow/MainWindow.cpp                   \
     MinesweeperLogic/MinesweeperLogic.cpp       \
+    SteamIntegration/SteamIntegration.cpp       \
     Utils/Utils.cpp                             \
     main.cpp                                    \
 
 HEADERS +=                                      \
     MainWindow/MainWindow.h                     \
     MinesweeperLogic/MinesweeperLogic.h         \
+    SteamIntegration/SteamIntegration.h         \
     Utils/Utils.h                               \
 
 TRANSLATIONS +=                                 \
@@ -34,6 +40,6 @@ TRANSLATIONS +=                                 \
 
 RESOURCES += Resources/resources.qrc
 
-win32:LIBS += -ladvapi32
+win32:LIBS += -ladvapi32 -L$$STEAM_PATH/lib/win64 -lsteam_api64
 
 RC_FILE = Resources/appicon.rc

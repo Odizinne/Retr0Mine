@@ -211,6 +211,7 @@ ApplicationWindow {
     property bool shouldUpdateSize: true
     property int cellSize: loadedCellSize
     property int cellSpacing: 2
+    property int currentHintCount: 0
 
     function getInitialWidth() {
         return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
@@ -282,7 +283,7 @@ ApplicationWindow {
     }
 
     function requestHint() {
-        if (!gameStarted || gameOver || flaggedCount === 0) {
+        if (!gameStarted || gameOver) {
             return;
         }
 
@@ -298,6 +299,7 @@ ApplicationWindow {
             let cell = grid.itemAtIndex(mineCell);
             cell.highlightHint();
         }
+        currentHintCount++;
     }
 
     function saveGame(filename) {
@@ -602,6 +604,7 @@ ApplicationWindow {
         firstClickIndex = -1
         gameStarted = false
         elapsedTime = 0
+        currentHintCount = 0
         gameTimer.stop()
         topBar.elapsedTimeLabelText = "00:00:00"
 
@@ -694,6 +697,28 @@ ApplicationWindow {
         if (revealedCount === gridSizeX * gridSizeY - mineCount && !gameOver) {
             gameOver = true
             gameTimer.stop()
+
+            // No-hint achievements
+            if (currentHintCount === 0) {
+                if (settings.difficulty === 0) {
+                    steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
+                } else if (settings.difficulty === 1) {
+                    steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
+                } else if (settings.difficulty === 2) {
+                    steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+                }
+            }
+
+            // Speed Demon achievement
+            if (settings.difficulty === 0 && elapsedTime < 15) {
+                steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
+            }
+
+            // "Was it really needed?" achievement
+            if (settings.difficulty === 0 && currentHintCount >= 20) {
+                steamIntegration.unlockAchievement("ACH_HINT_MASTER")
+            }
+
             gameOverPopup.gameOverLabelText = qsTr("Victory :)")
             gameOverPopup.gameOverLabelColor = "#28d13c"
             gameOverPopup.visible = true

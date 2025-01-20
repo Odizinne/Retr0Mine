@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QTranslator>
+#include "SteamIntegration.h"
 
 class MainWindow : public QObject
 {
@@ -32,6 +33,7 @@ private:
     QQmlContext* rootContext;
     QTranslator* translator;
     QString currentOS;
+    SteamIntegration* m_steamIntegration;
 
     void setupAndLoadQML();
     void setW10Theme();
