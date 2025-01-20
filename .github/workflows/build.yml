@@ -57,6 +57,11 @@ jobs:
           $jomPath = "${{ steps.jom-setup.outputs.jom_path }}"
           & "$jomPath\jom.exe"
           
+      - name: Copy Steam API DLL
+        shell: pwsh
+        run: |
+          Copy-Item "Dependencies\steam\lib\win64\steam_api64.dll" -Destination "build\release\"
+          
       - name: Remove source and object files
         shell: pwsh
         run: |
