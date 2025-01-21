@@ -678,9 +678,6 @@ ApplicationWindow {
                                 id: styleComboBox
                                 model: {
                                     let themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
-                                    if (root.isGamescope) {
-                                        themes.push("Deck Dark")
-                                    }
                                     return themes
                                 }
                                 Layout.rightMargin: 5

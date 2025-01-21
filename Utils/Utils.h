@@ -15,7 +15,6 @@ bool isWindows11();
 bool isLinux();
 void restartApp();
 QString getOperatingSystem();
-bool isGamescope();
 };
 
 #endif // UTILS_H
