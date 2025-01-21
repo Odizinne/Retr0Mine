@@ -42,7 +42,7 @@ RowLayout {
 
                 MenuItem {
                     text: qsTr("Hint")
-                    enabled: root.gameStarted && !root.gameOver && root.flaggedCount > 0
+                    enabled: root.gameStarted && !root.gameOver
                     onTriggered: root.requestHint()
                 }
 
