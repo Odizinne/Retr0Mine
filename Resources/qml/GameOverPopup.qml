@@ -13,7 +13,7 @@ Popup {
     property string gameOverLabelColor: "#d12844"
 
     Shortcut {
-        sequences: ["Return", "Q"]
+        sequence: "Return"
         enabled: gameOverWindow.visible
         onActivated: {
             gameOverWindow.close()
@@ -22,7 +22,7 @@ Popup {
     }
 
     Shortcut {
-        sequence: "Space"
+        sequence: "Esc"
         enabled: gameOverWindow.visible
         onActivated: gameOverWindow.close()
     }

@@ -21,6 +21,16 @@ ApplicationWindow {
         }
     }
 
+    Shortcut {
+        sequence: "Return"
+        enabled: saveWindow.visible
+        onActivated: {
+            if (saveButton.enabled) {
+                saveButton.click()
+            }
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 12
@@ -39,11 +49,6 @@ ApplicationWindow {
                 } else {
                     errorLabel.text = hasInvalidChars ? qsTr("Filename cannot contain:") + " \\ / : * ? \" < > |" : ""
                     saveButton.enabled = text.trim() !== "" && !hasInvalidChars
-                }
-            }
-            Keys.onReturnPressed: {
-                if (saveButton.enabled) {
-                    saveButton.clicked()
                 }
             }
         }
