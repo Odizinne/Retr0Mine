@@ -122,6 +122,7 @@ ApplicationWindow {
     property bool darkMode: isDarkMode
     property string operatingSystem: currentOS
     property bool isGamescope: gamescope
+    property int diffidx: 0
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
@@ -138,6 +139,7 @@ ApplicationWindow {
     property int cellSize: loadedCellSize
     property int cellSpacing: 2
     property int currentHintCount: 0
+    property bool gridFullyInitialized: false
 
     function getInitialWidth() {
         return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
@@ -276,6 +278,18 @@ ApplicationWindow {
             gridSizeX = data.gameState.gridSizeX
             gridSizeY = data.gameState.gridSizeY
             mineCount = data.gameState.mineCount
+
+            diffidx = root.difficultySettings.findIndex(diff =>
+                diff.x === gridSizeX &&
+                diff.y === gridSizeY &&
+                diff.mines === mineCount
+            )
+
+            // Fallback to default (Easy) if no matching difficulty found
+            if (diffidx === -1) {
+                diffidx = 0
+                console.warn("No matching difficulty found, defaulting to Easy")
+            }
 
             // Load game progress
             mines = data.gameState.mines
@@ -688,8 +702,18 @@ ApplicationWindow {
             root.gridSizeY = difficultySet.y
             root.mineCount = difficultySet.mines
         }
+    }
 
-        // Check for internal save state
+    Timer {
+        id: initialLoadTimer
+        interval: 1
+        repeat: false
+        onTriggered: root.checkInitialGameState()
+    }
+
+    function checkInitialGameState() {
+        if (!gridFullyInitialized) return
+
         let internalSaveData = mainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
             // Load the game state
@@ -748,6 +772,7 @@ ApplicationWindow {
                     model: root.gridSizeX * root.gridSizeY
                     interactive: false
                     property bool initialAnimationPlayed: false
+                    property int cellsCreated: 0
 
                     delegate: Item {
                         id: cellItem
@@ -766,6 +791,27 @@ ApplicationWindow {
                         readonly property int diagonalSum: row + col
 
                         opacity: 1
+
+                        Component.onCompleted: {
+                            grid.cellsCreated++
+
+                            // Check if this is the last cell
+                            if (grid.cellsCreated === root.gridSizeX * root.gridSizeY) {
+                                root.gridFullyInitialized = true
+                                initialLoadTimer.start()
+
+                                //root.checkInitialGameState()
+                            }
+
+                            if (settings.animations && !grid.initialAnimationPlayed) {
+                                opacity = 0
+                                fadeTimer.start()
+                                // Mark initial animation as played after the last cell is created
+                                if (index === (root.gridSizeX * root.gridSizeY - 1)) {
+                                    grid.initialAnimationPlayed = true
+                                }
+                            }
+                        }
 
                         Rectangle {
                             id: selectionRect
@@ -866,17 +912,17 @@ ApplicationWindow {
                             }
                         }
 
-                        Component.onCompleted: {
-                            // Only play initial animation once and only for the first creation
-                            if (settings.animations && !grid.initialAnimationPlayed) {
-                                opacity = 0
-                                fadeTimer.start()
-                                // Mark initial animation as played after the last cell is created
-                                if (index === (root.gridSizeX * root.gridSizeY - 1)) {
-                                    grid.initialAnimationPlayed = true
-                                }
-                            }
-                        }
+                        //Component.onCompleted: {
+                        //    // Only play initial animation once and only for the first creation
+                        //    if (settings.animations && !grid.initialAnimationPlayed) {
+                        //        opacity = 0
+                        //        fadeTimer.start()
+                        //        // Mark initial animation as played after the last cell is created
+                        //        if (index === (root.gridSizeX * root.gridSizeY - 1)) {
+                        //            grid.initialAnimationPlayed = true
+                        //        }
+                        //    }
+                        //}
 
                         Rectangle {
                             anchors.fill: cellButton

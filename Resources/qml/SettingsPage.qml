@@ -355,7 +355,7 @@ ApplicationWindow {
                                     Layout.preferredWidth: height
                                     Layout.alignment: Qt.AlignRight
                                     ButtonGroup.group: difficultyGroup
-                                    checked: settings.difficulty === index
+                                    checked: root.diffidx === index
 
                                     onUserInteractionCheckedChanged: {
                                         if (userInteractionChecked) {
