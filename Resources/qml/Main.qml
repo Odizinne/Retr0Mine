@@ -1017,26 +1017,30 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: (mouse) => {
-                                               if (cellItem.revealed) {
-                                                   revealConnectedCells(index);
-                                               } else {
-                                                   if (settings.invertLRClick) {
-                                                       if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                           reveal(index);
-                                                           playClick();
-                                                       } else if (mouse.button === Qt.LeftButton) {
-                                                           toggleFlag(index);
-                                                       }
-                                                   } else {
-                                                       if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                           reveal(index);
-                                                           playClick();
-                                                       } else if (mouse.button === Qt.RightButton) {
-                                                           toggleFlag(index);
-                                                       }
-                                                   }
-                                               }
-                                           }
+                                    if (!gameStarted) {
+                                        // Before game starts, any click reveals the cell
+                                        reveal(index);
+                                        playClick();
+                                    } else if (cellItem.revealed) {
+                                        revealConnectedCells(index);
+                                    } else {
+                                        if (settings.invertLRClick) {
+                                            if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
+                                                reveal(index);
+                                                playClick();
+                                            } else if (mouse.button === Qt.LeftButton) {
+                                                toggleFlag(index);
+                                            }
+                                        } else {
+                                            if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                                reveal(index);
+                                                playClick();
+                                            } else if (mouse.button === Qt.RightButton) {
+                                                toggleFlag(index);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
 
