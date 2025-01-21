@@ -355,8 +355,11 @@ ApplicationWindow {
                                     Layout.preferredWidth: height
                                     Layout.alignment: Qt.AlignRight
                                     ButtonGroup.group: difficultyGroup
-                                    checked: root.diffidx === index
-
+                                    Binding {
+                                        target: radioButton
+                                        property: "checked"
+                                        value: root.diffidx === index
+                                    }
                                     onUserInteractionCheckedChanged: {
                                         if (userInteractionChecked) {
                                             checked = true

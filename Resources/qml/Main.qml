@@ -122,7 +122,7 @@ ApplicationWindow {
     property bool darkMode: isDarkMode
     property string operatingSystem: currentOS
     property bool isGamescope: gamescope
-    property int diffidx: 0
+    property int diffidx: settings.difficulty
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
