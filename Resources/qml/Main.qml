@@ -31,6 +31,7 @@ ApplicationWindow {
 
     onVisibleChanged: {
         if (Universal !== undefined) {
+            Universal.theme = Universal.System
             Universal.accent = accentColor
         }
     }
