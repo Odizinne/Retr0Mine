@@ -140,6 +140,7 @@ ApplicationWindow {
     property int cellSpacing: 2
     property int currentHintCount: 0
     property bool gridFullyInitialized: false
+    property bool isManuallyLoaded: false
 
     function getInitialWidth() {
         return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
@@ -228,6 +229,7 @@ ApplicationWindow {
             cell.highlightHint();
         }
         currentHintCount++;
+        console.log(currentHintCount)
     }
 
     function saveGame(filename) {
@@ -344,6 +346,8 @@ ApplicationWindow {
             }
 
             topBar.elapsedTimeLabelText = formatTime(elapsedTime)
+            isManuallyLoaded = true
+
             return true
         } catch (e) {
             console.error("Error loading save:", e)
@@ -547,6 +551,7 @@ ApplicationWindow {
         currentHintCount = 0
         gameTimer.stop()
         topBar.elapsedTimeLabelText = "00:00:00"
+        isManuallyLoaded = false
 
         // Reset all cells and trigger new animations
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
@@ -639,7 +644,7 @@ ApplicationWindow {
             gameTimer.stop()
 
             // Check if Steam integration is available before using it
-            if (typeof steamIntegration !== "undefined") {
+            if (typeof steamIntegration !== "undefined" && !isManuallyLoaded) {
                 // No-hint achievements based on grid size
                 if (currentHintCount === 0) {
                     if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
@@ -658,6 +663,7 @@ ApplicationWindow {
 
                 // "Was it really needed?" achievement - check for Easy grid size
                 if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
+                    console.log("was it really needed")
                     steamIntegration.unlockAchievement("ACH_HINT_MASTER")
                 }
             }
