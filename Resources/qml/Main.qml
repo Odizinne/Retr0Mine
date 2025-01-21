@@ -640,22 +640,24 @@ ApplicationWindow {
 
             // Check if Steam integration is available before using it
             if (typeof steamIntegration !== "undefined") {
-                // No-hint achievements
+                // No-hint achievements based on grid size
                 if (currentHintCount === 0) {
-                    if (settings.difficulty === 0) {
+                    if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
                         steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
-                    } else if (settings.difficulty === 1) {
+                    } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
                         steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
-                    } else if (settings.difficulty === 2) {
+                    } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
                         steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
                     }
                 }
-                // Speed Demon achievement
-                if (settings.difficulty === 0 && elapsedTime < 15) {
+
+                // Speed Demon achievement - check for Easy grid size
+                if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && elapsedTime < 15) {
                     steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
                 }
-                // "Was it really needed?" achievement
-                if (settings.difficulty === 0 && currentHintCount >= 20) {
+
+                // "Was it really needed?" achievement - check for Easy grid size
+                if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
                     steamIntegration.unlockAchievement("ACH_HINT_MASTER")
                 }
             }
