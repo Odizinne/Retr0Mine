@@ -53,6 +53,9 @@ ApplicationWindow {
         property bool cellFrame: true
         property bool contrastFlag: false
         property int cellSize: 1
+        property int customWidth: 8
+        property int customHeight: 8
+        property int customMines: 10
     }
 
     Shortcut {
@@ -108,7 +111,8 @@ ApplicationWindow {
         { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
         { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
         { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
-        { text: "Retr0", x: 50, y: 32, mines: 320 }
+        { text: "Retr0", x: 50, y: 32, mines: 320 },
+        { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
     ]
 
     property int selectedCell: -1  // Track currently selected cell

@@ -5,12 +5,12 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: settingsPage
     title: qsTr("Settings")
-    width: 560
-    height: 420
-    minimumWidth: 560
-    minimumHeight: 420
-    maximumWidth: 560
-    maximumHeight: 420
+    width: 570
+    height: 480
+    minimumWidth: 570
+    minimumHeight: 480
+    maximumWidth: 570
+    maximumHeight: 480
     visible: false
     flags: Qt.Dialog
     onVisibleChanged: {
@@ -373,6 +373,75 @@ ApplicationWindow {
                                                        parent.userInteractionChecked = true
                                                    }
                                     }
+                                }
+                            }
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            Layout.rightMargin: isFluentWinUI3Theme ? 10 : 5
+                            enabled: root.diffidx === 4
+                            spacing: isFluentWinUI3Theme ? 10 : 20
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: qsTr("Width:")
+                                    Layout.fillWidth: true
+                                }
+
+                                SpinBox {
+                                    id: widthSpinBox
+                                    from: 8
+                                    to: 50
+                                    editable: true
+                                    Layout.preferredWidth: 100
+                                    value: settings.customWidth
+                                    onValueChanged: settings.customWidth = value
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: qsTr("Height:")
+                                    Layout.fillWidth: true
+                                }
+                                SpinBox {
+                                    id: heightSpinBox
+                                    from: 8
+                                    to: 50
+                                    editable: true
+                                    Layout.preferredWidth: 100
+                                    value: settings.customHeight
+                                    onValueChanged: settings.customHeight = value
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Label {
+                                    text: qsTr("Mines:")
+                                    Layout.fillWidth: true
+                                }
+                                SpinBox {
+                                    id: minesSpinBox
+                                    from: 1
+                                    to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 5)
+                                    editable: true
+                                    Layout.preferredWidth: 100
+                                    value: settings.customMines
+                                    onValueChanged: settings.customMines = value
+                                }
+                            }
+
+                            Button {
+                                text: qsTr("Apply")
+                                Layout.alignment: Qt.AlignRight
+                                onClicked: {
+                                    root.gridSizeX = settings.customWidth
+                                    root.gridSizeY = settings.customHeight
+                                    root.mineCount = settings.customMines
+                                    root.initGame()
                                 }
                             }
                         }
@@ -764,18 +833,6 @@ ApplicationWindow {
                                 ListElement {
                                     title: qsTr("Quit")
                                     shortcut: "Ctrl + Q"
-                                }
-                                ListElement {
-                                    title: qsTr("Cell selection")
-                                    shortcut: "WASD or Arrows"
-                                }
-                                ListElement {
-                                    title: qsTr("Reveal, replay")
-                                    shortcut: "Enter or Q"
-                                }
-                                ListElement {
-                                    title: qsTr("Flag / close")
-                                    shortcut: "Space"
                                 }
                             }
 
