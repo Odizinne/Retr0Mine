@@ -38,7 +38,6 @@ ApplicationWindow {
         anchors.centerIn: parent
         id: restoreDefaultsPopup
         height: 120
-        width: 320
         visible: false
 
         enter: Transition {
@@ -115,7 +114,6 @@ ApplicationWindow {
         anchors.centerIn: parent
         id: restartWindow
         height: 130
-        width: 300
         visible: false
 
         enter: Transition {
@@ -693,10 +691,10 @@ ApplicationWindow {
 
                                 currentIndex: settings.themeIndex
                                 onActivated: function(index) {
-                                    if (currentIndex !== previousIndex) {  // Check if index actually changed
+                                    if (currentIndex !== previousIndex) {
                                         settings.themeIndex = currentIndex
                                         restartWindow.visible = true
-                                        previousIndex = currentIndex  // Update the previous index
+                                        previousIndex = currentIndex
                                     }
                                 }
                             }
