@@ -1095,5 +1095,14 @@ ApplicationWindow {
             }
         }
     }
+    Label {
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+            margins: 3
+        }
+        text: `Steam Integration Available: ${typeof steamIntegration !== "undefined"}`
+        z: 1000
+    }
 }
 
