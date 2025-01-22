@@ -39,6 +39,7 @@ ApplicationWindow {
         id: restoreDefaultsPopup
         height: 120
         visible: false
+        modal: true
 
         enter: Transition {
             NumberAnimation {
@@ -115,6 +116,7 @@ ApplicationWindow {
         id: restartWindow
         height: 130
         visible: false
+        modal: true
 
         enter: Transition {
             NumberAnimation {

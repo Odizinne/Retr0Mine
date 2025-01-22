@@ -1,5 +1,6 @@
 #ifndef STEAMINTEGRATION_H
 #define STEAMINTEGRATION_H
+
 #include <QObject>
 #include <steam_api.h>
 
@@ -15,4 +16,5 @@ public:
 private:
     bool m_initialized;
 };
-#endif
+
+#endif // STEAMINTEGRATION_H

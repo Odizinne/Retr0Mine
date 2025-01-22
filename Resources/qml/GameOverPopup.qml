@@ -8,6 +8,7 @@ Popup {
     height: 100
     width: 250
     visible: false
+    modal: true
 
     property string gameOverLabelText: "Game Over :("
     property string gameOverLabelColor: "#d12844"

@@ -1096,18 +1096,5 @@ ApplicationWindow {
             }
         }
     }
-    Label {
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-            margins: 3
-        }
-        text: {
-            if (root.isGamescope) return "Gamescope"
-            else return "Not gamescope"
-        }
-
-        z: 1000
-    }
 }
 
