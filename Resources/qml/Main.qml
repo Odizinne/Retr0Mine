@@ -31,14 +31,14 @@ ApplicationWindow {
 
     onVisibleChanged: {
         if (Universal !== undefined) {
-            Universal.theme = Universal.System
+            Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
     }
 
     Settings {
         id: settings
-        property int themeIndex: 0
+        property int themeIndex: root.isGamescope ? 4 : 0
         property int colorScheme: 0
         property int languageIndex: 0
         property int difficulty: 0
@@ -125,6 +125,7 @@ ApplicationWindow {
     property bool isUniversalTheme: windows10
     property bool darkMode: isDarkMode
     property string operatingSystem: currentOS
+    property bool isGamescope: gamescope
     property int diffidx: settings.difficulty
     property bool gameOver: false
     property int revealedCount: 0

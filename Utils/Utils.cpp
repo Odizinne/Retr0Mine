@@ -126,3 +126,7 @@ QString Utils::getOperatingSystem()
 
     return "unknown";
 }
+
+bool Utils::isGamescope() {
+    return QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP") == "gamescope";
+}
