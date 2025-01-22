@@ -169,6 +169,8 @@ jobs:
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
           cp build/Retr0Mine AppDir/usr/bin/
           
+          #cp Dependencies/steam/lib/linux64/libsteam_api.so AppDir/usr/lib/
+
           # Create .desktop file
           cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
           [Desktop Entry]
@@ -200,11 +202,13 @@ jobs:
           export QMAKE=$(which qmake6)
           export QML_SOURCES_PATHS=${{ github.workspace }}/Resources/qml
           export OUTPUT="Retr0Mine-x86_64.AppImage"
-          
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/Dependencies/steam/lib/linux64
+
           echo "Using QMAKE: $QMAKE"
           
           # Create AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage
+          chmod +x Retr0Mine-x86_64.AppImage
 
       - name: Zip binary
         run: |
@@ -217,6 +221,22 @@ jobs:
           name: Retr0Mine_AppImage
           path: Retr0Mine-x86_64.AppImage
 
+      - name: Extract AppImage and upload squashfs-root
+        run: |
+          ./Retr0Mine-x86_64.AppImage --appimage-extract
+          mv squashfs-root Retr0Mine_squashfs
+
+          echo '#!/bin/sh
+          export LD_LIBRARY_PATH="./usr/lib:$LD_LIBRARY_PATH"
+          exec ./AppRun' > Retr0Mine_squashfs/Retr0Mine.sh
+          chmod +x Retr0Mine_squashfs/Retr0Mine.sh
+  
+      - name: Upload SquashFS Root
+        uses: actions/upload-artifact@v4
+        with:
+          name: Retr0Mine_squashfs
+          path: Retr0Mine_squashfs
+  
       - name: Upload plain binary
         uses: actions/upload-artifact@v4
         with:

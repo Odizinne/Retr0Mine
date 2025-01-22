@@ -42,4 +42,8 @@ RESOURCES += Resources/resources.qrc
 
 win32:LIBS += -ladvapi32 -L$$STEAM_PATH/lib/win64 -lsteam_api64
 
+linux {
+    LIBS += $$PWD/Dependencies/steam/lib/linux64/libsteam_api.so
+}
+
 RC_FILE = Resources/appicon.rc

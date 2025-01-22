@@ -1,11 +1,7 @@
 #ifndef STEAMINTEGRATION_H
 #define STEAMINTEGRATION_H
-
 #include <QObject>
-
-#ifdef _WIN32
 #include <steam_api.h>
-#endif
 
 class SteamIntegration : public QObject {
     Q_OBJECT
@@ -19,5 +15,4 @@ public:
 private:
     bool m_initialized;
 };
-
 #endif
