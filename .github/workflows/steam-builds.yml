@@ -1,7 +1,9 @@
-name: Build
+name: Steam build linux and windows
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -116,18 +118,6 @@ jobs:
           name: Retr0Mine_msvc_64
           path: build/Retr0Mine_msvc_64.zip
 
-      - name: Create Installer 
-        shell: pwsh
-        run: |
-          $env:Path += ";${env:ProgramFiles(x86)}\Inno Setup 6"
-          iscc.exe installer.iss
-
-      - name: Upload Installer
-        uses: actions/upload-artifact@v4
-        with:
-          name: Retr0Mine_Installer
-          path: Output/Retr0Mine_Installer.exe
-
   linux-build:
     runs-on: ubuntu-latest
 
@@ -208,17 +198,6 @@ jobs:
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt --output appimage
           chmod +x Retr0Mine-x86_64.AppImage
 
-      - name: Zip binary
-        run: |
-          cd build
-          zip Retr0Mine_linux_64.zip Retr0Mine
-
-      - name: Upload AppImage
-        uses: actions/upload-artifact@v4
-        with:
-          name: Retr0Mine_AppImage
-          path: Retr0Mine-x86_64.AppImage
-
       - name: Extract AppImage and upload squashfs-root
         run: |
           ./Retr0Mine-x86_64.AppImage --appimage-extract
@@ -235,9 +214,3 @@ jobs:
           name: Retr0Mine_squashfs
           path: Retr0Mine_squashfs
   
-      - name: Upload plain binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: Retr0Mine_linux_64
-          path: build/Retr0Mine_linux_64.zip
-          
