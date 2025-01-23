@@ -387,70 +387,67 @@ ApplicationWindow {
     }
 
 
-    SoundEffect {
+    MediaPlayer {
         id: looseEffect
         source: {
             switch (settings.soundPackIndex) {
-            case 0:
-                return "qrc:/sounds/pop/pop_bomb.wav"
-            case 1:
-                return "qrc:/sounds/w11/w11_bomb.wav"
-            case 2:
-                return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
-            default:
-                return "qrc:/sounds/pop/pop_bomb.wav"
+            case 0: return "qrc:/sounds/pop/pop_bomb.wav"
+            case 1: return "qrc:/sounds/w11/w11_bomb.wav"
+            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
+            default: return "qrc:/sounds/pop/pop_bomb.wav"
             }
         }
-        volume: settings.volume
+        audioOutput: AudioOutput {
+            volume: settings.volume
+        }
     }
 
-    SoundEffect {
+    MediaPlayer {
         id: clickEffect
         source: {
             switch (settings.soundPackIndex) {
-            case 0:
-                return "qrc:/sounds/pop/pop_click.wav"
-            case 1:
-                return "qrc:/sounds/w11/w11_click.wav"
-            case 2:
-                return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-            default:
-                return "qrc:/sounds/pop/pop_click.wav"
+            case 0: return "qrc:/sounds/pop/pop_click.wav"
+            case 1: return "qrc:/sounds/w11/w11_click.wav"
+            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+            default: return "qrc:/sounds/pop/pop_click.wav"
             }
         }
-        volume: settings.volume
+        audioOutput: AudioOutput {
+            volume: settings.volume
+        }
     }
 
-    SoundEffect {
+    MediaPlayer {
         id: winEffect
         source: {
             switch (settings.soundPackIndex) {
-            case 0:
-                return "qrc:/sounds/pop/pop_win.wav"
-            case 1:
-                return "qrc:/sounds/w11/w11_win.wav"
-            case 2:
-                return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
-            default:
-                return "qrc:/sounds/pop/pop_win.wav"
+            case 0: return "qrc:/sounds/pop/pop_win.wav"
+            case 1: return "qrc:/sounds/w11/w11_win.wav"
+            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
+            default: return "qrc:/sounds/pop/pop_win.wav"
             }
         }
-        volume: settings.volume
+        audioOutput: AudioOutput {
+            volume: settings.volume
+        }
     }
 
     function playLoose() {
         if (!settings.soundEffects) return
+        looseEffect.stop()
         looseEffect.play()
     }
 
     function playClick() {
         if (!settings.soundEffects) return
         if (gameOver) return
+        clickEffect.stop()
         clickEffect.play()
     }
 
     function playWin() {
         if (!settings.soundEffects) return
+        winEffect.stop()
         winEffect.play()
     }
 
