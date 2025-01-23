@@ -19,19 +19,19 @@ void Utils::restartApp()
 
 QString Utils::getTheme()
 {
-    Qt::ColorScheme colorScheme = QGuiApplication::styleHints()->colorScheme();
-
-    switch (colorScheme) {
-    case Qt::ColorScheme::Dark:
-        return "light";
-    case Qt::ColorScheme::Light:
-        return "dark";
-    default:
+    //Qt::ColorScheme colorScheme = QGuiApplication::styleHints()->colorScheme();
+//
+    //switch (colorScheme) {
+    //case Qt::ColorScheme::Dark:
+    //    return "light";
+    //case Qt::ColorScheme::Light:
+    //    return "dark";
+    //default:
         // Fallback in case Qt::ColorScheme::Unknown
         QPalette palette = QGuiApplication::palette();
         QColor backgroundColor = palette.color(QPalette::Window);
         return (backgroundColor.lightness() < 128) ? "light" : "dark";
-    }
+    //}
 }
 
 #ifdef _WIN32

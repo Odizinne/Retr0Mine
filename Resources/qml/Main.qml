@@ -90,7 +90,6 @@ ApplicationWindow {
     onClosing: {
         if (settings.loadLastGame && gameStarted && !gameOver) {
             saveGame("internalGameState.json")
-            console.log("autosave")
         }
     }
 
@@ -187,7 +186,6 @@ ApplicationWindow {
     }
 
     function handleVisibilityChange(newVisibility) {
-        console.log("pass")
         const wasMaximized = isMaximized
         isMaximized = newVisibility === Window.Maximized
         isFullScreen = newVisibility === Window.FullScreen
@@ -220,7 +218,6 @@ ApplicationWindow {
             cell.highlightHint();
         }
         currentHintCount++;
-        console.log(currentHintCount)
     }
 
     function saveGame(filename) {
@@ -645,7 +642,6 @@ ApplicationWindow {
 
                 // "Was it really needed?" achievement - check for Easy grid size
                 if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
-                    console.log("was it really needed")
                     steamIntegration.unlockAchievement("ACH_HINT_MASTER")
                 }
             }

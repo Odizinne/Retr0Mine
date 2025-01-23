@@ -35,7 +35,9 @@ MainWindow::MainWindow(QObject *parent)
 
 void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
 {
-    if (settings.value("colorScheme").toInt() != 0) return;
+    if (settings.value("colorScheme") != 0) {
+        return;
+    }
 
     if (scheme == Qt::ColorScheme::Light) {
         setColorScheme(1);
@@ -268,10 +270,10 @@ void MainWindow::restartRetr0Mine() const {
 void MainWindow::setColorScheme(int index) {
     QColor accentColor;
     bool darkMode;
+    bool overrideDarkMode = false;
 
     if (index == 1) {
         //light
-        darkMode = false;
         QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
         if (currentTheme == 1) {
             accentColor = Utils::getAccentColor("normal");
@@ -280,13 +282,13 @@ void MainWindow::setColorScheme(int index) {
         } else if (currentTheme == 3) {
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         } else {
-            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             darkMode = true;
+            overrideDarkMode = true;
+            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         }
     } else if (index == 2) {
         //dark
         QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-        darkMode = true;
         if (currentTheme == 1) {
             accentColor = Utils::getAccentColor("normal");
         } else if (currentTheme == 2) {
@@ -294,14 +296,15 @@ void MainWindow::setColorScheme(int index) {
         } else if (currentTheme == 3) {
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         } else {
-            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             darkMode = true;
+            overrideDarkMode = true;
+            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         }
     } else {
         // 0 = System
         QGuiApplication::styleHints()->unsetColorScheme();
         if (Utils::getTheme() == "light") {
-            darkMode = true;
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
             if (currentTheme == 1) {
                 accentColor = Utils::getAccentColor("normal");
             } else if (currentTheme == 2) {
@@ -309,11 +312,13 @@ void MainWindow::setColorScheme(int index) {
             } else if (currentTheme == 3) {
                 accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             } else {
+                darkMode = true;
+                overrideDarkMode = true;
                 accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-            darkMode = true;
             }
         } else {
-            darkMode = false;
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+
             if (currentTheme == 1) {
                 accentColor = Utils::getAccentColor("normal");
             } else if (currentTheme == 2) {
@@ -321,9 +326,18 @@ void MainWindow::setColorScheme(int index) {
             } else if (currentTheme == 3) {
                 accentColor = QGuiApplication::palette().color(QPalette::Highlight);
             } else {
+                darkMode = true;
+                overrideDarkMode = true;
                 accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-            darkMode = true;
             }
+        }
+    }
+
+    if (!overrideDarkMode) {
+        if (Utils::getTheme() == "light") {
+            darkMode = true;
+        } else {
+            darkMode = false;
         }
     }
 
