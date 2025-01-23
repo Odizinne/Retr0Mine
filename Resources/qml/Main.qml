@@ -16,19 +16,6 @@ ApplicationWindow {
     minimumHeight: getInitialHeight()
     title: "Retr0Mine"
 
-    MouseArea {
-        anchors.fill: parent
-        enabled: root.selectedCell !== -1
-        onPressed: {
-            if (mouse.button === Qt.LeftButton || mouse.button === Qt.RightButton) {
-                root.selectedCell = -1
-            }
-        }
-        z: 999
-        propagateComposedEvents: true
-    }
-
-
     onVisibleChanged: {
         if (Universal !== undefined) {
             Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
@@ -1053,7 +1040,7 @@ ApplicationWindow {
                                 if (mines.includes(index)) return ""
                                 return numbers[index] === undefined || numbers[index] === 0 ? "" : numbers[index];
                             }
-                            font.pixelSize: cellSize * 0.65
+                            font.pixelSize: cellSize * 0.60
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
