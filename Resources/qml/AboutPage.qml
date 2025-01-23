@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 ApplicationWindow {
     id: aboutPage
-    width: 180
+    width: 230
     height: 230
     minimumWidth: width
     minimumHeight: height
@@ -42,11 +42,22 @@ ApplicationWindow {
             Layout.fillHeight: true
         }
 
-        Button {
-            Layout.alignment: Qt.AlignHCenter
-            text: "Check on Github"
-            highlighted: true
-            onClicked: Qt.openUrlExternally("https://github.com/odizinne/Retr0Mine")
+        RowLayout {
+            spacing: 10
+            Button {
+                Layout.alignment: Qt.AlignHCenter
+                text: "Steam"
+                icon.source: "qrc:/icons/steam.png"
+                highlighted: true
+                onClicked: Qt.openUrlExternally("https://store.steampowered.com/app/3478030/Retr0Mine")
+            }
+
+            Button {
+                Layout.alignment: Qt.AlignHCenter
+                text: "Github"
+                icon.source: "qrc:/icons/github.png"
+                onClicked: Qt.openUrlExternally("https://github.com/odizinne/Retr0Mine")
+            }
         }
     }
 }

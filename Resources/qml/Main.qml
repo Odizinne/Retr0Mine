@@ -481,7 +481,6 @@ ApplicationWindow {
         let flaggedCount = 0;
         let adjacentCells = [];
 
-        // Check adjacent cells for flags and collect non-flagged cells
         for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
                 if (r === 0 && c === 0) continue;
@@ -496,7 +495,6 @@ ApplicationWindow {
                 if (adjacentCell.flagged) {
                     flaggedCount++;
                 } else if (!adjacentCell.revealed) {
-                    // Remove question mark if present
                     if (adjacentCell.questioned) {
                         adjacentCell.questioned = false;
                     }
@@ -505,7 +503,6 @@ ApplicationWindow {
             }
         }
 
-        // If the number of flags matches the cell's number, reveal adjacent non-flagged cells
         if (flaggedCount === numbers[index] && adjacentCells.length > 0) {
             for (let pos of adjacentCells) {
                 reveal(pos);
@@ -519,20 +516,17 @@ ApplicationWindow {
         const col = firstClickIndex % gridSizeX;
         console.log("QML: Placing mines, first click at:", col, row);
 
-        // Initialize the game with current settings
         if (!gameLogic.initializeGame(gridSizeX, gridSizeY, mineCount)) {
             console.error("Failed to initialize game!");
             return false;
         }
 
-        // Place mines using C++ backend
         const success = gameLogic.placeMines(col, row);
         if (!success) {
             console.error("Failed to place mines!");
             return false;
         }
 
-        // Get mines and numbers from C++ backend
         mines = gameLogic.getMines();
         numbers = gameLogic.getNumbers();
 
@@ -647,9 +641,7 @@ ApplicationWindow {
             gameOver = true
             gameTimer.stop()
 
-            // Check if Steam integration is available before using it
             if (typeof steamIntegration !== "undefined" && !isManuallyLoaded) {
-                // No-hint achievements based on grid size
                 if (currentHintCount === 0) {
                     if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
                         steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
@@ -660,7 +652,6 @@ ApplicationWindow {
                     }
                 }
 
-                // Speed Demon achievement - check for Easy grid size
                 if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && elapsedTime < 15) {
                     steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
                 }

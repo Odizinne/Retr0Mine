@@ -39,5 +39,7 @@
         <file>icons/flag.png</file>
         <file>icons/flag_dark.png</file>
         <file>icons/icon.png</file>
+        <file>icons/steam.png</file>
+        <file>icons/github.png</file>
     </qresource>
 </RCC>
