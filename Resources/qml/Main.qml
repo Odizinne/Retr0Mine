@@ -35,7 +35,7 @@ ApplicationWindow {
         property bool loadLastGame: false
         property bool soundEffects: true
         property real volume: 1.0
-        property int soundPackIndex: 0
+        property int soundPackIndex: 2
         property bool animations: true
         property bool cellFrame: true
         property bool contrastFlag: false
@@ -394,7 +394,8 @@ ApplicationWindow {
             case 0: return "qrc:/sounds/pop/pop_bomb.wav"
             case 1: return "qrc:/sounds/w11/w11_bomb.wav"
             case 2: return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
-            default: return "qrc:/sounds/pop/pop_bomb.wav"
+            case 3: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
+            default: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
             }
         }
         audioOutput: AudioOutput {
@@ -409,7 +410,8 @@ ApplicationWindow {
             case 0: return "qrc:/sounds/pop/pop_click.wav"
             case 1: return "qrc:/sounds/w11/w11_click.wav"
             case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-            default: return "qrc:/sounds/pop/pop_click.wav"
+            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
             }
         }
         audioOutput: AudioOutput {
@@ -424,7 +426,8 @@ ApplicationWindow {
             case 0: return "qrc:/sounds/pop/pop_win.wav"
             case 1: return "qrc:/sounds/w11/w11_win.wav"
             case 2: return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
-            default: return "qrc:/sounds/pop/pop_win.wav"
+            case 3: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
+            default: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
             }
         }
         audioOutput: AudioOutput {

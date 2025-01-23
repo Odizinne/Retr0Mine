@@ -784,7 +784,7 @@ ApplicationWindow {
                             }
                             ComboBox {
                                 id: soundpackComboBox
-                                model: ["Pop", "Windows", "KDE"]
+                                model: ["Pop", "Windows", "KDE", "Floraphonic"]
                                 currentIndex: settings.soundPackIndex
                                 onActivated: {
                                     settings.soundPackIndex = currentIndex
