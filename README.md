@@ -10,11 +10,12 @@ Runs on windows | linux.
 
 ![image](.assets/screenshot.png)
 
-If you like my work, consider supporting me!
+**If you like my work, consider supporting me by buying Retr0Mine on steam!**
 
-<a href="https://ko-fi.com/odizinne">
-  <img src=".assets/kofi_button.png" alt="Support me on Ko-fi" width="20%">
-</a>  
+[![Available on STEAM](/.assets/available_on_steam.png)](https://store.steampowered.com/app/3478030/Retr0Mine/)
+
+I will continue to provide access to precompiled binaries here, but less frequently.  
+A guide on how to build Retr0Mine by yourself will be provided soon in case you do not want to buy it, but still quick access to new updates.
 
 # Download
 
