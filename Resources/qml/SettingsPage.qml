@@ -332,9 +332,11 @@ ApplicationWindow {
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
-                                        onClicked: if (mouse.button === Qt.LeftButton) {
-                                                       radioButton.userInteractionChecked = true
-                                                   }
+                                        onClicked: function(mouse) {
+                                            if (mouse.button === Qt.LeftButton) {
+                                                radioButton.userInteractionChecked = true
+                                            }
+                                        }
                                     }
                                 }
 
@@ -342,9 +344,11 @@ ApplicationWindow {
                                     text: `${modelData.x}×${modelData.y}, ${modelData.mines} mines`
                                     MouseArea {
                                         anchors.fill: parent
-                                        onClicked: if (mouse.button === Qt.LeftButton) {
-                                                       radioButton.userInteractionChecked = true
-                                                   }
+                                        onClicked: function(mouse) {
+                                            if (mouse.button === Qt.LeftButton) {
+                                                radioButton.userInteractionChecked = true
+                                            }
+                                        }
                                     }
                                 }
 
@@ -369,9 +373,11 @@ ApplicationWindow {
 
                                     MouseArea {
                                         anchors.fill: parent
-                                        onClicked: if (mouse.button === Qt.LeftButton) {
-                                                       parent.userInteractionChecked = true
-                                                   }
+                                        onClicked: function(mouse) {
+                                            if (mouse.button === Qt.LeftButton) {
+                                                parent.userInteractionChecked = true
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -747,7 +753,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: soundSwitch.checked = !soundSwitch.checked
+                                    onClicked: soundEffectSwitch.checked = !soundEffectSwitch.checked
                                 }
                             }
                             Switch {

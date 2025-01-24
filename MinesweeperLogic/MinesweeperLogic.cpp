@@ -245,7 +245,6 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
 
             if (!hasIsolatedAreas && trySolve(currentMines)) {
                 qDebug() << "Successfully placed" << m_mineCount << "mines after" << attemptCount << "attempts";
-                qDebug() << "Mine positions:" << m_mines;
                 return true;
             }
             qDebug() << "Configuration not solvable or has isolated areas, retrying...";

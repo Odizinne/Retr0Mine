@@ -17,7 +17,7 @@ ApplicationWindow {
     title: "Retr0Mine"
 
     onVisibleChanged: {
-        if (Universal !== undefined) {
+        if (typeof Universal !== 'undefined') {
             Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
@@ -162,7 +162,7 @@ ApplicationWindow {
         }
     }
 
-    onVisibilityChanged: {
+    onVisibilityChanged: function(visibility) {
         const wasMaximized = isMaximized
         isMaximized = visibility === Window.Maximized
         isFullScreen = visibility === Window.FullScreen
@@ -174,7 +174,6 @@ ApplicationWindow {
             minimumHeight = getInitialHeight()
             width = minimumWidth
             height = minimumHeight
-
             if (height >= Screen.desktopAvailableHeight * 0.9 || width >= Screen.desktopAvailableWidth * 0.9) {
                 x = Screen.width / 2 - width / 2
                 y = Screen.height / 2 - height / 2
