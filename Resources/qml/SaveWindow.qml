@@ -83,7 +83,7 @@ ApplicationWindow {
                 enabled: false
                 onClicked: {
                     if (saveNameField.text.trim()) {
-                        saveGame(saveNameField.text.trim() + ".json")
+                        root.saveGame(saveNameField.text.trim() + ".json")
                         saveWindow.close()
                     }
                 }
