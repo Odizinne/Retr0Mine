@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -941,7 +942,6 @@ ApplicationWindow {
                                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 onClicked: (mouse) => {
                                     if (!gameStarted) {
-                                        // Before game starts, any click reveals the cell
                                         reveal(index);
                                         playClick();
                                     } else if (cellItem.revealed) {
