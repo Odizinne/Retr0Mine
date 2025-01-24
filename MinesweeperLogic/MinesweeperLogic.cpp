@@ -407,8 +407,6 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
         if (m_numbers[pos] <= 0) continue;
 
         QSet<int> neighbors = getNeighbors(pos);
-
-        // Count flags and unrevealed cells around this number
         int flagCount = 0;
         QSet<int> unrevealedCells;
 
@@ -426,7 +424,17 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
             // Return first unflagged mine
             for (int minePos : unrevealedCells) {
                 if (!flagged.contains(minePos)) {
-                    qDebug() << "Found mine hint through basic deduction at:" << minePos;
+                    int row = pos / m_width;
+                    int col = pos % m_width;
+                    int mineRow = minePos / m_width;
+                    int mineCol = minePos % m_width;
+                    qDebug() << "\nFound mine at" << mineCol << "," << mineRow
+                             << "\nReason: Cell at" << col << "," << row
+                             << "shows" << m_numbers[pos]
+                             << "mines, has" << flagCount << "flags nearby"
+                             << "and" << unrevealedCells.size() << "unrevealed cells."
+                             << "\nSince remaining mines (" << remainingMines
+                             << ") equals unrevealed cells, they must all be mines.";
                     return minePos;
                 }
             }
@@ -451,8 +459,17 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
 
         // If number matches flag count, all other unknowns are safe
         if (m_numbers[pos] == flagCount && !unknowns.isEmpty()) {
-            // Return first safe spot
-            return *unknowns.begin();
+            int safePos = *unknowns.begin();
+            int row = pos / m_width;
+            int col = pos % m_width;
+            int safeRow = safePos / m_width;
+            int safeCol = safePos % m_width;
+            qDebug() << "\nFound safe spot at" << safeCol << "," << safeRow
+                     << "\nReason: Cell at" << col << "," << row
+                     << "shows" << m_numbers[pos] << "mines"
+                     << "and already has" << flagCount << "flags nearby."
+                     << "\nSince flags count matches number, all other adjacent cells must be safe.";
+            return safePos;
         }
     }
 
@@ -463,29 +480,6 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
         return solverHint;
     } else {
         qDebug() << "solver failed";
-    }
-
-    // If no solution found through solver, check for safe spots
-    for (int pos : revealedCells) {
-        if (m_numbers[pos] <= 0) continue;
-
-        QSet<int> neighbors = getNeighbors(pos);
-        int flagCount = 0;
-        for (int neighbor : neighbors) {
-            if (flagged.contains(neighbor)) {
-                flagCount++;
-            }
-        }
-
-        // If number matches flag count, all other neighbors are safe
-        if (flagCount == m_numbers[pos]) {
-            for (int neighbor : neighbors) {
-                if (!flagged.contains(neighbor) && !revealed.contains(neighbor)) {
-                    qDebug() << "Found safe hint at:" << neighbor;
-                    return neighbor;
-                }
-            }
-        }
     }
 
     qDebug() << "\nGrid state when falling back to actual mine positions:";
