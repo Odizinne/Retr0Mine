@@ -537,7 +537,6 @@ ApplicationWindow {
         topBar.elapsedTimeLabelText = "00:00:00"
         isManuallyLoaded = false
 
-        // Reset all cells and trigger new animations
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell) {
@@ -604,18 +603,15 @@ ApplicationWindow {
             let cell = grid.itemAtIndex(i)
             if (cell) {
                 if (mines.includes(i)) {
-                    // Keep flag if it was correctly placed on a mine
                     if (!cell.flagged) {
-                        //cell.flagged = false
+                        cell.questioned = false
                         cell.revealed = true
                     } else {
                         cell.revealed = false
                     }
                 } else {
-                    // Remove flag if it was not on a mine
                     if (cell.flagged) {
                         cell.flagged = false
-                        // You could potentially add a visual indicator of incorrect flag here
                     }
                 }
             }
@@ -683,7 +679,6 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        // Set initial grid size based on difficulty
         const difficultySet = root.difficultySettings[settings.difficulty]
         if (difficultySet) {
             root.gridSizeX = difficultySet.x
@@ -964,16 +959,16 @@ ApplicationWindow {
                                 anchors.centerIn: parent
                                 source: darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
                                 visible: cellItem.revealed && mines.includes(index)
-                                sourceSize.width: cellItem.width / 2
-                                sourceSize.height: cellItem.height / 2
+                                sourceSize.width: cellItem.width / 2.1
+                                sourceSize.height: cellItem.height / 2.1
                             }
 
                             Image {
                                 anchors.centerIn: parent
                                 source: darkMode ? "qrc:/icons/questionmark_light.png" : "qrc:/icons/questionmark_dark.png"
                                 visible: cellItem.questioned
-                                sourceSize.width: cellItem.width / 2
-                                sourceSize.height: cellItem.height / 2
+                                sourceSize.width: cellItem.width / 2.1
+                                sourceSize.height: cellItem.height / 2.1
                             }
 
                             Image {
@@ -984,15 +979,15 @@ ApplicationWindow {
                                     return flagIcon
                                 }
                                 visible: cellItem.flagged
-                                sourceSize.width: cellItem.width / 2
-                                sourceSize.height: cellItem.height / 2
+                                sourceSize.width: cellItem.width / 2.1
+                                sourceSize.height: cellItem.height / 2.1
                             }
 
                             Image {
                                 id: hintOverlay
                                 anchors.centerIn: parent
-                                sourceSize.width: cellItem.width / 2
-                                sourceSize.height: cellItem.height / 2
+                                sourceSize.width: cellItem.width / 2.1
+                                sourceSize.height: cellItem.height / 2.1
                                 opacity: 0
                                 visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
                                 source: mines.includes(index) ?
