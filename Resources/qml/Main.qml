@@ -236,7 +236,8 @@ ApplicationWindow {
                 elapsedTime: elapsedTime,
                 gameOver: gameOver,
                 gameStarted: gameStarted,
-                firstClickIndex: firstClickIndex
+                firstClickIndex: firstClickIndex,
+                currentHintCount: currentHintCount
             }
         }
 
@@ -290,10 +291,11 @@ ApplicationWindow {
                 return false
             }
 
-            elapsedTime = data.gameState.elapsedTime
-            gameOver = data.gameState.gameOver
-            gameStarted = data.gameState.gameStarted
-            firstClickIndex = data.gameState.firstClickIndex
+            root.elapsedTime = data.gameState.elapsedTime
+            root.gameOver = data.gameState.gameOver
+            root.gameStarted = data.gameState.gameStarted
+            root.firstClickIndex = data.gameState.firstClickIndex
+            root.currentHintCount = data.gameState.currentHintCount || 0
 
             // Reset all cells first
             for (let i = 0; i < gridSizeX * gridSizeY; i++) {
