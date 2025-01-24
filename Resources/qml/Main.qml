@@ -101,8 +101,6 @@ ApplicationWindow {
         { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
     ]
 
-    property int selectedCell: -1  // Track currently selected cell
-    property bool hasSelection: selectedCell !== -1
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
@@ -145,7 +143,7 @@ ApplicationWindow {
             minimumWidth = getInitialWidth()
             width = getInitialWidth()
 
-            // Add 2px margin of error
+            // 2px margin of error
             if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
                 visibility = Window.Maximized
             }
@@ -157,7 +155,7 @@ ApplicationWindow {
             minimumHeight = getInitialHeight()
             height = getInitialHeight()
 
-            // Add 2px margin of error
+            // 2px margin of error
             if (height + 2 >= Screen.desktopAvailableHeight * 0.9) {
                 visibility = Window.Maximized
             }
@@ -241,7 +239,6 @@ ApplicationWindow {
             }
         }
 
-        // Collect revealed, flagged, and questioned cells
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell.revealed) saveData.gameState.revealedCells.push(i)
@@ -256,16 +253,13 @@ ApplicationWindow {
         try {
             let data = JSON.parse(saveData)
 
-            // Verify version compatibility
             if (!data.version || !data.version.startsWith("1.")) {
                 console.error("Incompatible save version")
                 return false
             }
 
-            // Reset game state
             gameTimer.stop()
 
-            // Load grid configuration
             gridSizeX = data.gameState.gridSizeX
             gridSizeY = data.gameState.gridSizeY
             mineCount = data.gameState.mineCount
@@ -276,13 +270,11 @@ ApplicationWindow {
                 diff.mines === mineCount
             )
 
-            // Fallback to default (Easy) if no matching difficulty found
             if (diffidx === -1) {
                 diffidx = 0
                 console.warn("No matching difficulty found, defaulting to Easy")
             }
 
-            // Load game progress
             mines = data.gameState.mines
             numbers = data.gameState.numbers
 
@@ -297,7 +289,6 @@ ApplicationWindow {
             root.firstClickIndex = data.gameState.firstClickIndex
             root.currentHintCount = data.gameState.currentHintCount || 0
 
-            // Reset all cells first
             for (let i = 0; i < gridSizeX * gridSizeY; i++) {
                 let cell = grid.itemAtIndex(i)
                 if (cell) {
@@ -307,7 +298,6 @@ ApplicationWindow {
                 }
             }
 
-            // Apply revealed, flagged, and questioned states
             data.gameState.revealedCells.forEach(index => {
                                                      let cell = grid.itemAtIndex(index)
                                                      if (cell) cell.revealed = true
@@ -318,7 +308,6 @@ ApplicationWindow {
                                                     if (cell) cell.flagged = true
                                                 })
 
-            // Handle questioned cells if they exist in the save data
             if (data.gameState.questionedCells) {
                 data.gameState.questionedCells.forEach(index => {
                                                            let cell = grid.itemAtIndex(index)
@@ -326,11 +315,9 @@ ApplicationWindow {
                                                        })
             }
 
-            // Update counters
             revealedCount = data.gameState.revealedCells.length
             flaggedCount = data.gameState.flaggedCells.length
 
-            // Resume timer if game was in progress
             if (gameStarted && !gameOver) {
                 gameTimer.start()
             }
@@ -523,7 +510,6 @@ ApplicationWindow {
     }
 
     function initGame() {
-        selectedCell = -1
         mines = []
         numbers = []
         gameOver = false
@@ -656,23 +642,19 @@ ApplicationWindow {
         let cell = grid.itemAtIndex(index)
         if (!cell.revealed) {
             if (!cell.flagged && !cell.questioned) {
-                // Empty -> Flag
                 cell.flagged = true
                 cell.questioned = false
                 flaggedCount++
             } else if (cell.flagged) {
                 if (settings.enableQuestionMarks) {
-                    // Flag -> Question (only if question marks are enabled)
                     cell.flagged = false
                     cell.questioned = true
                     flaggedCount--
                 } else {
-                    // Flag -> Empty (if question marks are disabled)
                     cell.flagged = false
                     flaggedCount--
                 }
             } else if (cell.questioned) {
-                // Question -> Empty
                 cell.questioned = false
             }
         }
@@ -699,9 +681,7 @@ ApplicationWindow {
 
         let internalSaveData = mainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
-            // Load the game state
             if (loadGame(internalSaveData)) {
-                // Delete the internal save file after successful load
                 mainWindow.deleteSaveFile("internalGameState.json")
                 root.isManuallyLoaded = false
             } else {
@@ -795,19 +775,6 @@ ApplicationWindow {
                                     grid.initialAnimationPlayed = true
                                 }
                             }
-                        }
-
-                        Rectangle {
-                            id: selectionRect
-                            anchors.centerIn: parent
-                            height: root.cellSize
-                            width: root.cellSize
-                            color: "transparent"
-                            anchors.margins: -1
-                            border.width: 3
-                            border.color: index === root.selectedCell ? accentColor : "transparent"
-                            visible: opacity > 0
-                            opacity: index === root.selectedCell ? 1 : 0
                         }
 
                         NumberAnimation {
