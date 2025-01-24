@@ -703,6 +703,7 @@ ApplicationWindow {
             if (loadGame(internalSaveData)) {
                 // Delete the internal save file after successful load
                 mainWindow.deleteSaveFile("internalGameState.json")
+                root.isManuallyLoaded = false
             } else {
                 console.error("Failed to load internal game state")
                 initGame()
