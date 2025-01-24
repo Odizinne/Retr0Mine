@@ -176,7 +176,6 @@ ApplicationWindow {
             height = minimumHeight
 
             if (height >= Screen.desktopAvailableHeight * 0.9 || width >= Screen.desktopAvailableWidth * 0.9) {
-                // Center the window
                 x = Screen.width / 2 - width / 2
                 y = Screen.height / 2 - height / 2
             }
@@ -487,7 +486,6 @@ ApplicationWindow {
     function placeMines(firstClickIndex) {
         const row = Math.floor(firstClickIndex / gridSizeX);
         const col = firstClickIndex % gridSizeX;
-        console.log("QML: Placing mines, first click at:", col, row);
 
         if (!gameLogic.initializeGame(gridSizeX, gridSizeY, mineCount)) {
             console.error("Failed to initialize game!");
@@ -502,9 +500,6 @@ ApplicationWindow {
 
         mines = gameLogic.getMines();
         numbers = gameLogic.getNumbers();
-
-        console.log("QML: Mines placed:", mines.length);
-        console.log("QML: Numbers array size:", numbers.length);
 
         return true;
     }
@@ -624,7 +619,6 @@ ApplicationWindow {
                     steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
                 }
 
-                // "Was it really needed?" achievement - check for Easy grid size
                 if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
                     steamIntegration.unlockAchievement("ACH_HINT_MASTER")
                 }
@@ -759,18 +753,14 @@ ApplicationWindow {
                         Component.onCompleted: {
                             grid.cellsCreated++
 
-                            // Check if this is the last cell
                             if (grid.cellsCreated === root.gridSizeX * root.gridSizeY) {
                                 root.gridFullyInitialized = true
                                 initialLoadTimer.start()
-
-                                //root.checkInitialGameState()
                             }
 
                             if (settings.animations && !grid.initialAnimationPlayed) {
                                 opacity = 0
                                 fadeTimer.start()
-                                // Mark initial animation as played after the last cell is created
                                 if (index === (root.gridSizeX * root.gridSizeY - 1)) {
                                     grid.initialAnimationPlayed = true
                                 }
@@ -798,10 +788,7 @@ ApplicationWindow {
                         SequentialAnimation {
                             id: hintAnimation
                             loops: 3
-
-                            // Remove Component.onCompleted
-                            running: false  // Make sure animation doesn't start automatically
-
+                            running: false
                             onStarted: hintRevealFadeIn.start()
                             onFinished: hintRevealFadeOut.start()
 
@@ -862,18 +849,6 @@ ApplicationWindow {
                                 }
                             }
                         }
-
-                        //Component.onCompleted: {
-                        //    // Only play initial animation once and only for the first creation
-                        //    if (settings.animations && !grid.initialAnimationPlayed) {
-                        //        opacity = 0
-                        //        fadeTimer.start()
-                        //        // Mark initial animation as played after the last cell is created
-                        //        if (index === (root.gridSizeX * root.gridSizeY - 1)) {
-                        //            grid.initialAnimationPlayed = true
-                        //        }
-                        //    }
-                        //}
 
                         Rectangle {
                             anchors.fill: cellButton
