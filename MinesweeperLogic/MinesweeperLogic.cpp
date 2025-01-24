@@ -892,35 +892,38 @@ QSet<int> MinesweeperLogic::getNeighbors(int pos) const {
 
 int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells)
 {
+    struct CellConstraint {
+        int pos;
+        int cellsNeeded;
+        QSet<int> unknowns;
+        bool isSafety;
+    };
+
     QSet<int> revealed;
     QSet<int> flagged;
     for (int cell : revealedCells) revealed.insert(cell);
     for (int cell : flaggedCells) flagged.insert(cell);
 
-    // Create a local numbers array that only contains revealed numbers
-    QVector<int> visibleNumbers(m_width * m_height, -2);  // -2 for unrevealed
+    QVector<int> visibleNumbers(m_width * m_height, -2);
     for (int pos : revealed) {
-        visibleNumbers[pos] = m_numbers[pos];  // Only copy revealed numbers
+        visibleNumbers[pos] = m_numbers[pos];
     }
     qDebug() << "\nTrying to find hint using only revealed numbers:";
 
-    // Reset solver state using only revealed information
     m_information.clear();
     m_informationsForSpace.clear();
     m_solvedSpaces.clear();
 
-    // Add initial information based on revealed numbers only
     for (int i = 0; i < m_width * m_height; i++) {
         if (flagged.contains(i)) {
-            m_solvedSpaces[i] = true;  // Mark flags as mines
+            m_solvedSpaces[i] = true;
             qDebug() << "Position" << i % m_width << "," << i / m_width << "is marked as flag";
             continue;
         }
         if (!revealed.contains(i)) {
-            continue;  // Skip unrevealed cells
+            continue;
         }
 
-        // Only use visible numbers for solving
         if (visibleNumbers[i] <= 0) continue;
 
         QSet<int> neighbors = getNeighbors(i);
@@ -948,7 +951,93 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         }
     }
 
-    // Try basic solver first
+    QVector<CellConstraint> constraints;
+
+    for (int pos : revealed) {
+        if (m_numbers[pos] <= 0) continue;
+
+        QSet<int> neighbors = getNeighbors(pos);
+        int flagCount = 0;
+        QSet<int> unknowns;
+
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            } else if (!revealed.contains(neighbor)) {
+                unknowns.insert(neighbor);
+            }
+        }
+
+        int minesNeeded = m_numbers[pos] - flagCount;
+
+        if (minesNeeded > 0) {
+            constraints.append({pos, minesNeeded, unknowns, false});
+            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width
+                     << "needs" << minesNeeded << "mines among"
+                     << unknowns.size() << "unknowns";
+        }
+
+        if (minesNeeded < unknowns.size()) {
+            int safeNeeded = unknowns.size() - minesNeeded;
+            constraints.append({pos, safeNeeded, unknowns, true});
+            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width
+                     << "needs" << safeNeeded << "safe cells among"
+                     << unknowns.size() << "unknowns";
+        }
+    }
+
+    // Look for cells that uniquely satisfy multiple constraints
+    QMap<int, QVector<int>> satisfiesConstraints; // cell -> constraint indices
+
+    for (int i = 0; i < constraints.size(); i++) {
+        for (int cell : constraints[i].unknowns) {
+            satisfiesConstraints[cell].append(i);
+        }
+    }
+
+    // Find cells that satisfy the most constraints
+    int maxConstraints = 0;
+    QVector<int> bestCells;
+
+    for (auto it = satisfiesConstraints.begin(); it != satisfiesConstraints.end(); ++it) {
+        int constraintCount = it.value().size();
+        if (constraintCount > maxConstraints) {
+            maxConstraints = constraintCount;
+            bestCells.clear();
+            bestCells.append(it.key());
+        } else if (constraintCount == maxConstraints) {
+            bestCells.append(it.key());
+        }
+    }
+
+    if (maxConstraints >= 2 && !bestCells.isEmpty()) {
+        for (int cell : bestCells) {
+            bool uniqueSolution = true;
+            bool isSafe = false;
+            bool firstConstraint = true;
+
+            for (int constraintIdx : satisfiesConstraints[cell]) {
+                const CellConstraint& constraint = constraints[constraintIdx];
+
+                if (constraint.cellsNeeded == constraint.unknowns.size()) {
+                    if (firstConstraint) {
+                        isSafe = constraint.isSafety;
+                        firstConstraint = false;
+                    } else if (constraint.isSafety != isSafe) {
+                        uniqueSolution = false;
+                        break;
+                    }
+                }
+            }
+
+            if (uniqueSolution) {
+                qDebug() << "Found cell at" << cell % m_width << "," << cell / m_width
+                         << "that uniquely satisfies" << maxConstraints << "constraints";
+                return cell;
+            }
+        }
+    }
+
     bool changed = true;
     while (changed) {
         changed = false;
@@ -965,7 +1054,6 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
                 }
             }
 
-            // Look for definite mines first
             if (info.count - knownMines == unknownSpaces.size()) {
                 for (int space : unknownSpaces) {
                     if (!m_solvedSpaces.contains(space) && !flagged.contains(space)) {
@@ -973,12 +1061,11 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
                                  << "\nReason: Space connects to a number requiring exactly"
                                  << unknownSpaces.size() << "more mines among"
                                  << unknownSpaces.size() << "unknown spaces";
-                        return space; // Found a definite mine
+                        return space;
                     }
                 }
             }
 
-            // Update solved spaces for future iterations
             if (info.count == knownMines) {
                 for (int space : unknownSpaces) {
                     if (!m_solvedSpaces.contains(space)) {
@@ -996,7 +1083,6 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     for (int pos : revealed) {
         if (m_numbers[pos] <= 0) continue;
 
-        // Get this number's state
         QSet<int> neighbors = getNeighbors(pos);
         int flagCount = 0;
         QSet<int> unknowns;
@@ -1017,12 +1103,10 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             int mineCol = forcedMine % m_width;
             qDebug() << "Found forced mine at" << mineCol << "," << mineRow;
 
-            // Check neighbors of this forced mine
             QSet<int> mineNeighbors = getNeighbors(forcedMine);
             for (int adjPos : mineNeighbors) {
                 if (!revealed.contains(adjPos) || m_numbers[adjPos] <= 0) continue;
 
-                // Count flags and unknowns for this adjacent number
                 QSet<int> adjNeighbors = getNeighbors(adjPos);
                 int adjFlagCount = 0;
                 QSet<int> adjUnknowns;
@@ -1052,103 +1136,63 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         }
     }
 
-    // If basic solver failed, try advanced pattern matching
-    struct NeedsMine {
-        int pos;           // Position of the number
-        int minesNeeded;   // How many more mines needed
-        QSet<int> unknowns; // Available positions for those mines
-    };
-
-    QVector<NeedsMine> singleMineNeeds;
-
-    // First gather all numbers that need mines
     for (int pos : revealed) {
         if (m_numbers[pos] <= 0) continue;
 
-        // Count flags and unknowns
-        QSet<int> neighbors = getNeighbors(pos);
-        int flagCount = 0;
-        QSet<int> unknowns;
+        int row = pos / m_width;
+        int col = pos % m_width;
 
-        for (int neighbor : neighbors) {
-            if (flagged.contains(neighbor)) {
-                flagCount++;
-            } else if (!revealed.contains(neighbor)) {
-                unknowns.insert(neighbor);
-            }
-        }
-
-        int minesNeeded = m_numbers[pos] - flagCount;
-        if (minesNeeded > 0) {
-            singleMineNeeds.append({pos, minesNeeded, unknowns});
-            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width
-                     << "needs" << minesNeeded << "more mines among"
-                     << unknowns.size() << "unknown cells";
-        }
-    }
-
-    // Now look for cells that satisfy multiple constraints
-    QMap<int, int> satisfiesConstraints; // cell pos -> number of constraints it satisfies
-
-    // For each pair of constraints
-    for (int i = 0; i < singleMineNeeds.size(); i++) {
-        for (int j = i + 1; j < singleMineNeeds.size(); j++) {
-            // Find shared unknown cells
-            QSet<int> shared = singleMineNeeds[i].unknowns;
-            shared.intersect(singleMineNeeds[j].unknowns);
-
-            // Count how many constraints each shared cell satisfies
-            for (int cell : shared) {
-                satisfiesConstraints[cell]++;
-                qDebug() << "Cell at" << cell % m_width << "," << cell / m_width
-                         << "satisfies" << satisfiesConstraints[cell] << "constraints";
-            }
-        }
-    }
-
-    // If we found cells that satisfy multiple constraints
-    if (!satisfiesConstraints.isEmpty()) {
-        // Find cell that satisfies most constraints
-        int bestCell = -1;
-        int maxConstraints = 0;
-
-        for (auto it = satisfiesConstraints.begin(); it != satisfiesConstraints.end(); ++it) {
-            if (it.value() > maxConstraints) {
-                maxConstraints = it.value();
-                bestCell = it.key();
-            }
-        }
-
-        // Verify this is the only possible solution
-        bool isUniqueSolution = true;
-        for (const NeedsMine& need : singleMineNeeds) {
-            // For each constraint this cell satisfies
-            if (need.unknowns.contains(bestCell)) {
-                // Check if there's another way to satisfy it
-                QSet<int> otherOptions = need.unknowns;
-                otherOptions.remove(bestCell);
-
-                // If this constraint has no other options, good
-                // If it has other options but they don't satisfy other constraints, also good
-                for (int other : otherOptions) {
-                    if (satisfiesConstraints.contains(other) &&
-                        satisfiesConstraints[other] >= maxConstraints) {
-                        isUniqueSolution = false;
-                        break;
+        if (m_numbers[pos] == 2) {
+            if (col > 0 && col < m_width - 1) {
+                int left = pos - 1;
+                int right = pos + 1;
+                if (revealed.contains(left) && revealed.contains(right) &&
+                    m_numbers[left] == 1 && m_numbers[right] == 1) {
+                    for (int offset : {-m_width, m_width}) {
+                        int checkPos = pos + offset;
+                        if (checkPos >= 0 && checkPos < m_width * m_height &&
+                            !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
+                            return checkPos;
+                        }
                     }
                 }
             }
-            if (!isUniqueSolution) break;
+
+            if (row > 0 && row < m_height - 1) {
+                int up = pos - m_width;
+                int down = pos + m_width;
+                if (revealed.contains(up) && revealed.contains(down) &&
+                    m_numbers[up] == 1 && m_numbers[down] == 1) {
+                    for (int offset : {-1, 1}) {
+                        int checkPos = pos + offset;
+                        if ((checkPos / m_width) == row &&
+                            !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
+                            return checkPos;
+                        }
+                    }
+                }
+            }
         }
 
-        if (isUniqueSolution && maxConstraints >= 2) {
-            qDebug() << "\nFound best cell at" << bestCell % m_width << "," << bestCell / m_width
-                     << "that uniquely satisfies" << maxConstraints << "constraints";
-            return bestCell;
+        if (m_numbers[pos] == 1 && row < m_height - 1 && col < m_width - 1) {
+            int right = pos + 1;
+            int down = pos + m_width;
+            int diagonal = pos + m_width + 1;
+
+            if (revealed.contains(right) && revealed.contains(down) && revealed.contains(diagonal) &&
+                m_numbers[right] == 1 && m_numbers[down] == 1 && m_numbers[diagonal] == 1) {
+                for (int offset : {-m_width-1, -m_width+1, m_width-1, m_width+1}) {
+                    int checkPos = pos + offset;
+                    if (checkPos >= 0 && checkPos < m_width * m_height &&
+                        abs((checkPos % m_width) - col) == 1 &&
+                        !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
+                        return checkPos;
+                    }
+                }
+            }
         }
     }
 
-    // If all else fails, look for safe moves
     for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
         if (!it.value() && !revealed.contains(it.key()) && !flagged.contains(it.key())) {
             qDebug() << "\nFalling back to previously marked safe cell at"
@@ -1158,7 +1202,7 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     }
 
     qDebug() << "No hint found!";
-    return -1; // No hint found
+    return -1;
 }
 
 bool MinesweeperLogic::initializeFromSave(int width, int height, int mineCount, const QVector<int>& mines) {
