@@ -902,6 +902,7 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     for (int pos : revealed) {
         visibleNumbers[pos] = m_numbers[pos];  // Only copy revealed numbers
     }
+    qDebug() << "\nTrying to find hint using only revealed numbers:";
 
     // Reset solver state using only revealed information
     m_information.clear();
@@ -912,6 +913,7 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     for (int i = 0; i < m_width * m_height; i++) {
         if (flagged.contains(i)) {
             m_solvedSpaces[i] = true;  // Mark flags as mines
+            qDebug() << "Position" << i % m_width << "," << i / m_width << "is marked as flag";
             continue;
         }
         if (!revealed.contains(i)) {
@@ -935,6 +937,10 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             info.count = mineCount;
             m_information.insert(info);
             m_solvedSpaces[i] = false;
+
+            qDebug() << "Cell at" << i % m_width << "," << i / m_width
+                     << "shows" << visibleNumbers[i] << "mines"
+                     << "and has" << mineCount << "flags nearby";
 
             for (int space : info.spaces) {
                 m_informationsForSpace[space].insert(info);
@@ -963,6 +969,10 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             if (info.count - knownMines == unknownSpaces.size()) {
                 for (int space : unknownSpaces) {
                     if (!m_solvedSpaces.contains(space) && !flagged.contains(space)) {
+                        qDebug() << "\nFound definite mine at" << space % m_width << "," << space / m_width
+                                 << "\nReason: Space connects to a number requiring exactly"
+                                 << unknownSpaces.size() << "more mines among"
+                                 << unknownSpaces.size() << "unknown spaces";
                         return space; // Found a definite mine
                     }
                 }
@@ -973,6 +983,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
                 for (int space : unknownSpaces) {
                     if (!m_solvedSpaces.contains(space)) {
                         m_solvedSpaces[space] = false;
+                        qDebug() << "Marked" << space % m_width << "," << space / m_width
+                                 << "as safe - number has all required mines flagged";
                         changed = true;
                     }
                 }
@@ -1031,7 +1043,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
                         int safeCell = *adjUnknowns.begin();
                         int safeRow = safeCell / m_width;
                         int safeCol = safeCell % m_width;
-                        qDebug() << "Found safe cell at" << safeCol << "," << safeRow;
+                        qDebug() << "Found safe cell at" << safeCol << "," << safeRow
+                                 << "\nBecause adjacent cell had a forced mine and needs exactly one more mine";
                         return safeCell;
                     }
                 }
@@ -1068,6 +1081,9 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         int minesNeeded = m_numbers[pos] - flagCount;
         if (minesNeeded > 0) {
             singleMineNeeds.append({pos, minesNeeded, unknowns});
+            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width
+                     << "needs" << minesNeeded << "more mines among"
+                     << unknowns.size() << "unknown cells";
         }
     }
 
@@ -1084,6 +1100,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             // Count how many constraints each shared cell satisfies
             for (int cell : shared) {
                 satisfiesConstraints[cell]++;
+                qDebug() << "Cell at" << cell % m_width << "," << cell / m_width
+                         << "satisfies" << satisfiesConstraints[cell] << "constraints";
             }
         }
     }
@@ -1124,6 +1142,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
         }
 
         if (isUniqueSolution && maxConstraints >= 2) {
+            qDebug() << "\nFound best cell at" << bestCell % m_width << "," << bestCell / m_width
+                     << "that uniquely satisfies" << maxConstraints << "constraints";
             return bestCell;
         }
     }
@@ -1131,10 +1151,13 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     // If all else fails, look for safe moves
     for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
         if (!it.value() && !revealed.contains(it.key()) && !flagged.contains(it.key())) {
+            qDebug() << "\nFalling back to previously marked safe cell at"
+                     << it.key() % m_width << "," << it.key() / m_width;
             return it.key();
         }
     }
 
+    qDebug() << "No hint found!";
     return -1; // No hint found
 }
 
