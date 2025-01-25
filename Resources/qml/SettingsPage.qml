@@ -318,6 +318,7 @@ ApplicationWindow {
                                     root.mineCount = difficultySet.mines
                                     initGame()
                                     settings.difficulty = idx
+                                    root.diffidx = idx
                                 }
                             }
                         }
