@@ -529,53 +529,62 @@ ApplicationWindow {
     }
 
     function reveal(index) {
-        if (gameOver) return
-        if (grid.itemAtIndex(index).revealed || grid.itemAtIndex(index).flagged) return
+       if (gameOver || grid.itemAtIndex(index).revealed || grid.itemAtIndex(index).flagged) return
 
-        if (!gameStarted) {
-            firstClickIndex = index
-            if (!placeMines(index)) {
-                reveal(index)
-                return
-            }
-            gameStarted = true
-            gameTimer.start()
-        }
+       if (!gameStarted) {
+           firstClickIndex = index
+           if (!placeMines(index)) {
+               reveal(index)
+               return
+           }
+           gameStarted = true
+           gameTimer.start()
+       }
 
-        let cell = grid.itemAtIndex(index)
-        cell.revealed = true
-        revealedCount++
+       let cellsToReveal = [index]
+       let visited = new Set()
 
-        if (mines.includes(index)) {
-            cell.isBombClicked = true
-            gameOver = true
-            gameTimer.stop()
-            revealAllMines()
-            playLoose()
-            gameOverPopup.gameOverLabelText = "Game over :("
-            gameOverPopup.gameOverLabelColor = "#d12844"
-            gameOverPopup.visible = true
-            return
-        }
+       while (cellsToReveal.length > 0) {
+           let currentIndex = cellsToReveal.pop()
+           if (visited.has(currentIndex)) continue
 
-        if (numbers[index] === 0) {
-            let row = Math.floor(index / gridSizeX)
-            let col = index % gridSizeX
+           visited.add(currentIndex)
+           let cell = grid.itemAtIndex(currentIndex)
 
-            for (let r = -1; r <= 1; r++) {
-                for (let c = -1; c <= 1; c++) {
-                    if (r === 0 && c === 0) continue
+           if (cell.revealed || cell.flagged) continue
 
-                    let newRow = row + r
-                    let newCol = col + c
-                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+           cell.revealed = true
+           revealedCount++
 
-                    let pos = newRow * gridSizeX + newCol
-                    reveal(pos)
-                }
-            }
-        }
-        checkWin()
+           if (mines.includes(currentIndex)) {
+               cell.isBombClicked = true
+               gameOver = true
+               gameTimer.stop()
+               revealAllMines()
+               playLoose()
+               gameOverPopup.gameOverLabelText = "Game over :("
+               gameOverPopup.gameOverLabelColor = "#d12844"
+               gameOverPopup.visible = true
+               return
+           }
+
+           if (numbers[currentIndex] === 0) {
+               let row = Math.floor(currentIndex / gridSizeX)
+               let col = currentIndex % gridSizeX
+
+               for (let r = -1; r <= 1; r++) {
+                   for (let c = -1; c <= 1; c++) {
+                       if (r === 0 && c === 0) continue
+                       let newRow = row + r
+                       let newCol = col + c
+                       if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+                       cellsToReveal.push(newRow * gridSizeX + newCol)
+                   }
+               }
+           }
+       }
+
+       checkWin()
     }
 
     function revealAllMines() {
