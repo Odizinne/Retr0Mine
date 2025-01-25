@@ -22,6 +22,7 @@ create_desktop_entry() {
 Name=$APP_NAME
 Exec=$INSTALL_DIR/Retr0Mine.sh
 Icon=$INSTALL_DIR/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
+Path=$INSTALL_DIR
 Type=Application
 Categories=Game;
 EOF
