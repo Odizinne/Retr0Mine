@@ -465,10 +465,7 @@ ApplicationWindow {
 
                 if (adjacentCell.flagged) {
                     flaggedCount++;
-                } else if (!adjacentCell.revealed) {
-                    if (adjacentCell.questioned) {
-                        adjacentCell.questioned = false;
-                    }
+                } else if (!adjacentCell.revealed && !adjacentCell.questioned) {
                     adjacentCells.push(pos);
                 }
             }
