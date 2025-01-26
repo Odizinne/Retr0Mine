@@ -43,6 +43,7 @@ ApplicationWindow {
         property int customWidth: 8
         property int customHeight: 8
         property int customMines: 10
+        property bool dimmSatisfied: false
     }
 
     Shortcut {
@@ -877,6 +878,33 @@ ApplicationWindow {
                                     return accentColor
                                 return "transparent"
                             }
+
+                            Behavior on opacity {
+                                enabled: settings.animations
+                                NumberAnimation { duration: 200 }
+                            }
+
+                            opacity: {
+                               if (!settings.dimmSatisfied || !cellItem.revealed) return 1
+                               if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index)) return 1
+
+                               let row = Math.floor(index / gridSizeX)
+                               let col = index % gridSizeX
+                               let adjacentFlags = 0
+
+                               for (let r = -1; r <= 1; r++) {
+                                   for (let c = -1; c <= 1; c++) {
+                                       if (r === 0 && c === 0) continue
+                                       let newRow = row + r
+                                       let newCol = col + c
+                                       if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+                                       let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol)
+                                       if (adjacentCell.flagged) adjacentFlags++
+                                   }
+                               }
+
+                               return adjacentFlags === numbers[index] ? 0.5 : 1
+                            }
                         }
 
                         // The button for background and interactions
@@ -984,6 +1012,32 @@ ApplicationWindow {
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
+                            opacity: {
+                                if (!settings.dimmSatisfied || !cellItem.revealed || numbers[index] === 0) return 1
+
+                                let row = Math.floor(index / gridSizeX)
+                                let col = index % gridSizeX
+                                let adjacentFlags = 0
+
+                                for (let r = -1; r <= 1; r++) {
+                                    for (let c = -1; c <= 1; c++) {
+                                        if (r === 0 && c === 0) continue
+                                        let newRow = row + r
+                                        let newCol = col + c
+                                        if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+                                        let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol)
+                                        if (adjacentCell.flagged) adjacentFlags++
+                                    }
+                                }
+
+                                return adjacentFlags === numbers[index] ? 0.25 : 1
+                            }
+
+                            Behavior on opacity {
+                                enabled: settings.animations
+                                NumberAnimation { duration: 200 }
+                            }
+
                             color: {
                                 if (!cellItem.revealed) return "black"
                                 if (mines.includes(index)) return "transparent"

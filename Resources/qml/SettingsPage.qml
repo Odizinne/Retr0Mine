@@ -616,6 +616,25 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
+                                text: qsTr("Dimm satisfied cells")
+                                Layout.fillWidth: true
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: dimmSatisfiedSwitch.checked = !dimmSatisfiedSwitch.checked
+                                }
+                            }
+                            Switch {
+                                id: dimmSatisfiedSwitch
+                                checked: settings.dimmSatisfied
+                                onCheckedChanged: {
+                                    settings.dimmSatisfied = checked
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Label {
                                 text: qsTr("High contrast flags")
                                 Layout.fillWidth: true
                                 MouseArea {
