@@ -61,18 +61,14 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
         if (!safeZone.contains(i)) allPositions.append(i);
     }
 
-    int maxAttempts = (m_width >= 30) ? 2000 : (m_width >= 16) ? 1500 : 1000;
     int attempts = 0;
 
-    while (maxAttempts--) {
+    while (attempts != 1000) {
         attempts++;
-        if (attempts % 100 == 0) {
-            qDebug() << "Failed to generate valid grid, attempt" << attempts;
-        }
-
         m_mines.clear();
         QVector<int> positions = allPositions;
 
+        // Shuffle mine positions
         for (int i = positions.size() - 1; i > 0; i--) {
             int j = std::uniform_int_distribution<int>(0, i)(m_rng);
             std::swap(positions[i], positions[j]);
@@ -90,154 +86,92 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
         if (currentMines.size() == m_mineCount) {
             calculateNumbers();
 
-            QSet<int> visited;
-            QQueue<int> queue;
-            queue.enqueue(firstClickPos);
-            visited.insert(firstClickPos);
-
-            while (!queue.isEmpty()) {
-                int current = queue.dequeue();
-                for (int neighbor : getNeighbors(current)) {
-                    if (!currentMines.contains(neighbor) && !visited.contains(neighbor)) {
-                        visited.insert(neighbor);
-                        queue.enqueue(neighbor);
-                    }
-                }
+            // Check for 50/50 ambiguous situations
+            if (hasAmbiguousMinePlacement(currentMines)) {
+                qDebug() << "Ambiguous mine placement detected, regenerating...";
+                continue; // Regenerate the grid
             }
 
-            bool hasIsolatedAreas = false;
-            for (int i = 0; i < m_width * m_height; i++) {
-                if (!currentMines.contains(i) && !visited.contains(i)) {
-                    hasIsolatedAreas = true;
-                    break;
-                }
+            qDebug() << "Successfully generated grid in" << attempts << "attempts";
+            return true;
+        }
+    }
+
+    qDebug() << "Failed to generate valid grid after" << attempts << "attempts";
+    return false;
+}
+
+bool MinesweeperLogic::hasAmbiguousMinePlacement(const QSet<int>& currentMines) {
+    for (int pos = 0; pos < m_width * m_height; pos++) {
+        if (currentMines.contains(pos)) continue; // Skip mines
+
+        int number = m_numbers.value(pos); // Get the number in this cell
+        if (number == 0) continue; // Skip empty cells
+
+        QSet<int> unknownNeighbors;
+        for (int neighbor : getNeighbors(pos)) {
+            if (!currentMines.contains(neighbor) && m_numbers.value(neighbor) == -1) {
+                unknownNeighbors.insert(neighbor); // Collect ? cells
             }
+        }
 
-            bool has5050 = false;
-            if (!hasIsolatedAreas) {
-                // Check vertical patterns
-                for (int x = 0; x < m_width; x++) {
-                    for (int y = 0; y < m_height - 1; y++) {
-                        int pos1 = y * m_width + x;
-                        int pos2 = (y + 1) * m_width + x;
+        if (unknownNeighbors.size() > 1) {
+            if (isAmbiguous(number, unknownNeighbors, currentMines)) {
+                qDebug() << "Conflict found at cell" << pos;
+                printGrid(currentMines);  // Print the grid when ambiguity is found
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-                        if (!currentMines.contains(pos1) && !currentMines.contains(pos2)) {
-                            // Check if both cells have the same surrounding numbers except each other
-                            QSet<int> neighbors1(getNeighbors(pos1).begin(), getNeighbors(pos1).end());
-                            QSet<int> neighbors2(getNeighbors(pos2).begin(), getNeighbors(pos2).end());
 
-                            neighbors1.remove(pos2);
-                            neighbors2.remove(pos1);
+bool MinesweeperLogic::isAmbiguous(int number, const QSet<int>& unknownCells, const QSet<int>& currentMines) {
+    QSet<QSet<int>> possibleMinePlacements;
 
-                            bool allMinesOrKnown = true;
-                            for (int n : neighbors1) {
-                                if (!currentMines.contains(n) && n != pos2) {
-                                    allMinesOrKnown = false;
-                                    break;
-                                }
-                            }
-                            for (int n : neighbors2) {
-                                if (!currentMines.contains(n) && n != pos1) {
-                                    allMinesOrKnown = false;
-                                    break;
-                                }
-                            }
-
-                            if (allMinesOrKnown) {
-                                has5050 = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (has5050) break;
-                }
-
-                // Check horizontal patterns
-                if (!has5050) {
-                    for (int y = 0; y < m_height; y++) {
-                        for (int x = 0; x < m_width - 1; x++) {
-                            int pos1 = y * m_width + x;
-                            int pos2 = pos1 + 1;
-
-                            if (!currentMines.contains(pos1) && !currentMines.contains(pos2)) {
-                                QSet<int> neighbors1(getNeighbors(pos1).begin(), getNeighbors(pos1).end());
-                                QSet<int> neighbors2(getNeighbors(pos2).begin(), getNeighbors(pos2).end());
-
-                                neighbors1.remove(pos2);
-                                neighbors2.remove(pos1);
-
-                                bool allMinesOrKnown = true;
-                                for (int n : neighbors1) {
-                                    if (!currentMines.contains(n) && n != pos2) {
-                                        allMinesOrKnown = false;
-                                        break;
-                                    }
-                                }
-                                for (int n : neighbors2) {
-                                    if (!currentMines.contains(n) && n != pos1) {
-                                        allMinesOrKnown = false;
-                                        break;
-                                    }
-                                }
-
-                                if (allMinesOrKnown) {
-                                    has5050 = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (has5050) break;
-                    }
-                }
-
-                // Check 2x2 patterns
-                for (int y = 0; y < m_height - 1; y++) {
-                    for (int x = 0; x < m_width - 1; x++) {
-                        int topLeft = y * m_width + x;
-                        int topRight = topLeft + 1;
-                        int bottomLeft = (y + 1) * m_width + x;
-                        int bottomRight = bottomLeft + 1;
-
-                        if (!currentMines.contains(topLeft) && !currentMines.contains(topRight) &&
-                            !currentMines.contains(bottomLeft) && !currentMines.contains(bottomRight)) {
-
-                            // Check if all surrounding cells are mines or known
-                            QSet<int> allNeighbors;
-                            for (int pos : {topLeft, topRight, bottomLeft, bottomRight}) {
-                                for (int n : getNeighbors(pos)) {
-                                    if (n != topLeft && n != topRight && n != bottomLeft && n != bottomRight) {
-                                        allNeighbors.insert(n);
-                                    }
-                                }
-                            }
-
-                            bool allMinesOrKnown = true;
-                            for (int n : allNeighbors) {
-                                if (!currentMines.contains(n)) {
-                                    allMinesOrKnown = false;
-                                    break;
-                                }
-                            }
-
-                            if (allMinesOrKnown) {
-                                has5050 = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (has5050) break;
-                }
-
-                if (!has5050) {
-                    qDebug() << "Successfully generated grid in" << attempts << "attempts";
-                    return true;
+    // Generate all possible ways to place mines in unknown cells
+    for (int mine1 : unknownCells) {
+        for (int mine2 : unknownCells) {
+            if (mine1 != mine2) {
+                QSet<int> placement = {mine1, mine2};
+                if (satisfiesNumber(number, placement, currentMines)) {
+                    possibleMinePlacements.insert(placement);
                 }
             }
         }
     }
 
-    return false;
+    // If multiple different placements satisfy the same number, it's ambiguous
+    return possibleMinePlacements.size() > 1;
 }
+
+bool MinesweeperLogic::satisfiesNumber(int number, const QSet<int>& placement, const QSet<int>& currentMines) {
+    int actualMines = 0;
+    for (int pos : placement) {
+        if (currentMines.contains(pos)) {
+            actualMines++;
+        }
+    }
+    return actualMines == number;
+}
+
+void MinesweeperLogic::printGrid(const QSet<int>& currentMines) {
+    for (int y = 0; y < m_height; y++) {
+        QString rowOutput;
+        for (int x = 0; x < m_width; x++) {
+            int pos = y * m_width + x;
+            if (currentMines.contains(pos)) {
+                rowOutput += "M "; // Mine
+            } else {
+                int num = m_numbers.value(pos); // Assuming you have a way to get the number
+                rowOutput += QString::number(num) + " "; // Display number
+            }
+        }
+        qDebug() << rowOutput;
+    }
+}
+
 
 bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
     QSet<int> neighbors = getNeighbors(pos);

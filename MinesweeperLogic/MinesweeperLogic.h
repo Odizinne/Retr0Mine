@@ -65,6 +65,11 @@ private:
     int solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells);
     bool isValidDensity(const QSet<int>& mines, int pos);
     bool wouldCreate5050(const QSet<int>& mines, int newMinePos, int checkRow, int checkCol);
+    void printGrid(const QSet<int>& currentMines);
+    bool isValidGrid(const QSet<int>& currentMines);
+    bool hasAmbiguousMinePlacement(const QSet<int>& currentMines);
+    bool isAmbiguous(int number, const QSet<int>& unknownCells, const QSet<int>& currentMines);
+    bool satisfiesNumber(int number, const QSet<int>& placement, const QSet<int>& currentMines);
 };
 
 #endif // MINESWEEPERLOGIC_H
