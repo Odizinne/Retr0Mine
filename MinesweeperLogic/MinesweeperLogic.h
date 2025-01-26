@@ -61,35 +61,6 @@ private:
     bool canPlaceMineAt(const QSet<int>& mines, int pos);
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
-    bool trySolve(const QSet<int>& mines);
-    void solve();
-
-    // Helper methods for mine hints
-    void findBasicDeductions(const QSet<int>& revealed,
-                             const QSet<int>& flagged,
-                             QSet<int>& logicalMines,
-                             QSet<int>& logicalSafe);
-
-    QSet<int> getFrontier(const QSet<int>& revealed, const QSet<int>& flagged);
-
-    void getNeighborInfo(int pos,
-                         const QSet<int>& flagged,
-                         const QSet<int>& frontier,
-                         QSet<int>& unknownNeighbors,
-                         int& flagCount);
-
-    void buildConstraintsForCell(int pos,
-                                 const QSet<int>& revealed,
-                                 const QSet<int>& flagged,
-                                 QMap<int, QSet<int>>& numberConstraints);
-
-    QSet<int> findSafeThroughExhaustiveCheck(const QSet<int>& revealed,
-                                             const QSet<int>& flagged,
-                                             const QSet<int>& frontier);
-
-    bool tryAllCombinations(const QMap<int, QSet<int>>& constraints,
-                            int testPos,
-                            const QSet<int>& flagged);
 
     int solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells);
     bool isValidDensity(const QSet<int>& mines, int pos);

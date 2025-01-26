@@ -22,115 +22,6 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount) {
     return true;
 }
 
-bool MinesweeperLogic::trySolve(const QSet<int>& mines) {
-    // Reset solver state
-    m_information.clear();
-    m_informationsForSpace.clear();
-    m_solvedSpaces.clear();
-
-    // Add initial information based on numbers
-    for (int i = 0; i < m_width * m_height; i++) {
-        if (mines.contains(i)) {
-            m_solvedSpaces[i] = true; // Mark mines as known
-            continue;
-        }
-
-        // Calculate number for this cell
-        QSet<int> neighbors = getNeighbors(i);
-        int mineCount = 0;
-        for (int neighbor : neighbors) {
-            if (mines.contains(neighbor)) {
-                mineCount++;
-            }
-        }
-
-        // Add as information if it has a number
-        if (mineCount > 0) {
-            MineSolverInfo info;
-            info.spaces = neighbors;
-            info.count = mineCount;
-            m_information.insert(info);
-            m_solvedSpaces[i] = false; // Mark revealed number as known safe
-
-            for (int space : info.spaces) {
-                m_informationsForSpace[space].insert(info);
-            }
-        }
-    }
-
-    try {
-        solve();
-        // Count solved spaces and mines
-        int solvedCount = 0;
-        int foundMines = 0;
-        for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
-            if (it.value()) foundMines++;
-            solvedCount++;
-        }
-
-        // If we found all mines, mark remaining cells as safe
-        if (foundMines == m_mineCount) {
-            for (int i = 0; i < m_width * m_height; i++) {
-                if (!m_solvedSpaces.contains(i)) {
-                    m_solvedSpaces[i] = false;
-                    solvedCount++;
-                }
-            }
-        }
-
-        qDebug() << "Solve attempt - Found mines:" << foundMines
-                 << "Total solved:" << solvedCount
-                 << "Expected mines:" << m_mineCount;
-
-        return solvedCount > 0 && foundMines == m_mineCount;
-    }
-    catch (...) {
-        return false;
-    }
-}
-
-void MinesweeperLogic::solve() {
-    bool changed = true;
-    while (changed) {
-        changed = false;
-
-        // Process each piece of information
-        for (const MineSolverInfo& info : m_information) {
-            // Count already solved spaces
-            int knownMines = 0;
-            QSet<int> unknownSpaces;
-
-            for (int space : info.spaces) {
-                if (m_solvedSpaces.contains(space)) {
-                    if (m_solvedSpaces[space]) knownMines++;
-                } else {
-                    unknownSpaces.insert(space);
-                }
-            }
-
-            // Simple deductions
-            if (info.count == knownMines) {
-                // All remaining spaces must be safe
-                for (int space : unknownSpaces) {
-                    if (!m_solvedSpaces.contains(space)) {
-                        m_solvedSpaces[space] = false;
-                        changed = true;
-                    }
-                }
-            }
-            else if (info.count - knownMines == unknownSpaces.size()) {
-                // All remaining spaces must be mines
-                for (int space : unknownSpaces) {
-                    if (!m_solvedSpaces.contains(space)) {
-                        m_solvedSpaces[space] = true;
-                        changed = true;
-                    }
-                }
-            }
-        }
-    }
-}
-
 void MinesweeperLogic::calculateNumbers() {
     m_numbers.fill(0, m_width * m_height);
 
@@ -149,62 +40,47 @@ void MinesweeperLogic::calculateNumbers() {
 
 bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
     const int firstClickPos = firstClickY * m_width + firstClickX;
-    qDebug() << "Placing mines, first click at:" << firstClickPos;
 
-    // Adjust safe zone size based on board size
-    int safeRadius = 1;  // Default for 9x9
-    if (m_width >= 30) safeRadius = 2;  // For largest board
-    else if (m_width >= 16) safeRadius = 1;  // Keep default for medium
-
-    // Create safe zone around first click
+    // Setup safe zone around first click
+    int safeRadius = (m_width >= 30) ? 2 : 1;
     QSet<int> safeZone;
     int row = firstClickPos / m_width;
     int col = firstClickPos % m_width;
-
     for (int r = -safeRadius; r <= safeRadius; r++) {
         for (int c = -safeRadius; c <= safeRadius; c++) {
             int newRow = row + r;
             int newCol = col + c;
-            if (newRow >= 0 && newRow < m_height &&
-                newCol >= 0 && newCol < m_width) {
+            if (newRow >= 0 && newRow < m_height && newCol >= 0 && newCol < m_width) {
                 safeZone.insert(newRow * m_width + newCol);
             }
         }
     }
 
-    // Create list of available positions
     QVector<int> allPositions;
     for (int i = 0; i < m_width * m_height; i++) {
-        if (!safeZone.contains(i)) {
-            allPositions.append(i);
-        }
+        if (!safeZone.contains(i)) allPositions.append(i);
     }
 
-    // Adjust maximum attempts based on board size
-    int maxAttempts = 1000;
-    if (m_width >= 30) maxAttempts = 2000;
-    else if (m_width >= 16) maxAttempts = 1500;
-
-    int attemptCount = 0;
+    int maxAttempts = (m_width >= 30) ? 2000 : (m_width >= 16) ? 1500 : 1000;
+    int attempts = 0;
 
     while (maxAttempts--) {
-        attemptCount++;
-        m_mines.clear();
+        attempts++;
+        if (attempts % 100 == 0) {
+            qDebug() << "Failed to generate valid grid, attempt" << attempts;
+        }
 
-        // Shuffle all positions
+        m_mines.clear();
         QVector<int> positions = allPositions;
+
         for (int i = positions.size() - 1; i > 0; i--) {
-            std::uniform_int_distribution<int> dist(0, i);
-            int j = dist(m_rng);
+            int j = std::uniform_int_distribution<int>(0, i)(m_rng);
             std::swap(positions[i], positions[j]);
         }
 
-        // Try to place mines in shuffled order
-        QSet<int> currentMines;  // Keep track of placed mines in a set for faster lookups
-
+        QSet<int> currentMines;
         for (int pos : positions) {
             if (currentMines.size() >= m_mineCount) break;
-
             if (canPlaceMineAt(currentMines, pos)) {
                 currentMines.insert(pos);
                 m_mines.append(pos);
@@ -214,46 +90,152 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
         if (currentMines.size() == m_mineCount) {
             calculateNumbers();
 
-            // First quick check: ensure no isolated areas
+            QSet<int> visited;
+            QQueue<int> queue;
+            queue.enqueue(firstClickPos);
+            visited.insert(firstClickPos);
+
+            while (!queue.isEmpty()) {
+                int current = queue.dequeue();
+                for (int neighbor : getNeighbors(current)) {
+                    if (!currentMines.contains(neighbor) && !visited.contains(neighbor)) {
+                        visited.insert(neighbor);
+                        queue.enqueue(neighbor);
+                    }
+                }
+            }
+
             bool hasIsolatedAreas = false;
-            {
-                QSet<int> visited;
-                QQueue<int> queue;
-                queue.enqueue(firstClickPos);
-                visited.insert(firstClickPos);
+            for (int i = 0; i < m_width * m_height; i++) {
+                if (!currentMines.contains(i) && !visited.contains(i)) {
+                    hasIsolatedAreas = true;
+                    break;
+                }
+            }
 
-                while (!queue.isEmpty()) {
-                    int current = queue.dequeue();
-                    QSet<int> neighbors = getNeighbors(current);
+            bool has5050 = false;
+            if (!hasIsolatedAreas) {
+                // Check vertical patterns
+                for (int x = 0; x < m_width; x++) {
+                    for (int y = 0; y < m_height - 1; y++) {
+                        int pos1 = y * m_width + x;
+                        int pos2 = (y + 1) * m_width + x;
 
-                    for (int neighbor : neighbors) {
-                        if (!currentMines.contains(neighbor) && !visited.contains(neighbor)) {
-                            visited.insert(neighbor);
-                            queue.enqueue(neighbor);
+                        if (!currentMines.contains(pos1) && !currentMines.contains(pos2)) {
+                            // Check if both cells have the same surrounding numbers except each other
+                            QSet<int> neighbors1(getNeighbors(pos1).begin(), getNeighbors(pos1).end());
+                            QSet<int> neighbors2(getNeighbors(pos2).begin(), getNeighbors(pos2).end());
+
+                            neighbors1.remove(pos2);
+                            neighbors2.remove(pos1);
+
+                            bool allMinesOrKnown = true;
+                            for (int n : neighbors1) {
+                                if (!currentMines.contains(n) && n != pos2) {
+                                    allMinesOrKnown = false;
+                                    break;
+                                }
+                            }
+                            for (int n : neighbors2) {
+                                if (!currentMines.contains(n) && n != pos1) {
+                                    allMinesOrKnown = false;
+                                    break;
+                                }
+                            }
+
+                            if (allMinesOrKnown) {
+                                has5050 = true;
+                                break;
+                            }
                         }
                     }
+                    if (has5050) break;
                 }
 
-                // Check if all non-mine cells are reachable
-                for (int i = 0; i < m_width * m_height; i++) {
-                    if (!currentMines.contains(i) && !visited.contains(i)) {
-                        hasIsolatedAreas = true;
-                        break;
+                // Check horizontal patterns
+                if (!has5050) {
+                    for (int y = 0; y < m_height; y++) {
+                        for (int x = 0; x < m_width - 1; x++) {
+                            int pos1 = y * m_width + x;
+                            int pos2 = pos1 + 1;
+
+                            if (!currentMines.contains(pos1) && !currentMines.contains(pos2)) {
+                                QSet<int> neighbors1(getNeighbors(pos1).begin(), getNeighbors(pos1).end());
+                                QSet<int> neighbors2(getNeighbors(pos2).begin(), getNeighbors(pos2).end());
+
+                                neighbors1.remove(pos2);
+                                neighbors2.remove(pos1);
+
+                                bool allMinesOrKnown = true;
+                                for (int n : neighbors1) {
+                                    if (!currentMines.contains(n) && n != pos2) {
+                                        allMinesOrKnown = false;
+                                        break;
+                                    }
+                                }
+                                for (int n : neighbors2) {
+                                    if (!currentMines.contains(n) && n != pos1) {
+                                        allMinesOrKnown = false;
+                                        break;
+                                    }
+                                }
+
+                                if (allMinesOrKnown) {
+                                    has5050 = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (has5050) break;
                     }
                 }
-            }
 
-            if (!hasIsolatedAreas && trySolve(currentMines)) {
-                qDebug() << "Successfully placed" << m_mineCount << "mines after" << attemptCount << "attempts";
-                return true;
+                // Check 2x2 patterns
+                for (int y = 0; y < m_height - 1; y++) {
+                    for (int x = 0; x < m_width - 1; x++) {
+                        int topLeft = y * m_width + x;
+                        int topRight = topLeft + 1;
+                        int bottomLeft = (y + 1) * m_width + x;
+                        int bottomRight = bottomLeft + 1;
+
+                        if (!currentMines.contains(topLeft) && !currentMines.contains(topRight) &&
+                            !currentMines.contains(bottomLeft) && !currentMines.contains(bottomRight)) {
+
+                            // Check if all surrounding cells are mines or known
+                            QSet<int> allNeighbors;
+                            for (int pos : {topLeft, topRight, bottomLeft, bottomRight}) {
+                                for (int n : getNeighbors(pos)) {
+                                    if (n != topLeft && n != topRight && n != bottomLeft && n != bottomRight) {
+                                        allNeighbors.insert(n);
+                                    }
+                                }
+                            }
+
+                            bool allMinesOrKnown = true;
+                            for (int n : allNeighbors) {
+                                if (!currentMines.contains(n)) {
+                                    allMinesOrKnown = false;
+                                    break;
+                                }
+                            }
+
+                            if (allMinesOrKnown) {
+                                has5050 = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (has5050) break;
+                }
+
+                if (!has5050) {
+                    qDebug() << "Successfully generated grid in" << attempts << "attempts";
+                    return true;
+                }
             }
-            qDebug() << "Configuration not solvable or has isolated areas, retrying...";
-        } else {
-            qDebug() << "Could only place" << m_mines.size() << "mines, retrying...";
         }
     }
 
-    qDebug() << "Failed to generate valid mine configuration after" << maxAttempts << "attempts";
     return false;
 }
 
@@ -514,43 +496,7 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
 
     return -1;
 }
-QSet<int> MinesweeperLogic::findSafeThroughExhaustiveCheck(const QSet<int>& revealed,
-                                                           const QSet<int>& flagged,
-                                                           const QSet<int>& frontier)
-{
-    QSet<int> safeCells;
-    QMap<int, QSet<int>> numberConstraints; // For each revealed number, its unknown neighbors
 
-    // Build constraints for each revealed number
-    for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
-
-        QSet<int> unknownNeighbors;
-        int flagCount = 0;
-        getNeighborInfo(pos, flagged, frontier, unknownNeighbors, flagCount);
-
-        if (!unknownNeighbors.isEmpty()) {
-            numberConstraints[pos] = unknownNeighbors;
-        }
-    }
-
-    // Check each frontier cell if it could be safe
-    for (int testPos : frontier) {
-        // Try both possibilities for this cell
-        QVector<QSet<int>> validConfigurations;
-        if (tryAllCombinations(numberConstraints, testPos, flagged)) {
-            // If we found valid configurations where this cell is both mine and not mine,
-            // we can't determine anything
-            qDebug() << "Cell" << testPos << "could be either mine or safe";
-        } else {
-            // If we only found configurations with this cell as safe, it must be safe
-            safeCells.insert(testPos);
-            qDebug() << "Found definite safe cell at" << testPos;
-        }
-    }
-
-    return safeCells;
-}
 
 bool MinesweeperLogic::isValidDensity(const QSet<int>& mines, int pos) {
     // Calculate local mine density in a 5x5 area
@@ -581,291 +527,12 @@ bool MinesweeperLogic::isValidDensity(const QSet<int>& mines, int pos) {
     return (static_cast<double>(localMines) / areaSize) <= maxDensity;
 }
 
-bool MinesweeperLogic::tryAllCombinations(const QMap<int, QSet<int>>& constraints,
-                                          int testPos,
-                                          const QSet<int>& flagged)
-{
-    QSet<int> relevantUnknowns;
-    for (const QSet<int>& unknowns : constraints) {
-        relevantUnknowns.unite(unknowns);
-    }
 
-    if (!relevantUnknowns.contains(testPos)) {
-        return true;
-    }
 
-    int totalMinesNeeded = 0;
-    int maxPossibleMines = relevantUnknowns.size();
 
-    for (auto it = constraints.begin(); it != constraints.end(); ++it) {
-        int pos = it.key();
-        totalMinesNeeded += m_numbers[pos];
-    }
 
-    if (totalMinesNeeded > maxPossibleMines) {
-        return false;
-    }
 
-    bool couldBeMine = false;
-    bool couldBeSafe = false;
 
-    // Try all possible mine combinations
-    int totalUnknowns = relevantUnknowns.size();
-    for (int i = 0; i < (1 << totalUnknowns); i++) {
-        QSet<int> testMines = flagged;
-        int bit = 0;
-
-        // Build test configuration
-        for (int pos : relevantUnknowns) {
-            if (i & (1 << bit)) {
-                testMines.insert(pos);
-            }
-            bit++;
-        }
-
-        // Check if this configuration satisfies all constraints
-        bool valid = true;
-        for (auto it = constraints.begin(); it != constraints.end(); ++it) {
-            int pos = it.key();
-            const QSet<int>& unknowns = it.value();
-
-            int mineCount = 0;
-            for (int neighbor : unknowns) {
-                if (testMines.contains(neighbor)) mineCount++;
-            }
-
-            if (mineCount != m_numbers[pos]) {
-                valid = false;
-                break;
-            }
-        }
-
-        if (valid) {
-            if (testMines.contains(testPos)) {
-                couldBeMine = true;
-            } else {
-                couldBeSafe = true;
-            }
-
-            if (couldBeMine && couldBeSafe) {
-                break;
-            }
-        }
-    }
-
-    return couldBeMine;
-}
-
-void MinesweeperLogic::findBasicDeductions(const QSet<int>& revealed,
-                                           const QSet<int>& flagged,
-                                           QSet<int>& logicalMines,
-                                           QSet<int>& logicalSafe)
-{
-    // First pass: find satisfied numbers and their implications
-    QSet<int> satisfiedNumbers;
-    for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
-
-        QSet<int> unknownNeighbors;
-        int flagCount = 0;
-        getNeighborInfo(pos, flagged, getFrontier(revealed, flagged), unknownNeighbors, flagCount);
-
-        // If number is satisfied by flags, all other unknowns are safe
-        if (m_numbers[pos] == flagCount) {
-            logicalSafe.unite(unknownNeighbors);
-            satisfiedNumbers.insert(pos);
-        }
-        // If remaining mines equals remaining unknowns, all unknowns are mines
-        else if (m_numbers[pos] - flagCount == unknownNeighbors.size()) {
-            logicalMines.unite(unknownNeighbors);
-        }
-    }
-
-    // Second pass: propagate implications from satisfied numbers
-    for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
-
-        QSet<int> unknownNeighbors;
-        int flagCount = 0;
-        getNeighborInfo(pos, flagged, getFrontier(revealed, flagged), unknownNeighbors, flagCount);
-
-        // Check neighbors of this number
-        int row = pos / m_width;
-        int col = pos % m_width;
-
-        bool hasAdjacentSatisfied = false;
-        for (int r = -1; r <= 1; ++r) {
-            for (int c = -1; c <= 1; ++c) {
-                if (r == 0 && c == 0) continue;
-
-                int newRow = row + r;
-                int newCol = col + c;
-
-                if (newRow >= 0 && newRow < m_height &&
-                    newCol >= 0 && newCol < m_width) {
-
-                    int adjPos = newRow * m_width + newCol;
-                    if (satisfiedNumbers.contains(adjPos)) {
-                        hasAdjacentSatisfied = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // If this number shares area with a satisfied number,
-        // we can deduce more information
-        if (hasAdjacentSatisfied) {
-            // Re-check this number's constraints considering satisfied neighbors
-            QSet<int> sharedWithSatisfied;
-            for (int unknown : unknownNeighbors) {
-                // Check if this unknown is adjacent to a satisfied number
-                int uRow = unknown / m_width;
-                int uCol = unknown % m_width;
-
-                for (int r = -1; r <= 1; ++r) {
-                    for (int c = -1; c <= 1; ++c) {
-                        int checkRow = uRow + r;
-                        int checkCol = uCol + c;
-
-                        if (checkRow >= 0 && checkRow < m_height &&
-                            checkCol >= 0 && checkCol < m_width) {
-
-                            int checkPos = checkRow * m_width + checkCol;
-                            if (satisfiedNumbers.contains(checkPos)) {
-                                sharedWithSatisfied.insert(unknown);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            // These cells must be safe as they're shared with satisfied numbers
-            logicalSafe.unite(sharedWithSatisfied);
-
-            // Recalculate constraints for remaining unknowns
-            unknownNeighbors.subtract(sharedWithSatisfied);
-            if (m_numbers[pos] - flagCount == unknownNeighbors.size()) {
-                logicalMines.unite(unknownNeighbors);
-            }
-        }
-    }
-}
-
-QSet<int> MinesweeperLogic::getFrontier(const QSet<int>& revealed, const QSet<int>& flagged)
-{
-    QSet<int> frontier;
-
-    // For each revealed cell
-    for (int pos : revealed) {
-        int row = pos / m_width;
-        int col = pos % m_width;
-
-        // Check all neighbors
-        for (int r = -1; r <= 1; ++r) {
-            for (int c = -1; c <= 1; ++c) {
-                if (r == 0 && c == 0) continue;
-
-                int newRow = row + r;
-                int newCol = col + c;
-
-                if (newRow >= 0 && newRow < m_height &&
-                    newCol >= 0 && newCol < m_width) {
-                    int neighborPos = newRow * m_width + newCol;
-
-                    // Add to frontier if not revealed and not flagged
-                    if (!revealed.contains(neighborPos) && !flagged.contains(neighborPos)) {
-                        frontier.insert(neighborPos);
-                    }
-                }
-            }
-        }
-    }
-
-    return frontier;
-}
-
-void MinesweeperLogic::getNeighborInfo(int pos,
-                                       const QSet<int>& flagged,
-                                       const QSet<int>& frontier,
-                                       QSet<int>& unknownNeighbors,
-                                       int& flagCount)
-{
-    int row = pos / m_width;
-    int col = pos % m_width;
-
-    flagCount = 0;
-    unknownNeighbors.clear();
-
-    // Check all neighbors
-    for (int r = -1; r <= 1; ++r) {
-        for (int c = -1; c <= 1; ++c) {
-            if (r == 0 && c == 0) continue;
-
-            int newRow = row + r;
-            int newCol = col + c;
-
-            if (newRow >= 0 && newRow < m_height &&
-                newCol >= 0 && newCol < m_width) {
-                int neighborPos = newRow * m_width + newCol;
-
-                if (flagged.contains(neighborPos)) {
-                    flagCount++;
-                } else if (frontier.contains(neighborPos)) {
-                    unknownNeighbors.insert(neighborPos);
-                }
-            }
-        }
-    }
-}
-
-void MinesweeperLogic::buildConstraintsForCell(int pos,
-                                               const QSet<int>& revealed,
-                                               const QSet<int>& flagged,
-                                               QMap<int, QSet<int>>& numberConstraints)
-{
-    QSet<int> relevantCells;
-    QQueue<int> toProcess;
-    toProcess.enqueue(pos);
-
-    // Do a breadth-first search to find all relevant revealed numbers
-    while (!toProcess.isEmpty()) {
-        int currentPos = toProcess.dequeue();
-        if (relevantCells.contains(currentPos)) continue;
-        relevantCells.insert(currentPos);
-
-        int row = currentPos / m_width;
-        int col = currentPos % m_width;
-
-        for (int r = -1; r <= 1; ++r) {
-            for (int c = -1; c <= 1; ++c) {
-                int newRow = row + r;
-                int newCol = col + c;
-
-                if (newRow >= 0 && newRow < m_height &&
-                    newCol >= 0 && newCol < m_width) {
-                    int neighborPos = newRow * m_width + newCol;
-
-                    if (revealed.contains(neighborPos) && m_numbers[neighborPos] > 0) {
-                        QSet<int> unknownNeighbors;
-                        int flagCount = 0;
-                        getNeighborInfo(neighborPos, flagged, getFrontier(revealed, flagged),
-                                        unknownNeighbors, flagCount);
-
-                        if (!unknownNeighbors.isEmpty()) {
-                            numberConstraints[neighborPos] = unknownNeighbors;
-                            // Add unknown neighbors to process queue to find connected constraints
-                            for (int unknown : unknownNeighbors) {
-                                toProcess.enqueue(unknown);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 
 QSet<int> MinesweeperLogic::getNeighbors(int pos) const {
     QSet<int> neighbors;
