@@ -31,7 +31,7 @@ I made a Steam Deck dark theme, available in gamemode session.
 |------------------------|-----------|----------------------------------------------------------------------------------------------------------------|
 | Windows Installer      | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
 | Windows Portable       | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)               |
-| Linux Bundle           | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Linux.AppImage)           |
+| Linux Bundle           | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Linux.zip)                 |
 | SteamDeck installer    | x64       | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop)     |
 
 Linux binaries require Qt6.8 to use FluentWinUI3 theme
