@@ -724,6 +724,26 @@ ApplicationWindow {
         }
     }
 
+    function hasUnrevealedNeighbors(index) {
+        let row = Math.floor(index / gridSizeX)
+        let col = index % gridSizeX
+
+        for (let r = -1; r <= 1; r++) {
+            for (let c = -1; c <= 1; c++) {
+                if (r === 0 && c === 0) continue
+                let newRow = row + r
+                let newCol = col + c
+                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+
+                let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol)
+                if (!adjacentCell.revealed && !adjacentCell.flagged) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     Component.onCompleted: {
         const difficultySet = root.difficultySettings[settings.difficulty]
         if (difficultySet) {
@@ -962,29 +982,12 @@ ApplicationWindow {
                             }
 
                             opacity: {
-                               if (!settings.dimmSatisfied || !cellItem.revealed) return 1
-                               if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index)) return 1
-
-                               let row = Math.floor(index / gridSizeX)
-                               let col = index % gridSizeX
-                               let adjacentFlags = 0
-
-                               for (let r = -1; r <= 1; r++) {
-                                   for (let c = -1; c <= 1; c++) {
-                                       if (r === 0 && c === 0) continue
-                                       let newRow = row + r
-                                       let newCol = col + c
-                                       if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
-                                       let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol)
-                                       if (adjacentCell.flagged) adjacentFlags++
-                                   }
-                               }
-
-                               return adjacentFlags === numbers[index] ? 0.5 : 1
+                                if (!settings.dimmSatisfied || !cellItem.revealed) return 1
+                                if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index)) return 1
+                                return root.hasUnrevealedNeighbors(index) ? 1 : 0.5
                             }
                         }
 
-                        // The button for background and interactions
                         Button {
                             id: cellButton
                             anchors.fill: parent
@@ -1091,23 +1094,7 @@ ApplicationWindow {
                             verticalAlignment: Text.AlignVCenter
                             opacity: {
                                 if (!settings.dimmSatisfied || !cellItem.revealed || numbers[index] === 0) return 1
-
-                                let row = Math.floor(index / gridSizeX)
-                                let col = index % gridSizeX
-                                let adjacentFlags = 0
-
-                                for (let r = -1; r <= 1; r++) {
-                                    for (let c = -1; c <= 1; c++) {
-                                        if (r === 0 && c === 0) continue
-                                        let newRow = row + r
-                                        let newCol = col + c
-                                        if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
-                                        let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol)
-                                        if (adjacentCell.flagged) adjacentFlags++
-                                    }
-                                }
-
-                                return adjacentFlags === numbers[index] ? 0.25 : 1
+                                return root.hasUnrevealedNeighbors(index) ? 1 : 0.25
                             }
 
                             Behavior on opacity {
