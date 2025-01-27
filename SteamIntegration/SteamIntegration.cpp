@@ -44,3 +44,20 @@ bool SteamIntegration::isAchievementUnlocked(const QString& achievementId) {
     steamUserStats->GetAchievement(achievementId.toUtf8().constData(), &achieved);
     return achieved;
 }
+
+void SteamIntegration::lockAllAchievements() {
+    if (!m_initialized) return;
+    ISteamUserStats* steamUserStats = SteamUserStats();
+    if (!steamUserStats) return;
+
+    // List all achievement IDs to lock
+    QStringList achievements = {
+        "ACH_NO_HINT_EASY", "ACH_NO_HINT_MEDIUM", "ACH_NO_HINT_HARD",
+        "ACH_SPEED_DEMON", "ACH_HINT_MASTER"
+    };
+
+    for (const QString& achievementId : achievements) {
+        steamUserStats->ClearAchievement(achievementId.toUtf8().constData());
+    }
+    steamUserStats->StoreStats();
+}

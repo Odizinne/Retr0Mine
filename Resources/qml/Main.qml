@@ -1132,5 +1132,12 @@ ApplicationWindow {
             }
         }
     }
+
+    Label {
+        text: {
+            if (typeof steamIntegration !== "undefined") return "steam connected"
+            else return "not connected"
+        }
+    }
 }
 
