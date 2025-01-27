@@ -37,19 +37,9 @@ void Utils::restartApp()
 
 bool Utils::isDarkMode()
 {
-    //Qt::ColorScheme colorScheme = QGuiApplication::styleHints()->colorScheme();
-//
-    //switch (colorScheme) {
-    //case Qt::ColorScheme::Dark:
-    //    return true;
-    //case Qt::ColorScheme::Light:
-    //    return false;
-    //default:
-        // Fallback in case Qt::ColorScheme::Unknown
-        QPalette palette = QGuiApplication::palette();
-        QColor backgroundColor = palette.color(QPalette::Window);
-        return (backgroundColor.lightness() < 128) ? true : false;
-    //}
+    QPalette palette = QGuiApplication::palette();
+    QColor backgroundColor = palette.color(QPalette::Window);
+    return (backgroundColor.lightness() < 128) ? true : false;
 }
 
 #ifdef _WIN32
@@ -139,5 +129,5 @@ QString Utils::getOperatingSystem()
 }
 
 bool Utils::isGamescope() {
-    return QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP") == "gamescope";
+    return QProcessEnvironment::systemEnvironment().value("SteamDeck") == "1";
 }

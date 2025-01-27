@@ -93,7 +93,6 @@ RowLayout {
         Label {
             id: elapsedTimeLabel
             text: topBar.elapsedTimeLabelText
-            //color: root.darkMode ? "white" : "black"
             font.pixelSize: 18
             Layout.alignment: Qt.AlignCenter
         }
