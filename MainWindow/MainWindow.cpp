@@ -354,3 +354,37 @@ void MainWindow::setColorScheme(int index) {
     rootContext->setContextProperty("isDarkMode", darkMode);
     rootContext->setContextProperty("accentColor", accentColor);
 }
+
+QString MainWindow::getLeaderboardPath() const {
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    return QDir(savePath).filePath("leaderboard.json");
+}
+
+bool MainWindow::saveLeaderboard(const QString &data) const {
+    QString filePath = getLeaderboardPath();
+    QDir saveDir = QFileInfo(filePath).dir();
+
+    if (!saveDir.exists()) {
+        saveDir.mkpath(".");
+    }
+
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << data;
+        file.close();
+        return true;
+    }
+    return false;
+}
+
+QString MainWindow::loadLeaderboard() const {
+    QFile file(getLeaderboardPath());
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        QString data = stream.readAll();
+        file.close();
+        return data;
+    }
+    return QString();
+}

@@ -67,6 +67,11 @@ RowLayout {
                 }
 
                 MenuItem {
+                    text: qsTr("Leaderboard")
+                    onTriggered: leaderboardWindow.visible = true
+                }
+
+                MenuItem {
                     text: qsTr("About")
                     onTriggered: aboutPage.visible = true
                 }

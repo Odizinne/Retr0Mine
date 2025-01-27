@@ -24,11 +24,14 @@ public:
     Q_INVOKABLE QStringList getSaveFiles() const;
     Q_INVOKABLE void openSaveFolder() const;
     Q_INVOKABLE void restartRetr0Mine() const;
+    Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
+    Q_INVOKABLE QString loadLeaderboard() const;
 
 private slots:
     void onColorSchemeChanged(Qt::ColorScheme scheme);
 
 private:
+    QString getLeaderboardPath() const;
     QSettings settings;
     QQmlContext* rootContext;
     QTranslator* translator;

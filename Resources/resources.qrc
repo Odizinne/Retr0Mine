@@ -8,6 +8,7 @@
         <file>qml/SaveWindow.qml</file>
         <file>qml/ErrorWindow.qml</file>
         <file>qml/TopBar.qml</file>
+        <file>qml/LeaderboardPage.qml</file>
         <file>sounds/pop/pop_bomb.wav</file>
         <file>sounds/pop/pop_click.wav</file>
         <file>sounds/pop/pop_win.wav</file>

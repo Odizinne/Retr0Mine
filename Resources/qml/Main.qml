@@ -374,6 +374,9 @@ ApplicationWindow {
         id: saveWindow
     }
 
+    LeaderboardPage {
+        id: leaderboardWindow
+    }
 
     MediaPlayer {
         id: looseEffect
@@ -421,6 +424,17 @@ ApplicationWindow {
         audioOutput: AudioOutput {
             volume: settings.volume
         }
+    }
+
+    function compareTime(newTime, oldTime) {
+        const newParts = newTime.split(':').map(Number)
+        const oldParts = oldTime.split(':').map(Number)
+
+        for (let i = 0; i < newParts.length; i++) {
+            if (newParts[i] < oldParts[i]) return true
+            if (newParts[i] > oldParts[i]) return false
+        }
+        return false
     }
 
     function playLoose() {
@@ -616,23 +630,67 @@ ApplicationWindow {
             gameOver = true
             gameTimer.stop()
 
-            if (typeof steamIntegration !== "undefined" && !isManuallyLoaded) {
-                if (currentHintCount === 0) {
-                    if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
-                        steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
-                    } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
-                        steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
-                    } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
-                        steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+            // Only update leaderboard if this is not a loaded game
+            if (!isManuallyLoaded) {
+                const formattedTime = formatTime(elapsedTime)
+
+                // Load current leaderboard
+                let leaderboardData = mainWindow.loadGameState("leaderboard.json")
+                let leaderboard = {}
+
+                if (leaderboardData) {
+                    try {
+                        leaderboard = JSON.parse(leaderboardData)
+                    } catch (e) {
+                        console.error("Failed to parse leaderboard data:", e)
                     }
                 }
 
-                if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && elapsedTime < 15) {
-                    steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
+                // Update appropriate time based on difficulty
+                if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
+                    if (!leaderboard.easyTime || compareTime(formattedTime, leaderboard.easyTime)) {
+                        leaderboard.easyTime = formattedTime
+                        leaderboardWindow.easyTime = formattedTime
+                    }
+                } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
+                    if (!leaderboard.mediumTime || compareTime(formattedTime, leaderboard.mediumTime)) {
+                        leaderboard.mediumTime = formattedTime
+                        leaderboardWindow.mediumTime = formattedTime
+                    }
+                } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
+                    if (!leaderboard.hardTime || compareTime(formattedTime, leaderboard.hardTime)) {
+                        leaderboard.hardTime = formattedTime
+                        leaderboardWindow.hardTime = formattedTime
+                    }
+                } else if (gridSizeX === 50 && gridSizeY === 32 && mineCount === 320) {
+                    if (!leaderboard.retr0Time || compareTime(formattedTime, leaderboard.retr0Time)) {
+                        leaderboard.retr0Time = formattedTime
+                        leaderboardWindow.retr0Time = formattedTime
+                    }
                 }
 
-                if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
-                    steamIntegration.unlockAchievement("ACH_HINT_MASTER")
+                // Save updated leaderboard
+                mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
+                // Handle Steam achievements
+
+                if (typeof steamIntegration !== "undefined") {
+                    if (currentHintCount === 0) {
+                        if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
+                            steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
+                        } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
+                            steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
+                        } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
+                            steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+                        }
+                    }
+
+                    if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && elapsedTime < 15) {
+                        steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
+                    }
+
+                    if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
+                        steamIntegration.unlockAchievement("ACH_HINT_MASTER")
+                    }
                 }
             }
 
@@ -672,6 +730,19 @@ ApplicationWindow {
             root.gridSizeX = difficultySet.x
             root.gridSizeY = difficultySet.y
             root.mineCount = difficultySet.mines
+        }
+
+        let leaderboardData = mainWindow.loadLeaderboard()
+        if (leaderboardData) {
+            try {
+                const leaderboard = JSON.parse(leaderboardData)
+                leaderboardWindow.easyTime = leaderboard.easyTime || ""
+                leaderboardWindow.mediumTime = leaderboard.mediumTime || ""
+                leaderboardWindow.hardTime = leaderboard.hardTime || ""
+                leaderboardWindow.retr0Time = leaderboard.retr0Time || ""
+            } catch (e) {
+                console.error("Failed to parse leaderboard data:", e)
+            }
         }
     }
 
