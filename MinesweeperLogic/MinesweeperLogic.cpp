@@ -90,6 +90,8 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
             if (hasAmbiguousMinePlacement(currentMines)) {
                 qDebug() << "Ambiguous mine placement detected, regenerating...";
                 continue; // Regenerate the grid
+            } else {
+                qDebug() << "pass";
             }
 
             qDebug() << "Successfully generated grid in" << attempts << "attempts";
@@ -101,48 +103,109 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
     return false;
 }
 
+
 bool MinesweeperLogic::hasAmbiguousMinePlacement(const QSet<int>& currentMines) {
-    for (int pos = 0; pos < m_width * m_height; pos++) {
-        if (currentMines.contains(pos)) continue; // Skip mines
+    // Check for 1-3 patterns and their variations
+    for (int y = 0; y < m_height; y++) {
+        for (int x = 0; x < m_width; x++) {
+            int pos = y * m_width + x;
+            int number = m_numbers.value(pos);
 
-        int number = m_numbers.value(pos); // Get the number in this cell
-        if (number == 0) continue; // Skip empty cells
+            // Look for cells with specific values that might create 50/50s
+            if (number == 1 || number == 2 || number == 3 || number == 4) {
+                QSet<int> neighbors = getNeighbors(pos);
 
-        QSet<int> unknownNeighbors;
-        for (int neighbor : getNeighbors(pos)) {
-            if (!currentMines.contains(neighbor) && m_numbers.value(neighbor) == -1) {
-                unknownNeighbors.insert(neighbor); // Collect ? cells
-            }
-        }
+                // For each neighbor that is also a number
+                for (int neighbor : neighbors) {
+                    int neighborNum = m_numbers.value(neighbor);
+                    if (neighborNum <= 0) continue;
 
-        if (unknownNeighbors.size() > 1) {
-            if (isAmbiguous(number, unknownNeighbors, currentMines)) {
-                qDebug() << "Conflict found at cell" << pos;
-                printGrid(currentMines);  // Print the grid when ambiguity is found
-                return true;
-            }
-        }
-    }
-    return false;
-}
+                    // Find shared unknown cells between these numbers
+                    QSet<int> pos1Unknowns;
+                    QSet<int> pos2Unknowns;
 
+                    for (int n : getNeighbors(pos)) {
+                        if (!currentMines.contains(n) && m_numbers.value(n) == -1) {
+                            pos1Unknowns.insert(n);
+                        }
+                    }
 
-bool MinesweeperLogic::isAmbiguous(int number, const QSet<int>& unknownCells, const QSet<int>& currentMines) {
-    QSet<QSet<int>> possibleMinePlacements;
+                    for (int n : getNeighbors(neighbor)) {
+                        if (!currentMines.contains(n) && m_numbers.value(n) == -1) {
+                            pos2Unknowns.insert(n);
+                        }
+                    }
 
-    // Generate all possible ways to place mines in unknown cells
-    for (int mine1 : unknownCells) {
-        for (int mine2 : unknownCells) {
-            if (mine1 != mine2) {
-                QSet<int> placement = {mine1, mine2};
-                if (satisfiesNumber(number, placement, currentMines)) {
-                    possibleMinePlacements.insert(placement);
+                    // Get shared unknown cells
+                    QSet<int> sharedUnknowns;
+                    for (int u : pos1Unknowns) {
+                        if (pos2Unknowns.contains(u)) {
+                            sharedUnknowns.insert(u);
+                        }
+                    }
+
+                    // Check for known 50/50 patterns
+                    bool is5050Pattern = false;
+
+                    // 1-3 pattern
+                    if ((number == 1 && neighborNum == 3) || (number == 3 && neighborNum == 1)) {
+                        if (sharedUnknowns.size() == 2) {
+                            is5050Pattern = true;
+                        }
+                    }
+
+                    // 2-4 pattern
+                    if ((number == 2 && neighborNum == 4) || (number == 4 && neighborNum == 2)) {
+                        if (sharedUnknowns.size() == 2) {
+                            is5050Pattern = true;
+                        }
+                    }
+
+                    if (is5050Pattern) {
+                        qDebug() << "Found 50/50 pattern between" << pos << "(" << number << ") and"
+                                 << neighbor << "(" << neighborNum << ")";
+                        return true;
+                    }
                 }
             }
         }
     }
 
-    // If multiple different placements satisfy the same number, it's ambiguous
+    return false;
+}
+
+
+bool MinesweeperLogic::isAmbiguous(int pos, int number, const QSet<int>& unknownCells, const QSet<int>& currentMines) {
+    QSet<QSet<int>> possibleMinePlacements;
+
+    // Generate all possible subsets of unknown cells
+    for (int mask = 0; mask < (1 << unknownCells.size()); mask++) {
+        QSet<int> placement;
+        int idx = 0;
+        for (int cell : unknownCells) {
+            if (mask & (1 << idx)) {
+                placement.insert(cell);
+            }
+            idx++;
+        }
+
+        // Check if this placement satisfies the number constraint
+        int mineCount = 0;
+        QSet<int> allMines = currentMines;
+        allMines.unite(placement);
+
+        // Count mines around the cell for this configuration
+        for (int neighbor : getNeighbors(pos)) {
+            if (allMines.contains(neighbor)) {
+                mineCount++;
+            }
+        }
+
+        if (mineCount == number) {
+            possibleMinePlacements.insert(placement);
+        }
+    }
+
     return possibleMinePlacements.size() > 1;
 }
 
@@ -236,71 +299,70 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
 }
 
 bool MinesweeperLogic::wouldCreate5050(const QSet<int>& mines, int newMinePos, int checkRow, int checkCol) {
-    // First check the original 50/50 patterns
-    // Get the position we're checking
-    int twoSpacesPos = checkRow * m_width + checkCol;
-    // Check all adjacent pairs of cells
-    QSet<int> neighbors = getNeighbors(twoSpacesPos);
-    for (int neighbor : neighbors) {
-        // Skip if it's a mine or the new mine position
-        if (mines.contains(neighbor) || neighbor == newMinePos) continue;
-        // For each pair of cells, check if they form a 50/50
-        QSet<int> sharedConstraints;
-        // Get all numbers that see both cells
-        QSet<int> cell1Numbers = getNeighbors(twoSpacesPos);
-        QSet<int> cell2Numbers = getNeighbors(neighbor);
-        // Look for numbers that constrain both cells
-        for (int num1 : cell1Numbers) {
-            if (cell2Numbers.contains(num1)) {
-                // Check if this number would create a constraining pattern
-                QSet<int> numNeighbors = getNeighbors(num1);
-                int mineCount = 0;
-                for (int n : numNeighbors) {
-                    if (mines.contains(n) || n == newMinePos) {
-                        mineCount++;
+    // Calculate what the numbers would be after placing this mine
+    QVector<int> tempNumbers(m_width * m_height, 0);
+    // First count existing mines
+    for (int mine : mines) {
+        QSet<int> neighbors = getNeighbors(mine);
+        for (int n : neighbors) {
+            tempNumbers[n]++;
+        }
+    }
+    // Add the new mine's contribution
+    QSet<int> newMineNeighbors = getNeighbors(newMinePos);
+    for (int n : newMineNeighbors) {
+        tempNumbers[n]++;
+    }
+
+    // Check every cell affected by the new mine
+    for (int pos : newMineNeighbors) {
+        QSet<int> neighbors = getNeighbors(pos);
+
+        // Look for 1-3 patterns
+        if (tempNumbers[pos] == 1 || tempNumbers[pos] == 3) {
+            for (int neighbor : neighbors) {
+                // Skip if it would be a mine
+                if (mines.contains(neighbor) || neighbor == newMinePos) continue;
+
+                if ((tempNumbers[pos] == 1 && tempNumbers[neighbor] == 3) ||
+                    (tempNumbers[pos] == 3 && tempNumbers[neighbor] == 1)) {
+                    // Count shared unknown cells
+                    QSet<int> unknownCells;
+                    QSet<int> neighborNeighbors = getNeighbors(neighbor);
+                    for (int cell : neighbors) {
+                        if (neighborNeighbors.contains(cell) &&
+                            !mines.contains(cell) &&
+                            cell != newMinePos) {
+                            unknownCells.insert(cell);
+                        }
                     }
-                }
-                // If this number would force exactly one mine between our two cells
-                if (mineCount == numNeighbors.size() - 2) {
-                    sharedConstraints.insert(num1);
+                    if (unknownCells.size() == 2) {
+                        return true; // Would create a 1-3 pattern
+                    }
                 }
             }
         }
-        // If we found multiple shared constraints that would force a 50/50
-        if (sharedConstraints.size() >= 2) {
-            return true;
-        }
-    }
 
-    // Now check for the new pattern with adjacent mines
-    // For each neighbor of our new mine position
-    for (int neighbor : getNeighbors(newMinePos)) {
-        // If this neighbor is already a mine
-        if (mines.contains(neighbor)) {
-            // Check cells adjacent to both mines for potential '3' cells
-            QSet<int> mine1Neighbors = getNeighbors(newMinePos);
-            QSet<int> mine2Neighbors = getNeighbors(neighbor);
+        // Look for 2-4 patterns
+        if (tempNumbers[pos] == 2 || tempNumbers[pos] == 4) {
+            for (int neighbor : neighbors) {
+                // Skip if it would be a mine
+                if (mines.contains(neighbor) || neighbor == newMinePos) continue;
 
-            // Find cells that are adjacent to both mines
-            for (int sharedCell : mine1Neighbors) {
-                if (mine2Neighbors.contains(sharedCell)) {
-                    // Get neighbors of this potentially constraining cell
-                    QSet<int> constraintNeighbors = getNeighbors(sharedCell);
-                    int mineCount = 0;
-                    int unknownCount = 0;
-
-                    // Count mines and unknown cells around it
-                    for (int n : constraintNeighbors) {
-                        if (mines.contains(n) || n == newMinePos) {
-                            mineCount++;
-                        } else if (!mines.contains(n)) {
-                            unknownCount++;
+                if ((tempNumbers[pos] == 2 && tempNumbers[neighbor] == 4) ||
+                    (tempNumbers[pos] == 4 && tempNumbers[neighbor] == 2)) {
+                    // Count shared unknown cells
+                    QSet<int> unknownCells;
+                    QSet<int> neighborNeighbors = getNeighbors(neighbor);
+                    for (int cell : neighbors) {
+                        if (neighborNeighbors.contains(cell) &&
+                            !mines.contains(cell) &&
+                            cell != newMinePos) {
+                            unknownCells.insert(cell);
                         }
                     }
-
-                    // If we have 2 mines and exactly 2 unknown cells around a potential '3'
-                    if (mineCount == 2 && unknownCount == 2) {
-                        return true;
+                    if (unknownCells.size() == 2) {
+                        return true; // Would create a 2-4 pattern
                     }
                 }
             }

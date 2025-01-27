@@ -68,7 +68,7 @@ private:
     void printGrid(const QSet<int>& currentMines);
     bool isValidGrid(const QSet<int>& currentMines);
     bool hasAmbiguousMinePlacement(const QSet<int>& currentMines);
-    bool isAmbiguous(int number, const QSet<int>& unknownCells, const QSet<int>& currentMines);
+    bool isAmbiguous(int pos, int number, const QSet<int>& unknownCells, const QSet<int>& currentMines);
     bool satisfiesNumber(int number, const QSet<int>& placement, const QSet<int>& currentMines);
 };
 
