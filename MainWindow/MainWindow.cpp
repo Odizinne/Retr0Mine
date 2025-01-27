@@ -94,7 +94,6 @@ void MainWindow::setLanguage(int index) {
             languageCode = locale.name().section('_', 0, 0);
         }
 
-        // Try to load system language, fall back to English if not supported
         if (!loadLanguage(languageCode)) {
             languageCode = "en";
             loadLanguage(languageCode);
@@ -262,41 +261,28 @@ void MainWindow::restartRetr0Mine() const {
 
 void MainWindow::setColorScheme() {
     QColor accentColor;
-    bool darkMode = false;
+    bool isSystemDark = QGuiApplication::styleHints()->colorScheme() != Qt::ColorScheme::Light;
 
-    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Light) {
-        if (currentTheme == 1) {
-            accentColor = Utils::getAccentColor("normal");
-        } else if (currentTheme == 2) {
-            accentColor = Utils::getAccentColor("dark1");
-        } else if (currentTheme == 3) {
-            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-        } else {
-            darkMode = true;
-            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-        }
-    } else {
-        if (currentTheme == 1) {
-            accentColor = Utils::getAccentColor("normal");
-        } else if (currentTheme == 2) {
-            accentColor = Utils::getAccentColor("light2");
-        } else if (currentTheme == 3) {
-            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-        } else {
-            accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-        }
-        darkMode = true;
+    switch (currentTheme) {
+    case 1:
+        accentColor = Utils::getAccentColor("normal");
+        break;
+    case 2:
+        accentColor = Utils::getAccentColor(isSystemDark ? "light2" : "dark1");
+        break;
+    case 3:
+        accentColor = QGuiApplication::palette().color(QPalette::Highlight);
+        break;
+    default:
+        accentColor = QGuiApplication::palette().color(QPalette::Highlight);
+        break;
     }
 
-    QIcon flagIcon = Utils::recolorIcon(QIcon(":/icons/flag.png"), accentColor);
-    QPixmap flagPixmap = flagIcon.pixmap(32, 32);
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
-    buffer.open(QIODevice::WriteOnly);
-    flagPixmap.save(&buffer, "PNG");
-    QString dataUrl = QString("data:image/png;base64,") + byteArray.toBase64();
+    qDebug() << accentColor;
+    qDebug() <<  QGuiApplication::palette().color(QPalette::Highlight);
+    bool darkMode = isSystemDark || currentTheme == 4;
 
-    rootContext->setContextProperty("flagIcon", dataUrl);
+    rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));
     rootContext->setContextProperty("isDarkMode", darkMode);
     rootContext->setContextProperty("accentColor", accentColor);
 }

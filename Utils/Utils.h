@@ -16,6 +16,7 @@ bool isLinux();
 void restartApp();
 QString getOperatingSystem();
 bool isGamescope();
+QString getFlagIcon(QColor accentColor);
 };
 
 #endif // UTILS_H

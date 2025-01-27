@@ -6,6 +6,7 @@
 #include <QPalette>
 #include <QStyleHints>
 #include <QOperatingSystemVersion>
+#include <QBuffer>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -89,6 +90,16 @@ QString Utils::getAccentColor(const QString &accentKey)
     QColor highlight = palette.color(QPalette::Highlight);
     return highlight.name();
 #endif
+}
+
+QString Utils::getFlagIcon(QColor accentColor) {
+    QIcon flagIcon = Utils::recolorIcon(QIcon(":/icons/flag.png"), accentColor);
+    QPixmap flagPixmap = flagIcon.pixmap(32, 32);
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
+    flagPixmap.save(&buffer, "PNG");
+    return QString("data:image/png;base64,") + byteArray.toBase64();
 }
 
 QIcon Utils::recolorIcon(QIcon icon, QColor color) {
