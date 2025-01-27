@@ -129,7 +129,7 @@ ApplicationWindow {
                 property: "opacity"
                 from: 0.0
                 to: 1.0
-                duration: 200  // Duration in milliseconds
+                duration: 200
                 easing.type: Easing.InOutQuad
             }
         }
@@ -204,54 +204,37 @@ ApplicationWindow {
                     model: [
                         {
                             text: qsTr("Difficulty"),
-                            iconDark: "qrc:/icons/difficulty_dark.png",
-                            iconLight: "qrc:/icons/difficulty_light.png"
+                            icon: "qrc:/icons/difficulty.png",
                         },
                         {
                             text: qsTr("Gameplay"),
-                            iconDark: "qrc:/icons/controls_dark.png",
-                            iconLight: "qrc:/icons/controls_light.png"
+                            icon: "qrc:/icons/controls.png",
                         },
                         {
                             text: qsTr("Visuals"),
-                            iconDark: "qrc:/icons/visuals_dark.png",
-                            iconLight: "qrc:/icons/visuals_light.png"
+                            icon: "qrc:/icons/visuals.png",
                         },
                         {
                             text: qsTr("Sound"),
-                            iconDark: "qrc:/icons/audio_dark.png",
-                            iconLight: "qrc:/icons/audio_light.png"
+                            icon: "qrc:/icons/audio.png",
                         },
                         {
                             text: qsTr("Shortcuts"),
-                            iconDark: "qrc:/icons/keyboard_dark.png",
-                            iconLight: "qrc:/icons/keyboard_light.png"
+                            icon: "qrc:/icons/keyboard.png",
                         },
                         {
                             text: qsTr("Language"),
-                            iconDark: "qrc:/icons/language_dark.png",
-                            iconLight: "qrc:/icons/language_light.png"
+                            icon: "qrc:/icons/language.png",
                         }
                     ]
                     currentIndex: 0
                     delegate: ItemDelegate {
                         width: parent.width
                         height: 40
+                        icon.source: modelData.icon
+                        text: "  " + modelData.text
+
                         highlighted: ListView.isCurrentItem
-                        contentItem: RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 12
-                            Image {
-                                source: darkMode ? modelData.iconLight : modelData.iconDark
-                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                            }
-                            Label {
-                                text: modelData.text
-                                font.pixelSize: 14
-                                Layout.fillWidth: true
-                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                            }
-                        }
                         onClicked: {
                             if (sidebarList.currentIndex !== index) {
                                 sidebarList.currentIndex = index

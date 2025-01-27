@@ -17,6 +17,7 @@ Popup {
         anchors.margins: 10
         spacing: 10
         Frame {
+            Layout.preferredWidth: 300
             Layout.fillWidth: true
 
             RowLayout {

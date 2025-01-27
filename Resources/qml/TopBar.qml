@@ -20,10 +20,8 @@ RowLayout {
 
         Button {
             Layout.alignment: Qt.AlignLeft
-            Layout.preferredWidth: 35
             Layout.preferredHeight: 35
-            icon.source: "qrc:/icons/menu.png"
-            icon.color: root.darkMode ? "white" : "black"
+            text: "Menu"
             onClicked: {
                 menu.visible ? menu.close() : menu.open()
             }

@@ -27,18 +27,12 @@
         <file>icons/safe.png</file>
         <file>icons/questionmark_light.png</file>
         <file>icons/questionmark_dark.png</file>
-        <file>icons/audio_light.png</file>
-        <file>icons/audio_dark.png</file>
-        <file>icons/difficulty_light.png</file>
-        <file>icons/difficulty_dark.png</file>
-        <file>icons/controls_light.png</file>
-        <file>icons/controls_dark.png</file>
-        <file>icons/visuals_light.png</file>
-        <file>icons/visuals_dark.png</file>
-        <file>icons/keyboard_light.png</file>
-        <file>icons/keyboard_dark.png</file>
-        <file>icons/language_light.png</file>
-        <file>icons/language_dark.png</file>
+        <file>icons/audio.png</file>
+        <file>icons/difficulty.png</file>
+        <file>icons/controls.png</file>
+        <file>icons/visuals.png</file>
+        <file>icons/keyboard.png</file>
+        <file>icons/language.png</file>
         <file>icons/menu.png</file>
         <file>icons/flag.png</file>
         <file>icons/flag_dark.png</file>
