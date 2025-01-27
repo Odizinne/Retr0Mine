@@ -81,21 +81,27 @@ ApplicationWindow {
                 text: qsTr("Restore")
                 Layout.fillWidth: true
                 onClicked: {
-                    settings.themeIndex = 0
-                    settings.colorScheme = 0
-                    settings.languageIndex = 0
+                    // difficultyPane
                     settings.difficulty = 0
+                    // gameplayPane
                     settings.invertLRClick = false
                     settings.autoreveal = false
                     settings.enableQuestionMarks = true
                     settings.loadLastGame = false
-                    settings.soundEffects = true
-                    settings.volume = 1.0
-                    settings.soundPackIndex = 0
+                    // visualsPane
                     settings.animations = true
                     settings.cellFrame = true
+                    settings.dimmSatisfied = false
                     settings.contrastFlag = false
                     settings.cellSize = 1
+                    settings.themeIndex = 0
+                    settings.colorScheme = 0
+                    // soundPane
+                    settings.soundEffects = true
+                    settings.volume = 1.0
+                    settings.soundPackIndex = 2
+                    // languagePane
+                    settings.languageIndex = 0
 
                     mainWindow.restartRetr0Mine()
                 }
