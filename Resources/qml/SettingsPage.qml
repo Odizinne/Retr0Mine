@@ -717,28 +717,28 @@ ApplicationWindow {
                             }
                         }
 
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Label {
-                                text: qsTr("Theme")
-                                Layout.fillWidth: true
-                            }
-                            ComboBox {
-                                id: themeComboBox
-                                enabled: root.operatingSystem !== "unknown"
-                                model: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
-                                Layout.rightMargin: 5
-                                Layout.preferredWidth: {
-                                    if (isUniversalTheme) return themeComboBox.implicitWidth + 5
-                                    return themeComboBox.implicitWidth
-                                }
-                                currentIndex: settings.colorScheme
-                                onActivated: {
-                                    settings.colorScheme = currentIndex
-                                    mainWindow.setColorScheme(currentIndex)
-                                }
-                            }
-                        }
+                        //RowLayout {
+                        //    Layout.fillWidth: true
+                        //    Label {
+                        //        text: qsTr("Theme")
+                        //        Layout.fillWidth: true
+                        //    }
+                        //    ComboBox {
+                        //        id: themeComboBox
+                        //        enabled: root.operatingSystem !== "unknown"
+                        //        model: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
+                        //        Layout.rightMargin: 5
+                        //        Layout.preferredWidth: {
+                        //            if (isUniversalTheme) return themeComboBox.implicitWidth + 5
+                        //            return themeComboBox.implicitWidth
+                        //        }
+                        //        currentIndex: settings.colorScheme
+                        //        onActivated: {
+                        //            settings.colorScheme = currentIndex
+                        //            mainWindow.setColorScheme(currentIndex)
+                        //        }
+                        //    }
+                        //}
                     }
                 }
             }

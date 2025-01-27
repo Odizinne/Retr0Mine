@@ -17,7 +17,7 @@ public:
     QQmlApplicationEngine* engine;
 
     Q_INVOKABLE void setLanguage(int index);
-    Q_INVOKABLE void setColorScheme(int index);
+    Q_INVOKABLE void setColorScheme();
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
     Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename) const;
     Q_INVOKABLE QString loadGameState(const QString &filename) const;

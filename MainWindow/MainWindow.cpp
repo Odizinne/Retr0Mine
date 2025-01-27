@@ -35,21 +35,13 @@ MainWindow::MainWindow(QObject *parent)
 
 void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
 {
-    if (settings.value("colorScheme") != 0) {
-        return;
-    }
-
-    if (scheme == Qt::ColorScheme::Light) {
-        setColorScheme(1);
-    } else if (scheme == Qt::ColorScheme::Dark) {
-        setColorScheme(2);
-    }
+    setColorScheme();
 }
 
 void MainWindow::setupAndLoadQML() {
     bool isGamescope = Utils::isGamescope();
     int styleIndex = settings.value("themeIndex", isGamescope ? 4 : 0).toInt();
-    int colorSchemeIndex = settings.value("colorScheme", 0).toInt();
+    //int colorSchemeIndex = settings.value("colorScheme", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
     int cellSize = settings.value("cellSize", 1).toInt();
 
@@ -66,7 +58,8 @@ void MainWindow::setupAndLoadQML() {
         else if (currentOS == "windows11") setW11Theme();
         else setFusionTheme();
     }
-    setColorScheme(colorSchemeIndex);
+
+    setColorScheme();
 
     if (cellSize == 0) {
         cellSize = 25;
@@ -267,28 +260,22 @@ void MainWindow::restartRetr0Mine() const {
     Utils::restartApp();
 }
 
-void MainWindow::setColorScheme(int index) {
+void MainWindow::setColorScheme() {
     QColor accentColor;
-    bool darkMode;
-    bool overrideDarkMode = false;
+    bool darkMode = false;
 
-    if (index == 1) {
-        //light
-        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Light) {
         if (currentTheme == 1) {
             accentColor = Utils::getAccentColor("normal");
         } else if (currentTheme == 2) {
-            accentColor = Utils::getAccentColor("dark2");
+            accentColor = Utils::getAccentColor("dark1");
         } else if (currentTheme == 3) {
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         } else {
             darkMode = true;
-            overrideDarkMode = true;
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         }
-    } else if (index == 2) {
-        //dark
-        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+    } else {
         if (currentTheme == 1) {
             accentColor = Utils::getAccentColor("normal");
         } else if (currentTheme == 2) {
@@ -296,49 +283,9 @@ void MainWindow::setColorScheme(int index) {
         } else if (currentTheme == 3) {
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         } else {
-            darkMode = true;
-            overrideDarkMode = true;
             accentColor = QGuiApplication::palette().color(QPalette::Highlight);
         }
-    } else {
-        // 0 = System
-        QGuiApplication::styleHints()->unsetColorScheme();
-        if (Utils::getTheme() == "light") {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-            if (currentTheme == 1) {
-                accentColor = Utils::getAccentColor("normal");
-            } else if (currentTheme == 2) {
-                accentColor = Utils::getAccentColor("light2");
-            } else if (currentTheme == 3) {
-                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-            } else {
-                darkMode = true;
-                overrideDarkMode = true;
-                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-            }
-        } else {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
-
-            if (currentTheme == 1) {
-                accentColor = Utils::getAccentColor("normal");
-            } else if (currentTheme == 2) {
-                accentColor = Utils::getAccentColor("dark2");
-            } else if (currentTheme == 3) {
-                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-            } else {
-                darkMode = true;
-                overrideDarkMode = true;
-                accentColor = QGuiApplication::palette().color(QPalette::Highlight);
-            }
-        }
-    }
-
-    if (!overrideDarkMode) {
-        if (Utils::getTheme() == "light") {
-            darkMode = true;
-        } else {
-            darkMode = false;
-        }
+        darkMode = true;
     }
 
     QIcon flagIcon = Utils::recolorIcon(QIcon(":/icons/flag.png"), accentColor);
@@ -350,7 +297,6 @@ void MainWindow::setColorScheme(int index) {
     QString dataUrl = QString("data:image/png;base64,") + byteArray.toBase64();
 
     rootContext->setContextProperty("flagIcon", dataUrl);
-    rootContext->setContextProperty("appTheme", index);
     rootContext->setContextProperty("isDarkMode", darkMode);
     rootContext->setContextProperty("accentColor", accentColor);
 }
