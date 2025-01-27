@@ -46,6 +46,29 @@
     </message>
 </context>
 <context>
+    <name>LeaderboardPage</name>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="25"/>
+        <source>Easy</source>
+        <translation>Facile</translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="42"/>
+        <source>Medium</source>
+        <translation>intermédiaire</translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="59"/>
+        <source>Hard</source>
+        <translation>Expert</translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="76"/>
+        <source>Retr0</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>LoadWindow</name>
     <message>
         <location filename="../qml/LoadWindow.qml" line="7"/>
@@ -269,7 +292,7 @@ Redémarrage nécessaire</translation>
         <translation type="vanished">Quitter</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="633"/>
+        <location filename="../qml/Main.qml" line="697"/>
         <source>Victory :)</source>
         <translation>Victoire :)</translation>
     </message>
@@ -633,11 +656,16 @@ La partie en cours sera sauvegardée</translation>
     </message>
     <message>
         <location filename="../qml/TopBar.qml" line="70"/>
+        <source>Leaderboard</source>
+        <translation>Classement</translation>
+    </message>
+    <message>
+        <location filename="../qml/TopBar.qml" line="75"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="75"/>
+        <location filename="../qml/TopBar.qml" line="80"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>

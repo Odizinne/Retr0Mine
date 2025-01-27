@@ -46,6 +46,29 @@
     </message>
 </context>
 <context>
+    <name>LeaderboardPage</name>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="25"/>
+        <source>Easy</source>
+        <translation type="unfinished">Facile</translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="42"/>
+        <source>Medium</source>
+        <translation type="unfinished">Medio</translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="59"/>
+        <source>Hard</source>
+        <translation type="unfinished">Difficile</translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="76"/>
+        <source>Retr0</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LoadWindow</name>
     <message>
         <location filename="../qml/LoadWindow.qml" line="7"/>
@@ -211,7 +234,7 @@
         <translation type="vanished">Esci</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="633"/>
+        <location filename="../qml/Main.qml" line="697"/>
         <source>Victory :)</source>
         <translation>Vittoria :)</translation>
     </message>
@@ -559,11 +582,16 @@ Your current game will be saved</source>
     </message>
     <message>
         <location filename="../qml/TopBar.qml" line="70"/>
+        <source>Leaderboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/TopBar.qml" line="75"/>
         <source>About</source>
         <translation type="unfinished">Info</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="75"/>
+        <location filename="../qml/TopBar.qml" line="80"/>
         <source>Exit</source>
         <translation type="unfinished">Esci</translation>
     </message>
