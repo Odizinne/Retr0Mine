@@ -41,9 +41,9 @@ bool Utils::isDarkMode()
 
     switch (colorScheme) {
     case Qt::ColorScheme::Dark:
-        return "light";
+        return true;
     case Qt::ColorScheme::Light:
-        return "dark";
+        return false;
     default:
         // Fallback in case Qt::ColorScheme::Unknown
         QPalette palette = QGuiApplication::palette();

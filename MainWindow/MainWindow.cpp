@@ -21,6 +21,9 @@ MainWindow::MainWindow(QObject *parent)
     , translator(new QTranslator(this))
     , currentOS(Utils::getOperatingSystem())
 {
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, &MainWindow::onColorSchemeChanged);
+
     m_steamIntegration = new SteamIntegration(this);
     if (!m_steamIntegration->initialize()) {
         qWarning() << "Failed to initialize Steam";
@@ -30,9 +33,6 @@ MainWindow::MainWindow(QObject *parent)
     }
 
     setupAndLoadQML();
-
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, &MainWindow::onColorSchemeChanged);
 }
 
 void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
@@ -61,7 +61,6 @@ void MainWindow::setupAndLoadQML() {
         else setFusionTheme();
     }
 
-    setColorScheme();
 
     if (cellSize == 0) {
         cellSize = 25;
@@ -81,6 +80,7 @@ void MainWindow::setupAndLoadQML() {
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
     engine->load(QUrl("qrc:/qml/Main.qml"));
+    setColorScheme();
 }
 
 void MainWindow::setLanguage(int index) {
