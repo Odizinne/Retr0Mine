@@ -95,7 +95,6 @@ ApplicationWindow {
                     settings.contrastFlag = false
                     settings.cellSize = 1
                     settings.themeIndex = 0
-                    settings.colorScheme = 0
                     // soundPane
                     settings.soundEffects = true
                     settings.volume = 1.0
@@ -232,6 +231,11 @@ ApplicationWindow {
                         width: parent.width
                         height: 40
                         icon.source: modelData.icon
+                        icon.color: {
+                            if (root.isFusionTheme) {
+                                return root.darkMode ? "white" : "dark"
+                            }
+                        }
                         text: "  " + modelData.text
 
                         highlighted: ListView.isCurrentItem
@@ -716,29 +720,6 @@ ApplicationWindow {
                                 }
                             }
                         }
-
-                        //RowLayout {
-                        //    Layout.fillWidth: true
-                        //    Label {
-                        //        text: qsTr("Theme")
-                        //        Layout.fillWidth: true
-                        //    }
-                        //    ComboBox {
-                        //        id: themeComboBox
-                        //        enabled: root.operatingSystem !== "unknown"
-                        //        model: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
-                        //        Layout.rightMargin: 5
-                        //        Layout.preferredWidth: {
-                        //            if (isUniversalTheme) return themeComboBox.implicitWidth + 5
-                        //            return themeComboBox.implicitWidth
-                        //        }
-                        //        currentIndex: settings.colorScheme
-                        //        onActivated: {
-                        //            settings.colorScheme = currentIndex
-                        //            mainWindow.setColorScheme(currentIndex)
-                        //        }
-                        //    }
-                        //}
                     }
                 }
             }

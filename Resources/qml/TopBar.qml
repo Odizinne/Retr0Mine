@@ -109,6 +109,11 @@ RowLayout {
         }
         Button {
             icon.source: "qrc:/icons/bomb_light.png"
+            icon.color: {
+                if (root.isFusionTheme) {
+                    return root.darkMode ? "white" : "dark"
+                }
+            }
             text: ": " + (root.mineCount - root.flaggedCount)
             font.pixelSize: 18
             font.bold: true
@@ -116,19 +121,5 @@ RowLayout {
                 root.requestHint()
             }
         }
-
-        //Image {
-        //    Layout.alignment: Qt.AlignRight
-        //    source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
-        //    Layout.preferredWidth: 16
-        //    Layout.preferredHeight: 16
-        //}
-        //Text {
-        //    Layout.alignment: Qt.AlignRight
-        //    text: ": " + (root.mineCount - root.flaggedCount)
-        //    color: root.darkMode ? "white" : "black"
-        //    font.pixelSize: 18
-        //    font.bold: true
-        //}
     }
 }
