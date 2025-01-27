@@ -3,7 +3,7 @@ name: Steam build linux and windows
 on:
   push:
     branches:
-      - linuxExperiment
+      - main
 
 jobs:
   build:
