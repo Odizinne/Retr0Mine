@@ -444,7 +444,6 @@ ApplicationWindow {
 
     function revealConnectedCells(index) {
         if (!settings.autoreveal || !gameStarted || gameOver) return;
-
         let cell = grid.itemAtIndex(index);
         if (!cell.revealed || numbers[index] <= 0) return;
 
@@ -452,11 +451,11 @@ ApplicationWindow {
         let col = index % gridSizeX;
         let flaggedCount = 0;
         let adjacentCells = [];
+        let hasQuestionMark = false;  // New flag to track question marks
 
         for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
                 if (r === 0 && c === 0) continue;
-
                 let newRow = row + r;
                 let newCol = col + c;
                 if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
@@ -464,15 +463,22 @@ ApplicationWindow {
                 let pos = newRow * gridSizeX + newCol;
                 let adjacentCell = grid.itemAtIndex(pos);
 
+                if (adjacentCell.questioned) {
+                    hasQuestionMark = true;
+                    break;  // Exit inner loop if question mark found
+                }
+
                 if (adjacentCell.flagged) {
                     flaggedCount++;
-                } else if (!adjacentCell.revealed && !adjacentCell.questioned) {
+                } else if (!adjacentCell.revealed) {
                     adjacentCells.push(pos);
                 }
             }
+            if (hasQuestionMark) break;  // Exit outer loop if question mark found
         }
 
-        if (flaggedCount === numbers[index] && adjacentCells.length > 0) {
+        // Only reveal if no question marks are present
+        if (!hasQuestionMark && flaggedCount === numbers[index] && adjacentCells.length > 0) {
             for (let pos of adjacentCells) {
                 reveal(pos);
             }
