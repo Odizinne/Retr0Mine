@@ -72,6 +72,7 @@ void MainWindow::setupAndLoadQML() {
         cellSize = 55;
     }
     setLanguage(languageIndex);
+    setColorScheme();
 
     rootContext->setContextProperty("gamescope", isGamescope);
     rootContext->setContextProperty("currentOS", currentOS);
@@ -80,7 +81,6 @@ void MainWindow::setupAndLoadQML() {
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
     engine->load(QUrl("qrc:/qml/Main.qml"));
-    setColorScheme();
 }
 
 void MainWindow::setLanguage(int index) {
@@ -280,8 +280,6 @@ void MainWindow::setColorScheme() {
         break;
     }
 
-    qDebug() << accentColor;
-    qDebug() <<  QGuiApplication::palette().color(QPalette::Highlight);
     bool darkMode = isSystemDark || currentTheme == 4;
 
     rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));
