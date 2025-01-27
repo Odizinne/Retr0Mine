@@ -90,10 +90,10 @@ RowLayout {
     RowLayout {
         Layout.preferredWidth: parent.width / 3
         Layout.fillWidth: true
-        Text {
+        Label {
             id: elapsedTimeLabel
             text: topBar.elapsedTimeLabelText
-            color: root.darkMode ? "white" : "black"
+            //color: root.darkMode ? "white" : "black"
             font.pixelSize: 18
             Layout.alignment: Qt.AlignCenter
         }
@@ -107,18 +107,28 @@ RowLayout {
         Item {
             Layout.fillWidth: true
         }
-        Image {
-            Layout.alignment: Qt.AlignRight
-            source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
-            Layout.preferredWidth: 16
-            Layout.preferredHeight: 16
-        }
-        Text {
-            Layout.alignment: Qt.AlignRight
+        Button {
+            icon.source: "qrc:/icons/bomb_light.png"
             text: ": " + (root.mineCount - root.flaggedCount)
-            color: root.darkMode ? "white" : "black"
             font.pixelSize: 18
             font.bold: true
+            onClicked: {
+                root.requestHint()
+            }
         }
+
+        //Image {
+        //    Layout.alignment: Qt.AlignRight
+        //    source: root.darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
+        //    Layout.preferredWidth: 16
+        //    Layout.preferredHeight: 16
+        //}
+        //Text {
+        //    Layout.alignment: Qt.AlignRight
+        //    text: ": " + (root.mineCount - root.flaggedCount)
+        //    color: root.darkMode ? "white" : "black"
+        //    font.pixelSize: 18
+        //    font.bold: true
+        //}
     }
 }
