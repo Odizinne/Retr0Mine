@@ -261,7 +261,7 @@ void MainWindow::restartRetr0Mine() const {
 
 void MainWindow::setColorScheme() {
     QColor accentColor;
-    bool isSystemDark = QGuiApplication::styleHints()->colorScheme() != Qt::ColorScheme::Light;
+    bool isSystemDark = Utils::isDarkMode();
 
     switch (currentTheme) {
     case 1:

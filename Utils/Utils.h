@@ -7,9 +7,8 @@
 
 namespace Utils
 {
-QString getTheme();
+bool isDarkMode();
 QString getAccentColor(const QString &accentKey);
-QIcon recolorIcon(QIcon icon, QColor color);
 bool isWindows10();
 bool isWindows11();
 bool isLinux();
