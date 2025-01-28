@@ -279,6 +279,9 @@ void MainWindow::setColorScheme() {
 
     bool darkMode = isSystemDark || currentTheme == 4;
 
+    if (m_steamIntegration->m_initialized && m_steamIntegration->isRunningOnDeck() && currentTheme == 2) {
+        darkMode = true;
+    }
     rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));
     rootContext->setContextProperty("isDarkMode", darkMode);
     rootContext->setContextProperty("accentColor", accentColor);
@@ -318,6 +321,3 @@ QString MainWindow::loadLeaderboard() const {
     return QString();
 }
 
-bool MainWindow::getDarkMode() const {
-    return Utils::isDarkMode();
-}

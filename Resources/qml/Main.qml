@@ -823,7 +823,6 @@ ApplicationWindow {
     function checkInitialGameState() {
         if (!gridFullyInitialized) return
 
-        root.darkMode = mainWindow.getDarkMode()
         let internalSaveData = mainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
             if (loadGame(internalSaveData)) {
