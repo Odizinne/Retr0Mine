@@ -1,27 +1,33 @@
 #include "Utils.h"
-#include <QDebug>
-#include <QSettings>
-#include <QProcess>
-#include <QGuiApplication>
-#include <QPalette>
-#include <QStyleHints>
-#include <QOperatingSystemVersion>
 #include <QBuffer>
+#include <QDebug>
+#include <QGuiApplication>
+#include <QOperatingSystemVersion>
+#include <QPalette>
+#include <QProcess>
+#include <QSettings>
+#include <QStyleHints>
 
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
-QIcon recolorIcon(QIcon icon, QColor color) {
+QIcon recolorIcon(QIcon icon, QColor color)
+{
     QPixmap pixmap = icon.pixmap(32, 32);
     QImage img = pixmap.toImage();
 
     for (int y = 0; y < img.height(); ++y) {
         for (int x = 0; x < img.width(); ++x) {
             QColor pixelColor = img.pixelColor(x, y);
-            if (pixelColor.alpha() > 0) {  // Ignore transparent pixels
+            if (pixelColor.alpha() > 0) { // Ignore transparent pixels
                 // Preserve alpha and apply new RGB color
-                img.setPixelColor(x, y, QColor(color.red(), color.green(), color.blue(), pixelColor.alpha()));
+                img.setPixelColor(x,
+                                  y,
+                                  QColor(color.red(),
+                                         color.green(),
+                                         color.blue(),
+                                         pixelColor.alpha()));
             }
         }
     }
@@ -45,10 +51,8 @@ bool Utils::isDarkMode()
 #ifdef _WIN32
 QString toHex(BYTE value)
 {
-    const char* hexDigits = "0123456789ABCDEF";
-    return QString("%1%2")
-        .arg(hexDigits[value >> 4])
-        .arg(hexDigits[value & 0xF]);
+    const char *hexDigits = "0123456789ABCDEF";
+    return QString("%1%2").arg(hexDigits[value >> 4]).arg(hexDigits[value & 0xF]);
 }
 #endif
 
@@ -56,21 +60,35 @@ QString Utils::getAccentColor(const QString &accentKey)
 {
 #ifdef _WIN32
     HKEY hKey;
-    BYTE accentPalette[32];  // AccentPalette contains 32 bytes
+    BYTE accentPalette[32]; // AccentPalette contains 32 bytes
     DWORD bufferSize = sizeof(accentPalette);
 
-    if (RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Accent", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-        if (RegGetValueW(hKey, NULL, L"AccentPalette", RRF_RT_REG_BINARY, NULL, accentPalette, &bufferSize) == ERROR_SUCCESS) {
+    if (RegOpenKeyExW(HKEY_CURRENT_USER,
+                      L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Accent",
+                      0,
+                      KEY_READ,
+                      &hKey)
+        == ERROR_SUCCESS) {
+        if (RegGetValueW(
+                hKey, NULL, L"AccentPalette", RRF_RT_REG_BINARY, NULL, accentPalette, &bufferSize)
+            == ERROR_SUCCESS) {
             RegCloseKey(hKey);
 
             int index = 0;
-            if (accentKey == "light3") index = 0;
-            else if (accentKey == "light2") index = 4;
-            else if (accentKey == "light1") index = 8;
-            else if (accentKey == "normal") index = 12;
-            else if (accentKey == "dark1") index = 16;
-            else if (accentKey == "dark2") index = 20;
-            else if (accentKey == "dark3") index = 24;
+            if (accentKey == "light3")
+                index = 0;
+            else if (accentKey == "light2")
+                index = 4;
+            else if (accentKey == "light1")
+                index = 8;
+            else if (accentKey == "normal")
+                index = 12;
+            else if (accentKey == "dark1")
+                index = 16;
+            else if (accentKey == "dark2")
+                index = 20;
+            else if (accentKey == "dark3")
+                index = 24;
             else {
                 qDebug() << "Invalid accentKey provided.";
                 return "#FFFFFF";
@@ -99,7 +117,8 @@ QString Utils::getAccentColor(const QString &accentKey)
 #endif
 }
 
-QString Utils::getFlagIcon(QColor accentColor) {
+QString Utils::getFlagIcon(QColor accentColor)
+{
     QIcon flagIcon = recolorIcon(QIcon(":/icons/flag.png"), accentColor);
     QPixmap flagPixmap = flagIcon.pixmap(32, 32);
     QByteArray byteArray;
@@ -114,8 +133,8 @@ QString Utils::getOperatingSystem()
     const QOperatingSystemVersion current = QOperatingSystemVersion::current();
 
     if (current.type() == QOperatingSystemVersion::Windows) {
-        const QOperatingSystemVersionBase& win11 = QOperatingSystemVersion::Windows11;
-        const QOperatingSystemVersion& win10 = QOperatingSystemVersion::Windows10;
+        const QOperatingSystemVersionBase &win11 = QOperatingSystemVersion::Windows11;
+        const QOperatingSystemVersion &win10 = QOperatingSystemVersion::Windows10;
 
         if (current >= win11) {
             return "windows11";

@@ -1,17 +1,17 @@
 #include "MainWindow.h"
-#include "Utils.h"
-#include "MinesweeperLogic.h"
-#include <QQmlContext>
-#include <QStandardPaths>
+#include <QBuffer>
+#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QDesktopServices>
-#include <QQuickStyle>
 #include <QGuiApplication>
-#include <QStyleHints>
-#include <QBuffer>
 #include <QPalette>
+#include <QQmlContext>
+#include <QQuickStyle>
+#include <QStandardPaths>
+#include <QStyleHints>
+#include "MinesweeperLogic.h"
+#include "Utils.h"
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
@@ -21,8 +21,10 @@ MainWindow::MainWindow(QObject *parent)
     , translator(new QTranslator(this))
     , currentOS(Utils::getOperatingSystem())
 {
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, &MainWindow::onColorSchemeChanged);
+    connect(QGuiApplication::styleHints(),
+            &QStyleHints::colorSchemeChanged,
+            this,
+            &MainWindow::onColorSchemeChanged);
 
     m_steamIntegration = new SteamIntegration(this);
     if (!m_steamIntegration->initialize()) {
@@ -40,8 +42,15 @@ void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
     setColorScheme();
 }
 
-void MainWindow::setupAndLoadQML() {
-    int styleIndex = settings.value("themeIndex", m_steamIntegration->isRunningOnDeck() && m_steamIntegration->m_initialized ? 4 : 0).toInt();
+void MainWindow::setupAndLoadQML()
+{
+    int styleIndex = settings
+                         .value("themeIndex",
+                                m_steamIntegration->isRunningOnDeck()
+                                        && m_steamIntegration->m_initialized
+                                    ? 4
+                                    : 0)
+                         .toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
     int cellSize = settings.value("cellSize", 1).toInt();
 
@@ -54,11 +63,13 @@ void MainWindow::setupAndLoadQML() {
     } else if (styleIndex == 4) {
         setSteamDeckDarkTheme();
     } else {
-        if (currentOS == "windows10") setW10Theme();
-        else if (currentOS == "windows11") setW11Theme();
-        else setFusionTheme();
+        if (currentOS == "windows10")
+            setW10Theme();
+        else if (currentOS == "windows11")
+            setW11Theme();
+        else
+            setFusionTheme();
     }
-
 
     if (cellSize == 0) {
         cellSize = 25;
@@ -80,7 +91,8 @@ void MainWindow::setupAndLoadQML() {
     engine->load(QUrl("qrc:/qml/Main.qml"));
 }
 
-void MainWindow::setLanguage(int index) {
+void MainWindow::setLanguage(int index)
+{
     QString languageCode;
     if (index == 0) {
         QLocale locale;
@@ -100,38 +112,38 @@ void MainWindow::setLanguage(int index) {
     } else {
         // Map index to language codes
         switch (index) {
-        case 1:  // English
+        case 1: // English
             languageCode = "en";
             break;
-        case 2:  // French
+        case 2: // French
             languageCode = "fr";
             break;
-        case 3:  // German
+        case 3: // German
             languageCode = "de";
             break;
-        case 4:  // Spanish
+        case 4: // Spanish
             languageCode = "es";
             break;
-        case 5:  // Italian
+        case 5: // Italian
             languageCode = "it";
             break;
-        case 6:  // Japanese
+        case 6: // Japanese
             languageCode = "ja";
             break;
-        case 7:  // Chinese Simplified
+        case 7: // Chinese Simplified
             languageCode = "zh_CN";
             break;
-        case 8:  // Chinese Traditional
+        case 8: // Chinese Traditional
             languageCode = "zh_TW";
             break;
-        case 9:  // Korean
+        case 9: // Korean
             languageCode = "ko";
             break;
         case 10: // Russian
             languageCode = "ru";
             break;
         default:
-            languageCode = "en";  // Fallback to English
+            languageCode = "en"; // Fallback to English
             break;
         }
         loadLanguage(languageCode);
@@ -140,7 +152,8 @@ void MainWindow::setLanguage(int index) {
     rootContext->setContextProperty("languageIndex", index);
 }
 
-bool MainWindow::loadLanguage(QString languageCode) {
+bool MainWindow::loadLanguage(QString languageCode)
+{
     qGuiApp->removeTranslator(translator);
 
     delete translator;
@@ -156,10 +169,9 @@ bool MainWindow::loadLanguage(QString languageCode) {
     return false;
 }
 
-bool MainWindow::saveGameState(const QString &data, const QString &filename) const {
-    QString savePath = QStandardPaths::writableLocation(
-        QStandardPaths::AppDataLocation
-        );
+bool MainWindow::saveGameState(const QString &data, const QString &filename) const
+{
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     QDir saveDir(savePath);
     if (!saveDir.exists()) {
@@ -176,10 +188,9 @@ bool MainWindow::saveGameState(const QString &data, const QString &filename) con
     return false;
 }
 
-QString MainWindow::loadGameState(const QString &filename) const {
-    QString savePath = QStandardPaths::writableLocation(
-        QStandardPaths::AppDataLocation
-        );
+QString MainWindow::loadGameState(const QString &filename) const
+{
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     QFile file(QDir(savePath).filePath(filename));
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -191,10 +202,9 @@ QString MainWindow::loadGameState(const QString &filename) const {
     return QString();
 }
 
-QStringList MainWindow::getSaveFiles() const {
-    QString savePath = QStandardPaths::writableLocation(
-        QStandardPaths::AppDataLocation
-        );
+QStringList MainWindow::getSaveFiles() const
+{
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
     if (!saveDir.exists()) {
         saveDir.mkpath(".");
@@ -204,7 +214,8 @@ QStringList MainWindow::getSaveFiles() const {
     return files;
 }
 
-void MainWindow::openSaveFolder() const {
+void MainWindow::openSaveFolder() const
+{
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
 
@@ -215,14 +226,16 @@ void MainWindow::openSaveFolder() const {
     QDesktopServices::openUrl(QUrl::fromLocalFile(savePath));
 }
 
-void MainWindow::deleteSaveFile(const QString &filename) {
+void MainWindow::deleteSaveFile(const QString &filename)
+{
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
     QString fullPath = saveDir.filePath(filename);
     QFile::remove(fullPath);
 }
 
-void MainWindow::setW10Theme() {
+void MainWindow::setW10Theme()
+{
     currentTheme = 1;
     QQuickStyle::setStyle("Universal");
     rootContext->setContextProperty("windows10", QVariant(true));
@@ -230,7 +243,8 @@ void MainWindow::setW10Theme() {
     rootContext->setContextProperty("fusion", QVariant(false));
 }
 
-void MainWindow::setW11Theme() {
+void MainWindow::setW11Theme()
+{
     currentTheme = 2;
     QQuickStyle::setStyle("FluentWinUI3");
     rootContext->setContextProperty("windows10", QVariant(false));
@@ -238,7 +252,8 @@ void MainWindow::setW11Theme() {
     rootContext->setContextProperty("fusion", QVariant(false));
 }
 
-void MainWindow::setFusionTheme() {
+void MainWindow::setFusionTheme()
+{
     currentTheme = 3;
     QQuickStyle::setStyle("Fusion");
     rootContext->setContextProperty("windows10", QVariant(false));
@@ -246,7 +261,8 @@ void MainWindow::setFusionTheme() {
     rootContext->setContextProperty("fusion", QVariant(true));
 }
 
-void MainWindow::setSteamDeckDarkTheme() {
+void MainWindow::setSteamDeckDarkTheme()
+{
     currentTheme = 4;
     QQuickStyle::setStyle("Universal");
     rootContext->setContextProperty("windows10", QVariant(true));
@@ -254,11 +270,13 @@ void MainWindow::setSteamDeckDarkTheme() {
     rootContext->setContextProperty("fusion", QVariant(false));
 }
 
-void MainWindow::restartRetr0Mine() const {
+void MainWindow::restartRetr0Mine() const
+{
     Utils::restartApp();
 }
 
-void MainWindow::setColorScheme() {
+void MainWindow::setColorScheme()
+{
     QColor accentColor;
     bool isSystemDark = Utils::isDarkMode();
 
@@ -279,7 +297,8 @@ void MainWindow::setColorScheme() {
 
     bool darkMode = isSystemDark || currentTheme == 4;
 
-    if (m_steamIntegration->m_initialized && m_steamIntegration->isRunningOnDeck() && currentTheme == 2) {
+    if (m_steamIntegration->m_initialized && m_steamIntegration->isRunningOnDeck()
+        && currentTheme == 2) {
         darkMode = true;
     }
     rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));
@@ -287,12 +306,14 @@ void MainWindow::setColorScheme() {
     rootContext->setContextProperty("accentColor", accentColor);
 }
 
-QString MainWindow::getLeaderboardPath() const {
+QString MainWindow::getLeaderboardPath() const
+{
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     return QDir(savePath).filePath("leaderboard.json");
 }
 
-bool MainWindow::saveLeaderboard(const QString &data) const {
+bool MainWindow::saveLeaderboard(const QString &data) const
+{
     QString filePath = getLeaderboardPath();
     QDir saveDir = QFileInfo(filePath).dir();
 
@@ -310,7 +331,8 @@ bool MainWindow::saveLeaderboard(const QString &data) const {
     return false;
 }
 
-QString MainWindow::loadLeaderboard() const {
+QString MainWindow::loadLeaderboard() const
+{
     QFile file(getLeaderboardPath());
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream stream(&file);
@@ -320,4 +342,3 @@ QString MainWindow::loadLeaderboard() const {
     }
     return QString();
 }
-

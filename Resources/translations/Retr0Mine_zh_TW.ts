@@ -91,17 +91,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="108"/>
+        <location filename="../qml/LoadWindow.qml" line="139"/>
         <source>Open save folder</source>
         <translation type="unfinished">開啟存檔資料夾</translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="117"/>
+        <location filename="../qml/LoadWindow.qml" line="148"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="129"/>
+        <location filename="../qml/LoadWindow.qml" line="72"/>
         <source>No saved games found</source>
         <translation type="unfinished"></translation>
     </message>

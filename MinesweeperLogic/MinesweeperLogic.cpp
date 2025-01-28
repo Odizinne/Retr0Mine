@@ -5,10 +5,10 @@
 MinesweeperLogic::MinesweeperLogic(QObject *parent)
     : QObject(parent)
     , m_rng(std::random_device{}())
-{
-}
+{}
 
-bool MinesweeperLogic::initializeGame(int width, int height, int mineCount) {
+bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
+{
     if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
         return false;
     }
@@ -22,11 +22,12 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount) {
     return true;
 }
 
-void MinesweeperLogic::calculateNumbers() {
+void MinesweeperLogic::calculateNumbers()
+{
     m_numbers.fill(0, m_width * m_height);
 
     for (int mine : m_mines) {
-        m_numbers[mine] = -1;  // Mark mine positions
+        m_numbers[mine] = -1; // Mark mine positions
 
         // Update adjacent cell counts
         QSet<int> neighbors = getNeighbors(mine);
@@ -38,7 +39,8 @@ void MinesweeperLogic::calculateNumbers() {
     }
 }
 
-bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
+bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY)
+{
     const int firstClickPos = firstClickY * m_width + firstClickX;
 
     // Setup safe zone around first click
@@ -58,7 +60,8 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
 
     QVector<int> allPositions;
     for (int i = 0; i < m_width * m_height; i++) {
-        if (!safeZone.contains(i)) allPositions.append(i);
+        if (!safeZone.contains(i))
+            allPositions.append(i);
     }
 
     int attempts = 0;
@@ -76,7 +79,8 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
 
         QSet<int> currentMines;
         for (int pos : positions) {
-            if (currentMines.size() >= m_mineCount) break;
+            if (currentMines.size() >= m_mineCount)
+                break;
             if (canPlaceMineAt(currentMines, pos)) {
                 currentMines.insert(pos);
                 m_mines.append(pos);
@@ -103,8 +107,8 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY) {
     return false;
 }
 
-
-bool MinesweeperLogic::hasAmbiguousMinePlacement(const QSet<int>& currentMines) {
+bool MinesweeperLogic::hasAmbiguousMinePlacement(const QSet<int> &currentMines)
+{
     // Check for 1-3 patterns and their variations
     for (int y = 0; y < m_height; y++) {
         for (int x = 0; x < m_width; x++) {
@@ -118,7 +122,8 @@ bool MinesweeperLogic::hasAmbiguousMinePlacement(const QSet<int>& currentMines) 
                 // For each neighbor that is also a number
                 for (int neighbor : neighbors) {
                     int neighborNum = m_numbers.value(neighbor);
-                    if (neighborNum <= 0) continue;
+                    if (neighborNum <= 0)
+                        continue;
 
                     // Find shared unknown cells between these numbers
                     QSet<int> pos1Unknowns;
@@ -174,8 +179,11 @@ bool MinesweeperLogic::hasAmbiguousMinePlacement(const QSet<int>& currentMines) 
     return false;
 }
 
-
-bool MinesweeperLogic::isAmbiguous(int pos, int number, const QSet<int>& unknownCells, const QSet<int>& currentMines) {
+bool MinesweeperLogic::isAmbiguous(int pos,
+                                   int number,
+                                   const QSet<int> &unknownCells,
+                                   const QSet<int> &currentMines)
+{
     QSet<QSet<int>> possibleMinePlacements;
 
     // Generate all possible subsets of unknown cells
@@ -209,7 +217,10 @@ bool MinesweeperLogic::isAmbiguous(int pos, int number, const QSet<int>& unknown
     return possibleMinePlacements.size() > 1;
 }
 
-bool MinesweeperLogic::satisfiesNumber(int number, const QSet<int>& placement, const QSet<int>& currentMines) {
+bool MinesweeperLogic::satisfiesNumber(int number,
+                                       const QSet<int> &placement,
+                                       const QSet<int> &currentMines)
+{
     int actualMines = 0;
     for (int pos : placement) {
         if (currentMines.contains(pos)) {
@@ -219,7 +230,8 @@ bool MinesweeperLogic::satisfiesNumber(int number, const QSet<int>& placement, c
     return actualMines == number;
 }
 
-void MinesweeperLogic::printGrid(const QSet<int>& currentMines) {
+void MinesweeperLogic::printGrid(const QSet<int> &currentMines)
+{
     for (int y = 0; y < m_height; y++) {
         QString rowOutput;
         for (int x = 0; x < m_width; x++) {
@@ -235,8 +247,8 @@ void MinesweeperLogic::printGrid(const QSet<int>& currentMines) {
     }
 }
 
-
-bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
+bool MinesweeperLogic::canPlaceMineAt(const QSet<int> &mines, int pos)
+{
     QSet<int> neighbors = getNeighbors(pos);
 
     // Count existing adjacent mines
@@ -248,11 +260,14 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
     }
 
     // Stricter adjacent mine check for larger boards
-    int maxAdjacent = 3;  // Default for 9x9
-    if (m_width >= 30) maxAdjacent = 4;  // For largest board
-    else if (m_width >= 16) maxAdjacent = 3;  // For medium boards
+    int maxAdjacent = 3; // Default for 9x9
+    if (m_width >= 30)
+        maxAdjacent = 4; // For largest board
+    else if (m_width >= 16)
+        maxAdjacent = 3; // For medium boards
 
-    if (adjacentMines >= maxAdjacent) return false;
+    if (adjacentMines >= maxAdjacent)
+        return false;
 
     // Check for patterns that create ambiguity
     for (int neighbor : neighbors) {
@@ -267,10 +282,12 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
         }
 
         // Prevent creating isolated high numbers
-        if (neighborMines >= 5) return false;
+        if (neighborMines >= 5)
+            return false;
     }
 
-    if (!isValidDensity(mines, pos)) return false;
+    if (!isValidDensity(mines, pos))
+        return false;
 
     // New check: Look for potential forced 50/50 situations
     int row = pos / m_width;
@@ -279,14 +296,13 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
     // Check all adjacent cells
     for (int r = -1; r <= 1; r++) {
         for (int c = -1; c <= 1; c++) {
-            if (r == 0 && c == 0) continue;
+            if (r == 0 && c == 0)
+                continue;
 
             int newRow = row + r;
             int newCol = col + c;
 
-            if (newRow >= 0 && newRow < m_height &&
-                newCol >= 0 && newCol < m_width) {
-
+            if (newRow >= 0 && newRow < m_height && newCol >= 0 && newCol < m_width) {
                 // For each cell, check if placing mine here would create a 50/50
                 if (wouldCreate5050(mines, pos, newRow, newCol)) {
                     return false;
@@ -298,7 +314,11 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int>& mines, int pos) {
     return true;
 }
 
-bool MinesweeperLogic::wouldCreate5050(const QSet<int>& mines, int newMinePos, int checkRow, int checkCol) {
+bool MinesweeperLogic::wouldCreate5050(const QSet<int> &mines,
+                                       int newMinePos,
+                                       int checkRow,
+                                       int checkCol)
+{
     // Calculate what the numbers would be after placing this mine
     QVector<int> tempNumbers(m_width * m_height, 0);
     // First count existing mines
@@ -322,17 +342,17 @@ bool MinesweeperLogic::wouldCreate5050(const QSet<int>& mines, int newMinePos, i
         if (tempNumbers[pos] == 1 || tempNumbers[pos] == 3) {
             for (int neighbor : neighbors) {
                 // Skip if it would be a mine
-                if (mines.contains(neighbor) || neighbor == newMinePos) continue;
+                if (mines.contains(neighbor) || neighbor == newMinePos)
+                    continue;
 
-                if ((tempNumbers[pos] == 1 && tempNumbers[neighbor] == 3) ||
-                    (tempNumbers[pos] == 3 && tempNumbers[neighbor] == 1)) {
+                if ((tempNumbers[pos] == 1 && tempNumbers[neighbor] == 3)
+                    || (tempNumbers[pos] == 3 && tempNumbers[neighbor] == 1)) {
                     // Count shared unknown cells
                     QSet<int> unknownCells;
                     QSet<int> neighborNeighbors = getNeighbors(neighbor);
                     for (int cell : neighbors) {
-                        if (neighborNeighbors.contains(cell) &&
-                            !mines.contains(cell) &&
-                            cell != newMinePos) {
+                        if (neighborNeighbors.contains(cell) && !mines.contains(cell)
+                            && cell != newMinePos) {
                             unknownCells.insert(cell);
                         }
                     }
@@ -347,17 +367,17 @@ bool MinesweeperLogic::wouldCreate5050(const QSet<int>& mines, int newMinePos, i
         if (tempNumbers[pos] == 2 || tempNumbers[pos] == 4) {
             for (int neighbor : neighbors) {
                 // Skip if it would be a mine
-                if (mines.contains(neighbor) || neighbor == newMinePos) continue;
+                if (mines.contains(neighbor) || neighbor == newMinePos)
+                    continue;
 
-                if ((tempNumbers[pos] == 2 && tempNumbers[neighbor] == 4) ||
-                    (tempNumbers[pos] == 4 && tempNumbers[neighbor] == 2)) {
+                if ((tempNumbers[pos] == 2 && tempNumbers[neighbor] == 4)
+                    || (tempNumbers[pos] == 4 && tempNumbers[neighbor] == 2)) {
                     // Count shared unknown cells
                     QSet<int> unknownCells;
                     QSet<int> neighborNeighbors = getNeighbors(neighbor);
                     for (int cell : neighbors) {
-                        if (neighborNeighbors.contains(cell) &&
-                            !mines.contains(cell) &&
-                            cell != newMinePos) {
+                        if (neighborNeighbors.contains(cell) && !mines.contains(cell)
+                            && cell != newMinePos) {
                             unknownCells.insert(cell);
                         }
                     }
@@ -372,16 +392,20 @@ bool MinesweeperLogic::wouldCreate5050(const QSet<int>& mines, int newMinePos, i
     return false;
 }
 
-int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells)
+int MinesweeperLogic::findMineHint(const QVector<int> &revealedCells,
+                                   const QVector<int> &flaggedCells)
 {
     QSet<int> revealed;
     QSet<int> flagged;
-    for (int cell : revealedCells) revealed.insert(cell);
-    for (int cell : flaggedCells) flagged.insert(cell);
+    for (int cell : revealedCells)
+        revealed.insert(cell);
+    for (int cell : flaggedCells)
+        flagged.insert(cell);
 
     // First check each revealed number for basic deductions
     for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
+        if (m_numbers[pos] <= 0)
+            continue;
 
         QSet<int> neighbors = getNeighbors(pos);
         int flagCount = 0;
@@ -406,9 +430,8 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
                     int mineRow = minePos / m_width;
                     int mineCol = minePos % m_width;
                     qDebug() << "\nFound mine at" << mineCol << "," << mineRow
-                             << "\nReason: Cell at" << col << "," << row
-                             << "shows" << m_numbers[pos]
-                             << "mines, has" << flagCount << "flags nearby"
+                             << "\nReason: Cell at" << col << "," << row << "shows"
+                             << m_numbers[pos] << "mines, has" << flagCount << "flags nearby"
                              << "and" << unrevealedCells.size() << "unrevealed cells."
                              << "\nSince remaining mines (" << remainingMines
                              << ") equals unrevealed cells, they must all be mines.";
@@ -420,7 +443,8 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
 
     // Then look for basic deductions - safe spots
     for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
+        if (m_numbers[pos] <= 0)
+            continue;
 
         QSet<int> neighbors = getNeighbors(pos);
         int flagCount = 0;
@@ -441,11 +465,11 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
             int col = pos % m_width;
             int safeRow = safePos / m_width;
             int safeCol = safePos % m_width;
-            qDebug() << "\nFound safe spot at" << safeCol << "," << safeRow
-                     << "\nReason: Cell at" << col << "," << row
-                     << "shows" << m_numbers[pos] << "mines"
-                     << "and already has" << flagCount << "flags nearby."
-                     << "\nSince flags count matches number, all other adjacent cells must be safe.";
+            qDebug()
+                << "\nFound safe spot at" << safeCol << "," << safeRow << "\nReason: Cell at" << col
+                << "," << row << "shows" << m_numbers[pos] << "mines"
+                << "and already has" << flagCount << "flags nearby."
+                << "\nSince flags count matches number, all other adjacent cells must be safe.";
             return safePos;
         }
     }
@@ -467,14 +491,14 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
             int pos = row * m_width + col;
             if (revealed.contains(pos)) {
                 if (m_numbers[pos] == -1) {
-                    rowStr += "M ";  // Mine
+                    rowStr += "M "; // Mine
                 } else {
-                    rowStr += QString::number(m_numbers[pos]) + " ";  // Number
+                    rowStr += QString::number(m_numbers[pos]) + " "; // Number
                 }
             } else if (flagged.contains(pos)) {
-                rowStr += "F ";  // Flag
+                rowStr += "F "; // Flag
             } else {
-                rowStr += ". ";  // Hidden
+                rowStr += ". "; // Hidden
             }
         }
         gridStr += rowStr.trimmed() + "\n";
@@ -493,8 +517,8 @@ int MinesweeperLogic::findMineHint(const QVector<int>& revealedCells, const QVec
     return -1;
 }
 
-
-bool MinesweeperLogic::isValidDensity(const QSet<int>& mines, int pos) {
+bool MinesweeperLogic::isValidDensity(const QSet<int> &mines, int pos)
+{
     // Calculate local mine density in a 5x5 area
     int row = pos / m_width;
     int col = pos % m_width;
@@ -516,34 +540,30 @@ bool MinesweeperLogic::isValidDensity(const QSet<int>& mines, int pos) {
     }
 
     // Maximum allowed density depends on board size
-    double maxDensity = 0.3;  // Default for 9x9
-    if (m_width >= 30) maxDensity = 0.25;
-    else if (m_width >= 16) maxDensity = 0.28;
+    double maxDensity = 0.3; // Default for 9x9
+    if (m_width >= 30)
+        maxDensity = 0.25;
+    else if (m_width >= 16)
+        maxDensity = 0.28;
 
     return (static_cast<double>(localMines) / areaSize) <= maxDensity;
 }
 
-
-
-
-
-
-
-
-QSet<int> MinesweeperLogic::getNeighbors(int pos) const {
+QSet<int> MinesweeperLogic::getNeighbors(int pos) const
+{
     QSet<int> neighbors;
     int row = pos / m_width;
     int col = pos % m_width;
 
     for (int r = -1; r <= 1; r++) {
         for (int c = -1; c <= 1; c++) {
-            if (r == 0 && c == 0) continue;
+            if (r == 0 && c == 0)
+                continue;
 
             int newRow = row + r;
             int newCol = col + c;
 
-            if (newRow >= 0 && newRow < m_height &&
-                newCol >= 0 && newCol < m_width) {
+            if (newRow >= 0 && newRow < m_height && newCol >= 0 && newCol < m_width) {
                 neighbors.insert(newRow * m_width + newCol);
             }
         }
@@ -552,9 +572,11 @@ QSet<int> MinesweeperLogic::getNeighbors(int pos) const {
     return neighbors;
 }
 
-int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVector<int>& flaggedCells)
+int MinesweeperLogic::solveForHint(const QVector<int> &revealedCells,
+                                   const QVector<int> &flaggedCells)
 {
-    struct CellConstraint {
+    struct CellConstraint
+    {
         int pos;
         int cellsNeeded;
         QSet<int> unknowns;
@@ -563,8 +585,10 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
 
     QSet<int> revealed;
     QSet<int> flagged;
-    for (int cell : revealedCells) revealed.insert(cell);
-    for (int cell : flaggedCells) flagged.insert(cell);
+    for (int cell : revealedCells)
+        revealed.insert(cell);
+    for (int cell : flaggedCells)
+        flagged.insert(cell);
 
     QVector<int> visibleNumbers(m_width * m_height, -2);
     for (int pos : revealed) {
@@ -586,7 +610,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             continue;
         }
 
-        if (visibleNumbers[i] <= 0) continue;
+        if (visibleNumbers[i] <= 0)
+            continue;
 
         QSet<int> neighbors = getNeighbors(i);
         int mineCount = 0;
@@ -603,8 +628,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             m_information.insert(info);
             m_solvedSpaces[i] = false;
 
-            qDebug() << "Cell at" << i % m_width << "," << i / m_width
-                     << "shows" << visibleNumbers[i] << "mines"
+            qDebug() << "Cell at" << i % m_width << "," << i / m_width << "shows"
+                     << visibleNumbers[i] << "mines"
                      << "and has" << mineCount << "flags nearby";
 
             for (int space : info.spaces) {
@@ -616,7 +641,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     QVector<CellConstraint> constraints;
 
     for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
+        if (m_numbers[pos] <= 0)
+            continue;
 
         QSet<int> neighbors = getNeighbors(pos);
         int flagCount = 0;
@@ -634,17 +660,15 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
 
         if (minesNeeded > 0) {
             constraints.append({pos, minesNeeded, unknowns, false});
-            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width
-                     << "needs" << minesNeeded << "mines among"
-                     << unknowns.size() << "unknowns";
+            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width << "needs" << minesNeeded
+                     << "mines among" << unknowns.size() << "unknowns";
         }
 
         if (minesNeeded < unknowns.size()) {
             int safeNeeded = unknowns.size() - minesNeeded;
             constraints.append({pos, safeNeeded, unknowns, true});
-            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width
-                     << "needs" << safeNeeded << "safe cells among"
-                     << unknowns.size() << "unknowns";
+            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width << "needs" << safeNeeded
+                     << "safe cells among" << unknowns.size() << "unknowns";
         }
     }
 
@@ -679,7 +703,7 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             bool firstConstraint = true;
 
             for (int constraintIdx : satisfiesConstraints[cell]) {
-                const CellConstraint& constraint = constraints[constraintIdx];
+                const CellConstraint &constraint = constraints[constraintIdx];
 
                 if (constraint.cellsNeeded == constraint.unknowns.size()) {
                     if (firstConstraint) {
@@ -704,13 +728,14 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     while (changed) {
         changed = false;
 
-        for (const MineSolverInfo& info : m_information) {
+        for (const MineSolverInfo &info : m_information) {
             int knownMines = 0;
             QSet<int> unknownSpaces;
 
             for (int space : info.spaces) {
                 if (m_solvedSpaces.contains(space)) {
-                    if (m_solvedSpaces[space]) knownMines++;
+                    if (m_solvedSpaces[space])
+                        knownMines++;
                 } else {
                     unknownSpaces.insert(space);
                 }
@@ -719,7 +744,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             if (info.count - knownMines == unknownSpaces.size()) {
                 for (int space : unknownSpaces) {
                     if (!m_solvedSpaces.contains(space) && !flagged.contains(space)) {
-                        qDebug() << "\nFound definite mine at" << space % m_width << "," << space / m_width
+                        qDebug() << "\nFound definite mine at" << space % m_width << ","
+                                 << space / m_width
                                  << "\nReason: Space connects to a number requiring exactly"
                                  << unknownSpaces.size() << "more mines among"
                                  << unknownSpaces.size() << "unknown spaces";
@@ -743,7 +769,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
 
     qDebug() << "\nLooking for forced mine patterns:";
     for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
+        if (m_numbers[pos] <= 0)
+            continue;
 
         QSet<int> neighbors = getNeighbors(pos);
         int flagCount = 0;
@@ -767,7 +794,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
 
             QSet<int> mineNeighbors = getNeighbors(forcedMine);
             for (int adjPos : mineNeighbors) {
-                if (!revealed.contains(adjPos) || m_numbers[adjPos] <= 0) continue;
+                if (!revealed.contains(adjPos) || m_numbers[adjPos] <= 0)
+                    continue;
 
                 QSet<int> adjNeighbors = getNeighbors(adjPos);
                 int adjFlagCount = 0;
@@ -790,7 +818,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
                         int safeRow = safeCell / m_width;
                         int safeCol = safeCell % m_width;
                         qDebug() << "Found safe cell at" << safeCol << "," << safeRow
-                                 << "\nBecause adjacent cell had a forced mine and needs exactly one more mine";
+                                 << "\nBecause adjacent cell had a forced mine and needs exactly "
+                                    "one more mine";
                         return safeCell;
                     }
                 }
@@ -799,7 +828,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     }
 
     for (int pos : revealed) {
-        if (m_numbers[pos] <= 0) continue;
+        if (m_numbers[pos] <= 0)
+            continue;
 
         int row = pos / m_width;
         int col = pos % m_width;
@@ -808,12 +838,12 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             if (col > 0 && col < m_width - 1) {
                 int left = pos - 1;
                 int right = pos + 1;
-                if (revealed.contains(left) && revealed.contains(right) &&
-                    m_numbers[left] == 1 && m_numbers[right] == 1) {
+                if (revealed.contains(left) && revealed.contains(right) && m_numbers[left] == 1
+                    && m_numbers[right] == 1) {
                     for (int offset : {-m_width, m_width}) {
                         int checkPos = pos + offset;
-                        if (checkPos >= 0 && checkPos < m_width * m_height &&
-                            !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
+                        if (checkPos >= 0 && checkPos < m_width * m_height
+                            && !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
                             return checkPos;
                         }
                     }
@@ -823,12 +853,12 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             if (row > 0 && row < m_height - 1) {
                 int up = pos - m_width;
                 int down = pos + m_width;
-                if (revealed.contains(up) && revealed.contains(down) &&
-                    m_numbers[up] == 1 && m_numbers[down] == 1) {
+                if (revealed.contains(up) && revealed.contains(down) && m_numbers[up] == 1
+                    && m_numbers[down] == 1) {
                     for (int offset : {-1, 1}) {
                         int checkPos = pos + offset;
-                        if ((checkPos / m_width) == row &&
-                            !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
+                        if ((checkPos / m_width) == row && !revealed.contains(checkPos)
+                            && !flagged.contains(checkPos)) {
                             return checkPos;
                         }
                     }
@@ -841,13 +871,13 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
             int down = pos + m_width;
             int diagonal = pos + m_width + 1;
 
-            if (revealed.contains(right) && revealed.contains(down) && revealed.contains(diagonal) &&
-                m_numbers[right] == 1 && m_numbers[down] == 1 && m_numbers[diagonal] == 1) {
-                for (int offset : {-m_width-1, -m_width+1, m_width-1, m_width+1}) {
+            if (revealed.contains(right) && revealed.contains(down) && revealed.contains(diagonal)
+                && m_numbers[right] == 1 && m_numbers[down] == 1 && m_numbers[diagonal] == 1) {
+                for (int offset : {-m_width - 1, -m_width + 1, m_width - 1, m_width + 1}) {
                     int checkPos = pos + offset;
-                    if (checkPos >= 0 && checkPos < m_width * m_height &&
-                        abs((checkPos % m_width) - col) == 1 &&
-                        !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
+                    if (checkPos >= 0 && checkPos < m_width * m_height
+                        && abs((checkPos % m_width) - col) == 1 && !revealed.contains(checkPos)
+                        && !flagged.contains(checkPos)) {
                         return checkPos;
                     }
                 }
@@ -857,8 +887,8 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
 
     for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
         if (!it.value() && !revealed.contains(it.key()) && !flagged.contains(it.key())) {
-            qDebug() << "\nFalling back to previously marked safe cell at"
-                     << it.key() % m_width << "," << it.key() / m_width;
+            qDebug() << "\nFalling back to previously marked safe cell at" << it.key() % m_width
+                     << "," << it.key() / m_width;
             return it.key();
         }
     }
@@ -867,7 +897,11 @@ int MinesweeperLogic::solveForHint(const QVector<int>& revealedCells, const QVec
     return -1;
 }
 
-bool MinesweeperLogic::initializeFromSave(int width, int height, int mineCount, const QVector<int>& mines) {
+bool MinesweeperLogic::initializeFromSave(int width,
+                                          int height,
+                                          int mineCount,
+                                          const QVector<int> &mines)
+{
     if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
         return false;
     }

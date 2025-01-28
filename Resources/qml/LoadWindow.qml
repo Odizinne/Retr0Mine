@@ -63,11 +63,21 @@ ApplicationWindow {
         anchors.margins: 12
         spacing: 10
 
+        Label {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            visible: saveFilesList.model.count === 0
+            text: qsTr("No saved games found")
+            font.pointSize: 12
+        }
+
         ScrollView {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-
+            visible: saveFilesList.model.count > 0
             ScrollBar.vertical.policy: saveFilesList.model.count > 5 ?
                                            ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
@@ -78,19 +88,12 @@ ApplicationWindow {
                 clip: true
                 highlightMoveDuration: 0
                 currentIndex: 0
-
-                // TODO, delete button for save files
                 delegate: ItemDelegate {
                     width: saveFilesList.width
                     height: 40
-
                     required property string name
                     required property int index
-
-                    text: name.replace(".json", "")
-
                     highlighted: saveFilesList.currentIndex === index
-
                     onClicked: {
                         saveFilesList.currentIndex = index
                         let saveData = mainWindow.loadGameState(name)
@@ -99,6 +102,34 @@ ApplicationWindow {
                                 errorWindow.visible = true
                             }
                             loadWindow.close()
+                        }
+                    }
+
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        anchors.leftMargin: 15
+                        anchors.rightMargin: 10
+
+
+                        Label {
+                            Layout.fillWidth: true
+                            text: name.replace(".json", "")
+                            elide: Text.ElideRight
+                        }
+
+                        Button {
+                            id: deleteButton
+                            icon.source: "qrc:/icons/delete.png"
+                            icon.color: root.darkMode ? "white" : "black"
+                            icon.width: 26
+                            icon.height: 26
+                            Layout.preferredWidth: height
+                            flat: true
+                            onClicked: {
+                                mainWindow.deleteSaveFile(name)
+                                saveFilesList.model.remove(index)
+                            }
                         }
                     }
                 }
@@ -127,7 +158,7 @@ ApplicationWindow {
             let saves = mainWindow.getSaveFiles()
 
             if (saves.length === 0) {
-                saveFilesList.model.append({name: qsTr("No saved games found"), enabled: false})
+                //saveFilesList.model.append({name: qsTr("No saved games found"), enabled: false})
             } else {
                 saves.forEach(function(save) {
                     saveFilesList.model.append({name: save, enabled: true})

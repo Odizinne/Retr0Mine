@@ -91,19 +91,19 @@
         <translation>Charger</translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="108"/>
+        <location filename="../qml/LoadWindow.qml" line="139"/>
         <source>Open save folder</source>
         <translation>Dossier des sauvegardes</translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="117"/>
+        <location filename="../qml/LoadWindow.qml" line="148"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="129"/>
+        <location filename="../qml/LoadWindow.qml" line="72"/>
         <source>No saved games found</source>
-        <translation></translation>
+        <translation>Aucune partie sauvegardée</translation>
     </message>
 </context>
 <context>

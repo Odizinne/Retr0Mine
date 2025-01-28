@@ -14,7 +14,7 @@ class MainWindow : public QObject
 public:
     explicit MainWindow(QObject *parent = nullptr);
 
-    QQmlApplicationEngine* engine;
+    QQmlApplicationEngine *engine;
 
     Q_INVOKABLE void setLanguage(int index);
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
@@ -32,10 +32,10 @@ private slots:
 private:
     QString getLeaderboardPath() const;
     QSettings settings;
-    QQmlContext* rootContext;
-    QTranslator* translator;
+    QQmlContext *rootContext;
+    QTranslator *translator;
     QString currentOS;
-    SteamIntegration* m_steamIntegration;
+    SteamIntegration *m_steamIntegration;
 
     void setupAndLoadQML();
     void setColorScheme();

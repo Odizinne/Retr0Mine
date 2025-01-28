@@ -1,18 +1,20 @@
 #include "SteamIntegration.h"
 #include <QDebug>
 
-SteamIntegration::SteamIntegration(QObject* parent)
+SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
     , m_initialized(false)
-{
-}
+{}
 
-SteamIntegration::~SteamIntegration() {
+SteamIntegration::~SteamIntegration()
+{
     shutdown();
 }
 
-bool SteamIntegration::initialize() {
-    if (m_initialized) return true;
+bool SteamIntegration::initialize()
+{
+    if (m_initialized)
+        return true;
     if (!SteamAPI_Init()) {
         qWarning() << "Failed to initialize Steam API";
         return false;
@@ -21,33 +23,43 @@ bool SteamIntegration::initialize() {
     return true;
 }
 
-void SteamIntegration::shutdown() {
+void SteamIntegration::shutdown()
+{
     if (m_initialized) {
         SteamAPI_Shutdown();
         m_initialized = false;
     }
 }
 
-void SteamIntegration::unlockAchievement(const QString& achievementId) {
-    if (!m_initialized) return;
-    ISteamUserStats* steamUserStats = SteamUserStats();
-    if (!steamUserStats) return;
+void SteamIntegration::unlockAchievement(const QString &achievementId)
+{
+    if (!m_initialized)
+        return;
+    ISteamUserStats *steamUserStats = SteamUserStats();
+    if (!steamUserStats)
+        return;
     steamUserStats->SetAchievement(achievementId.toUtf8().constData());
     steamUserStats->StoreStats();
 }
 
-bool SteamIntegration::isAchievementUnlocked(const QString& achievementId) {
-    if (!m_initialized) return false;
-    ISteamUserStats* steamUserStats = SteamUserStats();
-    if (!steamUserStats) return false;
+bool SteamIntegration::isAchievementUnlocked(const QString &achievementId)
+{
+    if (!m_initialized)
+        return false;
+    ISteamUserStats *steamUserStats = SteamUserStats();
+    if (!steamUserStats)
+        return false;
     bool achieved = false;
     steamUserStats->GetAchievement(achievementId.toUtf8().constData(), &achieved);
     return achieved;
 }
 
-bool SteamIntegration::isRunningOnDeck() {
-    if (!m_initialized) return false;
-    ISteamUtils* steamUtils = SteamUtils();
-    if (!steamUtils) return false;
+bool SteamIntegration::isRunningOnDeck()
+{
+    if (!m_initialized)
+        return false;
+    ISteamUtils *steamUtils = SteamUtils();
+    if (!steamUtils)
+        return false;
     return steamUtils->IsSteamRunningOnSteamDeck();
 }
