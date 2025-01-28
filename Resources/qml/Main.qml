@@ -18,7 +18,7 @@ ApplicationWindow {
 
     onVisibleChanged: {
         if (typeof Universal !== 'undefined') {
-            Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
+            Universal.theme = typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
     }

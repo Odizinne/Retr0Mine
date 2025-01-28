@@ -72,7 +72,6 @@ void MainWindow::setupAndLoadQML() {
     setLanguage(languageIndex);
     setColorScheme();
 
-    rootContext->setContextProperty("gamescope", isGamescope);
     rootContext->setContextProperty("currentOS", currentOS);
     rootContext->setContextProperty("loadedCellSize", cellSize);
     rootContext->setContextProperty("mainWindow", this);

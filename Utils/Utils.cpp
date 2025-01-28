@@ -127,7 +127,3 @@ QString Utils::getOperatingSystem()
 
     return "unknown";
 }
-
-bool Utils::isGamescope() {
-    return QProcessEnvironment::systemEnvironment().value("SteamDeck") == "1";
-}

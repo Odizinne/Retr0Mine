@@ -14,7 +14,6 @@ bool isWindows11();
 bool isLinux();
 void restartApp();
 QString getOperatingSystem();
-bool isGamescope();
 QString getFlagIcon(QColor accentColor);
 };
 
