@@ -13,7 +13,8 @@ public:
     void shutdown();
     Q_INVOKABLE void unlockAchievement(const QString& achievementId);
     Q_INVOKABLE bool isAchievementUnlocked(const QString& achievementId);
-    Q_INVOKABLE void lockAllAchievements();
+    Q_INVOKABLE bool isRunningOnDeck();
+
 private:
     bool m_initialized;
 };

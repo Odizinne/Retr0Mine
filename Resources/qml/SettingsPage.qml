@@ -696,9 +696,11 @@ ApplicationWindow {
                             ComboBox {
                                 id: styleComboBox
                                 model: {
-                                    let themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
-                                    if (root.isGameScope) {
-                                        themes.push("Deck Dark")
+                                    var themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
+                                    if (typeof steamIntegration !== "undefined") {
+                                        if (steamIntegration.isRunningOnDeck()) {
+                                            themes.push("Deck Dark")
+                                        }
                                     }
                                     return themes
                                 }
