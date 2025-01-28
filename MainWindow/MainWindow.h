@@ -25,6 +25,7 @@ public:
     Q_INVOKABLE void restartRetr0Mine() const;
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
+    Q_INVOKABLE bool getDarkMode() const;
 
 private slots:
     void onColorSchemeChanged(Qt::ColorScheme scheme);

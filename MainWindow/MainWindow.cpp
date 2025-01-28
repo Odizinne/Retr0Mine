@@ -317,3 +317,7 @@ QString MainWindow::loadLeaderboard() const {
     }
     return QString();
 }
+
+bool MainWindow::getDarkMode() const {
+    return Utils::isDarkMode();
+}
