@@ -1,6 +1,4 @@
 #include "MainWindow.h"
-#include <QBuffer>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -212,18 +210,6 @@ QStringList MainWindow::getSaveFiles() const
     QStringList files = saveDir.entryList(QStringList() << "*.json", QDir::Files);
     files.removeAll("leaderboard.json");
     return files;
-}
-
-void MainWindow::openSaveFolder() const
-{
-    QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QDir saveDir(savePath);
-
-    if (!saveDir.exists()) {
-        saveDir.mkpath(".");
-    }
-
-    QDesktopServices::openUrl(QUrl::fromLocalFile(savePath));
 }
 
 void MainWindow::deleteSaveFile(const QString &filename)

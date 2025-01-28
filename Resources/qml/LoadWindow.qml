@@ -137,15 +137,6 @@ ApplicationWindow {
         }
 
         Button {
-            text: qsTr("Open save folder")
-            Layout.fillWidth: true
-            onClicked: {
-                mainWindow.openSaveFolder()
-                loadWindow.close()
-            }
-        }
-
-        Button {
             text: qsTr("Cancel")
             Layout.fillWidth: true
             onClicked: loadWindow.close()
