@@ -90,11 +90,34 @@ Popup {
             Layout.fillHeight: true
         }
 
-        Button {
-            text: "Close"
-            Layout.alignment: Qt.AlignHCenter
-            onClicked: leaderboardPage.visible = false
-            Layout.bottomMargin: 15
+        RowLayout {
+            Button {
+                text: "Reset"
+                Layout.alignment: Qt.AlignHCenter
+                Layout.bottomMargin: 15
+                onClicked: {
+                    leaderboardPage.easyTime = ""
+                    leaderboardPage.mediumTime = ""
+                    leaderboardPage.hardTime = ""
+                    leaderboardPage.retr0Time = ""
+
+                    let emptyLeaderboard = {
+                        easyTime: "",
+                        mediumTime: "",
+                        hardTime: "",
+                        retr0Time: ""
+                    }
+
+                    mainWindow.saveLeaderboard(JSON.stringify(emptyLeaderboard))
+                }
+            }
+
+            Button {
+                text: "Close"
+                Layout.alignment: Qt.AlignHCenter
+                onClicked: leaderboardPage.visible = false
+                Layout.bottomMargin: 15
+            }
         }
     }
 }

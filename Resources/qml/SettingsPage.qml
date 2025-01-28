@@ -37,7 +37,6 @@ ApplicationWindow {
     Popup {
         anchors.centerIn: parent
         id: restoreDefaultsPopup
-        height: 120
         visible: false
         modal: true
 
@@ -119,7 +118,6 @@ ApplicationWindow {
     Popup {
         anchors.centerIn: parent
         id: restartWindow
-        height: 130
         visible: false
         modal: true
 
@@ -159,9 +157,7 @@ ApplicationWindow {
             Button {
                 text: qsTr("Restart")
                 Layout.fillWidth: true
-                Layout.preferredWidth: 80
                 onClicked: {
-                    // Save game state if there's an active game
                     if (root.gameStarted && !root.gameOver) {
                         saveGame("internalGameState.json")
                     }
@@ -172,7 +168,6 @@ ApplicationWindow {
             Button {
                 text: qsTr("Later")
                 Layout.fillWidth: true
-                Layout.preferredWidth: 80
                 onClicked: {
                     restartWindow.visible = false
                 }
@@ -231,11 +226,7 @@ ApplicationWindow {
                         width: parent.width
                         height: 40
                         icon.source: modelData.icon
-                        icon.color: {
-                            if (root.isFusionTheme) {
-                                return root.darkMode ? "white" : "dark"
-                            }
-                        }
+                        icon.color: root.darkMode ? "white" : "dark"
                         text: "  " + modelData.text
 
                         highlighted: ListView.isCurrentItem
@@ -294,8 +285,7 @@ ApplicationWindow {
                     id: difficultyPane
 
                     ColumnLayout {
-                        anchors.topMargin: !isFluentWinUI3Theme ? 10 : 0
-                        spacing: isFluentWinUI3Theme ? 10 : 20
+                        spacing: root.isFluentWinUI3Theme ? 15 : 20
                         width: parent.width
 
                         ButtonGroup {
@@ -377,72 +367,67 @@ ApplicationWindow {
                             }
                         }
 
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            Layout.rightMargin: isFluentWinUI3Theme ? 10 : 5
+                        RowLayout {
                             enabled: root.diffidx === 4
-                            spacing: isFluentWinUI3Theme ? 10 : 20
-                            RowLayout {
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Width:")
                                 Layout.fillWidth: true
-                                Label {
-                                    text: qsTr("Width:")
-                                    Layout.fillWidth: true
-                                }
-
-                                SpinBox {
-                                    id: widthSpinBox
-                                    from: 8
-                                    to: 50
-                                    editable: true
-                                    Layout.preferredWidth: 100
-                                    value: settings.customWidth
-                                    onValueChanged: settings.customWidth = value
-                                }
                             }
 
-                            RowLayout {
-                                Layout.fillWidth: true
-                                Label {
-                                    text: qsTr("Height:")
-                                    Layout.fillWidth: true
-                                }
-                                SpinBox {
-                                    id: heightSpinBox
-                                    from: 8
-                                    to: 50
-                                    editable: true
-                                    Layout.preferredWidth: 100
-                                    value: settings.customHeight
-                                    onValueChanged: settings.customHeight = value
-                                }
+                            SpinBox {
+                                id: widthSpinBox
+                                from: 8
+                                to: 50
+                                editable: true
+                                value: settings.customWidth
+                                onValueChanged: settings.customWidth = value
                             }
+                        }
 
-                            RowLayout {
+                        RowLayout {
+                            enabled: root.diffidx === 4
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Height:")
                                 Layout.fillWidth: true
-                                Label {
-                                    text: qsTr("Mines:")
-                                    Layout.fillWidth: true
-                                }
-                                SpinBox {
-                                    id: minesSpinBox
-                                    from: 1
-                                    to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 5)
-                                    editable: true
-                                    Layout.preferredWidth: 100
-                                    value: settings.customMines
-                                    onValueChanged: settings.customMines = value
-                                }
                             }
+                            SpinBox {
+                                id: heightSpinBox
+                                from: 8
+                                to: 50
+                                editable: true
+                                value: settings.customHeight
+                                onValueChanged: settings.customHeight = value
+                            }
+                        }
 
-                            Button {
-                                text: qsTr("Apply")
-                                Layout.alignment: Qt.AlignRight
-                                onClicked: {
-                                    root.gridSizeX = settings.customWidth
-                                    root.gridSizeY = settings.customHeight
-                                    root.mineCount = settings.customMines
-                                    root.initGame()
-                                }
+                        RowLayout {
+                            enabled: root.diffidx === 4
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Mines:")
+                                Layout.fillWidth: true
+                            }
+                            SpinBox {
+                                id: minesSpinBox
+                                from: 1
+                                to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 5)
+                                editable: true
+                                value: settings.customMines
+                                onValueChanged: settings.customMines = value
+                            }
+                        }
+
+                        Button {
+                            enabled: root.diffidx === 4
+                            text: qsTr("Apply")
+                            Layout.alignment: Qt.AlignRight
+                            onClicked: {
+                                root.gridSizeX = settings.customWidth
+                                root.gridSizeY = settings.customHeight
+                                root.mineCount = settings.customMines
+                                root.initGame()
                             }
                         }
                     }
@@ -459,10 +444,6 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Layout.topMargin: {
-                                if (isFluentWinUI3Theme) return 10
-                                return 0
-                            }
 
                             Label {
                                 text: qsTr("Invert left and right click")
@@ -560,10 +541,7 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Layout.topMargin: {
-                                if (isFluentWinUI3Theme) return 10
-                                return 0
-                            }
+
                             Label {
                                 text: qsTr("Animations")
                                 Layout.fillWidth: true
@@ -654,17 +632,13 @@ ApplicationWindow {
                                 id: cellSizeComboBox
                                 model: [qsTr("Small"), qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
                                 Layout.rightMargin: 5
-                                Layout.preferredWidth: {
-                                    if (isUniversalTheme) return cellSizeComboBox.implicitWidth + 5
-                                    return cellSizeComboBox.implicitWidth
-                                }
                                 currentIndex: {
                                     switch(settings.cellSize) {
                                     case 0: return 0;
                                     case 1: return 1;
                                     case 2: return 2;
                                     case 3: return 3;
-                                    default: return 1;  // Default to Normal
+                                    default: return 1;
                                     }
                                 }
 
@@ -705,10 +679,6 @@ ApplicationWindow {
                                     return themes
                                 }
                                 Layout.rightMargin: 5
-                                Layout.preferredWidth: {
-                                    if (isUniversalTheme) return styleComboBox.implicitWidth + 5
-                                    return styleComboBox.implicitWidth
-                                }
 
                                 property int previousIndex: settings.themeIndex
 
@@ -736,10 +706,7 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Layout.topMargin: {
-                                if (isFluentWinUI3Theme) return 10
-                                return 0
-                            }
+
                             Label {
                                 text: qsTr("Sound effects")
                                 Layout.fillWidth: true
@@ -865,10 +832,7 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Layout.topMargin: {
-                                if (isFluentWinUI3Theme) return 10
-                                return 0
-                            }
+
                             Label {
                                 text: qsTr("Language")
                                 Layout.fillWidth: true
@@ -891,11 +855,6 @@ ApplicationWindow {
                                 property int previousLanguageIndex: currentIndex
                                 Layout.rightMargin: 5
                                 currentIndex: settings.languageIndex
-                                Layout.preferredWidth: {
-                                    if (isUniversalTheme) return languageComboBox.implicitWidth + 5
-                                    return languageComboBox.implicitWidth
-                                }
-
                                 onActivated: {
                                     previousLanguageIndex = currentIndex
                                     settings.languageIndex = currentIndex

@@ -108,11 +108,7 @@ RowLayout {
         }
         Button {
             icon.source: "qrc:/icons/bomb_light.png"
-            icon.color: {
-                if (root.isFusionTheme) {
-                    return root.darkMode ? "white" : "dark"
-                }
-            }
+            icon.color: root.darkMode ? "white" : "dark"
             text: ": " + (root.mineCount - root.flaggedCount)
             font.pixelSize: 18
             font.bold: true
