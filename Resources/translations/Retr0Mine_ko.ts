@@ -35,12 +35,17 @@
 <context>
     <name>GameOverPopup</name>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="65"/>
+        <location filename="../qml/GameOverPopup.qml" line="66"/>
+        <source>New record saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/GameOverPopup.qml" line="73"/>
         <source>Retry</source>
         <translation type="unfinished">다시 시도</translation>
     </message>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="74"/>
+        <location filename="../qml/GameOverPopup.qml" line="82"/>
         <source>Close</source>
         <translation type="unfinished">닫기</translation>
     </message>
@@ -48,24 +53,34 @@
 <context>
     <name>LeaderboardPage</name>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="25"/>
+        <location filename="../qml/LeaderboardPage.qml" line="26"/>
         <source>Easy</source>
         <translation type="unfinished">쉬움</translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="42"/>
+        <location filename="../qml/LeaderboardPage.qml" line="43"/>
         <source>Medium</source>
         <translation type="unfinished">보통</translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="59"/>
+        <location filename="../qml/LeaderboardPage.qml" line="60"/>
         <source>Hard</source>
         <translation type="unfinished">어려움</translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="76"/>
+        <location filename="../qml/LeaderboardPage.qml" line="77"/>
         <source>Retr0</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="95"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="116"/>
+        <source>Close</source>
+        <translation type="unfinished">닫기</translation>
     </message>
 </context>
 <context>
@@ -234,7 +249,7 @@
         <translation type="vanished">종료</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="697"/>
+        <location filename="../qml/Main.qml" line="729"/>
         <source>Victory :)</source>
         <translation>승리! :)</translation>
     </message>
@@ -328,34 +343,34 @@
         <translation type="unfinished">설정</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="73"/>
+        <location filename="../qml/SettingsPage.qml" line="72"/>
         <source>Restore all settings to default?
 Application needs to be restarted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="81"/>
+        <location filename="../qml/SettingsPage.qml" line="80"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="105"/>
+        <location filename="../qml/SettingsPage.qml" line="109"/>
         <source>Cancel</source>
         <translation type="unfinished">취소</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="148"/>
+        <location filename="../qml/SettingsPage.qml" line="151"/>
         <source>Application needs to be restarted
 Your current game will be saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="155"/>
+        <location filename="../qml/SettingsPage.qml" line="158"/>
         <source>Restart</source>
         <translation type="unfinished">다시 시작</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="168"/>
+        <location filename="../qml/SettingsPage.qml" line="169"/>
         <source>Later</source>
         <translation type="unfinished">나중에</translation>
     </message>
@@ -365,190 +380,178 @@ Your current game will be saved</source>
         <translation type="unfinished">난이도</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="205"/>
+        <location filename="../qml/SettingsPage.qml" line="204"/>
         <source>Gameplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="210"/>
+        <location filename="../qml/SettingsPage.qml" line="208"/>
         <source>Visuals</source>
         <translation type="unfinished">화면</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="215"/>
+        <location filename="../qml/SettingsPage.qml" line="212"/>
         <source>Sound</source>
         <translation type="unfinished">소리</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="220"/>
+        <location filename="../qml/SettingsPage.qml" line="216"/>
         <source>Shortcuts</source>
         <translation type="unfinished">단축키</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="225"/>
-        <location filename="../qml/SettingsPage.qml" line="901"/>
+        <location filename="../qml/SettingsPage.qml" line="220"/>
+        <location filename="../qml/SettingsPage.qml" line="837"/>
         <source>Language</source>
         <translation type="unfinished">언어</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="272"/>
+        <location filename="../qml/SettingsPage.qml" line="256"/>
         <source>Restore defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="395"/>
+        <location filename="../qml/SettingsPage.qml" line="374"/>
         <source>Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="413"/>
+        <location filename="../qml/SettingsPage.qml" line="392"/>
         <source>Height:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="430"/>
+        <location filename="../qml/SettingsPage.qml" line="409"/>
         <source>Mines:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="445"/>
+        <location filename="../qml/SettingsPage.qml" line="424"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="475"/>
+        <location filename="../qml/SettingsPage.qml" line="449"/>
         <source>Invert left and right click</source>
         <translation type="unfinished">좌우 클릭 반전</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="494"/>
+        <location filename="../qml/SettingsPage.qml" line="468"/>
         <source>Quick reveal connected cells</source>
         <translation type="unfinished">연결된 칸 빠르게 공개</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="513"/>
+        <location filename="../qml/SettingsPage.qml" line="487"/>
         <source>Enable question marks</source>
         <translation type="unfinished">물음표 표시 사용</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="541"/>
+        <location filename="../qml/SettingsPage.qml" line="515"/>
         <source>Load last game on start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="575"/>
+        <location filename="../qml/SettingsPage.qml" line="546"/>
         <source>Animations</source>
         <translation type="unfinished">애니메이션</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="600"/>
+        <location filename="../qml/SettingsPage.qml" line="571"/>
         <source>Revealed cells frame</source>
         <translation type="unfinished">공개된 칸 테두리</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="619"/>
+        <location filename="../qml/SettingsPage.qml" line="590"/>
         <source>Dimm satisfied cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="638"/>
+        <location filename="../qml/SettingsPage.qml" line="609"/>
         <source>High contrast flags</source>
         <translation type="unfinished">고대비 깃발</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="657"/>
+        <location filename="../qml/SettingsPage.qml" line="628"/>
         <source>Cell size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="662"/>
+        <location filename="../qml/SettingsPage.qml" line="633"/>
         <source>Small</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="662"/>
+        <location filename="../qml/SettingsPage.qml" line="633"/>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="662"/>
+        <location filename="../qml/SettingsPage.qml" line="633"/>
         <source>Large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="662"/>
+        <location filename="../qml/SettingsPage.qml" line="633"/>
         <source>Extra Large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="699"/>
+        <location filename="../qml/SettingsPage.qml" line="666"/>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="706"/>
-        <location filename="../qml/SettingsPage.qml" line="740"/>
-        <location filename="../qml/SettingsPage.qml" line="907"/>
+        <location filename="../qml/SettingsPage.qml" line="673"/>
+        <location filename="../qml/SettingsPage.qml" line="843"/>
         <source>System</source>
         <translation type="unfinished">시스템</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="734"/>
         <source>Theme</source>
-        <translation type="unfinished">테마</translation>
+        <translation type="obsolete">테마</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="740"/>
-        <source>Light</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="740"/>
-        <source>Dark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="772"/>
+        <location filename="../qml/SettingsPage.qml" line="711"/>
         <source>Sound effects</source>
         <translation type="unfinished">효과음</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="791"/>
+        <location filename="../qml/SettingsPage.qml" line="730"/>
         <source>Volume</source>
         <translation type="unfinished">음량</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="808"/>
+        <location filename="../qml/SettingsPage.qml" line="747"/>
         <source>Soundpack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="840"/>
+        <location filename="../qml/SettingsPage.qml" line="779"/>
         <source>Fullscreen</source>
         <translation type="unfinished">전체화면</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="844"/>
+        <location filename="../qml/SettingsPage.qml" line="783"/>
         <source>New game</source>
         <translation type="unfinished">새 게임</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="848"/>
+        <location filename="../qml/SettingsPage.qml" line="787"/>
         <source>Save game</source>
         <translation type="unfinished">게임 저장</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="852"/>
+        <location filename="../qml/SettingsPage.qml" line="791"/>
         <source>Open settings</source>
         <translation type="unfinished">설정 열기</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="856"/>
+        <location filename="../qml/SettingsPage.qml" line="795"/>
         <source>Hint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="860"/>
+        <location filename="../qml/SettingsPage.qml" line="799"/>
         <source>Quit</source>
         <translation type="unfinished">종료</translation>
     </message>
@@ -556,42 +559,42 @@ Your current game will be saved</source>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="37"/>
+        <location filename="../qml/TopBar.qml" line="35"/>
         <source>New game</source>
         <translation type="unfinished">새 게임</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="44"/>
+        <location filename="../qml/TopBar.qml" line="42"/>
         <source>Hint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="52"/>
+        <location filename="../qml/TopBar.qml" line="50"/>
         <source>Save game</source>
         <translation type="unfinished">게임 저장</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="58"/>
+        <location filename="../qml/TopBar.qml" line="56"/>
         <source>Load game</source>
         <translation type="unfinished">게임 불러오기</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="65"/>
+        <location filename="../qml/TopBar.qml" line="63"/>
         <source>Settings</source>
         <translation type="unfinished">설정</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="70"/>
+        <location filename="../qml/TopBar.qml" line="68"/>
         <source>Leaderboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="75"/>
+        <location filename="../qml/TopBar.qml" line="73"/>
         <source>About</source>
         <translation type="unfinished">정보</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="80"/>
+        <location filename="../qml/TopBar.qml" line="78"/>
         <source>Exit</source>
         <translation type="unfinished">종료</translation>
     </message>

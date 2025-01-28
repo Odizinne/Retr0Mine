@@ -256,6 +256,7 @@ ApplicationWindow {
             }
 
             gameTimer.stop()
+            centisTimer.stop()
 
             gridSizeX = data.gameState.gridSizeX
             gridSizeY = data.gameState.gridSizeY
@@ -317,6 +318,7 @@ ApplicationWindow {
 
             if (gameStarted && !gameOver) {
                 gameTimer.start()
+                centisTimer.start()
             }
 
             topBar.elapsedTimeLabelText = formatTime(elapsedTime)
@@ -337,6 +339,21 @@ ApplicationWindow {
         return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
     }
 
+    function formatLeaderboardTime(seconds, cs) {
+        const hours = Math.floor(seconds / 3600)
+        const minutes = Math.floor((seconds % 3600) / 60)
+        const remainingSeconds = seconds % 60
+
+        let timeString = ""
+
+        timeString += hours.toString().padStart(2, '0') + ":"
+        timeString += minutes.toString().padStart(2, '0') + ":"
+        timeString += remainingSeconds.toString().padStart(2, '0')
+        timeString += "." + cs.toString().padStart(2, '0')
+
+        return timeString
+    }
+
     Timer {
         id: gameTimer
         interval: 1000
@@ -347,6 +364,17 @@ ApplicationWindow {
         }
     }
 
+    Timer {
+        id: centisTimer
+        interval: 10  // Update every 10ms
+        repeat: true
+        running: gameTimer.running
+        property int centiseconds: 0
+
+        onTriggered: {
+            centiseconds = (centiseconds + 1) % 100
+        }
+    }
 
     GameOverPopup {
         id: gameOverPopup
@@ -424,15 +452,20 @@ ApplicationWindow {
         }
     }
 
-    function compareTime(newTime, oldTime) {
-        const newParts = newTime.split(':').map(Number)
-        const oldParts = oldTime.split(':').map(Number)
+    function compareTime(time1, time2) {
+        if (!time1 || !time2) return true;
 
-        for (let i = 0; i < newParts.length; i++) {
-            if (newParts[i] < oldParts[i]) return true
-            if (newParts[i] > oldParts[i]) return false
-        }
-        return false
+        const [t1, cs1] = time1.split('.');
+        const [t2, cs2] = time2.split('.');
+
+        const [h1, m1, s1] = t1.split(':').map(Number);
+        const [h2, m2, s2] = t2.split(':').map(Number);
+
+        // Convert everything to centiseconds for comparison
+        const totalCs1 = ((h1 * 3600 + m1 * 60 + s1) * 100) + parseInt(cs1 || 0);
+        const totalCs2 = ((h2 * 3600 + m2 * 60 + s2) * 100) + parseInt(cs2 || 0);
+
+        return totalCs1 < totalCs2;
     }
 
     function playLoose() {
@@ -526,6 +559,7 @@ ApplicationWindow {
         elapsedTime = 0
         currentHintCount = 0
         gameTimer.stop()
+        centisTimer.stop()
         topBar.elapsedTimeLabelText = "00:00:00"
         isManuallyLoaded = false
 
@@ -551,6 +585,7 @@ ApplicationWindow {
            }
            gameStarted = true
            gameTimer.start()
+           centisTimer.start()
        }
 
        let cellsToReveal = [index]
@@ -572,10 +607,12 @@ ApplicationWindow {
                cell.isBombClicked = true
                gameOver = true
                gameTimer.stop()
+               centisTimer.stop()
                revealAllMines()
                playLoose()
                gameOverPopup.gameOverLabelText = "Game over :("
                gameOverPopup.gameOverLabelColor = "#d12844"
+               gameOverPopup.newRecordVisible = false
                gameOverPopup.visible = true
                return
            }
@@ -619,16 +656,28 @@ ApplicationWindow {
         }
     }
 
+    function getDifficultyLevel() {
+        if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
+            return 'easy';
+        } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
+            return 'medium';
+        } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
+            return 'hard';
+        } else if (gridSizeX === 50 && gridSizeY === 32 && mineCount === 320) {
+            return 'retr0';
+        }
+        return null;
+    }
+
     function checkWin() {
         if (revealedCount === gridSizeX * gridSizeY - mineCount && !gameOver) {
             gameOver = true
             gameTimer.stop()
+            centisTimer.stop()
 
-            // Only update leaderboard if this is not a loaded game
             if (!isManuallyLoaded) {
-                const formattedTime = formatTime(elapsedTime)
+                const formattedTime = formatTime(elapsedTime, centisTimer.centiseconds)
 
-                // Load current leaderboard
                 let leaderboardData = mainWindow.loadGameState("leaderboard.json")
                 let leaderboard = {}
 
@@ -640,32 +689,21 @@ ApplicationWindow {
                     }
                 }
 
-                // Update appropriate time based on difficulty
-                if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
-                    if (!leaderboard.easyTime || compareTime(formattedTime, leaderboard.easyTime)) {
-                        leaderboard.easyTime = formattedTime
-                        leaderboardWindow.easyTime = formattedTime
-                    }
-                } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
-                    if (!leaderboard.mediumTime || compareTime(formattedTime, leaderboard.mediumTime)) {
-                        leaderboard.mediumTime = formattedTime
-                        leaderboardWindow.mediumTime = formattedTime
-                    }
-                } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
-                    if (!leaderboard.hardTime || compareTime(formattedTime, leaderboard.hardTime)) {
-                        leaderboard.hardTime = formattedTime
-                        leaderboardWindow.hardTime = formattedTime
-                    }
-                } else if (gridSizeX === 50 && gridSizeY === 32 && mineCount === 320) {
-                    if (!leaderboard.retr0Time || compareTime(formattedTime, leaderboard.retr0Time)) {
-                        leaderboard.retr0Time = formattedTime
-                        leaderboardWindow.retr0Time = formattedTime
+                const difficulty = getDifficultyLevel();
+                if (difficulty) {
+                    const timeField = difficulty + 'Time';
+                    const formattedTime = formatLeaderboardTime(elapsedTime, centisTimer.centiseconds);
+
+                    if (!leaderboard[timeField] || compareTime(formattedTime, leaderboard[timeField])) {
+                        leaderboard[timeField] = formattedTime;
+                        leaderboardWindow[timeField] = formattedTime;
+                        gameOverPopup.newRecordVisible = true
+                    } else {
+                        gameOverPopup.newRecordVisible = false
                     }
                 }
 
-                // Save updated leaderboard
                 mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
-                // Handle Steam achievements
 
                 if (typeof steamIntegration !== "undefined") {
                     if (currentHintCount === 0) {
@@ -719,9 +757,17 @@ ApplicationWindow {
     }
 
     function hasUnrevealedNeighbors(index) {
+        // If the cell has no number (0), no need for satisfaction check
+        if (numbers[index] === 0) {
+            return false
+        }
+
         let row = Math.floor(index / gridSizeX)
         let col = index % gridSizeX
+        let flagCount = 0
+        let unrevealedCount = 0
 
+        // Count flagged and unrevealed neighbors
         for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
                 if (r === 0 && c === 0) continue
@@ -730,12 +776,19 @@ ApplicationWindow {
                 if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
 
                 let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol)
+                if (adjacentCell.flagged) {
+                    flagCount++
+                }
                 if (!adjacentCell.revealed && !adjacentCell.flagged) {
-                    return true
+                    unrevealedCount++
                 }
             }
         }
-        return false
+
+        // Return true if either:
+        // 1. There are still unrevealed non-flagged cells, OR
+        // 2. The number of flags doesn't match the cell's number
+        return unrevealedCount > 0 || flagCount !== numbers[index]
     }
 
     Component.onCompleted: {

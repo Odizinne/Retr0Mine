@@ -5,14 +5,14 @@ import QtQuick.Layouts
 Popup {
     anchors.centerIn: parent
     id: gameOverWindow
-    height: 100
+    //height: 100
     width: 250
     visible: false
     modal: true
 
     property string gameOverLabelText: "Game Over :("
     property string gameOverLabelColor: "#d12844"
-
+    property bool newRecordVisible: false
     Shortcut {
         sequence: "Return"
         enabled: gameOverWindow.visible
@@ -50,7 +50,7 @@ Popup {
     GridLayout {
         anchors.fill: parent
         columns: 2
-        rowSpacing: 10
+        rowSpacing: 15
         Label {
             id: gameOverLabel
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -59,6 +59,14 @@ Popup {
             Layout.columnSpan: 2
             font.bold: true
             font.pixelSize: 16
+        }
+
+        Label {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            text: qsTr("New record saved")
+            visible: gameOverWindow.newRecordVisible
+            Layout.columnSpan: 2
+            font.pixelSize: 13
         }
 
         Button {

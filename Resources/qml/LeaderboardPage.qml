@@ -92,8 +92,8 @@ Popup {
 
         RowLayout {
             Button {
-                text: "Reset"
-                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Clear")
+                Layout.fillWidth: true
                 Layout.bottomMargin: 15
                 onClicked: {
                     leaderboardPage.easyTime = ""
@@ -113,8 +113,8 @@ Popup {
             }
 
             Button {
-                text: "Close"
-                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Close")
+                Layout.fillWidth: true
                 onClicked: leaderboardPage.visible = false
                 Layout.bottomMargin: 15
             }
