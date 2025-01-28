@@ -123,6 +123,7 @@ jobs:
         with:
           version: '6.8.1'
           host: 'linux'
+          cache: true
           add-tools-to-path: true
           modules: 'qtmultimedia'
 
