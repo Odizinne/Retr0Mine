@@ -18,7 +18,7 @@ ApplicationWindow {
 
     onVisibleChanged: {
         if (typeof Universal !== 'undefined') {
-            Universal.theme = typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? Universal.Dark : Universal.System
+            Universal.theme = typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() && settings.themeIndex === 4 ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
     }
