@@ -140,6 +140,7 @@ jobs:
         with:
           version: '6.8.1'
           host: 'linux'
+          cache: true
           add-tools-to-path: true
           modules: 'qtmultimedia'
 
@@ -147,6 +148,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libgl1-mesa-dev fuse libfuse2 libwayland-dev qt6-wayland
+          # Configure FUSE for the current user
           sudo modprobe fuse
           sudo groupadd fuse || true
           sudo usermod -a -G fuse $USER
@@ -193,6 +195,7 @@ jobs:
           export QMAKE=$(which qmake6)
           export QML_SOURCES_PATHS=${{ github.workspace }}/Resources/qml
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/Dependencies/steam/lib/linux64
+          export EXTRA_QT_MODULES="multimedia"
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt
 
       - name: Create startup script
