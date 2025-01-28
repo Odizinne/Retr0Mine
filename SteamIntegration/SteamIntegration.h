@@ -14,8 +14,6 @@ public:
     Q_INVOKABLE void unlockAchievement(const QString& achievementId);
     Q_INVOKABLE bool isAchievementUnlocked(const QString& achievementId);
     Q_INVOKABLE bool isRunningOnDeck();
-
-private:
     bool m_initialized;
 };
 

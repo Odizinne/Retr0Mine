@@ -41,9 +41,7 @@ void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
 }
 
 void MainWindow::setupAndLoadQML() {
-    bool isGamescope = Utils::isGamescope();
-    int styleIndex = settings.value("themeIndex", isGamescope ? 4 : 0).toInt();
-    //int colorSchemeIndex = settings.value("colorScheme", 0).toInt();
+    int styleIndex = settings.value("themeIndex", m_steamIntegration->isRunningOnDeck() && m_steamIntegration->m_initialized ? 4 : 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
     int cellSize = settings.value("cellSize", 1).toInt();
 
