@@ -74,11 +74,12 @@ ApplicationWindow {
             ListView {
                 id: saveFilesList
                 model: ListModel {}
-                focus: true  // Ensure the ListView can receive focus
+                focus: true
                 clip: true
                 highlightMoveDuration: 0
-                currentIndex: 0  // Set initial selection
+                currentIndex: 0
 
+                // TODO, delete button for save files
                 delegate: ItemDelegate {
                     width: saveFilesList.width
                     height: 40

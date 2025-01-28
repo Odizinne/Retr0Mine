@@ -195,13 +195,13 @@ QStringList MainWindow::getSaveFiles() const {
     QString savePath = QStandardPaths::writableLocation(
         QStandardPaths::AppDataLocation
         );
-
     QDir saveDir(savePath);
     if (!saveDir.exists()) {
         saveDir.mkpath(".");
     }
-
-    return saveDir.entryList(QStringList() << "*.json", QDir::Files);
+    QStringList files = saveDir.entryList(QStringList() << "*.json", QDir::Files);
+    files.removeAll("leaderboard.json");
+    return files;
 }
 
 void MainWindow::openSaveFolder() const {

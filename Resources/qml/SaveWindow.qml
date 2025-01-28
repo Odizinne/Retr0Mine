@@ -41,7 +41,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             onTextChanged: {
                 let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                let isReserved = /^internalGameState$/i.test(text.trim())
+                let isReserved = /^(internalGameState|leaderboard)$/i.test(text.trim())
 
                 if (isReserved) {
                     errorLabel.text = qsTr("This filename is reserved for internal use")
