@@ -109,7 +109,6 @@ ApplicationWindow {
     property bool isFluentWinUI3Theme: windows11
     property bool isUniversalTheme: windows10
     property bool darkMode: isDarkMode
-    property string operatingSystem: currentOS
     property int diffidx: settings.difficulty
     property bool gameOver: false
     property int revealedCount: 0
@@ -464,36 +463,32 @@ ApplicationWindow {
         let col = index % gridSizeX;
         let flaggedCount = 0;
         let adjacentCells = [];
-        let hasQuestionMark = false;  // New flag to track question marks
+        let hasQuestionMark = false;
 
-        for (let r = -1; r <= 1; r++) {
+        outerLoop: for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
                 if (r === 0 && c === 0) continue;
                 let newRow = row + r;
                 let newCol = col + c;
                 if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
-
-                let pos = newRow * gridSizeX + newCol;
-                let adjacentCell = grid.itemAtIndex(pos);
+                let currentPos = newRow * gridSizeX + newCol;
+                let adjacentCell = grid.itemAtIndex(currentPos);
 
                 if (adjacentCell.questioned) {
                     hasQuestionMark = true;
-                    break;  // Exit inner loop if question mark found
+                    break outerLoop;
                 }
-
                 if (adjacentCell.flagged) {
                     flaggedCount++;
                 } else if (!adjacentCell.revealed) {
-                    adjacentCells.push(pos);
+                    adjacentCells.push(currentPos);
                 }
             }
-            if (hasQuestionMark) break;  // Exit outer loop if question mark found
         }
 
-        // Only reveal if no question marks are present
         if (!hasQuestionMark && flaggedCount === numbers[index] && adjacentCells.length > 0) {
-            for (let pos of adjacentCells) {
-                reveal(pos);
+            for (let adjacentPos of adjacentCells) {
+                reveal(adjacentPos);
             }
             root.playClick()
         }
