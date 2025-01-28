@@ -110,7 +110,6 @@ ApplicationWindow {
     property bool isUniversalTheme: windows10
     property bool darkMode: isDarkMode
     property string operatingSystem: currentOS
-    property bool isGamescope: gamescope
     property int diffidx: settings.difficulty
     property bool gameOver: false
     property int revealedCount: 0
