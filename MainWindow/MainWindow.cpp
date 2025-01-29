@@ -285,10 +285,8 @@ void MainWindow::setColorScheme()
     bool darkMode = isSystemDark || currentTheme == 4;
 
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
-    rootContext->setContextProperty("isGamescope", desktop.toLower() == "gamescope");
 
-    if (m_steamIntegration->m_initialized && m_steamIntegration->isRunningOnDeck()
-        && currentTheme == 2 && desktop.toLower() == "gamescope") {
+    if (currentTheme == 2 && desktop.toLower() == "gamescope") {
         darkMode = true;
     }
     rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));

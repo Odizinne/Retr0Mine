@@ -5,7 +5,6 @@ import QtQuick.Layouts
 Popup {
     anchors.centerIn: parent
     id: gameOverWindow
-    //width: 250
     visible: false
     modal: true
 

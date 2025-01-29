@@ -1200,10 +1200,5 @@ ApplicationWindow {
             }
         }
     }
-
-    Label {
-        text: "Gamescope"
-        visible: isGamescope
-    }
 }
 
