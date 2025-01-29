@@ -5,11 +5,11 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: settingsPage
     title: qsTr("Settings")
-    width: 570
+    width: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? height * 1.6 : 570
     height: 480
-    minimumWidth: 570
+    minimumWidth: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? height * 1.6 : 570
     minimumHeight: 480
-    maximumWidth: 570
+    maximumWidth: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? height * 1.6 : 570
     maximumHeight: 480
     visible: false
     flags: Qt.Dialog
