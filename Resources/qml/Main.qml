@@ -237,7 +237,10 @@ ApplicationWindow {
                 gameOver: gameOver,
                 gameStarted: gameStarted,
                 firstClickIndex: firstClickIndex,
-                currentHintCount: currentHintCount
+                currentHintCount: currentHintCount,
+                firstClickX: gameOverPopup.clickX,
+                firstClickY: gameOverPopup.clickY,
+                gameSeed: gameOverPopup.seed
             }
         }
 
@@ -266,6 +269,10 @@ ApplicationWindow {
             gridSizeX = data.gameState.gridSizeX
             gridSizeY = data.gameState.gridSizeY
             mineCount = data.gameState.mineCount
+
+            gameOverPopup.clickX = data.gameState.firstClickX
+            gameOverPopup.clickY = data.gameState.firstClickY
+            gameOverPopup.seed = data.gameState.gameSeed
 
             diffidx = root.difficultySettings.findIndex(diff =>
                 diff.x === gridSizeX &&

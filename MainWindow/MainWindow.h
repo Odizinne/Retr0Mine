@@ -26,7 +26,7 @@ public:
     Q_INVOKABLE QString loadLeaderboard() const;
 
 private slots:
-    void onColorSchemeChanged(Qt::ColorScheme scheme);
+    void onColorSchemeChanged();
 
 private:
     QString getLeaderboardPath() const;

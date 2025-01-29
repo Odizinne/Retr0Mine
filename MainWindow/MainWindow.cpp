@@ -35,7 +35,7 @@ MainWindow::MainWindow(QObject *parent)
     setupAndLoadQML();    
 }
 
-void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
+void MainWindow::onColorSchemeChanged()
 {
     setColorScheme();
 }
