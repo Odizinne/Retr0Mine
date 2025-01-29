@@ -91,6 +91,7 @@ Popup {
         }
 
         RowLayout {
+            spacing: 10
             Button {
                 text: qsTr("Clear")
                 Layout.fillWidth: true

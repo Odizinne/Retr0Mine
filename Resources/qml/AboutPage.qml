@@ -2,25 +2,23 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-ApplicationWindow {
+Popup {
     id: aboutPage
-    width: 230
-    height: 230
-    minimumWidth: width
-    minimumHeight: height
-    maximumWidth: width
-    maximumHeight: height
-    title: qsTr("About")
-    flags: Qt.Dialog
+    //width: 250
+    //height: 230
+    anchors.centerIn: parent
+    modal: true
 
     ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: 15
+        anchors.centerIn: parent
+        anchors.margins: 6
         spacing: 10
 
         Image {
             Layout.alignment: Qt.AlignHCenter
             source: "qrc:/icons/icon.png"
+            sourceSize.height: 64
+            sourceSize.width: 64
             Layout.preferredWidth: 64
             Layout.preferredHeight: 64
         }
@@ -45,7 +43,7 @@ ApplicationWindow {
         RowLayout {
             spacing: 10
             Button {
-                Layout.alignment: Qt.AlignHCenter
+                //Layout.alignment: Qt.AlignHCenter
                 text: "Steam"
                 icon.source: "qrc:/icons/steam.png"
                 highlighted: true
@@ -53,7 +51,7 @@ ApplicationWindow {
             }
 
             Button {
-                Layout.alignment: Qt.AlignHCenter
+                //Layout.alignment: Qt.AlignHCenter
                 text: "Github"
                 icon.source: "qrc:/icons/github.png"
                 onClicked: Qt.openUrlExternally("https://github.com/odizinne/Retr0Mine")
