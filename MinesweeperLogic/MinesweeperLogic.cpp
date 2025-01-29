@@ -39,17 +39,17 @@ void MinesweeperLogic::calculateNumbers()
     }
 }
 
-bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY, int seed)
+int MinesweeperLogic::placeMines(int firstClickX, int firstClickY, int seed)
 {
     const int firstClickPos = firstClickY * m_width + firstClickX;
-
     // Initialize RNG with seed or random device
     std::mt19937 rng;
     if (seed >= 0) {
         rng.seed(static_cast<unsigned>(seed));
     } else {
         std::random_device rd;
-        rng.seed(rd());
+        seed = static_cast<int>(rd()) & 0x7FFFFFFF; // Ensure positive value
+        rng.seed(static_cast<unsigned>(seed));
     }
 
     // Setup safe zone around first click
@@ -106,19 +106,15 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY, int seed)
                 qDebug() << "pass";
             }
 
-            if (seed >= 0) {
-                qDebug() << "Successfully generated grid with seed" << seed
-                         << "in" << attempts << "attempts";
-            } else {
-                qDebug() << "Successfully generated grid in" << attempts << "attempts"
-                         << "with random seed" << rng();
-            }
-            return true;
+            qDebug() << "Successfully generated grid with seed" << seed << "in" << attempts
+                     << "attempts";
+
+            return seed;
         }
     }
 
     qDebug() << "Failed to generate valid grid after" << attempts << "attempts";
-    return false;
+    return -1;
 }
 
 bool MinesweeperLogic::hasAmbiguousMinePlacement(const QSet<int> &currentMines)

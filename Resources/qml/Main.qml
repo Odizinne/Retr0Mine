@@ -541,13 +541,18 @@ ApplicationWindow {
             return false;
         }
 
-        const success = settings.fixedSeed && !isNaN(settings.fixedSeed)
+        const seed = settings.fixedSeed && !isNaN(settings.fixedSeed)
             ? gameLogic.placeMines(col, row, settings.fixedSeed)
             : gameLogic.placeMines(col, row, -1);
 
-        if (!success) {
+        if (seed === -1) {
             console.error("Failed to place mines!");
             return false;
+        } else {
+            gameOverPopup.seed = seed
+            gameOverPopup.clickX = col
+            gameOverPopup.clickY = row
+
         }
 
         mines = gameLogic.getMines();
@@ -618,7 +623,7 @@ ApplicationWindow {
                centisTimer.stop()
                revealAllMines()
                playLoose()
-               gameOverPopup.gameOverLabelText = "Game over :("
+               gameOverPopup.gameOverLabelText = "Game over"
                gameOverPopup.gameOverLabelColor = "#d12844"
                gameOverPopup.newRecordVisible = false
                gameOverPopup.visible = true
@@ -734,7 +739,7 @@ ApplicationWindow {
                 }
             }
 
-            gameOverPopup.gameOverLabelText = qsTr("Victory :)")
+            gameOverPopup.gameOverLabelText = qsTr("Victory")
             gameOverPopup.gameOverLabelColor = "#28d13c"
             gameOverPopup.visible = true
             playWin()

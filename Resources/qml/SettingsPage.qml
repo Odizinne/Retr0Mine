@@ -87,6 +87,8 @@ ApplicationWindow {
                     settings.autoreveal = false
                     settings.enableQuestionMarks = true
                     settings.loadLastGame = false
+                    settings.displaySeedAtGameOver = false
+                    settings.fixedSeed = -1
                     // visualsPane
                     settings.animations = true
                     settings.cellFrame = true

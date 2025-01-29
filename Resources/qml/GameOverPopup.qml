@@ -5,12 +5,11 @@ import QtQuick.Layouts
 Popup {
     anchors.centerIn: parent
     id: gameOverWindow
-    //height: 100
-    width: 250
+    //width: 250
     visible: false
     modal: true
 
-    property string gameOverLabelText: "Game Over :("
+    property string gameOverLabelText: "Game Over"
     property string gameOverLabelColor: "#d12844"
     property bool newRecordVisible: false
     property int seed: -1
@@ -75,7 +74,10 @@ Popup {
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: qsTr("First click: X: %1, Y: %2, seed: %3").arg(gameOverWindow.clickX).arg(gameOverWindow.clickY).arg(gameOverWindow.seed >= 0 ? gameOverWindow.seed : "random")
+            visible: settings.displaySeedAtGameOver
+            text: qsTr("First click: X: %1, Y: %2, seed: %3").arg(gameOverWindow.clickX).arg(gameOverWindow.clickY).arg(gameOverWindow.seed)
+            color: "#f7c220"
+            Layout.columnSpan: 2
         }
 
         Button {

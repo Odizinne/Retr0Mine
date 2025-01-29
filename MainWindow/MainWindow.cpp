@@ -32,7 +32,7 @@ MainWindow::MainWindow(QObject *parent)
         rootContext->setContextProperty("steamIntegration", m_steamIntegration);
     }
 
-    setupAndLoadQML();
+    setupAndLoadQML();    
 }
 
 void MainWindow::onColorSchemeChanged(Qt::ColorScheme scheme)
