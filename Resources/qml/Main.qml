@@ -103,6 +103,8 @@ ApplicationWindow {
     ]
 
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
+    property bool isSteamIntegrationEnabled: typeof steamIntegration !== "undefined" && steamIntegration !== null
+    property bool isRunningOnSteamDeck: isSteamIntegrationEnabled && steamIntegration.isRunningOnDeck() ? true : false
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
     property bool isFusionTheme: fusion
