@@ -4,12 +4,7 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../qml/AboutPage.qml" line="13"/>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/AboutPage.qml" line="37"/>
+        <location filename="../qml/AboutPage.qml" line="35"/>
         <source>by Odizinne</source>
         <translation type="unfinished"></translation>
     </message>
@@ -73,12 +68,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="95"/>
+        <location filename="../qml/LeaderboardPage.qml" line="96"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="116"/>
+        <location filename="../qml/LeaderboardPage.qml" line="117"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,17 +81,12 @@
 <context>
     <name>LoadWindow</name>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="7"/>
-        <source>Load Game</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/LoadWindow.qml" line="140"/>
+        <location filename="../qml/LoadWindow.qml" line="135"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="72"/>
+        <location filename="../qml/LoadWindow.qml" line="68"/>
         <source>No saved games found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -132,32 +122,27 @@
 <context>
     <name>SaveWindow</name>
     <message>
-        <location filename="../qml/SaveWindow.qml" line="7"/>
-        <source>Save Game</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SaveWindow.qml" line="40"/>
+        <location filename="../qml/SaveWindow.qml" line="36"/>
         <source>Enter save file name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SaveWindow.qml" line="47"/>
+        <location filename="../qml/SaveWindow.qml" line="43"/>
         <source>This filename is reserved for internal use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SaveWindow.qml" line="50"/>
+        <location filename="../qml/SaveWindow.qml" line="46"/>
         <source>Filename cannot contain:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SaveWindow.qml" line="74"/>
+        <location filename="../qml/SaveWindow.qml" line="70"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SaveWindow.qml" line="81"/>
+        <location filename="../qml/SaveWindow.qml" line="78"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
