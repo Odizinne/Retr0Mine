@@ -635,6 +635,25 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
+                                text: qsTr("Start in full screen")
+                                Layout.fillWidth: true
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: startFullScreenSwitch.checked = !startFullScreenSwitch.checked
+                                }
+                            }
+                            Switch {
+                                id: startFullScreenSwitch
+                                checked: settings.startFullScreen
+                                onCheckedChanged: {
+                                    settings.startFullScreen = checked
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Label {
                                 text: qsTr("Cell size")
                                 Layout.fillWidth: true
                             }

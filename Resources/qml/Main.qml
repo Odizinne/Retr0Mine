@@ -44,6 +44,7 @@ ApplicationWindow {
         property int customHeight: 8
         property int customMines: 10
         property bool dimmSatisfied: false
+        property bool startFullScreen: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? true : false
     }
 
     Shortcut {
@@ -825,6 +826,7 @@ ApplicationWindow {
     function checkInitialGameState() {
         if (!gridFullyInitialized) return
 
+        if (settings.startFullScreen) root.visibility = 5
         let internalSaveData = mainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
             if (loadGame(internalSaveData)) {
