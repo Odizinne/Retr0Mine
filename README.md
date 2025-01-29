@@ -1,7 +1,7 @@
 # Retr0Mine
 
 [![Version](https://img.shields.io/github/v/release/odizinne/Retr0Mine)](https://github.com/odizinne/retr0mine/releases)
-[![Version](https://img.shields.io/github/actions/workflow/status/odizinne/retr0mine/build.yml)]()
+[![Version](https://img.shields.io/github/actions/workflow/status/odizinne/retr0mine/steam-builds.yml)]()
 [![Github All Releases](https://img.shields.io/github/downloads/odizinne/Retr0Mine/total.svg)]()
 [![license](https://img.shields.io/github/license/odizinne/Retr0Mine)](https://github.com/Odizinne/Retr0Mine/blob/main/LICENSE)
 
