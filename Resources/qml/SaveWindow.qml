@@ -2,22 +2,18 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-ApplicationWindow {
+Popup {
     id: saveWindow
-    title: qsTr("Save Game")
     width: 300
-    height: 130
-    minimumWidth: 300
-    minimumHeight: 130
-    maximumWidth: 300
-    maximumHeight: 130
-    flags: Qt.Dialog
+    height: 140
+    modal: true
+    anchors.centerIn: parent
 
     Shortcut {
         sequence: "Esc"
         enabled: saveWindow.visible
         onActivated: {
-            saveWindow.close()
+            saveWindow.visible = false
         }
     }
 
@@ -33,7 +29,7 @@ ApplicationWindow {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 12
+        anchors.margins: 6
 
         TextField {
             id: saveNameField
@@ -72,19 +68,21 @@ ApplicationWindow {
             Button {
                 id: cancelButton
                 text: qsTr("Cancel")
-                Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
-                onClicked: saveWindow.close()
+                //Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
+                Layout.fillWidth: true
+                onClicked: saveWindow.visible = false
             }
 
             Button {
                 id: saveButton
                 text: qsTr("Save")
-                Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
+                //Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
+                Layout.fillWidth: true
                 enabled: false
                 onClicked: {
                     if (saveNameField.text.trim()) {
                         root.saveGame(saveNameField.text.trim() + ".json")
-                        saveWindow.close()
+                        saveWindow.visible = false
                     }
                 }
             }

@@ -55,12 +55,12 @@ ApplicationWindow {
     Shortcut {
         sequence: StandardKey.Save
         enabled: root.gameStarted
-        onActivated: saveWindow.show()
+        onActivated: saveWindow.visible = true
     }
 
     Shortcut {
         sequence: StandardKey.Open
-        onActivated: loadWindow.show()
+        onActivated: loadWindow.visible = true
     }
 
     Shortcut {

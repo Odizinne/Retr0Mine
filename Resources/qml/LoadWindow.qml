@@ -2,22 +2,18 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-ApplicationWindow {
+Popup {
     id: loadWindow
-    title: qsTr("Load Game")
     width: 300
     height: 320
-    minimumWidth: 300
-    minimumHeight: 320
-    maximumWidth: 300
-    maximumHeight: 320
-    flags: Qt.Dialog
+    modal: true
+    anchors.centerIn: parent
 
     Shortcut {
         sequence: "Esc"
         enabled: loadWindow.visible
         onActivated: {
-            loadWindow.close()
+            loadWindow.visible = false
         }
     }
 
@@ -52,7 +48,7 @@ ApplicationWindow {
                     if (!loadGame(saveData)) {
                         errorWindow.visible = true
                     }
-                    loadWindow.close()
+                    loadWindow.visible = false
                 }
             }
         }
@@ -60,7 +56,7 @@ ApplicationWindow {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 12
+        anchors.margins: 6
         spacing: 10
 
         Label {
@@ -101,7 +97,7 @@ ApplicationWindow {
                             if (!loadGame(saveData)) {
                                 errorWindow.visible = true
                             }
-                            loadWindow.close()
+                            loadWindow.visible = false
                         }
                     }
 
@@ -109,8 +105,7 @@ ApplicationWindow {
                         anchors.fill: parent
                         spacing: 8
                         anchors.leftMargin: 15
-                        anchors.rightMargin: 10
-
+                        anchors.rightMargin: 5
 
                         Label {
                             Layout.fillWidth: true
@@ -139,7 +134,7 @@ ApplicationWindow {
         Button {
             text: qsTr("Cancel")
             Layout.fillWidth: true
-            onClicked: loadWindow.close()
+            onClicked: loadWindow.visible = false
         }
     }
 
