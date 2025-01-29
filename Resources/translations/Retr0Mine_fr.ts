@@ -551,7 +551,7 @@ La partie en cours sera sauvegardée</translation>
     <message>
         <location filename="../qml/SettingsPage.qml" line="638"/>
         <source>Start in full screen</source>
-        <translation type="unfinished">Plein écran au lancement</translation>
+        <translation>Plein écran au lancement</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="657"/>
