@@ -43,9 +43,13 @@ void Utils::restartApp()
 
 bool Utils::isDarkMode()
 {
-    QPalette palette = QGuiApplication::palette();
-    QColor backgroundColor = palette.color(QPalette::Window);
-    return (backgroundColor.lightness() < 128) ? true : false;
+    if (qGuiApp->styleHints()->colorScheme() == Qt::ColorScheme::Dark) return true;
+    else if (qGuiApp->styleHints()->colorScheme() == Qt::ColorScheme::Light) return false;
+    else {
+        QPalette palette = QGuiApplication::palette();
+        QColor backgroundColor = palette.color(QPalette::Window);
+        return (backgroundColor.lightness() < 128) ? true : false;
+    }
 }
 
 #ifdef _WIN32

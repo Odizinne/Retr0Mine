@@ -562,16 +562,17 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
+                            spacing: 20
 
                             Label {
                                 text: qsTr("Fixed seed")
-                                Layout.fillWidth: true
                             }
 
                             TextField {
                                 id: seedField
                                 placeholderText: qsTr("Numbers only")
                                 maximumLength: 10
+                                Layout.fillWidth: true
                                 validator: RegularExpressionValidator { regularExpression: /^[0-9]*$/ }
                                 inputMethodHints: Qt.ImhDigitsOnly
                                 text: settings.fixedSeed >= 0 ? settings.fixedSeed.toString() : ""
