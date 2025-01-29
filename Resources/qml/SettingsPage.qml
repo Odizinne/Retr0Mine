@@ -251,7 +251,6 @@ ApplicationWindow {
                     visible: root.isRunningOnSteamDeck || false
                     onClicked: settingsPage.close()
                     Layout.fillWidth: true
-                    Layout.bottomMargin: 15
                     Layout.leftMargin: 15
                     Layout.rightMargin: 15
                     Layout.preferredHeight: 30
