@@ -45,6 +45,8 @@ ApplicationWindow {
         property int customMines: 10
         property bool dimmSatisfied: false
         property bool startFullScreen: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? true : false
+        property int fixedSeed: -1
+        property bool displaySeedAtGameOver: false
     }
 
     Shortcut {
@@ -539,7 +541,10 @@ ApplicationWindow {
             return false;
         }
 
-        const success = gameLogic.placeMines(col, row);
+        const success = settings.fixedSeed && !isNaN(settings.fixedSeed)
+            ? gameLogic.placeMines(col, row, settings.fixedSeed)
+            : gameLogic.placeMines(col, row, -1);
+
         if (!success) {
             console.error("Failed to place mines!");
             return false;

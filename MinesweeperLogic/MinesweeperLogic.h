@@ -44,7 +44,7 @@ public:
     explicit MinesweeperLogic(QObject *parent = nullptr);
 
     Q_INVOKABLE bool initializeGame(int width, int height, int mineCount);
-    Q_INVOKABLE bool placeMines(int firstClickX, int firstClickY);
+    Q_INVOKABLE bool placeMines(int firstClickX, int firstClickY, int seed = -1);
     Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells,
                                  const QVector<int> &flaggedCells);
     Q_INVOKABLE bool initializeFromSave(int width,

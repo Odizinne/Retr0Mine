@@ -537,6 +537,47 @@ ApplicationWindow {
                                 }
                             }
                         }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+
+                            Label {
+                                text: qsTr("Show seed at game over")
+                                Layout.fillWidth: true
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: printSeedSwitch.checked = !printSeedSwitch.checked
+                                }
+                            }
+                            Switch {
+                                id: printSeedSwitch
+                                checked: settings.displaySeedAtGameOver
+                                onCheckedChanged: {
+                                    settings.displaySeedAtGameOver = checked
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+
+                            Label {
+                                text: qsTr("Fixed seed")
+                                Layout.fillWidth: true
+                            }
+
+                            TextField {
+                                id: seedField
+                                placeholderText: qsTr("Numbers only")
+                                maximumLength: 10
+                                validator: RegularExpressionValidator { regularExpression: /^[0-9]*$/ }
+                                inputMethodHints: Qt.ImhDigitsOnly
+                                text: settings.fixedSeed >= 0 ? settings.fixedSeed.toString() : ""
+                                onTextChanged: {
+                                    settings.fixedSeed = text.length > 0 ? parseInt(text) : -1
+                                }
+                            }
+                        }
                     }
                 }
             }

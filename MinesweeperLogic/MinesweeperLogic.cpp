@@ -39,9 +39,18 @@ void MinesweeperLogic::calculateNumbers()
     }
 }
 
-bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY)
+bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY, int seed)
 {
     const int firstClickPos = firstClickY * m_width + firstClickX;
+
+    // Initialize RNG with seed or random device
+    std::mt19937 rng;
+    if (seed >= 0) {
+        rng.seed(static_cast<unsigned>(seed));
+    } else {
+        std::random_device rd;
+        rng.seed(rd());
+    }
 
     // Setup safe zone around first click
     int safeRadius = (m_width >= 30) ? 2 : 1;
@@ -65,15 +74,14 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY)
     }
 
     int attempts = 0;
-
     while (attempts != 1000) {
         attempts++;
         m_mines.clear();
         QVector<int> positions = allPositions;
 
-        // Shuffle mine positions
+        // Shuffle mine positions using the seeded RNG
         for (int i = positions.size() - 1; i > 0; i--) {
-            int j = std::uniform_int_distribution<int>(0, i)(m_rng);
+            int j = std::uniform_int_distribution<int>(0, i)(rng);
             std::swap(positions[i], positions[j]);
         }
 
@@ -98,7 +106,13 @@ bool MinesweeperLogic::placeMines(int firstClickX, int firstClickY)
                 qDebug() << "pass";
             }
 
-            qDebug() << "Successfully generated grid in" << attempts << "attempts";
+            if (seed >= 0) {
+                qDebug() << "Successfully generated grid with seed" << seed
+                         << "in" << attempts << "attempts";
+            } else {
+                qDebug() << "Successfully generated grid in" << attempts << "attempts"
+                         << "with random seed" << rng();
+            }
             return true;
         }
     }
