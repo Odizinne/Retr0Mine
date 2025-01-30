@@ -188,6 +188,12 @@ jobs:
           exec ./AppRun' > AppDir/Retr0Mine.sh
           chmod +x AppDir/Retr0Mine.sh
   
+      - name: Clean unnecessary files
+        run: |
+          rm -rf AppDir/usr/translations
+          rm -rf AppDir/usr/plugins/tls
+          rm -rf AppDir/usr/plugins/imageformats
+
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
