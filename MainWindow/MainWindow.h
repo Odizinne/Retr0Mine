@@ -14,8 +14,6 @@ class MainWindow : public QObject
 public:
     explicit MainWindow(QObject *parent = nullptr);
 
-    QQmlApplicationEngine *engine;
-
     Q_INVOKABLE void setLanguage(int index);
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
     Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename) const;
@@ -29,6 +27,7 @@ private slots:
     void onColorSchemeChanged();
 
 private:
+    QQmlApplicationEngine *engine;
     QString getLeaderboardPath() const;
     QSettings settings;
     QQmlContext *rootContext;
@@ -45,7 +44,6 @@ private:
     bool loadLanguage(QString languageCode);
     int currentTheme;
     bool isRunningOnGamescope;
-    QString mapSteamToAppLanguage(const QString &steamLanguage);
 };
 
 #endif // MAINWINDOW_H

@@ -7,13 +7,12 @@
 
 namespace Utils {
 bool isDarkMode();
-QString getAccentColor(const QString &accentKey);
-bool isWindows10();
-bool isWindows11();
-bool isLinux();
-void restartApp();
+QString getAccentColor();
 QString getOperatingSystem();
 QString getFlagIcon(QColor accentColor);
+QString mapSteamToAppLanguage(QString steamLanguage);
+QString mapSystemToAppLanguage(QString systemLanguage);
+QString mapIndexToLanguageCode(int index);
 }; // namespace Utils
 
 #endif // UTILS_H

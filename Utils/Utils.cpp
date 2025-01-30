@@ -35,16 +35,12 @@ QIcon recolorIcon(QIcon icon, QColor color)
     return QIcon(QPixmap::fromImage(img));
 }
 
-void Utils::restartApp()
-{
-    QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
-    QGuiApplication::quit();
-}
-
 bool Utils::isDarkMode()
 {
-    if (qGuiApp->styleHints()->colorScheme() == Qt::ColorScheme::Dark) return true;
-    else if (qGuiApp->styleHints()->colorScheme() == Qt::ColorScheme::Light) return false;
+    if (qGuiApp->styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+        return true;
+    else if (qGuiApp->styleHints()->colorScheme() == Qt::ColorScheme::Light)
+        return false;
     else {
         QPalette palette = QGuiApplication::palette();
         QColor backgroundColor = palette.color(QPalette::Window);
@@ -52,73 +48,11 @@ bool Utils::isDarkMode()
     }
 }
 
-#ifdef _WIN32
-QString toHex(BYTE value)
+QString Utils::getAccentColor()
 {
-    const char *hexDigits = "0123456789ABCDEF";
-    return QString("%1%2").arg(hexDigits[value >> 4]).arg(hexDigits[value & 0xF]);
-}
-#endif
-
-QString Utils::getAccentColor(const QString &accentKey)
-{
-#ifdef _WIN32
-    HKEY hKey;
-    BYTE accentPalette[32]; // AccentPalette contains 32 bytes
-    DWORD bufferSize = sizeof(accentPalette);
-
-    if (RegOpenKeyExW(HKEY_CURRENT_USER,
-                      L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Accent",
-                      0,
-                      KEY_READ,
-                      &hKey)
-        == ERROR_SUCCESS) {
-        if (RegGetValueW(
-                hKey, NULL, L"AccentPalette", RRF_RT_REG_BINARY, NULL, accentPalette, &bufferSize)
-            == ERROR_SUCCESS) {
-            RegCloseKey(hKey);
-
-            int index = 0;
-            if (accentKey == "light3")
-                index = 0;
-            else if (accentKey == "light2")
-                index = 4;
-            else if (accentKey == "light1")
-                index = 8;
-            else if (accentKey == "normal")
-                index = 12;
-            else if (accentKey == "dark1")
-                index = 16;
-            else if (accentKey == "dark2")
-                index = 20;
-            else if (accentKey == "dark3")
-                index = 24;
-            else {
-                qDebug() << "Invalid accentKey provided.";
-                return "#FFFFFF";
-            }
-
-            QString red = toHex(accentPalette[index]);
-            QString green = toHex(accentPalette[index + 1]);
-            QString blue = toHex(accentPalette[index + 2]);
-
-            return QString("#%1%2%3").arg(red, green, blue);
-        } else {
-            qDebug() << "Failed to retrieve AccentPalette from the registry.";
-        }
-
-        RegCloseKey(hKey);
-    } else {
-        qDebug() << "Failed to open registry key.";
-    }
-
-    return "#FFFFFF";
-#else
-    Q_UNUSED(accentKey);
     QPalette palette = QGuiApplication::palette();
     QColor highlight = palette.color(QPalette::Highlight);
     return highlight.name();
-#endif
 }
 
 QString Utils::getFlagIcon(QColor accentColor)
@@ -149,4 +83,55 @@ QString Utils::getOperatingSystem()
     }
 
     return "unknown";
+}
+
+QString Utils::mapSteamToAppLanguage(QString steamLanguage)
+{
+    static const QMap<QString, QString> languageMap = {{"english", "en"},
+                                                       {"french", "fr"},
+                                                       {"german", "de"},
+                                                       {"spanish", "es"},
+                                                       {"italian", "it"},
+                                                       {"japanese", "ja"},
+                                                       {"schinese", "zh_CN"},
+                                                       {"tchinese", "zh_TW"},
+                                                       {"koreana", "ko"},
+                                                       {"russian", "ru"}};
+
+    return languageMap.value(steamLanguage.toLower(), "en");
+}
+
+QString Utils::mapSystemToAppLanguage(QString systemLanguage)
+{
+    if (!systemLanguage.startsWith("zh")) {
+        systemLanguage = systemLanguage.section('_', 0, 0);
+    }
+
+    static const QMap<QString, QString> languageMap = {{"en", "en"},
+                                                       {"fr", "fr"},
+                                                       {"de", "de"},
+                                                       {"es", "es"},
+                                                       {"it", "it"},
+                                                       {"ja", "ja"},
+                                                       {"ko", "ko"},
+                                                       {"ru", "ru"},
+                                                       {"zh_TW", "zh_TW"},
+                                                       {"zh_CN", "zh_CN"}};
+
+    return languageMap.value(systemLanguage, "en");
+}
+
+QString Utils::mapIndexToLanguageCode(int index)
+{
+    static const QMap<int, QString> languageMap = {{1, "en"},
+                                                   {2, "fr"},
+                                                   {3, "de"},
+                                                   {4, "es"},
+                                                   {5, "it"},
+                                                   {6, "ja"},
+                                                   {7, "zh_CN"},
+                                                   {8, "zh_TW"},
+                                                   {9, "ko"},
+                                                   {10, "ru"}};
+    return languageMap.value(index, "en");
 }
