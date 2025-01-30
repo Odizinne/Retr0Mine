@@ -53,7 +53,10 @@ int MinesweeperLogic::placeMines(int firstClickX, int firstClickY, int seed)
     }
 
     // Setup safe zone around first click
-    int safeRadius = (m_width >= 30) ? 2 : 1;
+    //int safeRadius = (m_width >= 30) ? 2 : 1;
+
+    int safeRadius = 1;
+
     QSet<int> safeZone;
     int row = firstClickPos / m_width;
     int col = firstClickPos % m_width;

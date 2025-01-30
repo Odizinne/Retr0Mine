@@ -113,7 +113,6 @@ void MainWindow::setLanguage(int index)
     if (index == 0) {
         if (m_steamIntegration->m_initialized) {
             QString steamLang = m_steamIntegration->getSteamUILanguage();
-            qDebug() << steamLang;
             languageCode = mapSteamToAppLanguage(steamLang);
             loadLanguage(languageCode);
 
