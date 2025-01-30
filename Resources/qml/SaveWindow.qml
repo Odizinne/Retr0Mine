@@ -68,7 +68,6 @@ Popup {
             Button {
                 id: cancelButton
                 text: qsTr("Cancel")
-                //Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
                 Layout.fillWidth: true
                 onClicked: saveWindow.visible = false
             }
@@ -76,7 +75,6 @@ Popup {
             Button {
                 id: saveButton
                 text: qsTr("Save")
-                //Layout.preferredWidth: Math.max(cancelButton.implicitWidth, saveButton.implicitWidth)
                 Layout.fillWidth: true
                 enabled: false
                 onClicked: {

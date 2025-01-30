@@ -5,11 +5,11 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: settingsPage
     title: qsTr("Settings")
-    width: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? height * 1.6 : 570
+    width: root.isGamescope ? height * 1.6 : 570
     height: 480
-    minimumWidth: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? height * 1.6 : 570
+    minimumWidth: root.isGamescope ? height * 1.6 : 570
     minimumHeight: 480
-    maximumWidth: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? height * 1.6 : 570
+    maximumWidth: root.isGamescope ? height * 1.6 : 570
     maximumHeight: 480
     visible: false
     flags: Qt.Dialog
@@ -39,26 +39,6 @@ ApplicationWindow {
         id: restoreDefaultsPopup
         visible: false
         modal: true
-
-        enter: Transition {
-            NumberAnimation {
-                property: "opacity"
-                from: 0.0
-                to: 1.0
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
-        }
-
-        exit: Transition {
-            NumberAnimation {
-                property: "opacity"
-                from: 1.0
-                to: 0.0
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
-        }
 
         GridLayout {
             id: restoreDefaultLayout
@@ -94,8 +74,9 @@ ApplicationWindow {
                     settings.cellFrame = true
                     settings.dimmSatisfied = false
                     settings.contrastFlag = false
+                    settings.startFullScreen = root.isGamescope ? true : false
                     settings.cellSize = 1
-                    settings.themeIndex = 0
+                    settings.themeIndex = root.isGamescope ? 4 : 0
                     // soundPane
                     settings.soundEffects = true
                     settings.volume = 1.0
@@ -111,7 +92,7 @@ ApplicationWindow {
                 text: qsTr("Cancel")
                 Layout.fillWidth: true
                 onClicked: {
-                    restoreDefaultsPopup.close()
+                    restoreDefaultsPopup.visible = false
                 }
             }
         }
@@ -122,26 +103,6 @@ ApplicationWindow {
         id: restartWindow
         visible: false
         modal: true
-
-        enter: Transition {
-            NumberAnimation {
-                property: "opacity"
-                from: 0.0
-                to: 1.0
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
-        }
-
-        exit: Transition {
-            NumberAnimation {
-                property: "opacity"
-                from: 1.0
-                to: 0.0
-                duration: 200
-                easing.type: Easing.InOutQuad
-            }
-        }
 
         GridLayout {
             anchors.fill: parent
@@ -250,7 +211,7 @@ ApplicationWindow {
 
                 Button {
                     text: qsTr("Close")
-                    visible: root.isRunningOnSteamDeck || false
+                    visible: root.isGamescope || false
                     onClicked: settingsPage.close()
                     Layout.fillWidth: true
                     Layout.leftMargin: 15
@@ -744,10 +705,8 @@ ApplicationWindow {
                                 id: styleComboBox
                                 model: {
                                     var themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
-                                    if (typeof steamIntegration !== "undefined") {
-                                        if (steamIntegration.isRunningOnDeck()) {
-                                            themes.push("Deck Dark")
-                                        }
+                                    if (root.isGamescope) {
+                                        themes.push("Deck Dark")
                                     }
                                     return themes
                                 }

@@ -18,7 +18,7 @@ ApplicationWindow {
 
     onVisibleChanged: {
         if (typeof Universal !== 'undefined') {
-            Universal.theme = typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() && settings.themeIndex === 4 ? Universal.Dark : Universal.System
+            Universal.theme = root.isGamescope && settings.themeIndex === 4 ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
     }
@@ -26,7 +26,7 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        property int themeIndex: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? 4 : 0
+        property int themeIndex: root.isGamescope ? 4 : 0
         property int languageIndex: 0
         property int difficulty: 0
         property bool invertLRClick: false
@@ -44,7 +44,7 @@ ApplicationWindow {
         property int customHeight: 8
         property int customMines: 10
         property bool dimmSatisfied: false
-        property bool startFullScreen: typeof steamIntegration !== "undefined" && steamIntegration.isRunningOnDeck() ? true : false
+        property bool startFullScreen: root.isGamescope ? true : false
         property int fixedSeed: -1
         property bool displaySeedAtGameOver: false
     }
@@ -106,8 +106,7 @@ ApplicationWindow {
     ]
 
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
-    property bool isSteamIntegrationEnabled: typeof steamIntegration !== "undefined" && steamIntegration !== null
-    property bool isRunningOnSteamDeck: isSteamIntegrationEnabled && steamIntegration.isRunningOnDeck() ? true : false
+    property bool isGamescope: gamescope
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
     property bool isFusionTheme: fusion

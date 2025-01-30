@@ -289,6 +289,8 @@ void MainWindow::setColorScheme()
     if (currentTheme == 2 && desktop.toLower() == "gamescope") {
         darkMode = true;
     }
+
+    rootContext->setContextProperty("gamescope", desktop.toLower() == "gamescope");
     rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));
     rootContext->setContextProperty("isDarkMode", darkMode);
     rootContext->setContextProperty("accentColor", accentColor);

@@ -19,7 +19,7 @@ Popup {
         sequence: "Return"
         enabled: gameOverWindow.visible
         onActivated: {
-            gameOverWindow.close()
+            gameOverWindow.visible = false
             root.initGame()
         }
     }
@@ -27,7 +27,7 @@ Popup {
     Shortcut {
         sequence: "Esc"
         enabled: gameOverWindow.visible
-        onActivated: gameOverWindow.close()
+        onActivated: gameOverWindow.visible = false
     }
 
     enter: Transition {
@@ -83,7 +83,7 @@ Popup {
             text: qsTr("Retry")
             Layout.fillWidth: true
             onClicked: {
-                gameOverWindow.close()
+                gameOverWindow.visible = false
                 root.initGame()
             }
         }
@@ -92,7 +92,7 @@ Popup {
             text: qsTr("Close")
             Layout.fillWidth: true
             onClicked: {
-                gameOverWindow.close()
+                gameOverWindow.visible = false
             }
         }
     }
