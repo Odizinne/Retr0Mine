@@ -44,6 +44,7 @@ private:
     void setSteamDeckDarkTheme();
     bool loadLanguage(QString languageCode);
     int currentTheme;
+    bool isRunningOnGamescope;
 };
 
 #endif // MAINWINDOW_H

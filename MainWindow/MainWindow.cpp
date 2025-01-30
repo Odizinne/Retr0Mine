@@ -19,7 +19,11 @@ MainWindow::MainWindow(QObject *parent)
     , rootContext(engine->rootContext())
     , translator(new QTranslator(this))
     , currentOS(Utils::getOperatingSystem())
+    , isRunningOnGamescope(false)
 {
+    QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
+    isRunningOnGamescope = desktop.toLower() == "gamescope";
+
     connect(QGuiApplication::styleHints(),
             &QStyleHints::colorSchemeChanged,
             this,
@@ -75,7 +79,7 @@ void MainWindow::setupAndLoadQML()
     } else if (cellSize == 1) {
         cellSize = 35;
     } else if (cellSize == 2) {
-        cellSize = 45;
+        cellSize = isRunningOnGamescope ? 43 : 45;
     } else {
         cellSize = 55;
     }
@@ -286,11 +290,11 @@ void MainWindow::setColorScheme()
 
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
 
-    if (currentTheme == 2 && desktop.toLower() == "gamescope") {
+    if (currentTheme == 2 && isRunningOnGamescope) {
         darkMode = true;
     }
 
-    rootContext->setContextProperty("gamescope", desktop.toLower() == "gamescope");
+    rootContext->setContextProperty("gamescope", isRunningOnGamescope);
     rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));
     rootContext->setContextProperty("isDarkMode", darkMode);
     rootContext->setContextProperty("accentColor", accentColor);
