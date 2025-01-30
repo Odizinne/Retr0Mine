@@ -63,3 +63,16 @@ bool SteamIntegration::isRunningOnDeck()
         return false;
     return steamUtils->IsSteamRunningOnSteamDeck();
 }
+
+QString SteamIntegration::getSteamUILanguage() const
+{
+    if (!m_initialized)
+        return QString();
+
+    ISteamUtils* steamUtils = SteamUtils();
+    if (!steamUtils)
+        return QString();
+
+    const char* language = steamUtils->GetSteamUILanguage();
+    return QString::fromUtf8(language);
+}

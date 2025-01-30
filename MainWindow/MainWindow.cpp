@@ -88,59 +88,85 @@ void MainWindow::setupAndLoadQML()
     engine->load(QUrl("qrc:/qml/Main.qml"));
 }
 
+QString MainWindow::mapSteamToAppLanguage(const QString &steamLanguage)
+{
+    QMap<QString, QString> languageMap = {
+        {"english", "en"},
+        {"french", "fr"},
+        {"german", "de"},
+        {"spanish", "es"},
+        {"italian", "it"},
+        {"japanese", "ja"},
+        {"schinese", "zh_CN"},
+        {"tchinese", "zh_TW"},
+        {"koreana", "ko"},
+        {"russian", "ru"}
+    };
+
+    return languageMap.value(steamLanguage.toLower(), "en");
+}
+
 void MainWindow::setLanguage(int index)
 {
     QString languageCode;
+
     if (index == 0) {
-        QLocale locale;
-        QString fullLocale = locale.name();
-
-        // Check if the locale is Chinese
-        if (fullLocale.startsWith("zh")) {
-            languageCode = fullLocale; // Use full code for Chinese
-        } else {
-            languageCode = locale.name().section('_', 0, 0);
-        }
-
-        if (!loadLanguage(languageCode)) {
-            languageCode = "en";
+        if (m_steamIntegration->m_initialized) {
+            QString steamLang = m_steamIntegration->getSteamUILanguage();
+            qDebug() << steamLang;
+            languageCode = mapSteamToAppLanguage(steamLang);
             loadLanguage(languageCode);
+
+        } else {
+            QLocale locale;
+            QString fullLocale = locale.name();
+
+            if (fullLocale.startsWith("zh")) {
+                languageCode = fullLocale;
+            } else {
+                languageCode = locale.name().section('_', 0, 0);
+            }
+
+            if (!loadLanguage(languageCode)) {
+                languageCode = "en";
+                loadLanguage(languageCode);
+            }
         }
+
     } else {
-        // Map index to language codes
         switch (index) {
-        case 1: // English
+        case 1:
             languageCode = "en";
             break;
-        case 2: // French
+        case 2:
             languageCode = "fr";
             break;
-        case 3: // German
+        case 3:
             languageCode = "de";
             break;
-        case 4: // Spanish
+        case 4:
             languageCode = "es";
             break;
-        case 5: // Italian
+        case 5:
             languageCode = "it";
             break;
-        case 6: // Japanese
+        case 6:
             languageCode = "ja";
             break;
-        case 7: // Chinese Simplified
+        case 7:
             languageCode = "zh_CN";
             break;
-        case 8: // Chinese Traditional
+        case 8:
             languageCode = "zh_TW";
             break;
-        case 9: // Korean
+        case 9:
             languageCode = "ko";
             break;
-        case 10: // Russian
+        case 10:
             languageCode = "ru";
             break;
         default:
-            languageCode = "en"; // Fallback to English
+            languageCode = "en";
             break;
         }
         loadLanguage(languageCode);

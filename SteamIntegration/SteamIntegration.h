@@ -16,6 +16,7 @@ public:
     Q_INVOKABLE bool isAchievementUnlocked(const QString &achievementId);
     Q_INVOKABLE bool isRunningOnDeck();
     bool m_initialized;
+    QString getSteamUILanguage() const;
 };
 
 #endif // STEAMINTEGRATION_H

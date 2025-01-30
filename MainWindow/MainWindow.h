@@ -45,6 +45,7 @@ private:
     bool loadLanguage(QString languageCode);
     int currentTheme;
     bool isRunningOnGamescope;
+    QString mapSteamToAppLanguage(const QString &steamLanguage);
 };
 
 #endif // MAINWINDOW_H

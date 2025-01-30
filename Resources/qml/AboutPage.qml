@@ -43,7 +43,6 @@ Popup {
         RowLayout {
             spacing: 10
             Button {
-                //Layout.alignment: Qt.AlignHCenter
                 text: "Steam"
                 icon.source: "qrc:/icons/steam.png"
                 highlighted: true
@@ -51,7 +50,6 @@ Popup {
             }
 
             Button {
-                //Layout.alignment: Qt.AlignHCenter
                 text: "Github"
                 icon.source: "qrc:/icons/github.png"
                 onClicked: Qt.openUrlExternally("https://github.com/odizinne/Retr0Mine")
