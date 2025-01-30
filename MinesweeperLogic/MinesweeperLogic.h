@@ -73,7 +73,7 @@ private:
 
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     bool isValidDensity(const QSet<int> &mines, int pos);
-    bool wouldCreate5050(const QSet<int> &mines, int newMinePos, int checkRow, int checkCol);
+    bool wouldCreate5050(const QSet<int> &mines, int newMinePos);
     bool hasAmbiguousMinePlacement(const QSet<int> &currentMines);
 };
 

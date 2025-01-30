@@ -22,6 +22,27 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
     return true;
 }
 
+bool MinesweeperLogic::initializeFromSave(int width,
+                                          int height,
+                                          int mineCount,
+                                          const QVector<int> &mines)
+{
+    if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
+        return false;
+    }
+
+    m_width = width;
+    m_height = height;
+    m_mineCount = mineCount;
+    m_mines = mines;
+    m_numbers.resize(width * height);
+
+    // Recalculate numbers for the loaded mine positions
+    calculateNumbers();
+
+    return true;
+}
+
 void MinesweeperLogic::calculateNumbers()
 {
     m_numbers.fill(0, m_width * m_height);
@@ -104,9 +125,7 @@ int MinesweeperLogic::placeMines(int firstClickX, int firstClickY, int seed)
             // Check for 50/50 ambiguous situations
             if (hasAmbiguousMinePlacement(currentMines)) {
                 qDebug() << "Ambiguous mine placement detected, regenerating...";
-                continue; // Regenerate the grid
-            } else {
-                qDebug() << "pass";
+                continue;
             }
 
             qDebug() << "Successfully generated grid with seed" << seed << "in" << attempts
@@ -249,7 +268,7 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int> &mines, int pos)
 
             if (newRow >= 0 && newRow < m_height && newCol >= 0 && newCol < m_width) {
                 // For each cell, check if placing mine here would create a 50/50
-                if (wouldCreate5050(mines, pos, newRow, newCol)) {
+                if (wouldCreate5050(mines, pos)) {
                     return false;
                 }
             }
@@ -259,10 +278,7 @@ bool MinesweeperLogic::canPlaceMineAt(const QSet<int> &mines, int pos)
     return true;
 }
 
-bool MinesweeperLogic::wouldCreate5050(const QSet<int> &mines,
-                                       int newMinePos,
-                                       int checkRow,
-                                       int checkCol)
+bool MinesweeperLogic::wouldCreate5050(const QSet<int> &mines, int newMinePos)
 {
     // Calculate what the numbers would be after placing this mine
     QVector<int> tempNumbers(m_width * m_height, 0);
@@ -840,25 +856,4 @@ int MinesweeperLogic::solveForHint(const QVector<int> &revealedCells,
 
     qDebug() << "No hint found!";
     return -1;
-}
-
-bool MinesweeperLogic::initializeFromSave(int width,
-                                          int height,
-                                          int mineCount,
-                                          const QVector<int> &mines)
-{
-    if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
-        return false;
-    }
-
-    m_width = width;
-    m_height = height;
-    m_mineCount = mineCount;
-    m_mines = mines;
-    m_numbers.resize(width * height);
-
-    // Recalculate numbers for the loaded mine positions
-    calculateNumbers();
-
-    return true;
 }

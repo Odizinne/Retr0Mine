@@ -1,10 +1,6 @@
 QT       += core gui qml quick multimedia quickcontrols2
 
-CONFIG += c++17 silent lrelease embed_translations
-
-# Silence steam_api warnings
-QMAKE_CXXFLAGS += -D_CRT_SECURE_NO_WARNINGS
-QMAKE_CXXFLAGS += -wd4828
+CONFIG += c++20 silent lrelease embed_translations
 
 QM_FILES_RESOURCE_PREFIX = /translations
 STEAM_PATH = $$PWD/Dependencies/steam
@@ -43,8 +39,15 @@ TRANSLATIONS +=                                 \
 
 RESOURCES += Resources/resources.qrc
 
-win32:LIBS += -L$$STEAM_PATH/lib/win64 -lsteam_api64
 
-linux:LIBS += $$STEAM_PATH/lib/linux64/libsteam_api.so
+win32 {
+    QMAKE_CXXFLAGS += -D_CRT_SECURE_NO_WARNINGS
+    QMAKE_CXXFLAGS += -wd4828
+    LIBS += -L$$STEAM_PATH/lib/win64 -lsteam_api64
+}
+
+linux {
+    LIBS += $$STEAM_PATH/lib/linux64/libsteam_api.so
+}
 
 RC_FILE = Resources/appicon.rc
