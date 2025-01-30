@@ -8,10 +8,6 @@
 #include <QSettings>
 #include <QStyleHints>
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 QIcon recolorIcon(QIcon icon, QColor color)
 {
     QPixmap pixmap = icon.pixmap(32, 32);
