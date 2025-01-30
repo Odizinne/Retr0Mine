@@ -47,15 +47,9 @@ void MainWindow::onColorSchemeChanged()
 
 void MainWindow::setupAndLoadQML()
 {
-    int styleIndex = settings
-                         .value("themeIndex",
-                                m_steamIntegration->isRunningOnDeck()
-                                        && m_steamIntegration->m_initialized
-                                    ? 4
-                                    : 0)
-                         .toInt();
+    int styleIndex = settings.value("themeIndex", isRunningOnGamescope ? 2 : 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
-    int cellSize = settings.value("cellSize", 1).toInt();
+    int cellSize = settings.value("cellSize", isRunningOnGamescope ? 2 : 1).toInt();
 
     if (styleIndex == 1) {
         setW10Theme();
