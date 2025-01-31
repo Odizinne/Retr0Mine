@@ -30,22 +30,22 @@
 <context>
     <name>GameOverPopup</name>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="69"/>
+        <location filename="../qml/GameOverPopup.qml" line="68"/>
         <source>New record saved</source>
         <translation>Новый рекорд сохранен</translation>
     </message>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="78"/>
+        <location filename="../qml/GameOverPopup.qml" line="77"/>
         <source>First click: X: %1, Y: %2, seed: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="84"/>
+        <location filename="../qml/GameOverPopup.qml" line="83"/>
         <source>Retry</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="93"/>
+        <location filename="../qml/GameOverPopup.qml" line="92"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -119,7 +119,7 @@
         <translation>Пользовательский</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="742"/>
+        <location filename="../qml/Main.qml" line="748"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -151,7 +151,7 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../qml/SaveWindow.qml" line="78"/>
+        <location filename="../qml/SaveWindow.qml" line="77"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
@@ -164,238 +164,238 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="72"/>
+        <location filename="../qml/SettingsPage.qml" line="52"/>
         <source>Restore all settings to default?
 Application needs to be restarted</source>
         <translation>Восстановить все настройки по умолчанию?
 Приложение нужно перезапустить</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="80"/>
+        <location filename="../qml/SettingsPage.qml" line="60"/>
         <source>Restore</source>
         <translation>Восстановить</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="111"/>
+        <location filename="../qml/SettingsPage.qml" line="92"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="153"/>
+        <location filename="../qml/SettingsPage.qml" line="114"/>
         <source>Application needs to be restarted
 Your current game will be saved</source>
         <translation>Приложение нужно перезапустить
 Ваша текущая игра будет сохранена</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="160"/>
+        <location filename="../qml/SettingsPage.qml" line="121"/>
         <source>Restart</source>
         <translation>Перезапустить</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="171"/>
+        <location filename="../qml/SettingsPage.qml" line="132"/>
         <source>Later</source>
         <translation>Позже</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="202"/>
+        <location filename="../qml/SettingsPage.qml" line="163"/>
         <source>Difficulty</source>
         <translation>Сложность</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="206"/>
+        <location filename="../qml/SettingsPage.qml" line="167"/>
         <source>Gameplay</source>
         <translation>Игровой процесс</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="210"/>
+        <location filename="../qml/SettingsPage.qml" line="171"/>
         <source>Visuals</source>
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="214"/>
+        <location filename="../qml/SettingsPage.qml" line="175"/>
         <source>Sound</source>
         <translation>Звук</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="218"/>
+        <location filename="../qml/SettingsPage.qml" line="179"/>
         <source>Shortcuts</source>
         <translation>Горячие клавиши</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="222"/>
-        <location filename="../qml/SettingsPage.qml" line="909"/>
+        <location filename="../qml/SettingsPage.qml" line="183"/>
+        <location filename="../qml/SettingsPage.qml" line="869"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="252"/>
+        <location filename="../qml/SettingsPage.qml" line="213"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="268"/>
+        <location filename="../qml/SettingsPage.qml" line="229"/>
         <source>Restore defaults</source>
         <translation>Восстановить настройки по умолчанию</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="386"/>
+        <location filename="../qml/SettingsPage.qml" line="347"/>
         <source>Width:</source>
         <translation>Ширина:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="404"/>
+        <location filename="../qml/SettingsPage.qml" line="365"/>
         <source>Height:</source>
         <translation>Высота:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="421"/>
+        <location filename="../qml/SettingsPage.qml" line="382"/>
         <source>Mines:</source>
         <translation>Мины:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="436"/>
+        <location filename="../qml/SettingsPage.qml" line="397"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="461"/>
+        <location filename="../qml/SettingsPage.qml" line="422"/>
         <source>Invert left and right click</source>
         <translation>Поменять клавиши мыши</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="480"/>
+        <location filename="../qml/SettingsPage.qml" line="441"/>
         <source>Quick reveal connected cells</source>
         <translation>Быстрое открытие ячеек</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="499"/>
+        <location filename="../qml/SettingsPage.qml" line="460"/>
         <source>Enable question marks</source>
         <translation>Включить знаки вопроса</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="527"/>
+        <location filename="../qml/SettingsPage.qml" line="488"/>
         <source>Load last game on start</source>
         <translation>Загружать последнюю игру при запуске</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="547"/>
+        <location filename="../qml/SettingsPage.qml" line="508"/>
         <source>Show seed at game over</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="567"/>
+        <location filename="../qml/SettingsPage.qml" line="529"/>
         <source>Fixed seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="573"/>
+        <location filename="../qml/SettingsPage.qml" line="534"/>
         <source>Numbers only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="599"/>
+        <location filename="../qml/SettingsPage.qml" line="561"/>
         <source>Animations</source>
         <translation>Анимации</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="624"/>
+        <location filename="../qml/SettingsPage.qml" line="586"/>
         <source>Revealed cells frame</source>
         <translation>Рамка открытых ячеек</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="643"/>
+        <location filename="../qml/SettingsPage.qml" line="605"/>
         <source>Dimm satisfied cells</source>
         <translation>Затемнять удовлетворенные ячейки</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="662"/>
+        <location filename="../qml/SettingsPage.qml" line="624"/>
         <source>High contrast flags</source>
         <translation>Контрастные флажки</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="681"/>
+        <location filename="../qml/SettingsPage.qml" line="643"/>
         <source>Start in full screen</source>
         <translation>Запускать в полноэкранном режиме</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="700"/>
+        <location filename="../qml/SettingsPage.qml" line="662"/>
         <source>Cell size</source>
         <translation>Размер ячеек</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="705"/>
+        <location filename="../qml/SettingsPage.qml" line="667"/>
         <source>Small</source>
         <translation>Маленький</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="705"/>
+        <location filename="../qml/SettingsPage.qml" line="667"/>
         <source>Normal</source>
         <translation>Нормальный</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="705"/>
+        <location filename="../qml/SettingsPage.qml" line="667"/>
         <source>Large</source>
         <translation>Большой</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="705"/>
+        <location filename="../qml/SettingsPage.qml" line="667"/>
         <source>Extra Large</source>
         <translation>Очень большой</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="738"/>
+        <location filename="../qml/SettingsPage.qml" line="700"/>
         <source>Style</source>
         <translation>Стиль</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="745"/>
-        <location filename="../qml/SettingsPage.qml" line="915"/>
+        <location filename="../qml/SettingsPage.qml" line="707"/>
+        <location filename="../qml/SettingsPage.qml" line="875"/>
         <source>System</source>
         <translation>Системная</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="783"/>
+        <location filename="../qml/SettingsPage.qml" line="743"/>
         <source>Sound effects</source>
         <translation>Звуковые эффекты</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="802"/>
+        <location filename="../qml/SettingsPage.qml" line="762"/>
         <source>Volume</source>
         <translation>Громкость</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="819"/>
+        <location filename="../qml/SettingsPage.qml" line="779"/>
         <source>Soundpack</source>
         <translation>Звуковой пакет</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="851"/>
+        <location filename="../qml/SettingsPage.qml" line="811"/>
         <source>Fullscreen</source>
         <translation>Полный экран</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="855"/>
+        <location filename="../qml/SettingsPage.qml" line="815"/>
         <source>New game</source>
         <translation>Новая игра</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="859"/>
+        <location filename="../qml/SettingsPage.qml" line="819"/>
         <source>Save game</source>
         <translation>Сохранить игру</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="863"/>
+        <location filename="../qml/SettingsPage.qml" line="823"/>
         <source>Open settings</source>
         <translation>Открыть настройки</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="867"/>
+        <location filename="../qml/SettingsPage.qml" line="827"/>
         <source>Hint</source>
         <translation>Подсказка</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="871"/>
+        <location filename="../qml/SettingsPage.qml" line="831"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
