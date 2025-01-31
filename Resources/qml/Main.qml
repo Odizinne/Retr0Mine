@@ -232,6 +232,7 @@ ApplicationWindow {
                 flaggedCells: [],
                 questionedCells: [],
                 elapsedTime: elapsedTime,
+                centiseconds: centisTimer.centiseconds,
                 gameOver: gameOver,
                 gameStarted: gameStarted,
                 firstClickIndex: firstClickIndex,
@@ -292,6 +293,7 @@ ApplicationWindow {
             }
 
             root.elapsedTime = data.gameState.elapsedTime
+            centisTimer.centiseconds = data.gameState.centiseconds
             root.gameOver = data.gameState.gameOver
             root.gameStarted = data.gameState.gameStarted
             root.firstClickIndex = data.gameState.firstClickIndex
@@ -376,7 +378,7 @@ ApplicationWindow {
 
     Timer {
         id: centisTimer
-        interval: 10  // Update every 10ms
+        interval: 10
         repeat: true
         running: gameTimer.running
         property int centiseconds: 0
