@@ -124,7 +124,6 @@ ApplicationWindow {
     property int mineCount: 10
     property var mines: []
     property var numbers: []
-    property bool timerActive: false
     property int elapsedTime: 0
     property bool shouldUpdateSize: true
     property int cellSize: loadedCellSize

@@ -4,8 +4,7 @@ import QtQuick.Layouts
 
 Popup {
     id: aboutPage
-    //width: 250
-    //height: 230
+    width: height + 12
     anchors.centerIn: parent
     modal: true
 
@@ -19,8 +18,7 @@ Popup {
             source: "qrc:/icons/icon.png"
             sourceSize.height: 64
             sourceSize.width: 64
-            Layout.preferredWidth: 64
-            Layout.preferredHeight: 64
+
         }
 
         Label {
@@ -37,10 +35,12 @@ Popup {
         }
 
         Item {
+            visible: typeof steamIntegration === "undefined"
             Layout.fillHeight: true
         }
 
         RowLayout {
+            visible: typeof steamIntegration === "undefined"
             spacing: 10
             Button {
                 text: "Steam"
