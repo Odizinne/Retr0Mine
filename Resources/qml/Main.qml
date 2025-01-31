@@ -861,6 +861,48 @@ ApplicationWindow {
         id: topBar
     }
 
+    property Component defaultVerticalScrollBar: ScrollBar {
+        parent: scrollView
+        x: parent.width - width + 12
+        y: 0
+        height: scrollView.height
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    }
+    property Component defaultHorizontalScrollBar: ScrollBar {
+        parent: scrollView
+        x: 0
+        y: parent.height - height + 12
+        width: scrollView.width
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        orientation: Qt.Horizontal
+    }
+
+    // Store the fluent scrollbar settings
+    property Component fluentVerticalScrollBar: TempScrollBar {
+        parent: scrollView
+        x: parent.width - width + 12
+        y: 0
+        height: scrollView.height
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    }
+
+    property Component fluentHorizontalScrollBar: TempScrollBar {
+        parent: scrollView
+        x: 0
+        y: parent.height - height + 12
+        width: scrollView.width
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        orientation: Qt.Horizontal
+    }
+
     ScrollView {
         id: scrollView
         anchors {
@@ -873,13 +915,12 @@ ApplicationWindow {
             rightMargin: 12
             bottomMargin: 12
         }
-        clip: true
 
-        ScrollBar.vertical.policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
-                                       ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        ScrollBar.vertical: root.isFluentWinUI3Theme ? fluentVerticalScrollBar.createObject(scrollView)
+                                              : defaultVerticalScrollBar.createObject(scrollView)
 
-        ScrollBar.horizontal.policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
-                                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        ScrollBar.horizontal: root.isFluentWinUI3Theme ? fluentHorizontalScrollBar.createObject(scrollView)
+                                                : defaultHorizontalScrollBar.createObject(scrollView)
 
         ColumnLayout {
             id: gameLayout
