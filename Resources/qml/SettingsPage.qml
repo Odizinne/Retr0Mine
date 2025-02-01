@@ -86,6 +86,8 @@ ApplicationWindow {
                     // accessibilityPane
                     settings.colorBlindness = 0
 
+                    settings.welcomeMessageShown = false
+
                     mainWindow.restartRetr0Mine()
                 }
             }

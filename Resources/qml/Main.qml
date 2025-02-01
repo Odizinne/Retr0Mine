@@ -31,7 +31,7 @@ ApplicationWindow {
         property bool animations: true
         property bool cellFrame: true
         property bool contrastFlag: false
-        property int cellSize: root.isGamescope ? 2 : 1
+        property int cellSize: 2
         property int customWidth: 8
         property int customHeight: 8
         property int customMines: 10
@@ -40,6 +40,7 @@ ApplicationWindow {
         property int fixedSeed: -1
         property bool displaySeedAtGameOver: false
         property int colorBlindness: 0
+        property bool welcomeMessageShown: false
     }
 
     Shortcut {
@@ -830,6 +831,10 @@ ApplicationWindow {
         root.show()
     }
 
+    WelcomePage {
+        id: welcomePopup
+    }
+
     Timer {
         id: initialLoadTimer
         interval: 1
@@ -840,7 +845,6 @@ ApplicationWindow {
     function checkInitialGameState() {
         if (!gridFullyInitialized) return
 
-        if (settings.startFullScreen) root.visibility = 5
         let internalSaveData = mainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
             if (loadGame(internalSaveData)) {
@@ -852,6 +856,16 @@ ApplicationWindow {
             }
         } else {
             initGame()
+        }
+        if (settings.startFullScreen) root.visibility = 5
+        if (!settings.welcomeMessageShown) {
+            root.cellSize = 45
+            settings.cellSize = 2
+            root.minimumWidth = getInitialWidth()
+            root.minimumHeight = getInitialHeight()
+            root.width = root.minimumWidth
+            root.height = root.minimumHeight
+            welcomePopup.visible = true
         }
     }
 

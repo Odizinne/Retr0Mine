@@ -49,7 +49,7 @@ void MainWindow::setupAndLoadQML()
 {
     int styleIndex = settings.value("themeIndex", isRunningOnGamescope ? 2 : 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
-    int cellSize = settings.value("cellSize", isRunningOnGamescope ? 2 : 1).toInt();
+    int cellSize = settings.value("cellSize", 2).toInt();
 
     if (styleIndex == 1) {
         setW10Theme();

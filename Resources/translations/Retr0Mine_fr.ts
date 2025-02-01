@@ -99,27 +99,27 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="102"/>
+        <location filename="../qml/Main.qml" line="94"/>
         <source>Easy</source>
         <translation>Facile</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="103"/>
+        <location filename="../qml/Main.qml" line="95"/>
         <source>Medium</source>
         <translation>intermédiaire</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="104"/>
+        <location filename="../qml/Main.qml" line="96"/>
         <source>Hard</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="106"/>
+        <location filename="../qml/Main.qml" line="98"/>
         <source>Custom</source>
         <translation>Perso</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="750"/>
+        <location filename="../qml/Main.qml" line="742"/>
         <source>Victory</source>
         <translation>Victoire</translation>
     </message>
@@ -471,6 +471,99 @@ La partie en cours sera sauvegardée</translation>
         <location filename="../qml/TopBar.qml" line="78"/>
         <source>Exit</source>
         <translation>Quitter</translation>
+    </message>
+</context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="18"/>
+        <source>Welcome to Retr0Mine</source>
+        <translation>Bienvenue dans Retr0Mine</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="28"/>
+        <source>Would you like to configure some quick settings to enhance your experience? Everything can still be adjusted later.</source>
+        <translation>Voulez-vous configurer quelques réglages rapides pour améliorer votre expérience ? Tout pourra être réajusté plus tard.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="38"/>
+        <source>Later</source>
+        <translation>Plus tard</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="45"/>
+        <source>Yes</source>
+        <translation>Oui</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="84"/>
+        <source>Click cell to reveal</source>
+        <translation>Cliquer sur une cellule pour révéler</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="92"/>
+        <source>Classic</source>
+        <translation>Classique</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="122"/>
+        <source>Click cell or satisfied number to reveal</source>
+        <translation>Cliquer sur une cellule ou un chiffre satisfait pour révéler</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="129"/>
+        <source>Chord</source>
+        <translation>Accord</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="406"/>
+        <source>Enable enhanced visuals</source>
+        <translation>Activer les améliorations visuelles</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="428"/>
+        <source>Next</source>
+        <translation>Suivant</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="448"/>
+        <source>Color correction</source>
+        <translation>Correction de couleur</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="701"/>
+        <source>None</source>
+        <translation>Aucune</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="959"/>
+        <source>Tritanopia</source>
+        <translation>Tritanopie</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1221"/>
+        <source>Protanopia</source>
+        <translation>Protanopie</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1479"/>
+        <source>Deuteranopia</source>
+        <translation>Deuteranopie</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1502"/>
+        <source>You&apos;re all set!</source>
+        <translation>Tout est prêt!</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1508"/>
+        <source>You can edit these changes anytime in settings.</source>
+        <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1517"/>
+        <source>Close</source>
+        <translation>Fermer</translation>
     </message>
 </context>
 </TS>

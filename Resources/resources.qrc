@@ -10,6 +10,7 @@
         <file>qml/TopBar.qml</file>
         <file>qml/LeaderboardPage.qml</file>
         <file>qml/TempScrollBar.qml</file>
+        <file>qml/WelcomePage.qml</file>
         <file>sounds/pop/pop_bomb.wav</file>
         <file>sounds/pop/pop_click.wav</file>
         <file>sounds/pop/pop_win.wav</file>
@@ -41,5 +42,7 @@
         <file>icons/icon.png</file>
         <file>icons/steam.png</file>
         <file>icons/github.png</file>
+        <file>images/chord.gif</file>
+        <file>images/classic.gif</file>
     </qresource>
 </RCC>

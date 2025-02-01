@@ -209,7 +209,6 @@ jobs:
         run: |
           rm -rf AppDir/usr/translations
           rm -rf AppDir/usr/plugins/tls
-          rm -rf AppDir/usr/plugins/imageformats
           
       - name: Zip AppDir
         run: |

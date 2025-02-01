@@ -99,27 +99,27 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="102"/>
+        <location filename="../qml/Main.qml" line="94"/>
         <source>Easy</source>
         <translation>简单</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="103"/>
+        <location filename="../qml/Main.qml" line="95"/>
         <source>Medium</source>
         <translation>中等</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="104"/>
+        <location filename="../qml/Main.qml" line="96"/>
         <source>Hard</source>
         <translation>困难</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="106"/>
+        <location filename="../qml/Main.qml" line="98"/>
         <source>Custom</source>
         <translation>自定义</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="750"/>
+        <location filename="../qml/Main.qml" line="742"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -471,6 +471,99 @@ Your current game will be saved</source>
         <location filename="../qml/TopBar.qml" line="78"/>
         <source>Exit</source>
         <translation>退出</translation>
+    </message>
+</context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="18"/>
+        <source>Welcome to Retr0Mine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="28"/>
+        <source>Would you like to configure some quick settings to enhance your experience? Everything can still be adjusted later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="38"/>
+        <source>Later</source>
+        <translation type="unfinished">稍后</translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="45"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="84"/>
+        <source>Click cell to reveal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="92"/>
+        <source>Classic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="122"/>
+        <source>Click cell or satisfied number to reveal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="129"/>
+        <source>Chord</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="406"/>
+        <source>Enable enhanced visuals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="428"/>
+        <source>Next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="448"/>
+        <source>Color correction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="701"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="959"/>
+        <source>Tritanopia</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1221"/>
+        <source>Protanopia</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1479"/>
+        <source>Deuteranopia</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1502"/>
+        <source>You&apos;re all set!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1508"/>
+        <source>You can edit these changes anytime in settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/WelcomePage.qml" line="1517"/>
+        <source>Close</source>
+        <translation type="unfinished">关闭</translation>
     </message>
 </context>
 </TS>
