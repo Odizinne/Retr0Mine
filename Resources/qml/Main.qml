@@ -9,7 +9,7 @@ import "."
 
 ApplicationWindow {
     id: root
-    visible: true
+    visible: false
     width: getInitialWidth()
     height: getInitialHeight()
     minimumWidth: getInitialWidth()
@@ -17,6 +17,7 @@ ApplicationWindow {
     title: "Retr0Mine"
 
     onVisibleChanged: {
+
         if (typeof Universal !== 'undefined') {
             Universal.theme = root.isGamescope && settings.themeIndex === 4 ? Universal.Dark : Universal.System
             Universal.accent = accentColor
@@ -806,9 +807,6 @@ ApplicationWindow {
             }
         }
 
-        // Return true if either:
-        // 1. There are still unrevealed non-flagged cells, OR
-        // 2. The number of flags doesn't match the cell's number
         return unrevealedCount > 0 || flagCount !== numbers[index]
     }
 
@@ -832,6 +830,7 @@ ApplicationWindow {
                 console.error("Failed to parse leaderboard data:", e)
             }
         }
+        root.show()
     }
 
     Timer {
