@@ -47,6 +47,7 @@ ApplicationWindow {
         property bool startFullScreen: root.isGamescope ? true : false
         property int fixedSeed: -1
         property bool displaySeedAtGameOver: false
+        property int colorBlindness: 0
     }
 
     Shortcut {
@@ -1214,16 +1215,59 @@ ApplicationWindow {
                             color: {
                                 if (!cellItem.revealed) return "black"
                                 if (mines.includes(index)) return "transparent"
-                                if (numbers[index] === 1) return "#069ecc"
-                                if (numbers[index] === 2) return "#28d13c"
-                                if (numbers[index] === 3) return "#d12844"
-                                if (numbers[index] === 4) return "#9328d1"
-                                if (numbers[index] === 5) return "#ebc034"
-                                if (numbers[index] === 6) return "#34ebb1"
-                                if (numbers[index] === 7) return "#eb8634"
-                                if (numbers[index] === 8 && darkMode) return "white"
-                                if (numbers[index] === 8 && !darkMode) return "black"
-                                return "black"
+
+                                let palette = {}
+                                switch (settings.colorBlindness) {
+                                    case 1: // Deuteranopia
+                                        palette = {
+                                            1: "#377eb8",
+                                            2: "#4daf4a",
+                                            3: "#e41a1c",
+                                            4: "#984ea3",
+                                            5: "#ff7f00",
+                                            6: "#a65628",
+                                            7: "#f781bf",
+                                            8: darkMode ? "white" : "black"
+                                        }
+                                        break
+                                    case 2: // Protanopia
+                                        palette = {
+                                            1: "#66c2a5",
+                                            2: "#fc8d62",
+                                            3: "#8da0cb",
+                                            4: "#e78ac3",
+                                            5: "#a6d854",
+                                            6: "#ffd92f",
+                                            7: "#e5c494",
+                                            8: darkMode ? "white" : "black"
+                                        }
+                                        break
+                                    case 3: // Tritanopia
+                                        palette = {
+                                            1: "#e41a1c",
+                                            2: "#377eb8",
+                                            3: "#4daf4a",
+                                            4: "#984ea3",
+                                            5: "#ff7f00",
+                                            6: "#f781bf",
+                                            7: "#a65628",
+                                            8: darkMode ? "white" : "black"
+                                        }
+                                        break
+                                    default: // None
+                                        palette = {
+                                            1: "#069ecc",
+                                            2: "#28d13c",
+                                            3: "#d12844",
+                                            4: "#9328d1",
+                                            5: "#ebc034",
+                                            6: "#34ebb1",
+                                            7: "#eb8634",
+                                            8: darkMode ? "white" : "black"
+                                        }
+                                }
+
+                                return palette[numbers[index]] || "black"
                             }
                         }
 

@@ -83,6 +83,8 @@ ApplicationWindow {
                     settings.soundPackIndex = 2
                     // languagePane
                     settings.languageIndex = 0
+                    // accessibilityPane
+                    settings.colorBlindness = 0
 
                     mainWindow.restartRetr0Mine()
                 }
@@ -180,6 +182,10 @@ ApplicationWindow {
                             icon: "qrc:/icons/keyboard.png",
                         },
                         {
+                            text: qsTr("Accessibility"),
+                            icon: "qrc:/icons/accessibility.png",
+                        },
+                        {
                             text: qsTr("Language"),
                             icon: "qrc:/icons/language.png",
                         }
@@ -202,7 +208,8 @@ ApplicationWindow {
                                 case 2: stackView.push(visualsPaneComponent); break;
                                 case 3: stackView.push(soundPaneComponent); break;
                                 case 4: stackView.push(shortcutsPaneComponent); break;
-                                case 5: stackView.push(languagePaneComponent); break;
+                                case 5: stackView.push(accessibilityPaneComponent); break;
+                                case 6: stackView.push(languagePaneComponent); break;
                                 }
                             }
                         }
@@ -705,7 +712,7 @@ ApplicationWindow {
                                 id: styleComboBox
                                 model: {
                                     var themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
-                                    if (root.isGamescope) {
+                                    if (font.isGamescope) {
                                         themes.push("Deck Dark")
                                     }
                                     return themes
@@ -847,6 +854,44 @@ ApplicationWindow {
                                         text: shortcut
                                         font.bold: true
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: accessibilityPaneComponent
+                Pane {
+                    id: accessibilityPane
+                    ColumnLayout {
+                        spacing: 16
+                        width: parent.width
+
+                        RowLayout {
+                            Layout.fillWidth: true
+
+                            Label {
+                                text: qsTr("Color correction")
+                                Layout.fillWidth: true
+                            }
+
+                            ComboBox {
+                                id: colorComboBox
+                                model: [qsTr("None"),
+                                    qsTr("Deuteranopia"),
+                                    qsTr("Protanopia"),
+                                    qsTr("Tritanopia")
+                                ]
+                                //property int previousColorIndex: currentIndex
+                                Layout.rightMargin: 5
+                                currentIndex: settings.colorBlindness
+                                onActivated: {
+                                    //previousLanguageIndex = currentIndex
+                                    settings.colorBlindness = currentIndex
+                                    //mainWindow.setLanguage(currentIndex)
+                                    //currentIndex = ColorIndex
                                 }
                             }
                         }

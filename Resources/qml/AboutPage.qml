@@ -18,7 +18,6 @@ Popup {
             source: "qrc:/icons/icon.png"
             sourceSize.height: 64
             sourceSize.width: 64
-
         }
 
         Label {
