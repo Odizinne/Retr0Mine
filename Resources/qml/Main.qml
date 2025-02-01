@@ -16,15 +16,6 @@ ApplicationWindow {
     minimumHeight: getInitialHeight()
     title: "Retr0Mine"
 
-    onVisibleChanged: {
-
-        if (typeof Universal !== 'undefined') {
-            Universal.theme = root.isGamescope && settings.themeIndex === 4 ? Universal.Dark : Universal.System
-            Universal.accent = accentColor
-        }
-    }
-
-
     Settings {
         id: settings
         property int themeIndex: root.isGamescope ? 2 : 0
@@ -830,6 +821,12 @@ ApplicationWindow {
                 console.error("Failed to parse leaderboard data:", e)
             }
         }
+
+        if (typeof Universal !== 'undefined') {
+            Universal.theme = root.isGamescope && settings.themeIndex === 4 ? Universal.Dark : Universal.System
+            Universal.accent = accentColor
+        }
+
         root.show()
     }
 
