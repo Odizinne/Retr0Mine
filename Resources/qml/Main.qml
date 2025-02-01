@@ -719,7 +719,7 @@ ApplicationWindow {
                 mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
 
                 if (typeof steamIntegration !== "undefined") {
-                    if (currentHintCount === 0) {
+                    if (currentHintCount === 0 && fixedSeed != -1) {
                         if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
                             steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
                         } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
