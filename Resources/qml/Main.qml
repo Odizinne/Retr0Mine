@@ -160,11 +160,12 @@ ApplicationWindow {
 
     onVisibilityChanged: function(visibility) {
         const wasMaximized = isMaximized
+        const wasFullScreen = isFullScreen
         isMaximized = visibility === Window.Maximized
         isFullScreen = visibility === Window.FullScreen
         shouldUpdateSize = !isMaximized && !isFullScreen
 
-        if (wasMaximized && visibility === Window.Windowed) {
+        if (wasMaximized || wasFullScreen && visibility === Window.Windowed) {
             shouldUpdateSize = true
             minimumWidth = getInitialWidth()
             minimumHeight = getInitialHeight()
@@ -850,8 +851,17 @@ ApplicationWindow {
             welcomePopup.visible = true
         }
 
-        root.show()
-        settings.startFullScreen ? root.visibility = ApplicationWindow.FullScreen : ApplicationWindow.Windowed
+        if (settings.startFullScreen) root.showFullScreen()
+        else {
+            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
+                root.showMaximized()
+            }
+            else {
+                x = Screen.width / 2 - width / 2
+                y = Screen.height / 2 - height / 2
+                root.showNormal()
+            }
+        }
     }
 
     TopBar {
