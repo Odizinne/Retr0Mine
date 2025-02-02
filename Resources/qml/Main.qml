@@ -1142,9 +1142,26 @@ ApplicationWindow {
                             Image {
                                 anchors.centerIn: parent
                                 source: darkMode ? "qrc:/icons/questionmark_light.png" : "qrc:/icons/questionmark_dark.png"
-                                visible: cellItem.questioned
+                                //visible: cellItem.questioned
                                 sourceSize.width: cellItem.width / 2.1
                                 sourceSize.height: cellItem.height / 2.1
+                                opacity: settings.animations ? (cellItem.questioned ? 1 : 0) : 1
+                                scale: settings.animations ? (cellItem.questioned ? 1 : 1.3) : 1
+
+
+                                Behavior on opacity {
+                                    OpacityAnimator {
+                                        duration: 300
+                                        easing.type: Easing.OutQuad
+                                    }
+                                }
+
+                                Behavior on scale {
+                                    NumberAnimation {
+                                        duration: 300
+                                        easing.type: Easing.OutBack
+                                    }
+                                }
                             }
 
                             Image {
