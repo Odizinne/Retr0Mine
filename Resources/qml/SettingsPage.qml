@@ -615,11 +615,11 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: dimmSatisfiedSwitch.checked = !dimmSatisfiedSwitch.checked
+                                    onClicked: dimSatisfiedSwitch.checked = !dimSatisfiedSwitch.checked
                                 }
                             }
                             Switch {
-                                id: dimmSatisfiedSwitch
+                                id: dimSatisfiedSwitch
                                 checked: settings.dimSatisfied
                                 onCheckedChanged: {
                                     settings.dimSatisfied = checked
