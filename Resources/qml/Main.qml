@@ -9,7 +9,7 @@ import "."
 
 ApplicationWindow {
     id: root
-    visible: false
+    visibility: ApplicationWindow.Hidden
     width: getInitialWidth()
     height: getInitialHeight()
     minimumWidth: getInitialWidth()
@@ -73,7 +73,7 @@ ApplicationWindow {
         sequence: "F11"
         onActivated: {
             if (root.visibility === 5) {
-                root.visibility = ApplicationWindow.AutomaticVisibility;
+                root.visibility = ApplicationWindow.Windowed;
             } else {
                 root.visibility = 5;
             }
@@ -827,8 +827,6 @@ ApplicationWindow {
             Universal.theme = root.isGamescope && settings.themeIndex === 4 ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
-
-        root.show()
     }
 
     WelcomePage {
@@ -857,7 +855,6 @@ ApplicationWindow {
         } else {
             initGame()
         }
-        if (settings.startFullScreen) root.visibility = 5
         if (!settings.welcomeMessageShown) {
             root.cellSize = 45
             settings.cellSize = 2
@@ -867,6 +864,9 @@ ApplicationWindow {
             root.height = root.minimumHeight
             welcomePopup.visible = true
         }
+
+        root.show()
+        settings.startFullScreen ? root.visibility = ApplicationWindow.FullScreen : ApplicationWindow.Windowed
     }
 
     TopBar {
