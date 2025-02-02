@@ -310,8 +310,12 @@ Your current game will be saved</source>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="614"/>
+        <source>Dim satisfied cells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Dimm satisfied cells</source>
-        <translation>暗淡满足的格子</translation>
+        <translation type="vanished">暗淡满足的格子</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="633"/>
@@ -496,75 +500,75 @@ Your current game will be saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="112"/>
+        <location filename="../qml/WelcomePage.qml" line="111"/>
         <source>Classic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="84"/>
+        <location filename="../qml/WelcomePage.qml" line="83"/>
         <source>- Left click on cell to reveal
 - Right click on cell to flag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="103"/>
+        <location filename="../qml/WelcomePage.qml" line="102"/>
         <source>- Any click on satisfied number to reveal
 - Left click on cell to flag
 - Right click on cell to reveal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="112"/>
+        <location filename="../qml/WelcomePage.qml" line="111"/>
         <source>Chord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="411"/>
+        <location filename="../qml/WelcomePage.qml" line="408"/>
         <source>Enable enhanced visuals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="433"/>
+        <location filename="../qml/WelcomePage.qml" line="430"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="453"/>
+        <location filename="../qml/WelcomePage.qml" line="450"/>
         <source>Color correction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="706"/>
+        <location filename="../qml/WelcomePage.qml" line="703"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="964"/>
+        <location filename="../qml/WelcomePage.qml" line="961"/>
         <source>Tritanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1226"/>
+        <location filename="../qml/WelcomePage.qml" line="1223"/>
         <source>Protanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1484"/>
+        <location filename="../qml/WelcomePage.qml" line="1481"/>
         <source>Deuteranopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1507"/>
+        <location filename="../qml/WelcomePage.qml" line="1504"/>
         <source>You&apos;re all set!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1513"/>
+        <location filename="../qml/WelcomePage.qml" line="1510"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1524"/>
+        <location filename="../qml/WelcomePage.qml" line="1521"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>

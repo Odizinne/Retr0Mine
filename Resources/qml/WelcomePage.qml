@@ -416,11 +416,11 @@ Popup {
                 id: visualsSwitch
                 onCheckedChanged: {
                     settings.cellFrame = !checked
-                    settings.dimmSatisfied = checked
+                    settings.dimSatisfied = checked
                     settings.animations = checked
                 }
                 Component.onCompleted: {
-                    checked = !settings.cellFrame && settings.dimmSatisfied && settings.animations
+                    checked = !settings.cellFrame && settings.dimSatisfied && settings.animations
                 }
             }
         }

@@ -310,8 +310,12 @@ La partie en cours sera sauvegardée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="614"/>
-        <source>Dimm satisfied cells</source>
+        <source>Dim satisfied cells</source>
         <translation>Atténuer les cellules résolues</translation>
+    </message>
+    <message>
+        <source>Dimm satisfied cells</source>
+        <translation type="vanished">Atténuer les cellules résolues</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="633"/>
@@ -500,7 +504,7 @@ La partie en cours sera sauvegardée</translation>
         <translation type="vanished">Cliquer sur une cellule pour révéler</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="112"/>
+        <location filename="../qml/WelcomePage.qml" line="111"/>
         <source>Classic</source>
         <translation>Classique</translation>
     </message>
@@ -509,73 +513,73 @@ La partie en cours sera sauvegardée</translation>
         <translation type="vanished">Cliquer sur une cellule ou un chiffre satisfait pour révéler</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="84"/>
+        <location filename="../qml/WelcomePage.qml" line="83"/>
         <source>- Left click on cell to reveal
 - Right click on cell to flag</source>
         <translation>- Clique gauche sur une cellule pour révéler
 - Clique droit sur une cellule pour poser un drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="103"/>
+        <location filename="../qml/WelcomePage.qml" line="102"/>
         <source>- Any click on satisfied number to reveal
 - Left click on cell to flag
 - Right click on cell to reveal</source>
-        <translation type="unfinished">- Clique sur un chiffre satisfait pour révéler
+        <translation>- Clique sur un chiffre satisfait pour révéler
 - Clique gauche sur une cellule pour poser un drapeau
 - Clique droit sur une cellule pour révéler</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="112"/>
+        <location filename="../qml/WelcomePage.qml" line="111"/>
         <source>Chord</source>
         <translation>Accord</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="411"/>
+        <location filename="../qml/WelcomePage.qml" line="408"/>
         <source>Enable enhanced visuals</source>
         <translation>Activer les améliorations visuelles</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="433"/>
+        <location filename="../qml/WelcomePage.qml" line="430"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="453"/>
+        <location filename="../qml/WelcomePage.qml" line="450"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="706"/>
+        <location filename="../qml/WelcomePage.qml" line="703"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="964"/>
+        <location filename="../qml/WelcomePage.qml" line="961"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1226"/>
+        <location filename="../qml/WelcomePage.qml" line="1223"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1484"/>
+        <location filename="../qml/WelcomePage.qml" line="1481"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1507"/>
+        <location filename="../qml/WelcomePage.qml" line="1504"/>
         <source>You&apos;re all set!</source>
         <translation>Tout est prêt!</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1513"/>
+        <location filename="../qml/WelcomePage.qml" line="1510"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1524"/>
+        <location filename="../qml/WelcomePage.qml" line="1521"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

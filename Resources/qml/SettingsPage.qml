@@ -72,7 +72,7 @@ ApplicationWindow {
                     // visualsPane
                     settings.animations = true
                     settings.cellFrame = true
-                    settings.dimmSatisfied = false
+                    settings.dimSatisfied = false
                     settings.contrastFlag = false
                     settings.startFullScreen = root.isGamescope ? true : false
                     settings.cellSize = 2
@@ -611,7 +611,7 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
-                                text: qsTr("Dimm satisfied cells")
+                                text: qsTr("Dim satisfied cells")
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
@@ -620,9 +620,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: dimmSatisfiedSwitch
-                                checked: settings.dimmSatisfied
+                                checked: settings.dimSatisfied
                                 onCheckedChanged: {
-                                    settings.dimmSatisfied = checked
+                                    settings.dimSatisfied = checked
                                 }
                             }
                         }

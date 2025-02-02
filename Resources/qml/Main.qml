@@ -1102,7 +1102,7 @@ ApplicationWindow {
                             }
 
                             opacity: {
-                                if (!settings.dimmSatisfied || !cellItem.revealed) return 1
+                                if (!settings.dimSatisfied || !cellItem.revealed) return 1
                                 if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index)) return 1
                                 return root.hasUnrevealedNeighbors(index) ? 1 : 0.5
                             }
@@ -1213,7 +1213,7 @@ ApplicationWindow {
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             opacity: {
-                                if (!settings.dimmSatisfied || !cellItem.revealed || numbers[index] === 0) return 1
+                                if (!settings.dimSatisfied || !cellItem.revealed || numbers[index] === 0) return 1
                                 return root.hasUnrevealedNeighbors(index) ? 1 : 0.25
                             }
 
