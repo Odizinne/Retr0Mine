@@ -1142,14 +1142,13 @@ ApplicationWindow {
                             Image {
                                 anchors.centerIn: parent
                                 source: darkMode ? "qrc:/icons/questionmark_light.png" : "qrc:/icons/questionmark_dark.png"
-                                //visible: cellItem.questioned
                                 sourceSize.width: cellItem.width / 2.1
                                 sourceSize.height: cellItem.height / 2.1
-                                opacity: settings.animations ? (cellItem.questioned ? 1 : 0) : 1
-                                scale: settings.animations ? (cellItem.questioned ? 1 : 1.3) : 1
-
+                                opacity: cellItem.questioned ? 1 : 0
+                                scale: cellItem.questioned ? 1 : 1.3
 
                                 Behavior on opacity {
+                                    enabled: settings.animations
                                     OpacityAnimator {
                                         duration: 300
                                         easing.type: Easing.OutQuad
@@ -1157,6 +1156,7 @@ ApplicationWindow {
                                 }
 
                                 Behavior on scale {
+                                    enabled: settings.animations
                                     NumberAnimation {
                                         duration: 300
                                         easing.type: Easing.OutBack
@@ -1171,14 +1171,13 @@ ApplicationWindow {
                                         return darkMode ? "qrc:/icons/flag.png" : "qrc:/icons/flag_dark.png"
                                     return flagIcon
                                 }
-                                //visible: cellItem.flagged
                                 sourceSize.width: cellItem.width / 2.1
                                 sourceSize.height: cellItem.height / 2.1
-                                opacity: settings.animations ? (cellItem.flagged ? 1 : 0) : 1
-                                scale: settings.animations ? (cellItem.flagged ? 1 : 1.3) : 1
-
+                                opacity: cellItem.flagged ? 1 : 0
+                                scale: cellItem.flagged ? 1 : 1.3
 
                                 Behavior on opacity {
+                                    enabled: settings.animations
                                     OpacityAnimator {
                                         duration: 300
                                         easing.type: Easing.OutQuad
@@ -1186,6 +1185,7 @@ ApplicationWindow {
                                 }
 
                                 Behavior on scale {
+                                    enabled: settings.animations
                                     NumberAnimation {
                                         duration: 300
                                         easing.type: Easing.OutBack
