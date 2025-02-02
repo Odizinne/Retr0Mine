@@ -177,21 +177,6 @@ ApplicationWindow {
         }
     }
 
-    function handleVisibilityChange(newVisibility) {
-        const wasMaximized = isMaximized
-        isMaximized = newVisibility === Window.Maximized
-        isFullScreen = newVisibility === Window.FullScreen
-        shouldUpdateSize = !isMaximized && !isFullScreen
-
-        if (wasMaximized && newVisibility === Window.Windowed) {
-            shouldUpdateSize = true
-            minimumWidth = getInitialWidth()
-            minimumHeight = getInitialHeight()
-            width = minimumWidth
-            height = minimumHeight
-        }
-    }
-
     function requestHint() {
         if (!gameStarted || gameOver) {
             return;
