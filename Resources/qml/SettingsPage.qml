@@ -886,14 +886,10 @@ ApplicationWindow {
                                     qsTr("Protanopia"),
                                     qsTr("Tritanopia")
                                 ]
-                                //property int previousColorIndex: currentIndex
                                 Layout.rightMargin: 5
                                 currentIndex: settings.colorBlindness
                                 onActivated: {
-                                    //previousLanguageIndex = currentIndex
                                     settings.colorBlindness = currentIndex
-                                    //mainWindow.setLanguage(currentIndex)
-                                    //currentIndex = ColorIndex
                                 }
                             }
                         }
@@ -920,16 +916,8 @@ ApplicationWindow {
                             ComboBox {
                                 id: languageComboBox
                                 model: [qsTr("System"),
-                                    "English",        // English
-                                    "Français",       // French
-                                    "Deutsch",        // German
-                                    "Español",        // Spanish
-                                    "Italiano",       // Italian
-                                    "日本語",         // Japanese
-                                    "简体中文",       // Chinese Simplified
-                                    "繁體中文",       // Chinese Traditional
-                                    "한국어",         // Korean
-                                    "Русский"         // Russian
+                                    "English",
+                                    "Français"
                                 ]
                                 property int previousLanguageIndex: currentIndex
                                 Layout.rightMargin: 5

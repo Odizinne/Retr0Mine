@@ -28,14 +28,6 @@ HEADERS +=                                      \
 TRANSLATIONS +=                                 \
     Resources/translations/Retr0Mine_fr.ts      \
     Resources/translations/Retr0Mine_en.ts      \
-    Resources/translations/Retr0Mine_de.ts      \
-    Resources/translations/Retr0Mine_es.ts      \
-    Resources/translations/Retr0Mine_it.ts      \
-    Resources/translations/Retr0Mine_ja.ts      \
-    Resources/translations/Retr0Mine_zh_CN.ts   \
-    Resources/translations/Retr0Mine_zh_TW.ts   \
-    Resources/translations/Retr0Mine_ko.ts      \
-    Resources/translations/Retr0Mine_ru.ts      \
 
 RESOURCES += Resources/resources.qrc
 

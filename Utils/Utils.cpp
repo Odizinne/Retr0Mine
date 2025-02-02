@@ -84,50 +84,20 @@ QString Utils::getOperatingSystem()
 QString Utils::mapSteamToAppLanguage(QString steamLanguage)
 {
     static const QMap<QString, QString> languageMap = {{"english", "en"},
-                                                       {"french", "fr"},
-                                                       {"german", "de"},
-                                                       {"spanish", "es"},
-                                                       {"italian", "it"},
-                                                       {"japanese", "ja"},
-                                                       {"schinese", "zh_CN"},
-                                                       {"tchinese", "zh_TW"},
-                                                       {"koreana", "ko"},
-                                                       {"russian", "ru"}};
-
+                                                       {"french", "fr"}};
     return languageMap.value(steamLanguage.toLower(), "en");
 }
 
 QString Utils::mapSystemToAppLanguage(QString systemLanguage)
 {
-    if (!systemLanguage.startsWith("zh")) {
-        systemLanguage = systemLanguage.section('_', 0, 0);
-    }
-
     static const QMap<QString, QString> languageMap = {{"en", "en"},
-                                                       {"fr", "fr"},
-                                                       {"de", "de"},
-                                                       {"es", "es"},
-                                                       {"it", "it"},
-                                                       {"ja", "ja"},
-                                                       {"ko", "ko"},
-                                                       {"ru", "ru"},
-                                                       {"zh_TW", "zh_TW"},
-                                                       {"zh_CN", "zh_CN"}};
-
+                                                       {"fr", "fr"}};
     return languageMap.value(systemLanguage, "en");
 }
 
 QString Utils::mapIndexToLanguageCode(int index)
 {
     static const QMap<int, QString> languageMap = {{1, "en"},
-                                                   {2, "fr"},
-                                                   {3, "de"},
-                                                   {4, "es"},
-                                                   {5, "it"},
-                                                   {6, "ja"},
-                                                   {7, "zh_CN"},
-                                                   {8, "zh_TW"},
-                                                   {9, "ko"},
-                                                   {10, "ru"}};
+                                                   {2, "fr"}};
     return languageMap.value(index, "en");
 }

@@ -60,12 +60,9 @@ void MainWindow::setupAndLoadQML()
     } else if (styleIndex == 4) {
         setSteamDeckDarkTheme();
     } else {
-        if (currentOS == "windows10")
-            setW10Theme();
-        else if (currentOS == "windows11")
-            setW11Theme();
-        else
-            setFusionTheme();
+        if (currentOS == "windows10") setW10Theme();
+        else if (currentOS == "windows11") setW11Theme();
+        else setFusionTheme();
     }
 
     if (cellSize == 0) {
