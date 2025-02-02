@@ -75,7 +75,7 @@ ApplicationWindow {
                     settings.dimmSatisfied = false
                     settings.contrastFlag = false
                     settings.startFullScreen = root.isGamescope ? true : false
-                    settings.cellSize = root.isGamescope ? 2 : 1
+                    settings.cellSize = 2
                     settings.themeIndex = root.isGamescope ? 2 : 0
                     // soundPane
                     settings.soundEffects = true

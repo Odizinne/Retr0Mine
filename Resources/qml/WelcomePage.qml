@@ -48,69 +48,47 @@ Popup {
                     welcomePage.visible = false
                     initialConfig.visible = false
                     controlsConfig.visible = true
-                    welcomePage.height = 300
+                    welcomePage.height = 350
                     welcomePage.visible = true
                 }
             }
         }
     }
 
-    RowLayout {
+    ColumnLayout {
         opacity: 1
         visible: false
         anchors.fill: parent
         id: controlsConfig
-
-
+        spacing: 20
 
         ColumnLayout {
             spacing: 20
-            Layout.preferredWidth: parent.width * 0.5
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
 
             AnimatedImage {
+                id: classicImage
                 Layout.alignment: Qt.AlignHCenter
-
                 source: "qrc:/images/classic.gif"
                 sourceSize.height: 116
                 sourceSize.width: 116
             }
 
             Label {
+                id: classicLabel
                 Layout.preferredHeight: chordLabel.height
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment:  Qt.AlignHCenter
-
-                text: qsTr("Click cell to reveal")
+                text: qsTr("- Left click on cell to reveal\n- Right click on cell to flag")
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
             }
 
-            Button {
-                Layout.alignment: Qt.AlignHCenter
-
-                text: qsTr("Classic")
-                onClicked: {
-                    welcomePage.visible = false
-                    settings.autoreveal = false
-                    controlsConfig.visible = false
-                    visualsConfig.visible = true
-                    welcomePage.width = 350
-                    welcomePage.visible = true
-                }
-            }
-        }
-
-        ColumnLayout {
-            spacing: 20
-            Layout.preferredWidth: parent.width * 0.5
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignHCenter
-
             AnimatedImage {
+                id: chordImage
+                visible: false
                 Layout.alignment: Qt.AlignHCenter
-
                 source: "qrc:/images/chord.gif"
                 sourceSize.height: 116
                 sourceSize.width: 116
@@ -118,22 +96,47 @@ Popup {
 
             Label {
                 id: chordLabel
+                visible: false
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment:  Qt.AlignHCenter
-
-                text: qsTr("Click cell or satisfied number to reveal")
+                text: qsTr("- Any click on satisfied number to reveal\n- Left click on cell to flag\n- Right click on cell to reveal")
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
 
             }
+        }
+
+        RowLayout {
+            Label {
+                text: gameplaySwitch.checked ? qsTr("Chord") : qsTr("Classic")
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Switch {
+                id: gameplaySwitch
+                onCheckedChanged: {
+                    chordLabel.visible = checked
+                    chordImage.visible = checked
+                    classicLabel.visible = !checked
+                    classicImage.visible = !checked
+                    settings.autoreveal = checked
+                    settings.invertLRClick = checked
+                }
+            }
+        }
+
+        RowLayout {
+            Item {
+                Layout.fillWidth: true
+            }
 
             Button {
-                text: qsTr("Chord")
-                Layout.alignment: Qt.AlignHCenter
-
+                text: "Next"
                 onClicked: {
                     welcomePage.visible = false
-                    settings.autoreveal = true
                     controlsConfig.visible = false
                     visualsConfig.visible = true
                     welcomePage.height = 250
@@ -144,15 +147,12 @@ Popup {
         }
     }
 
-
     ColumnLayout {
         opacity: 1
         visible: false
         anchors.fill: parent
         id: visualsConfig
         spacing: 15
-
-        // video
 
         GridLayout {
             Layout.alignment: Qt.AlignHCenter
