@@ -78,7 +78,7 @@ jobs:
           $qmlDir = "D:\a\Retr0Mine\Retr0Mine\Resources\qml"
           if (Test-Path $windeployqtPath) {
               & $windeployqtPath `
-                  --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,imageformats,qmltooling,sqldrivers,tls,qmlls `
+                  --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
                   --no-opengl-sw `
                   --no-system-dxc-compiler `
                   --no-compiler-runtime `
