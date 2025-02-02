@@ -1150,14 +1150,32 @@ ApplicationWindow {
                             Image {
                                 anchors.centerIn: parent
                                 source: {
-                                    if(settings.contrastFlag)
+                                    if (settings.contrastFlag)
                                         return darkMode ? "qrc:/icons/flag.png" : "qrc:/icons/flag_dark.png"
                                     return flagIcon
                                 }
-                                visible: cellItem.flagged
+                                //visible: cellItem.flagged
                                 sourceSize.width: cellItem.width / 2.1
                                 sourceSize.height: cellItem.height / 2.1
+                                opacity: settings.animations ? (cellItem.flagged ? 1 : 0) : 1
+                                scale: settings.animations ? (cellItem.flagged ? 1 : 1.3) : 1
+
+
+                                Behavior on opacity {
+                                    OpacityAnimator {
+                                        duration: 300
+                                        easing.type: Easing.OutQuad
+                                    }
+                                }
+
+                                Behavior on scale {
+                                    NumberAnimation {
+                                        duration: 300
+                                        easing.type: Easing.OutBack
+                                    }
+                                }
                             }
+
 
                             Image {
                                 id: hintOverlay
