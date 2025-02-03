@@ -49,7 +49,6 @@ void MainWindow::setupAndLoadQML()
 {
     int styleIndex = settings.value("themeIndex", isRunningOnGamescope ? 2 : 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
-    int cellSize = settings.value("cellSize", 2).toInt();
 
     if (styleIndex == 1) {
         setW10Theme();
@@ -65,19 +64,9 @@ void MainWindow::setupAndLoadQML()
         else setFusionTheme();
     }
 
-    if (cellSize == 0) {
-        cellSize = 25;
-    } else if (cellSize == 1) {
-        cellSize = 35;
-    } else if (cellSize == 2) {
-        cellSize = isRunningOnGamescope ? 43 : 45;
-    } else {
-        cellSize = 55;
-    }
     setLanguage(languageIndex);
     setColorScheme();
 
-    rootContext->setContextProperty("loadedCellSize", cellSize);
     rootContext->setContextProperty("mainWindow", this);
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
@@ -125,10 +114,7 @@ void MainWindow::setColorScheme()
 {
     QColor accentColor = Utils::getAccentColor();
     bool isSystemDark = Utils::isDarkMode();
-    bool darkMode = isSystemDark || currentTheme == 4;
-
-    if (currentTheme == 2 && isRunningOnGamescope)
-        darkMode = true;
+    bool darkMode = isSystemDark || currentTheme == 4 || (currentTheme == 2 && isRunningOnGamescope);
 
     rootContext->setContextProperty("gamescope", isRunningOnGamescope);
     rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));

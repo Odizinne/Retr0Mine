@@ -31,7 +31,7 @@ ApplicationWindow {
         property bool animations: true
         property bool cellFrame: true
         property bool contrastFlag: false
-        property int cellSize: 2
+        property int cellSize: 1
         property int customWidth: 8
         property int customHeight: 8
         property int customMines: 10
@@ -120,7 +120,13 @@ ApplicationWindow {
     property var numbers: []
     property int elapsedTime: 0
     property bool shouldUpdateSize: true
-    property int cellSize: loadedCellSize
+    property int cellSize: {
+        switch (settings.cellSize) {
+            case 0: return 35;
+            case 2: return 55;
+            default: return isGamescope ? 43 : 45;
+        }
+    }
     property int cellSpacing: 2
     property int currentHintCount: 0
     property bool gridFullyInitialized: false

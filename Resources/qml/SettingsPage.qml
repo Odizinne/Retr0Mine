@@ -75,7 +75,7 @@ ApplicationWindow {
                     settings.dimSatisfied = false
                     settings.contrastFlag = false
                     settings.startFullScreen = root.isGamescope ? true : false
-                    settings.cellSize = 2
+                    settings.cellSize = 1
                     settings.themeIndex = root.isGamescope ? 2 : 0
                     // soundPane
                     settings.soundEffects = true
@@ -673,32 +673,25 @@ ApplicationWindow {
                             }
                             ComboBox {
                                 id: cellSizeComboBox
-                                model: [qsTr("Small"), qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
+                                model: [qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
                                 Layout.rightMargin: 5
                                 currentIndex: {
                                     switch(settings.cellSize) {
                                     case 0: return 0;
                                     case 1: return 1;
                                     case 2: return 2;
-                                    case 3: return 3;
-                                    default: return 1;
+                                    default: return 0;
                                     }
                                 }
 
                                 onActivated: {
-                                    switch(cellSizeComboBox.currentIndex) {
-                                    case 0: root.cellSize = 25; break;
-                                    case 1: root.cellSize = 35; break;
-                                    case 2: root.cellSize = 45; break;
-                                    case 3: root.cellSize = 55; break;
-                                    }
+                                    settings.cellSize = currentIndex
                                     if (!isMaximized && !isFullScreen) {
                                         root.minimumWidth = getInitialWidth()
                                         root.minimumHeight = getInitialHeight()
                                         root.width = root.minimumWidth
                                         root.height = root.minimumHeight
                                     }
-                                    settings.cellSize = currentIndex
                                 }
                             }
                         }
