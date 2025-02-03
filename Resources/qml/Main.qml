@@ -9,7 +9,7 @@ import "."
 
 ApplicationWindow {
     id: root
-    visibility: ApplicationWindow.Hidden
+    visibility: ApplicationWindow.Windowed
     width: getInitialWidth()
     height: getInitialHeight()
     minimumWidth: getInitialWidth()
@@ -171,8 +171,8 @@ ApplicationWindow {
         isMaximized = visibility === Window.Maximized
         isFullScreen = visibility === Window.FullScreen
         shouldUpdateSize = !isMaximized && !isFullScreen
-
         if (wasMaximized || wasFullScreen && visibility === Window.Windowed) {
+
             shouldUpdateSize = true
             minimumWidth = getInitialWidth()
             minimumHeight = getInitialHeight()
@@ -820,6 +820,21 @@ ApplicationWindow {
             Universal.theme = root.isGamescope && settings.themeIndex === 4 ? Universal.Dark : Universal.System
             Universal.accent = accentColor
         }
+
+        welcomePopup.visible = !settings.welcomeMessageShown
+
+        if (settings.startFullScreen) {
+            root.showFullScreen()
+        } else {
+            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
+                root.showMaximized()
+            }
+            else {
+                x = Screen.width / 2 - width / 2
+                y = Screen.height / 2 - height / 2
+                root.showNormal()
+            }
+        }
     }
 
     WelcomePage {
@@ -847,20 +862,6 @@ ApplicationWindow {
             }
         } else {
             initGame()
-        }
-
-        welcomePopup.visible = !settings.welcomeMessageShown
-
-        if (settings.startFullScreen) root.showFullScreen()
-        else {
-            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
-                root.showMaximized()
-            }
-            else {
-                x = Screen.width / 2 - width / 2
-                y = Screen.height / 2 - height / 2
-                root.showNormal()
-            }
         }
     }
 
@@ -912,6 +913,7 @@ ApplicationWindow {
 
     ScrollView {
         id: scrollView
+
         anchors {
             left: parent.left
             right: parent.right
