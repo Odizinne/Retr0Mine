@@ -119,7 +119,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="743"/>
+        <location filename="../qml/Main.qml" line="735"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -223,7 +223,7 @@ Your current game will be saved</source>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="191"/>
-        <location filename="../qml/SettingsPage.qml" line="916"/>
+        <location filename="../qml/SettingsPage.qml" line="905"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -308,10 +308,6 @@ Your current game will be saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Dimm satisfied cells</source>
-        <translation type="obsolete">Dim satisfied cells</translation>
-    </message>
-    <message>
         <location filename="../qml/SettingsPage.qml" line="633"/>
         <source>High contrast flags</source>
         <translation type="unfinished"></translation>
@@ -324,11 +320,6 @@ Your current game will be saved</source>
     <message>
         <location filename="../qml/SettingsPage.qml" line="671"/>
         <source>Cell size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="676"/>
-        <source>Small</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -347,83 +338,88 @@ Your current game will be saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="709"/>
+        <location filename="../qml/SettingsPage.qml" line="702"/>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="716"/>
-        <location filename="../qml/SettingsPage.qml" line="922"/>
+        <location filename="../qml/SettingsPage.qml" line="709"/>
+        <location filename="../qml/SettingsPage.qml" line="911"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="752"/>
+        <location filename="../qml/SettingsPage.qml" line="711"/>
+        <source>Oled Dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="745"/>
         <source>Sound effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="771"/>
+        <location filename="../qml/SettingsPage.qml" line="764"/>
         <source>Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="788"/>
+        <location filename="../qml/SettingsPage.qml" line="781"/>
         <source>Soundpack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="820"/>
+        <location filename="../qml/SettingsPage.qml" line="813"/>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="824"/>
+        <location filename="../qml/SettingsPage.qml" line="817"/>
         <source>New game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="828"/>
+        <location filename="../qml/SettingsPage.qml" line="821"/>
         <source>Save game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="832"/>
+        <location filename="../qml/SettingsPage.qml" line="825"/>
         <source>Open settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="836"/>
+        <location filename="../qml/SettingsPage.qml" line="829"/>
         <source>Hint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="840"/>
+        <location filename="../qml/SettingsPage.qml" line="833"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="878"/>
+        <location filename="../qml/SettingsPage.qml" line="871"/>
         <source>Color correction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="884"/>
+        <location filename="../qml/SettingsPage.qml" line="877"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="885"/>
+        <location filename="../qml/SettingsPage.qml" line="878"/>
         <source>Deuteranopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="886"/>
+        <location filename="../qml/SettingsPage.qml" line="879"/>
         <source>Protanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="887"/>
+        <location filename="../qml/SettingsPage.qml" line="880"/>
         <source>Tritanopia</source>
         <translation type="unfinished"></translation>
     </message>

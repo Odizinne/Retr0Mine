@@ -76,7 +76,7 @@ ApplicationWindow {
                     settings.contrastFlag = false
                     settings.startFullScreen = root.isGamescope ? true : false
                     settings.cellSize = 1
-                    settings.themeIndex = root.isGamescope ? 2 : 0
+                    settings.themeIndex = 0
                     // soundPane
                     settings.soundEffects = true
                     settings.volume = 1.0
@@ -708,7 +708,7 @@ ApplicationWindow {
                                 model: {
                                     var themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
                                     if (font.isGamescope) {
-                                        themes.push("Deck Dark")
+                                        themes.push(qsTr("Oled Dark"))
                                     }
                                     return themes
                                 }

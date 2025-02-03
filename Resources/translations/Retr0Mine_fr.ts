@@ -119,13 +119,9 @@
         <translation>Perso</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="743"/>
+        <location filename="../qml/Main.qml" line="735"/>
         <source>Victory</source>
         <translation>Victoire</translation>
-    </message>
-    <message>
-        <source>Victory :)</source>
-        <translation type="vanished">Victoire :)</translation>
     </message>
 </context>
 <context>
@@ -229,7 +225,7 @@ La partie en cours sera sauvegardée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="191"/>
-        <location filename="../qml/SettingsPage.qml" line="916"/>
+        <location filename="../qml/SettingsPage.qml" line="905"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
@@ -314,10 +310,6 @@ La partie en cours sera sauvegardée</translation>
         <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
-        <source>Dimm satisfied cells</source>
-        <translation type="vanished">Atténuer les cellules résolues</translation>
-    </message>
-    <message>
         <location filename="../qml/SettingsPage.qml" line="633"/>
         <source>High contrast flags</source>
         <translation>Drapeaux contrastés</translation>
@@ -331,11 +323,6 @@ La partie en cours sera sauvegardée</translation>
         <location filename="../qml/SettingsPage.qml" line="671"/>
         <source>Cell size</source>
         <translation>Taille des cellules</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="676"/>
-        <source>Small</source>
-        <translation>Petit</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="676"/>
@@ -353,83 +340,88 @@ La partie en cours sera sauvegardée</translation>
         <translation>Très grand</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="709"/>
+        <location filename="../qml/SettingsPage.qml" line="702"/>
         <source>Style</source>
         <translation>Style</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="716"/>
-        <location filename="../qml/SettingsPage.qml" line="922"/>
+        <location filename="../qml/SettingsPage.qml" line="709"/>
+        <location filename="../qml/SettingsPage.qml" line="911"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="752"/>
+        <location filename="../qml/SettingsPage.qml" line="711"/>
+        <source>Oled Dark</source>
+        <translation>Oled sombre</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="745"/>
         <source>Sound effects</source>
         <translation>Effets sonores</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="771"/>
+        <location filename="../qml/SettingsPage.qml" line="764"/>
         <source>Volume</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="788"/>
+        <location filename="../qml/SettingsPage.qml" line="781"/>
         <source>Soundpack</source>
         <translation>Pack de sons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="820"/>
+        <location filename="../qml/SettingsPage.qml" line="813"/>
         <source>Fullscreen</source>
         <translation>Plein écran</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="824"/>
+        <location filename="../qml/SettingsPage.qml" line="817"/>
         <source>New game</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="828"/>
+        <location filename="../qml/SettingsPage.qml" line="821"/>
         <source>Save game</source>
         <translation>Sauver</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="832"/>
+        <location filename="../qml/SettingsPage.qml" line="825"/>
         <source>Open settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="836"/>
+        <location filename="../qml/SettingsPage.qml" line="829"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="840"/>
+        <location filename="../qml/SettingsPage.qml" line="833"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="878"/>
+        <location filename="../qml/SettingsPage.qml" line="871"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="884"/>
+        <location filename="../qml/SettingsPage.qml" line="877"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="885"/>
+        <location filename="../qml/SettingsPage.qml" line="878"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="886"/>
+        <location filename="../qml/SettingsPage.qml" line="879"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="887"/>
+        <location filename="../qml/SettingsPage.qml" line="880"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
@@ -500,17 +492,9 @@ La partie en cours sera sauvegardée</translation>
         <translation>Oui</translation>
     </message>
     <message>
-        <source>Click cell to reveal</source>
-        <translation type="vanished">Cliquer sur une cellule pour révéler</translation>
-    </message>
-    <message>
         <location filename="../qml/WelcomePage.qml" line="111"/>
         <source>Classic</source>
         <translation>Classique</translation>
-    </message>
-    <message>
-        <source>Click cell or satisfied number to reveal</source>
-        <translation type="vanished">Cliquer sur une cellule ou un chiffre satisfait pour révéler</translation>
     </message>
     <message>
         <location filename="../qml/WelcomePage.qml" line="83"/>
