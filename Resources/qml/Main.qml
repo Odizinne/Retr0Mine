@@ -123,6 +123,7 @@ ApplicationWindow {
     property int cellSize: {
         switch (settings.cellSize) {
             case 0: return 35;
+            case 1: return isGamescope ? 43 : 45;
             case 2: return 55;
             default: return isGamescope ? 43 : 45;
         }
@@ -847,15 +848,8 @@ ApplicationWindow {
         } else {
             initGame()
         }
-        if (!settings.welcomeMessageShown) {
-            root.cellSize = 45
-            settings.cellSize = 2
-            root.minimumWidth = getInitialWidth()
-            root.minimumHeight = getInitialHeight()
-            root.width = root.minimumWidth
-            root.height = root.minimumHeight
-            welcomePopup.visible = true
-        }
+
+        welcomePopup.visible = !settings.welcomeMessageShown
 
         if (settings.startFullScreen) root.showFullScreen()
         else {
