@@ -5,12 +5,21 @@ import QtQuick.Layouts
 Popup {
     id: leaderboardPage
     anchors.centerIn: parent
+    closePolicy: Popup.NoAutoClose
     visible: false
     modal: true
     property string easyTime: ""
     property string mediumTime: ""
     property string hardTime: ""
     property string retr0Time: ""
+
+    Shortcut {
+        sequence: "Esc"
+        enabled: leaderboardPage.visible
+        onActivated: {
+            leaderboardPage.visible = false
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent

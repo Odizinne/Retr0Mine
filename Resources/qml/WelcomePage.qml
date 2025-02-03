@@ -44,6 +44,7 @@ Popup {
 
             Button {
                 text: qsTr("Yes")
+                highlighted: true
                 onClicked: {
                     welcomePage.visible = false
                     initialConfig.visible = false

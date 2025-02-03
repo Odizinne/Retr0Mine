@@ -8,6 +8,14 @@ Popup {
     anchors.centerIn: parent
     modal: true
 
+    Shortcut {
+        sequence: "Esc"
+        enabled: aboutPage.visible
+        onActivated: {
+            aboutPage.visible = false
+        }
+    }
+
     ColumnLayout {
         anchors.centerIn: parent
         anchors.margins: 6

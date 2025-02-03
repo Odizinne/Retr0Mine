@@ -8,6 +8,7 @@ Popup {
     height: 140
     modal: true
     anchors.centerIn: parent
+    closePolicy: Popup.NoAutoClose
 
     Shortcut {
         sequence: "Esc"
