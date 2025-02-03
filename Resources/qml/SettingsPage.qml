@@ -630,25 +630,6 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
-                                text: qsTr("High contrast flags")
-                                Layout.fillWidth: true
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: highContrastFlagSwitch.checked = !highContrastFlagSwitch.checked
-                                }
-                            }
-                            Switch {
-                                id: highContrastFlagSwitch
-                                checked: settings.contrastFlag
-                                onCheckedChanged: {
-                                    settings.contrastFlag = checked
-                                }
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Label {
                                 text: qsTr("Start in full screen")
                                 Layout.fillWidth: true
                                 MouseArea {
@@ -661,37 +642,6 @@ ApplicationWindow {
                                 checked: settings.startFullScreen
                                 onCheckedChanged: {
                                     settings.startFullScreen = checked
-                                }
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Label {
-                                text: qsTr("Cell size")
-                                Layout.fillWidth: true
-                            }
-                            ComboBox {
-                                id: cellSizeComboBox
-                                model: [qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
-                                Layout.rightMargin: 5
-                                currentIndex: {
-                                    switch(settings.cellSize) {
-                                    case 0: return 0;
-                                    case 1: return 1;
-                                    case 2: return 2;
-                                    default: return 0;
-                                    }
-                                }
-
-                                onActivated: {
-                                    settings.cellSize = currentIndex
-                                    if (!isMaximized && !isFullScreen) {
-                                        root.minimumWidth = getInitialWidth()
-                                        root.minimumHeight = getInitialHeight()
-                                        root.width = root.minimumWidth
-                                        root.height = root.minimumHeight
-                                    }
                                 }
                             }
                         }
@@ -883,6 +833,56 @@ ApplicationWindow {
                                 currentIndex: settings.colorBlindness
                                 onActivated: {
                                     settings.colorBlindness = currentIndex
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Cell size")
+                                Layout.fillWidth: true
+                            }
+                            ComboBox {
+                                id: cellSizeComboBox
+                                model: [qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
+                                Layout.rightMargin: 5
+                                currentIndex: {
+                                    switch(settings.cellSize) {
+                                    case 0: return 0;
+                                    case 1: return 1;
+                                    case 2: return 2;
+                                    default: return 0;
+                                    }
+                                }
+
+                                onActivated: {
+                                    settings.cellSize = currentIndex
+                                    if (!isMaximized && !isFullScreen) {
+                                        root.minimumWidth = getInitialWidth()
+                                        root.minimumHeight = getInitialHeight()
+                                        root.width = root.minimumWidth
+                                        root.height = root.minimumHeight
+                                    }
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("High contrast flags")
+                                Layout.fillWidth: true
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: highContrastFlagSwitch.checked = !highContrastFlagSwitch.checked
+                                }
+                            }
+                            Switch {
+                                id: highContrastFlagSwitch
+                                checked: settings.contrastFlag
+                                onCheckedChanged: {
+                                    settings.contrastFlag = checked
                                 }
                             }
                         }
