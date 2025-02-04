@@ -61,7 +61,7 @@ void MainWindow::setupAndLoadQML()
     } else {
         if (currentOS == "windows10") setW10Theme();
         else if (currentOS == "windows11") setW11Theme();
-        else if (currentOS == "unknow" && isRunningOnGamescope) setW11Theme();
+        else if (currentOS == "unknown" && isRunningOnGamescope) setW11Theme();
         else setFusionTheme();
     }
 
