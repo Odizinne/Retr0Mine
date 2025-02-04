@@ -10,7 +10,7 @@ import "."
 
 ApplicationWindow {
     id: root
-    visibility: ApplicationWindow.Windowed
+    //visibility: ApplicationWindow.Windowed
     width: getInitialWidth()
     height: getInitialHeight()
     minimumWidth: getInitialWidth()
@@ -825,15 +825,14 @@ ApplicationWindow {
         welcomePopup.visible = !settings.welcomeMessageShown
 
         if (settings.startFullScreen) {
-            root.showFullScreen()
+            root.visibility = 5
         } else {
             if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
-                root.showMaximized()
+                root.visibility = 4
             }
             else {
                 x = Screen.width / 2 - width / 2
                 y = Screen.height / 2 - height / 2
-                root.showNormal()
             }
         }
     }
