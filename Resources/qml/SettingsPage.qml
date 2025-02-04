@@ -162,6 +162,7 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.margins: 10
+                    interactive: false
                     model: [
                         {
                             text: qsTr("Difficulty"),
