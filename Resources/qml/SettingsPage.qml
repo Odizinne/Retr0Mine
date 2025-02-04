@@ -5,11 +5,11 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: settingsPage
     title: qsTr("Settings")
-    width: root.isGamescope ? height * 1.6 : 570
+    width: root.isGamescope ? height * 1.6 : 600
     height: 480
-    minimumWidth: root.isGamescope ? height * 1.6 : 570
+    minimumWidth: root.isGamescope ? height * 1.6 : 600
     minimumHeight: 480
-    maximumWidth: root.isGamescope ? height * 1.6 : 570
+    maximumWidth: root.isGamescope ? height * 1.6 : 600
     maximumHeight: 480
     visible: false
     flags: Qt.Dialog
@@ -191,6 +191,10 @@ ApplicationWindow {
                         {
                             text: qsTr("Language"),
                             icon: "qrc:/icons/language.png",
+                        },
+                        {
+                            text: qsTr("Advanced"),
+                            icon: "qrc:/icons/debug.png",
                         }
                     ]
                     currentIndex: 0
@@ -199,7 +203,7 @@ ApplicationWindow {
                         height: 40
                         icon.source: modelData.icon
                         icon.color: root.darkMode ? "white" : "dark"
-                        text: "  " + modelData.text
+                        text: root.isFluentWinUI3Theme ? "  " + modelData.text : modelData.text
 
                         highlighted: ListView.isCurrentItem
                         onClicked: {
@@ -213,6 +217,7 @@ ApplicationWindow {
                                 case 4: stackView.push(shortcutsPaneComponent); break;
                                 case 5: stackView.push(accessibilityPaneComponent); break;
                                 case 6: stackView.push(languagePaneComponent); break;
+                                case 7: stackView.push(debugPaneComponent); break;
                                 }
                             }
                         }
@@ -249,7 +254,7 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.leftMargin: {
                 if (isFluentWinUI3Theme) return -10
-                return 0
+                return -20
             }
 
             z: 2
@@ -507,48 +512,6 @@ ApplicationWindow {
                                 checked: settings.loadLastGame
                                 onCheckedChanged: {
                                     settings.loadLastGame = checked
-                                }
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-
-                            Label {
-                                text: qsTr("Show seed at game over")
-                                Layout.fillWidth: true
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: printSeedSwitch.checked = !printSeedSwitch.checked
-                                }
-                            }
-                            Switch {
-                                id: printSeedSwitch
-                                checked: settings.displaySeedAtGameOver
-                                onCheckedChanged: {
-                                    settings.displaySeedAtGameOver = checked
-                                }
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 20
-
-                            Label {
-                                text: qsTr("Fixed seed")
-                            }
-
-                            TextField {
-                                id: seedField
-                                placeholderText: qsTr("Numbers only")
-                                maximumLength: 10
-                                Layout.fillWidth: true
-                                validator: RegularExpressionValidator { regularExpression: /^[0-9]*$/ }
-                                inputMethodHints: Qt.ImhDigitsOnly
-                                text: settings.fixedSeed >= 0 ? settings.fixedSeed.toString() : ""
-                                onTextChanged: {
-                                    settings.fixedSeed = text.length > 0 ? parseInt(text) : -1
                                 }
                             }
                         }
@@ -815,7 +778,7 @@ ApplicationWindow {
                 Pane {
                     id: accessibilityPane
                     ColumnLayout {
-                        spacing: 16
+                        spacing: 26
                         width: parent.width
 
                         RowLayout {
@@ -899,7 +862,7 @@ ApplicationWindow {
                 Pane {
                     id: languagePane
                     ColumnLayout {
-                        spacing: 16
+                        spacing: 26
                         width: parent.width
 
                         RowLayout {
@@ -927,6 +890,60 @@ ApplicationWindow {
                                 }
                             }
                         }
+                    }
+                }
+            }
+
+            Component {
+                id: debugPaneComponent
+                Pane {
+                    id: debugPane
+                    ColumnLayout {
+                        spacing: 26
+                        width: parent.width
+
+                        RowLayout {
+                            Layout.fillWidth: true
+
+                            Label {
+                                text: qsTr("Show seed at game over")
+                                Layout.fillWidth: true
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: printSeedSwitch.checked = !printSeedSwitch.checked
+                                }
+                            }
+                            Switch {
+                                id: printSeedSwitch
+                                checked: settings.displaySeedAtGameOver
+                                onCheckedChanged: {
+                                    settings.displaySeedAtGameOver = checked
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 20
+
+                            Label {
+                                text: qsTr("Fixed seed")
+                            }
+
+                            TextField {
+                                id: seedField
+                                placeholderText: qsTr("Numbers only")
+                                maximumLength: 10
+                                Layout.fillWidth: true
+                                validator: RegularExpressionValidator { regularExpression: /^[0-9]*$/ }
+                                inputMethodHints: Qt.ImhDigitsOnly
+                                text: settings.fixedSeed >= 0 ? settings.fixedSeed.toString() : ""
+                                onTextChanged: {
+                                    settings.fixedSeed = text.length > 0 ? parseInt(text) : -1
+                                }
+                            }
+                        }
+
                     }
                 }
             }

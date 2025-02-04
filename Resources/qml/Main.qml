@@ -10,7 +10,6 @@ import "."
 
 ApplicationWindow {
     id: root
-    //visibility: ApplicationWindow.Windowed
     visible: true
     width: getInitialWidth()
     height: getInitialHeight()
