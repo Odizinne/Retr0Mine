@@ -23,12 +23,10 @@
         <file>sounds/floraphonic/floraphonic_bomb.wav</file>
         <file>sounds/floraphonic/floraphonic_click.wav</file>
         <file>sounds/floraphonic/floraphonic_win.wav</file>
-        <file>icons/bomb_light.png</file>
-        <file>icons/bomb_dark.png</file>
+        <file>icons/bomb.png</file>
         <file>icons/warning.png</file>
         <file>icons/safe.png</file>
-        <file>icons/questionmark_light.png</file>
-        <file>icons/questionmark_dark.png</file>
+        <file>icons/questionmark.png</file>
         <file>icons/audio.png</file>
         <file>icons/difficulty.png</file>
         <file>icons/controls.png</file>
@@ -37,7 +35,6 @@
         <file>icons/language.png</file>
         <file>icons/accessibility.png</file>
         <file>icons/flag.png</file>
-        <file>icons/flag_dark.png</file>
         <file>icons/delete.png</file>
         <file>icons/icon.png</file>
         <file>icons/steam.png</file>

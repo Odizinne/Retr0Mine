@@ -107,7 +107,7 @@ RowLayout {
             Layout.fillWidth: true
         }
         Button {
-            icon.source: "qrc:/icons/bomb_light.png"
+            icon.source: "qrc:/icons/bomb.png"
             icon.color: root.darkMode ? "white" : "dark"
             text: ": " + (root.mineCount - root.flaggedCount)
             font.pixelSize: 18

@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
 import QtQuick.Window
+import QtQuick.Controls.impl
 import com.odizinne.minesweeper 1.0
 import QtCore
 import "."
@@ -1128,17 +1129,19 @@ ApplicationWindow {
                                 }
                             }
 
-                            Image {
+                            IconImage {
                                 anchors.centerIn: parent
-                                source: darkMode ? "qrc:/icons/bomb_light.png" : "qrc:/icons/bomb_dark.png"
+                                source: "qrc:/icons/bomb.png"
+                                color: root.darkMode ? "white" : "black"
                                 visible: cellItem.revealed && mines.includes(index)
                                 sourceSize.width: cellItem.width / 2.1
                                 sourceSize.height: cellItem.height / 2.1
                             }
 
-                            Image {
+                            IconImage {
                                 anchors.centerIn: parent
-                                source: darkMode ? "qrc:/icons/questionmark_light.png" : "qrc:/icons/questionmark_dark.png"
+                                source: "qrc:/icons/questionmark.png"
+                                color: root.darkMode ? "white" : "black"
                                 sourceSize.width: cellItem.width / 2.1
                                 sourceSize.height: cellItem.height / 2.1
                                 opacity: cellItem.questioned ? 1 : 0
@@ -1161,13 +1164,14 @@ ApplicationWindow {
                                 }
                             }
 
-                            Image {
+                            IconImage {
                                 anchors.centerIn: parent
-                                source: {
-                                    if (settings.contrastFlag)
-                                        return darkMode ? "qrc:/icons/flag.png" : "qrc:/icons/flag_dark.png"
-                                    return flagIcon
+                                source: "qrc:/icons/flag.png"
+                                color: {
+                                    if (settings.contrastFlag) return root.darkMode ? "white" : "black"
+                                    else return accentColor
                                 }
+
                                 sourceSize.width: cellItem.width / 2.1
                                 sourceSize.height: cellItem.height / 2.1
                                 opacity: cellItem.flagged ? 1 : 0
@@ -1198,8 +1202,7 @@ ApplicationWindow {
                                 sourceSize.height: cellItem.height / 2.1
                                 opacity: 0
                                 visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
-                                source: mines.includes(index) ?
-                                            "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+                                source: mines.includes(index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
                             }
 
                             MouseArea {
