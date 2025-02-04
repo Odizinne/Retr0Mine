@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls.impl
 
 Popup {
     id: loadWindow
@@ -85,12 +86,14 @@ Popup {
                 clip: true
                 highlightMoveDuration: 0
                 currentIndex: 0
+
                 delegate: ItemDelegate {
-                    width: saveFilesList.width
+                    width: saveFilesList.width - 10
                     height: 40
                     required property string name
                     required property int index
                     highlighted: saveFilesList.currentIndex === index
+                    text: name.replace(".json", "")
                     onClicked: {
                         saveFilesList.currentIndex = index
                         let saveData = mainWindow.loadGameState(name)
@@ -102,26 +105,20 @@ Popup {
                         }
                     }
 
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 8
-                        anchors.leftMargin: 15
-                        anchors.rightMargin: 5
 
-                        Label {
-                            Layout.fillWidth: true
-                            text: name.replace(".json", "")
-                            elide: Text.ElideRight
-                        }
-
-                        Button {
-                            id: deleteButton
-                            icon.source: "qrc:/icons/delete.png"
-                            icon.color: root.darkMode ? "white" : "black"
-                            icon.width: 26
-                            icon.height: 26
-                            Layout.preferredWidth: height
-                            flat: true
+                    IconImage {
+                        id: deleteButton
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.rightMargin: 10
+                        source: "qrc:/icons/delete.png"
+                        color: root.darkMode ? "white" : "black"
+                        height: 16
+                        width: 40
+                        MouseArea {
+                            height: 32
+                            width: 32
+                            anchors.centerIn: parent
                             onClicked: {
                                 mainWindow.deleteSaveFile(name)
                                 saveFilesList.model.remove(index)
