@@ -631,15 +631,18 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
+                                enabled: !root.isGamescope
                                 text: qsTr("Start in full screen")
                                 Layout.fillWidth: true
                                 MouseArea {
+                                    enabled: !root.isGamescope
                                     anchors.fill: parent
                                     onClicked: startFullScreenSwitch.checked = !startFullScreenSwitch.checked
                                 }
                             }
                             Switch {
                                 id: startFullScreenSwitch
+                                enabled: !root.isGamescope
                                 checked: settings.startFullScreen
                                 onCheckedChanged: {
                                     settings.startFullScreen = checked
