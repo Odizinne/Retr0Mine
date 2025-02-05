@@ -8,7 +8,6 @@
 namespace Utils {
 bool isDarkMode();
 QString getAccentColor();
-QString getOperatingSystem();
 QString getFlagIcon(QColor accentColor);
 QString mapSteamToAppLanguage(QString steamLanguage);
 QString mapSystemToAppLanguage(QString systemLanguage);

@@ -60,9 +60,7 @@ ApplicationWindow {
 
                 Button {
                     text: qsTr("Restore")
-                    id: popupRestoreButton
                     Layout.fillWidth: true
-                    implicitWidth: Math.max(popupRestoreButton.width, popupCancelButton.width)
                     onClicked: {
                         // difficultyPane
                         settings.difficulty = 0
@@ -98,8 +96,6 @@ ApplicationWindow {
 
                 Button {
                     text: qsTr("Cancel")
-                    id: popupCancelButton
-                    implicitWidth: Math.max(popupRestoreButton.width, popupCancelButton.width)
                     Layout.fillWidth: true
                     onClicked: restoreDefaultsPopup.visible = false
                 }
@@ -577,41 +573,6 @@ ApplicationWindow {
                                 }
                             }
                         }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Label {
-                                text: qsTr("Style")
-                                Layout.fillWidth: true
-                            }
-
-                            ComboBox {
-                                id: styleComboBox
-                                model: {
-                                    var themes = [qsTr("System"), "Windows 10", "Windows 11", "Fusion"]
-                                    if (font.isGamescope) {
-                                        themes.push(qsTr("Oled Dark"))
-                                    }
-                                    return themes
-                                }
-                                Layout.rightMargin: 5
-
-                                property int previousIndex: settings.themeIndex
-
-                                currentIndex: settings.themeIndex
-                                onActivated: function(index) {
-                                    if (currentIndex !== previousIndex) {
-                                        settings.themeIndex = currentIndex
-                                        //restartWindow.visible = true
-                                        previousIndex = currentIndex
-                                        if (root.gameStarted && !root.gameOver) {
-                                            saveGame("internalGameState.json")
-                                        }
-                                        mainWindow.restartRetr0Mine()
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -913,6 +874,40 @@ ApplicationWindow {
                             }
                         }
 
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Style")
+                                Layout.fillWidth: true
+                            }
+
+                            ComboBox {
+                                id: styleComboBox
+                                model: {
+                                    var themes = ["Windows 11", "Windows 10", "Fusion"]
+                                    if (root.isGamescope) {
+                                        themes.push(qsTr("Oled Dark"))
+                                    }
+                                    return themes
+                                }
+                                Layout.rightMargin: 5
+
+                                property int previousIndex: settings.themeIndex
+
+                                currentIndex: settings.themeIndex
+                                onActivated: function(index) {
+                                    if (currentIndex !== previousIndex) {
+                                        settings.themeIndex = currentIndex
+                                        //restartWindow.visible = true
+                                        previousIndex = currentIndex
+                                        if (root.gameStarted && !root.gameOver) {
+                                            saveGame("internalGameState.json")
+                                        }
+                                        mainWindow.restartRetr0Mine()
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

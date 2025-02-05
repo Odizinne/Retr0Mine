@@ -62,25 +62,6 @@ QString Utils::getFlagIcon(QColor accentColor)
     return QString("data:image/png;base64,") + byteArray.toBase64();
 }
 
-QString Utils::getOperatingSystem()
-{
-    const QOperatingSystemVersion current = QOperatingSystemVersion::current();
-
-    if (current.type() == QOperatingSystemVersion::Windows) {
-        const QOperatingSystemVersionBase &win11 = QOperatingSystemVersion::Windows11;
-        const QOperatingSystemVersion &win10 = QOperatingSystemVersion::Windows10;
-
-        if (current >= win11) {
-            return "windows11";
-        }
-        if (current >= win10 && current < win11) {
-            return "windows10";
-        }
-    }
-
-    return "unknown";
-}
-
 QString Utils::mapSteamToAppLanguage(QString steamLanguage)
 {
     static const QMap<QString, QString> languageMap = {{"english", "en"},

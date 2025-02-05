@@ -83,8 +83,6 @@ Popup {
 
         Button {
             text: qsTr("Retry")
-            id: popupRetryButton
-            implicitWidth: Math.max(popupRetryButton.width, popupCloseButton.width)
             Layout.fillWidth: true
             onClicked: {
                 gameOverWindow.visible = false
@@ -94,8 +92,6 @@ Popup {
 
         Button {
             text: qsTr("Close")
-            id: popupCloseButton
-            implicitWidth: Math.max(popupRetryButton.width, popupCloseButton.width)
             Layout.fillWidth: true
             onClicked: {
                 gameOverWindow.visible = false

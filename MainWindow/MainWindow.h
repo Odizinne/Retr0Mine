@@ -32,8 +32,9 @@ private:
     QSettings settings;
     QQmlContext *rootContext;
     QTranslator *translator;
-    QString currentOS;
     SteamIntegration *m_steamIntegration;
+    int currentTheme;
+    bool isRunningOnGamescope;
 
     void setupAndLoadQML();
     void setColorScheme();
@@ -42,8 +43,6 @@ private:
     void setFusionTheme();
     void setSteamDeckDarkTheme();
     bool loadLanguage(QString languageCode);
-    int currentTheme;
-    bool isRunningOnGamescope;
 };
 
 #endif // MAINWINDOW_H

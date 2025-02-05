@@ -18,7 +18,6 @@ MainWindow::MainWindow(QObject *parent)
     , settings("Odizinne", "Retr0Mine")
     , rootContext(engine->rootContext())
     , translator(new QTranslator(this))
-    , currentOS(Utils::getOperatingSystem())
     , isRunningOnGamescope(false)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
@@ -47,22 +46,17 @@ void MainWindow::onColorSchemeChanged()
 
 void MainWindow::setupAndLoadQML()
 {
-    int styleIndex = settings.value("themeIndex", isRunningOnGamescope ? 2 : 0).toInt();
+    int styleIndex = settings.value("themeIndex", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
 
-    if (styleIndex == 1) {
+    if (styleIndex == 0) {
+        setW11Theme();
+    } else if (styleIndex == 1) {
         setW10Theme();
     } else if (styleIndex == 2) {
-        setW11Theme();
-    } else if (styleIndex == 3) {
         setFusionTheme();
-    } else if (styleIndex == 4) {
+    } else if (styleIndex == 3) {
         setSteamDeckDarkTheme();
-    } else {
-        if (currentOS == "windows10") setW10Theme();
-        else if (currentOS == "windows11") setW11Theme();
-        else if (currentOS == "unknown" && isRunningOnGamescope) setW11Theme();
-        else setFusionTheme();
     }
 
     setLanguage(languageIndex);
