@@ -1,6 +1,6 @@
 QT       += core gui qml quick multimedia quickcontrols2
 
-CONFIG += c++20 silent lrelease embed_translations
+CONFIG += c++20 silent lrelease embed_translations qtquickcompiler
 
 QM_FILES_RESOURCE_PREFIX = /translations
 STEAM_PATH = $$PWD/Dependencies/steam
