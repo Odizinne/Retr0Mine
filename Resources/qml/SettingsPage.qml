@@ -40,103 +40,68 @@ ApplicationWindow {
         visible: false
         modal: true
 
-        GridLayout {
+        ColumnLayout {
             id: restoreDefaultLayout
             anchors.fill: parent
-            columns: 2
-            rowSpacing: 10
+            spacing: 15
 
             Label {
                 id: restoreDefaultsLabel
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                text: qsTr("Restore all settings to default?\nApplication needs to be restarted")
+                text: qsTr("Restore all settings to default?")
                 Layout.columnSpan: 2
                 font.bold: true
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
             }
 
-            Button {
-                text: qsTr("Restore")
-                Layout.fillWidth: true
-                onClicked: {
-                    // difficultyPane
-                    settings.difficulty = 0
-                    // gameplayPane
-                    settings.invertLRClick = false
-                    settings.autoreveal = false
-                    settings.enableQuestionMarks = true
-                    settings.loadLastGame = false
-                    settings.displaySeedAtGameOver = false
-                    settings.fixedSeed = -1
-                    // visualsPane
-                    settings.animations = true
-                    settings.cellFrame = true
-                    settings.dimSatisfied = false
-                    settings.contrastFlag = false
-                    settings.startFullScreen = root.isGamescope ? true : false
-                    settings.cellSize = 1
-                    settings.themeIndex = 0
-                    // soundPane
-                    settings.soundEffects = true
-                    settings.volume = 1.0
-                    settings.soundPackIndex = 2
-                    // languagePane
-                    settings.languageIndex = 0
-                    // accessibilityPane
-                    settings.colorBlindness = 0
+            RowLayout {
+                spacing: 10
 
-                    settings.welcomeMessageShown = false
+                Button {
+                    text: qsTr("Restore")
+                    id: popupRestoreButton
+                    Layout.fillWidth: true
+                    implicitWidth: Math.max(popupRestoreButton.width, popupCancelButton.width)
+                    onClicked: {
+                        // difficultyPane
+                        settings.difficulty = 0
+                        // gameplayPane
+                        settings.invertLRClick = false
+                        settings.autoreveal = false
+                        settings.enableQuestionMarks = true
+                        settings.loadLastGame = false
+                        settings.displaySeedAtGameOver = false
+                        settings.fixedSeed = -1
+                        // visualsPane
+                        settings.animations = true
+                        settings.cellFrame = true
+                        settings.dimSatisfied = false
+                        settings.contrastFlag = false
+                        settings.startFullScreen = root.isGamescope ? true : false
+                        settings.cellSize = 1
+                        settings.themeIndex = 0
+                        // soundPane
+                        settings.soundEffects = true
+                        settings.volume = 1.0
+                        settings.soundPackIndex = 2
+                        // languagePane
+                        settings.languageIndex = 0
+                        // accessibilityPane
+                        settings.colorBlindness = 0
 
-                    mainWindow.restartRetr0Mine()
-                }
-            }
+                        settings.welcomeMessageShown = false
 
-            Button {
-                text: qsTr("Cancel")
-                Layout.fillWidth: true
-                onClicked: {
-                    restoreDefaultsPopup.visible = false
-                }
-            }
-        }
-    }
-
-    Popup {
-        anchors.centerIn: parent
-        id: restartWindow
-        visible: false
-        modal: true
-
-        GridLayout {
-            anchors.fill: parent
-            columns: 2
-            rowSpacing: 10
-            Label {
-                id: restartLabel
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                text: qsTr("Application needs to be restarted\nYour current game will be saved")
-                Layout.columnSpan: 2
-                font.bold: true
-                font.pixelSize: 16
-            }
-
-            Button {
-                text: qsTr("Restart")
-                Layout.fillWidth: true
-                onClicked: {
-                    if (root.gameStarted && !root.gameOver) {
-                        saveGame("internalGameState.json")
+                        mainWindow.restartRetr0Mine()
                     }
-                    mainWindow.restartRetr0Mine()
                 }
-            }
 
-            Button {
-                text: qsTr("Later")
-                Layout.fillWidth: true
-                onClicked: {
-                    restartWindow.visible = false
+                Button {
+                    text: qsTr("Cancel")
+                    id: popupCancelButton
+                    implicitWidth: Math.max(popupRestoreButton.width, popupCancelButton.width)
+                    Layout.fillWidth: true
+                    onClicked: restoreDefaultsPopup.visible = false
                 }
             }
         }
@@ -637,8 +602,12 @@ ApplicationWindow {
                                 onActivated: function(index) {
                                     if (currentIndex !== previousIndex) {
                                         settings.themeIndex = currentIndex
-                                        restartWindow.visible = true
+                                        //restartWindow.visible = true
                                         previousIndex = currentIndex
+                                        if (root.gameStarted && !root.gameOver) {
+                                            saveGame("internalGameState.json")
+                                        }
+                                        mainWindow.restartRetr0Mine()
                                     }
                                 }
                             }
