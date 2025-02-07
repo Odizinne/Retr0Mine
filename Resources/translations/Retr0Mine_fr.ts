@@ -124,7 +124,7 @@
         <translation>Victoire</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="931"/>
+        <location filename="../qml/Main.qml" line="939"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
