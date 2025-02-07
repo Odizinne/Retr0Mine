@@ -826,14 +826,6 @@ ApplicationWindow {
 
         if (settings.startFullScreen) {
             root.visibility = 5
-        } else {
-            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
-                root.visibility = 4
-            }
-            else {
-                x = Screen.width / 2 - width / 2
-                y = Screen.height / 2 - height / 2
-            }
         }
     }
 
@@ -913,7 +905,6 @@ ApplicationWindow {
 
     ScrollView {
         id: scrollView
-
         anchors {
             left: parent.left
             right: parent.right
@@ -924,29 +915,25 @@ ApplicationWindow {
             rightMargin: 12
             bottomMargin: 12
         }
-
+        contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
+        contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
         ScrollBar.vertical: root.isFluentWinUI3Theme ? fluentVerticalScrollBar.createObject(scrollView)
                                               : defaultVerticalScrollBar.createObject(scrollView)
-
         ScrollBar.horizontal: root.isFluentWinUI3Theme ? fluentHorizontalScrollBar.createObject(scrollView)
                                                 : defaultHorizontalScrollBar.createObject(scrollView)
 
-        ColumnLayout {
-            id: gameLayout
+        Item {
+            anchors.centerIn: parent
             width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
             height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
-            spacing: 10
-
-            Item {
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.preferredWidth: (root.cellSize + root.cellSpacing) * root.gridSizeX
-                Layout.preferredHeight: (root.cellSize + root.cellSpacing) * root.gridSizeY
 
                 GridView {
                     id: grid
-                    anchors.fill: parent
+                    anchors.centerIn: parent
                     cellWidth: cellSize + cellSpacing
                     cellHeight: cellSize + cellSpacing
+                    width: (root.cellSize + root.cellSpacing) * root.gridSizeX
+                    height: (root.cellSize + root.cellSpacing) * root.gridSizeY
                     model: root.gridSizeX * root.gridSizeY
                     interactive: false
                     property bool initialAnimationPlayed: false
@@ -1327,7 +1314,7 @@ ApplicationWindow {
                     }
                 }
             }
-        }
+        //}
     }
 }
 
