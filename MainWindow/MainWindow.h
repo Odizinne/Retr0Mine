@@ -22,6 +22,7 @@ public:
     Q_INVOKABLE void restartRetr0Mine() const;
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
+    Q_INVOKABLE void resetSettings();
 
 private slots:
     void onColorSchemeChanged();
@@ -43,6 +44,7 @@ private:
     void setFusionTheme();
     void setSteamDeckDarkTheme();
     bool loadLanguage(QString languageCode);
+    bool shouldShowWelcomeMessage;
 };
 
 #endif // MAINWINDOW_H

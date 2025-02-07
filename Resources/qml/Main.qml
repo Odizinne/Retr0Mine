@@ -42,6 +42,7 @@ ApplicationWindow {
         property bool displaySeedAtGameOver: false
         property int colorBlindness: 0
         property bool welcomeMessageShown: false
+        property int flagSkinIndex: 0
     }
 
     Shortcut {
@@ -100,6 +101,16 @@ ApplicationWindow {
         { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
     ]
 
+    property bool flag1Unlocked: unlockedFlag1
+    property bool flag2Unlocked: unlockedFlag2
+    property bool flag3Unlocked: unlockedFlag3
+    property string flagPath: {
+        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
+        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
+        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
+        else return "qrc:/icons/flag.png"
+    }
+
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isGamescope: gamescope
     property bool isMaximized: visibility === 4
@@ -123,10 +134,10 @@ ApplicationWindow {
     property bool shouldUpdateSize: true
     property int cellSize: {
         switch (settings.cellSize) {
-            case 0: return 35;
-            case 1: return isGamescope ? 43 : 45;
-            case 2: return 55;
-            default: return isGamescope ? 43 : 45;
+        case 0: return 35;
+        case 1: return isGamescope ? 43 : 45;
+        case 2: return 55;
+        default: return isGamescope ? 43 : 45;
         }
     }
     property int cellSpacing: 2
@@ -262,10 +273,10 @@ ApplicationWindow {
             gameOverPopup.seed = data.gameState.gameSeed
 
             diffidx = root.difficultySettings.findIndex(diff =>
-                diff.x === gridSizeX &&
-                diff.y === gridSizeY &&
-                diff.mines === mineCount
-            )
+                                                        diff.x === gridSizeX &&
+                                                        diff.y === gridSizeY &&
+                                                        diff.mines === mineCount
+                                                        )
 
             if (diffidx === -1) {
                 diffidx = 0
@@ -537,8 +548,8 @@ ApplicationWindow {
         }
 
         const seed = settings.fixedSeed && !isNaN(settings.fixedSeed)
-            ? gameLogic.placeMines(col, row, settings.fixedSeed)
-            : gameLogic.placeMines(col, row, -1);
+                   ? gameLogic.placeMines(col, row, settings.fixedSeed)
+                   : gameLogic.placeMines(col, row, -1);
 
         if (seed === -1) {
             console.error("Failed to place mines!");
@@ -583,65 +594,65 @@ ApplicationWindow {
     }
 
     function reveal(index) {
-       if (gameOver || grid.itemAtIndex(index).revealed || grid.itemAtIndex(index).flagged) return
+        if (gameOver || grid.itemAtIndex(index).revealed || grid.itemAtIndex(index).flagged) return
 
-       if (!gameStarted) {
-           firstClickIndex = index
-           if (!placeMines(index)) {
-               reveal(index)
-               return
-           }
-           gameStarted = true
-           gameTimer.start()
-           centisTimer.start()
-       }
+        if (!gameStarted) {
+            firstClickIndex = index
+            if (!placeMines(index)) {
+                reveal(index)
+                return
+            }
+            gameStarted = true
+            gameTimer.start()
+            centisTimer.start()
+        }
 
-       let cellsToReveal = [index]
-       let visited = new Set()
+        let cellsToReveal = [index]
+        let visited = new Set()
 
-       while (cellsToReveal.length > 0) {
-           let currentIndex = cellsToReveal.pop()
-           if (visited.has(currentIndex)) continue
+        while (cellsToReveal.length > 0) {
+            let currentIndex = cellsToReveal.pop()
+            if (visited.has(currentIndex)) continue
 
-           visited.add(currentIndex)
-           let cell = grid.itemAtIndex(currentIndex)
+            visited.add(currentIndex)
+            let cell = grid.itemAtIndex(currentIndex)
 
-           if (cell.revealed || cell.flagged) continue
+            if (cell.revealed || cell.flagged) continue
 
-           cell.revealed = true
-           revealedCount++
+            cell.revealed = true
+            revealedCount++
 
-           if (mines.includes(currentIndex)) {
-               cell.isBombClicked = true
-               gameOver = true
-               gameTimer.stop()
-               centisTimer.stop()
-               revealAllMines()
-               playLoose()
-               gameOverPopup.gameOverLabelText = "Game over"
-               gameOverPopup.gameOverLabelColor = "#d12844"
-               gameOverPopup.newRecordVisible = false
-               gameOverPopup.visible = true
-               return
-           }
+            if (mines.includes(currentIndex)) {
+                cell.isBombClicked = true
+                gameOver = true
+                gameTimer.stop()
+                centisTimer.stop()
+                revealAllMines()
+                playLoose()
+                gameOverPopup.gameOverLabelText = "Game over"
+                gameOverPopup.gameOverLabelColor = "#d12844"
+                gameOverPopup.newRecordVisible = false
+                gameOverPopup.visible = true
+                return
+            }
 
-           if (numbers[currentIndex] === 0) {
-               let row = Math.floor(currentIndex / gridSizeX)
-               let col = currentIndex % gridSizeX
+            if (numbers[currentIndex] === 0) {
+                let row = Math.floor(currentIndex / gridSizeX)
+                let col = currentIndex % gridSizeX
 
-               for (let r = -1; r <= 1; r++) {
-                   for (let c = -1; c <= 1; c++) {
-                       if (r === 0 && c === 0) continue
-                       let newRow = row + r
-                       let newCol = col + c
-                       if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
-                       cellsToReveal.push(newRow * gridSizeX + newCol)
-                   }
-               }
-           }
-       }
+                for (let r = -1; r <= 1; r++) {
+                    for (let c = -1; c <= 1; c++) {
+                        if (r === 0 && c === 0) continue
+                        let newRow = row + r
+                        let newCol = col + c
+                        if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+                        cellsToReveal.push(newRow * gridSizeX + newCol)
+                    }
+                }
+            }
+        }
 
-       checkWin()
+        checkWin()
     }
 
     function revealAllMines() {
@@ -716,11 +727,23 @@ ApplicationWindow {
                 if (typeof steamIntegration !== "undefined") {
                     if (currentHintCount === 0 && settings.fixedSeed == -1) {
                         if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
-                            steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
+                            if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
+                                steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
+                                flagToast.visible = true
+                                root.flag1Unlocked = true
+                            }
                         } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
-                            steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
+                            if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
+                                steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
+                                flagToast.visible = true
+                                root.flag2Unlocked = true
+                            }
                         } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
-                            steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+                            if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
+                                steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+                                flagToast.visible = true
+                                root.flag3Unlocked = true
+                            }
                         }
                     }
 
@@ -822,7 +845,7 @@ ApplicationWindow {
             Universal.accent = accentColor
         }
 
-        welcomePopup.visible = !settings.welcomeMessageShown
+        welcomePopup.visible = showWelcome
 
         if (settings.startFullScreen) {
             root.visibility = 5
@@ -868,7 +891,7 @@ ApplicationWindow {
         height: scrollView.height
         active: true
         policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
     }
     property Component defaultHorizontalScrollBar: ScrollBar {
         parent: scrollView
@@ -877,7 +900,7 @@ ApplicationWindow {
         width: scrollView.width
         active: true
         policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         orientation: Qt.Horizontal
     }
 
@@ -889,7 +912,7 @@ ApplicationWindow {
         height: scrollView.height
         active: true
         policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
     }
 
     property Component fluentHorizontalScrollBar: TempScrollBar {
@@ -899,8 +922,25 @@ ApplicationWindow {
         width: scrollView.width
         active: true
         policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         orientation: Qt.Horizontal
+    }
+
+    ToolTip {
+        id: flagToast
+        text: qsTr("New flag unlocked!")
+        font.pixelSize: 18
+        timeout: 2000
+        x: Math.round((parent.width - width) / 2)
+        y: parent.y + 15
+
+        enter: Transition {
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 200 }
+        }
+
+        exit: Transition {
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 200 }
+        }
     }
 
     ScrollView {
@@ -918,403 +958,402 @@ ApplicationWindow {
         contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
         contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
         ScrollBar.vertical: root.isFluentWinUI3Theme ? fluentVerticalScrollBar.createObject(scrollView)
-                                              : defaultVerticalScrollBar.createObject(scrollView)
+                                                     : defaultVerticalScrollBar.createObject(scrollView)
         ScrollBar.horizontal: root.isFluentWinUI3Theme ? fluentHorizontalScrollBar.createObject(scrollView)
-                                                : defaultHorizontalScrollBar.createObject(scrollView)
+                                                       : defaultHorizontalScrollBar.createObject(scrollView)
 
         Item {
             anchors.centerIn: parent
             width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
             height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
 
-                GridView {
-                    id: grid
-                    anchors.centerIn: parent
-                    cellWidth: cellSize + cellSpacing
-                    cellHeight: cellSize + cellSpacing
-                    width: (root.cellSize + root.cellSpacing) * root.gridSizeX
-                    height: (root.cellSize + root.cellSpacing) * root.gridSizeY
-                    model: root.gridSizeX * root.gridSizeY
-                    interactive: false
-                    property bool initialAnimationPlayed: false
-                    property int cellsCreated: 0
+            GridView {
+                id: grid
+                anchors.centerIn: parent
+                cellWidth: cellSize + cellSpacing
+                cellHeight: cellSize + cellSpacing
+                width: (root.cellSize + root.cellSpacing) * root.gridSizeX
+                height: (root.cellSize + root.cellSpacing) * root.gridSizeY
+                model: root.gridSizeX * root.gridSizeY
+                interactive: false
+                property bool initialAnimationPlayed: false
+                property int cellsCreated: 0
 
-                    delegate: Item {
-                        id: cellItem
-                        width: cellSize
-                        height: cellSize
+                delegate: Item {
+                    id: cellItem
+                    width: cellSize
+                    height: cellSize
 
-                        property bool animatingReveal: false
-                        property bool shouldBeFlat: false
-                        property bool revealed: false
-                        property bool flagged: false
-                        property bool questioned: false
-                        property bool isBombClicked: false
+                    property bool animatingReveal: false
+                    property bool shouldBeFlat: false
+                    property bool revealed: false
+                    property bool flagged: false
+                    property bool questioned: false
+                    property bool isBombClicked: false
 
-                        readonly property int row: Math.floor(index / root.gridSizeX)
-                        readonly property int col: index % root.gridSizeX
-                        readonly property int diagonalSum: row + col
+                    readonly property int row: Math.floor(index / root.gridSizeX)
+                    readonly property int col: index % root.gridSizeX
+                    readonly property int diagonalSum: row + col
 
-                        opacity: 1
+                    opacity: 1
 
-                        Component.onCompleted: {
-                            grid.cellsCreated++
+                    Component.onCompleted: {
+                        grid.cellsCreated++
 
-                            if (grid.cellsCreated === root.gridSizeX * root.gridSizeY) {
-                                root.gridFullyInitialized = true
-                                initialLoadTimer.start()
+                        if (grid.cellsCreated === root.gridSizeX * root.gridSizeY) {
+                            root.gridFullyInitialized = true
+                            initialLoadTimer.start()
+                        }
+
+                        if (settings.animations && !grid.initialAnimationPlayed) {
+                            opacity = 0
+                            fadeTimer.start()
+                            if (index === (root.gridSizeX * root.gridSizeY - 1)) {
+                                grid.initialAnimationPlayed = true
                             }
-
-                            if (settings.animations && !grid.initialAnimationPlayed) {
-                                opacity = 0
-                                fadeTimer.start()
-                                if (index === (root.gridSizeX * root.gridSizeY - 1)) {
-                                    grid.initialAnimationPlayed = true
-                                }
-                            }
                         }
+                    }
 
-                        NumberAnimation {
-                            id: hintRevealFadeIn
-                            target: hintOverlay
-                            property: "opacity"
-                            from: 0
-                            to: 1
-                            duration: 200
-                        }
+                    NumberAnimation {
+                        id: hintRevealFadeIn
+                        target: hintOverlay
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration: 200
+                    }
 
-                        NumberAnimation {
-                            id: hintRevealFadeOut
-                            target: hintOverlay
-                            property: "opacity"
-                            from: 1
-                            to: 0
-                            duration: 200
-                        }
+                    NumberAnimation {
+                        id: hintRevealFadeOut
+                        target: hintOverlay
+                        property: "opacity"
+                        from: 1
+                        to: 0
+                        duration: 200
+                    }
+
+                    SequentialAnimation {
+                        id: hintAnimation
+                        loops: 3
+                        running: false
+                        onStarted: hintRevealFadeIn.start()
+                        onFinished: hintRevealFadeOut.start()
 
                         SequentialAnimation {
-                            id: hintAnimation
-                            loops: 3
-                            running: false
-                            onStarted: hintRevealFadeIn.start()
-                            onFinished: hintRevealFadeOut.start()
-
-                            SequentialAnimation {
-                                PropertyAnimation {
-                                    target: cellButton
-                                    property: "scale"
-                                    to: 1.2
-                                    duration: 300
-                                    easing.type: Easing.InOutQuad
-                                }
-                                PropertyAnimation {
-                                    target: cellButton
-                                    property: "scale"
-                                    to: 1.0
-                                    duration: 300
-                                    easing.type: Easing.InOutQuad
-                                }
+                            PropertyAnimation {
+                                target: cellButton
+                                property: "scale"
+                                to: 1.2
+                                duration: 300
+                                easing.type: Easing.InOutQuad
+                            }
+                            PropertyAnimation {
+                                target: cellButton
+                                property: "scale"
+                                to: 1.0
+                                duration: 300
+                                easing.type: Easing.InOutQuad
                             }
                         }
+                    }
 
-                        function highlightHint() {
-                            hintAnimation.start();
+                    function highlightHint() {
+                        hintAnimation.start();
+                    }
+
+                    NumberAnimation {
+                        id: fadeAnimation
+                        target: cellItem
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration: 200
+                    }
+
+                    NumberAnimation {
+                        id: revealFadeAnimation
+                        target: cellButton
+                        property: "opacity"
+                        from: 1
+                        to: 0
+                        duration: 200
+                        easing.type: Easing.Linear
+                        onStarted: animatingReveal = true
+                        onFinished: {
+                            animatingReveal = false
+                            cellButton.flat = shouldBeFlat
+                            cellButton.opacity = 1
+                        }
+                    }
+
+                    Timer {
+                        id: fadeTimer
+                        interval: diagonalSum * 20
+                        repeat: false
+                        onTriggered: {
+                            if (settings.animations) {
+                                fadeAnimation.start()
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        anchors.fill: cellButton
+                        border.width: 2
+                        radius: {
+                            if (isUniversalTheme) return 0
+                            else if (isFluentWinUI3Theme) return 4
+                            else if (isFusionTheme) return 3
+                            else return 2
+                        }
+                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        visible: {
+                            if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
+                                return true
+                            if (cellItem.animatingReveal && settings.cellFrame)
+                                return true
+                            return cellButton.flat && settings.cellFrame
+                        }
+                        color: {
+                            if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
+                                return accentColor
+                            return "transparent"
                         }
 
-                        NumberAnimation {
-                            id: fadeAnimation
+                        Behavior on opacity {
+                            enabled: settings.animations
+                            NumberAnimation { duration: 200 }
+                        }
+
+                        opacity: {
+                            if (!settings.dimSatisfied || !cellItem.revealed) return 1
+                            if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index)) return 1
+                            return root.hasUnrevealedNeighbors(index) ? 1 : 0.5
+                        }
+                    }
+
+                    Button {
+                        id: cellButton
+                        anchors.fill: parent
+                        anchors.margins: cellSpacing / 2
+
+                        Connections {
                             target: cellItem
-                            property: "opacity"
-                            from: 0
-                            to: 1
-                            duration: 200
-                        }
-
-                        NumberAnimation {
-                            id: revealFadeAnimation
-                            target: cellButton
-                            property: "opacity"
-                            from: 1
-                            to: 0
-                            duration: 200
-                            easing.type: Easing.Linear
-                            onStarted: animatingReveal = true
-                            onFinished: {
-                                animatingReveal = false
-                                cellButton.flat = shouldBeFlat
-                                cellButton.opacity = 1
-                            }
-                        }
-
-                        Timer {
-                            id: fadeTimer
-                            interval: diagonalSum * 20
-                            repeat: false
-                            onTriggered: {
-                                if (settings.animations) {
-                                    fadeAnimation.start()
-                                }
-                            }
-                        }
-
-                        Rectangle {
-                            anchors.fill: cellButton
-                            border.width: 2
-                            radius: {
-                                if (isUniversalTheme) return 0
-                                else if (isFluentWinUI3Theme) return 4
-                                else if (isFusionTheme) return 3
-                                else return 2
-                            }
-                            border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
-                            visible: {
-                                if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
-                                    return true
-                                if (cellItem.animatingReveal && settings.cellFrame)
-                                    return true
-                                return cellButton.flat && settings.cellFrame
-                            }
-                            color: {
-                                if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
-                                    return accentColor
-                                return "transparent"
-                            }
-
-                            Behavior on opacity {
-                                enabled: settings.animations
-                                NumberAnimation { duration: 200 }
-                            }
-
-                            opacity: {
-                                if (!settings.dimSatisfied || !cellItem.revealed) return 1
-                                if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index)) return 1
-                                return root.hasUnrevealedNeighbors(index) ? 1 : 0.5
-                            }
-                        }
-
-                        Button {
-                            id: cellButton
-                            anchors.fill: parent
-                            anchors.margins: cellSpacing / 2
-
-                            Connections {
-                                target: cellItem
-                                function onRevealedChanged() {
-                                    if (cellItem.revealed) {
-                                        if (settings.animations) {
-                                            shouldBeFlat = true
-                                            revealFadeAnimation.start()
-                                        } else {
-                                            cellButton.flat = true
-                                        }
+                            function onRevealedChanged() {
+                                if (cellItem.revealed) {
+                                    if (settings.animations) {
+                                        shouldBeFlat = true
+                                        revealFadeAnimation.start()
                                     } else {
-                                        shouldBeFlat = false
-                                        cellButton.opacity = 1
-                                        cellButton.flat = false
+                                        cellButton.flat = true
                                     }
-                                }
-                            }
-
-                            IconImage {
-                                anchors.centerIn: parent
-                                source: "qrc:/icons/bomb.png"
-                                color: root.darkMode ? "white" : "black"
-                                visible: cellItem.revealed && mines.includes(index)
-                                sourceSize.width: cellItem.width / 2.1
-                                sourceSize.height: cellItem.height / 2.1
-                            }
-
-                            IconImage {
-                                anchors.centerIn: parent
-                                source: "qrc:/icons/questionmark.png"
-                                color: root.darkMode ? "white" : "black"
-                                sourceSize.width: cellItem.width / 2.1
-                                sourceSize.height: cellItem.height / 2.1
-                                opacity: cellItem.questioned ? 1 : 0
-                                scale: cellItem.questioned ? 1 : 1.3
-
-                                Behavior on opacity {
-                                    enabled: settings.animations
-                                    OpacityAnimator {
-                                        duration: 300
-                                        easing.type: Easing.OutQuad
-                                    }
-                                }
-
-                                Behavior on scale {
-                                    enabled: settings.animations
-                                    NumberAnimation {
-                                        duration: 300
-                                        easing.type: Easing.OutBack
-                                    }
-                                }
-                            }
-
-                            IconImage {
-                                anchors.centerIn: parent
-                                source: "qrc:/icons/flag.png"
-                                color: {
-                                    if (settings.contrastFlag) return root.darkMode ? "white" : "black"
-                                    else return accentColor
-                                }
-
-                                sourceSize.width: cellItem.width / 2.1
-                                sourceSize.height: cellItem.height / 2.1
-                                opacity: cellItem.flagged ? 1 : 0
-                                scale: cellItem.flagged ? 1 : 1.3
-
-                                Behavior on opacity {
-                                    enabled: settings.animations
-                                    OpacityAnimator {
-                                        duration: 300
-                                        easing.type: Easing.OutQuad
-                                    }
-                                }
-
-                                Behavior on scale {
-                                    enabled: settings.animations
-                                    NumberAnimation {
-                                        duration: 300
-                                        easing.type: Easing.OutBack
-                                    }
-                                }
-                            }
-
-
-                            Image {
-                                id: hintOverlay
-                                anchors.centerIn: parent
-                                sourceSize.width: cellItem.width / 2.1
-                                sourceSize.height: cellItem.height / 2.1
-                                opacity: 0
-                                visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
-                                source: mines.includes(index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                                onClicked: (mouse) => {
-                                    if (!gameStarted) {
-                                        reveal(index);
-                                        playClick();
-                                    } else if (cellItem.revealed) {
-                                        revealConnectedCells(index);
-                                    } else {
-                                        if (settings.invertLRClick) {
-                                            if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                reveal(index);
-                                                playClick();
-                                            } else if (mouse.button === Qt.LeftButton) {
-                                                toggleFlag(index);
-                                            }
-                                        } else {
-                                            if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                reveal(index);
-                                                playClick();
-                                            } else if (mouse.button === Qt.RightButton) {
-                                                toggleFlag(index);
-                                            }
-                                        }
-                                    }
+                                } else {
+                                    shouldBeFlat = false
+                                    cellButton.opacity = 1
+                                    cellButton.flat = false
                                 }
                             }
                         }
 
-                        // Number display
-                        Text {
+                        IconImage {
                             anchors.centerIn: parent
-                            text: {
-                                if (!cellItem.revealed || cellItem.flagged) return ""
-                                if (mines.includes(index)) return ""
-                                return numbers[index] === undefined || numbers[index] === 0 ? "" : numbers[index];
-                            }
-                            font.pixelSize: cellSize * 0.60
-                            font.bold: true
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            opacity: {
-                                if (!settings.dimSatisfied || !cellItem.revealed || numbers[index] === 0) return 1
-                                return root.hasUnrevealedNeighbors(index) ? 1 : 0.25
-                            }
+                            source: "qrc:/icons/bomb.png"
+                            color: root.darkMode ? "white" : "black"
+                            visible: cellItem.revealed && mines.includes(index)
+                            sourceSize.width: cellItem.width / 2.1
+                            sourceSize.height: cellItem.height / 2.1
+                        }
+
+                        IconImage {
+                            anchors.centerIn: parent
+                            source: "qrc:/icons/questionmark.png"
+                            color: root.darkMode ? "white" : "black"
+                            sourceSize.width: cellItem.width / 2.1
+                            sourceSize.height: cellItem.height / 2.1
+                            opacity: cellItem.questioned ? 1 : 0
+                            scale: cellItem.questioned ? 1 : 1.3
 
                             Behavior on opacity {
                                 enabled: settings.animations
-                                NumberAnimation { duration: 200 }
-                            }
-
-                            color: {
-                                if (!cellItem.revealed) return "black"
-                                if (mines.includes(index)) return "transparent"
-
-                                let palette = {}
-                                switch (settings.colorBlindness) {
-                                    case 1: // Deuteranopia
-                                        palette = {
-                                            1: "#377eb8",
-                                            2: "#4daf4a",
-                                            3: "#e41a1c",
-                                            4: "#984ea3",
-                                            5: "#ff7f00",
-                                            6: "#a65628",
-                                            7: "#f781bf",
-                                            8: darkMode ? "white" : "black"
-                                        }
-                                        break
-                                    case 2: // Protanopia
-                                        palette = {
-                                            1: "#66c2a5",
-                                            2: "#fc8d62",
-                                            3: "#8da0cb",
-                                            4: "#e78ac3",
-                                            5: "#a6d854",
-                                            6: "#ffd92f",
-                                            7: "#e5c494",
-                                            8: darkMode ? "white" : "black"
-                                        }
-                                        break
-                                    case 3: // Tritanopia
-                                        palette = {
-                                            1: "#e41a1c",
-                                            2: "#377eb8",
-                                            3: "#4daf4a",
-                                            4: "#984ea3",
-                                            5: "#ff7f00",
-                                            6: "#f781bf",
-                                            7: "#a65628",
-                                            8: darkMode ? "white" : "black"
-                                        }
-                                        break
-                                    default: // None
-                                        palette = {
-                                            1: "#069ecc",
-                                            2: "#28d13c",
-                                            3: "#d12844",
-                                            4: "#9328d1",
-                                            5: "#ebc034",
-                                            6: "#34ebb1",
-                                            7: "#eb8634",
-                                            8: darkMode ? "white" : "black"
-                                        }
+                                OpacityAnimator {
+                                    duration: 300
+                                    easing.type: Easing.OutQuad
                                 }
+                            }
 
-                                return palette[numbers[index]] || "black"
+                            Behavior on scale {
+                                enabled: settings.animations
+                                NumberAnimation {
+                                    duration: 300
+                                    easing.type: Easing.OutBack
+                                }
                             }
                         }
 
-                        function startFadeIn() {
-                            if (!settings.animations) {
-                                opacity = 1
-                                return
+                        IconImage {
+                            anchors.centerIn: parent
+                            source: root.flagPath
+                            color: {
+                                if (settings.contrastFlag) return root.darkMode ? "white" : "black"
+                                else return accentColor
                             }
-                            grid.initialAnimationPlayed = false  // Reset the animation flag
-                            opacity = 0
-                            fadeTimer.restart()
+
+                            sourceSize.width: cellItem.width / 1.8
+                            sourceSize.height: cellItem.height / 1.8
+                            opacity: cellItem.flagged ? 1 : 0
+                            scale: cellItem.flagged ? 1 : 1.3
+
+                            Behavior on opacity {
+                                enabled: settings.animations
+                                OpacityAnimator {
+                                    duration: 300
+                                    easing.type: Easing.OutQuad
+                                }
+                            }
+
+                            Behavior on scale {
+                                enabled: settings.animations
+                                NumberAnimation {
+                                    duration: 300
+                                    easing.type: Easing.OutBack
+                                }
+                            }
                         }
+
+
+                        Image {
+                            id: hintOverlay
+                            anchors.centerIn: parent
+                            sourceSize.width: cellItem.width / 2.1
+                            sourceSize.height: cellItem.height / 2.1
+                            opacity: 0
+                            visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
+                            source: mines.includes(index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.LeftButton | Qt.RightButton
+                            onClicked: (mouse) => {
+                                           if (!gameStarted) {
+                                               reveal(index);
+                                               playClick();
+                                           } else if (cellItem.revealed) {
+                                               revealConnectedCells(index);
+                                           } else {
+                                               if (settings.invertLRClick) {
+                                                   if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
+                                                       reveal(index);
+                                                       playClick();
+                                                   } else if (mouse.button === Qt.LeftButton) {
+                                                       toggleFlag(index);
+                                                   }
+                                               } else {
+                                                   if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                                       reveal(index);
+                                                       playClick();
+                                                   } else if (mouse.button === Qt.RightButton) {
+                                                       toggleFlag(index);
+                                                   }
+                                               }
+                                           }
+                                       }
+                        }
+                    }
+
+                    // Number display
+                    Text {
+                        anchors.centerIn: parent
+                        text: {
+                            if (!cellItem.revealed || cellItem.flagged) return ""
+                            if (mines.includes(index)) return ""
+                            return numbers[index] === undefined || numbers[index] === 0 ? "" : numbers[index];
+                        }
+                        font.pixelSize: cellSize * 0.60
+                        font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        opacity: {
+                            if (!settings.dimSatisfied || !cellItem.revealed || numbers[index] === 0) return 1
+                            return root.hasUnrevealedNeighbors(index) ? 1 : 0.25
+                        }
+
+                        Behavior on opacity {
+                            enabled: settings.animations
+                            NumberAnimation { duration: 200 }
+                        }
+
+                        color: {
+                            if (!cellItem.revealed) return "black"
+                            if (mines.includes(index)) return "transparent"
+
+                            let palette = {}
+                            switch (settings.colorBlindness) {
+                            case 1: // Deuteranopia
+                                palette = {
+                                    1: "#377eb8",
+                                    2: "#4daf4a",
+                                    3: "#e41a1c",
+                                    4: "#984ea3",
+                                    5: "#ff7f00",
+                                    6: "#a65628",
+                                    7: "#f781bf",
+                                    8: darkMode ? "white" : "black"
+                                }
+                                break
+                            case 2: // Protanopia
+                                palette = {
+                                    1: "#66c2a5",
+                                    2: "#fc8d62",
+                                    3: "#8da0cb",
+                                    4: "#e78ac3",
+                                    5: "#a6d854",
+                                    6: "#ffd92f",
+                                    7: "#e5c494",
+                                    8: darkMode ? "white" : "black"
+                                }
+                                break
+                            case 3: // Tritanopia
+                                palette = {
+                                    1: "#e41a1c",
+                                    2: "#377eb8",
+                                    3: "#4daf4a",
+                                    4: "#984ea3",
+                                    5: "#ff7f00",
+                                    6: "#f781bf",
+                                    7: "#a65628",
+                                    8: darkMode ? "white" : "black"
+                                }
+                                break
+                            default: // None
+                                palette = {
+                                    1: "#069ecc",
+                                    2: "#28d13c",
+                                    3: "#d12844",
+                                    4: "#9328d1",
+                                    5: "#ebc034",
+                                    6: "#34ebb1",
+                                    7: "#eb8634",
+                                    8: darkMode ? "white" : "black"
+                                }
+                            }
+
+                            return palette[numbers[index]] || "black"
+                        }
+                    }
+
+                    function startFadeIn() {
+                        if (!settings.animations) {
+                            opacity = 1
+                            return
+                        }
+                        grid.initialAnimationPlayed = false  // Reset the animation flag
+                        opacity = 0
+                        fadeTimer.restart()
                     }
                 }
             }
-        //}
+        }
     }
 }
 

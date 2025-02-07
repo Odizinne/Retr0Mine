@@ -62,34 +62,7 @@ ApplicationWindow {
                     text: qsTr("Restore")
                     Layout.fillWidth: true
                     onClicked: {
-                        // difficultyPane
-                        settings.difficulty = 0
-                        // gameplayPane
-                        settings.invertLRClick = false
-                        settings.autoreveal = false
-                        settings.enableQuestionMarks = true
-                        settings.loadLastGame = false
-                        settings.displaySeedAtGameOver = false
-                        settings.fixedSeed = -1
-                        // visualsPane
-                        settings.animations = true
-                        settings.cellFrame = true
-                        settings.dimSatisfied = false
-                        settings.contrastFlag = false
-                        settings.startFullScreen = root.isGamescope ? true : false
-                        settings.cellSize = 1
-                        settings.themeIndex = 0
-                        // soundPane
-                        settings.soundEffects = true
-                        settings.volume = 1.0
-                        settings.soundPackIndex = 2
-                        // languagePane
-                        settings.languageIndex = 0
-                        // accessibilityPane
-                        settings.colorBlindness = 0
-
                         settings.welcomeMessageShown = false
-
                         mainWindow.restartRetr0Mine()
                     }
                 }
@@ -570,6 +543,98 @@ ApplicationWindow {
                                 checked: settings.startFullScreen
                                 onCheckedChanged: {
                                     settings.startFullScreen = checked
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            //visible: typeof steamIntegration !== "undefined"
+                            spacing: 10
+
+                            ButtonGroup {
+                                id: buttonGroup
+                                exclusive: true
+                            }
+
+                            Label {
+                                text: qsTr("Flag")
+                                Layout.fillWidth: true
+                            }
+
+                            ColumnLayout {
+                                Button {
+                                    Layout.preferredWidth: 45
+                                    Layout.preferredHeight: 45
+                                    checkable: true
+                                    icon.source: "qrc:/icons/flag.png"
+                                    checked: settings.flagSkinIndex === 0 || typeof steamIntegration === "undefined"
+                                    icon.width: 35
+                                    icon.height: 35
+                                    ButtonGroup.group: buttonGroup
+                                    Layout.alignment: Qt.AlignHCenter
+                                    onCheckedChanged: {
+                                        if (checked) settings.flagSkinIndex = 0
+                                    }
+                                }
+                            }
+
+                            ColumnLayout {
+                                Button {
+                                    Layout.preferredWidth: 45
+                                    Layout.preferredHeight: 45
+                                    enabled: typeof steamIntegration !== "undefined" && root.flag1Unlocked
+                                    checkable: true
+                                    checked: typeof steamIntegration !== "undefined" && root.flag1Unlocked && settings.flagSkinIndex === 1
+                                    icon.source: typeof steamIntegration !== "undefined" && root.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
+                                    icon.width: 35
+                                    icon.height: 35
+                                    ButtonGroup.group: buttonGroup
+                                    Layout.alignment: Qt.AlignHCenter
+                                    ToolTip.visible: hovered && !enabled
+                                    ToolTip.text: qsTr("Unlock Trust Your Instincts achievement")
+                                    onCheckedChanged: {
+                                        if (checked) settings.flagSkinIndex = 1
+                                    }
+                                }
+                            }
+
+                            ColumnLayout {
+                                Button {
+                                    Layout.preferredWidth: 45
+                                    Layout.preferredHeight: 45
+                                    enabled: typeof steamIntegration !== "undefined" && root.flag2Unlocked
+                                    checkable: true
+                                    checked: typeof steamIntegration !== "undefined" && root.flag1Unlocked && settings.flagSkinIndex === 2
+                                    icon.source: typeof steamIntegration !== "undefined" && root.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
+                                    icon.width: 35
+                                    icon.height: 35
+                                    ButtonGroup.group: buttonGroup
+                                    Layout.alignment: Qt.AlignHCenter
+                                    ToolTip.visible: hovered && !enabled
+                                    ToolTip.text: qsTr("Unlock Master Tactician achievement")
+                                    onCheckedChanged: {
+                                        if (checked) settings.flagSkinIndex = 2
+                                    }
+                                }
+                            }
+
+                            ColumnLayout {
+                                Button {
+                                    Layout.preferredWidth: 45
+                                    Layout.preferredHeight: 45
+                                    enabled: typeof steamIntegration !== "undefined" && root.flag3Unlocked
+                                    checkable: true
+                                    checked: typeof steamIntegration !== "undefined" && root.flag1Unlocked && settings.flagSkinIndex === 3
+                                    icon.source: typeof steamIntegration !== "undefined" && root.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
+                                    icon.width: 35
+                                    icon.height: 35
+                                    ButtonGroup.group: buttonGroup
+                                    Layout.alignment: Qt.AlignHCenter
+                                    ToolTip.visible: hovered && !enabled
+                                    ToolTip.text: qsTr("Unlock Minefield Legend achievement")
+                                    onCheckedChanged: {
+                                        if (checked) settings.flagSkinIndex = 3
+                                    }
                                 }
                             }
                         }

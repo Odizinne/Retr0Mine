@@ -35,6 +35,10 @@
         <file>icons/language.png</file>
         <file>icons/accessibility.png</file>
         <file>icons/flag.png</file>
+        <file>icons/flag1.png</file>
+        <file>icons/flag2.png</file>
+        <file>icons/flag3.png</file>
+        <file>icons/locked.png</file>
         <file>icons/delete.png</file>
         <file>icons/debug.png</file>
         <file>icons/icon.png</file>

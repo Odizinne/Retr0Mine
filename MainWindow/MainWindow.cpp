@@ -19,6 +19,7 @@ MainWindow::MainWindow(QObject *parent)
     , rootContext(engine->rootContext())
     , translator(new QTranslator(this))
     , isRunningOnGamescope(false)
+    , shouldShowWelcomeMessage(false)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
     isRunningOnGamescope = desktop.toLower() == "gamescope";
@@ -30,11 +31,13 @@ MainWindow::MainWindow(QObject *parent)
 
     m_steamIntegration = new SteamIntegration(this);
     if (!m_steamIntegration->initialize()) {
-        qWarning() << "Failed to initialize Steam";
+        qWarning() << "Failed to initialize Steam integration";
     } else {
         qDebug() << "Steam integration enabled";
         rootContext->setContextProperty("steamIntegration", m_steamIntegration);
     }
+
+    if (!settings.value("welcomeMessageShown", false).toBool()) resetSettings();
 
     setupAndLoadQML();
 }
@@ -42,6 +45,36 @@ MainWindow::MainWindow(QObject *parent)
 void MainWindow::onColorSchemeChanged()
 {
     setColorScheme();
+}
+
+void MainWindow::resetSettings()
+{
+    settings.setValue("themeIndex", 0);
+    settings.setValue("languageIndex", 0);
+    settings.setValue("difficulty", 0);
+    settings.setValue("invertLRClick", false);
+    settings.setValue("autoreveal", false);
+    settings.setValue("enableQuestionMarks", true);
+    settings.setValue("loadLastGame", false);
+    settings.setValue("soundEffects", true);
+    settings.setValue("volume", 1.0);
+    settings.setValue("soundPackIndex", 2);
+    settings.setValue("animations", true);
+    settings.setValue("cellFrame", true);
+    settings.setValue("contrastFlag", false);
+    settings.setValue("cellSize", 1);
+    settings.setValue("customWidth", 8);
+    settings.setValue("customHeight", 8);
+    settings.setValue("customMines", 10);
+    settings.setValue("dimSatisfied", false);
+    settings.setValue("startFullScreen", isRunningOnGamescope ? true : false);
+    settings.setValue("fixedSeed", -1);
+    settings.setValue("displaySeedAtGameOver", false);
+    settings.setValue("colorBlindness", 0);
+    settings.setValue("flagSkinIndex", 0);
+
+    settings.setValue("welcomeMessageShown", true);
+    shouldShowWelcomeMessage = true;
 }
 
 void MainWindow::setupAndLoadQML()
@@ -63,6 +96,10 @@ void MainWindow::setupAndLoadQML()
     setColorScheme();
 
     rootContext->setContextProperty("mainWindow", this);
+    rootContext->setContextProperty("showWelcome", shouldShowWelcomeMessage);
+    rootContext->setContextProperty("unlockedFlag1", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_EASY"));
+    rootContext->setContextProperty("unlockedFlag2", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_MEDIUM"));
+    rootContext->setContextProperty("unlockedFlag3", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_HARD"));
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
     engine->load(QUrl("qrc:/qml/Main.qml"));
