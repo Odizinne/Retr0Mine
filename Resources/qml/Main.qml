@@ -952,10 +952,6 @@ ApplicationWindow {
         }
     }
 
-    Button {
-        onClicked: flagToast.visible = true
-    }
-
     ScrollView {
         id: scrollView
         anchors {
