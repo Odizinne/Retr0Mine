@@ -100,6 +100,7 @@ void MainWindow::setupAndLoadQML()
     rootContext->setContextProperty("unlockedFlag1", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_EASY"));
     rootContext->setContextProperty("unlockedFlag2", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_MEDIUM"));
     rootContext->setContextProperty("unlockedFlag3", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_HARD"));
+    rootContext->setContextProperty("playerName", m_steamIntegration->getSteamUserName());
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
     engine->load(QUrl("qrc:/qml/Main.qml"));

@@ -76,3 +76,15 @@ QString SteamIntegration::getSteamUILanguage() const
     const char* language = steamUtils->GetSteamUILanguage();
     return QString::fromUtf8(language);
 }
+
+QString SteamIntegration::getSteamUserName() const
+{
+    if (!m_initialized)
+        return QString();
+
+    ISteamFriends* steamFriends = SteamFriends();
+    if (!steamFriends)
+        return QString();
+
+    return QString::fromUtf8(steamFriends->GetPersonaName());
+}

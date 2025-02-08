@@ -17,6 +17,7 @@ public:
     Q_INVOKABLE bool isRunningOnDeck();
     bool m_initialized;
     QString getSteamUILanguage() const;
+    QString getSteamUserName() const;
 };
 
 #endif // STEAMINTEGRATION_H

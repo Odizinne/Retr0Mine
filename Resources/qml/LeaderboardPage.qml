@@ -25,6 +25,16 @@ Popup {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 10
+
+        Label {
+            visible: typeof steamIntegration !== "undefined"
+            text: playerName
+            font.bold: true
+            font.pixelSize: 20
+            color: "#efbf04"
+            Layout.alignment: Qt.AlignCenter
+        }
+
         Frame {
             Layout.preferredWidth: 300
             Layout.fillWidth: true
