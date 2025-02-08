@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls.impl
 
 Popup {
     id: welcomePage
@@ -194,16 +195,16 @@ Popup {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
 
-                Image {
+                IconImage {
                     anchors.centerIn: parent
-                    source: {
-                        if(settings.contrastFlag)
-                            return darkMode ? "qrc:/icons/flag.png" : "qrc:/icons/flag_dark.png"
-                        return flagIcon
+                    source: "qrc:/icons/flag.png"
+                    color: {
+                        if (settings.contrastFlag) return root.darkMode ? "white" : "black"
+                        else return accentColor
                     }
                     visible: true
-                    sourceSize.width: 35 / 2.1
-                    sourceSize.height: 35 / 2.1
+                    sourceSize.width: 35 / 1.8
+                    sourceSize.height: 35 / 1.8
                 }
             }
             Button {
@@ -358,18 +359,17 @@ Popup {
             Button {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
-                Image {
+                IconImage {
                     anchors.centerIn: parent
-                    source: {
-                        if(settings.contrastFlag)
-                            return darkMode ? "qrc:/icons/flag.png" : "qrc:/icons/flag_dark.png"
-                        return flagIcon
+                    source: "qrc:/icons/flag.png"
+                    color: {
+                        if (settings.contrastFlag) return root.darkMode ? "white" : "black"
+                        else return accentColor
                     }
                     visible: true
-                    sourceSize.width: 35 / 2.1
-                    sourceSize.height: 35 / 2.1
+                    sourceSize.width: 35 / 1.8
+                    sourceSize.height: 35 / 1.8
                 }
-
             }
             Button {
                 Layout.preferredHeight: 35
