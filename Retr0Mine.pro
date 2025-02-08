@@ -33,8 +33,8 @@ RESOURCES += Resources/resources.qrc
 
 
 win32 {
-    #QMAKE_CXXFLAGS += -D_CRT_SECURE_NO_WARNINGS
-    #QMAKE_CXXFLAGS += -wd4828
+    QMAKE_CXXFLAGS += -D_CRT_SECURE_NO_WARNINGS
+    QMAKE_CXXFLAGS += -wd4828
     LIBS += -L$$STEAM_PATH/lib/win64 -lsteam_api64
 }
 

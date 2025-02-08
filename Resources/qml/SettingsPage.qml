@@ -548,7 +548,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            //visible: typeof steamIntegration !== "undefined"
+                            visible: typeof steamIntegration !== "undefined"
                             spacing: 10
 
                             ButtonGroup {
