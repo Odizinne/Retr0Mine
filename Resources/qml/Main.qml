@@ -875,7 +875,7 @@ ApplicationWindow {
             initGame()
         }
 
-        if (settings.startFullScreen) {
+        if (settings.startFullScreen || root.isGamescope) {
             root.visibility = 5
         }
     }

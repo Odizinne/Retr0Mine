@@ -540,7 +540,7 @@ ApplicationWindow {
                             Switch {
                                 id: startFullScreenSwitch
                                 enabled: !root.isGamescope
-                                checked: settings.startFullScreen
+                                checked: settings.startFullScreen || root.isGamescope
                                 onCheckedChanged: {
                                     settings.startFullScreen = checked
                                 }
