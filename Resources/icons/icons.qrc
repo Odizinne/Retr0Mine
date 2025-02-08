@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>bomb.png</file>
+        <file>warning.png</file>
+        <file>safe.png</file>
+        <file>questionmark.png</file>
+        <file>audio.png</file>
+        <file>difficulty.png</file>
+        <file>controls.png</file>
+        <file>visuals.png</file>
+        <file>keyboard.png</file>
+        <file>language.png</file>
+        <file>accessibility.png</file>
+        <file>flag.png</file>
+        <file>flag1.png</file>
+        <file>flag2.png</file>
+        <file>flag3.png</file>
+        <file>locked.png</file>
+        <file>delete.png</file>
+        <file>debug.png</file>
+        <file>icon.png</file>
+        <file>steam.png</file>
+        <file>github.png</file>
+    </qresource>
+</RCC>

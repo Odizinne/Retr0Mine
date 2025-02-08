@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.impl
 import QtQuick.Layouts
 
 Popup {
@@ -26,13 +27,24 @@ Popup {
         anchors.margins: 10
         spacing: 10
 
-        Label {
+        RowLayout {
+            spacing: 10
             visible: typeof steamIntegration !== "undefined"
-            text: playerName
-            font.bold: true
-            font.pixelSize: 20
-            color: "#efbf04"
             Layout.alignment: Qt.AlignCenter
+
+            IconImage {
+                source: "qrc:/icons/steam.png"
+                color: root.darkMode ? "white" : "Dark"
+                sourceSize.height: 20
+                sourceSize.width: 20
+            }
+
+            Label {
+                text: playerName
+                font.bold: true
+                font.pixelSize: 20
+                Layout.alignment: Qt.AlignCenter
+            }
         }
 
         Frame {
@@ -43,6 +55,8 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Easy")
+                    color: "#55eb34"
+                    font.bold: true
                 }
                 Item {
                     Layout.fillWidth: true
@@ -60,6 +74,8 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Medium")
+                    color: "#eb8f34"
+                    font.bold: true
                 }
                 Item {
                     Layout.fillWidth: true
@@ -77,6 +93,8 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Hard")
+                    color: "#eb3434"
+                    font.bold: true
                 }
                 Item {
                     Layout.fillWidth: true
@@ -94,6 +112,8 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Retr0")
+                    color: "#6b34eb"
+                    font.bold: true
                 }
                 Item {
                     Layout.fillWidth: true

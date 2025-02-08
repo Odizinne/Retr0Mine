@@ -29,8 +29,11 @@ TRANSLATIONS +=                                 \
     Resources/translations/Retr0Mine_fr.ts      \
     Resources/translations/Retr0Mine_en.ts      \
 
-RESOURCES += Resources/resources.qrc
-
+RESOURCES +=                                    \
+    Resources/icons/icons.qrc                   \
+    Resources/images/images.qrc                 \
+    Resources/qml/qml.qrc                       \
+    Resources/sounds/sounds.qrc                 \
 
 win32 {
     QMAKE_CXXFLAGS += -D_CRT_SECURE_NO_WARNINGS

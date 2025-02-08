@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>Main.qml</file>
+        <file>SettingsPage.qml</file>
+        <file>GameOverPopup.qml</file>
+        <file>AboutPage.qml</file>
+        <file>LoadWindow.qml</file>
+        <file>SaveWindow.qml</file>
+        <file>ErrorWindow.qml</file>
+        <file>TopBar.qml</file>
+        <file>LeaderboardPage.qml</file>
+        <file>TempScrollBar.qml</file>
+        <file>WelcomePage.qml</file>
+        <file>CellFrame.qml</file>
+        <file>SidebarDelegate.qml</file>
+        <file>SidebarSeparator.qml</file>
+        <file>DifficultyLayout.qml</file>
+        <file>MainWindow.qml</file>
+        <file>GameArea.qml</file>
+        <file>+Universal/CellFrame.qml</file>
+        <file>+Universal/SidebarDelegate.qml</file>
+        <file>+Universal/MainWindow.qml</file>
+        <file>+Universal/GameArea.qml</file>
+        <file>+Universal/SidebarSeparator.qml</file>
+        <file>+Universal/DifficultyLayout.qml</file>
+        <file>+Fusion/CellFrame.qml</file>
+        <file>+Fusion/SidebarDelegate.qml</file>
+        <file>+Fusion/GameArea.qml</file>
+        <file>+Fusion/SidebarSeparator.qml</file>
+        <file>+Fusion/DifficultyLayout.qml</file>
+        <file>+FluentWinUI3/CellFrame.qml</file>
+        <file>+FluentWinUI3/SidebarDelegate.qml</file>
+        <file>+FluentWinUI3/GameArea.qml</file>
+        <file>+FluentWinUI3/SidebarSeparator.qml</file>
+        <file>+FluentWinUI3/DifficultyLayout.qml</file>
+    </qresource>
+</RCC>
