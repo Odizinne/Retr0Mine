@@ -415,7 +415,46 @@ ApplicationWindow {
         id: leaderboardWindow
     }
 
-    MediaPlayer {
+    SoundEffect {
+        id: clickEffect0
+        source: {
+            switch (settings.soundPackIndex) {
+            case 0: return "qrc:/sounds/pop/pop_click.wav"
+            case 1: return "qrc:/sounds/w11/w11_click.wav"
+            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+            }
+        }
+    }
+
+    SoundEffect {
+        id: clickEffect1
+        source: {
+            switch (settings.soundPackIndex) {
+            case 0: return "qrc:/sounds/pop/pop_click.wav"
+            case 1: return "qrc:/sounds/w11/w11_click.wav"
+            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+            }
+        }
+    }
+
+    SoundEffect {
+        id: clickEffect2
+        source: {
+            switch (settings.soundPackIndex) {
+            case 0: return "qrc:/sounds/pop/pop_click.wav"
+            case 1: return "qrc:/sounds/w11/w11_click.wav"
+            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+            }
+        }
+    }
+
+    SoundEffect {
         id: looseEffect
         source: {
             switch (settings.soundPackIndex) {
@@ -426,28 +465,9 @@ ApplicationWindow {
             default: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
             }
         }
-        audioOutput: AudioOutput {
-            volume: settings.volume
-        }
     }
 
-    MediaPlayer {
-        id: clickEffect
-        source: {
-            switch (settings.soundPackIndex) {
-            case 0: return "qrc:/sounds/pop/pop_click.wav"
-            case 1: return "qrc:/sounds/w11/w11_click.wav"
-            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            }
-        }
-        audioOutput: AudioOutput {
-            volume: settings.volume
-        }
-    }
-
-    MediaPlayer {
+    SoundEffect {
         id: winEffect
         source: {
             switch (settings.soundPackIndex) {
@@ -457,9 +477,6 @@ ApplicationWindow {
             case 3: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
             default: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
             }
-        }
-        audioOutput: AudioOutput {
-            volume: settings.volume
         }
     }
 
@@ -479,23 +496,24 @@ ApplicationWindow {
         return totalCs1 < totalCs2;
     }
 
-    function playLoose() {
-        if (!settings.soundEffects) return
-        looseEffect.stop()
-        looseEffect.play()
+    function playClick() {
+        if (!settings.soundEffects || gameOver) return;
+
+        if (!clickEffect0.playing) {
+            clickEffect0.play();
+        } else if (!clickEffect1.playing) {
+            clickEffect1.play();
+        } else if (!clickEffect2.playing) {
+            clickEffect2.play();
+        }
     }
 
-    function playClick() {
-        if (!settings.soundEffects) return
-        if (gameOver) return
-        clickEffect.stop()
-        clickEffect.play()
+    function playLoose() {
+        if (settings.soundEffects) looseEffect.play()
     }
 
     function playWin() {
-        if (!settings.soundEffects) return
-        winEffect.stop()
-        winEffect.play()
+        if (settings.soundEffects) winEffect.play()
     }
 
     function revealConnectedCells(index) {

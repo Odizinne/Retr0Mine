@@ -949,7 +949,7 @@ ApplicationWindow {
                             ComboBox {
                                 id: styleComboBox
                                 model: {
-                                    var themes = ["Windows 11", "Windows 10", "Fusion"]
+                                    var themes = ["Fluent", "Universal", "Fusion"]
                                     if (root.isGamescope) {
                                         themes.push(qsTr("Oled Dark"))
                                     }
