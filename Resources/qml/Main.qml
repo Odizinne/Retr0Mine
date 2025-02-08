@@ -846,10 +846,6 @@ ApplicationWindow {
         }
 
         welcomePopup.visible = showWelcome
-
-        if (settings.startFullScreen) {
-            root.visibility = 5
-        }
     }
 
     WelcomePage {
@@ -877,6 +873,10 @@ ApplicationWindow {
             }
         } else {
             initGame()
+        }
+
+        if (settings.startFullScreen) {
+            root.visibility = 5
         }
     }
 
