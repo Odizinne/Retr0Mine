@@ -1124,15 +1124,9 @@ ApplicationWindow {
                         }
                     }
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: cellButton
                         border.width: 2
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                         visible: {
                             if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))

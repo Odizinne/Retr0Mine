@@ -11,6 +11,14 @@
         <file>qml/LeaderboardPage.qml</file>
         <file>qml/TempScrollBar.qml</file>
         <file>qml/WelcomePage.qml</file>
+        <file>qml/CellFrame.qml</file>
+        <file>qml/SidebarDelegate.qml</file>
+        <file>qml/+Universal/CellFrame.qml</file>
+        <file>qml/+Universal/SidebarDelegate.qml</file>
+        <file>qml/+Fusion/CellFrame.qml</file>
+        <file>qml/+Fusion/SidebarDelegate.qml</file>
+        <file>qml/+FluentWinUI3/CellFrame.qml</file>
+        <file>qml/+FluentWinUI3/SidebarDelegate.qml</file>
         <file>sounds/pop/pop_bomb.wav</file>
         <file>sounds/pop/pop_click.wav</file>
         <file>sounds/pop/pop_win.wav</file>

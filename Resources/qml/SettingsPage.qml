@@ -132,12 +132,11 @@ ApplicationWindow {
                         }
                     ]
                     currentIndex: 0
-                    delegate: ItemDelegate {
+                    delegate: SidebarDelegate {
                         width: parent.width
                         height: 40
                         icon.source: modelData.icon
                         icon.color: root.darkMode ? "white" : "dark"
-                        text: root.isFluentWinUI3Theme ? "  " + modelData.text : modelData.text
 
                         highlighted: ListView.isCurrentItem
                         onClicked: {
