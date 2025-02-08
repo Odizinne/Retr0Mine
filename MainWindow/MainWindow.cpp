@@ -149,7 +149,6 @@ void MainWindow::setColorScheme()
     bool darkMode = isSystemDark || currentTheme == 4 || (currentTheme == 2 && isRunningOnGamescope);
 
     rootContext->setContextProperty("gamescope", isRunningOnGamescope);
-    rootContext->setContextProperty("flagIcon", Utils::getFlagIcon(accentColor));
     rootContext->setContextProperty("isDarkMode", darkMode);
     rootContext->setContextProperty("accentColor", accentColor);
 }
