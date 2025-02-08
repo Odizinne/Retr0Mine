@@ -8,6 +8,7 @@ Popup {
     visible: false
     modal: true
     closePolicy: Popup.NoAutoClose
+    width: 300
 
     property string gameOverLabelText: "Game Over"
     property string gameOverLabelColor: "#d12844"

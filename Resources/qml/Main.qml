@@ -8,7 +8,7 @@ import com.odizinne.minesweeper 1.0
 import QtCore
 import "."
 
-ApplicationWindow {
+MainWindow {
     id: root
     visible: true
     width: getInitialWidth()
@@ -856,11 +856,6 @@ ApplicationWindow {
             } catch (e) {
                 console.error("Failed to parse leaderboard data:", e)
             }
-        }
-
-        if (typeof Universal !== 'undefined') {
-            Universal.theme = root.isGamescope && settings.themeIndex === 4 ? Universal.Dark : Universal.System
-            Universal.accent = accentColor
         }
 
         welcomePopup.visible = showWelcome
