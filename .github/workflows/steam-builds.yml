@@ -181,12 +181,10 @@ jobs:
           export EXTRA_QT_MODULES="multimedia"
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt
 
-      - name: Create startup script
+      - name: Remove unnecessary files in AppDir
         run: |
-          echo '#!/bin/sh
-          export LD_LIBRARY_PATH="./usr/lib:$LD_LIBRARY_PATH"
-          exec ./AppRun' > AppDir/Retr0Mine.sh
-          chmod +x AppDir/Retr0Mine.sh
+          shopt -s extglob
+          rm -rf AppDir/!(usr)
   
       - name: Clean unnecessary files
         run: |
