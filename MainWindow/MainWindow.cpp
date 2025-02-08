@@ -61,7 +61,7 @@ void MainWindow::resetSettings()
     settings.setValue("soundPackIndex", 2);
     settings.setValue("animations", true);
     settings.setValue("cellFrame", true);
-    settings.setValue("contrastFlag", false);
+    settings.setValue("contrastFlag", true);
     settings.setValue("cellSize", 1);
     settings.setValue("customWidth", 8);
     settings.setValue("customHeight", 8);
