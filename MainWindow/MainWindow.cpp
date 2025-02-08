@@ -81,6 +81,8 @@ void MainWindow::setupAndLoadQML()
 {
     int styleIndex = settings.value("themeIndex", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
+    // fallback to Universal if themeIndex is Oled dark outside of gamescope
+    if (!isRunningOnGamescope && styleIndex == 3) styleIndex = 1;
 
     setQMLStyle(styleIndex);
     setLanguage(languageIndex);
