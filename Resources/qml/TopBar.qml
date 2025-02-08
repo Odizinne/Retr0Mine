@@ -36,16 +36,6 @@ RowLayout {
                     onTriggered: root.initGame()
                 }
 
-                MenuSeparator { }
-
-                MenuItem {
-                    text: qsTr("Hint")
-                    enabled: root.gameStarted && !root.gameOver
-                    onTriggered: root.requestHint()
-                }
-
-                MenuSeparator { }
-
                 MenuItem {
                     text: qsTr("Save game")
                     enabled: root.gameStarted
@@ -55,6 +45,12 @@ RowLayout {
                     id: loadMenu
                     text: qsTr("Load game")
                     onTriggered: loadWindow.visible = true
+                }
+
+                MenuItem {
+                    text: qsTr("Hint")
+                    enabled: root.gameStarted && !root.gameOver
+                    onTriggered: root.requestHint()
                 }
 
                 MenuSeparator { }
@@ -73,6 +69,8 @@ RowLayout {
                     text: qsTr("About")
                     onTriggered: aboutPage.visible = true
                 }
+
+                MenuSeparator { }
 
                 MenuItem {
                     text: qsTr("Exit")
