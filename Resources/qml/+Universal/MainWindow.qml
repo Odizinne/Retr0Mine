@@ -1,6 +1,6 @@
 import QtQuick.Controls.Universal
 
 ApplicationWindow {
-    Universal.theme: Universal.System
+    Universal.theme: root.isGamescope && settings.themeIndex === 3 ? Universal.Dark : Universal.System
     Universal.accent: accentColor
 }

@@ -82,16 +82,7 @@ void MainWindow::setupAndLoadQML()
     int styleIndex = settings.value("themeIndex", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
 
-    if (styleIndex == 0) {
-        setW11Theme();
-    } else if (styleIndex == 1) {
-        setW10Theme();
-    } else if (styleIndex == 2) {
-        setFusionTheme();
-    } else if (styleIndex == 3) {
-        setSteamDeckDarkTheme();
-    }
-
+    setQMLStyle(styleIndex);
     setLanguage(languageIndex);
     setColorScheme();
 
@@ -104,6 +95,28 @@ void MainWindow::setupAndLoadQML()
     qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
 
     engine->load(QUrl("qrc:/qml/Main.qml"));
+}
+
+void MainWindow::setQMLStyle(int index)
+{
+    QString style;
+    switch(index) {
+    case 0:
+        style = "FluentWinUI3";
+        break;
+    case 1:
+        style = "Universal";
+        break;
+    case 2:
+        style = "Fusion";
+        break;
+    case 3:
+        style = "Universal";
+        break;
+    }
+
+    currentTheme = index;
+    QQuickStyle::setStyle(style);
 }
 
 void MainWindow::setLanguage(int index)
@@ -145,49 +158,11 @@ bool MainWindow::loadLanguage(QString languageCode)
 
 void MainWindow::setColorScheme()
 {
-    QColor accentColor = Utils::getAccentColor();
-    bool isSystemDark = Utils::isDarkMode();
-    bool darkMode = isSystemDark || currentTheme == 4 || (currentTheme == 2 && isRunningOnGamescope);
+    bool darkMode = Utils::isDarkMode() || currentTheme == 3 || (currentTheme == 0 && isRunningOnGamescope);
 
     rootContext->setContextProperty("gamescope", isRunningOnGamescope);
     rootContext->setContextProperty("isDarkMode", darkMode);
-    rootContext->setContextProperty("accentColor", accentColor);
-}
-
-void MainWindow::setW10Theme()
-{
-    currentTheme = 1;
-    QQuickStyle::setStyle("Universal");
-    rootContext->setContextProperty("windows10", QVariant(true));
-    rootContext->setContextProperty("windows11", QVariant(false));
-    rootContext->setContextProperty("fusion", QVariant(false));
-}
-
-void MainWindow::setW11Theme()
-{
-    currentTheme = 2;
-    QQuickStyle::setStyle("FluentWinUI3");
-    rootContext->setContextProperty("windows10", QVariant(false));
-    rootContext->setContextProperty("windows11", QVariant(true));
-    rootContext->setContextProperty("fusion", QVariant(false));
-}
-
-void MainWindow::setFusionTheme()
-{
-    currentTheme = 3;
-    QQuickStyle::setStyle("Fusion");
-    rootContext->setContextProperty("windows10", QVariant(false));
-    rootContext->setContextProperty("windows11", QVariant(false));
-    rootContext->setContextProperty("fusion", QVariant(true));
-}
-
-void MainWindow::setSteamDeckDarkTheme()
-{
-    currentTheme = 4;
-    QQuickStyle::setStyle("Universal");
-    rootContext->setContextProperty("windows10", QVariant(true));
-    rootContext->setContextProperty("windows11", QVariant(false));
-    rootContext->setContextProperty("fusion", QVariant(false));
+    rootContext->setContextProperty("accentColor", Utils::getAccentColor());
 }
 
 void MainWindow::restartRetr0Mine() const

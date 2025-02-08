@@ -166,17 +166,11 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                Rectangle {
+                CellFrame {
                     anchors.fill: parent
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    radius: {
-                        if (isUniversalTheme) return 0
-                        else if (isFluentWinUI3Theme) return 4
-                        else if (isFusionTheme) return 3
-                        else return 2
-                    }
                     border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
@@ -212,17 +206,11 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                Rectangle {
+                CellFrame {
                     anchors.fill: parent
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    radius: {
-                        if (isUniversalTheme) return 0
-                        else if (isFluentWinUI3Theme) return 4
-                        else if (isFusionTheme) return 3
-                        else return 2
-                    }
                     border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
@@ -241,17 +229,11 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                Rectangle {
+                CellFrame {
                     anchors.fill: parent
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    radius: {
-                        if (isUniversalTheme) return 0
-                        else if (isFluentWinUI3Theme) return 4
-                        else if (isFusionTheme) return 3
-                        else return 2
-                    }
                     border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
@@ -271,17 +253,11 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                Rectangle {
+                CellFrame {
                     anchors.fill: parent
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    radius: {
-                        if (isUniversalTheme) return 0
-                        else if (isFluentWinUI3Theme) return 4
-                        else if (isFusionTheme) return 3
-                        else return 2
-                    }
                     border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
@@ -301,17 +277,11 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                Rectangle {
+                CellFrame {
                     anchors.fill: parent
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    radius: {
-                        if (isUniversalTheme) return 0
-                        else if (isFluentWinUI3Theme) return 4
-                        else if (isFusionTheme) return 3
-                        else return 2
-                    }
                     border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
@@ -331,17 +301,11 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                Rectangle {
+                CellFrame {
                     anchors.fill: parent
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    radius: {
-                        if (isUniversalTheme) return 0
-                        else if (isFluentWinUI3Theme) return 4
-                        else if (isFusionTheme) return 3
-                        else return 2
-                    }
                     border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
@@ -376,18 +340,11 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                Rectangle {
+                CellFrame {
                     anchors.fill: parent
                     border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
-
-                    radius: {
-                        if (isUniversalTheme) return 0
-                        else if (isFluentWinUI3Theme) return 4
-                        else if (isFusionTheme) return 3
-                        else return 2
-                    }
                     border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
@@ -467,16 +424,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -495,16 +446,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -523,16 +468,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -551,16 +490,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -592,16 +525,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -620,16 +547,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -648,16 +569,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -676,16 +591,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -725,16 +634,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -753,16 +656,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -781,16 +678,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -809,16 +700,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -850,16 +735,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -878,16 +757,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -906,16 +779,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -934,16 +801,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -987,16 +848,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1015,16 +870,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1043,16 +892,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1071,16 +914,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1112,16 +949,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1140,16 +971,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1168,16 +993,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1196,16 +1015,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1245,16 +1058,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1273,16 +1080,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1301,16 +1102,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1329,16 +1124,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1370,16 +1159,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1398,16 +1181,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1426,16 +1203,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
@@ -1454,16 +1225,10 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    Rectangle {
+                    CellFrame {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        radius: {
-                            if (isUniversalTheme) return 0
-                            else if (isFluentWinUI3Theme) return 4
-                            else if (isFusionTheme) return 3
-                            else return 2
-                        }
                         border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 

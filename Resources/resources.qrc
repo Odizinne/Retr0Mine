@@ -13,14 +13,26 @@
         <file>qml/WelcomePage.qml</file>
         <file>qml/CellFrame.qml</file>
         <file>qml/SidebarDelegate.qml</file>
+        <file>qml/SidebarSeparator.qml</file>
+        <file>qml/DifficultyLayout.qml</file>
         <file>qml/MainWindow.qml</file>
+        <file>qml/GameArea.qml</file>
         <file>qml/+Universal/CellFrame.qml</file>
         <file>qml/+Universal/SidebarDelegate.qml</file>
         <file>qml/+Universal/MainWindow.qml</file>
+        <file>qml/+Universal/GameArea.qml</file>
+        <file>qml/+Universal/SidebarSeparator.qml</file>
+        <file>qml/+Universal/DifficultyLayout.qml</file>
         <file>qml/+Fusion/CellFrame.qml</file>
         <file>qml/+Fusion/SidebarDelegate.qml</file>
+        <file>qml/+Fusion/GameArea.qml</file>
+        <file>qml/+Fusion/SidebarSeparator.qml</file>
+        <file>qml/+Fusion/DifficultyLayout.qml</file>
         <file>qml/+FluentWinUI3/CellFrame.qml</file>
         <file>qml/+FluentWinUI3/SidebarDelegate.qml</file>
+        <file>qml/+FluentWinUI3/GameArea.qml</file>
+        <file>qml/+FluentWinUI3/SidebarSeparator.qml</file>
+        <file>qml/+FluentWinUI3/DifficultyLayout.qml</file>
         <file>sounds/pop/pop_bomb.wav</file>
         <file>sounds/pop/pop_click.wav</file>
         <file>sounds/pop/pop_win.wav</file>

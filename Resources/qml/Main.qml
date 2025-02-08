@@ -110,14 +110,10 @@ MainWindow {
         if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
-
     property MinesweeperLogic gameLogic: MinesweeperLogic {}
     property bool isGamescope: gamescope
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
-    property bool isFusionTheme: fusion
-    property bool isFluentWinUI3Theme: windows11
-    property bool isUniversalTheme: windows10
     property bool darkMode: isDarkMode
     property int diffidx: settings.difficulty
     property bool gameOver: false
@@ -965,7 +961,7 @@ MainWindow {
         }
     }
 
-    ScrollView {
+    GameArea {
         id: scrollView
         anchors {
             left: parent.left
@@ -979,10 +975,6 @@ MainWindow {
         }
         contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
         contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
-        ScrollBar.vertical: root.isFluentWinUI3Theme ? fluentVerticalScrollBar.createObject(scrollView)
-                                                     : defaultVerticalScrollBar.createObject(scrollView)
-        ScrollBar.horizontal: root.isFluentWinUI3Theme ? fluentHorizontalScrollBar.createObject(scrollView)
-                                                       : defaultHorizontalScrollBar.createObject(scrollView)
 
         Item {
             anchors.centerIn: parent

@@ -29,22 +29,19 @@ private slots:
 
 private:
     QQmlApplicationEngine *engine;
-    QString getLeaderboardPath() const;
     QSettings settings;
     QQmlContext *rootContext;
     QTranslator *translator;
     SteamIntegration *m_steamIntegration;
     int currentTheme;
     bool isRunningOnGamescope;
+    bool shouldShowWelcomeMessage;
 
     void setupAndLoadQML();
+    void setQMLStyle(int index);
     void setColorScheme();
-    void setW10Theme();
-    void setW11Theme();
-    void setFusionTheme();
-    void setSteamDeckDarkTheme();
     bool loadLanguage(QString languageCode);
-    bool shouldShowWelcomeMessage;
+    QString getLeaderboardPath() const;
 };
 
 #endif // MAINWINDOW_H

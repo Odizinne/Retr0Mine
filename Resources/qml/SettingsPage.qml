@@ -183,13 +183,8 @@ ApplicationWindow {
             }
         }
 
-        ToolSeparator {
+        SidebarSeparator {
             Layout.fillHeight: true
-            Layout.leftMargin: {
-                if (isFluentWinUI3Theme) return -10
-                return -20
-            }
-
             z: 2
         }
 
@@ -205,8 +200,7 @@ ApplicationWindow {
                 Pane {
                     id: difficultyPane
 
-                    ColumnLayout {
-                        spacing: root.isFluentWinUI3Theme ? 15 : 20
+                    DifficultyLayout {
                         width: parent.width
 
                         ButtonGroup {
