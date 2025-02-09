@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import QtMultimedia
 import QtQuick.Window
 import QtQuick.Controls.impl
-import com.odizinne.minesweeper 1.0
 import QtCore
 import "."
 
@@ -106,20 +105,22 @@ MainWindow {
         { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
     ]
 
-    property bool flag1Unlocked: unlockedFlag1
-    property bool flag2Unlocked: unlockedFlag2
-    property bool flag3Unlocked: unlockedFlag3
+    required property var mainWindow
+    required property var steamIntegration
+    required property var gameLogic
+    property bool flag1Unlocked: mainWindow.unlockedFlag1
+    property bool flag2Unlocked: mainWindow.unlockedFlag2
+    property bool flag3Unlocked: mainWindow.unlockedFlag3
     property string flagPath: {
         if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
         if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
         if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
-    property MinesweeperLogic gameLogic: MinesweeperLogic {}
-    property bool isGamescope: gamescope
+    property bool isGamescope: mainWindow.gamescope
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
-    property bool darkMode: isDarkMode
+    property bool darkMode: mainWindow.isDarkMode
     property int diffidx: settings.difficulty
     property bool gameOver: false
     property int revealedCount: 0
@@ -859,7 +860,7 @@ MainWindow {
             }
         }
 
-        welcomePopup.visible = showWelcome
+        welcomePopup.visible = mainWindow.showWelcome
     }
 
     WelcomePage {
@@ -1087,7 +1088,7 @@ MainWindow {
                         }
                         color: {
                             if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
-                                return accentColor
+                                return mainWindow.accentColor
                             return "transparent"
                         }
 
@@ -1166,7 +1167,7 @@ MainWindow {
                             source: root.flagPath
                             color: {
                                 if (settings.contrastFlag) return root.darkMode ? "white" : "black"
-                                else return accentColor
+                                else return mainWindow.accentColor
                             }
 
                             sourceSize.width: cellItem.width / 1.8

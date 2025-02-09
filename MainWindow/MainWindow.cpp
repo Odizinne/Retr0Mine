@@ -9,7 +9,6 @@
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
-#include "MinesweeperLogic.h"
 #include "Utils.h"
 
 MainWindow::MainWindow(QObject *parent)
@@ -18,6 +17,7 @@ MainWindow::MainWindow(QObject *parent)
     , settings("Odizinne", "Retr0Mine")
     , rootContext(engine->rootContext())
     , translator(new QTranslator(this))
+    , m_gameLogic(new MinesweeperLogic(this))
     , isRunningOnGamescope(false)
     , shouldShowWelcomeMessage(false)
 {
@@ -33,13 +33,23 @@ MainWindow::MainWindow(QObject *parent)
     if (!m_steamIntegration->initialize()) {
         qWarning() << "Failed to initialize Steam integration";
     } else {
-        qDebug() << "Steam integration enabled";
-        rootContext->setContextProperty("steamIntegration", m_steamIntegration);
+        //qDebug() << "Steam integration enabled";
+        //rootContext->setContextProperty("steamIntegration", m_steamIntegration);
     }
 
     if (!settings.value("welcomeMessageShown", false).toBool()) resetSettings();
 
     setupAndLoadQML();
+}
+
+MainWindow::~MainWindow()
+{
+    if (engine) {
+        engine->deleteLater();
+    }
+    if (translator) {
+        translator->deleteLater();
+    }
 }
 
 void MainWindow::onColorSchemeChanged()
@@ -88,13 +98,15 @@ void MainWindow::setupAndLoadQML()
     setLanguage(languageIndex);
     setColorScheme();
 
-    rootContext->setContextProperty("mainWindow", this);
-    rootContext->setContextProperty("showWelcome", shouldShowWelcomeMessage);
-    rootContext->setContextProperty("unlockedFlag1", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_EASY"));
-    rootContext->setContextProperty("unlockedFlag2", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_MEDIUM"));
-    rootContext->setContextProperty("unlockedFlag3", m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_HARD"));
-    rootContext->setContextProperty("playerName", m_steamIntegration->getSteamUserName());
-    qmlRegisterType<MinesweeperLogic>("com.odizinne.minesweeper", 1, 0, "MinesweeperLogic");
+    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+    QQmlEngine::setObjectOwnership(m_steamIntegration, QQmlEngine::CppOwnership);
+    QQmlEngine::setObjectOwnership(m_gameLogic, QQmlEngine::CppOwnership);
+
+    engine->setInitialProperties({
+        {"mainWindow", QVariant::fromValue(this)},
+        {"steamIntegration", QVariant::fromValue(m_steamIntegration)},
+        {"gameLogic", QVariant::fromValue(m_gameLogic)}
+    });
 
     engine->load(QUrl("qrc:/qml/Main.qml"));
 }
@@ -138,7 +150,9 @@ void MainWindow::setLanguage(int index)
 
     loadLanguage(languageCode);
     engine->retranslate();
-    rootContext->setContextProperty("languageIndex", index);
+
+    m_languageIndex = index;
+    emit languageIndexChanged();
 }
 
 bool MainWindow::loadLanguage(QString languageCode)
@@ -160,11 +174,12 @@ bool MainWindow::loadLanguage(QString languageCode)
 
 void MainWindow::setColorScheme()
 {
-    bool darkMode = Utils::isDarkMode() || currentTheme == 3 || (currentTheme == 0 && isRunningOnGamescope);
+    m_isDarkMode = Utils::isDarkMode() || currentTheme == 3 ||
+                   (currentTheme == 0 && isRunningOnGamescope);
+    m_accentColor = Utils::getAccentColor();
 
-    rootContext->setContextProperty("gamescope", isRunningOnGamescope);
-    rootContext->setContextProperty("isDarkMode", darkMode);
-    rootContext->setContextProperty("accentColor", Utils::getAccentColor());
+    emit darkModeChanged();
+    emit accentColorChanged();
 }
 
 void MainWindow::restartRetr0Mine() const

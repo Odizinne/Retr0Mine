@@ -759,7 +759,7 @@ ApplicationWindow {
                                         Layout.fillWidth: true
                                     }
                                     Label {
-                                        color: accentColor
+                                        color: mainWindow.accentColor
                                         text: shortcut
                                         font.bold: true
                                     }

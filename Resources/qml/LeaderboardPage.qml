@@ -42,7 +42,7 @@ Popup {
             }
 
             Label {
-                text: playerName
+                text: mainWindow.playerName
                 font.bold: true
                 font.pixelSize: 20
                 Layout.alignment: Qt.AlignCenter

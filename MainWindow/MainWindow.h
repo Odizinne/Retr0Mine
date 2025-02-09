@@ -4,15 +4,28 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QSettings>
+#include <QColor>
 #include <QTranslator>
 #include "SteamIntegration.h"
+#include "MinesweeperLogic.h"
 
 class MainWindow : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool showWelcome READ getShowWelcome CONSTANT)
+    Q_PROPERTY(bool unlockedFlag1 READ getUnlockedFlag1 CONSTANT)
+    Q_PROPERTY(bool unlockedFlag2 READ getUnlockedFlag2 CONSTANT)
+    Q_PROPERTY(bool unlockedFlag3 READ getUnlockedFlag3 CONSTANT)
+    Q_PROPERTY(QString playerName READ getPlayerName CONSTANT)
+    Q_PROPERTY(bool gamescope READ isGamescope CONSTANT)
+    Q_PROPERTY(bool isDarkMode READ getDarkMode NOTIFY darkModeChanged)
+    Q_PROPERTY(QColor accentColor READ getAccentColor NOTIFY accentColorChanged)
+    Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
+
 public:
     explicit MainWindow(QObject *parent = nullptr);
+    ~MainWindow() override;
 
     Q_INVOKABLE void setLanguage(int index);
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
@@ -24,6 +37,16 @@ public:
     Q_INVOKABLE QString loadLeaderboard() const;
     Q_INVOKABLE void resetSettings();
 
+    bool getShowWelcome() const { return shouldShowWelcomeMessage; }
+    bool getUnlockedFlag1() const { return m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_EASY"); }
+    bool getUnlockedFlag2() const { return m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_MEDIUM"); }
+    bool getUnlockedFlag3() const { return m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_HARD"); }
+    QString getPlayerName() const { return m_steamIntegration->getSteamUserName(); }
+    bool isGamescope() const { return isRunningOnGamescope; }
+    bool getDarkMode() const { return m_isDarkMode; }
+    QColor getAccentColor() const { return m_accentColor; }
+    int getLanguageIndex() const { return m_languageIndex; }
+
 private slots:
     void onColorSchemeChanged();
 
@@ -33,6 +56,7 @@ private:
     QQmlContext *rootContext;
     QTranslator *translator;
     SteamIntegration *m_steamIntegration;
+    MinesweeperLogic* m_gameLogic;
     int currentTheme;
     bool isRunningOnGamescope;
     bool shouldShowWelcomeMessage;
@@ -42,6 +66,16 @@ private:
     void setColorScheme();
     bool loadLanguage(QString languageCode);
     QString getLeaderboardPath() const;
+
+    bool m_isDarkMode;
+    QColor m_accentColor;
+    int m_languageIndex;
+
+signals:
+    void darkModeChanged();
+    void accentColorChanged();
+    void languageIndexChanged();
+
 };
 
 #endif // MAINWINDOW_H

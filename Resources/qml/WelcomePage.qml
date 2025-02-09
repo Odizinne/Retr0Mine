@@ -194,7 +194,7 @@ Popup {
                     source: "qrc:/icons/flag.png"
                     color: {
                         if (settings.contrastFlag) return root.darkMode ? "white" : "black"
-                        else return accentColor
+                        else return mainWindow.accentColor
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8
@@ -328,7 +328,7 @@ Popup {
                     source: "qrc:/icons/flag.png"
                     color: {
                         if (settings.contrastFlag) return root.darkMode ? "white" : "black"
-                        else return accentColor
+                        else return mainWindow.accentColor
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8
