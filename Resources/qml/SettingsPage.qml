@@ -13,6 +13,7 @@ ApplicationWindow {
     maximumHeight: 480
     visible: false
     flags: Qt.Dialog
+    modality: Qt.ApplicationModal
     onVisibleChanged: {
         if (settingsPage.visible) {
             if (root.x + root.width + settingsPage.width + 10 <= screen.width) {
