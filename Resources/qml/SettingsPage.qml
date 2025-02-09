@@ -39,6 +39,7 @@ ApplicationWindow {
         id: restoreDefaultsPopup
         visible: false
         modal: true
+        property int buttonWidth: Math.max(restoreButton.implicitWidth, cancelButton.implicitWidth)
 
         ColumnLayout {
             id: restoreDefaultLayout
@@ -59,7 +60,9 @@ ApplicationWindow {
                 spacing: 10
 
                 Button {
+                    id: restoreButton
                     text: qsTr("Restore")
+                    Layout.preferredWidth: restoreDefaultsPopup.buttonWidth
                     Layout.fillWidth: true
                     onClicked: {
                         settings.welcomeMessageShown = false
@@ -68,7 +71,9 @@ ApplicationWindow {
                 }
 
                 Button {
+                    id: cancelButton
                     text: qsTr("Cancel")
+                    Layout.preferredWidth: restoreDefaultsPopup.buttonWidth
                     Layout.fillWidth: true
                     onClicked: restoreDefaultsPopup.visible = false
                 }

@@ -9,6 +9,7 @@ Popup {
     modal: true
     closePolicy: Popup.NoAutoClose
     width: 300
+    property int buttonWidth: Math.max(retryButton.implicitWidth, closeButton.implicitWidth)
 
     property string gameOverLabelText: "Game Over"
     property string gameOverLabelColor: "#d12844"
@@ -83,8 +84,10 @@ Popup {
         }
 
         Button {
+            id: retryButton
             text: qsTr("Retry")
             Layout.fillWidth: true
+            Layout.preferredWidth: gameOverWindow.buttonWidth
             onClicked: {
                 gameOverWindow.visible = false
                 root.initGame()
@@ -92,8 +95,10 @@ Popup {
         }
 
         Button {
+            id: closeButton
             text: qsTr("Close")
             Layout.fillWidth: true
+            Layout.preferredWidth: gameOverWindow.buttonWidth
             onClicked: {
                 gameOverWindow.visible = false
             }

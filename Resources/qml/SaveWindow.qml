@@ -9,6 +9,7 @@ Popup {
     modal: true
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
+    property int buttonWidth: Math.max(saveButton.implicitWidth, cancelButton.implicitWidth)
 
     Shortcut {
         sequence: "Esc"
@@ -69,6 +70,7 @@ Popup {
             Button {
                 id: cancelButton
                 text: qsTr("Cancel")
+                Layout.preferredWidth: saveWindow.buttonWidth
                 Layout.fillWidth: true
                 onClicked: saveWindow.visible = false
             }
@@ -76,6 +78,7 @@ Popup {
             Button {
                 id: saveButton
                 text: qsTr("Save")
+                Layout.preferredWidth: saveWindow.buttonWidth
                 Layout.fillWidth: true
                 enabled: false
                 onClicked: {

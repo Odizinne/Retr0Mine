@@ -31,12 +31,14 @@ Popup {
             spacing: 10
             visible: typeof steamIntegration !== "undefined"
             Layout.alignment: Qt.AlignCenter
+            Layout.preferredHeight: 40
 
             IconImage {
                 source: "qrc:/icons/steam.png"
                 color: root.darkMode ? "white" : "Dark"
                 sourceSize.height: 20
                 sourceSize.width: 20
+                Layout.alignment: Qt.AlignCenter
             }
 
             Label {
@@ -51,70 +53,58 @@ Popup {
             Layout.preferredWidth: 300
             Layout.fillWidth: true
 
-            RowLayout {
+            ColumnLayout {
+                spacing: 15
                 anchors.fill: parent
-                Label {
-                    text: qsTr("Easy")
-                    Layout.fillWidth: true
+
+                RowLayout {
+                    Label {
+                        text: qsTr("Easy")
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: leaderboardPage.easyTime
+                        font.bold: true
+                    }
                 }
 
-                Label {
-                    text: leaderboardPage.easyTime
-                    font.bold: true
+                RowLayout {
+                    Label {
+                        text: qsTr("Medium")
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: leaderboardPage.mediumTime
+                        font.bold: true
+                    }
+                }
+
+                RowLayout {
+                    Label {
+                        text: qsTr("Hard")
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: leaderboardPage.hardTime
+                        font.bold: true
+                    }
+                }
+
+                RowLayout {
+                    Label {
+                        text: qsTr("Retr0")
+                        Layout.fillWidth: true
+                    }
+
+                    Label {
+                        text: leaderboardPage.retr0Time
+                        font.bold: true
+                    }
                 }
             }
-        }
-        Frame {
-            Layout.fillWidth: true
-
-            RowLayout {
-                anchors.fill: parent
-                Label {
-                    text: qsTr("Medium")
-                    Layout.fillWidth: true
-                }
-
-                Label {
-                    text: leaderboardPage.mediumTime
-                    font.bold: true
-                }
-            }
-        }
-        Frame {
-            Layout.fillWidth: true
-
-            RowLayout {
-                anchors.fill: parent
-                Label {
-                    text: qsTr("Hard")
-                    Layout.fillWidth: true
-                }
-
-                Label {
-                    text: leaderboardPage.hardTime
-                    font.bold: true
-                }
-            }
-        }
-        Frame {
-            Layout.fillWidth: true
-
-            RowLayout {
-                anchors.fill: parent
-                Label {
-                    text: qsTr("Retr0")
-                    Layout.fillWidth: true
-                }
-
-                Label {
-                    text: leaderboardPage.retr0Time
-                    font.bold: true
-                }
-            }
-        }
-
-        Item {
-            Layout.fillHeight: true
         }
 
         RowLayout {
