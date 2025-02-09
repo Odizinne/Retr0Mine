@@ -5,6 +5,8 @@ import QtQuick.Layouts
 Popup {
     anchors.centerIn: parent
     id: gameOverWindow
+    required property var root
+    required property var settings
     visible: false
     modal: true
     closePolicy: Popup.NoAutoClose
@@ -23,7 +25,7 @@ Popup {
         enabled: gameOverWindow.visible
         onActivated: {
             gameOverWindow.visible = false
-            root.initGame()
+            gameOverWindow.root.initGame()
         }
     }
 
@@ -77,7 +79,7 @@ Popup {
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: settings.displaySeedAtGameOver
+            visible: gameOverWindow.settings.displaySeedAtGameOver
             text: qsTr("First click: X: %1, Y: %2, seed: %3").arg(gameOverWindow.clickX).arg(gameOverWindow.clickY).arg(gameOverWindow.seed)
             color: "#f7c220"
             Layout.columnSpan: 2
@@ -90,7 +92,7 @@ Popup {
             Layout.preferredWidth: gameOverWindow.buttonWidth
             onClicked: {
                 gameOverWindow.visible = false
-                root.initGame()
+                gameOverWindow.root.initGame()
             }
         }
 

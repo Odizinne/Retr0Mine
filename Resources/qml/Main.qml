@@ -389,12 +389,22 @@ MainWindow {
         }
     }
 
+    WelcomePage {
+        id: welcomePopup
+        root: root
+        settings: settings
+    }
+
     GameOverPopup {
         id: gameOverPopup
+        root: root
+        settings: settings
     }
 
     SettingsPage {
         id: settingsWindow
+        root: root
+        settings: settings
     }
 
     AboutPage {
@@ -407,14 +417,17 @@ MainWindow {
 
     LoadWindow {
         id: loadWindow
+        root: root
     }
 
     SaveWindow {
         id: saveWindow
+        root: root
     }
 
     LeaderboardPage {
         id: leaderboardWindow
+        root: root
     }
 
     SoundEffect {
@@ -863,10 +876,6 @@ MainWindow {
         welcomePopup.visible = mainWindow.showWelcome
     }
 
-    WelcomePage {
-        id: welcomePopup
-    }
-
     Timer {
         id: initialLoadTimer
         interval: 1
@@ -897,6 +906,13 @@ MainWindow {
 
     TopBar {
         id: topBar
+        root: root
+        settings: settings
+        saveWindow: saveWindow
+        loadWindow: loadWindow
+        settingsWindow: settingsWindow
+        leaderboardWindow: leaderboardWindow
+        aboutPage: aboutPage
     }
 
     ToolTip {

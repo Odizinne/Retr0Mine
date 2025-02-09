@@ -5,6 +5,8 @@ import QtQuick.Controls.impl
 
 Popup {
     id: welcomePage
+    required property var root
+    required property var settings
     height: 200
     width: 400
     anchors.centerIn: parent
@@ -39,7 +41,7 @@ Popup {
                 text: qsTr("Later")
                 onClicked: {
                     welcomePage.visible = false
-                    settings.welcomeMessageShown = true
+                      welcomePage.settings.welcomeMessageShown = true
                 }
             }
 
@@ -124,8 +126,8 @@ Popup {
                     chordImage.visible = checked
                     classicLabel.visible = !checked
                     classicImage.visible = !checked
-                    settings.autoreveal = checked
-                    settings.invertLRClick = checked
+                      welcomePage.settings.autoreveal = checked
+                      welcomePage.settings.invertLRClick = checked
                 }
             }
         }
@@ -171,7 +173,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
                 Text {
@@ -193,7 +195,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (settings.contrastFlag) return root.darkMode ? "white" : "black"
+                        if (  welcomePage.settings.contrastFlag) return  welcomePage.root.darkMode ? "white" : "black"
                         else return mainWindow.accentColor
                     }
                     visible: true
@@ -211,7 +213,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
                 Text {
@@ -234,7 +236,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
                 Text {
@@ -258,7 +260,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
                 Text {
@@ -282,7 +284,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
                 Text {
@@ -306,7 +308,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
                 Text {
@@ -327,7 +329,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (settings.contrastFlag) return root.darkMode ? "white" : "black"
+                        if (  welcomePage.settings.contrastFlag) return  welcomePage.root.darkMode ? "white" : "black"
                         else return mainWindow.accentColor
                     }
                     visible: true
@@ -345,7 +347,7 @@ Popup {
                     border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
-                    border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                 }
 
                 Text {
@@ -373,12 +375,12 @@ Popup {
             Switch {
                 id: visualsSwitch
                 onCheckedChanged: {
-                    settings.cellFrame = !checked
-                    settings.dimSatisfied = checked
-                    settings.animations = checked
+                      welcomePage.settings.cellFrame = !checked
+                      welcomePage.settings.dimSatisfied = checked
+                      welcomePage.settings.animations = checked
                 }
                 Component.onCompleted: {
-                    checked = !settings.cellFrame && settings.dimSatisfied && settings.animations
+                    checked = !  welcomePage.settings.cellFrame &&   welcomePage.settings.dimSatisfied &&   welcomePage.settings.animations
                 }
             }
         }
@@ -428,7 +430,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -450,7 +452,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -472,7 +474,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -494,7 +496,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -529,7 +531,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -551,7 +553,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -573,7 +575,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -595,13 +597,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color: root.darkMode ? "white" : "black"
+                        color:  welcomePage.root.darkMode ? "white" : "black"
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -615,7 +617,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                        settings.colorBlindness = 0
+                          welcomePage.settings.colorBlindness = 0
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -638,7 +640,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -660,7 +662,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -682,7 +684,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -704,7 +706,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -739,7 +741,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -761,7 +763,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -783,7 +785,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -805,13 +807,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color: root.darkMode ? "white" : "black"
+                        color:  welcomePage.root.darkMode ? "white" : "black"
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -825,7 +827,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                        settings.colorBlindness = 3
+                          welcomePage.settings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -852,7 +854,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -874,7 +876,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -896,7 +898,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -918,7 +920,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -953,7 +955,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -975,7 +977,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -997,7 +999,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1019,13 +1021,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color: root.darkMode ? "white" : "black"
+                        color:  welcomePage.root.darkMode ? "white" : "black"
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -1039,7 +1041,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                        settings.colorBlindness = 2
+                          welcomePage.settings.colorBlindness = 2
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1062,7 +1064,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1084,7 +1086,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1106,7 +1108,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1128,7 +1130,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1163,7 +1165,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1185,7 +1187,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1207,7 +1209,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
@@ -1229,13 +1231,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.root.darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color: root.darkMode ? "white" : "black"
+                        color:  welcomePage.root.darkMode ? "white" : "black"
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -1249,7 +1251,7 @@ Popup {
                     Layout.fillWidth: true
                     onClicked: {
                         welcomePage.visible = false
-                        settings.colorBlindness = 3
+                          welcomePage.settings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1287,7 +1289,7 @@ Popup {
                 text: qsTr("Close")
                 onClicked: {
                     welcomePage.visible = false
-                    settings.welcomeMessageShown = true
+                      welcomePage.settings.welcomeMessageShown = true
                 }
             }
         }

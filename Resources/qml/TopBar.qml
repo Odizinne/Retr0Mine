@@ -3,7 +3,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 RowLayout {
-    id:topBar
+    id: topBar
+    required property var root
+    required property var settings
+    required property var saveWindow
+    required property var loadWindow
+    required property var settingsWindow
+    required property var leaderboardWindow
+    required property var aboutPage
     height: 40
     anchors.left: parent.left
     anchors.right: parent.right
@@ -33,41 +40,41 @@ RowLayout {
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                 MenuItem {
                     text: qsTr("New game")
-                    onTriggered: root.initGame()
+                    onTriggered: topBar.root.initGame()
                 }
 
                 MenuItem {
                     text: qsTr("Save game")
-                    enabled: root.gameStarted
-                    onTriggered: saveWindow.visible = true
+                    enabled: topBar.root.gameStarted
+                    onTriggered: topBar.saveWindow.visible = true
                 }
                 MenuItem {
                     id: loadMenu
                     text: qsTr("Load game")
-                    onTriggered: loadWindow.visible = true
+                    onTriggered: topBar.loadWindow.visible = true
                 }
 
                 MenuItem {
                     text: qsTr("Hint")
-                    enabled: root.gameStarted && !root.gameOver
-                    onTriggered: root.requestHint()
+                    enabled: topBar.root.gameStarted && !topBar.root.gameOver
+                    onTriggered: topBar.root.requestHint()
                 }
 
                 MenuSeparator { }
 
                 MenuItem {
                     text: qsTr("Settings")
-                    onTriggered: settingsWindow.visible = true
+                    onTriggered: topBar.settingsWindow.visible = true
                 }
 
                 MenuItem {
                     text: qsTr("Leaderboard")
-                    onTriggered: leaderboardWindow.visible = true
+                    onTriggered: topBar.leaderboardWindow.visible = true
                 }
 
                 MenuItem {
                     text: qsTr("About")
-                    onTriggered: aboutPage.visible = true
+                    onTriggered: topBar.aboutPage.visible = true
                 }
 
                 MenuSeparator { }
@@ -106,12 +113,12 @@ RowLayout {
         }
         Button {
             icon.source: "qrc:/icons/bomb.png"
-            icon.color: root.darkMode ? "white" : "dark"
-            text: ": " + (root.mineCount - root.flaggedCount)
+            icon.color: topBar.root.darkMode ? "white" : "dark"
+            text: ": " + (topBar.root.mineCount - topBar.root.flaggedCount)
             font.pixelSize: 18
             font.bold: true
             onClicked: {
-                root.requestHint()
+                topBar.root.requestHint()
             }
         }
     }

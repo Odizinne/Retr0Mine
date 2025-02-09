@@ -4,7 +4,6 @@ import QtQuick.Templates as T
 
 T.ScrollBar {
     id: control
-
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
