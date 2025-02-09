@@ -55,12 +55,9 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Easy")
-                    color: "#55eb34"
-                    font.bold: true
-                }
-                Item {
                     Layout.fillWidth: true
                 }
+
                 Label {
                     text: leaderboardPage.easyTime
                     font.bold: true
@@ -74,12 +71,9 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Medium")
-                    color: "#eb8f34"
-                    font.bold: true
-                }
-                Item {
                     Layout.fillWidth: true
                 }
+
                 Label {
                     text: leaderboardPage.mediumTime
                     font.bold: true
@@ -93,12 +87,9 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Hard")
-                    color: "#eb3434"
-                    font.bold: true
-                }
-                Item {
                     Layout.fillWidth: true
                 }
+
                 Label {
                     text: leaderboardPage.hardTime
                     font.bold: true
@@ -112,12 +103,9 @@ Popup {
                 anchors.fill: parent
                 Label {
                     text: qsTr("Retr0")
-                    color: "#6b34eb"
-                    font.bold: true
-                }
-                Item {
                     Layout.fillWidth: true
                 }
+
                 Label {
                     text: leaderboardPage.retr0Time
                     font.bold: true

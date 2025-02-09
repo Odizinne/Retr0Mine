@@ -735,6 +735,10 @@ ApplicationWindow {
                                     shortcut: "Ctrl + H"
                                 }
                                 ListElement {
+                                    title: qsTr("Leaderboard")
+                                    shortcut: "Ctrl + L"
+                                }
+                                ListElement {
                                     title: qsTr("Quit")
                                     shortcut: "Ctrl + Q"
                                 }

@@ -72,6 +72,11 @@ MainWindow {
     }
 
     Shortcut {
+        sequence: "Ctrl+L"
+        onActivated: leaderboardWindow.visible = true
+    }
+
+    Shortcut {
         sequence: "F11"
         onActivated: {
             if (root.visibility === 5) {
