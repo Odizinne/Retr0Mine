@@ -898,48 +898,6 @@ MainWindow {
         id: topBar
     }
 
-    property Component defaultVerticalScrollBar: ScrollBar {
-        parent: scrollView
-        x: parent.width - width + 12
-        y: 0
-        height: scrollView.height
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-    }
-    property Component defaultHorizontalScrollBar: ScrollBar {
-        parent: scrollView
-        x: 0
-        y: parent.height - height + 12
-        width: scrollView.width
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        orientation: Qt.Horizontal
-    }
-
-    // Store the fluent scrollbar settings
-    property Component fluentVerticalScrollBar: TempScrollBar {
-        parent: scrollView
-        x: parent.width - width + 12
-        y: 0
-        height: scrollView.height
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > scrollView.height ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-    }
-
-    property Component fluentHorizontalScrollBar: TempScrollBar {
-        parent: scrollView
-        x: 0
-        y: parent.height - height + 12
-        width: scrollView.width
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > scrollView.width ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        orientation: Qt.Horizontal
-    }
-
     ToolTip {
         id: flagToast
         font.pixelSize: 18
@@ -967,7 +925,7 @@ MainWindow {
     }
 
     GameArea {
-        id: scrollView
+        id: gameArea
         anchors {
             left: parent.left
             right: parent.right
@@ -978,19 +936,19 @@ MainWindow {
             rightMargin: 12
             bottomMargin: 12
         }
-        contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
-        contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
+        contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
+        contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
 
         Item {
             anchors.centerIn: parent
-            width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, scrollView.width)
-            height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, scrollView.height)
+            width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
+            height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
 
             GridView {
                 id: grid
                 anchors.centerIn: parent
-                cellWidth: cellSize + cellSpacing
-                cellHeight: cellSize + cellSpacing
+                cellWidth: root.cellSize + root.cellSpacing
+                cellHeight: root.cellSize + root.cellSpacing
                 width: (root.cellSize + root.cellSpacing) * root.gridSizeX
                 height: (root.cellSize + root.cellSpacing) * root.gridSizeY
                 model: root.gridSizeX * root.gridSizeY
@@ -1000,8 +958,8 @@ MainWindow {
 
                 delegate: Item {
                     id: cellItem
-                    width: cellSize
-                    height: cellSize
+                    width: root.cellSize
+                    height: root.cellSize
 
                     property bool animatingReveal: false
                     property bool shouldBeFlat: false
