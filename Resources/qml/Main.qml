@@ -672,14 +672,18 @@ MainWindow {
             if (numbers[currentIndex] === 0) {
                 let row = Math.floor(currentIndex / gridSizeX)
                 let col = currentIndex % gridSizeX
-
                 for (let r = -1; r <= 1; r++) {
                     for (let c = -1; c <= 1; c++) {
                         if (r === 0 && c === 0) continue
                         let newRow = row + r
                         let newCol = col + c
                         if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
-                        cellsToReveal.push(newRow * gridSizeX + newCol)
+                        let adjacentIndex = newRow * gridSizeX + newCol
+                        let adjacentCell = grid.itemAtIndex(adjacentIndex)
+                        if (adjacentCell.questioned) {
+                            adjacentCell.questioned = false
+                        }
+                        cellsToReveal.push(adjacentIndex)
                     }
                 }
             }
