@@ -41,7 +41,7 @@ Popup {
                 text: qsTr("Later")
                 onClicked: {
                     welcomePage.visible = false
-                      welcomePage.settings.welcomeMessageShown = true
+                    welcomePage.settings.welcomeMessageShown = true
                 }
             }
 
@@ -126,8 +126,8 @@ Popup {
                     chordImage.visible = checked
                     classicLabel.visible = !checked
                     classicImage.visible = !checked
-                      welcomePage.settings.autoreveal = checked
-                      welcomePage.settings.invertLRClick = checked
+                    welcomePage.settings.autoreveal = checked
+                    welcomePage.settings.invertLRClick = checked
                 }
             }
         }
@@ -375,12 +375,11 @@ Popup {
             Switch {
                 id: visualsSwitch
                 onCheckedChanged: {
-                      welcomePage.settings.cellFrame = !checked
-                      welcomePage.settings.dimSatisfied = checked
-                      welcomePage.settings.animations = checked
+                    welcomePage.settings.cellFrame = !checked
+                    welcomePage.settings.dimSatisfied = checked
                 }
                 Component.onCompleted: {
-                    checked = !  welcomePage.settings.cellFrame &&   welcomePage.settings.dimSatisfied &&   welcomePage.settings.animations
+                    checked = !welcomePage.settings.cellFrame && welcomePage.settings.dimSatisfied
                 }
             }
         }
@@ -617,7 +616,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                          welcomePage.settings.colorBlindness = 0
+                        welcomePage.settings.colorBlindness = 0
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -827,7 +826,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                          welcomePage.settings.colorBlindness = 3
+                        welcomePage.settings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1041,7 +1040,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                          welcomePage.settings.colorBlindness = 2
+                        welcomePage.settings.colorBlindness = 2
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1251,7 +1250,7 @@ Popup {
                     Layout.fillWidth: true
                     onClicked: {
                         welcomePage.visible = false
-                          welcomePage.settings.colorBlindness = 3
+                        welcomePage.settings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1259,7 +1258,6 @@ Popup {
                     }
                 }
             }
-
         }
     }
     ColumnLayout {
@@ -1289,7 +1287,7 @@ Popup {
                 text: qsTr("Close")
                 onClicked: {
                     welcomePage.visible = false
-                      welcomePage.settings.welcomeMessageShown = true
+                    welcomePage.settings.welcomeMessageShown = true
                 }
             }
         }
