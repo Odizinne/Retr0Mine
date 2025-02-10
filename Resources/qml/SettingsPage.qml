@@ -954,9 +954,6 @@ ApplicationWindow {
                                 id: styleComboBox
                                 model: {
                                     var themes = ["Fluent", "Universal", "Fusion"]
-                                    if (root.isGamescope) {
-                                        themes.push(qsTr("Oled Dark"))
-                                    }
                                     return themes
                                 }
                                 Layout.rightMargin: 5
@@ -967,7 +964,7 @@ ApplicationWindow {
                                 onActivated: function(index) {
                                     if (currentIndex !== previousIndex) {
                                         settingsPage.settings.themeIndex = currentIndex
-                                        //restartWindow.visible = true
+                                        settings.themeIndex = currentIndex
                                         previousIndex = currentIndex
                                         if (root.gameStarted && !root.gameOver) {
                                             saveGame("internalGameState.json")
