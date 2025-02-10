@@ -1094,7 +1094,6 @@ MainWindow {
                     CellFrame {
                         anchors.fill: cellButton
                         border.width: 2
-                        border.color: darkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
                         visible: {
                             if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
                                 return true
