@@ -114,32 +114,32 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="102"/>
+        <location filename="../qml/Main.qml" line="103"/>
         <source>Easy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="103"/>
+        <location filename="../qml/Main.qml" line="104"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="104"/>
+        <location filename="../qml/Main.qml" line="105"/>
         <source>Hard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="106"/>
+        <location filename="../qml/Main.qml" line="107"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="828"/>
+        <location filename="../qml/Main.qml" line="829"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="984"/>
+        <location filename="../qml/Main.qml" line="985"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,6 +311,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="1039"/>
+        <source>Color scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="1046"/>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="1046"/>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="495"/>
         <source>Animations</source>
         <translation type="unfinished"></translation>
@@ -362,6 +377,7 @@
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="904"/>
+        <location filename="../qml/SettingsPage.qml" line="1046"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
