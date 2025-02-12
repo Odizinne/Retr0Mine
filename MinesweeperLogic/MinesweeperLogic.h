@@ -54,7 +54,7 @@ public:
 
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
-
+    Q_INVOKABLE int placeLogicalMines(int firstClickX, int firstClickY);
 private:
     int m_width;
     int m_height;

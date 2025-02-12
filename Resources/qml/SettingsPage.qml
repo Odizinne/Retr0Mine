@@ -905,6 +905,35 @@ ApplicationWindow {
                             Layout.fillWidth: true
 
                             Label {
+                                text: qsTr("Advanced generation algorithm")
+                                Layout.fillWidth: true
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: advGenAlgoSwitch.checked = !advGenAlgoSwitch.checked
+                                }
+                            }
+                            Switch {
+                                id: advGenAlgoSwitch
+                                checked: settingsPage.settings.advGenAlgo
+                                onCheckedChanged: {
+                                    settingsPage.settings.advGenAlgo = checked
+                                    if (checked) {
+                                        settingsPage.settings.displaySeedAtGameOver = false
+                                    }
+                                }
+                                Component.onCompleted: {
+                                    if (checked && settingsPage.settings.displaySeedAtGameOver) {
+                                        settingsPage.settings.displaySeedAtGameOver = false
+                                    }
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
+                            enabled: !advGenAlgoSwitch.checked
+
+                            Label {
                                 text: qsTr("Show seed at game over")
                                 Layout.fillWidth: true
                                 MouseArea {
@@ -924,6 +953,7 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 20
+                            enabled: !advGenAlgoSwitch.checked
 
                             Label {
                                 text: qsTr("Fixed seed")

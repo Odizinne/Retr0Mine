@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 import QtMultimedia
 import QtQuick.Window
 import QtQuick.Controls.impl
@@ -42,6 +41,7 @@ MainWindow {
         property int colorBlindness: 0
         property bool welcomeMessageShown: false
         property int flagSkinIndex: 0
+        property bool advGenAlgo: true
     }
 
     Shortcut {
@@ -580,23 +580,31 @@ MainWindow {
             return false;
         }
 
-        const seed = settings.fixedSeed && !isNaN(settings.fixedSeed)
-                   ? gameLogic.placeMines(col, row, settings.fixedSeed)
-                   : gameLogic.placeMines(col, row, -1);
-
-        if (seed === -1) {
-            console.error("Failed to place mines!");
-            return false;
+        if (settings.advGenAlgo) {
+            console.log("Using new algo")
+            const result = gameLogic.placeLogicalMines(col, row);
+            if (result === -1) {
+                console.error("Failed to place mines!");
+                return false;
+            }
         } else {
-            gameOverPopup.seed = seed
-            gameOverPopup.clickX = col
-            gameOverPopup.clickY = row
+            console.log("Using old algo")
+            const seed = settings.fixedSeed && !isNaN(settings.fixedSeed)
+                       ? gameLogic.placeMines(col, row, settings.fixedSeed)
+                       : gameLogic.placeMines(col, row, -1);
 
+            if (seed === -1) {
+                console.error("Failed to place mines!");
+                return false;
+            } else {
+                gameOverPopup.seed = seed
+                gameOverPopup.clickX = col
+                gameOverPopup.clickY = row
+            }
         }
 
         mines = gameLogic.getMines();
         numbers = gameLogic.getNumbers();
-
         return true;
     }
 

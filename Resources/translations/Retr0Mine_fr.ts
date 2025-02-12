@@ -119,12 +119,12 @@
         <translation>Perso</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="793"/>
+        <location filename="../qml/Main.qml" line="805"/>
         <source>Victory</source>
         <translation>Victoire</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="928"/>
+        <location filename="../qml/Main.qml" line="940"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
@@ -277,16 +277,21 @@
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="908"/>
+        <source>Advanced generation algorithm</source>
+        <translation>Algorithme de generation avancé</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="937"/>
         <source>Show seed at game over</source>
         <translation>Afficher la seed en fin de partie</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="929"/>
+        <location filename="../qml/SettingsPage.qml" line="959"/>
         <source>Fixed seed</source>
         <translation>Utiliser une seed prédéfinie</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="934"/>
+        <location filename="../qml/SettingsPage.qml" line="964"/>
         <source>Numbers only</source>
         <translation>Chiffres uniquement</translation>
     </message>
@@ -336,7 +341,7 @@
         <translation>Très grand</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="949"/>
+        <location filename="../qml/SettingsPage.qml" line="979"/>
         <source>Style</source>
         <translation>Style</translation>
     </message>
@@ -344,11 +349,6 @@
         <location filename="../qml/SettingsPage.qml" line="877"/>
         <source>System</source>
         <translation>Système</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="958"/>
-        <source>Oled Dark</source>
-        <translation>Oled sombre</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="657"/>
@@ -538,47 +538,47 @@
         <translation>Activer les améliorations visuelles</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="390"/>
+        <location filename="../qml/WelcomePage.qml" line="389"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="410"/>
+        <location filename="../qml/WelcomePage.qml" line="409"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="615"/>
+        <location filename="../qml/WelcomePage.qml" line="614"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="825"/>
+        <location filename="../qml/WelcomePage.qml" line="824"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1039"/>
+        <location filename="../qml/WelcomePage.qml" line="1038"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1249"/>
+        <location filename="../qml/WelcomePage.qml" line="1248"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1272"/>
+        <location filename="../qml/WelcomePage.qml" line="1270"/>
         <source>You&apos;re all set!</source>
         <translation>Tout est prêt!</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1278"/>
+        <location filename="../qml/WelcomePage.qml" line="1276"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1289"/>
+        <location filename="../qml/WelcomePage.qml" line="1287"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

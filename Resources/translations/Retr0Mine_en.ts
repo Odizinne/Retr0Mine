@@ -119,12 +119,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="793"/>
+        <location filename="../qml/Main.qml" line="805"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="928"/>
+        <location filename="../qml/Main.qml" line="940"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -277,16 +277,21 @@
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="908"/>
+        <source>Advanced generation algorithm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="937"/>
         <source>Show seed at game over</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="929"/>
+        <location filename="../qml/SettingsPage.qml" line="959"/>
         <source>Fixed seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="934"/>
+        <location filename="../qml/SettingsPage.qml" line="964"/>
         <source>Numbers only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -336,18 +341,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="949"/>
+        <location filename="../qml/SettingsPage.qml" line="979"/>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="877"/>
         <source>System</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="958"/>
-        <source>Oled Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -535,47 +535,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="390"/>
+        <location filename="../qml/WelcomePage.qml" line="389"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="410"/>
+        <location filename="../qml/WelcomePage.qml" line="409"/>
         <source>Color correction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="615"/>
+        <location filename="../qml/WelcomePage.qml" line="614"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="825"/>
+        <location filename="../qml/WelcomePage.qml" line="824"/>
         <source>Tritanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1039"/>
+        <location filename="../qml/WelcomePage.qml" line="1038"/>
         <source>Protanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1249"/>
+        <location filename="../qml/WelcomePage.qml" line="1248"/>
         <source>Deuteranopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1272"/>
+        <location filename="../qml/WelcomePage.qml" line="1270"/>
         <source>You&apos;re all set!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1278"/>
+        <location filename="../qml/WelcomePage.qml" line="1276"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1289"/>
+        <location filename="../qml/WelcomePage.qml" line="1287"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
