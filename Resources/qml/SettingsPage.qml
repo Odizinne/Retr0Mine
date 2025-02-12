@@ -432,6 +432,33 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Enable green question marks")
+                                Layout.fillWidth: true
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: safeQuestionMarksSwitch.checked = !safeQuestionMarksSwitch.checked
+                                }
+                            }
+                            Switch {
+                                id: safeQuestionMarksSwitch
+                                checked: settingsPage.settings.enableSafeQuestionMarks
+                                onCheckedChanged: {
+                                    settingsPage.settings.enableSafeQuestionMarks = checked
+                                    if (!checked) {
+                                        for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
+                                            let cell = grid.itemAtIndex(i)
+                                            if (cell && cell.safeQuestioned) {
+                                                cell.safeQuestioned = false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
 
                             Label {
                                 text: qsTr("Load last game on start")

@@ -23,6 +23,7 @@ MainWindow {
         property bool invertLRClick: false
         property bool autoreveal: false
         property bool enableQuestionMarks: true
+        property bool enableSafeQuestionMarks: true
         property bool loadLastGame: false
         property bool soundEffects: true
         property real volume: 1.0
@@ -233,6 +234,7 @@ MainWindow {
                 revealedCells: [],
                 flaggedCells: [],
                 questionedCells: [],
+                safeQuestionedCells: [],
                 elapsedTime: elapsedTime,
                 centiseconds: centisTimer.centiseconds,
                 gameOver: gameOver,
@@ -250,6 +252,7 @@ MainWindow {
             if (cell.revealed) saveData.gameState.revealedCells.push(i)
             if (cell.flagged) saveData.gameState.flaggedCells.push(i)
             if (cell.questioned) saveData.gameState.questionedCells.push(i)
+            if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
         }
 
         mainWindow.saveGameState(JSON.stringify(saveData), filename)
@@ -307,6 +310,7 @@ MainWindow {
                     cell.revealed = false
                     cell.flagged = false
                     cell.questioned = false
+                    cell.safeQuestioned = false
                 }
             }
 
@@ -324,6 +328,13 @@ MainWindow {
                 data.gameState.questionedCells.forEach(index => {
                                                            let cell = grid.itemAtIndex(index)
                                                            if (cell) cell.questioned = true
+                                                       })
+            }
+
+            if (data.gameState.safeQuestionedCells) {
+                data.gameState.safeQuestionedCells.forEach(index => {
+                                                           let cell = grid.itemAtIndex(index)
+                                                           if (cell) cell.safeQuestioned = true
                                                        })
             }
 
@@ -624,6 +635,7 @@ MainWindow {
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
+                cell.safeQuestioned = false
                 root.noAnimReset = false
                 cell.startFadeIn()
             }
@@ -824,21 +836,37 @@ MainWindow {
         if (gameOver) return
         let cell = grid.itemAtIndex(index)
         if (!cell.revealed) {
-            if (!cell.flagged && !cell.questioned) {
+            if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
                 cell.flagged = true
                 cell.questioned = false
+                cell.safeQuestioned = false
                 flaggedCount++
             } else if (cell.flagged) {
                 if (settings.enableQuestionMarks) {
                     cell.flagged = false
                     cell.questioned = true
+                    cell.safeQuestioned = false
+                    flaggedCount--
+                } else if (settings.enableSafeQuestionMarks) {
+                    cell.flagged = false
+                    cell.questioned = false
+                    cell.safeQuestioned = true
                     flaggedCount--
                 } else {
                     cell.flagged = false
+                    cell.questioned = false
+                    cell.safeQuestioned = false
                     flaggedCount--
                 }
             } else if (cell.questioned) {
-                cell.questioned = false
+                if (settings.enableSafeQuestionMarks) {
+                    cell.questioned = false
+                    cell.safeQuestioned = true
+                } else {
+                    cell.questioned = false
+                }
+            } else if (cell.safeQuestioned) {
+                cell.safeQuestioned = false
             }
         }
     }
@@ -1011,6 +1039,7 @@ MainWindow {
                     property bool revealed: false
                     property bool flagged: false
                     property bool questioned: false
+                    property bool safeQuestioned: false
                     property bool isBombClicked: false
 
                     readonly property int row: Math.floor(index / root.gridSizeX)
@@ -1187,6 +1216,32 @@ MainWindow {
                             sourceSize.height: cellItem.height / 2.1
                             opacity: cellItem.questioned ? 1 : 0
                             scale: cellItem.questioned ? 1 : 1.3
+
+                            Behavior on opacity {
+                                enabled: settings.animations && !root.noAnimReset
+                                OpacityAnimator {
+                                    duration: 300
+                                    easing.type: Easing.OutQuad
+                                }
+                            }
+
+                            Behavior on scale {
+                                enabled: settings.animations && !root.noAnimReset
+                                NumberAnimation {
+                                    duration: 300
+                                    easing.type: Easing.OutBack
+                                }
+                            }
+                        }
+
+                        IconImage {
+                            anchors.centerIn: parent
+                            source: "qrc:/icons/questionmark.png"
+                            color: "#58d16c"
+                            sourceSize.width: cellItem.width / 2.1
+                            sourceSize.height: cellItem.height / 2.1
+                            opacity: cellItem.safeQuestioned ? 1 : 0
+                            scale: cellItem.safeQuestioned ? 1 : 1.3
 
                             Behavior on opacity {
                                 enabled: settings.animations && !root.noAnimReset
