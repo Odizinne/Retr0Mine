@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QColor>
 #include <QTranslator>
+#include <QTimer>
 #include "SteamIntegration.h"
 #include "MinesweeperLogic.h"
 

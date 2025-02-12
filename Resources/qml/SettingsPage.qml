@@ -28,6 +28,12 @@ ApplicationWindow {
         }
     }
 
+    BusyIndicator {
+        // stupid, but allow continuous engine update
+        // without too much hassle (needed for steam overlay)
+        opacity: 0
+    }
+
     Shortcut {
         sequence: "Esc"
         enabled: settingsPage.visible

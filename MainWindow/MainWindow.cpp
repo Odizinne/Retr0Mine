@@ -10,6 +10,7 @@
 #include <QStandardPaths>
 #include <QStyleHints>
 #include "Utils.h"
+#include <QQuickWindow>
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
