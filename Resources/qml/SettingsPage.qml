@@ -1031,6 +1031,30 @@ ApplicationWindow {
                                 }
                             }
                         }
+
+                        RowLayout {
+                            enabled: Qt.platform.os === "windows"
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Color scheme")
+                                Layout.fillWidth: true
+                            }
+
+                            ComboBox {
+                                id: colorSchemeComboBox
+                                model: {
+                                    var colorSchemes = [qsTr("System"), qsTr("Dark"), qsTr("Light")]
+                                    return colorSchemes
+                                }
+                                Layout.rightMargin: 5
+
+                                currentIndex: settingsPage.settings.colorSchemeIndex
+                                onActivated: {
+                                    settingsPage.settings.colorSchemeIndex = currentIndex
+                                    settingsPage.root.mainWindow.setThemeColorScheme(currentIndex)
+                                }
+                            }
+                        }
                     }
                 }
             }

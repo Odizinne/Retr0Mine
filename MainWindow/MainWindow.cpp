@@ -36,6 +36,9 @@ MainWindow::MainWindow(QObject *parent)
 
     if (!settings.value("welcomeMessageShown", false).toBool()) resetSettings();
 
+    int colorSchemeIndex = settings.value("colorSchemeIndex").toInt();
+    setThemeColorScheme(colorSchemeIndex);
+
     setupAndLoadQML();
 }
 
@@ -51,7 +54,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::onColorSchemeChanged()
 {
-    setColorScheme();
+    if (settings.value("colorSchemeIndex").toInt() == 0) {
+        setColorScheme();
+    }
 }
 
 void MainWindow::resetSettings()
@@ -126,6 +131,28 @@ void MainWindow::setQMLStyle(int index)
 
     currentTheme = index;
     QQuickStyle::setStyle(style);
+}
+
+void MainWindow::setThemeColorScheme(int colorSchemeIndex)
+{
+#ifdef _WIN32
+    switch(colorSchemeIndex) {
+        case(0):
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+            break;
+        case(1):
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+            break;
+        case(2):
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+            break;
+        default:
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+            break;
+    }
+
+    setColorScheme();
+#endif
 }
 
 void MainWindow::setLanguage(int index)

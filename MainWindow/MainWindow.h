@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
     Q_INVOKABLE void resetSettings();
+    Q_INVOKABLE void setThemeColorScheme(int ColorSchemeIndex);
 
     bool getShowWelcome() const { return shouldShowWelcomeMessage; }
     bool getUnlockedFlag1() const { return m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_EASY"); }

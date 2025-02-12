@@ -43,6 +43,7 @@ MainWindow {
         property bool welcomeMessageShown: false
         property int flagSkinIndex: 0
         property bool advGenAlgo: true
+        property int colorSchemeIndex: 0
     }
 
     Shortcut {
@@ -1237,7 +1238,7 @@ MainWindow {
                         IconImage {
                             anchors.centerIn: parent
                             source: "qrc:/icons/questionmark.png"
-                            color: "#58d16c"
+                            color: "green"
                             sourceSize.width: cellItem.width / 2.1
                             sourceSize.height: cellItem.height / 2.1
                             opacity: cellItem.safeQuestioned ? 1 : 0
