@@ -15,6 +15,7 @@ public:
     Q_INVOKABLE void unlockAchievement(const QString &achievementId);
     Q_INVOKABLE bool isAchievementUnlocked(const QString &achievementId);
     Q_INVOKABLE bool isRunningOnDeck();
+    Q_INVOKABLE bool incrementTotalWin();
     bool m_initialized;
     QString getSteamUILanguage() const;
     QString getSteamUserName() const;

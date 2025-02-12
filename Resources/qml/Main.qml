@@ -805,6 +805,8 @@ MainWindow {
                     if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
                         steamIntegration.unlockAchievement("ACH_HINT_MASTER")
                     }
+
+                    steamIntegration.incrementTotalWin()
                 }
             }
 

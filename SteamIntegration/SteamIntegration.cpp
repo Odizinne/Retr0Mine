@@ -88,3 +88,22 @@ QString SteamIntegration::getSteamUserName() const
 
     return QString::fromUtf8(steamFriends->GetPersonaName());
 }
+
+bool SteamIntegration::incrementTotalWin()
+{
+    if (!m_initialized)
+        return false;
+
+    ISteamUserStats *steamUserStats = SteamUserStats();
+    if (!steamUserStats)
+        return false;
+
+    int currentWins = 0;
+    if (!steamUserStats->GetStat("TOTAL_WIN", &currentWins))
+        return false;
+
+    if (!steamUserStats->SetStat("TOTAL_WIN", currentWins + 1))
+        return false;
+
+    return steamUserStats->StoreStats();
+}
