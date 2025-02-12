@@ -19,7 +19,7 @@ RowLayout {
     anchors.leftMargin: 12
     anchors.rightMargin: 12
 
-    property string elapsedTimeLabelText: "HH:MM:SS"
+    property string elapsedTimeLabelText: ""
 
     RowLayout {
         spacing: 6

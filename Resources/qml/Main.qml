@@ -345,25 +345,18 @@ MainWindow {
     }
 
     function formatTime(seconds) {
-        let hours = Math.floor(seconds / 3600)
-        let minutes = Math.floor((seconds % 3600) / 60)
-        let remainingSeconds = seconds % 60
-
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+        const totalMinutes = Math.floor(seconds / 60)
+        const remainingSeconds = seconds % 60
+        return `${totalMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
     }
 
     function formatLeaderboardTime(seconds, cs) {
-        const hours = Math.floor(seconds / 3600)
-        const minutes = Math.floor((seconds % 3600) / 60)
+        const totalMinutes = Math.floor(seconds / 60)
         const remainingSeconds = seconds % 60
-
         let timeString = ""
-
-        timeString += hours.toString().padStart(2, '0') + ":"
-        timeString += minutes.toString().padStart(2, '0') + ":"
+        timeString += totalMinutes.toString().padStart(2, '0') + ":"
         timeString += remainingSeconds.toString().padStart(2, '0')
         timeString += "." + cs.toString().padStart(2, '0')
-
         return timeString
     }
 
@@ -620,7 +613,7 @@ MainWindow {
         currentHintCount = 0
         gameTimer.stop()
         centisTimer.stop()
-        topBar.elapsedTimeLabelText = "00:00:00"
+        topBar.elapsedTimeLabelText = "00:00"
         isManuallyLoaded = false
 
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
@@ -756,8 +749,21 @@ MainWindow {
                 const difficulty = getDifficultyLevel();
                 if (difficulty) {
                     const timeField = difficulty + 'Time';
+                    const winsField = difficulty + 'Wins'; // New field for tracking wins
                     const formattedTime = formatLeaderboardTime(elapsedTime, centisTimer.centiseconds);
 
+                    // Initialize wins counter if it doesn't exist
+                    if (!leaderboard[winsField]) {
+                        leaderboard[winsField] = 0;
+                    }
+
+                    // Increment wins counter
+                    leaderboard[winsField]++;
+
+                    // Update leaderboardWindow to display the new wins count
+                    leaderboardWindow[winsField] = leaderboard[winsField];
+
+                    // Handle time record
                     if (!leaderboard[timeField] || compareTime(formattedTime, leaderboard[timeField])) {
                         leaderboard[timeField] = formattedTime;
                         leaderboardWindow[timeField] = formattedTime;
@@ -871,20 +877,25 @@ MainWindow {
             root.gridSizeY = difficultySet.y
             root.mineCount = difficultySet.mines
         }
-
         let leaderboardData = mainWindow.loadLeaderboard()
         if (leaderboardData) {
             try {
                 const leaderboard = JSON.parse(leaderboardData)
+                // Load times
                 leaderboardWindow.easyTime = leaderboard.easyTime || ""
                 leaderboardWindow.mediumTime = leaderboard.mediumTime || ""
                 leaderboardWindow.hardTime = leaderboard.hardTime || ""
                 leaderboardWindow.retr0Time = leaderboard.retr0Time || ""
+
+                // Load wins
+                leaderboardWindow.easyWins = leaderboard.easyWins || 0
+                leaderboardWindow.mediumWins = leaderboard.mediumWins || 0
+                leaderboardWindow.hardWins = leaderboard.hardWins || 0
+                leaderboardWindow.retr0Wins = leaderboard.retr0Wins || 0
             } catch (e) {
                 console.error("Failed to parse leaderboard data:", e)
             }
         }
-
         welcomePopup.visible = mainWindow.showWelcome
     }
 

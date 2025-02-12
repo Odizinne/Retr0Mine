@@ -14,6 +14,21 @@ Popup {
     property string mediumTime: ""
     property string hardTime: ""
     property string retr0Time: ""
+    property int easyWins: 0
+    property int mediumWins: 0
+    property int hardWins: 0
+    property int retr0Wins: 0
+
+    function convertTimeFormat(timeString) {
+        const parts = timeString.split(':')
+        if (parts.length === 3) {
+            // Old format HH:MM:SS.CC
+            const totalMinutes = (Number(parts[0]) * 60 + Number(parts[1]))
+            return `${String(totalMinutes).padStart(2, '0')}:${parts[2]}`
+        }
+        // Already in new format MM:SS.CC
+        return timeString
+    }
 
     Shortcut {
         sequence: "Esc"
@@ -43,7 +58,7 @@ Popup {
             }
 
             Label {
-                text: mainWindow.playerName
+                text: leaderboardPage.root.mainWindow.playerName
                 font.bold: true
                 font.pixelSize: 20
                 Layout.alignment: Qt.AlignCenter
@@ -51,61 +66,82 @@ Popup {
         }
 
         Frame {
-            Layout.preferredWidth: 300
-            Layout.fillWidth: true
+           Layout.preferredWidth: 300
+           Layout.fillWidth: true
+           GridLayout {
+               anchors.fill: parent
+               columns: 3
+               columnSpacing: 15
+               rowSpacing: 15
 
-            ColumnLayout {
-                spacing: 15
-                anchors.fill: parent
+               Label {
+                   text: qsTr("Difficulty")
+                   font.bold: true
+                   Layout.preferredWidth: parent.width / 3
+               }
+               Label {
+                   text: qsTr("Time")
+                   font.bold: true
+                   Layout.preferredWidth: parent.width / 3
+               }
+               Label {
+                   text: qsTr("Wins")
+                   font.bold: true
+                   Layout.preferredWidth: parent.width / 3
+               }
 
-                RowLayout {
-                    Label {
-                        text: qsTr("Easy")
-                        Layout.fillWidth: true
-                    }
+               Label {
+                   text: qsTr("Easy")
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.convertTimeFormat(leaderboardPage.easyTime)
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.easyWins.toString()
+                   Layout.minimumWidth: parent.width / 3
+               }
 
-                    Label {
-                        text: leaderboardPage.easyTime
-                        font.bold: true
-                    }
-                }
+               Label {
+                   text: qsTr("Medium")
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.convertTimeFormat(leaderboardPage.mediumTime)
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.mediumWins.toString()
+                   Layout.minimumWidth: parent.width / 3
+               }
 
-                RowLayout {
-                    Label {
-                        text: qsTr("Medium")
-                        Layout.fillWidth: true
-                    }
+               Label {
+                   text: qsTr("Hard")
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.convertTimeFormat(leaderboardPage.hardTime)
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.hardWins.toString()
+                   Layout.minimumWidth: parent.width / 3
+               }
 
-                    Label {
-                        text: leaderboardPage.mediumTime
-                        font.bold: true
-                    }
-                }
-
-                RowLayout {
-                    Label {
-                        text: qsTr("Hard")
-                        Layout.fillWidth: true
-                    }
-
-                    Label {
-                        text: leaderboardPage.hardTime
-                        font.bold: true
-                    }
-                }
-
-                RowLayout {
-                    Label {
-                        text: qsTr("Retr0")
-                        Layout.fillWidth: true
-                    }
-
-                    Label {
-                        text: leaderboardPage.retr0Time
-                        font.bold: true
-                    }
-                }
-            }
+               Label {
+                   text: qsTr("Retr0")
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.convertTimeFormat(leaderboardPage.retr0Time)
+                   Layout.minimumWidth: parent.width / 3
+               }
+               Label {
+                   text: leaderboardPage.retr0Wins.toString()
+                   Layout.minimumWidth: parent.width / 3
+               }
+           }
         }
 
         RowLayout {
@@ -124,10 +160,14 @@ Popup {
                         easyTime: "",
                         mediumTime: "",
                         hardTime: "",
-                        retr0Time: ""
+                        retr0Time: "",
+                        easyWins: 0,
+                        mediumWins: 0,
+                        hardWins: 0,
+                        retr0Wins: 0
                     }
 
-                    mainWindow.saveLeaderboard(JSON.stringify(emptyLeaderboard))
+                    leaderboardPage.root.mainWindow.saveLeaderboard(JSON.stringify(emptyLeaderboard))
                 }
             }
 

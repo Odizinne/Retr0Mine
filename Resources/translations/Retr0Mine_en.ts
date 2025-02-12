@@ -53,32 +53,47 @@
 <context>
     <name>LeaderboardPage</name>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="63"/>
-        <source>Easy</source>
+        <location filename="../qml/LeaderboardPage.qml" line="67"/>
+        <source>Difficulty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="75"/>
-        <source>Medium</source>
+        <location filename="../qml/LeaderboardPage.qml" line="73"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="80"/>
+        <source>Wins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/LeaderboardPage.qml" line="87"/>
+        <source>Easy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="107"/>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LeaderboardPage.qml" line="128"/>
         <source>Hard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="99"/>
+        <location filename="../qml/LeaderboardPage.qml" line="149"/>
         <source>Retr0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="114"/>
+        <location filename="../qml/LeaderboardPage.qml" line="173"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LeaderboardPage.qml" line="135"/>
+        <location filename="../qml/LeaderboardPage.qml" line="194"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -119,12 +134,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="805"/>
+        <location filename="../qml/Main.qml" line="818"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="940"/>
+        <location filename="../qml/Main.qml" line="958"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
