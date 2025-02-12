@@ -146,6 +146,7 @@ MainWindow {
     property int currentHintCount: 0
     property bool gridFullyInitialized: false
     property bool isManuallyLoaded: false
+    property bool noAnimReset: false
 
     function getInitialWidth() {
         return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
@@ -619,9 +620,11 @@ MainWindow {
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell) {
+                root.noAnimReset = true
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
+                root.noAnimReset = false
                 cell.startFadeIn()
             }
         }
@@ -1186,7 +1189,7 @@ MainWindow {
                             scale: cellItem.questioned ? 1 : 1.3
 
                             Behavior on opacity {
-                                enabled: settings.animations
+                                enabled: settings.animations && !root.noAnimReset
                                 OpacityAnimator {
                                     duration: 300
                                     easing.type: Easing.OutQuad
@@ -1194,7 +1197,7 @@ MainWindow {
                             }
 
                             Behavior on scale {
-                                enabled: settings.animations
+                                enabled: settings.animations && !root.noAnimReset
                                 NumberAnimation {
                                     duration: 300
                                     easing.type: Easing.OutBack
@@ -1209,14 +1212,13 @@ MainWindow {
                                 if (settings.contrastFlag) return root.darkMode ? "white" : "black"
                                 else return mainWindow.accentColor
                             }
-
                             sourceSize.width: cellItem.width / 1.8
                             sourceSize.height: cellItem.height / 1.8
                             opacity: cellItem.flagged ? 1 : 0
                             scale: cellItem.flagged ? 1 : 1.3
 
                             Behavior on opacity {
-                                enabled: settings.animations
+                                enabled: settings.animations && !root.noAnimReset
                                 OpacityAnimator {
                                     duration: 300
                                     easing.type: Easing.OutQuad
@@ -1224,7 +1226,7 @@ MainWindow {
                             }
 
                             Behavior on scale {
-                                enabled: settings.animations
+                                enabled: settings.animations && !root.noAnimReset
                                 NumberAnimation {
                                     duration: 300
                                     easing.type: Easing.OutBack
