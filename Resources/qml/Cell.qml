@@ -34,11 +34,6 @@ Item {
         }
 
         if (cellItem.settings.animations && !grid.initialAnimationPlayed && !cellItem.root.blockAnim) {
-            //opacity = 0
-            //fadeTimer.start()
-            //if (index === (cellItem.root.gridSizeX * cellItem.root.gridSizeY - 1)) {
-            //    grid.initialAnimationPlayed = true
-            //}
             startFadeIn()
         }
     }
@@ -127,14 +122,14 @@ Item {
         border.width: 2
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
-            return true
+                return true
             if (cellItem.animatingReveal && cellItem.settings.cellFrame)
-            return true
+                return true
             return cellButton.flat && cellItem.settings.cellFrame
         }
         color: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
-            return cellItem.root.mainWindow.accentColor
+                return cellItem.root.mainWindow.accentColor
             return "transparent"
         }
 
@@ -277,29 +272,29 @@ Item {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: (mouse) => {
-                if (!cellItem.root.gameStarted) {
-                    cellItem.root.reveal(cellItem.index);
-                    cellItem.root.playClick();
-                } else if (cellItem.revealed) {
-                    cellItem.root.revealConnectedCells(cellItem.index);
-                } else {
-                    if (cellItem.settings.invertLRClick) {
-                        if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                            cellItem.root.reveal(cellItem.index);
-                            cellItem.root.playClick();
-                        } else if (mouse.button === Qt.LeftButton) {
-                            cellItem.root.toggleFlag(cellItem.index);
-                        }
-                    } else {
-                        if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                            cellItem.root.reveal(cellItem.index);
-                            cellItem.root.playClick();
-                        } else if (mouse.button === Qt.RightButton) {
-                            cellItem.root.toggleFlag(cellItem.index);
-                        }
-                    }
-                }
-            }
+                           if (!cellItem.root.gameStarted) {
+                               cellItem.root.reveal(cellItem.index);
+                               cellItem.root.playClick();
+                           } else if (cellItem.revealed) {
+                               cellItem.root.revealConnectedCells(cellItem.index);
+                           } else {
+                               if (cellItem.settings.invertLRClick) {
+                                   if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
+                                       cellItem.root.reveal(cellItem.index);
+                                       cellItem.root.playClick();
+                                   } else if (mouse.button === Qt.LeftButton) {
+                                       cellItem.root.toggleFlag(cellItem.index);
+                                   }
+                               } else {
+                                   if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                       cellItem.root.reveal(cellItem.index);
+                                       cellItem.root.playClick();
+                                   } else if (mouse.button === Qt.RightButton) {
+                                       cellItem.root.toggleFlag(cellItem.index);
+                                   }
+                               }
+                           }
+                       }
         }
     }
 
@@ -330,7 +325,7 @@ Item {
 
             let palette = {}
             switch (cellItem.settings.colorBlindness) {
-                case 1: // Deuteranopia
+            case 1: // Deuteranopia
                 palette = {
                     1: "#377eb8",
                     2: "#4daf4a",
@@ -342,7 +337,7 @@ Item {
                     8: cellItem.root.darkMode ? "white" : "black"
                 }
                 break
-                case 2: // Protanopia
+            case 2: // Protanopia
                 palette = {
                     1: "#66c2a5",
                     2: "#fc8d62",
@@ -354,7 +349,7 @@ Item {
                     8: cellItem.root.darkMode ? "white" : "black"
                 }
                 break
-                case 3: // Tritanopia
+            case 3: // Tritanopia
                 palette = {
                     1: "#e41a1c",
                     2: "#377eb8",
@@ -366,7 +361,7 @@ Item {
                     8: cellItem.root.darkMode ? "white" : "black"
                 }
                 break
-                default: // None
+            default: // None
                 palette = {
                     1: "#069ecc",
                     2: "#28d13c",
@@ -397,23 +392,23 @@ Item {
         }
 
         switch (cellItem.settings.gridResetAnimationIndex) {
-            case 0: // Original diagonal animation
-                grid.initialAnimationPlayed = false
-                opacity = 0
-                fadeTimer.restart()
-                break
+        case 0: // Original diagonal animation
+            grid.initialAnimationPlayed = false
+            opacity = 0
+            fadeTimer.restart()
+            break
 
-            case 1: // New fade out -> fade in animation
-                grid.initialAnimationPlayed = false
-                opacity = 0
-                resetFadeOutAnimation.start()
-                break
+        case 1: // New fade out -> fade in animation
+            grid.initialAnimationPlayed = false
+            opacity = 0
+            resetFadeOutAnimation.start()
+            break
 
-            case 2: // Spin animation
-                grid.initialAnimationPlayed = false
-                opacity = 1
-                resetSpinAnimation.start()
-                break
+        case 2: // Spin animation
+            grid.initialAnimationPlayed = false
+            opacity = 1
+            resetSpinAnimation.start()
+            break
         }
     }
 

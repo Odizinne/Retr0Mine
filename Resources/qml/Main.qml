@@ -616,17 +616,14 @@ MainWindow {
         }
         root.noAnimReset = false
 
-        // Start fade in animation after all properties are reset
         if (settings.animations) {
             for (let i = 0; i < gridSizeX * gridSizeY; i++) {
                 let cell = grid.itemAtIndex(i) as Cell
                 if (cell) {
-                    //if (!root.firstRun)
                     cell.startFadeIn()
                 }
             }
         }
-
     }
 
     function reveal(index) {

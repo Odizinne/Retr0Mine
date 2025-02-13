@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls.impl
 
 ApplicationWindow {
     id: settingsPage
@@ -700,17 +701,14 @@ ApplicationWindow {
                                     text: model.text
                                     enabled: model.enabled
                                     highlighted: gridResetAnimationComboBox.highlightedIndex === index
-                                    contentItem: Label {
-                                        text: model.text
-                                        elide: Text.ElideRight
-                                        verticalAlignment: Text.AlignVCenter
-                                    }
+                                    icon.source: enabled ? "" : "qrc:/icons/locked.png"
+                                    ToolTip.visible: !enabled && hovered
+                                    ToolTip.text: qsTr("Unlocked with a secret achievement")
+                                    ToolTip.delay: 1000
                                 }
                                 currentIndex: settingsPage.settings.gridResetAnimationIndex
                                 onActivated: {
-                                    console.log(currentIndex)
-                                        settingsPage.settings.gridResetAnimationIndex = currentIndex
-
+                                    settingsPage.settings.gridResetAnimationIndex = currentIndex
                                 }
                             }
                         }
