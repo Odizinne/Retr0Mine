@@ -7,11 +7,12 @@ ToolTip {
     timeout: 3000
     x: Math.round((parent.width - width) / 2)
     y: parent.y + parent.height - height - 30
+    property string notificationText
 
     contentItem: Item {
         Text {
             anchors.centerIn: parent
-            text: qsTr("New flag unlocked!")
+            text: flagToast.notificationText
             color: "#28d13c"
             font.pixelSize: 18
             font.bold: true

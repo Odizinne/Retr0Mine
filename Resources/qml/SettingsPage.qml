@@ -671,6 +671,49 @@ ApplicationWindow {
                                 }
                             }
                         }
+
+                        RowLayout {
+                            visible: typeof steamIntegration !== "undefined"
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Grid reset animation")
+                                Layout.fillWidth: true
+                            }
+                            ComboBox {
+                                id: gridResetAnimationComboBox
+                                model: ListModel {
+                                    id: animationModel
+                                    ListElement { text: qsTr("Wave"); enabled: true }
+                                    ListElement { text: qsTr("Fade"); enabled: false }
+                                    ListElement { text: qsTr("Spin"); enabled: false }
+                                }
+
+                                Component.onCompleted: {
+                                    console.log(settingsPage.root.anim1Unlocked)
+                                    animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
+                                    animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
+                                }
+
+                                displayText: model.get(currentIndex).text
+                                delegate: ItemDelegate {
+                                    width: parent.width
+                                    text: model.text
+                                    enabled: model.enabled
+                                    highlighted: gridResetAnimationComboBox.highlightedIndex === index
+                                    contentItem: Label {
+                                        text: model.text
+                                        elide: Text.ElideRight
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
+                                }
+                                currentIndex: settingsPage.settings.gridResetAnimationIndex
+                                onActivated: {
+                                    console.log(currentIndex)
+                                        settingsPage.settings.gridResetAnimationIndex = currentIndex
+
+                                }
+                            }
+                        }
                     }
                 }
             }

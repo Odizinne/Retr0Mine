@@ -6,6 +6,7 @@ QM_FILES_RESOURCE_PREFIX = /translations
 STEAM_PATH = $$PWD/Dependencies/steam
 
 INCLUDEPATH +=                                  \
+    GameTimer                                   \
     MainWindow                                  \
     Utils                                       \
     MinesweeperLogic                            \
@@ -13,6 +14,7 @@ INCLUDEPATH +=                                  \
     Dependencies/steam                          \
 
 SOURCES +=                                      \
+    GameTimer/GameTimer.cpp                     \
     MainWindow/MainWindow.cpp                   \
     MinesweeperLogic/MinesweeperLogic.cpp       \
     SteamIntegration/SteamIntegration.cpp       \
@@ -20,6 +22,7 @@ SOURCES +=                                      \
     main.cpp                                    \
 
 HEADERS +=                                      \
+    GameTimer/GameTimer.h                       \
     MainWindow/MainWindow.h                     \
     MinesweeperLogic/MinesweeperLogic.h         \
     SteamIntegration/SteamIntegration.h         \

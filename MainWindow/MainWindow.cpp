@@ -19,6 +19,7 @@ MainWindow::MainWindow(QObject *parent)
     , rootContext(engine->rootContext())
     , translator(new QTranslator(this))
     , m_gameLogic(new MinesweeperLogic(this))
+    , m_gameTimer(new GameTimer(this))
     , isRunningOnGamescope(false)
     , shouldShowWelcomeMessage(false)
 {
@@ -106,7 +107,8 @@ void MainWindow::setupAndLoadQML()
     engine->setInitialProperties({
         {"mainWindow", QVariant::fromValue(this)},
         {"steamIntegration", QVariant::fromValue(m_steamIntegration)},
-        {"gameLogic", QVariant::fromValue(m_gameLogic)}
+        {"gameLogic", QVariant::fromValue(m_gameLogic)},
+        {"gameTimer", QVariant::fromValue(m_gameTimer)}
     });
 
     engine->load(QUrl("qrc:/qml/Main.qml"));

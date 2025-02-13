@@ -9,6 +9,7 @@
 #include <QTimer>
 #include "SteamIntegration.h"
 #include "MinesweeperLogic.h"
+#include "GameTimer.h"
 
 class MainWindow : public QObject
 {
@@ -18,6 +19,8 @@ class MainWindow : public QObject
     Q_PROPERTY(bool unlockedFlag1 READ getUnlockedFlag1 CONSTANT)
     Q_PROPERTY(bool unlockedFlag2 READ getUnlockedFlag2 CONSTANT)
     Q_PROPERTY(bool unlockedFlag3 READ getUnlockedFlag3 CONSTANT)
+    Q_PROPERTY(bool unlockedAnim1 READ getUnlockedAnim1 CONSTANT)
+    Q_PROPERTY(bool unlockedAnim2 READ getUnlockedAnim2 CONSTANT)
     Q_PROPERTY(QString playerName READ getPlayerName CONSTANT)
     Q_PROPERTY(bool gamescope READ isGamescope CONSTANT)
     Q_PROPERTY(bool isDarkMode READ getDarkMode NOTIFY darkModeChanged)
@@ -43,6 +46,8 @@ public:
     bool getUnlockedFlag1() const { return m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_EASY"); }
     bool getUnlockedFlag2() const { return m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_MEDIUM"); }
     bool getUnlockedFlag3() const { return m_steamIntegration->isAchievementUnlocked("ACH_NO_HINT_HARD"); }
+    bool getUnlockedAnim1() const { return m_steamIntegration->isAchievementUnlocked("ACH_HINT_MASTER"); }
+    bool getUnlockedAnim2() const { return m_steamIntegration->isAchievementUnlocked("ACH_SPEED_DEMON"); }
     QString getPlayerName() const { return m_steamIntegration->getSteamUserName(); }
     bool isGamescope() const { return isRunningOnGamescope; }
     bool getDarkMode() const { return m_isDarkMode; }
@@ -58,7 +63,8 @@ private:
     QQmlContext *rootContext;
     QTranslator *translator;
     SteamIntegration *m_steamIntegration;
-    MinesweeperLogic* m_gameLogic;
+    MinesweeperLogic *m_gameLogic;
+    GameTimer *m_gameTimer;
     int currentTheme;
     bool isRunningOnGamescope;
     bool shouldShowWelcomeMessage;

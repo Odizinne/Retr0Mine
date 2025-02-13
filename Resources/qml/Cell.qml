@@ -33,12 +33,13 @@ Item {
             initialLoadTimer.start()
         }
 
-        if (cellItem.settings.animations && !grid.initialAnimationPlayed) {
-            opacity = 0
-            fadeTimer.start()
-            if (index === (cellItem.root.gridSizeX * cellItem.root.gridSizeY - 1)) {
-                grid.initialAnimationPlayed = true
-            }
+        if (cellItem.settings.animations && !grid.initialAnimationPlayed && !cellItem.root.blockAnim) {
+            //opacity = 0
+            //fadeTimer.start()
+            //if (index === (cellItem.root.gridSizeX * cellItem.root.gridSizeY - 1)) {
+            //    grid.initialAnimationPlayed = true
+            //}
+            startFadeIn()
         }
     }
 
@@ -387,8 +388,95 @@ Item {
             opacity = 1
             return
         }
-        grid.initialAnimationPlayed = false
-        opacity = 0
-        fadeTimer.restart()
+
+        if (typeof steamIntegration === "undefined") {
+            grid.initialAnimationPlayed = false
+            opacity = 0
+            fadeTimer.restart()
+            return
+        }
+
+        switch (cellItem.settings.gridResetAnimationIndex) {
+            case 0: // Original diagonal animation
+                grid.initialAnimationPlayed = false
+                opacity = 0
+                fadeTimer.restart()
+                break
+
+            case 1: // New fade out -> fade in animation
+                grid.initialAnimationPlayed = false
+                opacity = 0
+                resetFadeOutAnimation.start()
+                break
+
+            case 2: // Spin animation
+                grid.initialAnimationPlayed = false
+                opacity = 1
+                resetSpinAnimation.start()
+                break
+        }
+    }
+
+    ParallelAnimation {
+        id: resetSpinAnimation
+
+        // Spin animation (full duration)
+        NumberAnimation {
+            target: cellItem
+            property: "rotation"
+            from: 0
+            to: 360
+            duration: 900
+            easing.type: Easing.InOutQuad
+        }
+
+        // Scale animations in sequence
+        SequentialAnimation {
+            // Scale down for first 1/3
+            NumberAnimation {
+                target: cellItem
+                property: "scale"
+                from: 1.0
+                to: 0.5
+                duration: 300  // ~1/3 of 2000
+                easing.type: Easing.InOutQuad
+            }
+            // Stay at 0.5 for middle 1/3
+            PauseAnimation {
+                duration: 300
+            }
+            // Scale up for last 1/3
+            NumberAnimation {
+                target: cellItem
+                property: "scale"
+                from: 0.5
+                to: 1.0
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
+    }
+
+    // First fade out
+    NumberAnimation {
+        id: resetFadeOutAnimation
+        target: cellItem
+        property: "opacity"
+        from: 1
+        to: 0
+        duration: 300
+        easing.type: Easing.InOutQuad
+        onFinished: resetFadeInAnimation.start()
+    }
+
+    // Then fade in
+    NumberAnimation {
+        id: resetFadeInAnimation
+        target: cellItem
+        property: "opacity"
+        from: 0
+        to: 1
+        duration: 500
+        easing.type: Easing.OutQuad
     }
 }
