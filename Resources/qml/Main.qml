@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtMultimedia
@@ -1040,6 +1042,7 @@ MainWindow {
                     width: root.cellSize
                     height: root.cellSize
 
+                    required property int index
                     property bool animatingReveal: false
                     property bool shouldBeFlat: false
                     property bool revealed: false
@@ -1135,17 +1138,17 @@ MainWindow {
                         to: 0
                         duration: 200
                         easing.type: Easing.Linear
-                        onStarted: animatingReveal = true
+                        onStarted: cellItem.animatingReveal = true
                         onFinished: {
-                            animatingReveal = false
-                            cellButton.flat = shouldBeFlat
+                            cellItem.animatingReveal = false
+                            cellButton.flat = cellItem.shouldBeFlat
                             cellButton.opacity = 1
                         }
                     }
 
                     Timer {
                         id: fadeTimer
-                        interval: diagonalSum * 20
+                        interval: cellItem.diagonalSum * 20
                         repeat: false
                         onTriggered: {
                             if (settings.animations) {
@@ -1158,15 +1161,15 @@ MainWindow {
                         anchors.fill: cellButton
                         border.width: 2
                         visible: {
-                            if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
+                            if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index))
                                 return true
                             if (cellItem.animatingReveal && settings.cellFrame)
                                 return true
                             return cellButton.flat && settings.cellFrame
                         }
                         color: {
-                            if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index))
-                                return mainWindow.accentColor
+                            if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index))
+                                return root.mainWindow.accentColor
                             return "transparent"
                         }
 
@@ -1177,28 +1180,28 @@ MainWindow {
 
                         opacity: {
                             if (!settings.dimSatisfied || !cellItem.revealed) return 1
-                            if (cellItem.revealed && cellItem.isBombClicked && mines.includes(index)) return 1
-                            return root.hasUnrevealedNeighbors(index) ? 1 : 0.5
+                            if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index)) return 1
+                            return root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
                         }
                     }
 
                     Button {
                         id: cellButton
                         anchors.fill: parent
-                        anchors.margins: cellSpacing / 2
+                        anchors.margins: root.cellSpacing / 2
 
                         Connections {
                             target: cellItem
                             function onRevealedChanged() {
                                 if (cellItem.revealed) {
                                     if (settings.animations) {
-                                        shouldBeFlat = true
+                                        cellItem.shouldBeFlat = true
                                         revealFadeAnimation.start()
                                     } else {
                                         cellButton.flat = true
                                     }
                                 } else {
-                                    shouldBeFlat = false
+                                    cellItem.shouldBeFlat = false
                                     cellButton.opacity = 1
                                     cellButton.flat = false
                                 }
@@ -1209,7 +1212,7 @@ MainWindow {
                             anchors.centerIn: parent
                             source: "qrc:/icons/bomb.png"
                             color: root.darkMode ? "white" : "black"
-                            visible: cellItem.revealed && mines.includes(index)
+                            visible: cellItem.revealed && root.mines.includes(cellItem.index)
                             sourceSize.width: cellItem.width / 2.1
                             sourceSize.height: cellItem.height / 2.1
                         }
@@ -1271,7 +1274,7 @@ MainWindow {
                             source: root.flagPath
                             color: {
                                 if (settings.contrastFlag) return root.darkMode ? "white" : "black"
-                                else return mainWindow.accentColor
+                                else return root.mainWindow.accentColor
                             }
                             sourceSize.width: cellItem.width / 1.8
                             sourceSize.height: cellItem.height / 1.8
@@ -1303,32 +1306,32 @@ MainWindow {
                             sourceSize.height: cellItem.height / 2.1
                             opacity: 0
                             visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
-                            source: mines.includes(index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+                            source: root.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
                         }
 
                         MouseArea {
                             anchors.fill: parent
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: (mouse) => {
-                                           if (!gameStarted) {
-                                               reveal(index);
-                                               playClick();
+                                           if (!root.gameStarted) {
+                                               root.reveal(cellItem.index);
+                                               root.playClick();
                                            } else if (cellItem.revealed) {
-                                               revealConnectedCells(index);
+                                               root.revealConnectedCells(cellItem.index);
                                            } else {
                                                if (settings.invertLRClick) {
                                                    if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                       reveal(index);
-                                                       playClick();
+                                                       root.reveal(cellItem.index);
+                                                       root.playClick();
                                                    } else if (mouse.button === Qt.LeftButton) {
-                                                       toggleFlag(index);
+                                                       root.toggleFlag(cellItem.index);
                                                    }
                                                } else {
                                                    if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                       reveal(index);
-                                                       playClick();
+                                                       root.reveal(cellItem.index);
+                                                       root.playClick();
                                                    } else if (mouse.button === Qt.RightButton) {
-                                                       toggleFlag(index);
+                                                       root.toggleFlag(cellItem.index);
                                                    }
                                                }
                                            }
@@ -1341,16 +1344,16 @@ MainWindow {
                         anchors.centerIn: parent
                         text: {
                             if (!cellItem.revealed || cellItem.flagged) return ""
-                            if (mines.includes(index)) return ""
-                            return numbers[index] === undefined || numbers[index] === 0 ? "" : numbers[index];
+                            if (root.mines.includes(cellItem.index)) return ""
+                            return root.numbers[cellItem.index] === undefined || root.numbers[cellItem.index] === 0 ? "" : root.numbers[cellItem.index];
                         }
-                        font.pixelSize: cellSize * 0.60
+                        font.pixelSize: root.cellSize * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         opacity: {
-                            if (!settings.dimSatisfied || !cellItem.revealed || numbers[index] === 0) return 1
-                            return root.hasUnrevealedNeighbors(index) ? 1 : 0.25
+                            if (!settings.dimSatisfied || !cellItem.revealed || root.numbers[cellItem.index] === 0) return 1
+                            return root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
                         }
 
                         Behavior on opacity {
@@ -1360,7 +1363,7 @@ MainWindow {
 
                         color: {
                             if (!cellItem.revealed) return "black"
-                            if (mines.includes(index)) return "transparent"
+                            if (root.mines.includes(cellItem.index)) return "transparent"
 
                             let palette = {}
                             switch (settings.colorBlindness) {
@@ -1373,7 +1376,7 @@ MainWindow {
                                     5: "#ff7f00",
                                     6: "#a65628",
                                     7: "#f781bf",
-                                    8: darkMode ? "white" : "black"
+                                    8: root.darkMode ? "white" : "black"
                                 }
                                 break
                             case 2: // Protanopia
@@ -1385,7 +1388,7 @@ MainWindow {
                                     5: "#a6d854",
                                     6: "#ffd92f",
                                     7: "#e5c494",
-                                    8: darkMode ? "white" : "black"
+                                    8: root.darkMode ? "white" : "black"
                                 }
                                 break
                             case 3: // Tritanopia
@@ -1397,7 +1400,7 @@ MainWindow {
                                     5: "#ff7f00",
                                     6: "#f781bf",
                                     7: "#a65628",
-                                    8: darkMode ? "white" : "black"
+                                    8: root.darkMode ? "white" : "black"
                                 }
                                 break
                             default: // None
@@ -1409,11 +1412,11 @@ MainWindow {
                                     5: "#ebc034",
                                     6: "#34ebb1",
                                     7: "#eb8634",
-                                    8: darkMode ? "white" : "black"
+                                    8: root.darkMode ? "white" : "black"
                                 }
                             }
 
-                            return palette[numbers[index]] || "black"
+                            return palette[root.numbers[cellItem.index]] || "black"
                         }
                     }
 
@@ -1422,7 +1425,7 @@ MainWindow {
                             opacity = 1
                             return
                         }
-                        grid.initialAnimationPlayed = false  // Reset the animation flag
+                        grid.initialAnimationPlayed = false
                         opacity = 0
                         fadeTimer.restart()
                     }
