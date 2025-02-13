@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtMultimedia
 import QtQuick.Window
-import QtQuick.Controls.impl
 import QtCore
 import "."
 
@@ -243,8 +242,7 @@ MainWindow {
                 flaggedCells: [],
                 questionedCells: [],
                 safeQuestionedCells: [],
-                elapsedTime: elapsedTime,
-                centiseconds: centisTimer.centiseconds,
+                centiseconds: gameTimer.centiseconds,
                 gameOver: gameOver,
                 gameStarted: gameStarted,
                 firstClickIndex: firstClickIndex,
@@ -276,7 +274,7 @@ MainWindow {
             }
 
             gameTimer.stop()
-            centisTimer.stop()
+            //centisTimer.stop()
 
             gridSizeX = data.gameState.gridSizeX
             gridSizeY = data.gameState.gridSizeY
@@ -305,8 +303,7 @@ MainWindow {
                 return false
             }
 
-            root.elapsedTime = data.gameState.elapsedTime
-            centisTimer.centiseconds = data.gameState.centiseconds
+            gameTimer.centiseconds = data.gameState.centiseconds || (data.gameState.elapsedTime * 100)
             root.gameOver = data.gameState.gameOver
             root.gameStarted = data.gameState.gameStarted
             root.firstClickIndex = data.gameState.firstClickIndex
@@ -351,10 +348,10 @@ MainWindow {
 
             if (gameStarted && !gameOver) {
                 gameTimer.start()
-                centisTimer.start()
+                //centisTimer.start()
             }
 
-            topBar.elapsedTimeLabelText = formatTime(elapsedTime)
+            topBar.elapsedTimeLabelText = formatTime(Math.floor(gameTimer.centiseconds / 100))
             isManuallyLoaded = true
 
             return true
@@ -364,44 +361,33 @@ MainWindow {
         }
     }
 
-    function formatTime(seconds) {
-        const totalMinutes = Math.floor(seconds / 60)
-        const remainingSeconds = seconds % 60
-        return `${totalMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
-    }
-
-    function formatLeaderboardTime(seconds, cs) {
-        const totalMinutes = Math.floor(seconds / 60)
-        const remainingSeconds = seconds % 60
-        let timeString = ""
-        timeString += totalMinutes.toString().padStart(2, '0') + ":"
-        timeString += remainingSeconds.toString().padStart(2, '0')
-        timeString += "." + cs.toString().padStart(2, '0')
-        return timeString
-    }
-
     Timer {
         id: gameTimer
-        interval: 1000
-        repeat: true
-        onTriggered: {
-            root.elapsedTime++
-            topBar.elapsedTimeLabelText = root.formatTime(root.elapsedTime)
-        }
-    }
-
-    Timer {
-        id: centisTimer
         interval: 10
         repeat: true
-        running: gameTimer.running
         property int centiseconds: 0
 
         onTriggered: {
-            centiseconds = (centiseconds + 1) % 100
+            centiseconds++
+            // Update the regular time display every 100 centiseconds (1 second)
+            if (centiseconds % 100 === 0) {
+                topBar.elapsedTimeLabelText = root.formatTime(Math.floor(centiseconds / 100))
+            }
         }
     }
 
+    function formatTime(seconds, includeCentis = false) {
+        const totalMinutes = Math.floor(seconds / 60)
+        const remainingSeconds = seconds % 60
+        const baseTime = `${totalMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+
+        if (includeCentis) {
+            const cs = gameTimer.centiseconds % 100
+            return `${baseTime}.${cs.toString().padStart(2, '0')}`
+        }
+
+        return baseTime
+    }
     WelcomePage {
         id: welcomePopup
         root: root
@@ -560,7 +546,7 @@ MainWindow {
                 let currentPos = newRow * gridSizeX + newCol;
                 let adjacentCell = grid.itemAtIndex(currentPos) as Cell;
 
-                if (adjacentCell.questioned) {
+                if (adjacentCell.questioned || adjacentCell.safeQuestioned) {
                     hasQuestionMark = true;
                     break outerLoop;
                 }
@@ -625,10 +611,9 @@ MainWindow {
         flaggedCount = 0
         firstClickIndex = -1
         gameStarted = false
-        elapsedTime = 0
         currentHintCount = 0
+        gameTimer.centiseconds = 0
         gameTimer.stop()
-        centisTimer.stop()
         topBar.elapsedTimeLabelText = "00:00"
         isManuallyLoaded = false
 
@@ -658,7 +643,6 @@ MainWindow {
             }
             gameStarted = true
             gameTimer.start()
-            centisTimer.start()
         }
 
         let cellsToReveal = [index]
@@ -680,7 +664,6 @@ MainWindow {
                 cell.isBombClicked = true
                 gameOver = true
                 gameTimer.stop()
-                centisTimer.stop()
                 revealAllMines()
                 playLoose()
                 gameOverPopup.gameOverLabelText = "Game over"
@@ -703,6 +686,9 @@ MainWindow {
                         let adjacentCell = grid.itemAtIndex(adjacentIndex) as Cell
                         if (adjacentCell.questioned) {
                             adjacentCell.questioned = false
+                        }
+                        if (adjacentCell.safeQuestioned) {
+                            adjacentCell.safeQuestioned = false
                         }
                         cellsToReveal.push(adjacentIndex)
                     }
@@ -750,10 +736,9 @@ MainWindow {
         if (revealedCount === gridSizeX * gridSizeY - mineCount && !gameOver) {
             gameOver = true
             gameTimer.stop()
-            centisTimer.stop()
 
             if (!isManuallyLoaded) {
-                const formattedTime = formatTime(elapsedTime, centisTimer.centiseconds)
+                const formattedTime = formatTime(Math.floor(gameTimer.centiseconds / 100), true)
 
                 let leaderboardData = mainWindow.loadGameState("leaderboard.json")
                 let leaderboard = {}
@@ -770,7 +755,7 @@ MainWindow {
                 if (difficulty) {
                     const timeField = difficulty + 'Time';
                     const winsField = difficulty + 'Wins'; // New field for tracking wins
-                    const formattedTime = formatLeaderboardTime(elapsedTime, centisTimer.centiseconds);
+                    const formattedTime = formatTime(Math.floor(gameTimer.centiseconds / 100), true)
 
                     // Initialize wins counter if it doesn't exist
                     if (!leaderboard[winsField]) {
@@ -798,37 +783,40 @@ MainWindow {
                 mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
 
                 if (typeof steamIntegration !== "undefined") {
+                    const difficulty = getDifficultyLevel();
+
                     if (currentHintCount === 0 && settings.fixedSeed == -1) {
-                        if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
+                        if (difficulty === 'easy') {
                             if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
-                                steamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
-                                flagToast.visible = true
-                                root.flag1Unlocked = true
+                                steamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
+                                flagToast.visible = true;
+                                root.flag1Unlocked = true;
                             }
-                        } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
+                        } else if (difficulty === 'medium') {
                             if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
-                                steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
-                                flagToast.visible = true
-                                root.flag2Unlocked = true
+                                steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
+                                flagToast.visible = true;
+                                root.flag2Unlocked = true;
                             }
-                        } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
+                        } else if (difficulty === 'hard') {
                             if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
-                                steamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
-                                flagToast.visible = true
-                                root.flag3Unlocked = true
+                                steamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
+                                flagToast.visible = true;
+                                root.flag3Unlocked = true;
                             }
                         }
                     }
 
-                    if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && elapsedTime < 15) {
-                        steamIntegration.unlockAchievement("ACH_SPEED_DEMON")
+                    if (difficulty === 'easy') {
+                        if (Math.floor(gameTimer.centiseconds / 100) < 15) {
+                            steamIntegration.unlockAchievement("ACH_SPEED_DEMON");
+                        }
+                        if (currentHintCount >= 20) {
+                            steamIntegration.unlockAchievement("ACH_HINT_MASTER");
+                        }
                     }
 
-                    if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10 && currentHintCount >= 20) {
-                        steamIntegration.unlockAchievement("ACH_HINT_MASTER")
-                    }
-
-                    steamIntegration.incrementTotalWin()
+                    steamIntegration.incrementTotalWin();
                 }
             }
 
@@ -910,35 +898,6 @@ MainWindow {
         return unrevealedCount > 0 || flagCount !== numbers[index]
     }
 
-    Component.onCompleted: {
-        const difficultySet = root.difficultySettings[settings.difficulty]
-        if (difficultySet) {
-            root.gridSizeX = difficultySet.x
-            root.gridSizeY = difficultySet.y
-            root.mineCount = difficultySet.mines
-        }
-        let leaderboardData = mainWindow.loadLeaderboard()
-        if (leaderboardData) {
-            try {
-                const leaderboard = JSON.parse(leaderboardData)
-                // Load times
-                leaderboardWindow.easyTime = leaderboard.easyTime || ""
-                leaderboardWindow.mediumTime = leaderboard.mediumTime || ""
-                leaderboardWindow.hardTime = leaderboard.hardTime || ""
-                leaderboardWindow.retr0Time = leaderboard.retr0Time || ""
-
-                // Load wins
-                leaderboardWindow.easyWins = leaderboard.easyWins || 0
-                leaderboardWindow.mediumWins = leaderboard.mediumWins || 0
-                leaderboardWindow.hardWins = leaderboard.hardWins || 0
-                leaderboardWindow.retr0Wins = leaderboard.retr0Wins || 0
-            } catch (e) {
-                console.error("Failed to parse leaderboard data:", e)
-            }
-        }
-        welcomePopup.visible = mainWindow.showWelcome
-    }
-
     Timer {
         id: initialLoadTimer
         interval: 1
@@ -967,6 +926,10 @@ MainWindow {
         }
     }
 
+    FlagToast {
+        id: flagToast
+    }
+
     TopBar {
         id: topBar
         root: root
@@ -976,32 +939,6 @@ MainWindow {
         settingsWindow: settingsWindow
         leaderboardWindow: leaderboardWindow
         aboutPage: aboutPage
-    }
-
-    ToolTip {
-        id: flagToast
-        font.pixelSize: 18
-        timeout: 3000
-        x: Math.round((parent.width - width) / 2)
-        y: parent.y + parent.height - height - 30
-
-        contentItem: Item {
-            Text {
-                anchors.centerIn: parent
-                text: qsTr("New flag unlocked!")
-                color: "#28d13c"
-                font.pixelSize: 18
-                font.bold: true
-            }
-        }
-
-        enter: Transition {
-            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 200 }
-        }
-
-        exit: Transition {
-            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 200 }
-        }
     }
 
     GameArea {
@@ -1040,382 +977,41 @@ MainWindow {
                     id: cellItem
                     width: root.cellSize
                     height: root.cellSize
-
-                    required property int index
-
+                    root: root
+                    settings: settings
+                    grid: grid
                     row: Math.floor(index / root.gridSizeX)
                     col: index % root.gridSizeX
                     opacity: 1
-
-                    Component.onCompleted: {
-                        grid.cellsCreated++
-
-                        if (grid.cellsCreated === root.gridSizeX * root.gridSizeY) {
-                            root.gridFullyInitialized = true
-                            initialLoadTimer.start()
-                        }
-
-                        if (settings.animations && !grid.initialAnimationPlayed) {
-                            opacity = 0
-                            fadeTimer.start()
-                            if (index === (root.gridSizeX * root.gridSizeY - 1)) {
-                                grid.initialAnimationPlayed = true
-                            }
-                        }
-                    }
-
-                    NumberAnimation {
-                        id: hintRevealFadeIn
-                        target: hintOverlay
-                        property: "opacity"
-                        from: 0
-                        to: 1
-                        duration: 200
-                    }
-
-                    NumberAnimation {
-                        id: hintRevealFadeOut
-                        target: hintOverlay
-                        property: "opacity"
-                        from: 1
-                        to: 0
-                        duration: 200
-                    }
-
-                    SequentialAnimation {
-                        id: hintAnimation
-                        loops: 3
-                        running: false
-                        onStarted: hintRevealFadeIn.start()
-                        onFinished: hintRevealFadeOut.start()
-
-                        SequentialAnimation {
-                            PropertyAnimation {
-                                target: cellButton
-                                property: "scale"
-                                to: 1.2
-                                duration: 300
-                                easing.type: Easing.InOutQuad
-                            }
-                            PropertyAnimation {
-                                target: cellButton
-                                property: "scale"
-                                to: 1.0
-                                duration: 300
-                                easing.type: Easing.InOutQuad
-                            }
-                        }
-                    }
-
-                    NumberAnimation {
-                        id: fadeAnimation
-                        target: cellItem
-                        property: "opacity"
-                        from: 0
-                        to: 1
-                        duration: 200
-                    }
-
-                    NumberAnimation {
-                        id: revealFadeAnimation
-                        target: cellButton
-                        property: "opacity"
-                        from: 1
-                        to: 0
-                        duration: 200
-                        easing.type: Easing.Linear
-                        onStarted: cellItem.animatingReveal = true
-                        onFinished: {
-                            cellItem.animatingReveal = false
-                            cellButton.flat = cellItem.shouldBeFlat
-                            cellButton.opacity = 1
-                        }
-                    }
-
-                    Timer {
-                        id: fadeTimer
-                        interval: cellItem.diagonalSum * 20
-                        repeat: false
-                        onTriggered: {
-                            if (settings.animations) {
-                                fadeAnimation.start()
-                            }
-                        }
-                    }
-
-                    CellFrame {
-                        anchors.fill: cellButton
-                        border.width: 2
-                        visible: {
-                            if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index))
-                            return true
-                            if (cellItem.animatingReveal && settings.cellFrame)
-                            return true
-                            return cellButton.flat && settings.cellFrame
-                        }
-                        color: {
-                            if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index))
-                            return root.mainWindow.accentColor
-                            return "transparent"
-                        }
-
-                        Behavior on opacity {
-                            enabled: settings.animations
-                            NumberAnimation { duration: 200 }
-                        }
-
-                        opacity: {
-                            if (!settings.dimSatisfied || !cellItem.revealed) return 1
-                            if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index)) return 1
-                            return root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
-                        }
-                    }
-
-                    Button {
-                        id: cellButton
-                        anchors.fill: parent
-                        anchors.margins: root.cellSpacing / 2
-
-                        Connections {
-                            target: cellItem
-                            function onRevealedChanged() {
-                                if (cellItem.revealed) {
-                                    if (settings.animations) {
-                                        cellItem.shouldBeFlat = true
-                                        revealFadeAnimation.start()
-                                    } else {
-                                        cellButton.flat = true
-                                    }
-                                } else {
-                                    cellItem.shouldBeFlat = false
-                                    cellButton.opacity = 1
-                                    cellButton.flat = false
-                                }
-                            }
-                        }
-
-                        IconImage {
-                            anchors.centerIn: parent
-                            source: "qrc:/icons/bomb.png"
-                            color: root.darkMode ? "white" : "black"
-                            visible: cellItem.revealed && root.mines.includes(cellItem.index)
-                            sourceSize.width: cellItem.width / 2.1
-                            sourceSize.height: cellItem.height / 2.1
-                        }
-
-                        IconImage {
-                            anchors.centerIn: parent
-                            source: "qrc:/icons/questionmark.png"
-                            color: root.darkMode ? "white" : "black"
-                            sourceSize.width: cellItem.width / 2.1
-                            sourceSize.height: cellItem.height / 2.1
-                            opacity: cellItem.questioned ? 1 : 0
-                            scale: cellItem.questioned ? 1 : 1.3
-
-                            Behavior on opacity {
-                                enabled: settings.animations && !root.noAnimReset
-                                OpacityAnimator {
-                                    duration: 300
-                                    easing.type: Easing.OutQuad
-                                }
-                            }
-
-                            Behavior on scale {
-                                enabled: settings.animations && !root.noAnimReset
-                                NumberAnimation {
-                                    duration: 300
-                                    easing.type: Easing.OutBack
-                                }
-                            }
-                        }
-
-                        IconImage {
-                            anchors.centerIn: parent
-                            source: "qrc:/icons/questionmark.png"
-                            color: "green"
-                            sourceSize.width: cellItem.width / 2.1
-                            sourceSize.height: cellItem.height / 2.1
-                            opacity: cellItem.safeQuestioned ? 1 : 0
-                            scale: cellItem.safeQuestioned ? 1 : 1.3
-
-                            Behavior on opacity {
-                                enabled: settings.animations && !root.noAnimReset
-                                OpacityAnimator {
-                                    duration: 300
-                                    easing.type: Easing.OutQuad
-                                }
-                            }
-
-                            Behavior on scale {
-                                enabled: settings.animations && !root.noAnimReset
-                                NumberAnimation {
-                                    duration: 300
-                                    easing.type: Easing.OutBack
-                                }
-                            }
-                        }
-
-                        IconImage {
-                            anchors.centerIn: parent
-                            source: root.flagPath
-                            color: {
-                                if (settings.contrastFlag) return root.darkMode ? "white" : "black"
-                                else return root.mainWindow.accentColor
-                            }
-                            sourceSize.width: cellItem.width / 1.8
-                            sourceSize.height: cellItem.height / 1.8
-                            opacity: cellItem.flagged ? 1 : 0
-                            scale: cellItem.flagged ? 1 : 1.3
-
-                            Behavior on opacity {
-                                enabled: settings.animations && !root.noAnimReset
-                                OpacityAnimator {
-                                    duration: 300
-                                    easing.type: Easing.OutQuad
-                                }
-                            }
-
-                            Behavior on scale {
-                                enabled: settings.animations && !root.noAnimReset
-                                NumberAnimation {
-                                    duration: 300
-                                    easing.type: Easing.OutBack
-                                }
-                            }
-                        }
-
-                        Image {
-                            id: hintOverlay
-                            anchors.centerIn: parent
-                            sourceSize.width: cellItem.width / 2.1
-                            sourceSize.height: cellItem.height / 2.1
-                            opacity: 0
-                            visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
-                            source: root.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            acceptedButtons: Qt.LeftButton | Qt.RightButton
-                            onClicked: (mouse) => {
-                                if (!root.gameStarted) {
-                                    root.reveal(cellItem.index);
-                                    root.playClick();
-                                } else if (cellItem.revealed) {
-                                    root.revealConnectedCells(cellItem.index);
-                                } else {
-                                    if (settings.invertLRClick) {
-                                        if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                            root.reveal(cellItem.index);
-                                            root.playClick();
-                                        } else if (mouse.button === Qt.LeftButton) {
-                                            root.toggleFlag(cellItem.index);
-                                        }
-                                    } else {
-                                        if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                            root.reveal(cellItem.index);
-                                            root.playClick();
-                                        } else if (mouse.button === Qt.RightButton) {
-                                            root.toggleFlag(cellItem.index);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: {
-                            if (!cellItem.revealed || cellItem.flagged) return ""
-                            if (root.mines.includes(cellItem.index)) return ""
-                            return root.numbers[cellItem.index] === undefined || root.numbers[cellItem.index] === 0 ? "" : root.numbers[cellItem.index];
-                        }
-                        font.pixelSize: root.cellSize * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        opacity: {
-                            if (!settings.dimSatisfied || !cellItem.revealed || root.numbers[cellItem.index] === 0) return 1
-                            return root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
-                        }
-
-                        Behavior on opacity {
-                            enabled: settings.animations
-                            NumberAnimation { duration: 200 }
-                        }
-
-                        color: {
-                            if (!cellItem.revealed) return "black"
-                            if (root.mines.includes(cellItem.index)) return "transparent"
-
-                            let palette = {}
-                            switch (settings.colorBlindness) {
-                                case 1: // Deuteranopia
-                                palette = {
-                                    1: "#377eb8",
-                                    2: "#4daf4a",
-                                    3: "#e41a1c",
-                                    4: "#984ea3",
-                                    5: "#ff7f00",
-                                    6: "#a65628",
-                                    7: "#f781bf",
-                                    8: root.darkMode ? "white" : "black"
-                                }
-                                break
-                                case 2: // Protanopia
-                                palette = {
-                                    1: "#66c2a5",
-                                    2: "#fc8d62",
-                                    3: "#8da0cb",
-                                    4: "#e78ac3",
-                                    5: "#a6d854",
-                                    6: "#ffd92f",
-                                    7: "#e5c494",
-                                    8: root.darkMode ? "white" : "black"
-                                }
-                                break
-                                case 3: // Tritanopia
-                                palette = {
-                                    1: "#e41a1c",
-                                    2: "#377eb8",
-                                    3: "#4daf4a",
-                                    4: "#984ea3",
-                                    5: "#ff7f00",
-                                    6: "#f781bf",
-                                    7: "#a65628",
-                                    8: root.darkMode ? "white" : "black"
-                                }
-                                break
-                                default: // None
-                                palette = {
-                                    1: "#069ecc",
-                                    2: "#28d13c",
-                                    3: "#d12844",
-                                    4: "#9328d1",
-                                    5: "#ebc034",
-                                    6: "#34ebb1",
-                                    7: "#eb8634",
-                                    8: root.darkMode ? "white" : "black"
-                                }
-                            }
-
-                            return palette[root.numbers[cellItem.index]] || "black"
-                        }
-                    }
-
-                    function startFadeIn() {
-                        if (!settings.animations) {
-                            opacity = 1
-                            return
-                        }
-                        grid.initialAnimationPlayed = false
-                        opacity = 0
-                        fadeTimer.restart()
-                    }
                 }
             }
         }
+    }
+
+    Component.onCompleted: {
+        const difficultySet = root.difficultySettings[settings.difficulty]
+        if (difficultySet) {
+            root.gridSizeX = difficultySet.x
+            root.gridSizeY = difficultySet.y
+            root.mineCount = difficultySet.mines
+        }
+        let leaderboardData = mainWindow.loadLeaderboard()
+        if (leaderboardData) {
+            try {
+                const leaderboard = JSON.parse(leaderboardData)
+                leaderboardWindow.easyTime = leaderboard.easyTime || ""
+                leaderboardWindow.mediumTime = leaderboard.mediumTime || ""
+                leaderboardWindow.hardTime = leaderboard.hardTime || ""
+                leaderboardWindow.retr0Time = leaderboard.retr0Time || ""
+                leaderboardWindow.easyWins = leaderboard.easyWins || 0
+                leaderboardWindow.mediumWins = leaderboard.mediumWins || 0
+                leaderboardWindow.hardWins = leaderboard.hardWins || 0
+                leaderboardWindow.retr0Wins = leaderboard.retr0Wins || 0
+            } catch (e) {
+                console.error("Failed to parse leaderboard data:", e)
+            }
+        }
+        welcomePopup.visible = mainWindow.showWelcome
     }
 }
 
