@@ -617,16 +617,25 @@ MainWindow {
         topBar.elapsedTimeLabelText = "00:00"
         isManuallyLoaded = false
 
+        root.noAnimReset = true
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            let cell = grid.itemAtIndex(i)
+            let cell = grid.itemAtIndex(i) as Cell
             if (cell) {
-                root.noAnimReset = true
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
                 cell.safeQuestioned = false
-                root.noAnimReset = false
-                cell.startFadeIn()
+            }
+        }
+        root.noAnimReset = false
+
+        // Start fade in animation after all properties are reset
+        if (settings.animations) {
+            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+                let cell = grid.itemAtIndex(i) as Cell
+                if (cell) {
+                    cell.startFadeIn()
+                }
             }
         }
     }
