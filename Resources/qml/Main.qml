@@ -145,10 +145,10 @@ MainWindow {
     property bool shouldUpdateSize: true
     property int cellSize: {
         switch (settings.cellSize) {
-        case 0: return 35;
-        case 1: return isGamescope ? 43 : 45;
-        case 2: return 55;
-        default: return isGamescope ? 43 : 45;
+            case 0: return 35;
+            case 1: return isGamescope ? 43 : 45;
+            case 2: return 55;
+            default: return isGamescope ? 43 : 45;
         }
     }
     property int cellSpacing: 2
@@ -217,14 +217,14 @@ MainWindow {
         let revealed = [];
         let flagged = [];
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            let cell = grid.itemAtIndex(i);
+            let cell = grid.itemAtIndex(i) as Cell;
             if (cell.revealed) revealed.push(i);
             if (cell.flagged) flagged.push(i);
         }
         let mineCell = gameLogic.findMineHint(revealed, flagged);
         if (mineCell !== -1) {
-            let cell = grid.itemAtIndex(mineCell);
-            cell.highlightHint();
+            let cell = grid.itemAtIndex(mineCell) as Cell;
+            cell.highlightHint()
         }
         currentHintCount++;
     }
@@ -256,7 +256,7 @@ MainWindow {
         }
 
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            let cell = grid.itemAtIndex(i)
+            let cell = grid.itemAtIndex(i) as Cell
             if (cell.revealed) saveData.gameState.revealedCells.push(i)
             if (cell.flagged) saveData.gameState.flaggedCells.push(i)
             if (cell.questioned) saveData.gameState.questionedCells.push(i)
@@ -341,9 +341,9 @@ MainWindow {
 
             if (data.gameState.safeQuestionedCells) {
                 data.gameState.safeQuestionedCells.forEach(index => {
-                                                           let cell = grid.itemAtIndex(index)
-                                                           if (cell) cell.safeQuestioned = true
-                                                       })
+                                                               let cell = grid.itemAtIndex(index)
+                                                               if (cell) cell.safeQuestioned = true
+                                                           })
             }
 
             revealedCount = data.gameState.revealedCells.length
@@ -447,11 +447,11 @@ MainWindow {
         id: clickEffect0
         source: {
             switch (settings.soundPackIndex) {
-            case 0: return "qrc:/sounds/pop/pop_click.wav"
-            case 1: return "qrc:/sounds/w11/w11_click.wav"
-            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+                case 0: return "qrc:/sounds/pop/pop_click.wav"
+                case 1: return "qrc:/sounds/w11/w11_click.wav"
+                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+                case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+                default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
             }
         }
     }
@@ -460,11 +460,11 @@ MainWindow {
         id: clickEffect1
         source: {
             switch (settings.soundPackIndex) {
-            case 0: return "qrc:/sounds/pop/pop_click.wav"
-            case 1: return "qrc:/sounds/w11/w11_click.wav"
-            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+                case 0: return "qrc:/sounds/pop/pop_click.wav"
+                case 1: return "qrc:/sounds/w11/w11_click.wav"
+                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+                case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+                default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
             }
         }
     }
@@ -473,11 +473,11 @@ MainWindow {
         id: clickEffect2
         source: {
             switch (settings.soundPackIndex) {
-            case 0: return "qrc:/sounds/pop/pop_click.wav"
-            case 1: return "qrc:/sounds/w11/w11_click.wav"
-            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-            case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+                case 0: return "qrc:/sounds/pop/pop_click.wav"
+                case 1: return "qrc:/sounds/w11/w11_click.wav"
+                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
+                case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
+                default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
             }
         }
     }
@@ -486,11 +486,11 @@ MainWindow {
         id: looseEffect
         source: {
             switch (settings.soundPackIndex) {
-            case 0: return "qrc:/sounds/pop/pop_bomb.wav"
-            case 1: return "qrc:/sounds/w11/w11_bomb.wav"
-            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
-            case 3: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
-            default: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
+                case 0: return "qrc:/sounds/pop/pop_bomb.wav"
+                case 1: return "qrc:/sounds/w11/w11_bomb.wav"
+                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
+                case 3: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
+                default: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
             }
         }
     }
@@ -499,11 +499,11 @@ MainWindow {
         id: winEffect
         source: {
             switch (settings.soundPackIndex) {
-            case 0: return "qrc:/sounds/pop/pop_win.wav"
-            case 1: return "qrc:/sounds/w11/w11_win.wav"
-            case 2: return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
-            case 3: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
-            default: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
+                case 0: return "qrc:/sounds/pop/pop_win.wav"
+                case 1: return "qrc:/sounds/w11/w11_win.wav"
+                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
+                case 3: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
+                default: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
             }
         }
     }
@@ -542,7 +542,7 @@ MainWindow {
 
     function revealConnectedCells(index) {
         if (!settings.autoreveal || !gameStarted || gameOver) return;
-        let cell = grid.itemAtIndex(index);
+        let cell = grid.itemAtIndex(index) as Cell;
         if (!cell.revealed || numbers[index] <= 0) return;
 
         let row = Math.floor(index / gridSizeX);
@@ -558,7 +558,7 @@ MainWindow {
                 let newCol = col + c;
                 if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
                 let currentPos = newRow * gridSizeX + newCol;
-                let adjacentCell = grid.itemAtIndex(currentPos);
+                let adjacentCell = grid.itemAtIndex(currentPos) as Cell;
 
                 if (adjacentCell.questioned) {
                     hasQuestionMark = true;
@@ -647,7 +647,8 @@ MainWindow {
     }
 
     function reveal(index) {
-        if (gameOver || grid.itemAtIndex(index).revealed || grid.itemAtIndex(index).flagged) return
+        let initialCell = grid.itemAtIndex(index) as Cell
+        if (gameOver || initialCell.revealed || initialCell.flagged) return
 
         if (!gameStarted) {
             firstClickIndex = index
@@ -668,7 +669,7 @@ MainWindow {
             if (visited.has(currentIndex)) continue
 
             visited.add(currentIndex)
-            let cell = grid.itemAtIndex(currentIndex)
+            let cell = grid.itemAtIndex(currentIndex) as Cell
 
             if (cell.revealed || cell.flagged) continue
 
@@ -699,7 +700,7 @@ MainWindow {
                         let newCol = col + c
                         if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
                         let adjacentIndex = newRow * gridSizeX + newCol
-                        let adjacentCell = grid.itemAtIndex(adjacentIndex)
+                        let adjacentCell = grid.itemAtIndex(adjacentIndex) as Cell
                         if (adjacentCell.questioned) {
                             adjacentCell.questioned = false
                         }
@@ -714,7 +715,7 @@ MainWindow {
 
     function revealAllMines() {
         for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-            let cell = grid.itemAtIndex(i)
+            let cell = grid.itemAtIndex(i) as Cell
             if (cell) {
                 if (mines.includes(i)) {
                     if (!cell.flagged) {
@@ -840,7 +841,7 @@ MainWindow {
 
     function toggleFlag(index) {
         if (gameOver) return
-        let cell = grid.itemAtIndex(index)
+        let cell = grid.itemAtIndex(index) as Cell
         if (!cell.revealed) {
             if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
                 cell.flagged = true
@@ -1035,24 +1036,15 @@ MainWindow {
                 property bool initialAnimationPlayed: false
                 property int cellsCreated: 0
 
-                delegate: Item {
+                delegate: Cell {
                     id: cellItem
                     width: root.cellSize
                     height: root.cellSize
 
                     required property int index
-                    property bool animatingReveal: false
-                    property bool shouldBeFlat: false
-                    property bool revealed: false
-                    property bool flagged: false
-                    property bool questioned: false
-                    property bool safeQuestioned: false
-                    property bool isBombClicked: false
 
-                    readonly property int row: Math.floor(index / root.gridSizeX)
-                    readonly property int col: index % root.gridSizeX
-                    readonly property int diagonalSum: row + col
-
+                    row: Math.floor(index / root.gridSizeX)
+                    col: index % root.gridSizeX
                     opacity: 1
 
                     Component.onCompleted: {
@@ -1115,10 +1107,6 @@ MainWindow {
                         }
                     }
 
-                    function highlightHint() {
-                        hintAnimation.start();
-                    }
-
                     NumberAnimation {
                         id: fadeAnimation
                         target: cellItem
@@ -1160,14 +1148,14 @@ MainWindow {
                         border.width: 2
                         visible: {
                             if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index))
-                                return true
+                            return true
                             if (cellItem.animatingReveal && settings.cellFrame)
-                                return true
+                            return true
                             return cellButton.flat && settings.cellFrame
                         }
                         color: {
                             if (cellItem.revealed && cellItem.isBombClicked && root.mines.includes(cellItem.index))
-                                return root.mainWindow.accentColor
+                            return root.mainWindow.accentColor
                             return "transparent"
                         }
 
@@ -1296,7 +1284,6 @@ MainWindow {
                             }
                         }
 
-
                         Image {
                             id: hintOverlay
                             anchors.centerIn: parent
@@ -1311,33 +1298,32 @@ MainWindow {
                             anchors.fill: parent
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: (mouse) => {
-                                           if (!root.gameStarted) {
-                                               root.reveal(cellItem.index);
-                                               root.playClick();
-                                           } else if (cellItem.revealed) {
-                                               root.revealConnectedCells(cellItem.index);
-                                           } else {
-                                               if (settings.invertLRClick) {
-                                                   if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
-                                                       root.reveal(cellItem.index);
-                                                       root.playClick();
-                                                   } else if (mouse.button === Qt.LeftButton) {
-                                                       root.toggleFlag(cellItem.index);
-                                                   }
-                                               } else {
-                                                   if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
-                                                       root.reveal(cellItem.index);
-                                                       root.playClick();
-                                                   } else if (mouse.button === Qt.RightButton) {
-                                                       root.toggleFlag(cellItem.index);
-                                                   }
-                                               }
-                                           }
-                                       }
+                                if (!root.gameStarted) {
+                                    root.reveal(cellItem.index);
+                                    root.playClick();
+                                } else if (cellItem.revealed) {
+                                    root.revealConnectedCells(cellItem.index);
+                                } else {
+                                    if (settings.invertLRClick) {
+                                        if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned) {
+                                            root.reveal(cellItem.index);
+                                            root.playClick();
+                                        } else if (mouse.button === Qt.LeftButton) {
+                                            root.toggleFlag(cellItem.index);
+                                        }
+                                    } else {
+                                        if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned) {
+                                            root.reveal(cellItem.index);
+                                            root.playClick();
+                                        } else if (mouse.button === Qt.RightButton) {
+                                            root.toggleFlag(cellItem.index);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
-                    // Number display
                     Text {
                         anchors.centerIn: parent
                         text: {
@@ -1365,7 +1351,7 @@ MainWindow {
 
                             let palette = {}
                             switch (settings.colorBlindness) {
-                            case 1: // Deuteranopia
+                                case 1: // Deuteranopia
                                 palette = {
                                     1: "#377eb8",
                                     2: "#4daf4a",
@@ -1377,7 +1363,7 @@ MainWindow {
                                     8: root.darkMode ? "white" : "black"
                                 }
                                 break
-                            case 2: // Protanopia
+                                case 2: // Protanopia
                                 palette = {
                                     1: "#66c2a5",
                                     2: "#fc8d62",
@@ -1389,7 +1375,7 @@ MainWindow {
                                     8: root.darkMode ? "white" : "black"
                                 }
                                 break
-                            case 3: // Tritanopia
+                                case 3: // Tritanopia
                                 palette = {
                                     1: "#e41a1c",
                                     2: "#377eb8",
@@ -1401,7 +1387,7 @@ MainWindow {
                                     8: root.darkMode ? "white" : "black"
                                 }
                                 break
-                            default: // None
+                                default: // None
                                 palette = {
                                     1: "#069ecc",
                                     2: "#28d13c",
