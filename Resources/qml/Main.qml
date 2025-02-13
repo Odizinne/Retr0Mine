@@ -737,51 +737,46 @@ MainWindow {
             gameOver = true
             gameTimer.stop()
 
-            if (!isManuallyLoaded) {
+            const formattedTime = formatTime(Math.floor(gameTimer.centiseconds / 100), true)
+            let leaderboardData = mainWindow.loadGameState("leaderboard.json")
+            let leaderboard = {}
+
+            if (leaderboardData) {
+                try {
+                    leaderboard = JSON.parse(leaderboardData)
+                } catch (e) {
+                    console.error("Failed to parse leaderboard data:", e)
+                }
+            }
+
+            const difficulty = getDifficultyLevel();
+            if (difficulty) {
+                const timeField = difficulty + 'Time';
+                const winsField = difficulty + 'Wins'; // New field for tracking wins
                 const formattedTime = formatTime(Math.floor(gameTimer.centiseconds / 100), true)
 
-                let leaderboardData = mainWindow.loadGameState("leaderboard.json")
-                let leaderboard = {}
-
-                if (leaderboardData) {
-                    try {
-                        leaderboard = JSON.parse(leaderboardData)
-                    } catch (e) {
-                        console.error("Failed to parse leaderboard data:", e)
-                    }
+                if (!leaderboard[winsField]) {
+                    leaderboard[winsField] = 0;
                 }
 
-                const difficulty = getDifficultyLevel();
-                if (difficulty) {
-                    const timeField = difficulty + 'Time';
-                    const winsField = difficulty + 'Wins'; // New field for tracking wins
-                    const formattedTime = formatTime(Math.floor(gameTimer.centiseconds / 100), true)
+                leaderboard[winsField]++;
+                leaderboardWindow[winsField] = leaderboard[winsField];
 
-                    // Initialize wins counter if it doesn't exist
-                    if (!leaderboard[winsField]) {
-                        leaderboard[winsField] = 0;
-                    }
+                console.log(formattedTime, leaderboard[timeField])
 
-                    // Increment wins counter
-                    leaderboard[winsField]++;
-
-                    // Update leaderboardWindow to display the new wins count
-                    leaderboardWindow[winsField] = leaderboard[winsField];
-
-                    console.log(formattedTime, leaderboard[timeField])
-
-                    if (!leaderboard[timeField] || compareTime(formattedTime, leaderboard[timeField])) {
-                        console.log("pass")
-                        leaderboard[timeField] = formattedTime;
-                        leaderboardWindow[timeField] = formattedTime;
-                        gameOverPopup.newRecordVisible = true
-                    } else {
-                        gameOverPopup.newRecordVisible = false
-                    }
+                if (!leaderboard[timeField] || compareTime(formattedTime, leaderboard[timeField])) {
+                    console.log("pass")
+                    leaderboard[timeField] = formattedTime;
+                    leaderboardWindow[timeField] = formattedTime;
+                    gameOverPopup.newRecordVisible = true
+                } else {
+                    gameOverPopup.newRecordVisible = false
                 }
+            }
 
-                mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
+            mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
 
+            if (!isManuallyLoaded) {
                 if (typeof steamIntegration !== "undefined") {
                     const difficulty = getDifficultyLevel();
 
