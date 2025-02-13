@@ -55,37 +55,38 @@ MainWindow {
 
     Shortcut {
         sequence: "Ctrl+Q"
+        autoRepeat: false
         onActivated: Qt.quit()
     }
-
     Shortcut {
         sequence: StandardKey.Save
         enabled: root.gameStarted
+        autoRepeat: false
         onActivated: saveWindow.visible = true
     }
-
     Shortcut {
         sequence: StandardKey.Open
+        autoRepeat: false
         onActivated: loadWindow.visible = true
     }
-
     Shortcut {
         sequence: StandardKey.New
+        autoRepeat: false
         onActivated: root.initGame()
     }
-
     Shortcut {
         sequence: "Ctrl+P"
+        autoRepeat: false
         onActivated: !settingsWindow.visible ? settingsWindow.show() : settingsWindow.close()
     }
-
     Shortcut {
         sequence: "Ctrl+L"
+        autoRepeat: false
         onActivated: leaderboardWindow.visible = true
     }
-
     Shortcut {
         sequence: "F11"
+        autoRepeat: false
         onActivated: {
             if (root.visibility === 5) {
                 root.visibility = ApplicationWindow.Windowed;
@@ -94,9 +95,9 @@ MainWindow {
             }
         }
     }
-
     Shortcut {
         sequence: "Ctrl+H"
+        autoRepeat: false
         onActivated: root.requestHint()
     }
 
