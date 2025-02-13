@@ -3,6 +3,9 @@ name: Build and Release
 on:
   workflow_dispatch:
 
+env:
+  QT_VERSION: '6.8.2'
+
 jobs:
   build:
     runs-on: windows-latest
@@ -19,7 +22,7 @@ jobs:
         id: qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.1'
+          version: ${{ env.QT_VERSION }}
           add-tools-to-path: true
           cache: true
           modules: 'qtmultimedia'
@@ -40,7 +43,7 @@ jobs:
           $jomExe = "$jomDir\jom.exe"
           if (Test-Path $jomExe) {
             Write-Output "JOM Path: $jomDir"
-            Write-Output "::set-output name=jom_path::$jomDir"
+            "jom_path=$jomDir" >> $env:GITHUB_OUTPUT
           } else {
             Write-Error "jom.exe not found in $jomDir"
             exit 1
@@ -55,41 +58,31 @@ jobs:
           $jomPath = "${{ steps.jom-setup.outputs.jom_path }}"
           & "$jomPath\jom.exe"
 
+      - name: Clean release directory
+        shell: pwsh
+        run: |
+          cd build/release
+          Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
+
       - name: Copy Steam API DLL
         shell: pwsh
         run: |
           Copy-Item "Dependencies\steam\lib\win64\steam_api64.dll" -Destination "build\release\"
-          
-      - name: Remove source and object files
-        shell: pwsh
-        run: |
-          $buildDir = "build/release"
-          if (Test-Path $buildDir) {
-              Get-ChildItem -Path $buildDir -Include *.cpp, *.h, *.obj, *.res, *.qm -Recurse | Remove-Item -Force
-          } else {
-              Write-Host "Directory not found: $buildDir"
-          }
 
       - name: Deploy Qt
         shell: pwsh
         run: |
           cd build
-          $windeployqtPath = "D:\a\Retr0Mine\Qt\6.8.1\msvc2022_64\bin\windeployqt6.exe"
           $qmlDir = "D:\a\Retr0Mine\Retr0Mine\Resources\qml"
-          if (Test-Path $windeployqtPath) {
-              & $windeployqtPath `
-                  --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
-                  --no-opengl-sw `
-                  --no-system-dxc-compiler `
-                  --no-compiler-runtime `
-                  --no-translations `
-                  --no-system-d3d-compiler `
-                  --qmldir $qmlDir `
-                  D:\a\Retr0Mine\Retr0Mine\build\release\Retr0Mine.exe
-          } else {
-              Write-Error "windeployqt not found at the expected path!"
-              exit 1
-          }
+          windeployqt6 `
+              --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
+              --no-opengl-sw `
+              --no-system-dxc-compiler `
+              --no-compiler-runtime `
+              --no-translations `
+              --no-system-d3d-compiler `
+              --qmldir $qmlDir `
+              release\Retr0Mine.exe
 
       - name: Rename release folder
         shell: pwsh
@@ -138,7 +131,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.1'
+          version: ${{ env.QT_VERSION }}
           host: 'linux'
           cache: true
           add-tools-to-path: true
@@ -224,31 +217,27 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: [build, linux-build]
-
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Download Windows ZIP
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_msvc_64
-
       - name: Download Windows Installer
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_Installer
-          path: installer 
-
+          path: installer
       - name: Download Linux Build
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_Linux
-
       - name: Download Steam Deck Installer Desktop File
         run: |
           wget https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop
-
       - name: Bump version and create release
         id: bump_release
         run: |
@@ -263,66 +252,26 @@ jobs:
           else
             NEW_TAG="v$(($LAST_MAJOR_TAG + 1))"
           fi
-
           # Check if the tag already exists
           if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
             echo "Tag '$NEW_TAG' already exists. Incrementing to next major version."
             LAST_MAJOR_TAG=$(git tag --list 'v*' | sed -E 's/^v?([0-9]+).*/\1/' | sort -nr | head -n 1)
             NEW_TAG="v$(($LAST_MAJOR_TAG + 1))"
           fi
-
           echo "New tag is $NEW_TAG"
           git tag $NEW_TAG
           git push origin $NEW_TAG
           echo "new_tag=$NEW_TAG" >> $GITHUB_ENV
-
-      - name: Create GitHub release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.new_tag }}
-          release_name: ${{ env.new_tag }}
-          body: ""
+          name: ${{ env.new_tag }}
           draft: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Windows ZIP asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Retr0Mine_msvc_64.zip
-          asset_name: Retr0Mine_msvc_64.zip
-          asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Windows Installer asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: installer/Retr0Mine_Installer.exe 
-          asset_name: Retr0Mine_Installer.exe  
-          asset_content_type: application/vnd.microsoft.portable-executable
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Linux Build asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Retr0Mine_Linux.zip
-          asset_name: Retr0Mine_Linux.zip
-          asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Steam Deck Installer Desktop File
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Retr0Mine_SteamDeckInstaller.desktop
-          asset_name: Retr0Mine_SteamDeckInstaller.desktop
-          asset_content_type: application/x-desktop
+          files: |
+            Retr0Mine_msvc_64.zip
+            installer/Retr0Mine_Installer.exe
+            Retr0Mine_Linux.zip
+            Retr0Mine_SteamDeckInstaller.desktop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
