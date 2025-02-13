@@ -510,17 +510,13 @@ MainWindow {
 
     function compareTime(time1, time2) {
         if (!time1 || !time2) return true;
-
         const [t1, cs1] = time1.split('.');
         const [t2, cs2] = time2.split('.');
-
-        const [h1, m1, s1] = t1.split(':').map(Number);
-        const [h2, m2, s2] = t2.split(':').map(Number);
-
+        const [m1, s1] = t1.split(':').map(Number);
+        const [m2, s2] = t2.split(':').map(Number);
         // Convert everything to centiseconds for comparison
-        const totalCs1 = ((h1 * 3600 + m1 * 60 + s1) * 100) + parseInt(cs1 || 0);
-        const totalCs2 = ((h2 * 3600 + m2 * 60 + s2) * 100) + parseInt(cs2 || 0);
-
+        const totalCs1 = (m1 * 60 + s1) * 100 + parseInt(cs1 || 0);
+        const totalCs2 = (m2 * 60 + s2) * 100 + parseInt(cs2 || 0);
         return totalCs1 < totalCs2;
     }
 
@@ -786,8 +782,10 @@ MainWindow {
                     // Update leaderboardWindow to display the new wins count
                     leaderboardWindow[winsField] = leaderboard[winsField];
 
-                    // Handle time record
+                    console.log(formattedTime, leaderboard[timeField])
+
                     if (!leaderboard[timeField] || compareTime(formattedTime, leaderboard[timeField])) {
+                        console.log("pass")
                         leaderboard[timeField] = formattedTime;
                         leaderboardWindow[timeField] = formattedTime;
                         gameOverPopup.newRecordVisible = true
