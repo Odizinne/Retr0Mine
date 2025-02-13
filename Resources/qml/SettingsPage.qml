@@ -695,6 +695,16 @@ ApplicationWindow {
                                     animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
                                 }
 
+                                Connections {
+                                    target: settingsPage.root
+                                    function onAnim1UnlockedChanged() {
+                                        animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
+                                    }
+                                    function onAnim2UnlockedChanged() {
+                                        animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
+                                    }
+                                }
+
                                 displayText: model.get(currentIndex).text
                                 delegate: ItemDelegate {
                                     width: parent.width

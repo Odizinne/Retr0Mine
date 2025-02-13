@@ -2,7 +2,6 @@
     <qresource prefix="/qml">
         <file>Main.qml</file>
         <file>Cell.qml</file>
-        <file>FlagToast.qml</file>
         <file>SettingsPage.qml</file>
         <file>GameOverPopup.qml</file>
         <file>AboutPage.qml</file>

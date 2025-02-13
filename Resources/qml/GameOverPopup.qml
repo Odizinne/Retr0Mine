@@ -12,7 +12,8 @@ Popup {
     closePolicy: Popup.NoAutoClose
     width: 300
     property int buttonWidth: Math.max(retryButton.implicitWidth, closeButton.implicitWidth)
-
+    property string notificationText
+    property bool notificationVisible: false
     property string gameOverLabelText: "Game Over"
     property string gameOverLabelColor: "#d12844"
     property bool newRecordVisible: false
@@ -71,6 +72,16 @@ Popup {
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            text: gameOverWindow.notificationText
+            visible: gameOverWindow.notificationVisible
+            font.pixelSize: 13
+            font.bold: true
+            Layout.columnSpan: 2
+            color: "#28d13c"
+        }
+
+        Label {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             text: qsTr("New record saved")
             visible: gameOverWindow.newRecordVisible
             Layout.columnSpan: 2
@@ -92,6 +103,7 @@ Popup {
             Layout.preferredWidth: gameOverWindow.buttonWidth
             onClicked: {
                 gameOverWindow.visible = false
+                gameOverWindow.notificationVisible = false
                 gameOverWindow.root.initGame()
             }
         }
@@ -103,6 +115,7 @@ Popup {
             Layout.preferredWidth: gameOverWindow.buttonWidth
             onClicked: {
                 gameOverWindow.visible = false
+                gameOverWindow.notificationVisible = false
             }
         }
     }

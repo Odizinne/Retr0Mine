@@ -780,22 +780,22 @@ MainWindow {
                         if (difficulty === 'easy') {
                             if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
                                 steamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
-                                flagToast.notificationText = qsTr("New flag unlocked!")
-                                flagToast.visible = true;
+                                gameOverPopup.notificationText = qsTr("New flag unlocked!")
+                                gameOverPopup.notificationVisible = true;
                                 root.flag1Unlocked = true;
                             }
                         } else if (difficulty === 'medium') {
                             if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
                                 steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
-                                flagToast.notificationText = qsTr("New flag unlocked!")
-                                flagToast.visible = true;
+                                gameOverPopup.notificationText = qsTr("New flag unlocked!")
+                                gameOverPopup.notificationVisible = true;
                                 root.flag2Unlocked = true;
                             }
                         } else if (difficulty === 'hard') {
                             if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
                                 steamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
-                                flagToast.notificationText = qsTr("New flag unlocked!")
-                                flagToast.visible = true;
+                                gameOverPopup.notificationText = qsTr("New flag unlocked!")
+                                gameOverPopup.notificationVisible = true;
                                 root.flag3Unlocked = true;
                             }
                         }
@@ -804,14 +804,15 @@ MainWindow {
                     if (difficulty === 'easy') {
                         if (Math.floor(gameTimer.centiseconds / 100) < 15 && !steamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
                             steamIntegration.unlockAchievement("ACH_SPEED_DEMON");
-                            flagToast.notificationText = qsTr("New grid animation unlocked!")
-                            flagToast.visible = true
+                            gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
+                            gameOverPopup.notificationVisible = true
                             root.anim2Unlocked = true
+
                         }
                         if (currentHintCount >= 20 && !steamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
                             steamIntegration.unlockAchievement("ACH_HINT_MASTER");
-                            flagToast.notificationText = qsTr("New grid animation unlocked!")
-                            flagToast.visible = true
+                            gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
+                            gameOverPopup.notificationVisible = true
                             root.anim1Unlocked = true
                         }
                     }
@@ -924,10 +925,6 @@ MainWindow {
         if (settings.startFullScreen || root.isGamescope) {
             root.visibility = 5
         }
-    }
-
-    FlagToast {
-        id: flagToast
     }
 
     TopBar {
