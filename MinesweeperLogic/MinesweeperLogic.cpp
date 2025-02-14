@@ -754,7 +754,6 @@ int MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
         bool isMine = false;
         bool isRevealed = false;
         int adjacentMines = 0;
-        int unrevealedNeighbors = 0;
         QSet<int> neighbors;
     };
 
@@ -778,7 +777,6 @@ int MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
                 }
             }
         }
-        cells[i].unrevealedNeighbors = cells[i].neighbors.size();
     }
 
     // Create initial safe area
@@ -801,36 +799,57 @@ int MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
         }
     }
 
-    auto wouldCreatePattern = [width = m_width, height = m_height](const QVector<CellState>& cells, int pos) -> bool {
+    auto wouldCreate5050Pattern = [width = m_width, height = m_height](const QVector<CellState>& cells, int pos) -> bool {
         int row = pos / width;
         int col = pos % width;
 
-        // Check all potential 2x2 formations around this position
-        for (int baseRow = std::max(0, row - 1); baseRow <= std::min(height - 2, row); ++baseRow) {
-            for (int baseCol = std::max(0, col - 1); baseCol <= std::min(width - 2, col); ++baseCol) {
-                // Get all four positions in the 2x2 grid
-                int topLeft = baseRow * width + baseCol;
-                int topRight = topLeft + 1;
-                int bottomLeft = topLeft + width;
-                int bottomRight = bottomLeft + 1;
+        // For each position around the placed mine
+        for (int r = std::max(0, row - 1); r <= std::min(height - 1, row + 1); ++r) {
+            for (int c = std::max(0, col - 1); c <= std::min(width - 1, col + 1); ++c) {
+                int checkPos = r * width + c;
+
+                // Check 2x2 grid with this position as any corner
+                std::array<std::pair<int, int>, 4> corners = {{
+                    {r, c}, {r, c+1},
+                    {r+1, c}, {r+1, c+1}
+                }};
+
+                // Skip if any position would be out of bounds
+                if (c + 1 >= width || r + 1 >= height) continue;
 
                 int mineCount = 0;
-                int unrevealed = 0;
+                std::vector<int> numbers;
+                std::vector<int> unrevealed;
 
-                // Count mines and unrevealed cells
-                for (int checkPos : {topLeft, topRight, bottomLeft, bottomRight}) {
-                    if (cells[checkPos].isMine) mineCount++;
-                    if (!cells[checkPos].isRevealed && !cells[checkPos].isMine) unrevealed++;
+                for (const auto& [cr, cc] : corners) {
+                    int p = cr * width + cc;
+                    if (cells[p].isMine) {
+                        mineCount++;
+                    } else if (!cells[p].isRevealed) {
+                        unrevealed.push_back(p);
+                    } else {
+                        numbers.push_back(cells[p].adjacentMines);
+                    }
                 }
 
-                // Check for diagonal mine patterns that would create 50-50
-                bool diagMines = (cells[topLeft].isMine && cells[bottomRight].isMine) ||
-                                 (cells[topRight].isMine && cells[bottomLeft].isMine);
-
-                // If we have two diagonal mines, or two mines and two unrevealed,
-                // this could create a 50-50 situation
-                if (diagMines || (mineCount == 2 && unrevealed == 2)) {
-                    return true;
+                // Look for patterns that would create 50-50 situations
+                if (unrevealed.size() == 2) {
+                    // If there's exactly one mine and two unrevealed cells in a 2x2 grid,
+                    // and the numbers around them would force exactly one mine in the unrevealed cells,
+                    // it's a potential 50-50
+                    if (mineCount == 1 && numbers.size() >= 1) {
+                        bool would5050 = false;
+                        for (int num : numbers) {
+                            // Common 50-50 patterns like 3-1, 2-1, etc.
+                            if ((num == 3 && std::find(numbers.begin(), numbers.end(), 1) != numbers.end()) ||
+                                (num == 2 && std::find(numbers.begin(), numbers.end(), 1) != numbers.end()) ||
+                                (num == 1 && std::find(numbers.begin(), numbers.end(), 1) != numbers.end())) {
+                                would5050 = true;
+                                break;
+                            }
+                        }
+                        if (would5050) return true;
+                    }
                 }
             }
         }
@@ -867,13 +886,12 @@ int MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
             // Update neighbors
             for (int neighbor : cells[candidate].neighbors) {
                 cells[neighbor].adjacentMines++;
-                cells[neighbor].unrevealedNeighbors--;
             }
 
-            // Check if this placement creates any problematic patterns
-            bool createsPattern = wouldCreatePattern(cells, candidate);
+            // Check if this placement creates any 50-50 patterns
+            bool creates5050 = wouldCreate5050Pattern(cells, candidate);
 
-            if (!createsPattern) {
+            if (!creates5050) {
                 // Accept this placement
                 m_mines.append(candidate);
                 candidates.removeAt(i);
@@ -885,7 +903,6 @@ int MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
             cells[candidate].isMine = false;
             for (int neighbor : cells[candidate].neighbors) {
                 cells[neighbor].adjacentMines--;
-                cells[neighbor].unrevealedNeighbors++;
             }
         }
 

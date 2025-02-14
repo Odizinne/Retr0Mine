@@ -341,7 +341,7 @@ ApplicationWindow {
                             SpinBox {
                                 id: minesSpinBox
                                 from: 1
-                                to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 5)
+                                to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 4) // / 5
                                 editable: true
                                 value: settingsPage.settings.customMines
                                 onValueChanged: settingsPage.settings.customMines = value
