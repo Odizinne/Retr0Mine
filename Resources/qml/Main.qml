@@ -564,25 +564,31 @@ MainWindow {
         }
 
         if (settings.advGenAlgo) {
-            console.log("Using new algo")
-            const result = gameLogic.placeLogicalMines(col, row);
+            console.log("Using classic algo")
+            const result = gameLogic.placeMines(col, row);
             if (result === -1) {
                 console.error("Failed to place mines!");
                 return false;
             }
         } else {
-            console.log("Using old algo")
-            const seed = settings.fixedSeed && !isNaN(settings.fixedSeed)
-                       ? gameLogic.placeMines(col, row, settings.fixedSeed)
-                       : gameLogic.placeMines(col, row, -1);
+            console.log("Using logic algo")
+            //const seed = settings.fixedSeed && !isNaN(settings.fixedSeed)
+            //           ? gameLogic.placeMines(col, row, settings.fixedSeed)
+            //           : gameLogic.placeMines(col, row, -1);
+//
+            //if (seed === -1) {
+            //    console.error("Failed to place mines!");
+            //    return false;
+            //} else {
+            //    gameOverPopup.seed = seed
+            //    gameOverPopup.clickX = col
+            //    gameOverPopup.clickY = row
+            //}
 
-            if (seed === -1) {
+            const result = gameLogic.placeLogicalMines(col, row);
+            if (result === -1) {
                 console.error("Failed to place mines!");
                 return false;
-            } else {
-                gameOverPopup.seed = seed
-                gameOverPopup.clickX = col
-                gameOverPopup.clickY = row
             }
         }
 
