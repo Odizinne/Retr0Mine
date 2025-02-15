@@ -43,7 +43,6 @@ Popup {
         }
 
         RowLayout {
-            visible: !aboutPage.root.isSteamEnabled
             spacing: 10
             Button {
                 text: "Steam"

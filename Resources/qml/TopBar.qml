@@ -74,6 +74,8 @@ RowLayout {
 
                 MenuItem {
                     text: qsTr("About")
+                    height: !topBar.root.isSteamEnabled ? implicitHeight : 0
+                    visible: height > 0
                     onTriggered: topBar.aboutPage.visible = true
                 }
 

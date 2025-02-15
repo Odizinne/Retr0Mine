@@ -785,7 +785,7 @@ MainWindow {
                     }
 
                     steamIntegration.incrementTotalWin();
-                    leaderboardWindow.isShining = mainWindow.isAchievementUnlocked("ACH_50_TOTAL")
+                    leaderboardWindow.isShining = steamIntegration.isAchievementUnlocked("ACH_50_TOTAL")
                 }
             }
 
