@@ -32,9 +32,7 @@ MainWindow::MainWindow(QObject *parent)
             &MainWindow::onColorSchemeChanged);
 
     m_steamIntegration = new SteamIntegration(this);
-    if (!m_steamIntegration->initialize()) {
-        qWarning() << "Failed to initialize Steam integration";
-    }
+    m_steamEnabled = m_steamIntegration->initialize();
 
     if (!settings.value("welcomeMessageShown", false).toBool()) resetSettings();
 

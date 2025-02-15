@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Controls.impl
 
 ApplicationWindow {
     id: settingsPage
@@ -555,7 +554,7 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
-                                enabled: !root.isGamescope
+                                enabled: !settingsPage.root.isGamescope
                                 text: qsTr("Start in full screen")
                                 Layout.fillWidth: true
                                 MouseArea {
@@ -566,7 +565,7 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: startFullScreenSwitch
-                                enabled: !root.isGamescope
+                                enabled: !settingsPage.root.isGamescope
                                 checked: settingsPage.settings.startFullScreen || settingsPage.root.isGamescope
                                 onCheckedChanged: {
                                     settingsPage.settings.startFullScreen = checked
@@ -575,7 +574,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            visible: typeof steamIntegration !== "undefined"
+                            visible: settingsPage.root.isSteamEnabled
                             spacing: 10
 
                             ButtonGroup {
@@ -594,7 +593,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     checkable: true
                                     icon.source: "qrc:/icons/flag.png"
-                                    checked: settingsPage.settings.flagSkinIndex === 0 || typeof steamIntegration === "undefined"
+                                    checked: settingsPage.settings.flagSkinIndex === 0 || !settingsPage.root.isSteamEnabled
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -609,10 +608,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: typeof steamIntegration !== "undefined" && settingsPage.root.flag1Unlocked
+                                    enabled: settingsPage.root.flag1Unlocked
                                     checkable: true
-                                    checked: typeof steamIntegration !== "undefined" && settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 1
-                                    icon.source: typeof steamIntegration !== "undefined" && settingsPage.root.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
+                                    checked: settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 1
+                                    icon.source: settingsPage.root.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -629,10 +628,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: typeof steamIntegration !== "undefined" && settingsPage.root.flag2Unlocked
+                                    enabled: settingsPage.root.flag2Unlocked
                                     checkable: true
-                                    checked: typeof steamIntegration !== "undefined" && settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 2
-                                    icon.source: typeof steamIntegration !== "undefined" && settingsPage.root.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
+                                    checked: settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 2
+                                    icon.source: settingsPage.root.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -649,10 +648,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: typeof steamIntegration !== "undefined" && settingsPage.root.flag3Unlocked
+                                    enabled: settingsPage.root.flag3Unlocked
                                     checkable: true
-                                    checked: typeof steamIntegration !== "undefined" && settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 3
-                                    icon.source: typeof steamIntegration !== "undefined" && settingsPage.root.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
+                                    checked: settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 3
+                                    icon.source: settingsPage.root.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -667,7 +666,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            visible: typeof steamIntegration !== "undefined"
+                            visible: settingsPage.root.isSteamEnabled
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Grid reset animation")
@@ -683,7 +682,6 @@ ApplicationWindow {
                                 }
 
                                 Component.onCompleted: {
-                                    console.log(settingsPage.root.anim1Unlocked)
                                     animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
                                     animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
                                 }

@@ -7,6 +7,7 @@ Popup {
     width: height + 12
     anchors.centerIn: parent
     modal: true
+    required property var root
 
     Shortcut {
         sequence: "Esc"
@@ -42,12 +43,12 @@ Popup {
         }
 
         Item {
-            visible: typeof steamIntegration === "undefined"
+            visible: aboutPage.root.isSteamEnabled
             Layout.fillHeight: true
         }
 
         RowLayout {
-            visible: typeof steamIntegration === "undefined"
+            visible: aboutPage.root.isSteamEnabled
             spacing: 10
             Button {
                 text: "Steam"

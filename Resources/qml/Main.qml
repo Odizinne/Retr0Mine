@@ -25,15 +25,17 @@ MainWindow {
         { text: "Retr0", x: 50, y: 32, mines: 320 },
         { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
     ]
+    property bool isSteamEnabled: mainWindow.steamEnabled
     property bool flag1Unlocked: mainWindow.unlockedFlag1
     property bool flag2Unlocked: mainWindow.unlockedFlag2
     property bool flag3Unlocked: mainWindow.unlockedFlag3
     property bool anim1Unlocked: mainWindow.unlockedAnim1
     property bool anim2Unlocked: mainWindow.unlockedAnim2
+    property bool shineUnlocked: mainWindow.unlockedShine
     property string flagPath: {
-        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
-        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
-        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
+        if (root.isSteamEnabled && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
+        if (root.isSteamEnabled && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
+        if (root.isSteamEnabled && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
     property bool isGamescope: mainWindow.gamescope
@@ -218,6 +220,7 @@ MainWindow {
 
     AboutPage {
         id: aboutPage
+        root: root
     }
 
     ErrorWindow {
@@ -738,7 +741,7 @@ MainWindow {
             mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
 
             if (!isManuallyLoaded) {
-                if (typeof steamIntegration !== "undefined") {
+                if (root.isSteamEnabled) {
                     const difficulty = getDifficultyLevel();
 
                     if (currentHintCount === 0 && settings.fixedSeed == -1) {
@@ -772,7 +775,6 @@ MainWindow {
                             gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
                             gameOverPopup.notificationVisible = true
                             root.anim2Unlocked = true
-
                         }
                         if (currentHintCount >= 20 && !steamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
                             steamIntegration.unlockAchievement("ACH_HINT_MASTER");
@@ -783,6 +785,7 @@ MainWindow {
                     }
 
                     steamIntegration.incrementTotalWin();
+                    leaderboardWindow.isShining = mainWindow.isAchievementUnlocked("ACH_50_TOTAL")
                 }
             }
 

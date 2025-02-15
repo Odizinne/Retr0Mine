@@ -385,7 +385,7 @@ Item {
             return
         }
 
-        if (typeof steamIntegration === "undefined") {
+        if (!cellItem.root.isSteamEnabled) {
             grid.initialAnimationPlayed = false
             opacity = 0
             fadeTimer.restart()
