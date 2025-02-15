@@ -6,7 +6,7 @@ IconImage {
     id: root
     property string tooltipText: ""
     property int tooltipDelay: 500
-    property string iconColor: "#e6ae17"
+    property string iconColor: "#f6ae57"
     source: "qrc:/icons/info.png"
     color: root.iconColor
     sourceSize.height: 18
