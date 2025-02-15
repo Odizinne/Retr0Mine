@@ -19,6 +19,7 @@
         <file>delete.png</file>
         <file>debug.png</file>
         <file>icon.png</file>
+        <file>info.png</file>
         <file>steam.png</file>
         <file>github.png</file>
     </qresource>

@@ -253,16 +253,9 @@ ApplicationWindow {
                                     }
                                 }
 
-                                Label {
-                                    text: `${modelData.x}×${modelData.y}, ${modelData.mines} mines`
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: function(mouse) {
-                                            if (mouse.button === Qt.LeftButton) {
-                                                radioButton.userInteractionChecked = true
-                                            }
-                                        }
-                                    }
+                                InfoIcon {
+                                    visible: index !== 4
+                                    tooltipText: `${modelData.x}×${modelData.y}, ${modelData.mines} mines`
                                 }
 
                                 RadioButton {
@@ -996,6 +989,11 @@ ApplicationWindow {
                                     onClicked: advGenAlgoSwitch.checked = !advGenAlgoSwitch.checked
                                 }
                             }
+
+                            InfoIcon {
+                                tooltipText: qsTr("Enabled: Generates more chaotic grids\nDisabled: Generates more predictable grids")
+                            }
+
                             Switch {
                                 id: advGenAlgoSwitch
                                 checked: settingsPage.settings.advGenAlgo
@@ -1062,6 +1060,10 @@ ApplicationWindow {
                             Label {
                                 text: qsTr("Style")
                                 Layout.fillWidth: true
+                            }
+
+                            InfoIcon {
+                                tooltipText: qsTr("Application will restart on change\nCurrent game will be saved and restored")
                             }
 
                             ComboBox {

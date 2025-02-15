@@ -18,6 +18,7 @@
         <file>DifficultyLayout.qml</file>
         <file>MainWindow.qml</file>
         <file>GameArea.qml</file>
+        <file>InfoIcon.qml</file>
         <file>+Universal/CellFrame.qml</file>
         <file>+Universal/SidebarDelegate.qml</file>
         <file>+Universal/MainWindow.qml</file>
