@@ -19,17 +19,6 @@ Popup {
     property int hardWins: 0
     property int retr0Wins: 0
 
-    function convertTimeFormat(timeString) {
-        const parts = timeString.split(':')
-        if (parts.length === 3) {
-            // Old format HH:MM:SS.CC
-            const totalMinutes = (Number(parts[0]) * 60 + Number(parts[1]))
-            return `${String(totalMinutes).padStart(2, '0')}:${parts[2]}`
-        }
-        // Already in new format MM:SS.CC
-        return timeString
-    }
-
     Shortcut {
         sequence: "Esc"
         enabled: leaderboardPage.visible
@@ -95,7 +84,7 @@ Popup {
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
-                    text: leaderboardPage.convertTimeFormat(leaderboardPage.easyTime)
+                    text: leaderboardPage.easyTime
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
@@ -108,7 +97,7 @@ Popup {
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
-                    text: leaderboardPage.convertTimeFormat(leaderboardPage.mediumTime)
+                    text: leaderboardPage.mediumTime
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
@@ -121,7 +110,7 @@ Popup {
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
-                    text: leaderboardPage.convertTimeFormat(leaderboardPage.hardTime)
+                    text: leaderboardPage.hardTime
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
@@ -134,7 +123,7 @@ Popup {
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
-                    text: leaderboardPage.convertTimeFormat(leaderboardPage.retr0Time)
+                    text: leaderboardPage.retr0Time
                     Layout.minimumWidth: parent.width / 3
                 }
                 Label {
