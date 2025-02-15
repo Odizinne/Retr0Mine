@@ -25,7 +25,6 @@ class MainWindow : public QObject
     Q_PROPERTY(QString playerName READ getPlayerName CONSTANT)
     Q_PROPERTY(bool gamescope READ isGamescope CONSTANT)
     Q_PROPERTY(bool isDarkMode READ getDarkMode NOTIFY darkModeChanged)
-    Q_PROPERTY(QColor accentColor READ getAccentColor NOTIFY accentColorChanged)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
     Q_PROPERTY(bool steamEnabled READ getSteamEnabled CONSTANT)
 
@@ -55,7 +54,6 @@ public:
     QString getPlayerName() const { return m_steamIntegration->getSteamUserName(); }
     bool isGamescope() const { return isRunningOnGamescope; }
     bool getDarkMode() const { return m_isDarkMode; }
-    QColor getAccentColor() const { return m_accentColor; }
     int getLanguageIndex() const { return m_languageIndex; }
 
 private slots:
@@ -80,13 +78,11 @@ private:
     QString getLeaderboardPath() const;
 
     bool m_isDarkMode;
-    QColor m_accentColor;
     int m_languageIndex;
     bool m_steamEnabled;
 
 signals:
     void darkModeChanged();
-    void accentColorChanged();
     void languageIndexChanged();
 
 };

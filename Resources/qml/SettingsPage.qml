@@ -829,6 +829,11 @@ ApplicationWindow {
                             delegate: Frame {
                                 width: ListView.view.width - 20
 
+                                SystemPalette {
+                                    id: sysPalette
+                                    colorGroup: SystemPalette.Active
+                                }
+
                                 RowLayout {
                                     anchors.fill: parent
                                     Label {
@@ -836,7 +841,7 @@ ApplicationWindow {
                                         Layout.fillWidth: true
                                     }
                                     Label {
-                                        color: mainWindow.accentColor
+                                        color: sysPalette.highlight
                                         text: shortcut
                                         font.bold: true
                                     }

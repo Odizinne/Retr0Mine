@@ -16,13 +16,6 @@ bool Utils::isDarkMode()
     }
 }
 
-QString Utils::getAccentColor()
-{
-    QPalette palette = QGuiApplication::palette();
-    QColor highlight = palette.color(QPalette::Highlight);
-    return highlight.name();
-}
-
 QString Utils::mapSteamToAppLanguage(QString steamLanguage)
 {
     static const QMap<QString, QString> languageMap = {{"english", "en"},

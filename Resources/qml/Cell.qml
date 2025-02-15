@@ -4,7 +4,6 @@ import QtQuick.Controls
 
 Item {
     id: cellItem
-
     required property var root
     required property var settings
     required property var audioEngine
@@ -21,6 +20,11 @@ Item {
     property int row: 0
     property int col: 0
     property int diagonalSum: row + col
+
+    SystemPalette {
+        id: sysPalette
+        colorGroup: SystemPalette.Active
+    }
 
     function highlightHint() {
         hintAnimation.start();
@@ -130,7 +134,7 @@ Item {
         }
         color: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
-                return cellItem.root.mainWindow.accentColor
+                return sysPalette.highlight
             return "transparent"
         }
 
@@ -235,7 +239,7 @@ Item {
             source: cellItem.root.flagPath
             color: {
                 if (cellItem.settings.contrastFlag) return cellItem.root.darkMode ? "white" : "black"
-                else return cellItem.root.mainWindow.accentColor
+                else return sysPalette.highlight
             }
             sourceSize.width: cellItem.width / 1.8
             sourceSize.height: cellItem.height / 1.8

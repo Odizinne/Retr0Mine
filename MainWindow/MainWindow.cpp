@@ -199,10 +199,8 @@ void MainWindow::setColorScheme()
 {
     m_isDarkMode = Utils::isDarkMode() || (currentTheme == 1 && isRunningOnGamescope) ||
                    (currentTheme == 0 && isRunningOnGamescope);
-    m_accentColor = Utils::getAccentColor();
 
     emit darkModeChanged();
-    emit accentColorChanged();
 }
 
 void MainWindow::restartRetr0Mine() const

@@ -13,6 +13,11 @@ Popup {
     closePolicy: Popup.NoAutoClose
     modal: true
 
+    SystemPalette {
+        id: sysPalette
+        colorGroup: SystemPalette.Active
+    }
+
     ColumnLayout {
         opacity: 1
         id: initialConfig
@@ -196,7 +201,7 @@ Popup {
                     source: "qrc:/icons/flag.png"
                     color: {
                         if (  welcomePage.settings.contrastFlag) return  welcomePage.root.darkMode ? "white" : "black"
-                        else return mainWindow.accentColor
+                        else return sysPalette.highlight
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8
@@ -330,7 +335,7 @@ Popup {
                     source: "qrc:/icons/flag.png"
                     color: {
                         if (  welcomePage.settings.contrastFlag) return  welcomePage.root.darkMode ? "white" : "black"
-                        else return mainWindow.accentColor
+                        else return sysPalette.highlight
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8

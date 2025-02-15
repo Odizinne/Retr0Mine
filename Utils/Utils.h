@@ -5,7 +5,6 @@
 
 namespace Utils {
 bool isDarkMode();
-QString getAccentColor();
 QString mapSteamToAppLanguage(QString steamLanguage);
 QString mapSystemToAppLanguage(QString systemLanguage);
 QString mapIndexToLanguageCode(int index);
