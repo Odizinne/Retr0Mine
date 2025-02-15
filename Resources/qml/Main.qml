@@ -13,8 +13,139 @@ MainWindow {
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
 
-    Retr0MineSettings {
-        id: settings
+    required property var mainWindow
+    required property var steamIntegration
+    required property var gameLogic
+    required property var gameTimer
+
+    property var difficultySettings: [
+        { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
+        { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
+        { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
+        { text: "Retr0", x: 50, y: 32, mines: 320 },
+        { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
+    ]
+    property bool flag1Unlocked: mainWindow.unlockedFlag1
+    property bool flag2Unlocked: mainWindow.unlockedFlag2
+    property bool flag3Unlocked: mainWindow.unlockedFlag3
+    property bool anim1Unlocked: mainWindow.unlockedAnim1
+    property bool anim2Unlocked: mainWindow.unlockedAnim2
+    property string flagPath: {
+        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
+        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
+        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
+        else return "qrc:/icons/flag.png"
+    }
+    property bool isGamescope: mainWindow.gamescope
+    property bool isMaximized: visibility === 4
+    property bool isFullScreen: visibility === 5
+    property bool darkMode: mainWindow.isDarkMode
+    property int diffidx: settings.difficulty
+    property bool gameOver: false
+    property int revealedCount: 0
+    property int flaggedCount: 0
+    property int firstClickIndex: -1
+    property bool gameStarted: false
+    property int gridSizeX: 8
+    property int gridSizeY: 8
+    property int mineCount: 10
+    property var mines: []
+    property var numbers: []
+    property int elapsedTime: 0
+    property bool shouldUpdateSize: true
+    property int cellSize: {
+        switch (settings.cellSize) {
+            case 0: return 35;
+            case 1: return isGamescope ? 43 : 45;
+            case 2: return 55;
+            default: return isGamescope ? 43 : 45;
+        }
+    }
+    property int cellSpacing: 2
+    property int currentHintCount: 0
+    property bool gridFullyInitialized: false
+    property bool isManuallyLoaded: false
+    property bool noAnimReset: false
+    property bool blockAnim: true
+
+    onClosing: {
+        if (settings.loadLastGame && gameStarted && !gameOver) {
+            saveGame("internalGameState.json")
+        }
+    }
+
+    onGridSizeXChanged: {
+        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
+            minimumWidth = getInitialWidth()
+            width = getInitialWidth()
+
+            // 2px margin of error
+            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
+                visibility = Window.Maximized
+            }
+        }
+    }
+
+    onGridSizeYChanged: {
+        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
+            minimumHeight = getInitialHeight()
+            height = getInitialHeight()
+
+            // 2px margin of error
+            if (height + 2 >= Screen.desktopAvailableHeight * 0.9) {
+                visibility = Window.Maximized
+            }
+        }
+    }
+
+    onVisibilityChanged: function(visibility) {
+        const wasMaximized = isMaximized
+        const wasFullScreen = isFullScreen
+        isMaximized = visibility === Window.Maximized
+        isFullScreen = visibility === Window.FullScreen
+        shouldUpdateSize = !isMaximized && !isFullScreen
+        if (wasMaximized || wasFullScreen && visibility === Window.Windowed) {
+
+            shouldUpdateSize = true
+            minimumWidth = getInitialWidth()
+            minimumHeight = getInitialHeight()
+            width = minimumWidth
+            height = minimumHeight
+            if (height >= Screen.desktopAvailableHeight * 0.9 || width >= Screen.desktopAvailableWidth * 0.9) {
+                x = Screen.width / 2 - width / 2
+                y = Screen.height / 2 - height / 2
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        const difficultySet = root.difficultySettings[settings.difficulty]
+        if (difficultySet) {
+            root.gridSizeX = difficultySet.x
+            root.gridSizeY = difficultySet.y
+            root.mineCount = difficultySet.mines
+        }
+        let leaderboardData = mainWindow.loadLeaderboard()
+        if (leaderboardData) {
+            try {
+                const leaderboard = JSON.parse(leaderboardData)
+                leaderboardWindow.easyTime = leaderboard.easyTime || ""
+                leaderboardWindow.mediumTime = leaderboard.mediumTime || ""
+                leaderboardWindow.hardTime = leaderboard.hardTime || ""
+                leaderboardWindow.retr0Time = leaderboard.retr0Time || ""
+                leaderboardWindow.easyWins = leaderboard.easyWins || 0
+                leaderboardWindow.mediumWins = leaderboard.mediumWins || 0
+                leaderboardWindow.hardWins = leaderboard.hardWins || 0
+                leaderboardWindow.retr0Wins = leaderboard.retr0Wins || 0
+            } catch (e) {
+                console.error("Failed to parse leaderboard data:", e)
+            }
+        }
+        welcomePopup.visible = mainWindow.showWelcome
+
+        gameTimer.centisecondsChanged.connect(function() {
+        topBar.elapsedTimeLabelText = root.formatTime(Math.floor(gameTimer.centiseconds / 100))
+        })
     }
 
     Shortcut {
@@ -65,66 +196,142 @@ MainWindow {
         onActivated: root.requestHint()
     }
 
-    onClosing: {
-        if (settings.loadLastGame && gameStarted && !gameOver) {
-            saveGame("internalGameState.json")
+    Retr0MineSettings {
+        id: settings
+    }
+
+    AudioEffectsEngine {
+        id: audioEngine
+        packIndex: settings.soundPackIndex
+    }
+
+    WelcomePage {
+        id: welcomePopup
+        root: root
+        settings: settings
+    }
+
+    GameOverPopup {
+        id: gameOverPopup
+        root: root
+        settings: settings
+    }
+
+    SettingsPage {
+        id: settingsWindow
+        root: root
+        settings: settings
+    }
+
+    AboutPage {
+        id: aboutPage
+    }
+
+    ErrorWindow {
+        id: errorWindow
+    }
+
+    LoadWindow {
+        id: loadWindow
+        root: root
+    }
+
+    SaveWindow {
+        id: saveWindow
+        root: root
+    }
+
+    LeaderboardPage {
+        id: leaderboardWindow
+        root: root
+    }
+
+    TopBar {
+        id: topBar
+        root: root
+        settings: settings
+        saveWindow: saveWindow
+        loadWindow: loadWindow
+        settingsWindow: settingsWindow
+        leaderboardWindow: leaderboardWindow
+        aboutPage: aboutPage
+    }
+
+    GameArea {
+        id: gameArea
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            top: topBar.bottom
+            topMargin: 10
+            leftMargin: 12
+            rightMargin: 12
+            bottomMargin: 12
+        }
+        contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
+        contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
+
+        Item {
+            anchors.centerIn: parent
+            width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
+            height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
+
+            GridView {
+                id: grid
+                anchors.centerIn: parent
+                cellWidth: root.cellSize + root.cellSpacing
+                cellHeight: root.cellSize + root.cellSpacing
+                width: (root.cellSize + root.cellSpacing) * root.gridSizeX
+                height: (root.cellSize + root.cellSpacing) * root.gridSizeY
+                model: root.gridSizeX * root.gridSizeY
+                interactive: false
+                property bool initialAnimationPlayed: false
+                property int cellsCreated: 0
+
+                delegate: Cell {
+                    id: cellItem
+                    width: root.cellSize
+                    height: root.cellSize
+                    root: root
+                    settings: settings
+                    audioEngine: audioEngine
+                    grid: grid
+                    row: Math.floor(index / root.gridSizeX)
+                    col: index % root.gridSizeX
+                    opacity: 1
+                }
+            }
         }
     }
 
-    property var difficultySettings: [
-        { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
-        { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
-        { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
-        { text: "Retr0", x: 50, y: 32, mines: 320 },
-        { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
-    ]
-
-    required property var mainWindow
-    required property var steamIntegration
-    required property var gameLogic
-    required property var gameTimer
-    property bool flag1Unlocked: mainWindow.unlockedFlag1
-    property bool flag2Unlocked: mainWindow.unlockedFlag2
-    property bool flag3Unlocked: mainWindow.unlockedFlag3
-    property bool anim1Unlocked: mainWindow.unlockedAnim1
-    property bool anim2Unlocked: mainWindow.unlockedAnim2
-    property string flagPath: {
-        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
-        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
-        if (typeof steamIntegration !== "undefined" && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
-        else return "qrc:/icons/flag.png"
+    Timer {
+        id: initialLoadTimer
+        interval: 1
+        repeat: false
+        onTriggered: root.checkInitialGameState()
     }
-    property bool isGamescope: mainWindow.gamescope
-    property bool isMaximized: visibility === 4
-    property bool isFullScreen: visibility === 5
-    property bool darkMode: mainWindow.isDarkMode
-    property int diffidx: settings.difficulty
-    property bool gameOver: false
-    property int revealedCount: 0
-    property int flaggedCount: 0
-    property int firstClickIndex: -1
-    property bool gameStarted: false
-    property int gridSizeX: 8
-    property int gridSizeY: 8
-    property int mineCount: 10
-    property var mines: []
-    property var numbers: []
-    property int elapsedTime: 0
-    property bool shouldUpdateSize: true
-    property int cellSize: {
-        switch (settings.cellSize) {
-            case 0: return 35;
-            case 1: return isGamescope ? 43 : 45;
-            case 2: return 55;
-            default: return isGamescope ? 43 : 45;
+
+    function checkInitialGameState() {
+        if (!gridFullyInitialized) return
+
+        let internalSaveData = mainWindow.loadGameState("internalGameState.json")
+        if (internalSaveData) {
+            if (loadGame(internalSaveData)) {
+                mainWindow.deleteSaveFile("internalGameState.json")
+                root.isManuallyLoaded = false
+            } else {
+                console.error("Failed to load internal game state")
+                initGame()
+            }
+        } else {
+            initGame()
+        }
+
+        if (settings.startFullScreen || root.isGamescope) {
+            root.visibility = 5
         }
     }
-    property int cellSpacing: 2
-    property int currentHintCount: 0
-    property bool gridFullyInitialized: false
-    property bool isManuallyLoaded: false
-    property bool noAnimReset: false
-    property bool blockAnim: true
 
     function getInitialWidth() {
         return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
@@ -132,50 +339,6 @@ MainWindow {
 
     function getInitialHeight() {
         return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeY + 74, Screen.desktopAvailableHeight * 0.9) : height
-    }
-
-    onGridSizeXChanged: {
-        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
-            minimumWidth = getInitialWidth()
-            width = getInitialWidth()
-
-            // 2px margin of error
-            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
-                visibility = Window.Maximized
-            }
-        }
-    }
-
-    onGridSizeYChanged: {
-        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
-            minimumHeight = getInitialHeight()
-            height = getInitialHeight()
-
-            // 2px margin of error
-            if (height + 2 >= Screen.desktopAvailableHeight * 0.9) {
-                visibility = Window.Maximized
-            }
-        }
-    }
-
-    onVisibilityChanged: function(visibility) {
-        const wasMaximized = isMaximized
-        const wasFullScreen = isFullScreen
-        isMaximized = visibility === Window.Maximized
-        isFullScreen = visibility === Window.FullScreen
-        shouldUpdateSize = !isMaximized && !isFullScreen
-        if (wasMaximized || wasFullScreen && visibility === Window.Windowed) {
-
-            shouldUpdateSize = true
-            minimumWidth = getInitialWidth()
-            minimumHeight = getInitialHeight()
-            width = minimumWidth
-            height = minimumHeight
-            if (height >= Screen.desktopAvailableHeight * 0.9 || width >= Screen.desktopAvailableWidth * 0.9) {
-                x = Screen.width / 2 - width / 2
-                y = Screen.height / 2 - height / 2
-            }
-        }
     }
 
     function requestHint() {
@@ -339,52 +502,6 @@ MainWindow {
         }
 
         return baseTime
-    }
-
-    AudioEffectsEngine {
-        id: audioEngine
-        packIndex: settings.soundPackIndex
-    }
-
-    WelcomePage {
-        id: welcomePopup
-        root: root
-        settings: settings
-    }
-
-    GameOverPopup {
-        id: gameOverPopup
-        root: root
-        settings: settings
-    }
-
-    SettingsPage {
-        id: settingsWindow
-        root: root
-        settings: settings
-    }
-
-    AboutPage {
-        id: aboutPage
-    }
-
-    ErrorWindow {
-        id: errorWindow
-    }
-
-    LoadWindow {
-        id: loadWindow
-        root: root
-    }
-
-    SaveWindow {
-        id: saveWindow
-        root: root
-    }
-
-    LeaderboardPage {
-        id: leaderboardWindow
-        root: root
     }
 
     function compareTime(time1, time2) {
@@ -782,123 +899,6 @@ MainWindow {
         }
 
         return unrevealedCount > 0 || flagCount !== numbers[index]
-    }
-
-    Timer {
-        id: initialLoadTimer
-        interval: 1
-        repeat: false
-        onTriggered: root.checkInitialGameState()
-    }
-
-    function checkInitialGameState() {
-        if (!gridFullyInitialized) return
-
-        let internalSaveData = mainWindow.loadGameState("internalGameState.json")
-        if (internalSaveData) {
-            if (loadGame(internalSaveData)) {
-                mainWindow.deleteSaveFile("internalGameState.json")
-                root.isManuallyLoaded = false
-            } else {
-                console.error("Failed to load internal game state")
-                initGame()
-            }
-        } else {
-            initGame()
-        }
-
-        if (settings.startFullScreen || root.isGamescope) {
-            root.visibility = 5
-        }
-    }
-
-    TopBar {
-        id: topBar
-        root: root
-        settings: settings
-        saveWindow: saveWindow
-        loadWindow: loadWindow
-        settingsWindow: settingsWindow
-        leaderboardWindow: leaderboardWindow
-        aboutPage: aboutPage
-    }
-
-    GameArea {
-        id: gameArea
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-            top: topBar.bottom
-            topMargin: 10
-            leftMargin: 12
-            rightMargin: 12
-            bottomMargin: 12
-        }
-        contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
-        contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
-
-        Item {
-            anchors.centerIn: parent
-            width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
-            height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
-
-            GridView {
-                id: grid
-                anchors.centerIn: parent
-                cellWidth: root.cellSize + root.cellSpacing
-                cellHeight: root.cellSize + root.cellSpacing
-                width: (root.cellSize + root.cellSpacing) * root.gridSizeX
-                height: (root.cellSize + root.cellSpacing) * root.gridSizeY
-                model: root.gridSizeX * root.gridSizeY
-                interactive: false
-                property bool initialAnimationPlayed: false
-                property int cellsCreated: 0
-
-                delegate: Cell {
-                    id: cellItem
-                    width: root.cellSize
-                    height: root.cellSize
-                    root: root
-                    settings: settings
-                    audioEngine: audioEngine
-                    grid: grid
-                    row: Math.floor(index / root.gridSizeX)
-                    col: index % root.gridSizeX
-                    opacity: 1
-                }
-            }
-        }
-    }
-
-    Component.onCompleted: {
-        const difficultySet = root.difficultySettings[settings.difficulty]
-        if (difficultySet) {
-            root.gridSizeX = difficultySet.x
-            root.gridSizeY = difficultySet.y
-            root.mineCount = difficultySet.mines
-        }
-        let leaderboardData = mainWindow.loadLeaderboard()
-        if (leaderboardData) {
-            try {
-                const leaderboard = JSON.parse(leaderboardData)
-                leaderboardWindow.easyTime = leaderboard.easyTime || ""
-                leaderboardWindow.mediumTime = leaderboard.mediumTime || ""
-                leaderboardWindow.hardTime = leaderboard.hardTime || ""
-                leaderboardWindow.retr0Time = leaderboard.retr0Time || ""
-                leaderboardWindow.easyWins = leaderboard.easyWins || 0
-                leaderboardWindow.mediumWins = leaderboard.mediumWins || 0
-                leaderboardWindow.hardWins = leaderboard.hardWins || 0
-                leaderboardWindow.retr0Wins = leaderboard.retr0Wins || 0
-            } catch (e) {
-                console.error("Failed to parse leaderboard data:", e)
-            }
-        }
-        welcomePopup.visible = mainWindow.showWelcome
-
-        gameTimer.centisecondsChanged.connect(function() {
-        topBar.elapsedTimeLabelText = root.formatTime(Math.floor(gameTimer.centiseconds / 100))
-        })
     }
 }
 
