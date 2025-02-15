@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/qml">
         <file>Main.qml</file>
+        <file>Retr0MineSettings.qml</file>
+        <file>AudioEffectsEngine.qml</file>
         <file>Cell.qml</file>
         <file>SettingsPage.qml</file>
         <file>GameOverPopup.qml</file>

@@ -2,9 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
-import QtMultimedia
 import QtQuick.Window
-import QtCore
 import "."
 
 MainWindow {
@@ -14,43 +12,9 @@ MainWindow {
     height: getInitialHeight()
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
-    title: "Retr0Mine"
 
-    BusyIndicator {
-        // stupid, but allow continuous engine update without too much hassle (needed for steam overlay)
-        opacity: 0
-    }
-
-    Settings {
+    Retr0MineSettings {
         id: settings
-        property int themeIndex: 0
-        property int languageIndex: 0
-        property int difficulty: 0
-        property bool invertLRClick: false
-        property bool autoreveal: false
-        property bool enableQuestionMarks: true
-        property bool enableSafeQuestionMarks: true
-        property bool loadLastGame: false
-        property bool soundEffects: true
-        property real volume: 1.0
-        property int soundPackIndex: 2
-        property bool animations: true
-        property bool cellFrame: true
-        property bool contrastFlag: false
-        property int cellSize: 1
-        property int customWidth: 8
-        property int customHeight: 8
-        property int customMines: 10
-        property bool dimSatisfied: false
-        property bool startFullScreen: root.isGamescope ? true : false
-        property int fixedSeed: -1
-        property bool displaySeedAtGameOver: false
-        property int colorBlindness: 0
-        property bool welcomeMessageShown: false
-        property int flagSkinIndex: 0
-        property bool advGenAlgo: true
-        property int colorSchemeIndex: 0
-        property int gridResetAnimationIndex: 0
     }
 
     Shortcut {
@@ -376,6 +340,12 @@ MainWindow {
 
         return baseTime
     }
+
+    AudioEffectsEngine {
+        id: audioEngine
+        packIndex: settings.soundPackIndex
+    }
+
     WelcomePage {
         id: welcomePopup
         root: root
@@ -417,71 +387,6 @@ MainWindow {
         root: root
     }
 
-    SoundEffect {
-        id: clickEffect0
-        source: {
-            switch (settings.soundPackIndex) {
-                case 0: return "qrc:/sounds/pop/pop_click.wav"
-                case 1: return "qrc:/sounds/w11/w11_click.wav"
-                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-                case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-                default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            }
-        }
-    }
-
-    SoundEffect {
-        id: clickEffect1
-        source: {
-            switch (settings.soundPackIndex) {
-                case 0: return "qrc:/sounds/pop/pop_click.wav"
-                case 1: return "qrc:/sounds/w11/w11_click.wav"
-                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-                case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-                default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            }
-        }
-    }
-
-    SoundEffect {
-        id: clickEffect2
-        source: {
-            switch (settings.soundPackIndex) {
-                case 0: return "qrc:/sounds/pop/pop_click.wav"
-                case 1: return "qrc:/sounds/w11/w11_click.wav"
-                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_click.wav"
-                case 3: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-                default: return "qrc:/sounds/floraphonic/floraphonic_click.wav"
-            }
-        }
-    }
-
-    SoundEffect {
-        id: looseEffect
-        source: {
-            switch (settings.soundPackIndex) {
-                case 0: return "qrc:/sounds/pop/pop_bomb.wav"
-                case 1: return "qrc:/sounds/w11/w11_bomb.wav"
-                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
-                case 3: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
-                default: return "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
-            }
-        }
-    }
-
-    SoundEffect {
-        id: winEffect
-        source: {
-            switch (settings.soundPackIndex) {
-                case 0: return "qrc:/sounds/pop/pop_win.wav"
-                case 1: return "qrc:/sounds/w11/w11_win.wav"
-                case 2: return "qrc:/sounds/kde-ocean/kde-ocean_win.wav"
-                case 3: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
-                default: return "qrc:/sounds/floraphonic/floraphonic_win.wav"
-            }
-        }
-    }
-
     function compareTime(time1, time2) {
         if (!time1 || !time2) return true;
         const [t1, cs1] = time1.split('.');
@@ -492,26 +397,6 @@ MainWindow {
         const totalCs1 = (m1 * 60 + s1) * 100 + parseInt(cs1 || 0);
         const totalCs2 = (m2 * 60 + s2) * 100 + parseInt(cs2 || 0);
         return totalCs1 < totalCs2;
-    }
-
-    function playClick() {
-        if (!settings.soundEffects || gameOver) return;
-
-        if (!clickEffect0.playing) {
-            clickEffect0.play();
-        } else if (!clickEffect1.playing) {
-            clickEffect1.play();
-        } else if (!clickEffect2.playing) {
-            clickEffect2.play();
-        }
-    }
-
-    function playLoose() {
-        if (settings.soundEffects) looseEffect.play()
-    }
-
-    function playWin() {
-        if (settings.soundEffects) winEffect.play()
     }
 
     function revealConnectedCells(index) {
@@ -550,7 +435,7 @@ MainWindow {
             for (let adjacentPos of adjacentCells) {
                 reveal(adjacentPos);
             }
-            root.playClick()
+            audioEngine.playClick()
         }
     }
 
@@ -661,7 +546,7 @@ MainWindow {
                 gameOver = true
                 gameTimer.stop()
                 revealAllMines()
-                playLoose()
+                audioEngine.playLoose()
                 gameOverPopup.gameOverLabelText = "Game over"
                 gameOverPopup.gameOverLabelColor = "#d12844"
                 gameOverPopup.newRecordVisible = false
@@ -824,7 +709,7 @@ MainWindow {
             gameOverPopup.gameOverLabelText = qsTr("Victory")
             gameOverPopup.gameOverLabelColor = "#28d13c"
             gameOverPopup.visible = true
-            playWin()
+            audioEngine.playWin()
         }
     }
 
@@ -976,6 +861,7 @@ MainWindow {
                     height: root.cellSize
                     root: root
                     settings: settings
+                    audioEngine: audioEngine
                     grid: grid
                     row: Math.floor(index / root.gridSizeX)
                     col: index % root.gridSizeX
