@@ -45,7 +45,7 @@ RowLayout {
 
                 MenuItem {
                     text: qsTr("Save game")
-                    enabled: topBar.root.gameStarted
+                    enabled: topBar.root.gameStarted && !root.gameOver
                     onTriggered: topBar.saveWindow.visible = true
                 }
                 MenuItem {
@@ -90,7 +90,6 @@ RowLayout {
             Layout.fillWidth: true
         }
     }
-
 
     RowLayout {
         Layout.preferredWidth: parent.width / 3

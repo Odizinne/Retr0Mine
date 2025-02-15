@@ -67,7 +67,6 @@ void GameTimer::setCentiseconds(qint64 value)
 
 void GameTimer::start()
 {
-    qDebug() << "Starting timers";
     timer.start();
     updateTimer.start();
 }
