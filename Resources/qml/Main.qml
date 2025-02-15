@@ -51,7 +51,6 @@ MainWindow {
     property int mineCount: 10
     property var mines: []
     property var numbers: []
-    property int elapsedTime: 0
     property bool shouldUpdateSize: true
     property int cellSize: {
         switch (settings.cellSize) {
@@ -120,11 +119,10 @@ MainWindow {
 
     Component.onCompleted: {
         const difficultySet = root.difficultySettings[settings.difficulty]
-        if (difficultySet) {
-            root.gridSizeX = difficultySet.x
-            root.gridSizeY = difficultySet.y
-            root.mineCount = difficultySet.mines
-        }
+        root.gridSizeX = difficultySet.x
+        root.gridSizeY = difficultySet.y
+        root.mineCount = difficultySet.mines
+
         let leaderboardData = mainWindow.loadLeaderboard()
         if (leaderboardData) {
             try {
@@ -142,10 +140,6 @@ MainWindow {
             }
         }
         welcomePopup.visible = mainWindow.showWelcome
-
-        gameTimer.centisecondsChanged.connect(function() {
-        topBar.elapsedTimeLabelText = root.formatTime(Math.floor(gameTimer.centiseconds / 100))
-        })
     }
 
     Shortcut {
@@ -255,6 +249,7 @@ MainWindow {
         settingsWindow: settingsWindow
         leaderboardWindow: leaderboardWindow
         aboutPage: aboutPage
+        elapsedTimeLabelText: root.gameTimer.displayTime
     }
 
     GameArea {
@@ -408,7 +403,7 @@ MainWindow {
             gameTimer.stop()
 
             // Get the saved time first
-            const savedCentiseconds = data.gameState.centiseconds || (data.gameState.elapsedTime * 100)
+            const savedCentiseconds = data.gameState.centiseconds
 
             // Rest of your loading logic
             gridSizeX = data.gameState.gridSizeX
@@ -452,27 +447,27 @@ MainWindow {
             }
 
             data.gameState.revealedCells.forEach(index => {
-                let cell = grid.itemAtIndex(index)
-                if (cell) cell.revealed = true
-            })
+                                                     let cell = grid.itemAtIndex(index)
+                                                     if (cell) cell.revealed = true
+                                                 })
 
             data.gameState.flaggedCells.forEach(index => {
-                let cell = grid.itemAtIndex(index)
-                if (cell) cell.flagged = true
-            })
+                                                    let cell = grid.itemAtIndex(index)
+                                                    if (cell) cell.flagged = true
+                                                })
 
             if (data.gameState.questionedCells) {
                 data.gameState.questionedCells.forEach(index => {
-                    let cell = grid.itemAtIndex(index)
-                    if (cell) cell.questioned = true
-                })
+                                                           let cell = grid.itemAtIndex(index)
+                                                           if (cell) cell.questioned = true
+                                                       })
             }
 
             if (data.gameState.safeQuestionedCells) {
                 data.gameState.safeQuestionedCells.forEach(index => {
-                    let cell = grid.itemAtIndex(index)
-                    if (cell) cell.safeQuestioned = true
-                })
+                                                               let cell = grid.itemAtIndex(index)
+                                                               if (cell) cell.safeQuestioned = true
+                                                           })
             }
 
             revealedCount = data.gameState.revealedCells.length
@@ -482,38 +477,12 @@ MainWindow {
                 gameTimer.start()
             }
 
-            topBar.elapsedTimeLabelText = formatTime(Math.floor(gameTimer.centiseconds / 100))
             isManuallyLoaded = true
             return true
         } catch (e) {
             console.error("Error loading save:", e)
             return false
         }
-    }
-
-    function formatTime(seconds, includeCentis = false) {
-        const totalMinutes = Math.floor(seconds / 60)
-        const remainingSeconds = seconds % 60
-        const baseTime = `${totalMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
-
-        if (includeCentis) {
-            const cs = gameTimer.centiseconds % 100
-            return `${baseTime}.${cs.toString().padStart(2, '0')}`
-        }
-
-        return baseTime
-    }
-
-    function compareTime(time1, time2) {
-        if (!time1 || !time2) return true;
-        const [t1, cs1] = time1.split('.');
-        const [t2, cs2] = time2.split('.');
-        const [m1, s1] = t1.split(':').map(Number);
-        const [m2, s2] = t2.split(':').map(Number);
-        // Convert everything to centiseconds for comparison
-        const totalCs1 = (m1 * 60 + s1) * 100 + parseInt(cs1 || 0);
-        const totalCs2 = (m2 * 60 + s2) * 100 + parseInt(cs2 || 0);
-        return totalCs1 < totalCs2;
     }
 
     function revealConnectedCells(index) {
@@ -604,7 +573,6 @@ MainWindow {
         gameStarted = false
         currentHintCount = 0
         gameTimer.reset()
-        topBar.elapsedTimeLabelText = "00:00"
         isManuallyLoaded = false
 
         root.noAnimReset = true
@@ -735,7 +703,6 @@ MainWindow {
             gameOver = true
             gameTimer.stop()
 
-            const formattedTime = formatTime(Math.floor(gameTimer.centiseconds / 100), true)
             let leaderboardData = mainWindow.loadGameState("leaderboard.json")
             let leaderboard = {}
 
@@ -750,8 +717,10 @@ MainWindow {
             const difficulty = getDifficultyLevel();
             if (difficulty) {
                 const timeField = difficulty + 'Time';
-                const winsField = difficulty + 'Wins'; // New field for tracking wins
-                const formattedTime = formatTime(Math.floor(gameTimer.centiseconds / 100), true)
+                const winsField = difficulty + 'Wins';
+                const centisecondsField = difficulty + 'Centiseconds';
+                const formattedTime = gameTimer.getDetailedTime()
+                const centiseconds = gameTimer.centiseconds
 
                 if (!leaderboard[winsField]) {
                     leaderboard[winsField] = 0;
@@ -760,11 +729,9 @@ MainWindow {
                 leaderboard[winsField]++;
                 leaderboardWindow[winsField] = leaderboard[winsField];
 
-                console.log(formattedTime, leaderboard[timeField])
-
-                if (!leaderboard[timeField] || compareTime(formattedTime, leaderboard[timeField])) {
-                    console.log("pass")
+                if (!leaderboard[centisecondsField] || centiseconds < leaderboard[centisecondsField]) {
                     leaderboard[timeField] = formattedTime;
+                    leaderboard[centisecondsField] = centiseconds;
                     leaderboardWindow[timeField] = formattedTime;
                     gameOverPopup.newRecordVisible = true
                 } else {
