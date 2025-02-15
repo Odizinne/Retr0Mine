@@ -104,7 +104,6 @@ MainWindow {
         isFullScreen = visibility === Window.FullScreen
         shouldUpdateSize = !isMaximized && !isFullScreen
         if (wasMaximized || wasFullScreen && visibility === Window.Windowed) {
-
             shouldUpdateSize = true
             minimumWidth = getInitialWidth()
             minimumHeight = getInitialHeight()
@@ -149,7 +148,7 @@ MainWindow {
     }
     Shortcut {
         sequence: StandardKey.Save
-        enabled: root.gameStarted
+        enabled: root.gameStarted && !root.gameOver
         autoRepeat: false
         onActivated: saveWindow.visible = true
     }
@@ -428,7 +427,6 @@ MainWindow {
                 return false
             }
 
-            // Use resumeFrom instead of directly setting centiseconds
             gameTimer.resumeFrom(savedCentiseconds)
 
             root.gameOver = data.gameState.gameOver
