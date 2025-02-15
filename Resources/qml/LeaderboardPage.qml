@@ -46,6 +46,8 @@ Popup {
                 color: leaderboardPage.root.darkMode ? "white" : "Dark"
                 sourceSize.height: 20
                 sourceSize.width: 20
+                Layout.preferredHeight: 30
+                Layout.alignment: Qt.AlignCenter
             }
 
             Label {
@@ -53,6 +55,9 @@ Popup {
                 text: leaderboardPage.root.mainWindow.playerName
                 font.bold: true
                 font.pixelSize: 20
+                Layout.preferredHeight: 30
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 layer.enabled: leaderboardPage.isShining
                 layer.effect: LinearGradient {
                     id: shineEffect
@@ -84,80 +89,107 @@ Popup {
         }
 
         Frame {
-            Layout.preferredWidth: 300
+            Layout.preferredWidth: 350
             Layout.fillWidth: true
-            GridLayout {
+
+            RowLayout {
                 anchors.fill: parent
-                columns: 3
-                columnSpacing: 15
-                rowSpacing: 15
+                spacing: 15
 
-                Label {
-                    text: qsTr("Difficulty")
-                    font.bold: true
+                ColumnLayout {
                     Layout.preferredWidth: parent.width / 3
+                    spacing: 15
+
+                    Label {
+                        text: qsTr("Difficulty")
+                        font.bold: true
+                        horizontalAlignment: Text.AlignLeft
+                        elide: Text.ElideRight
+                    }
+                    Label {
+                        text: qsTr("Easy")
+                        horizontalAlignment: Text.AlignLeft
+                        elide: Text.ElideRight
+                    }
+                    Label {
+                        text: qsTr("Medium")
+                        horizontalAlignment: Text.AlignLeft
+                        elide: Text.ElideRight
+                    }
+                    Label {
+                        text: qsTr("Hard")
+                        horizontalAlignment: Text.AlignLeft
+                        elide: Text.ElideRight
+                    }
+                    Label {
+                        text: qsTr("Retr0")
+                        horizontalAlignment: Text.AlignLeft
+                        elide: Text.ElideRight
+                    }
                 }
-                Label {
-                    text: qsTr("Time")
-                    font.bold: true
+
+                ColumnLayout {
                     Layout.preferredWidth: parent.width / 3
+                    spacing: 15
+
+                    Label {
+                        text: qsTr("Time")
+                        font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    Label {
+                        text: leaderboardPage.easyTime
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    Label {
+                        text: leaderboardPage.mediumTime
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    Label {
+                        text: leaderboardPage.hardTime
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    Label {
+                        text: leaderboardPage.retr0Time
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.alignment: Qt.AlignHCenter
+                    }
                 }
-                Label {
-                    text: qsTr("Wins")
-                    font.bold: true
+
+                ColumnLayout {
                     Layout.preferredWidth: parent.width / 3
-                }
+                    spacing: 15
 
-                Label {
-                    text: qsTr("Easy")
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.easyTime
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.easyWins.toString()
-                    Layout.minimumWidth: parent.width / 3
-                }
-
-                Label {
-                    text: qsTr("Medium")
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.mediumTime
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.mediumWins.toString()
-                    Layout.minimumWidth: parent.width / 3
-                }
-
-                Label {
-                    text: qsTr("Hard")
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.hardTime
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.hardWins.toString()
-                    Layout.minimumWidth: parent.width / 3
-                }
-
-                Label {
-                    text: qsTr("Retr0")
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.retr0Time
-                    Layout.minimumWidth: parent.width / 3
-                }
-                Label {
-                    text: leaderboardPage.retr0Wins.toString()
-                    Layout.minimumWidth: parent.width / 3
+                    Label {
+                        text: qsTr("Wins")
+                        font.bold: true
+                        horizontalAlignment: Text.AlignRight
+                        Layout.alignment: Qt.AlignRight
+                    }
+                    Label {
+                        text: leaderboardPage.easyWins.toString()
+                        horizontalAlignment: Text.AlignRight
+                        Layout.alignment: Qt.AlignRight
+                    }
+                    Label {
+                        text: leaderboardPage.mediumWins.toString()
+                        horizontalAlignment: Text.AlignRight
+                        Layout.alignment: Qt.AlignRight
+                    }
+                    Label {
+                        text: leaderboardPage.hardWins.toString()
+                        horizontalAlignment: Text.AlignRight
+                        Layout.alignment: Qt.AlignRight
+                    }
+                    Label {
+                        text: leaderboardPage.retr0Wins.toString()
+                        horizontalAlignment: Text.AlignRight
+                        Layout.alignment: Qt.AlignRight
+                    }
                 }
             }
         }

@@ -42,13 +42,8 @@ Popup {
             font.pixelSize: 14
         }
 
-        Item {
-            visible: aboutPage.root.isSteamEnabled
-            Layout.fillHeight: true
-        }
-
         RowLayout {
-            visible: aboutPage.root.isSteamEnabled
+            visible: !aboutPage.root.isSteamEnabled
             spacing: 10
             Button {
                 text: "Steam"
