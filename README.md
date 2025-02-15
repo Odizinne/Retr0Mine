@@ -62,5 +62,7 @@ Other translations were made by AI. Feel free to submit a pull request if you no
 - Used [Floraphonic](https://www.floraphonic.com/) sound effects 
 - Used PopOs sound effects from [PopOs GTK-Theme](https://github.com/pop-os/gtk-theme)
 - Used KDE ocean sound effects from [ocea-sound-theme](https://github.com/KDE/ocean-sound-theme)
+- Icons by Freepik downloaded on [flaticon](https://www.flaticon.com/authors/freepik)
 
 Ocean sound effects used are licensed under [cc by sa 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+PopOs sound effects used are licensed under [cc by sa 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
