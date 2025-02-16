@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -148,6 +150,8 @@ ApplicationWindow {
                     delegate: SidebarDelegate {
                         width: parent.width
                         height: 40
+                        required property var modelData
+                        required property int index
                         icon.source: modelData.icon
                         icon.color: settingsPage.root.darkMode ? "white" : "dark"
 
@@ -220,14 +224,14 @@ ApplicationWindow {
                             id: difficultyGroup
                             exclusive: true
                             onCheckedButtonChanged: {
-                                if (checkedButton && (checkedButton.userInteractionChecked || checkedButton.activeFocus)) {
+                                if (checkedButton && (checkedButton.userInteractionChecked)) {
                                     const idx = checkedButton.difficultyIndex
                                     const difficultySet = settingsPage.root.difficultySettings[idx]
 
                                     settingsPage.root.gridSizeX = difficultySet.x
                                     settingsPage.root.gridSizeY = difficultySet.y
                                     settingsPage.root.mineCount = difficultySet.mines
-                                    initGame()
+                                    settingsPage.root.initGame()
                                     settingsPage.settings.difficulty = idx
                                     settingsPage.root.diffidx = idx
                                 }
@@ -237,10 +241,13 @@ ApplicationWindow {
                         Repeater {
                             model: settingsPage.root.difficultySettings
                             RowLayout {
+                                id: difficultyRow
                                 Layout.fillWidth: true
+                                required property var modelData
+                                required property int index
 
                                 Label {
-                                    text: modelData.text
+                                    text: difficultyRow.modelData.text
                                     Layout.fillWidth: true
                                     MouseArea {
                                         anchors.fill: parent
@@ -253,14 +260,14 @@ ApplicationWindow {
                                 }
 
                                 InfoIcon {
-                                    visible: index !== 4
-                                    tooltipText: `${modelData.x}×${modelData.y}, ${modelData.mines} mines`
+                                    visible: difficultyRow.index !== 4
+                                    tooltipText: `${difficultyRow.modelData.x}×${difficultyRow.modelData.y}, ${difficultyRow.modelData.mines} mines`
                                 }
 
                                 RadioButton {
                                     id: radioButton
                                     property bool userInteractionChecked: false
-                                    property int difficultyIndex: index
+                                    property int difficultyIndex: difficultyRow.index
                                     Layout.preferredWidth: height
                                     Layout.alignment: Qt.AlignRight
                                     ButtonGroup.group: difficultyGroup
@@ -558,7 +565,7 @@ ApplicationWindow {
                                 text: qsTr("Start in full screen")
                                 Layout.fillWidth: true
                                 MouseArea {
-                                    enabled: !root.isGamescope
+                                    enabled: !settingsPage.root.isGamescope
                                     anchors.fill: parent
                                     onClicked: startFullScreenSwitch.checked = !startFullScreenSwitch.checked
                                 }
@@ -698,6 +705,8 @@ ApplicationWindow {
 
                                 displayText: model.get(currentIndex).text
                                 delegate: ItemDelegate {
+                                    required property var model
+                                    required property int index
                                     width: parent.width
                                     text: model.text
                                     enabled: model.enabled
@@ -827,6 +836,8 @@ ApplicationWindow {
                             }
 
                             delegate: Frame {
+                                id: shortcutLine
+                                required property var model
                                 width: ListView.view.width - 20
 
                                 SystemPalette {
@@ -837,12 +848,12 @@ ApplicationWindow {
                                 RowLayout {
                                     anchors.fill: parent
                                     Label {
-                                        text: title
+                                        text: shortcutLine.model.title
                                         Layout.fillWidth: true
                                     }
                                     Label {
                                         color: sysPalette.highlight
-                                        text: shortcut
+                                        text: shortcutLine.model.shortcut
                                         font.bold: true
                                     }
                                 }
@@ -894,7 +905,7 @@ ApplicationWindow {
                                 model: [qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
                                 Layout.rightMargin: 5
                                 currentIndex: {
-                                    switch(settings.cellSize) {
+                                    switch(settingsPage.settings.cellSize) {
                                     case 0: return 0;
                                     case 1: return 1;
                                     case 2: return 2;
@@ -1079,7 +1090,7 @@ ApplicationWindow {
                                 Layout.rightMargin: 5
                                 currentIndex: settingsPage.settings.themeIndex
                                 onActivated: {
-                                    if (root.gameStarted && !root.gameOver) {
+                                    if (settingsPage.root.gameStarted && !settingsPage.root.gameOver) {
                                         settingsPage.root.saveGame("internalGameState.json")
                                     }
                                     settingsPage.root.mainWindow.restartRetr0Mine(currentIndex)
