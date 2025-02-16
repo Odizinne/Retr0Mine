@@ -3,7 +3,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QGuiApplication>
-#include <QPalette>
 #include <QProcessEnvironment>
 #include <QQmlContext>
 #include <QQuickStyle>
@@ -115,7 +114,6 @@ void MainWindow::setupAndLoadQML()
 void MainWindow::setQMLStyle(int index)
 {
     QString style;
-    qDebug() << index;
     switch(index) {
     case 0:
         style = "FluentWinUI3";

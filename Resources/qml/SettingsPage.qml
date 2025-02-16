@@ -1067,6 +1067,7 @@ ApplicationWindow {
 
                             InfoIcon {
                                 tooltipText: qsTr("Application will restart on change\nCurrent game will be saved and restored")
+                                Layout.rightMargin: 5
                             }
 
                             ComboBox {

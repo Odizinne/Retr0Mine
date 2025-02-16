@@ -23,11 +23,7 @@
         <file>InfoIcon.qml</file>
         <file>+Universal/CellFrame.qml</file>
         <file>+Universal/MainWindow.qml</file>
-        <file>+Universal/SidebarSeparator.qml</file>
-        <file>+Universal/DifficultyLayout.qml</file>
         <file>+Fusion/CellFrame.qml</file>
-        <file>+Fusion/SidebarSeparator.qml</file>
-        <file>+Fusion/DifficultyLayout.qml</file>
         <file>+FluentWinUI3/CellFrame.qml</file>
         <file>+FluentWinUI3/SidebarDelegate.qml</file>
         <file>+FluentWinUI3/GameArea.qml</file>
