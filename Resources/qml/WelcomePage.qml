@@ -12,6 +12,7 @@ Popup {
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     modal: true
+    visible: true
 
     SystemPalette {
         id: sysPalette

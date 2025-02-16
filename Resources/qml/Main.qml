@@ -139,7 +139,6 @@ MainWindow {
                 console.error("Failed to parse leaderboard data:", e)
             }
         }
-        welcomePopup.visible = mainWindow.showWelcome
     }
 
     Shortcut {
@@ -190,6 +189,18 @@ MainWindow {
         onActivated: root.requestHint()
     }
 
+    Loader {
+        id: welcomeLoader
+        anchors.fill: parent
+        active: root.mainWindow.showWelcome
+        sourceComponent: Component {
+            WelcomePage {
+                root: root
+                settings: settings
+            }
+        }
+    }
+
     Retr0MineSettings {
         id: settings
     }
@@ -197,12 +208,6 @@ MainWindow {
     AudioEffectsEngine {
         id: audioEngine
         packIndex: settings.soundPackIndex
-    }
-
-    WelcomePage {
-        id: welcomePopup
-        root: root
-        settings: settings
     }
 
     GameOverPopup {
