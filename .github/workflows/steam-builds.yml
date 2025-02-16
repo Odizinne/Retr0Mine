@@ -27,7 +27,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           add-tools-to-path: true
           cache: true
-          modules: 'qtmultimedia qt5compat'
+          modules: 'qtmultimedia'
 
       - name: Install jom
         id: jom-setup
@@ -118,7 +118,7 @@ jobs:
           host: 'linux'
           cache: true
           add-tools-to-path: true
-          modules: 'qtmultimedia qt5compat'
+          modules: 'qtmultimedia'
 
       - name: Install dependencies
         run: |

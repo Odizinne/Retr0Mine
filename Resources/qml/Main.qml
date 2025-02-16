@@ -31,7 +31,6 @@ MainWindow {
     property bool flag3Unlocked: mainWindow.unlockedFlag3
     property bool anim1Unlocked: mainWindow.unlockedAnim1
     property bool anim2Unlocked: mainWindow.unlockedAnim2
-    property bool shineUnlocked: mainWindow.unlockedShine
     property string flagPath: {
         if (root.isSteamEnabled && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
         if (root.isSteamEnabled && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
@@ -786,7 +785,6 @@ MainWindow {
                     }
 
                     steamIntegration.incrementTotalWin();
-                    leaderboardWindow.isShining = steamIntegration.isAchievementUnlocked("ACH_50_TOTAL")
                 }
             }
 

@@ -4,7 +4,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.impl
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 Popup {
     id: leaderboardPage
@@ -21,7 +20,6 @@ Popup {
     property int mediumWins: 0
     property int hardWins: 0
     property int retr0Wins: 0
-    property bool isShining: root.shineUnlocked
 
     Shortcut {
         sequence: "Esc"
@@ -58,33 +56,6 @@ Popup {
                 Layout.preferredHeight: 30
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                layer.enabled: leaderboardPage.isShining
-                layer.effect: LinearGradient {
-                    id: shineEffect
-                    property real offset: shineAnim.value
-                    start: Qt.point(offset * (width * 1.5) - width, offset * (height * 1.5) - height)
-                    end: Qt.point(offset * (width * 1.5), offset * (height * 1.5))
-                    source: baseLabel
-                    gradient: Gradient {
-                        GradientStop { position: 0.0; color: baseLabel.color }
-                        GradientStop { position: 0.35; color: baseLabel.color }
-                        GradientStop { position: 0.5; color: "#7fFFFFFF" }
-                        GradientStop { position: 0.65; color: baseLabel.color }
-                        GradientStop { position: 1.0; color: baseLabel.color }
-                    }
-                }
-
-                PropertyAnimation {
-                    id: shineAnim
-                    property real value: 0
-                    target: shineAnim
-                    property: "value"
-                    from: 0.0
-                    to: 1.0
-                    duration: 3000
-                    loops: Animation.Infinite
-                    running: true
-                }
             }
         }
 
