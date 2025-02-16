@@ -204,6 +204,7 @@ MainWindow {
 
     Retr0MineSettings {
         id: settings
+        startFullScreen: root.isGamescope ? true : false
     }
 
     AudioEffectsEngine {

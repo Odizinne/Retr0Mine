@@ -20,7 +20,7 @@ Settings {
     property int customHeight: 8
     property int customMines: 10
     property bool dimSatisfied: false
-    property bool startFullScreen: root.isGamescope ? true : false
+    property bool startFullScreen
     property int fixedSeed: -1
     property bool displaySeedAtGameOver: false
     property int colorBlindness: 0
