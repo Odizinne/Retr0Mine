@@ -41,7 +41,7 @@ MainWindow {
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
     property bool darkMode: mainWindow.isDarkMode
-    property int diffidx: settings.difficulty
+    property int diffidx: 0
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
@@ -122,6 +122,7 @@ MainWindow {
         root.gridSizeX = difficultySet.x
         root.gridSizeY = difficultySet.y
         root.mineCount = difficultySet.mines
+        root.diffidx = settings.difficulty
 
         let leaderboardData = mainWindow.loadLeaderboard()
         if (leaderboardData) {

@@ -223,19 +223,6 @@ ApplicationWindow {
                         ButtonGroup {
                             id: difficultyGroup
                             exclusive: true
-                            onCheckedButtonChanged: {
-                                if (checkedButton && (checkedButton.userInteractionChecked)) {
-                                    const idx = checkedButton.difficultyIndex
-                                    const difficultySet = settingsPage.root.difficultySettings[idx]
-
-                                    settingsPage.root.gridSizeX = difficultySet.x
-                                    settingsPage.root.gridSizeY = difficultySet.y
-                                    settingsPage.root.mineCount = difficultySet.mines
-                                    settingsPage.root.initGame()
-                                    settingsPage.settings.difficulty = idx
-                                    settingsPage.root.diffidx = idx
-                                }
-                            }
                         }
 
                         Repeater {
@@ -266,30 +253,19 @@ ApplicationWindow {
 
                                 RadioButton {
                                     id: radioButton
-                                    property bool userInteractionChecked: false
-                                    property int difficultyIndex: difficultyRow.index
                                     Layout.preferredWidth: height
                                     Layout.alignment: Qt.AlignRight
                                     ButtonGroup.group: difficultyGroup
-                                    Binding {
-                                        target: radioButton
-                                        property: "checked"
-                                        value: settingsPage.root.diffidx === index
-                                    }
-                                    onUserInteractionCheckedChanged: {
-                                        if (userInteractionChecked) {
-                                            checked = true
-                                            userInteractionChecked = false
-                                        }
-                                    }
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: function(mouse) {
-                                            if (mouse.button === Qt.LeftButton) {
-                                                parent.userInteractionChecked = true
-                                            }
-                                        }
+                                    checked: settingsPage.root.diffidx === index
+                                    onClicked: {
+                                        const idx = difficultyGroup.buttons.indexOf(this)
+                                        const difficultySet = settingsPage.root.difficultySettings[idx]
+                                        settingsPage.root.gridSizeX = difficultySet.x
+                                        settingsPage.root.gridSizeY = difficultySet.y
+                                        settingsPage.root.mineCount = difficultySet.mines
+                                        settingsPage.root.initGame()
+                                        settingsPage.settings.difficulty = idx
+                                        settingsPage.root.diffidx = idx
                                     }
                                 }
                             }
