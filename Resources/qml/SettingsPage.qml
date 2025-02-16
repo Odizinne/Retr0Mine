@@ -1076,20 +1076,12 @@ ApplicationWindow {
                                     return themes
                                 }
                                 Layout.rightMargin: 5
-
-                                property int previousIndex: settingsPage.settings.themeIndex
-
                                 currentIndex: settingsPage.settings.themeIndex
-                                onActivated: function(index) {
-                                    if (currentIndex !== previousIndex) {
-                                        settingsPage.settings.themeIndex = currentIndex
-                                        settings.themeIndex = currentIndex
-                                        previousIndex = currentIndex
-                                        if (root.gameStarted && !root.gameOver) {
-                                            saveGame("internalGameState.json")
-                                        }
-                                        mainWindow.restartRetr0Mine()
+                                onActivated: {
+                                    if (root.gameStarted && !root.gameOver) {
+                                        settingsPage.root.saveGame("internalGameState.json")
                                     }
+                                    settingsPage.root.mainWindow.restartRetr0Mine(currentIndex)
                                 }
                             }
                         }

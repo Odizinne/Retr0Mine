@@ -22,14 +22,10 @@
         <file>GameArea.qml</file>
         <file>InfoIcon.qml</file>
         <file>+Universal/CellFrame.qml</file>
-        <file>+Universal/SidebarDelegate.qml</file>
         <file>+Universal/MainWindow.qml</file>
-        <file>+Universal/GameArea.qml</file>
         <file>+Universal/SidebarSeparator.qml</file>
         <file>+Universal/DifficultyLayout.qml</file>
         <file>+Fusion/CellFrame.qml</file>
-        <file>+Fusion/SidebarDelegate.qml</file>
-        <file>+Fusion/GameArea.qml</file>
         <file>+Fusion/SidebarSeparator.qml</file>
         <file>+Fusion/DifficultyLayout.qml</file>
         <file>+FluentWinUI3/CellFrame.qml</file>

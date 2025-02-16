@@ -115,6 +115,7 @@ void MainWindow::setupAndLoadQML()
 void MainWindow::setQMLStyle(int index)
 {
     QString style;
+    qDebug() << index;
     switch(index) {
     case 0:
         style = "FluentWinUI3";
@@ -125,8 +126,8 @@ void MainWindow::setQMLStyle(int index)
     case 2:
         style = "Fusion";
         break;
-    case 3:
-        style = "Universal";
+    default:
+        style = "FluentWinUI3";
         break;
     }
 
@@ -203,8 +204,10 @@ void MainWindow::setColorScheme()
     emit darkModeChanged();
 }
 
-void MainWindow::restartRetr0Mine() const
+void MainWindow::restartRetr0Mine(int index)
 {
+    settings.setValue("themeIndex", index);
+
     QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
     QGuiApplication::quit();
 }

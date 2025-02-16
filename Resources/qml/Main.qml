@@ -266,6 +266,7 @@ MainWindow {
             rightMargin: 12
             bottomMargin: 12
         }
+        root: root
         contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
         contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
 

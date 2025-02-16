@@ -1,5 +1,5 @@
 import QtQuick.Controls
 
 ItemDelegate {
-    text: ""
+    text: modelData.text
 }

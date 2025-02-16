@@ -37,7 +37,7 @@ public:
     Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename) const;
     Q_INVOKABLE QString loadGameState(const QString &filename) const;
     Q_INVOKABLE QStringList getSaveFiles() const;
-    Q_INVOKABLE void restartRetr0Mine() const;
+    Q_INVOKABLE void restartRetr0Mine(int index);
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
     Q_INVOKABLE void resetSettings();

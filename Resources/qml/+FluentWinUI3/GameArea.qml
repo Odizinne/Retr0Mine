@@ -2,9 +2,10 @@ import QtQuick.Controls.FluentWinUI3
 import QtQuick
 
 ScrollView {
+    required property var root
     property Component fluentVerticalScrollBar: TempScrollBar {
         parent: parent
-        x: parent.width - width + 12
+        x: parent.width - width
         y: 0
         height: parent.height
         active: true
@@ -15,7 +16,7 @@ ScrollView {
     property Component fluentHorizontalScrollBar: TempScrollBar {
         parent: parent
         x: 0
-        y: parent.height - height + 12
+        y: parent.height - height
         width: parent.width
         active: true
         policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > parent.width ?
