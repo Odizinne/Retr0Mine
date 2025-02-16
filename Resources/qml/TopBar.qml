@@ -19,8 +19,6 @@ RowLayout {
     anchors.leftMargin: 12
     anchors.rightMargin: 12
 
-    property string elapsedTimeLabelText: ""
-
     RowLayout {
         spacing: 6
         Layout.preferredWidth: parent.width / 3
@@ -98,7 +96,7 @@ RowLayout {
         Layout.fillWidth: true
         Label {
             id: elapsedTimeLabel
-            text: topBar.elapsedTimeLabelText
+            text: topBar.root.gameTimer.displayTime
             font.pixelSize: 18
             Layout.alignment: Qt.AlignCenter
         }

@@ -257,7 +257,6 @@ MainWindow {
         settingsWindow: settingsWindow
         leaderboardWindow: leaderboardWindow
         aboutPage: aboutPage
-        elapsedTimeLabelText: root.gameTimer.displayTime
     }
 
     GameArea {
