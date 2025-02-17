@@ -255,6 +255,7 @@ MainWindow {
         id: gameOverPopup
         root: root
         settings: settings
+        numberFont: numberFont
     }
 
     SettingsPage {

@@ -7,6 +7,7 @@ Popup {
     id: gameOverWindow
     required property var root
     required property var settings
+    required property var numberFont
     visible: false
     modal: true
     closePolicy: Popup.NoAutoClose
@@ -55,6 +56,7 @@ Popup {
             easing.type: Easing.InOutQuad
         }
     }
+
     GridLayout {
         id: popupLayout
         anchors.fill: parent
@@ -66,7 +68,7 @@ Popup {
             text: gameOverWindow.gameOverLabelText
             color: gameOverWindow.gameOverLabelColor
             Layout.columnSpan: 2
-            font.bold: true
+            font.family: gameOverWindow.numberFont.name
             font.pixelSize: 16
         }
 
