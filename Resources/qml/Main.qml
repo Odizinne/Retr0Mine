@@ -197,8 +197,15 @@ MainWindow {
             WelcomePage {
                 root: root
                 settings: settings
+                colors: colors
             }
         }
+    }
+
+    Colors {
+        id: colors
+        settings: settings
+        root: root
     }
 
     Retr0MineSettings {
@@ -221,6 +228,7 @@ MainWindow {
         id: settingsWindow
         root: root
         settings: settings
+        colors: colors
     }
 
     AboutPage {
@@ -235,6 +243,7 @@ MainWindow {
     LoadWindow {
         id: loadWindow
         root: root
+        colors: colors
     }
 
     SaveWindow {
@@ -245,6 +254,7 @@ MainWindow {
     LeaderboardPage {
         id: leaderboardWindow
         root: root
+        colors: colors
     }
 
     TopBar {
@@ -256,6 +266,7 @@ MainWindow {
         settingsWindow: settingsWindow
         leaderboardWindow: leaderboardWindow
         aboutPage: aboutPage
+        colors: colors
     }
 
     GameArea {
@@ -297,6 +308,7 @@ MainWindow {
                     height: root.cellSize
                     root: root
                     settings: settings
+                    colors: colors
                     audioEngine: audioEngine
                     grid: grid
                     row: Math.floor(index / root.gridSizeX)

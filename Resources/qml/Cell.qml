@@ -6,6 +6,7 @@ Item {
     id: cellItem
     required property var root
     required property var settings
+    required property var colors
     required property var audioEngine
     required property int index
     required property var grid
@@ -125,6 +126,7 @@ Item {
     CellFrame {
         anchors.fill: cellButton
         border.width: 2
+        border.color: cellItem.colors.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
                 return true
@@ -176,7 +178,7 @@ Item {
         IconImage {
             anchors.centerIn: parent
             source: "qrc:/icons/bomb.png"
-            color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+            color: cellItem.colors.foregroundColor
             visible: cellItem.revealed && cellItem.root.mines.includes(cellItem.index)
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
@@ -185,7 +187,7 @@ Item {
         IconImage {
             anchors.centerIn: parent
             source: "qrc:/icons/questionmark.png"
-            color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+            color: cellItem.colors.foregroundColor
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
             opacity: cellItem.questioned ? 1 : 0
@@ -238,7 +240,7 @@ Item {
             anchors.centerIn: parent
             source: cellItem.root.flagPath
             color: {
-                if (cellItem.settings.contrastFlag) return Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                if (cellItem.settings.contrastFlag) return cellItem.colors.foregroundColor
                 else return sysPalette.accent
             }
             sourceSize.width: cellItem.width / 1.8
@@ -339,7 +341,7 @@ Item {
                     5: "#ff7f00",
                     6: "#a65628",
                     7: "#f781bf",
-                    8: Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                    8: cellItem.colors.foregroundColor
                 }
                 break
             case 2: // Protanopia
@@ -351,7 +353,7 @@ Item {
                     5: "#a6d854",
                     6: "#ffd92f",
                     7: "#e5c494",
-                    8: Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                    8: cellItem.colors.foregroundColor
                 }
                 break
             case 3: // Tritanopia
@@ -363,7 +365,7 @@ Item {
                     5: "#ff7f00",
                     6: "#f781bf",
                     7: "#a65628",
-                    8: Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                    8: cellItem.colors.foregroundColor
                 }
                 break
             default: // None
@@ -375,7 +377,7 @@ Item {
                     5: "#ebc034",
                     6: "#34ebb1",
                     7: "#eb8634",
-                    8: Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                    8: cellItem.colors.foregroundColor
                 }
             }
 

@@ -8,6 +8,7 @@ import QtQuick.Layouts
 Popup {
     id: leaderboardPage
     required property var root
+    required property var colors
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     visible: false
@@ -41,7 +42,7 @@ Popup {
 
             IconImage {
                 source: "qrc:/icons/steam.png"
-                color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "Dark"
+                color: leaderboardPage.colors.foregroundColor
                 sourceSize.height: 20
                 sourceSize.width: 20
                 Layout.preferredHeight: 30

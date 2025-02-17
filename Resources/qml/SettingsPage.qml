@@ -9,6 +9,7 @@ ApplicationWindow {
     title: qsTr("Settings")
     required property var root
     required property var settings
+    required property var colors
     width: settingsPage.root.isGamescope ? height * 1.6 : 600
     height: 480
     minimumWidth: settingsPage.root.isGamescope ? height * 1.6 : 600
@@ -153,7 +154,7 @@ ApplicationWindow {
                         required property var modelData
                         required property int index
                         icon.source: modelData.icon
-                        icon.color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
+                        icon.color: settingsPage.colors.foregroundColor
 
                         highlighted: ListView.isCurrentItem
                         onClicked: {

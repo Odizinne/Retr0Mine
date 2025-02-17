@@ -11,6 +11,8 @@ RowLayout {
     required property var settingsWindow
     required property var leaderboardWindow
     required property var aboutPage
+    required property var colors
+
     height: 40
     anchors.left: parent.left
     anchors.right: parent.right
@@ -112,7 +114,7 @@ RowLayout {
         }
         Button {
             icon.source: "qrc:/icons/bomb.png"
-            icon.color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
+            icon.color: topBar.colors.foregroundColor
             text: ": " + (topBar.root.mineCount - topBar.root.flaggedCount)
             font.pixelSize: 18
             font.bold: true

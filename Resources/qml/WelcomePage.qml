@@ -7,6 +7,7 @@ Popup {
     id: welcomePage
     required property var root
     required property var settings
+    required property var colors
     height: 200
     width: 400
     anchors.centerIn: parent
@@ -179,7 +180,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.colors.frameColor
                 }
 
                 Text {
@@ -201,7 +202,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  welcomePage.settings.contrastFlag) return  Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                        if (  welcomePage.settings.contrastFlag) return  welcomePage.colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -219,7 +220,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.colors.frameColor
                 }
 
                 Text {
@@ -242,7 +243,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.colors.frameColor
                 }
 
                 Text {
@@ -266,7 +267,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.colors.frameColor
                 }
 
                 Text {
@@ -290,7 +291,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.colors.frameColor
                 }
 
                 Text {
@@ -314,7 +315,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.colors.frameColor
                 }
 
                 Text {
@@ -335,7 +336,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  welcomePage.settings.contrastFlag) return  Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                        if (  welcomePage.settings.contrastFlag) return  welcomePage.colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -353,7 +354,7 @@ Popup {
                     border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
-                    border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                    border.color:  welcomePage.colors.frameColor
                 }
 
                 Text {
@@ -435,7 +436,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -457,7 +458,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -479,7 +480,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -501,7 +502,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -536,7 +537,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -558,7 +559,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -580,7 +581,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -602,13 +603,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                        color:  welcomePage.colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -645,7 +646,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -667,7 +668,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -689,7 +690,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -711,7 +712,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -746,7 +747,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -768,7 +769,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -790,7 +791,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -812,13 +813,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                        color:  welcomePage.colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -859,7 +860,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -881,7 +882,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -903,7 +904,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -925,7 +926,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -960,7 +961,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -982,7 +983,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1004,7 +1005,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1026,13 +1027,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                        color:  welcomePage.colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -1069,7 +1070,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1091,7 +1092,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1113,7 +1114,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1135,7 +1136,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1170,7 +1171,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1192,7 +1193,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1214,7 +1215,7 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
@@ -1236,13 +1237,13 @@ Popup {
                         anchors.fill: parent
                         border.width: 2
                         color: "transparent"
-                        border.color:  Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+                        border.color:  welcomePage.colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
+                        color:  welcomePage.colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
