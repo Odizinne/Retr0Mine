@@ -29,4 +29,5 @@ Settings {
     property bool advGenAlgo: true
     property int colorSchemeIndex: 0
     property int gridResetAnimationIndex: 0
+    property int fontIndex: 0
 }

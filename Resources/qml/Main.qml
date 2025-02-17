@@ -202,6 +202,29 @@ MainWindow {
         }
     }
 
+    FontLoader {
+        id: numberFont
+        source: switch (settings.fontIndex) {
+            case 0:
+                "qrc:/fonts/FiraSans-SemiBold.ttf"
+                break
+            case 1:
+                "qrc:/fonts/NotoSerif-Regular.ttf"
+                break
+            case 2:
+                "qrc:/fonts/SpaceMono-Regular.ttf"
+                break
+            case 3:
+                "qrc:/fonts/Orbitron-Regular.ttf"
+                break
+            case 4:
+                "qrc:/fonts/PixelifySans-Regular.ttf"
+                break
+            default:
+                "qrc:/fonts/FiraSans-Bold.ttf"
+        }
+    }
+
     Colors {
         id: colors
         settings: settings
@@ -311,6 +334,7 @@ MainWindow {
                     colors: colors
                     audioEngine: audioEngine
                     grid: grid
+                    numberFont: numberFont.name
                     row: Math.floor(index / root.gridSizeX)
                     col: index % root.gridSizeX
                     opacity: 1

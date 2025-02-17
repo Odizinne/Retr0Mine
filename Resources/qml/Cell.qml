@@ -10,6 +10,7 @@ Item {
     required property var audioEngine
     required property int index
     required property var grid
+    required property string numberFont
 
     property bool revealed: false
     property bool flagged: false
@@ -312,8 +313,9 @@ Item {
             if (cellItem.root.mines.includes(cellItem.index)) return ""
             return cellItem.root.numbers[cellItem.index] === undefined || cellItem.root.numbers[cellItem.index] === 0 ? "" : cellItem.root.numbers[cellItem.index];
         }
+        font.family: cellItem.numberFont
         font.pixelSize: cellItem.root.cellSize * 0.60
-        font.bold: true
+        //font.bold: true
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         opacity: {

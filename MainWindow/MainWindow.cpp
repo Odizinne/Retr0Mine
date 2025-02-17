@@ -93,6 +93,7 @@ void MainWindow::resetSettings()
     settings.setValue("displaySeedAtGameOver", false);
     settings.setValue("colorBlindness", 0);
     settings.setValue("flagSkinIndex", 0);
+    settings.setValue("fontIndex", 0);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;

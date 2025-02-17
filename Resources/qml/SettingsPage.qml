@@ -558,6 +558,76 @@ ApplicationWindow {
                         }
 
                         RowLayout {
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Numbers font")
+                                Layout.fillWidth: true
+                            }
+
+                            ComboBox {
+                                id: colorSchemeComboBox
+                                model: ["Fira Sans", "Noto Serif", "Space Mono", "Orbitron", "Pixelify"]
+                                Layout.rightMargin: 5
+                                currentIndex: settingsPage.settings.fontIndex
+                                onActivated: {
+                                    settingsPage.settings.fontIndex = currentIndex
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            visible: settingsPage.root.isSteamEnabled
+                            Layout.fillWidth: true
+                            Label {
+                                text: qsTr("Grid reset animation")
+                                Layout.fillWidth: true
+                            }
+                            ComboBox {
+                                id: gridResetAnimationComboBox
+                                Layout.rightMargin: 5
+                                model: ListModel {
+                                    id: animationModel
+                                    ListElement { text: qsTr("Wave"); enabled: true }
+                                    ListElement { text: qsTr("Fade"); enabled: false }
+                                    ListElement { text: qsTr("Spin"); enabled: false }
+                                }
+
+                                Component.onCompleted: {
+                                    animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
+                                    animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
+                                }
+
+                                Connections {
+                                    target: settingsPage.root
+                                    function onAnim1UnlockedChanged() {
+                                        animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
+                                    }
+                                    function onAnim2UnlockedChanged() {
+                                        animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
+                                    }
+                                }
+
+                                displayText: model.get(currentIndex).text
+                                delegate: ItemDelegate {
+                                    required property var model
+                                    required property int index
+                                    width: parent.width
+                                    text: model.text
+                                    enabled: model.enabled
+                                    highlighted: gridResetAnimationComboBox.highlightedIndex === index
+                                    icon.source: enabled ? "" : "qrc:/icons/locked.png"
+                                    ToolTip.visible: !enabled && hovered
+                                    ToolTip.text: qsTr("Unlocked with a secret achievement")
+                                    ToolTip.delay: 1000
+                                }
+                                currentIndex: settingsPage.settings.gridResetAnimationIndex
+                                onActivated: {
+                                    settingsPage.settings.gridResetAnimationIndex = currentIndex
+                                }
+                            }
+                        }
+
+                        RowLayout {
                             visible: settingsPage.root.isSteamEnabled
                             spacing: 10
 
@@ -648,57 +718,6 @@ ApplicationWindow {
                                 }
                             }
                         }
-
-                        RowLayout {
-                            visible: settingsPage.root.isSteamEnabled
-                            Layout.fillWidth: true
-                            Label {
-                                text: qsTr("Grid reset animation")
-                                Layout.fillWidth: true
-                            }
-                            ComboBox {
-                                id: gridResetAnimationComboBox
-                                model: ListModel {
-                                    id: animationModel
-                                    ListElement { text: qsTr("Wave"); enabled: true }
-                                    ListElement { text: qsTr("Fade"); enabled: false }
-                                    ListElement { text: qsTr("Spin"); enabled: false }
-                                }
-
-                                Component.onCompleted: {
-                                    animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
-                                    animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
-                                }
-
-                                Connections {
-                                    target: settingsPage.root
-                                    function onAnim1UnlockedChanged() {
-                                        animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
-                                    }
-                                    function onAnim2UnlockedChanged() {
-                                        animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
-                                    }
-                                }
-
-                                displayText: model.get(currentIndex).text
-                                delegate: ItemDelegate {
-                                    required property var model
-                                    required property int index
-                                    width: parent.width
-                                    text: model.text
-                                    enabled: model.enabled
-                                    highlighted: gridResetAnimationComboBox.highlightedIndex === index
-                                    icon.source: enabled ? "" : "qrc:/icons/locked.png"
-                                    ToolTip.visible: !enabled && hovered
-                                    ToolTip.text: qsTr("Unlocked with a secret achievement")
-                                    ToolTip.delay: 1000
-                                }
-                                currentIndex: settingsPage.settings.gridResetAnimationIndex
-                                onActivated: {
-                                    settingsPage.settings.gridResetAnimationIndex = currentIndex
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -756,6 +775,7 @@ ApplicationWindow {
                             }
                             ComboBox {
                                 id: soundpackComboBox
+                                Layout.rightMargin: 5
                                 model: ["Pop", "Windows", "KDE", "Floraphonic"]
                                 currentIndex: settingsPage.settings.soundPackIndex
                                 onActivated: {
@@ -1060,10 +1080,7 @@ ApplicationWindow {
 
                             ComboBox {
                                 id: styleComboBox
-                                model: {
-                                    var themes = ["Fluent", "Universal", "Fusion"]
-                                    return themes
-                                }
+                                model: ["Fluent", "Universal", "Fusion"]
                                 Layout.rightMargin: 5
                                 currentIndex: settingsPage.settings.themeIndex
                                 onActivated: {
@@ -1085,10 +1102,7 @@ ApplicationWindow {
 
                             ComboBox {
                                 id: colorSchemeComboBox
-                                model: {
-                                    var colorSchemes = [qsTr("System"), qsTr("Dark"), qsTr("Light")]
-                                    return colorSchemes
-                                }
+                                model: [qsTr("System"), qsTr("Dark"), qsTr("Light")]
                                 Layout.rightMargin: 5
 
                                 currentIndex: settingsPage.settings.colorSchemeIndex

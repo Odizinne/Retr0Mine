@@ -34,6 +34,7 @@ RESOURCES +=                                    \
     Resources/images/images.qrc                 \
     Resources/qml/qml.qrc                       \
     Resources/sounds/sounds.qrc                 \
+    Resources/fonts/fonts.qrc                   \
 
 win32 {
     QMAKE_CXXFLAGS += -D_CRT_SECURE_NO_WARNINGS
