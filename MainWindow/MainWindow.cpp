@@ -89,8 +89,6 @@ void MainWindow::resetSettings()
     settings.setValue("customMines", 10);
     settings.setValue("dimSatisfied", false);
     settings.setValue("startFullScreen", isRunningOnGamescope ? true : false);
-    settings.setValue("fixedSeed", -1);
-    settings.setValue("displaySeedAtGameOver", false);
     settings.setValue("colorBlindness", 0);
     settings.setValue("flagSkinIndex", 0);
     settings.setValue("fontIndex", 0);

@@ -21,12 +21,9 @@ Settings {
     property int customMines: 10
     property bool dimSatisfied: false
     property bool startFullScreen
-    property int fixedSeed: -1
-    property bool displaySeedAtGameOver: false
     property int colorBlindness: 0
     property bool welcomeMessageShown: false
     property int flagSkinIndex: 0
-    property bool advGenAlgo: true
     property int colorSchemeIndex: 0
     property int gridResetAnimationIndex: 0
     property int fontIndex: 0

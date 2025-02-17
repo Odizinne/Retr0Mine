@@ -172,7 +172,7 @@ ApplicationWindow {
                                     case 4: stackView.push(shortcutsPaneComponent); break;
                                     case 5: stackView.push(accessibilityPaneComponent); break;
                                     case 6: stackView.push(languagePaneComponent); break;
-                                    case 7: stackView.push(debugPaneComponent); break;
+                                    case 7: stackView.push(advancedPaneComponent); break;
                                 }
                             }
                         }
@@ -990,89 +990,12 @@ ApplicationWindow {
             }
 
             Component {
-                id: debugPaneComponent
+                id: advancedPaneComponent
                 Pane {
-                    id: debugPane
+                    id: advancedPane
                     ColumnLayout {
                         spacing: 26
                         width: parent.width
-
-                        RowLayout {
-                            Layout.fillWidth: true
-
-                            Label {
-                                text: qsTr("Advanced generation algorithm")
-                                Layout.fillWidth: true
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: advGenAlgoSwitch.checked = !advGenAlgoSwitch.checked
-                                }
-                            }
-
-                            InfoIcon {
-                                tooltipText: qsTr("Enabled: Generates more chaotic grids\nDisabled: Generates more predictable grids")
-                            }
-
-                            Switch {
-                                id: advGenAlgoSwitch
-                                checked: settingsPage.settings.advGenAlgo
-                                onCheckedChanged: {
-                                    settingsPage.settings.advGenAlgo = checked
-                                    if (checked) {
-                                        settingsPage.settings.displaySeedAtGameOver = false
-                                    }
-                                }
-                                Component.onCompleted: {
-                                    if (checked && settingsPage.settings.displaySeedAtGameOver) {
-                                        settingsPage.settings.displaySeedAtGameOver = false
-                                    }
-                                }
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            enabled: !advGenAlgoSwitch.checked
-
-                            Label {
-                                text: qsTr("Show seed at game over")
-                                Layout.fillWidth: true
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: printSeedSwitch.checked = !printSeedSwitch.checked
-                                }
-                            }
-                            Switch {
-                                id: printSeedSwitch
-                                checked: settingsPage.settings.displaySeedAtGameOver
-                                onCheckedChanged: {
-                                    settingsPage.settings.displaySeedAtGameOver = checked
-                                }
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 20
-                            enabled: !advGenAlgoSwitch.checked
-
-                            Label {
-                                text: qsTr("Fixed seed")
-                            }
-
-                            TextField {
-                                id: seedField
-                                placeholderText: qsTr("Numbers only")
-                                maximumLength: 10
-                                Layout.fillWidth: true
-                                validator: RegularExpressionValidator { regularExpression: /^[0-9]*$/ }
-                                inputMethodHints: Qt.ImhDigitsOnly
-                                text: settingsPage.settings.fixedSeed >= 0 ? settingsPage.settings.fixedSeed.toString() : ""
-                                onTextChanged: {
-                                    settingsPage.settings.fixedSeed = text.length > 0 ? parseInt(text) : -1
-                                }
-                            }
-                        }
 
                         RowLayout {
                             Layout.fillWidth: true

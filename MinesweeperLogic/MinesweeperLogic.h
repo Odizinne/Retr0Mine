@@ -44,17 +44,12 @@ public:
     explicit MinesweeperLogic(QObject *parent = nullptr);
 
     Q_INVOKABLE bool initializeGame(int width, int height, int mineCount);
-    Q_INVOKABLE int placeMines(int firstClickX, int firstClickY, int seed = -1);
-    Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells,
-                                 const QVector<int> &flaggedCells);
-    Q_INVOKABLE bool initializeFromSave(int width,
-                                        int height,
-                                        int mineCount,
-                                        const QVector<int> &mines);
-
+    Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines);
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
-    Q_INVOKABLE int placeLogicalMines(int firstClickX, int firstClickY);
+    Q_INVOKABLE bool placeLogicalMines(int firstClickX, int firstClickY);
+    Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
+
 private:
     int m_width;
     int m_height;
@@ -67,14 +62,10 @@ private:
     QMap<int, QSet<MineSolverInfo>> m_informationsForSpace;
     QMap<int, bool> m_solvedSpaces;
 
-    bool canPlaceMineAt(const QSet<int> &mines, int pos);
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
 
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
-    bool isValidDensity(const QSet<int> &mines, int pos);
-    bool wouldCreate5050(const QSet<int> &mines, int newMinePos);
-    bool hasAmbiguousMinePlacement(const QSet<int> &currentMines);
 };
 
 #endif // MINESWEEPERLOGIC_H
