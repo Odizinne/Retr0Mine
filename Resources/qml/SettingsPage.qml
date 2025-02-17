@@ -10,12 +10,16 @@ ApplicationWindow {
     required property var root
     required property var settings
     required property var colors
-    width: settingsPage.root.isGamescope ? height * 1.6 : 600
-    height: 480
-    minimumWidth: settingsPage.root.isGamescope ? height * 1.6 : 600
-    minimumHeight: 480
-    maximumWidth: settingsPage.root.isGamescope ? height * 1.6 : 600
-    maximumHeight: 480
+
+    readonly property int baseWidth: 600
+    readonly property int baseHeight: 480
+
+    width: root.isGamescope ? 1280 : baseWidth
+    height: root.isGamescope ? 800 : baseHeight
+    minimumWidth: width
+    minimumHeight: height
+    maximumWidth: width
+    maximumHeight: height
     visible: false
     flags: Qt.Dialog
     onVisibleChanged: {
@@ -161,14 +165,14 @@ ApplicationWindow {
                             if (sidebarList.currentIndex !== index) {
                                 sidebarList.currentIndex = index
                                 switch(index) {
-                                case 0: stackView.push(difficultyPaneComponent); break;
-                                case 1: stackView.push(gameplayPaneComponent); break;
-                                case 2: stackView.push(visualsPaneComponent); break;
-                                case 3: stackView.push(soundPaneComponent); break;
-                                case 4: stackView.push(shortcutsPaneComponent); break;
-                                case 5: stackView.push(accessibilityPaneComponent); break;
-                                case 6: stackView.push(languagePaneComponent); break;
-                                case 7: stackView.push(debugPaneComponent); break;
+                                    case 0: stackView.push(difficultyPaneComponent); break;
+                                    case 1: stackView.push(gameplayPaneComponent); break;
+                                    case 2: stackView.push(visualsPaneComponent); break;
+                                    case 3: stackView.push(soundPaneComponent); break;
+                                    case 4: stackView.push(shortcutsPaneComponent); break;
+                                    case 5: stackView.push(accessibilityPaneComponent); break;
+                                    case 6: stackView.push(languagePaneComponent); break;
+                                    case 7: stackView.push(debugPaneComponent); break;
                                 }
                             }
                         }
@@ -903,10 +907,10 @@ ApplicationWindow {
                                 Layout.rightMargin: 5
                                 currentIndex: {
                                     switch(settingsPage.settings.cellSize) {
-                                    case 0: return 0;
-                                    case 1: return 1;
-                                    case 2: return 2;
-                                    default: return 0;
+                                        case 0: return 0;
+                                        case 1: return 1;
+                                        case 2: return 2;
+                                        default: return 0;
                                     }
                                 }
 
