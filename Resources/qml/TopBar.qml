@@ -112,7 +112,7 @@ RowLayout {
         }
         Button {
             icon.source: "qrc:/icons/bomb.png"
-            icon.color: topBar.root.darkMode ? "white" : "dark"
+            icon.color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
             text: ": " + (topBar.root.mineCount - topBar.root.flaggedCount)
             font.pixelSize: 18
             font.bold: true

@@ -23,7 +23,6 @@ class MainWindow : public QObject
     Q_PROPERTY(bool unlockedAnim2 READ getUnlockedAnim2 CONSTANT)
     Q_PROPERTY(QString playerName READ getPlayerName CONSTANT)
     Q_PROPERTY(bool gamescope READ isGamescope CONSTANT)
-    Q_PROPERTY(bool isDarkMode READ getDarkMode NOTIFY darkModeChanged)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
     Q_PROPERTY(bool steamEnabled READ getSteamEnabled CONSTANT)
 
@@ -51,11 +50,7 @@ public:
     bool getUnlockedAnim2() const { return m_steamIntegration->isAchievementUnlocked("ACH_SPEED_DEMON"); }
     QString getPlayerName() const { return m_steamIntegration->getSteamUserName(); }
     bool isGamescope() const { return isRunningOnGamescope; }
-    bool getDarkMode() const { return m_isDarkMode; }
     int getLanguageIndex() const { return m_languageIndex; }
-
-private slots:
-    void onColorSchemeChanged();
 
 private:
     QQmlApplicationEngine *engine;
@@ -71,16 +66,13 @@ private:
 
     void setupAndLoadQML();
     void setQMLStyle(int index);
-    void setColorScheme();
     bool loadLanguage(QString languageCode);
     QString getLeaderboardPath() const;
 
-    bool m_isDarkMode;
     int m_languageIndex;
     bool m_steamEnabled;
 
 signals:
-    void darkModeChanged();
     void languageIndexChanged();
 
 };

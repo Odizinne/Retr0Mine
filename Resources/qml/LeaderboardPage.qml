@@ -41,7 +41,7 @@ Popup {
 
             IconImage {
                 source: "qrc:/icons/steam.png"
-                color: leaderboardPage.root.darkMode ? "white" : "Dark"
+                color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "Dark"
                 sourceSize.height: 20
                 sourceSize.width: 20
                 Layout.preferredHeight: 30

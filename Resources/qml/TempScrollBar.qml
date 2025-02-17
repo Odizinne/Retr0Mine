@@ -17,7 +17,7 @@ T.ScrollBar {
         implicitWidth: control.interactive ? 6 : 2
         implicitHeight: control.interactive ? 6 : 2
         radius: width / 2
-        color: root.darkMode ? "#9f9f9f" : "#8a8a8a"
+        color: Application.styleHints.colorScheme == Qt.Dark ? "#9f9f9f" : "#8a8a8a"
         opacity: 0.0
 
         states: State {

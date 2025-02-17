@@ -24,12 +24,6 @@ MainWindow::MainWindow(QObject *parent)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
     isRunningOnGamescope = desktop.toLower() == "gamescope";
-
-    connect(QGuiApplication::styleHints(),
-            &QStyleHints::colorSchemeChanged,
-            this,
-            &MainWindow::onColorSchemeChanged);
-
     m_steamIntegration = new SteamIntegration(this);
     m_steamEnabled = m_steamIntegration->initialize();
 
@@ -48,13 +42,6 @@ MainWindow::~MainWindow()
     }
     if (translator) {
         translator->deleteLater();
-    }
-}
-
-void MainWindow::onColorSchemeChanged()
-{
-    if (settings.value("colorSchemeIndex").toInt() == 0) {
-        setColorScheme();
     }
 }
 
@@ -95,7 +82,6 @@ void MainWindow::setupAndLoadQML()
 
     setQMLStyle(styleIndex);
     setLanguage(languageIndex);
-    setColorScheme();
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     QQmlEngine::setObjectOwnership(m_steamIntegration, QQmlEngine::CppOwnership);
@@ -150,8 +136,6 @@ void MainWindow::setThemeColorScheme(int colorSchemeIndex)
             QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
             break;
     }
-
-    setColorScheme();
 #endif
 }
 
@@ -192,14 +176,6 @@ bool MainWindow::loadLanguage(QString languageCode)
     }
 
     return false;
-}
-
-void MainWindow::setColorScheme()
-{
-    m_isDarkMode = Utils::isDarkMode() || (currentTheme == 1 && isRunningOnGamescope) ||
-                   (currentTheme == 0 && isRunningOnGamescope);
-
-    emit darkModeChanged();
 }
 
 void MainWindow::restartRetr0Mine(int index)

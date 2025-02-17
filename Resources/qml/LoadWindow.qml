@@ -113,7 +113,7 @@ Popup {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.rightMargin: 10
                         source: "qrc:/icons/delete.png"
-                        color: loadWindow.root.darkMode ? "white" : "black"
+                        color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "black"
                         height: 16
                         width: 40
                         MouseArea {

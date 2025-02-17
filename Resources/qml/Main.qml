@@ -40,7 +40,6 @@ MainWindow {
     property bool isGamescope: mainWindow.gamescope
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
-    property bool darkMode: mainWindow.isDarkMode
     property int diffidx: 0
     property bool gameOver: false
     property int revealedCount: 0

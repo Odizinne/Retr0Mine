@@ -153,7 +153,7 @@ ApplicationWindow {
                         required property var modelData
                         required property int index
                         icon.source: modelData.icon
-                        icon.color: settingsPage.root.darkMode ? "white" : "dark"
+                        icon.color: Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
 
                         highlighted: ListView.isCurrentItem
                         onClicked: {
@@ -828,7 +828,7 @@ ApplicationWindow {
                                         Layout.fillWidth: true
                                     }
                                     Label {
-                                        color: sysPalette.highlight
+                                        color: sysPalette.accent
                                         text: shortcutLine.model.shortcut
                                         font.bold: true
                                     }
