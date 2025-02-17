@@ -6,6 +6,7 @@
 #include <QSet>
 #include <QVector>
 #include <random>
+#include "MinesweeperSolver.h"
 
 struct MineSolverInfo
 {
@@ -55,6 +56,8 @@ public:
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
     Q_INVOKABLE int placeLogicalMines(int firstClickX, int firstClickY);
+    Q_INVOKABLE bool generateNoGuessGrid(int firstClickX, int firstClickY);
+
 private:
     int m_width;
     int m_height;
@@ -62,6 +65,7 @@ private:
     QVector<int> m_mines;
     QVector<int> m_numbers;
     std::mt19937 m_rng;
+    MinesweeperSolver m_solver;
 
     QSet<MineSolverInfo> m_information;
     QMap<int, QSet<MineSolverInfo>> m_informationsForSpace;

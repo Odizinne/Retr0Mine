@@ -1,4 +1,4 @@
-QT       += core gui qml quick multimedia quickcontrols2
+QT       += core gui qml quick multimedia quickcontrols2 concurrent
 
 CONFIG += c++20 silent lrelease embed_translations qtquickcompiler
 
@@ -16,6 +16,7 @@ SOURCES +=                                      \
     GameTimer/GameTimer.cpp                     \
     MainWindow/MainWindow.cpp                   \
     MinesweeperLogic/MinesweeperLogic.cpp       \
+    MinesweeperSolver.cpp \
     SteamIntegration/SteamIntegration.cpp       \
     main.cpp                                    \
 
@@ -23,6 +24,7 @@ HEADERS +=                                      \
     GameTimer/GameTimer.h                       \
     MainWindow/MainWindow.h                     \
     MinesweeperLogic/MinesweeperLogic.h         \
+    MinesweeperSolver.h \
     SteamIntegration/SteamIntegration.h         \
 
 TRANSLATIONS +=                                 \

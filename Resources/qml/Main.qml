@@ -583,23 +583,17 @@ MainWindow {
         }
 
         if (settings.advGenAlgo) {
-            const result = gameLogic.placeLogicalMines(col, row);
+            const result = gameLogic.generateNoGuessGrid(col, row);
             if (result === -1) {
                 console.error("Failed to place mines!");
                 return false;
             }
         } else {
-            const seed = settings.fixedSeed && !isNaN(settings.fixedSeed)
-                       ? gameLogic.placeMines(col, row, settings.fixedSeed)
-                       : gameLogic.placeMines(col, row, -1);
+            const result = gameLogic.placeLogicalMines(col, row)
 
-            if (seed === -1) {
+            if (result === -1) {
                 console.error("Failed to place mines!");
                 return false;
-            } else {
-                gameOverPopup.seed = seed
-                gameOverPopup.clickX = col
-                gameOverPopup.clickY = row
             }
         }
 

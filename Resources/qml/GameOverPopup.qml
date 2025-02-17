@@ -90,14 +90,6 @@ Popup {
             font.pixelSize: 13
         }
 
-        Label {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: gameOverWindow.settings.displaySeedAtGameOver
-            text: qsTr("First click: X: %1, Y: %2, seed: %3").arg(gameOverWindow.clickX).arg(gameOverWindow.clickY).arg(gameOverWindow.seed)
-            color: "#f7c220"
-            Layout.columnSpan: 2
-        }
-
         Button {
             id: retryButton
             text: qsTr("Retry")

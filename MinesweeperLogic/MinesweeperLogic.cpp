@@ -37,7 +37,6 @@ bool MinesweeperLogic::initializeFromSave(int width,
     m_mines = mines;
     m_numbers.resize(width * height);
 
-    // Recalculate numbers for the loaded mine positions
     calculateNumbers();
 
     return true;
@@ -354,126 +353,13 @@ bool MinesweeperLogic::wouldCreate5050(const QSet<int> &mines, int newMinePos)
 int MinesweeperLogic::findMineHint(const QVector<int> &revealedCells,
                                    const QVector<int> &flaggedCells)
 {
-    QSet<int> revealed;
-    QSet<int> flagged;
-    for (int cell : revealedCells)
-        revealed.insert(cell);
-    for (int cell : flaggedCells)
-        flagged.insert(cell);
-
-    // First check each revealed number for basic deductions
-    for (int pos : revealed) {
-        if (m_numbers[pos] <= 0)
-            continue;
-
-        QSet<int> neighbors = getNeighbors(pos);
-        int flagCount = 0;
-        QSet<int> unrevealedCells;
-
-        for (int neighbor : neighbors) {
-            if (flagged.contains(neighbor)) {
-                flagCount++;
-            } else if (!revealed.contains(neighbor)) {
-                unrevealedCells.insert(neighbor);
-            }
-        }
-
-        // If remaining mines equals remaining unrevealed cells, they must all be mines
-        int remainingMines = m_numbers[pos] - flagCount;
-        if (remainingMines > 0 && remainingMines == unrevealedCells.size()) {
-            // Return first unflagged mine
-            for (int minePos : unrevealedCells) {
-                if (!flagged.contains(minePos)) {
-                    int row = pos / m_width;
-                    int col = pos % m_width;
-                    int mineRow = minePos / m_width;
-                    int mineCol = minePos % m_width;
-                    qDebug() << "\nFound mine at" << mineCol << "," << mineRow
-                             << "\nReason: Cell at" << col << "," << row << "shows"
-                             << m_numbers[pos] << "mines, has" << flagCount << "flags nearby"
-                             << "and" << unrevealedCells.size() << "unrevealed cells."
-                             << "\nSince remaining mines (" << remainingMines
-                             << ") equals unrevealed cells, they must all be mines.";
-                    return minePos;
-                }
-            }
-        }
+    // Create visible numbers array - only revealed cells show their numbers
+    QVector<int> visibleNumbers(m_numbers.size(), 0);
+    for (int cell : revealedCells) {
+        visibleNumbers[cell] = m_numbers[cell];
     }
 
-    // Then look for basic deductions - safe spots
-    for (int pos : revealed) {
-        if (m_numbers[pos] <= 0)
-            continue;
-
-        QSet<int> neighbors = getNeighbors(pos);
-        int flagCount = 0;
-        QSet<int> unknowns;
-
-        for (int neighbor : neighbors) {
-            if (flagged.contains(neighbor)) {
-                flagCount++;
-            } else if (!revealed.contains(neighbor)) {
-                unknowns.insert(neighbor);
-            }
-        }
-
-        // If number matches flag count, all other unknowns are safe
-        if (m_numbers[pos] == flagCount && !unknowns.isEmpty()) {
-            int safePos = *unknowns.begin();
-            int row = pos / m_width;
-            int col = pos % m_width;
-            int safeRow = safePos / m_width;
-            int safeCol = safePos % m_width;
-            qDebug()
-                << "\nFound safe spot at" << safeCol << "," << safeRow << "\nReason: Cell at" << col
-                << "," << row << "shows" << m_numbers[pos] << "mines"
-                << "and already has" << flagCount << "flags nearby."
-                << "\nSince flags count matches number, all other adjacent cells must be safe.";
-            return safePos;
-        }
-    }
-
-    // Try solveForHint for more advanced pattern detection
-    int solverHint = solveForHint(revealedCells, flaggedCells);
-    if (solverHint != -1) {
-        qDebug() << "Found hint through solver at:" << solverHint;
-        return solverHint;
-    } else {
-        qDebug() << "solver failed";
-    }
-
-    qDebug() << "\nGrid state when falling back to actual mine positions:";
-    QString gridStr;
-    for (int row = 0; row < m_height; row++) {
-        QString rowStr;
-        for (int col = 0; col < m_width; col++) {
-            int pos = row * m_width + col;
-            if (revealed.contains(pos)) {
-                if (m_numbers[pos] == -1) {
-                    rowStr += "M "; // Mine
-                } else {
-                    rowStr += QString::number(m_numbers[pos]) + " "; // Number
-                }
-            } else if (flagged.contains(pos)) {
-                rowStr += "F "; // Flag
-            } else {
-                rowStr += ". "; // Hidden
-            }
-        }
-        gridStr += rowStr.trimmed() + "\n";
-    }
-    qDebug().noquote() << gridStr;
-
-    // Last resort: use actual mine positions
-    qDebug() << "WARNING: Using actual mine positions for hint";
-    for (int pos : m_mines) {
-        if (!flagged.contains(pos)) {
-            qDebug() << "Found mine hint from actual positions at:" << pos;
-            return pos;
-        }
-    }
-
-    return -1;
+    return m_solver.findHint(visibleNumbers, revealedCells, flaggedCells, m_width, m_height);
 }
 
 bool MinesweeperLogic::isValidDensity(const QSet<int> &mines, int pos)
@@ -1073,4 +959,44 @@ int MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
     }
 
     return 0;
+}
+
+bool MinesweeperLogic::generateNoGuessGrid(int firstClickX, int firstClickY)
+{
+    const int maxAttempts = 100;
+    int firstClickPos = firstClickY * m_width + firstClickX;
+
+    // Get safe region around first click
+    QSet<int> safeCells = getNeighbors(firstClickPos);
+    safeCells.insert(firstClickPos);
+
+    // Build pool of cells where we can place mines
+    QVector<int> cellsPool;
+    for(int i = 0; i < m_width * m_height; ++i) {
+        if (!safeCells.contains(i)) {
+            cellsPool.append(i);
+        }
+    }
+
+    // Try to generate valid grid
+    for(int attempt = 0; attempt < maxAttempts; ++attempt) {
+        m_mines.clear();
+
+        // Place mines randomly outside safe zone
+        QVector<int> shuffledPool = cellsPool;
+        std::shuffle(shuffledPool.begin(), shuffledPool.end(), m_rng);
+
+        for(int i = 0; i < m_mineCount && i < shuffledPool.size(); ++i) {
+            m_mines.append(shuffledPool[i]);
+        }
+
+        calculateNumbers();
+
+        // Validate with solver starting from first click
+        if(m_solver.validateGrid(m_numbers, m_width, m_height)) {
+            return true;
+        }
+    }
+
+    return false;
 }
