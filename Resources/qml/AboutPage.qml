@@ -7,7 +7,6 @@ Popup {
     width: height + 12
     anchors.centerIn: parent
     modal: true
-    required property var root
 
     Shortcut {
         sequence: "Esc"

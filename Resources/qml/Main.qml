@@ -202,6 +202,16 @@ MainWindow {
         }
     }
 
+    Loader {
+        id: aboutLoader
+        anchors.fill: parent
+        active: !root.isSteamEnabled
+        sourceComponent: Component {
+            AboutPage {
+            }
+        }
+    }
+
     FontLoader {
         id: numberFont
         source: switch (settings.fontIndex) {
@@ -254,11 +264,6 @@ MainWindow {
         colors: colors
     }
 
-    AboutPage {
-        id: aboutPage
-        root: root
-    }
-
     ErrorWindow {
         id: errorWindow
     }
@@ -288,7 +293,7 @@ MainWindow {
         loadWindow: loadWindow
         settingsWindow: settingsWindow
         leaderboardWindow: leaderboardWindow
-        aboutPage: aboutPage
+        aboutLoader: aboutLoader
         colors: colors
     }
 

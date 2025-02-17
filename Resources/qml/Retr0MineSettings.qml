@@ -14,7 +14,7 @@ Settings {
     property int soundPackIndex: 2
     property bool animations: true
     property bool cellFrame: true
-    property bool contrastFlag: false
+    property bool contrastFlag: true
     property int cellSize: 1
     property int customWidth: 8
     property int customHeight: 8

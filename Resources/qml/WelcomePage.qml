@@ -150,7 +150,7 @@ Popup {
                     welcomePage.visible = false
                     controlsConfig.visible = false
                     visualsConfig.visible = true
-                    welcomePage.height = 250
+                    welcomePage.height = 300
                     welcomePage.width = 350
                     welcomePage.visible = true
                 }
@@ -387,6 +387,28 @@ Popup {
                 }
                 Component.onCompleted: {
                     checked = !welcomePage.settings.cellFrame && welcomePage.settings.dimSatisfied
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+
+            Label {
+                text: qsTr("System color for flags")
+            }
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Switch {
+                id: accentFlagSwitch
+                onCheckedChanged: {
+                    welcomePage.settings.contrastFlag = !checked
+                }
+                Component.onCompleted: {
+                    checked = !welcomePage.settings.contrastFlag
                 }
             }
         }

@@ -10,7 +10,7 @@ RowLayout {
     required property var loadWindow
     required property var settingsWindow
     required property var leaderboardWindow
-    required property var aboutPage
+    required property var aboutLoader
     required property var colors
 
     height: 40
@@ -76,7 +76,7 @@ RowLayout {
                     text: qsTr("About")
                     height: !topBar.root.isSteamEnabled ? implicitHeight : 0
                     visible: height > 0
-                    onTriggered: topBar.aboutPage.visible = true
+                    onTriggered: topBar.aboutLoader.item.visible = true
                 }
 
                 MenuSeparator { }
