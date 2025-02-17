@@ -8,7 +8,6 @@ STEAM_PATH = $$PWD/Dependencies/steam
 INCLUDEPATH +=                                  \
     GameTimer                                   \
     MainWindow                                  \
-    Utils                                       \
     MinesweeperLogic                            \
     SteamIntegration                            \
     Dependencies/steam                          \
@@ -18,7 +17,6 @@ SOURCES +=                                      \
     MainWindow/MainWindow.cpp                   \
     MinesweeperLogic/MinesweeperLogic.cpp       \
     SteamIntegration/SteamIntegration.cpp       \
-    Utils/Utils.cpp                             \
     main.cpp                                    \
 
 HEADERS +=                                      \
@@ -26,7 +24,6 @@ HEADERS +=                                      \
     MainWindow/MainWindow.h                     \
     MinesweeperLogic/MinesweeperLogic.h         \
     SteamIntegration/SteamIntegration.h         \
-    Utils/Utils.h                               \
 
 TRANSLATIONS +=                                 \
     Resources/translations/Retr0Mine_fr.ts      \

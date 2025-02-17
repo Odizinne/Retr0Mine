@@ -4,9 +4,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QSettings>
-#include <QColor>
 #include <QTranslator>
-#include <QTimer>
 #include "SteamIntegration.h"
 #include "MinesweeperLogic.h"
 #include "GameTimer.h"

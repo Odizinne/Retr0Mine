@@ -4,12 +4,35 @@
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QProcessEnvironment>
-#include <QQmlContext>
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
-#include "Utils.h"
-#include <QQuickWindow>
+
+namespace {
+const QMap<QString, QString>& getSteamLanguageMap() {
+    static const QMap<QString, QString> map {
+        {"english", "en"},
+        {"french", "fr"}
+    };
+    return map;
+}
+
+const QMap<QString, QString>& getSystemLanguageMap() {
+    static const QMap<QString, QString> map {
+        {"en", "en"},
+        {"fr", "fr"}
+    };
+    return map;
+}
+
+const QMap<int, QString>& getLanguageIndexMap() {
+    static const QMap<int, QString> map {
+        {1, "en"},
+        {2, "fr"}
+    };
+    return map;
+}
+}
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
@@ -145,13 +168,13 @@ void MainWindow::setLanguage(int index)
 
     if (index == 0) {
         if (m_steamIntegration->m_initialized) {
-            languageCode = Utils::mapSteamToAppLanguage(m_steamIntegration->getSteamUILanguage());
+            languageCode = getSteamLanguageMap().value(m_steamIntegration->getSteamUILanguage().toLower(), "en");
         } else {
             QLocale locale;
-            languageCode = Utils::mapSystemToAppLanguage(locale.name());
+            languageCode = getSystemLanguageMap().value(locale.name(), "en");
         }
     } else {
-        languageCode = Utils::mapIndexToLanguageCode(index);
+        languageCode = getLanguageIndexMap().value(index, "en");
     }
 
     loadLanguage(languageCode);
