@@ -286,6 +286,7 @@ ApplicationWindow {
 
                             SpinBox {
                                 id: widthSpinBox
+                                Layout.rightMargin: 5
                                 from: 8
                                 to: 50
                                 editable: true
@@ -303,6 +304,7 @@ ApplicationWindow {
                             }
                             SpinBox {
                                 id: heightSpinBox
+                                Layout.rightMargin: 5
                                 from: 8
                                 to: 50
                                 editable: true
@@ -320,8 +322,9 @@ ApplicationWindow {
                             }
                             SpinBox {
                                 id: minesSpinBox
+                                Layout.rightMargin: 5
                                 from: 1
-                                to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 5)
+                                to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 4)
                                 editable: true
                                 value: settingsPage.settings.customMines
                                 onValueChanged: settingsPage.settings.customMines = value
@@ -330,6 +333,7 @@ ApplicationWindow {
 
                         Button {
                             enabled: settingsPage.root.diffidx === 4
+                            Layout.rightMargin: 5
                             text: qsTr("Apply")
                             Layout.alignment: Qt.AlignRight
                             onClicked: {
