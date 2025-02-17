@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -97,7 +99,7 @@ Popup {
                     text: name.replace(".json", "")
                     onClicked: {
                         saveFilesList.currentIndex = index
-                        let saveData = mainWindow.loadGameState(name)
+                        let saveData = loadWindow.root.mainWindow.loadGameState(name)
                         if (saveData) {
                             if (!loadGame(saveData)) {
                                 errorWindow.visible = true
@@ -121,7 +123,7 @@ Popup {
                             width: 32
                             anchors.centerIn: parent
                             onClicked: {
-                                mainWindow.deleteSaveFile(name)
+                                loadWindow.root.mainWindow.deleteSaveFile(name)
                                 saveFilesList.model.remove(index)
                             }
                         }
@@ -140,7 +142,7 @@ Popup {
     onVisibleChanged: {
         if (visible) {
             saveFilesList.model.clear()
-            let saves = mainWindow.getSaveFiles()
+            let saves =loadWindow.root.mainWindow.getSaveFiles()
 
             if (saves.length === 0) {
                 //saveFilesList.model.append({name: qsTr("No saved games found"), enabled: false})
