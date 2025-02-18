@@ -776,7 +776,7 @@ MainWindow {
                 if (root.isSteamEnabled) {
                     const difficulty = getDifficultyLevel();
 
-                    if (currentHintCount === 0 && settings.fixedSeed == -1) {
+                    if (currentHintCount === 0) {
                         if (difficulty === 'easy') {
                             if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
                                 steamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
