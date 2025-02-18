@@ -190,7 +190,7 @@ bool MainWindow::loadLanguage(QString languageCode)
     delete translator;
     translator = new QTranslator(this);
 
-    QString filePath = ":/translations/Retr0Mine_" + languageCode + ".qm";
+    QString filePath = ":/translations/retr0mine_" + languageCode + ".qm";
 
     if (translator->load(filePath)) {
         qGuiApp->installTranslator(translator);

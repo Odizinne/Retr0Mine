@@ -101,8 +101,8 @@ target_link_libraries(appRetr0Mine PRIVATE
 # Handle translations
 qt_add_translations(appRetr0Mine
     TS_FILES
-        resources/translations/Retr0Mine_en.ts
-        resources/translations/Retr0Mine_fr.ts
+        translations/retr0mine_en.ts
+        translations/retr0mine_fr.ts
     RESOURCE_PREFIX "/translations"
 )
 
