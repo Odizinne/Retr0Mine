@@ -1,6 +1,7 @@
 #include "minesweeperlogic.h"
 #include <QDebug>
 #include <QQueue>
+#include <QRandomGenerator>
 
 MinesweeperLogic::MinesweeperLogic(QObject *parent)
     : QObject(parent)
@@ -568,6 +569,25 @@ bool MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
     // Create initial safe area
     QQueue<int> toReveal;
     QSet<int> safeCells;
+    safeCells.insert(firstClickIndex);
+
+    // Add neighbors with a bias towards cardinal directions
+    for (int i = 0; i < cells.size(); ++i) {
+        int row = i / m_width;
+        int col = i % m_width;
+
+        if (std::abs(row - firstClickY) <= 1 && std::abs(col - firstClickX) <= 1) {
+            // Always add direct cardinal neighbors
+            if (row == firstClickY || col == firstClickX) {
+                safeCells.insert(i);
+            }
+            // Add diagonals with less priority
+            else if (QRandomGenerator::global()->bounded(100) < 50) {
+                safeCells.insert(i);
+            }
+        }
+    }
+
     toReveal.enqueue(firstClickIndex);
 
     while (!toReveal.isEmpty()) {
