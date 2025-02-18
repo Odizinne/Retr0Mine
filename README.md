@@ -5,7 +5,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/odizinne/Retr0Mine/total.svg)]()
 [![license](https://img.shields.io/github/license/odizinne/Retr0Mine)](https://github.com/Odizinne/Retr0Mine/blob/main/LICENSE)
 
-Modern UI minesweeper created for a friend.  
+Modern UI minesweeper with a lot of configuration.  
 Runs on windows | linux.
 
 ![image](.assets/screenshot.png)
@@ -14,9 +14,6 @@ Runs on windows | linux.
 
 [![Available on STEAM](/.assets/available_on_steam.png)](https://store.steampowered.com/app/3478030/Retr0Mine/)
 
-I will continue to provide access to precompiled binaries here, but less frequently.  
-A guide on how to build Retr0Mine by yourself will be provided soon in case you do not want to buy it, but still quick access to new updates.
-
 # Download
 
 **Note:** Steam deck users with firefox should right click on `Download` -> `save file as` and save to desktop.  
@@ -24,38 +21,12 @@ Remove `.download` extension after downloading.
 You can then click the installer on your desktop.
 After installation you can right click Retr0Mine in your application menu and select `Add to steam` if you want to be able to run it from gamemode.
 
-**Note:** ColorScheme cannot be forced on linux for now.  
-I made a Steam Deck dark theme, available in gamemode session.
-
 | OS                     | Platform  | Download                                                                                                       |
 |------------------------|-----------|----------------------------------------------------------------------------------------------------------------|
 | Windows Installer      | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
 | Windows Portable       | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)               |
 | Linux Bundle           | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Linux.zip)                 |
 | SteamDeck installer    | x64       | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop)     |
-
-Linux binaries require Qt6.8 to use FluentWinUI3 theme
-
-# Features
-
-- Save / load game state
-- You cannot hit a mine on first click
-- QoL features such as reveal by clicking on connected cells
-
-# Shortcuts
-
-- `Ctrl+Q` Quit
-- `Ctrl+N` New game
-- `Ctrl+S` Save dialog
-- `Ctrl+P` Settings
-- `F11`    Fullscreen (G4m3r)
-
-# Translations
-
-- EN (me)
-- FR (me)
-
-Other translations were made by AI. Feel free to submit a pull request if you notice any inaccuracies.
 
 # Resources
 
