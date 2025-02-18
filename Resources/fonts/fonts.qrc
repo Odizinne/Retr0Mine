@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/fonts">
-        <file>SpaceMono-Regular.ttf</file>
-        <file>FiraSans-SemiBold.ttf</file>
-        <file>Orbitron-Regular.ttf</file>
-        <file>PixelifySans-Regular.ttf</file>
-        <file>NotoSerif-Regular.ttf</file>
-    </qresource>
-</RCC>
