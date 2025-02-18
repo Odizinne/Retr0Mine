@@ -124,9 +124,9 @@ Item {
         }
     }
 
-    CellFrame {
+    Rectangle {
         anchors.fill: cellButton
-        border.width: 2
+        border.width: cellItem.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
         border.color: cellItem.colors.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))

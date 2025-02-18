@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(Retr0Mine VERSION 1.0 LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -50,7 +50,6 @@ qt_add_qml_module(appRetr0Mine
    URI Retr0Mine
    VERSION 1.0
    QML_FILES
-       qml/Main.qml
        qml/Colors.qml
        qml/Retr0MineSettings.qml
        qml/AudioEffectsEngine.qml
@@ -65,21 +64,8 @@ qt_add_qml_module(appRetr0Mine
        qml/LeaderboardPage.qml
        qml/TempScrollBar.qml
        qml/WelcomePage.qml
-       qml/CellFrame.qml
-       qml/SidebarDelegate.qml
-       qml/SidebarSeparator.qml
-       qml/DifficultyLayout.qml
-       qml/MainWindow.qml
-       qml/GameArea.qml
+       qml/Main.qml
        qml/InfoIcon.qml
-       qml/+Universal/CellFrame.qml
-       qml/+Universal/MainWindow.qml
-       qml/+Fusion/CellFrame.qml
-       qml/+FluentWinUI3/CellFrame.qml
-       qml/+FluentWinUI3/SidebarDelegate.qml
-       qml/+FluentWinUI3/GameArea.qml
-       qml/+FluentWinUI3/SidebarSeparator.qml
-       qml/+FluentWinUI3/DifficultyLayout.qml
 )
 
 # Set include directories

@@ -122,23 +122,35 @@ void MainWindow::setupAndLoadQML()
 void MainWindow::setQMLStyle(int index)
 {
     QString style;
+    m_isFluent = false;
+    m_isUniversal = false;
+    m_isFusion = false;
+
     switch(index) {
     case 0:
         style = "FluentWinUI3";
+        m_isFluent = true;
         break;
     case 1:
         style = "Universal";
+        m_isUniversal = true;
         break;
     case 2:
         style = "Fusion";
+        m_isFusion = true;
         break;
     default:
         style = "FluentWinUI3";
+        m_isFluent = true;
         break;
     }
 
     currentTheme = index;
     QQuickStyle::setStyle(style);
+
+    emit fluentChanged();
+    emit universalChanged();
+    emit fusionChanged();
 }
 
 void MainWindow::setThemeColorScheme(int colorSchemeIndex)

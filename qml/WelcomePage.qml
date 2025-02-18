@@ -175,9 +175,9 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                CellFrame {
+                Rectangle {
                     anchors.fill: parent
-                    border.width: 2
+                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -215,9 +215,9 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                CellFrame {
+                Rectangle {
                     anchors.fill: parent
-                    border.width: 2
+                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -238,9 +238,9 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                CellFrame {
+                Rectangle {
                     anchors.fill: parent
-                    border.width: 2
+                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -262,9 +262,9 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                CellFrame {
+                Rectangle {
                     anchors.fill: parent
-                    border.width: 2
+                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -286,9 +286,9 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                CellFrame {
+                Rectangle {
                     anchors.fill: parent
-                    border.width: 2
+                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -310,9 +310,9 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                CellFrame {
+                Rectangle {
                     anchors.fill: parent
-                    border.width: 2
+                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -349,9 +349,9 @@ Popup {
                 Layout.preferredWidth: 35
                 flat: true
 
-                CellFrame {
+                Rectangle {
                     anchors.fill: parent
-                    border.width: 2
+                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
                     border.color:  welcomePage.colors.frameColor
@@ -382,11 +382,11 @@ Popup {
             Switch {
                 id: visualsSwitch
                 onCheckedChanged: {
-                    welcomePage.settings.cellFrame = !checked
+                    welcomePage.settings.Rectangle = !checked
                     welcomePage.settings.dimSatisfied = checked
                 }
                 Component.onCompleted: {
-                    checked = !welcomePage.settings.cellFrame && welcomePage.settings.dimSatisfied
+                    checked = !welcomePage.settings.Rectangle && welcomePage.settings.dimSatisfied
                 }
             }
         }
@@ -454,9 +454,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -476,9 +476,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -498,9 +498,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -520,9 +520,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -555,9 +555,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -577,9 +577,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -599,9 +599,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -621,9 +621,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -664,9 +664,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -686,9 +686,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -708,9 +708,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -730,9 +730,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -765,9 +765,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -787,9 +787,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -809,9 +809,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -831,9 +831,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -878,9 +878,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -900,9 +900,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -922,9 +922,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -944,9 +944,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -979,9 +979,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1001,9 +1001,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1023,9 +1023,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1045,9 +1045,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1088,9 +1088,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1110,9 +1110,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1132,9 +1132,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1154,9 +1154,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1189,9 +1189,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1211,9 +1211,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1233,9 +1233,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1255,9 +1255,9 @@ Popup {
                     Layout.preferredWidth: 35
                     flat: true
 
-                    CellFrame {
+                    Rectangle {
                         anchors.fill: parent
-                        border.width: 2
+                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }

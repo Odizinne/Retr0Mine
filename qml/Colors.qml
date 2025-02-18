@@ -3,6 +3,7 @@ import QtQuick
 QtObject {
     required property var root
     required property var settings
+
     readonly property color foregroundColor: {
         if (root.isGamescope && (settings.themeIndex === 0 || settings.themeIndex === 1)) {
             return "white"

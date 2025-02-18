@@ -23,6 +23,9 @@ class MainWindow : public QObject
     Q_PROPERTY(bool gamescope READ isGamescope CONSTANT)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
     Q_PROPERTY(bool steamEnabled READ getSteamEnabled CONSTANT)
+    Q_PROPERTY(bool isFluent READ getIsFluent NOTIFY fluentChanged)
+    Q_PROPERTY(bool isUniversal READ getIsUniversal NOTIFY universalChanged)
+    Q_PROPERTY(bool isFusion READ getIsFusion NOTIFY fusionChanged)
 
 public:
     explicit MainWindow(QObject *parent = nullptr);
@@ -50,6 +53,10 @@ public:
     bool isGamescope() const { return isRunningOnGamescope; }
     int getLanguageIndex() const { return m_languageIndex; }
 
+    bool getIsFluent() const { return m_isFluent; }
+    bool getIsUniversal() const { return m_isUniversal; }
+    bool getIsFusion() const { return m_isFusion; }
+
 private:
     QQmlApplicationEngine *engine;
     QSettings settings;
@@ -69,10 +76,15 @@ private:
 
     int m_languageIndex;
     bool m_steamEnabled;
+    bool m_isFluent = true;
+    bool m_isUniversal = false;
+    bool m_isFusion = false;
 
 signals:
     void languageIndexChanged();
-
+    void fluentChanged();
+    void universalChanged();
+    void fusionChanged();
 };
 
 #endif // MAINWINDOW_H

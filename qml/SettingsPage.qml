@@ -152,14 +152,14 @@ ApplicationWindow {
                         }
                     ]
                     currentIndex: 0
-                    delegate: SidebarDelegate {
+                    delegate: ItemDelegate {
                         width: parent.width
                         height: 40
                         required property var modelData
                         required property int index
                         icon.source: modelData.icon
                         icon.color: settingsPage.colors.foregroundColor
-
+                        text: settingsPage.root.mainWindow.isFluent ? "  " + modelData.text : modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {
                             if (sidebarList.currentIndex !== index) {
@@ -205,7 +205,7 @@ ApplicationWindow {
             }
         }
 
-        SidebarSeparator {
+        ToolSeparator {
             Layout.fillHeight: true
             z: 2
         }
@@ -222,8 +222,9 @@ ApplicationWindow {
                 Pane {
                     id: difficultyPane
 
-                    DifficultyLayout {
+                    ColumnLayout {
                         width: parent.width
+                        spacing: settingsPage.root.mainWindow.isFluent ? 15 : 20
 
                         ButtonGroup {
                             id: difficultyGroup

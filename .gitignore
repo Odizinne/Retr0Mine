@@ -2,3 +2,4 @@ Retr0Mine.pro.user
 build/
 *.qml.autosave
 CMakeLists.txt.user
+.vscode

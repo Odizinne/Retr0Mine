@@ -3,9 +3,8 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
-import "."
 
-MainWindow {
+ApplicationWindow {
     id: root
     visible: true
     width: getInitialWidth()
@@ -139,6 +138,17 @@ MainWindow {
                 console.error("Failed to parse leaderboard data:", e)
             }
         }
+
+
+        if (typeof Universal !== undefined) {
+            Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
+            Universal.accent = sysPalette.accent
+        }
+    }
+
+    SystemPalette {
+        id: sysPalette
+        colorGroup: SystemPalette.Active
     }
 
     Shortcut {
@@ -298,7 +308,49 @@ MainWindow {
         colors: colors
     }
 
-    GameArea {
+    property Component defaultVerticalScrollBar: ScrollBar {
+        parent: gameArea
+        x: parent.width - width
+        y: 0
+        height: gameArea.height
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    }
+    property Component defaultHorizontalScrollBar: ScrollBar {
+        parent: gameArea
+        x: 0
+        y: parent.height - height
+        width: gameArea.width
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        orientation: Qt.Horizontal
+    }
+
+    // Store the fluent scrollbar settings
+    property Component fluentVerticalScrollBar: TempScrollBar {
+        parent: gameArea
+        x: parent.width - width
+        y: 0
+        height: gameArea.height
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    }
+
+    property Component fluentHorizontalScrollBar: TempScrollBar {
+        parent: gameArea
+        x: 0
+        y: parent.height - height
+        width: gameArea.width
+        active: true
+        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
+                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        orientation: Qt.Horizontal
+    }
+
+    ScrollView {
         id: gameArea
         anchors {
             left: parent.left
@@ -310,9 +362,13 @@ MainWindow {
             rightMargin: 12
             bottomMargin: 12
         }
-        root: root
         contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
         contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
+        ScrollBar.vertical: root.mainWindow.isFluent ? fluentVerticalScrollBar.createObject(gameArea)
+                                              : defaultVerticalScrollBar.createObject(gameArea)
+
+        ScrollBar.horizontal: root.mainWindow.isFluent ? fluentHorizontalScrollBar.createObject(gameArea)
+                                                : defaultHorizontalScrollBar.createObject(gameArea)
 
         Item {
             anchors.centerIn: parent
