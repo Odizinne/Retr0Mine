@@ -1,4 +1,4 @@
-#include "MinesweeperLogic.h"
+#include "minesweeperlogic.h"
 #include <QDebug>
 #include <QQueue>
 

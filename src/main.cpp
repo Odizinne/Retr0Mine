@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "mainwindow.h"
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLoggingCategory>

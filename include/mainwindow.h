@@ -5,9 +5,9 @@
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QTranslator>
-#include "SteamIntegration.h"
-#include "MinesweeperLogic.h"
-#include "GameTimer.h"
+#include "steamintegration.h"
+#include "minesweeperlogic.h"
+#include "gametimer.h"
 
 class MainWindow : public QObject
 {

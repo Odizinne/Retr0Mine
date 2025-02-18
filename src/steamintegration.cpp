@@ -1,4 +1,4 @@
-#include "SteamIntegration.h"
+#include "steamintegration.h"
 #include <QDebug>
 
 SteamIntegration::SteamIntegration(QObject *parent)

@@ -1,4 +1,4 @@
-#include "GameTimer.h"
+#include "gametimer.h"
 #include <QDebug>
 
 GameTimer::GameTimer(QObject *parent)

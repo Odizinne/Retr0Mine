@@ -29,53 +29,31 @@ jobs:
           cache: true
           modules: 'qtmultimedia'
 
-      - name: Install jom
-        id: jom-setup
+      - name: Generate and Build with CMake
         shell: pwsh
         run: |
-          $url = "https://download.qt.io/official_releases/jom/jom_1_1_4.zip"
-          $outputPath = "jom_1_1_4.zip"
-          Invoke-WebRequest -Uri $url -OutFile $outputPath
-          $extractPath = "jom"
-          if (-not (Test-Path $extractPath)) {
-            New-Item -ItemType Directory -Path $extractPath | Out-Null
-          }
-          Expand-Archive -Path $outputPath -DestinationPath $extractPath
-          $jomDir = "$(pwd)\jom"
-          $jomExe = "$jomDir\jom.exe"
-          if (Test-Path $jomExe) {
-            Write-Output "JOM Path: $jomDir"
-            "jom_path=$jomDir" >> $env:GITHUB_OUTPUT
-          } else {
-            Write-Error "jom.exe not found in $jomDir"
-            exit 1
-          }
-
-      - name: Build with qmake and jom
-        shell: pwsh
-        run: |
-          mkdir build
+          mkdir -p build
           cd build
-          qmake ..\Retr0Mine.pro CONFIG+=release
-          $jomPath = "${{ steps.jom-setup.outputs.jom_path }}"
-          & "$jomPath\jom.exe"
+          cmake ..
+          cmake --build . --config Release
+          ls
           
-      - name: Clean release directory
+      - name: Clean build directory
         shell: pwsh
         run: |
-          cd build/release
+          cd build
           Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
 
       - name: Copy Steam API DLL
         shell: pwsh
         run: |
-          Copy-Item "Dependencies\steam\lib\win64\steam_api64.dll" -Destination "build\release\"
+          Copy-Item "\lib\steam\win64\steam_api64.dll" -Destination "build\"
 
       - name: Deploy Qt
         shell: pwsh
         run: |
           cd build
-          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\Resources\qml"
+          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\qml"
           windeployqt6 `
               --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
               --no-opengl-sw `
@@ -84,25 +62,13 @@ jobs:
               --no-translations `
               --no-system-d3d-compiler `
               --qmldir $qmlDir `
-              release\Retr0Mine.exe
-
-      - name: Rename release folder
-        shell: pwsh
-        run: |
-          $releaseDir = "build/release"
-          $newDir = "Retr0Mine"
-          if (Test-Path $releaseDir) {
-              Rename-Item -Path $releaseDir -NewName $newDir
-          } else {
-              Write-Error "Release folder not found!"
-              exit 1
-          }
+              Retr0Mine.exe
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_Windows
-          path: build/Retr0Mine
+          path: build
 
   linux-build:
     runs-on: ubuntu-latest
@@ -129,12 +95,14 @@ jobs:
           sudo groupadd fuse || true
           sudo usermod -a -G fuse $USER
 
-      - name: Build with qmake
+      - name: Generate and Build with CMake
+        shell: pwsh
         run: |
-          mkdir build
+          mkdir -p build
           cd build
-          qmake ../Retr0Mine.pro CONFIG+=release
-          make -j$(nproc)
+          cmake ..
+          cmake --build . --config Release
+          ls
 
       - name: Create AppDir structure
         run: |
@@ -142,9 +110,9 @@ jobs:
           mkdir -p AppDir/usr/lib
           mkdir -p AppDir/usr/share/applications
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
-          cp build/Retr0Mine AppDir/usr/bin/
+          cp build/Retr0Mine/Retr0Mine AppDir/usr/bin/
           
-          #cp Dependencies/steam/lib/linux64/libsteam_api.so AppDir/usr/lib/
+          #cp lib/steam/linux64/libsteam_api.so AppDir/usr/lib/
 
           # Create .desktop file
           cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
@@ -169,8 +137,8 @@ jobs:
       - name: Deploy with linuxdeploy
         run: |
           export QMAKE=$(which qmake6)
-          export QML_SOURCES_PATHS=${{ github.workspace }}/Resources/qml
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/Dependencies/steam/lib/linux64
+          export QML_SOURCES_PATHS=${{ github.workspace }}/qml
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/lib/steam/linux64
           export EXTRA_QT_MODULES="multimedia"
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt
 

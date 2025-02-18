@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "mainwindow.h"
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -116,7 +116,7 @@ void MainWindow::setupAndLoadQML()
         {"gameTimer", QVariant::fromValue(m_gameTimer)}
     });
 
-    engine->load(QUrl("qrc:/qml/Main.qml"));
+    engine->loadFromModule("Retr0Mine", "Main");
 }
 
 void MainWindow::setQMLStyle(int index)

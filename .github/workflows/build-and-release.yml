@@ -27,47 +27,25 @@ jobs:
           cache: true
           modules: 'qtmultimedia'
 
-      - name: Install jom
-        id: jom-setup
-        shell: pwsh
-        run: |
-          $url = "https://download.qt.io/official_releases/jom/jom_1_1_4.zip"
-          $outputPath = "jom_1_1_4.zip"
-          Invoke-WebRequest -Uri $url -OutFile $outputPath
-          $extractPath = "jom"
-          if (-not (Test-Path $extractPath)) {
-            New-Item -ItemType Directory -Path $extractPath | Out-Null
-          }
-          Expand-Archive -Path $outputPath -DestinationPath $extractPath
-          $jomDir = "$(pwd)\jom"
-          $jomExe = "$jomDir\jom.exe"
-          if (Test-Path $jomExe) {
-            Write-Output "JOM Path: $jomDir"
-            "jom_path=$jomDir" >> $env:GITHUB_OUTPUT
-          } else {
-            Write-Error "jom.exe not found in $jomDir"
-            exit 1
-          }
-
-      - name: Build with qmake and jom
+      - name: Generate and Build with CMake
         shell: pwsh
         run: |
           mkdir build
           cd build
-          qmake ..\Retr0Mine.pro CONFIG+=release
-          $jomPath = "${{ steps.jom-setup.outputs.jom_path }}"
-          & "$jomPath\jom.exe"
+          cmake ..
+          cmake --build . --config Release
+          ls
 
-      - name: Clean release directory
+      - name: Clean build directory
         shell: pwsh
         run: |
-          cd build/release
+          cd build
           Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
 
       - name: Copy Steam API DLL
         shell: pwsh
         run: |
-          Copy-Item "Dependencies\steam\lib\win64\steam_api64.dll" -Destination "build\release\"
+          Copy-Item "lib\steam\win64\steam_api64.dll" -Destination "build\"
 
       - name: Deploy Qt
         shell: pwsh
@@ -82,32 +60,20 @@ jobs:
               --no-translations `
               --no-system-d3d-compiler `
               --qmldir $qmlDir `
-              release\Retr0Mine.exe
-
-      - name: Rename release folder
-        shell: pwsh
-        run: |
-          $releaseDir = "build/release"
-          $newDir = "Retr0Mine"
-          if (Test-Path $releaseDir) {
-              Rename-Item -Path $releaseDir -NewName $newDir
-          } else {
-              Write-Error "Release folder not found!"
-              exit 1
-          }
+              Retr0Mine.exe
 
       - name: Zip binaries folder
         shell: pwsh
         run: |
-          $zipFile = "build/Retr0Mine_msvc_64.zip"
-          $folder = "build/Retr0Mine"
+          $zipFile = "Retr0Mine_msvc_64.zip"
+          $folder = "build"
           Compress-Archive -Path $folder -DestinationPath $zipFile
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_msvc_64
-          path: build/Retr0Mine_msvc_64.zip
+          path: Retr0Mine_msvc_64.zip
 
       - name: Create Installer 
         shell: pwsh
@@ -146,12 +112,13 @@ jobs:
           sudo groupadd fuse || true
           sudo usermod -a -G fuse $USER
 
-      - name: Build with qmake
+      - name: Generate and Build with CMake
+        shell: pwsh
         run: |
-          mkdir build
+          mkdir -p build
           cd build
-          qmake ../Retr0Mine.pro CONFIG+=release
-          make -j$(nproc)
+          cmake ..
+          cmake --build . --config Release
 
       - name: Create AppDir structure
         run: |
@@ -161,7 +128,7 @@ jobs:
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
           cp build/Retr0Mine AppDir/usr/bin/
           
-          #cp Dependencies/steam/lib/linux64/libsteam_api.so AppDir/usr/lib/
+          #cp lib/steam/linux64/libsteam_api.so AppDir/usr/lib/
 
           # Create .desktop file
           cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
@@ -222,22 +189,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Download Windows ZIP
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_msvc_64
+          
       - name: Download Windows Installer
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_Installer
           path: installer
+
       - name: Download Linux Build
         uses: actions/download-artifact@v4
         with:
           name: Retr0Mine_Linux
+
       - name: Download Steam Deck Installer Desktop File
         run: |
           wget https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop
+
       - name: Bump version and create release
         id: bump_release
         run: |
@@ -262,6 +234,7 @@ jobs:
           git tag $NEW_TAG
           git push origin $NEW_TAG
           echo "new_tag=$NEW_TAG" >> $GITHUB_ENV
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
