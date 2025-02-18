@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>chord.gif</file>
+        <file>classic.gif</file>
+    </qresource>
+</RCC>
