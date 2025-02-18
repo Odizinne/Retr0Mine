@@ -6,7 +6,8 @@ import QtQuick.Window
 
 ApplicationWindow {
     id: root
-    visible: true
+    //visible: true
+    visibility: ApplicationWindow.Hidden
     width: getInitialWidth()
     height: getInitialHeight()
     minimumWidth: getInitialWidth()
@@ -138,7 +139,6 @@ ApplicationWindow {
                 console.error("Failed to parse leaderboard data:", e)
             }
         }
-
 
         if (typeof Universal !== undefined) {
             Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
@@ -427,6 +427,7 @@ ApplicationWindow {
         } else {
             initGame()
         }
+        root.visibility = ApplicationWindow.Windowed
 
         if (settings.startFullScreen || root.isGamescope) {
             root.visibility = 5
