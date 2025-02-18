@@ -20,7 +20,7 @@ create_desktop_entry() {
     cat > "$DESKTOP_DIR/$APP_NAME.desktop" << EOF
 [Desktop Entry]
 Name=$APP_NAME
-Exec=$INSTALL_DIR/Retr0Mine.sh
+Exec=bash -c 'export LD_LIBRARY_PATH="./usr/lib:\$LD_LIBRARY_PATH" && $INSTALL_DIR/Retr0Mine.sh'
 Icon=$INSTALL_DIR/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
 Path=$INSTALL_DIR
 Type=Application
