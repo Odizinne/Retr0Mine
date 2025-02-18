@@ -26,7 +26,7 @@ After installation you can right click Retr0Mine in your application menu and se
 | Windows Installer      | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
 | Windows Portable       | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)               |
 | Linux Bundle           | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Linux.zip)                 |
-| SteamDeck installer    | x64       | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop)     |
+| SteamDeck installer    | x64       | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/refs/heads/main/tools/Retr0Mine_SteamDeckInstaller.desktop)     |
 
 # Resources
 
