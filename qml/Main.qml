@@ -151,6 +151,10 @@ ApplicationWindow {
         colorGroup: SystemPalette.Active
     }
 
+    BusyIndicator {
+        opacity: 0
+    }
+
     Shortcut {
         sequence: "Ctrl+Q"
         autoRepeat: false
