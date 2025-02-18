@@ -207,6 +207,11 @@ ApplicationWindow {
 
         ToolSeparator {
             Layout.fillHeight: true
+            Layout.leftMargin: {
+                if (settingsPage.root.mainWindow.isUniversal) return -15
+                else return -10
+            }
+
             z: 2
         }
 
