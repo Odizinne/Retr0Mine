@@ -16,7 +16,8 @@ find_package(Qt6 REQUIRED COMPONENTS
     LinguistTools
 )
 
-qt_policy(SET QTP0001 NEW)
+qt_standard_project_setup(REQUIRES 6.5)
+
 qt_policy(SET QTP0004 NEW)
 
 set(SOURCES
@@ -48,7 +49,6 @@ add_executable(appRetr0Mine
 qt_add_qml_module(appRetr0Mine
    URI Retr0Mine
    VERSION 1.0
-   NO_RESOURCE_TARGET_PATH
    QML_FILES
        qml/Main.qml
        qml/Colors.qml
@@ -100,7 +100,9 @@ target_link_libraries(appRetr0Mine PRIVATE
 
 # Handle translations
 qt_add_translations(appRetr0Mine
-    TS_FILES ${TS_FILES}
+    TS_FILES
+        resources/translations/Retr0Mine_en.ts
+        resources/translations/Retr0Mine_fr.ts
     RESOURCE_PREFIX "/translations"
 )
 
@@ -114,6 +116,9 @@ if(WIN32)
     )
     target_link_libraries(appRetr0Mine PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/win64/steam_api64.lib
+    )
+    set_target_properties(appRetr0Mine PROPERTIES
+        WIN32_EXECUTABLE TRUE
     )
 elseif(UNIX AND NOT APPLE)
     target_link_libraries(appRetr0Mine PRIVATE

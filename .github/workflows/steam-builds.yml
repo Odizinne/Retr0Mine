@@ -35,24 +35,25 @@ jobs:
           mkdir -p build
           cd build
           cmake ..
-          cmake --build . --config Release
+          cmake --build . --config Release --parallel
           ls
           
       - name: Clean build directory
         shell: pwsh
         run: |
-          cd build
+          cd build/release
+          Rename-Item -Path "appRetr0Mine.exe" -NewName "Retr0Mine.exe"
           Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
 
       - name: Copy Steam API DLL
         shell: pwsh
         run: |
-          Copy-Item "\lib\steam\win64\steam_api64.dll" -Destination "build\"
+          Copy-Item "lib\steam\win64\steam_api64.dll" -Destination "build\release"
 
       - name: Deploy Qt
         shell: pwsh
         run: |
-          cd build
+          cd build/release
           $qmlDir = "D:\a\Retr0Mine\Retr0Mine\qml"
           windeployqt6 `
               --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
@@ -68,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_Windows
-          path: build
+          path: build/release
 
   linux-build:
     runs-on: ubuntu-latest
@@ -101,7 +102,7 @@ jobs:
           mkdir -p build
           cd build
           cmake ..
-          cmake --build . --config Release
+          cmake --build . --config Release --parallel
           ls
 
       - name: Create AppDir structure
@@ -110,7 +111,7 @@ jobs:
           mkdir -p AppDir/usr/lib
           mkdir -p AppDir/usr/share/applications
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
-          cp build/Retr0Mine/Retr0Mine AppDir/usr/bin/
+          mv build/appRetr0Mine AppDir/usr/bin/Retr0Mine
           
           #cp lib/steam/linux64/libsteam_api.so AppDir/usr/lib/
 
@@ -126,7 +127,7 @@ jobs:
           EOF
           
           # Copy application icon
-          cp Resources/icons/icon.png AppDir/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
+          cp resources/icons/icon.png AppDir/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
 
       - name: Download linuxdeploy and plugins
         run: |
