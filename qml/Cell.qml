@@ -282,21 +282,18 @@ Item {
             onClicked: (mouse) => {
                            if (!cellItem.root.gameStarted) {
                                cellItem.root.reveal(cellItem.index);
-                               cellItem.audioEngine.playClick();
                            } else if (cellItem.revealed) {
                                cellItem.root.revealConnectedCells(cellItem.index);
                            } else {
                                if (cellItem.settings.invertLRClick) {
                                    if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
                                        cellItem.root.reveal(cellItem.index);
-                                       cellItem.audioEngine.playClick();
                                    } else if (mouse.button === Qt.LeftButton) {
                                        cellItem.root.toggleFlag(cellItem.index);
                                    }
                                } else {
                                    if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
                                        cellItem.root.reveal(cellItem.index);
-                                       cellItem.audioEngine.playClick();
                                    } else if (mouse.button === Qt.RightButton) {
                                        cellItem.root.toggleFlag(cellItem.index);
                                    }

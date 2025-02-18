@@ -5,6 +5,13 @@ Item {
     id: root
     property int packIndex: 2
     property bool enabled: true
+    property bool clickCooldown: false
+
+    Timer {
+        id: cooldownTimer
+        interval: 100
+        onTriggered: root.clickCooldown = false
+    }
 
     property list<SoundEffect> clickPool: [
         SoundEffect {
@@ -51,25 +58,29 @@ Item {
                 bomb: "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
             }
         }
-
         return packs[packIndex][type]
     }
 
     function playClick() {
-        if (!enabled) return
+        if (!enabled || clickCooldown) return
+
         for (let effect of clickPool) {
             if (!effect.playing) {
                 effect.play()
+                clickCooldown = true
+                cooldownTimer.restart()
                 return
             }
         }
     }
 
     function playWin() {
-        if (enabled) winEffect.play()
+        if (!enabled) return
+        winEffect.play()
     }
 
     function playLoose() {
-        if (enabled) looseEffect.play()
+        if (!enabled) return
+        looseEffect.play()
     }
 }

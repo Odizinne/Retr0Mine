@@ -626,7 +626,6 @@ ApplicationWindow {
             for (let adjacentPos of adjacentCells) {
                 reveal(adjacentPos);
             }
-            audioEngine.playClick()
         }
     }
 
@@ -881,6 +880,8 @@ ApplicationWindow {
             gameOverPopup.gameOverLabelColor = "#28d13c"
             gameOverPopup.visible = true
             audioEngine.playWin()
+        } else {
+            audioEngine.playClick()
         }
     }
 
