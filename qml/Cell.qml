@@ -37,7 +37,7 @@ Item {
 
         if (grid.cellsCreated === cellItem.root.gridSizeX * cellItem.root.gridSizeY) {
             cellItem.root.gridFullyInitialized = true
-            initialLoadTimer.start()
+            cellItem.root.startInitialLoadTimer()
         }
 
         if (cellItem.settings.animations && !grid.initialAnimationPlayed && !cellItem.root.blockAnim) {
@@ -126,7 +126,8 @@ Item {
 
     Rectangle {
         anchors.fill: cellButton
-        border.width: cellItem.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+        border.width: 2
+        radius: cellItem.root.mainWindow.isFluent ? 4 : (cellItem.root.isUniversal ? 0 : 3)
         border.color: cellItem.colors.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))

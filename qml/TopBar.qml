@@ -45,7 +45,7 @@ RowLayout {
 
                 MenuItem {
                     text: qsTr("Save game")
-                    enabled: topBar.root.gameStarted && !root.gameOver
+                    enabled: topBar.root.gameStarted && !topBar.root.gameOver
                     onTriggered: topBar.saveWindow.visible = true
                 }
 

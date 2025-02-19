@@ -277,6 +277,7 @@ ApplicationWindow {
         root: root
         settings: settings
         colors: colors
+        grid: grid
     }
 
     ErrorWindow {
@@ -287,6 +288,7 @@ ApplicationWindow {
         id: loadWindow
         root: root
         colors: colors
+        errorWindow: errorWindow
     }
 
     SaveWindow {
@@ -406,6 +408,10 @@ ApplicationWindow {
         interval: 1
         repeat: false
         onTriggered: root.checkInitialGameState()
+    }
+
+    function startInitialLoadTimer() {
+        initialLoadTimer.start()
     }
 
     function checkInitialGameState() {

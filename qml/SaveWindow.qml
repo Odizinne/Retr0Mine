@@ -39,8 +39,9 @@ Popup {
             placeholderText: qsTr("Enter save file name")
             Layout.fillWidth: true
             onTextChanged: {
-                let hasInvalidChars = /[\\/:*?"<>|]/.test(text)
-                let isReserved = /^(internalGameState|leaderboard)$/i.test(text.trim())
+                let hasInvalidChars = text.match(/[\\/:*?"<>|]/) !== null
+                let isReserved = text.trim().toLowerCase() === "internalgamestate" ||
+                                 text.trim().toLowerCase() === "leaderboard"
 
                 if (isReserved) {
                     errorLabel.text = qsTr("This filename is reserved for internal use")

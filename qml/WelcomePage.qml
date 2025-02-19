@@ -177,7 +177,8 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -217,7 +218,8 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -240,7 +242,8 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -264,7 +267,8 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -288,7 +292,8 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -312,7 +317,8 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
                     border.color:  welcomePage.colors.frameColor
@@ -351,7 +357,8 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
                     border.color:  welcomePage.colors.frameColor
@@ -456,7 +463,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -478,7 +486,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -500,7 +509,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -522,7 +532,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -557,7 +568,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -579,7 +591,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -601,7 +614,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -623,7 +637,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -666,7 +681,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -688,7 +704,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -710,7 +727,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -732,7 +750,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -767,7 +786,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -789,7 +809,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -811,7 +832,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -833,7 +855,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -880,7 +903,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -902,7 +926,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -924,7 +949,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -946,7 +972,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -981,7 +1008,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1003,7 +1031,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1025,7 +1054,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1047,7 +1077,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1090,7 +1121,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1112,7 +1144,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1134,7 +1167,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1156,7 +1190,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1191,7 +1226,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1213,7 +1249,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1235,7 +1272,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }
@@ -1257,7 +1295,8 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        border.width: welcomePage.root.mainWindow.isFluent ? 4 : (root.isUniversal ? 0 : 3)
+                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        border.width: 2
                         color: "transparent"
                         border.color:  welcomePage.colors.frameColor
                     }

@@ -9,6 +9,8 @@ Popup {
     id: loadWindow
     required property var root
     required property var colors
+    required property var errorWindow
+
     width: 300
     height: 320
     modal: true
@@ -49,10 +51,10 @@ Popup {
 
                 let saveFileName = saveFilesList.model.get(saveFilesList.currentIndex).name
 
-                let saveData = mainWindow.loadGameState(saveFileName)
+                let saveData = loadWindow.root.mainWindow.loadGameState(saveFileName)
                 if (saveData) {
-                    if (!loadGame(saveData)) {
-                        errorWindow.visible = true
+                    if (!loadWindow.root.loadGame(saveData)) {
+                        loadWindow.errorWindow.visible = true
                     }
                     loadWindow.visible = false
                 }
@@ -92,6 +94,7 @@ Popup {
                 currentIndex: 0
 
                 delegate: ItemDelegate {
+                    id: saveFile
                     width: saveFilesList.width - 10
                     height: 40
                     required property string name
@@ -102,13 +105,12 @@ Popup {
                         saveFilesList.currentIndex = index
                         let saveData = loadWindow.root.mainWindow.loadGameState(name)
                         if (saveData) {
-                            if (!loadGame(saveData)) {
-                                errorWindow.visible = true
+                            if (!loadWindow.root.loadGame(saveData)) {
+                                loadWindow.errorWindow.visible = true
                             }
                             loadWindow.visible = false
                         }
                     }
-
 
                     IconImage {
                         id: deleteButton
@@ -124,8 +126,8 @@ Popup {
                             width: 32
                             anchors.centerIn: parent
                             onClicked: {
-                                loadWindow.root.mainWindow.deleteSaveFile(name)
-                                saveFilesList.model.remove(index)
+                                loadWindow.root.mainWindow.deleteSaveFile(saveFile.name)
+                                saveFilesList.model.remove(saveFile.index)
                             }
                         }
                     }

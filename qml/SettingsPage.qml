@@ -10,6 +10,7 @@ ApplicationWindow {
     required property var root
     required property var settings
     required property var colors
+    required property var grid
 
     readonly property int baseWidth: 600
     readonly property int baseHeight: 480
@@ -24,12 +25,12 @@ ApplicationWindow {
     flags: Qt.Dialog
     onVisibleChanged: {
         if (settingsPage.visible) {
-            if (root.x + settingsPage.root.width + settingsPage.width + 10 <= screen.width) {
+            if (settingsPage.root.x + settingsPage.root.width + settingsPage.width + 10 <= Screen.width) {
                 settingsPage.x = settingsPage.root.x + settingsPage.root.width + 20
-            } else if (root.x - settingsPage.width - 10 >= 0) {
+            } else if (settingsPage.root.x - settingsPage.width - 10 >= 0) {
                 settingsPage.x = settingsPage.root.x - settingsPage.width - 20
             } else {
-                settingsPage.x = screen.width - settingsPage.width - 20
+                settingsPage.x = Screen.width - settingsPage.width - 20
             }
             settingsPage.y = settingsPage.root.y + (root.height - settingsPage.height) / 2
         }
@@ -81,7 +82,7 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     onClicked: {
                         settingsPage.settings.welcomeMessageShown = false
-                        mainWindow.restartRetr0Mine()
+                        settingsPage.root.mainWindow.restartRetr0Mine()
                     }
                 }
 
@@ -251,7 +252,7 @@ ApplicationWindow {
                                         anchors.fill: parent
                                         onClicked: function(mouse) {
                                             if (mouse.button === Qt.LeftButton) {
-                                                radioButton.userInteractionChecked = true
+                                                radioButton.click()
                                             }
                                         }
                                     }
@@ -267,7 +268,7 @@ ApplicationWindow {
                                     Layout.preferredWidth: height
                                     Layout.alignment: Qt.AlignRight
                                     ButtonGroup.group: difficultyGroup
-                                    checked: settingsPage.root.diffidx === index
+                                    checked: settingsPage.root.diffidx === parent.index
                                     onClicked: {
                                         const idx = difficultyGroup.buttons.indexOf(this)
                                         const difficultySet = settingsPage.root.difficultySettings[idx]
@@ -417,7 +418,7 @@ ApplicationWindow {
                                     settingsPage.settings.enableQuestionMarks = checked
                                     if (!checked) {
                                         for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
-                                            let cell = grid.itemAtIndex(i)
+                                            let cell = settingsPage.grid.itemAtIndex(i) as Cell
                                             if (cell && cell.questioned) {
                                                 cell.questioned = false
                                             }
@@ -444,7 +445,7 @@ ApplicationWindow {
                                     settingsPage.settings.enableSafeQuestionMarks = checked
                                     if (!checked) {
                                         for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
-                                            let cell = grid.itemAtIndex(i)
+                                            let cell = settingsPage.grid.itemAtIndex(i) as Cell
                                             if (cell && cell.safeQuestioned) {
                                                 cell.safeQuestioned = false
                                             }
@@ -502,7 +503,7 @@ ApplicationWindow {
                                 onCheckedChanged: {
                                     settingsPage.settings.animations = checked
                                     for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
-                                        let cell = grid.itemAtIndex(i)
+                                        let cell = settingsPage.grid.itemAtIndex(i) as Cell
                                         if (cell) {
                                             cell.opacity = 1
                                         }
@@ -926,9 +927,9 @@ ApplicationWindow {
 
                                 onActivated: {
                                     settingsPage.settings.cellSize = currentIndex
-                                    if (!isMaximized && !isFullScreen) {
-                                        settingsPage.root.minimumWidth = getInitialWidth()
-                                        settingsPage.root.minimumHeight = getInitialHeight()
+                                    if (!settingsPage.root.isMaximized && !settingsPage.root.isFullScreen) {
+                                        settingsPage.root.minimumWidth = settingsPage.root.getInitialWidth()
+                                        settingsPage.root.minimumHeight = settingsPage.root.getInitialHeight()
                                         settingsPage.root.width = settingsPage.root.minimumWidth
                                         settingsPage.root.height = settingsPage.root.minimumHeight
                                     }
@@ -986,7 +987,7 @@ ApplicationWindow {
                                 onActivated: {
                                     previousLanguageIndex = currentIndex
                                     settingsPage.settings.languageIndex = currentIndex
-                                    mainWindow.setLanguage(currentIndex)
+                                    settingsPage.root.mainWindow.setLanguage(currentIndex)
                                     currentIndex = previousLanguageIndex
                                 }
                             }
