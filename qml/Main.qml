@@ -312,48 +312,6 @@ ApplicationWindow {
         colors: colors
     }
 
-    property Component defaultVerticalScrollBar: ScrollBar {
-        parent: gameArea
-        x: parent.width - width
-        y: 0
-        height: gameArea.height
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-    }
-    property Component defaultHorizontalScrollBar: ScrollBar {
-        parent: gameArea
-        x: 0
-        y: parent.height - height
-        width: gameArea.width
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        orientation: Qt.Horizontal
-    }
-
-    // Store the fluent scrollbar settings
-    property Component fluentVerticalScrollBar: TempScrollBar {
-        parent: gameArea
-        x: parent.width - width
-        y: 0
-        height: gameArea.height
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-    }
-
-    property Component fluentHorizontalScrollBar: TempScrollBar {
-        parent: gameArea
-        x: 0
-        y: parent.height - height
-        width: gameArea.width
-        active: true
-        policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
-                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        orientation: Qt.Horizontal
-    }
-
     ScrollView {
         id: gameArea
         anchors {
@@ -368,11 +326,45 @@ ApplicationWindow {
         }
         contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
         contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
-        ScrollBar.vertical: root.mainWindow.isFluent ? fluentVerticalScrollBar.createObject(gameArea)
-                                              : defaultVerticalScrollBar.createObject(gameArea)
 
-        ScrollBar.horizontal: root.mainWindow.isFluent ? fluentHorizontalScrollBar.createObject(gameArea)
-                                                : defaultHorizontalScrollBar.createObject(gameArea)
+        ScrollBar {
+            id: defaultVerticalScrollBar
+            parent: gameArea
+            orientation: Qt.Vertical
+            visible: !root.mainWindow.isFluent
+            policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        }
+
+        ScrollBar {
+            id: defaultHorizontalScrollBar
+            parent: gameArea
+            orientation: Qt.Horizontal
+            visible: !root.mainWindow.isFluent
+            policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        }
+
+        TempScrollBar {
+            id: fluentVerticalScrollBar
+            parent: gameArea
+            orientation: Qt.Vertical
+            visible: root.mainWindow.isFluent
+            policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        }
+
+        TempScrollBar {
+            id: fluentHorizontalScrollBar
+            parent: gameArea
+            orientation: Qt.Horizontal
+            visible: root.mainWindow.isFluent
+            policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        }
+
+        ScrollBar.vertical: root.mainWindow.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
+        ScrollBar.horizontal: root.mainWindow.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
 
         Item {
             anchors.centerIn: parent
@@ -947,7 +939,7 @@ ApplicationWindow {
                 let newCol = col + c
                 if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
 
-                let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol)
+                let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol) as Cell
                 if (adjacentCell.flagged) {
                     flagCount++
                 }
