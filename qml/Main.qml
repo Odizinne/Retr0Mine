@@ -6,7 +6,6 @@ import QtQuick.Window
 
 ApplicationWindow {
     id: root
-    //visible: true
     visibility: ApplicationWindow.Hidden
     width: getInitialWidth()
     height: getInitialHeight()
@@ -333,7 +332,11 @@ ApplicationWindow {
             id: defaultVerticalScrollBar
             parent: gameArea
             orientation: Qt.Vertical
-            visible: !root.mainWindow.isFluent
+            x: parent.width - width
+            y: 0
+            height: gameArea.height
+            visible: policy === ScrollBar.AlwaysOn && !root.mainWindow.isFluent
+            active: !root.mainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -342,7 +345,11 @@ ApplicationWindow {
             id: defaultHorizontalScrollBar
             parent: gameArea
             orientation: Qt.Horizontal
-            visible: !root.mainWindow.isFluent
+            x: 0
+            y: parent.height - height
+            width: gameArea.width
+            visible: policy === ScrollBar.AlwaysOn && !root.mainWindow.isFluent
+            active: !root.mainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -351,7 +358,11 @@ ApplicationWindow {
             id: fluentVerticalScrollBar
             parent: gameArea
             orientation: Qt.Vertical
-            visible: root.mainWindow.isFluent
+            x: parent.width - width
+            y: 0
+            height: gameArea.height
+            visible: policy === ScrollBar.AlwaysOn && root.mainWindow.isFluent
+            active: root.mainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -360,7 +371,11 @@ ApplicationWindow {
             id: fluentHorizontalScrollBar
             parent: gameArea
             orientation: Qt.Horizontal
-            visible: root.mainWindow.isFluent
+            x: 0
+            y: parent.height - height
+            width: gameArea.width
+            visible: policy === ScrollBar.AlwaysOn && root.mainWindow.isFluent
+            active: root.mainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
