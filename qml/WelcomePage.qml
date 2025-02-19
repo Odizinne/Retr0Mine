@@ -389,11 +389,11 @@ Popup {
             Switch {
                 id: visualsSwitch
                 onCheckedChanged: {
-                    welcomePage.settings.Rectangle = !checked
+                    welcomePage.settings.cellFrame = !checked
                     welcomePage.settings.dimSatisfied = checked
                 }
                 Component.onCompleted: {
-                    checked = !welcomePage.settings.Rectangle && welcomePage.settings.dimSatisfied
+                    checked = !welcomePage.settings.cellFrame && welcomePage.settings.dimSatisfied
                 }
             }
         }
