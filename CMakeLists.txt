@@ -47,34 +47,32 @@ add_executable(appRetr0Mine
 )
 
 qt_add_qml_module(appRetr0Mine
-   URI Retr0Mine
-   VERSION 1.0
-   QML_FILES
-       qml/Colors.qml
-       qml/Retr0MineSettings.qml
-       qml/AudioEffectsEngine.qml
-       qml/Cell.qml
-       qml/SettingsPage.qml
-       qml/GameOverPopup.qml
-       qml/AboutPage.qml
-       qml/LoadWindow.qml
-       qml/SaveWindow.qml
-       qml/ErrorWindow.qml
-       qml/TopBar.qml
-       qml/LeaderboardPage.qml
-       qml/TempScrollBar.qml
-       qml/WelcomePage.qml
-       qml/Main.qml
-       qml/InfoIcon.qml
+    URI Retr0Mine
+    VERSION 1.0
+    QML_FILES
+        qml/Colors.qml
+        qml/Retr0MineSettings.qml
+        qml/AudioEffectsEngine.qml
+        qml/Cell.qml
+        qml/SettingsPage.qml
+        qml/GameOverPopup.qml
+        qml/AboutPage.qml
+        qml/LoadWindow.qml
+        qml/SaveWindow.qml
+        qml/ErrorWindow.qml
+        qml/TopBar.qml
+        qml/LeaderboardPage.qml
+        qml/TempScrollBar.qml
+        qml/WelcomePage.qml
+        qml/Main.qml
+        qml/InfoIcon.qml
 )
 
-# Set include directories
 target_include_directories(appRetr0Mine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include/steam
 )
 
-# Link Qt libraries
 target_link_libraries(appRetr0Mine PRIVATE
     Qt6::Core
     Qt6::Gui
@@ -84,7 +82,6 @@ target_link_libraries(appRetr0Mine PRIVATE
     Qt6::QuickControls2
 )
 
-# Handle translations
 qt_add_translations(appRetr0Mine
     TS_FILES
         translations/retr0mine_en.ts
@@ -92,7 +89,6 @@ qt_add_translations(appRetr0Mine
     RESOURCE_PREFIX "/translations"
 )
 
-# Platform specific settings
 if(WIN32)
     target_compile_definitions(appRetr0Mine PRIVATE
         *CRT*SECURE_NO_WARNINGS

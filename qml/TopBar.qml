@@ -48,6 +48,7 @@ RowLayout {
                     enabled: topBar.root.gameStarted && !root.gameOver
                     onTriggered: topBar.saveWindow.visible = true
                 }
+
                 MenuItem {
                     id: loadMenu
                     text: qsTr("Load game")
