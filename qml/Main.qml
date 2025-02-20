@@ -261,6 +261,7 @@ ApplicationWindow {
 
     AudioEffectsEngine {
         id: audioEngine
+        root: root
         packIndex: settings.soundPackIndex
     }
 

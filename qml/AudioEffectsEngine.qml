@@ -3,6 +3,7 @@ import QtMultimedia
 
 Item {
     id: root
+    required property var root
     property int packIndex: 2
     property bool enabled: true
     property bool clickCooldown: false
@@ -11,6 +12,24 @@ Item {
         id: cooldownTimer
         interval: 100
         onTriggered: root.clickCooldown = false
+    }
+
+    Timer {
+        id: clickDelayTimer
+        interval: 20
+        repeat: false
+        onTriggered: {
+            if (!root.root.gameOver) {
+                for (let effect of clickPool) {
+                    if (!effect.playing) {
+                        effect.play()
+                        clickCooldown = true
+                        cooldownTimer.restart()
+                        return
+                    }
+                }
+            }
+        }
     }
 
     property list<SoundEffect> clickPool: [
@@ -63,15 +82,7 @@ Item {
 
     function playClick() {
         if (!enabled || clickCooldown) return
-
-        for (let effect of clickPool) {
-            if (!effect.playing) {
-                effect.play()
-                clickCooldown = true
-                cooldownTimer.restart()
-                return
-            }
-        }
+        clickDelayTimer.start()
     }
 
     function playWin() {
