@@ -12,10 +12,6 @@ ApplicationWindow {
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
 
-    required property var steamIntegration
-    required property var gameLogic
-    required property var gameTimer
-
     readonly property var difficultySettings: [
         { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
         { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
@@ -23,15 +19,15 @@ ApplicationWindow {
         { text: "Retr0", x: 50, y: 32, mines: 320 },
         { text: qsTr("Custom"), x: Retr0MineSettings.customWidth, y: Retr0MineSettings.customHeight, mines: Retr0MineSettings.customMines },
     ]
-    property bool flag1Unlocked: MainWindow.unlockedFlag1
-    property bool flag2Unlocked: MainWindow.unlockedFlag2
-    property bool flag3Unlocked: MainWindow.unlockedFlag3
-    property bool anim1Unlocked: MainWindow.unlockedAnim1
-    property bool anim2Unlocked: MainWindow.unlockedAnim2
+    property bool flag1Unlocked: SteamIntegration.unlockedFlag1
+    property bool flag2Unlocked: SteamIntegration.unlockedFlag2
+    property bool flag3Unlocked: SteamIntegration.unlockedFlag3
+    property bool anim1Unlocked: SteamIntegration.unlockedAnim1
+    property bool anim2Unlocked: SteamIntegration.unlockedAnim2
     readonly property string flagPath: {
-        if (MainWindow.steamEnabled && Retr0MineSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
-        if (MainWindow.steamEnabled && Retr0MineSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
-        if (MainWindow.steamEnabled && Retr0MineSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
+        if (SteamIntegration.initialized && Retr0MineSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
+        if (SteamIntegration.initialized && Retr0MineSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
+        if (SteamIntegration.initialized && Retr0MineSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
     property bool isMaximized: visibility === 4
@@ -211,7 +207,7 @@ ApplicationWindow {
     Loader {
         id: aboutLoader
         anchors.fill: parent
-        active: !MainWindow.steamEnabled
+        active: !SteamIntegration.initialized
         sourceComponent: Component {
             AboutPage {
             }
@@ -444,7 +440,7 @@ ApplicationWindow {
             if (cell.revealed) revealed.push(i);
             if (cell.flagged) flagged.push(i);
         }
-        let mineCell = gameLogic.findMineHint(revealed, flagged);
+        let mineCell = MinesweeperLogic.findMineHint(revealed, flagged);
         if (mineCell !== -1) {
             let cell = grid.itemAtIndex(mineCell) as Cell;
             cell.highlightHint()
@@ -466,14 +462,11 @@ ApplicationWindow {
                 flaggedCells: [],
                 questionedCells: [],
                 safeQuestionedCells: [],
-                centiseconds: gameTimer.centiseconds,
+                centiseconds: GameTimer.centiseconds,
                 gameOver: gameOver,
                 gameStarted: gameStarted,
                 firstClickIndex: firstClickIndex,
                 currentHintCount: currentHintCount,
-                firstClickX: gameOverPopup.clickX,
-                firstClickY: gameOverPopup.clickY,
-                gameSeed: gameOverPopup.seed
             }
         }
 
@@ -504,7 +497,7 @@ ApplicationWindow {
                 console.error("Incompatible save version")
                 return false
             }
-            gameTimer.stop()
+            GameTimer.stop()
             // Get the saved time first
             const savedCentiseconds = data.gameState.centiseconds
             // Rest of your loading logic
@@ -514,7 +507,7 @@ ApplicationWindow {
             mines = data.gameState.mines
             numbers = data.gameState.numbers
 
-            if (!gameLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
+            if (!MinesweeperLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
                 console.error("Failed to initialize game logic from save")
                 return false
             }
@@ -549,7 +542,7 @@ ApplicationWindow {
             Retr0MineSettings.customHeight = gridSizeY
             Retr0MineSettings.customMines = mineCount
         }
-        gameTimer.resumeFrom(savedCentiseconds)
+        GameTimer.resumeFrom(savedCentiseconds)
         root.gameOver = data.gameState.gameOver
         root.gameStarted = data.gameState.gameStarted
         root.firstClickIndex = data.gameState.firstClickIndex
@@ -598,102 +591,6 @@ ApplicationWindow {
 
         isManuallyLoaded = true
     }
-//    function loadGame(saveData) {
-//        try {
-//            let data = JSON.parse(saveData)
-//            if (!data.version || !data.version.startsWith("1.")) {
-//                console.error("Incompatible save version")
-//                return false
-//            }
-//
-//            gameTimer.stop()
-//
-//            // Get the saved time first
-//            const savedCentiseconds = data.gameState.centiseconds
-//
-//            // Rest of your loading logic
-//            gridSizeX = data.gameState.gridSizeX
-//            gridSizeY = data.gameState.gridSizeY
-//            mineCount = data.gameState.mineCount
-//            mines = data.gameState.mines
-//            numbers = data.gameState.numbers
-//
-//            if (!gameLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
-//                console.error("Failed to initialize game logic from save")
-//                return false
-//            }
-//
-//            let foundDifficulty = difficultySettings.findIndex(setting =>
-//                setting.x === gridSizeX &&
-//                setting.y === gridSizeY &&
-//                setting.mines === mineCount
-//            )
-//
-//            if (foundDifficulty === 0 || foundDifficulty === 1 ||
-//                foundDifficulty === 2 || foundDifficulty === 3) {
-//                Retr0MineSettings.difficulty = foundDifficulty
-//            } else {
-//                Retr0MineSettings.difficulty = 4
-//                Retr0MineSettings.customWidth = gridSizeX
-//                Retr0MineSettings.customHeight = gridSizeY
-//                Retr0MineSettings.customMines = mineCount
-//            }
-//
-//            gameTimer.resumeFrom(savedCentiseconds)
-//
-//            root.gameOver = data.gameState.gameOver
-//            root.gameStarted = data.gameState.gameStarted
-//            root.firstClickIndex = data.gameState.firstClickIndex
-//            root.currentHintCount = data.gameState.currentHintCount || 0
-//
-//            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-//                let cell = grid.itemAtIndex(i)
-//                if (cell) {
-//                    cell.revealed = false
-//                    cell.flagged = false
-//                    cell.questioned = false
-//                    cell.safeQuestioned = false
-//                }
-//            }
-//
-//            data.gameState.revealedCells.forEach(index => {
-//                                                     let cell = grid.itemAtIndex(index)
-//                                                     if (cell) cell.revealed = true
-//                                                 })
-//
-//            data.gameState.flaggedCells.forEach(index => {
-//                                                    let cell = grid.itemAtIndex(index)
-//                                                    if (cell) cell.flagged = true
-//                                                })
-//
-//            if (data.gameState.questionedCells) {
-//                data.gameState.questionedCells.forEach(index => {
-//                                                           let cell = grid.itemAtIndex(index)
-//                                                           if (cell) cell.questioned = true
-//                                                       })
-//            }
-//
-//            if (data.gameState.safeQuestionedCells) {
-//                data.gameState.safeQuestionedCells.forEach(index => {
-//                                                               let cell = grid.itemAtIndex(index)
-//                                                               if (cell) cell.safeQuestioned = true
-//                                                           })
-//            }
-//
-//            revealedCount = data.gameState.revealedCells.length
-//            flaggedCount = data.gameState.flaggedCells.length
-//
-//            if (gameStarted && !gameOver) {
-//                gameTimer.start()
-//            }
-//
-//            isManuallyLoaded = true
-//            return true
-//        } catch (e) {
-//            console.error("Error loading save:", e)
-//            return false
-//        }
-//    }
 
     function revealConnectedCells(index) {
         if (!Retr0MineSettings.autoreveal || !gameStarted || gameOver) return;
@@ -738,19 +635,19 @@ ApplicationWindow {
         const row = Math.floor(firstClickIndex / gridSizeX);
         const col = firstClickIndex % gridSizeX;
 
-        if (!gameLogic.initializeGame(gridSizeX, gridSizeY, mineCount)) {
+        if (!MinesweeperLogic.initializeGame(gridSizeX, gridSizeY, mineCount)) {
             console.error("Failed to initialize game!");
             return false;
         }
 
-        const result = gameLogic.placeLogicalMines(col, row);
+        const result = MinesweeperLogic.placeLogicalMines(col, row);
         if (!result) {
             console.error("Failed to place mines!");
             return false;
         }
 
-        mines = gameLogic.getMines();
-        numbers = gameLogic.getNumbers();
+        mines = MinesweeperLogic.getMines();
+        numbers = MinesweeperLogic.getNumbers();
         return true;
     }
 
@@ -764,7 +661,7 @@ ApplicationWindow {
         firstClickIndex = -1
         gameStarted = false
         currentHintCount = 0
-        gameTimer.reset()
+        GameTimer.reset()
         isManuallyLoaded = false
 
         root.noAnimReset = true
@@ -800,7 +697,7 @@ ApplicationWindow {
                 return
             }
             gameStarted = true
-            gameTimer.start()
+            GameTimer.start()
         }
 
         let cellsToReveal = [index]
@@ -821,7 +718,7 @@ ApplicationWindow {
             if (mines.includes(currentIndex)) {
                 cell.isBombClicked = true
                 gameOver = true
-                gameTimer.stop()
+                GameTimer.stop()
                 revealAllMines()
                 audioEngine.playLoose()
                 gameOverPopup.gameOverLabelText = "Game over"
@@ -893,7 +790,7 @@ ApplicationWindow {
     function checkWin() {
         if (revealedCount === gridSizeX * gridSizeY - mineCount && !gameOver) {
             gameOver = true
-            gameTimer.stop()
+            GameTimer.stop()
 
             let leaderboardData = MainWindow.loadGameState("leaderboard.json")
             let leaderboard = {}
@@ -911,8 +808,8 @@ ApplicationWindow {
                 const timeField = difficulty + 'Time';
                 const winsField = difficulty + 'Wins';
                 const centisecondsField = difficulty + 'Centiseconds';
-                const formattedTime = gameTimer.getDetailedTime()
-                const centiseconds = gameTimer.centiseconds
+                const formattedTime = GameTimer.getDetailedTime()
+                const centiseconds = GameTimer.centiseconds
 
                 if (!leaderboard[winsField]) {
                     leaderboard[winsField] = 0;
@@ -934,27 +831,27 @@ ApplicationWindow {
             MainWindow.saveLeaderboard(JSON.stringify(leaderboard))
 
             if (!isManuallyLoaded) {
-                if (root.isSteamEnabled) {
+                if (SteamIntegration.initialized) {
                     const difficulty = getDifficultyLevel();
 
                     if (currentHintCount === 0) {
                         if (difficulty === 'easy') {
-                            if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
-                                steamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
+                            if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
+                                SteamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
                                 gameOverPopup.notificationText = qsTr("New flag unlocked!")
                                 gameOverPopup.notificationVisible = true;
                                 root.flag1Unlocked = true;
                             }
                         } else if (difficulty === 'medium') {
-                            if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
-                                steamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
+                            if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
+                                SteamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
                                 gameOverPopup.notificationText = qsTr("New flag unlocked!")
                                 gameOverPopup.notificationVisible = true;
                                 root.flag2Unlocked = true;
                             }
                         } else if (difficulty === 'hard') {
-                            if (!steamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
-                                steamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
+                            if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
+                                SteamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
                                 gameOverPopup.notificationText = qsTr("New flag unlocked!")
                                 gameOverPopup.notificationVisible = true;
                                 root.flag3Unlocked = true;
@@ -963,21 +860,21 @@ ApplicationWindow {
                     }
 
                     if (difficulty === 'easy') {
-                        if (Math.floor(gameTimer.centiseconds / 100) < 15 && !steamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
-                            steamIntegration.unlockAchievement("ACH_SPEED_DEMON");
+                        if (Math.floor(GameTimer.centiseconds / 100) < 15 && !SteamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
+                            SteamIntegration.unlockAchievement("ACH_SPEED_DEMON");
                             gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
                             gameOverPopup.notificationVisible = true
                             root.anim2Unlocked = true
                         }
-                        if (currentHintCount >= 20 && !steamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
-                            steamIntegration.unlockAchievement("ACH_HINT_MASTER");
+                        if (currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
+                            SteamIntegration.unlockAchievement("ACH_HINT_MASTER");
                             gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
                             gameOverPopup.notificationVisible = true
                             root.anim1Unlocked = true
                         }
                     }
 
-                    steamIntegration.incrementTotalWin();
+                    SteamIntegration.incrementTotalWin();
                 }
             }
 

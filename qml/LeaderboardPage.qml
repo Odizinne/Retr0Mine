@@ -36,7 +36,7 @@ Popup {
 
         RowLayout {
             spacing: 10
-            visible: MainWindow.steamEnabled
+            visible: SteamIntegration.initialized
             Layout.alignment: Qt.AlignCenter
 
             IconImage {
@@ -50,7 +50,7 @@ Popup {
 
             Label {
                 id: baseLabel
-                text: MainWindow.playerName
+                text: SteamIntegration.playerName
                 font.bold: true
                 font.pixelSize: 20
                 Layout.preferredHeight: 30

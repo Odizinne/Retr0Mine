@@ -73,7 +73,7 @@ RowLayout {
 
                 MenuItem {
                     text: qsTr("About")
-                    height: !MainWindow.steamEnabled ? implicitHeight : 0
+                    height: !SteamIntegration.initialized ? implicitHeight : 0
                     visible: height > 0
                     onTriggered: control.aboutLoader.item.visible = true
                 }
@@ -97,7 +97,7 @@ RowLayout {
         Layout.fillWidth: true
         Label {
             id: elapsedTimeLabel
-            text: control.root.gameTimer.displayTime
+            text: GameTimer.displayTime
             font.pixelSize: 18
             Layout.alignment: Qt.AlignCenter
         }

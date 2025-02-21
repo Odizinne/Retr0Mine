@@ -4,11 +4,8 @@
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
     , m_initialized(false)
-{}
-
-SteamIntegration::~SteamIntegration()
 {
-    shutdown();
+    initialize();
 }
 
 bool SteamIntegration::initialize()
@@ -20,8 +17,11 @@ bool SteamIntegration::initialize()
         return false;
     }
     m_initialized = true;
+    updatePlayerName();
+
     return true;
 }
+
 
 void SteamIntegration::shutdown()
 {
@@ -42,7 +42,7 @@ void SteamIntegration::unlockAchievement(const QString &achievementId)
     steamUserStats->StoreStats();
 }
 
-bool SteamIntegration::isAchievementUnlocked(const QString &achievementId)
+bool SteamIntegration::isAchievementUnlocked(const QString &achievementId) const
 {
     if (!m_initialized)
         return false;
@@ -54,7 +54,7 @@ bool SteamIntegration::isAchievementUnlocked(const QString &achievementId)
     return achieved;
 }
 
-bool SteamIntegration::isRunningOnDeck()
+bool SteamIntegration::isRunningOnDeck() const
 {
     if (!m_initialized)
         return false;
@@ -77,16 +77,18 @@ QString SteamIntegration::getSteamUILanguage() const
     return QString::fromUtf8(language);
 }
 
-QString SteamIntegration::getSteamUserName() const
+void SteamIntegration::updatePlayerName()
 {
     if (!m_initialized)
-        return QString();
-
+        return;
     ISteamFriends* steamFriends = SteamFriends();
     if (!steamFriends)
-        return QString();
-
-    return QString::fromUtf8(steamFriends->GetPersonaName());
+        return;
+    QString newName = QString::fromUtf8(steamFriends->GetPersonaName());
+    if (m_playerName != newName) {
+        m_playerName = newName;
+        emit playerNameChanged();
+    }
 }
 
 bool SteamIntegration::incrementTotalWin()

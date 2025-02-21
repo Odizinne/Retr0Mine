@@ -1,17 +1,16 @@
 #ifndef MINESWEEPERLOGIC_H
 #define MINESWEEPERLOGIC_H
-
 #include <QMap>
 #include <QObject>
 #include <QSet>
 #include <QVector>
+#include <QQmlEngine>
 #include <random>
 
 struct MineSolverInfo
 {
     QSet<int> spaces;
     int count;
-
     bool operator==(const MineSolverInfo &other) const
     {
         return spaces == other.spaces && count == other.count;
@@ -30,7 +29,6 @@ inline size_t qHash(const MineSolverInfo &info, size_t seed = 0)
 class MinesweeperLogic : public QObject
 {
     Q_OBJECT
-
 public:
     struct Cell
     {
@@ -57,15 +55,35 @@ private:
     QVector<int> m_mines;
     QVector<int> m_numbers;
     std::mt19937 m_rng;
-
     QSet<MineSolverInfo> m_information;
     QMap<int, QSet<MineSolverInfo>> m_informationsForSpace;
     QMap<int, bool> m_solvedSpaces;
-
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
-
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
+};
+
+struct MinesweeperLogicForeign
+{
+    Q_GADGET
+    QML_FOREIGN(MinesweeperLogic)
+    QML_SINGLETON
+    QML_NAMED_ELEMENT(MinesweeperLogic)
+public:
+    inline static MinesweeperLogic* s_singletonInstance = nullptr;
+    inline static QJSEngine* s_engine = nullptr;
+
+    static MinesweeperLogic* create(QQmlEngine*, QJSEngine* engine)
+    {
+        Q_ASSERT(s_singletonInstance);
+        Q_ASSERT(engine->thread() == s_singletonInstance->thread());
+        if (s_engine)
+            Q_ASSERT(engine == s_engine);
+        else
+            s_engine = engine;
+        QJSEngine::setObjectOwnership(s_singletonInstance, QJSEngine::CppOwnership);
+        return s_singletonInstance;
+    }
 };
 
 #endif // MINESWEEPERLOGIC_H

@@ -587,7 +587,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            visible: control.root.isSteamEnabled
+                            visible: SteamIntegration.initialized
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Grid reset animation")
@@ -639,7 +639,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            visible: control.root.isSteamEnabled
+                            visible: SteamIntegration.initialized
                             spacing: 10
 
                             ButtonGroup {
@@ -658,7 +658,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     checkable: true
                                     icon.source: "qrc:/icons/flag.png"
-                                    checked: Retr0MineSettings.flagSkinIndex === 0 || !control.root.isSteamEnabled
+                                    checked: Retr0MineSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup

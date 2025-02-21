@@ -7,6 +7,7 @@
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
+#include "steamintegration.h"
 
 namespace {
 const QMap<QString, QString>& getSteamLanguageMap() {
@@ -38,15 +39,11 @@ MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
     , settings("Odizinne", "Retr0Mine")
     , translator(new QTranslator(this))
-    , m_gameLogic(new MinesweeperLogic(this))
-    , m_gameTimer(new GameTimer(this))
     , isRunningOnGamescope(false)
     , shouldShowWelcomeMessage(false)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
     isRunningOnGamescope = desktop.toLower() == "gamescope";
-    m_steamIntegration = new SteamIntegration(this);
-    m_steamEnabled = m_steamIntegration->initialize();
 }
 
 MainWindow::~MainWindow()
@@ -158,8 +155,11 @@ void MainWindow::setLanguage(int index)
 {
     QString languageCode;
     if (index == 0) {
-        if (m_steamIntegration->m_initialized) {
-            languageCode = getSteamLanguageMap().value(m_steamIntegration->getSteamUILanguage().toLower(), "en");
+        if (SteamIntegrationForeign::s_singletonInstance->isInitialized()) {
+            languageCode = getSteamLanguageMap().value(
+                SteamIntegrationForeign::s_singletonInstance->getSteamUILanguage().toLower(),
+                "en"
+                );
         } else {
             QLocale locale;
             languageCode = getSystemLanguageMap().value(locale.name(), "en");
