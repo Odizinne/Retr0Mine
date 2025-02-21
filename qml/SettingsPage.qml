@@ -9,7 +9,6 @@ ApplicationWindow {
     id: settingsPage
     title: qsTr("Settings")
     required property var root
-    required property var colors
     required property var grid
 
     readonly property int baseWidth: 600
@@ -159,7 +158,7 @@ ApplicationWindow {
                         required property var modelData
                         required property int index
                         icon.source: modelData.icon
-                        icon.color: settingsPage.colors.foregroundColor
+                        icon.color: Colors.foregroundColor
                         text: settingsPage.root.mainWindow.isFluent ? "  " + modelData.text : modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {

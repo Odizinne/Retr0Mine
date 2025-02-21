@@ -10,7 +10,6 @@ RowLayout {
     required property var settingsWindow
     required property var leaderboardWindow
     required property var aboutLoader
-    required property var colors
 
     height: 40
     anchors.left: parent.left
@@ -114,7 +113,7 @@ RowLayout {
         }
         Button {
             icon.source: "qrc:/icons/bomb.png"
-            icon.color: topBar.colors.foregroundColor
+            icon.color: Colors.foregroundColor
             text: ": " + (topBar.root.mineCount - topBar.root.flaggedCount)
             font.pixelSize: 18
             font.bold: true

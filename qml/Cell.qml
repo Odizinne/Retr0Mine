@@ -5,7 +5,6 @@ import QtQuick.Controls
 Item {
     id: cellItem
     required property var root
-    required property var colors
     required property var audioEngine
     required property int index
     required property var grid
@@ -130,7 +129,7 @@ Item {
         anchors.fill: cellButton
         border.width: 2
         radius: cellItem.root.mainWindow.isFluent ? 4 : (cellItem.root.isUniversal ? 0 : 3)
-        border.color: cellItem.colors.frameColor
+        border.color: Colors.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
                 return true
@@ -182,7 +181,7 @@ Item {
         IconImage {
             anchors.centerIn: parent
             source: "qrc:/icons/bomb.png"
-            color: cellItem.colors.foregroundColor
+            color: Colors.foregroundColor
             visible: cellItem.revealed && cellItem.root.mines.includes(cellItem.index)
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
@@ -191,7 +190,7 @@ Item {
         IconImage {
             anchors.centerIn: parent
             source: "qrc:/icons/questionmark.png"
-            color: cellItem.colors.foregroundColor
+            color: Colors.foregroundColor
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
             opacity: cellItem.questioned ? 1 : 0
@@ -244,7 +243,7 @@ Item {
             anchors.centerIn: parent
             source: cellItem.root.flagPath
             color: {
-                if (Retr0MineSettings.contrastFlag) return cellItem.colors.foregroundColor
+                if (Retr0MineSettings.contrastFlag) return Colors.foregroundColor
                 else return sysPalette.accent
             }
             sourceSize.width: cellItem.width / 1.8
@@ -327,7 +326,7 @@ Item {
             NumberAnimation { duration: 200 }
         }
 
-        color: cellItem.colors.getNumberColor(
+        color: Colors.getNumberColor(
             cellItem.revealed,
             cellItem.root.mines.includes(cellItem.index),
             cellItem.index,

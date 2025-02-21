@@ -36,7 +36,6 @@ set(HEADERS
 )
 
 set(QML_FILES
-    qml/Colors.qml
     qml/AudioEffectsEngine.qml
     qml/Cell.qml
     qml/SettingsPage.qml
@@ -55,6 +54,8 @@ set(QML_FILES
 
 set(QML_SINGLETONS
     qml/Retr0MineSettings.qml
+    qml/Colors.qml
+    #qml/GameState.qml
 )
 
 set_source_files_properties(${QML_SINGLETONS}

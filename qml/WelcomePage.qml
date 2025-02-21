@@ -7,7 +7,6 @@ import Retr0Mine
 Popup {
     id: welcomePage
     required property var root
-    required property var colors
     height: 200
     width: 400
     anchors.centerIn: parent
@@ -181,7 +180,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  welcomePage.colors.frameColor
+                    border.color:  Colors.frameColor
                 }
 
                 Text {
@@ -203,7 +202,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  Retr0MineSettings.contrastFlag) return  welcomePage.colors.foregroundColor
+                        if (  Retr0MineSettings.contrastFlag) return  Colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -222,7 +221,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  welcomePage.colors.frameColor
+                    border.color:  Colors.frameColor
                 }
 
                 Text {
@@ -246,7 +245,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  welcomePage.colors.frameColor
+                    border.color:  Colors.frameColor
                 }
 
                 Text {
@@ -271,7 +270,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  welcomePage.colors.frameColor
+                    border.color:  Colors.frameColor
                 }
 
                 Text {
@@ -296,7 +295,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  welcomePage.colors.frameColor
+                    border.color:  Colors.frameColor
                 }
 
                 Text {
@@ -321,7 +320,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  welcomePage.colors.frameColor
+                    border.color:  Colors.frameColor
                 }
 
                 Text {
@@ -342,7 +341,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  Retr0MineSettings.contrastFlag) return  welcomePage.colors.foregroundColor
+                        if (  Retr0MineSettings.contrastFlag) return  Colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -361,7 +360,7 @@ Popup {
                     border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
-                    border.color:  welcomePage.colors.frameColor
+                    border.color:  Colors.frameColor
                 }
 
                 Text {
@@ -466,7 +465,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -489,7 +488,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -512,7 +511,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -535,7 +534,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -571,7 +570,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -594,7 +593,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -617,7 +616,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -640,13 +639,13 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  welcomePage.colors.foregroundColor
+                        color:  Colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -684,7 +683,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -707,7 +706,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -730,7 +729,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -753,7 +752,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -789,7 +788,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -812,7 +811,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -835,7 +834,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -858,13 +857,13 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  welcomePage.colors.foregroundColor
+                        color:  Colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -906,7 +905,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -929,7 +928,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -952,7 +951,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -975,7 +974,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1011,7 +1010,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1034,7 +1033,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1057,7 +1056,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1080,13 +1079,13 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  welcomePage.colors.foregroundColor
+                        color:  Colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -1124,7 +1123,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1147,7 +1146,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1170,7 +1169,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1193,7 +1192,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1229,7 +1228,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1252,7 +1251,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1275,7 +1274,7 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
@@ -1298,13 +1297,13 @@ Popup {
                         radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  welcomePage.colors.frameColor
+                        border.color:  Colors.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  welcomePage.colors.foregroundColor
+                        color:  Colors.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter

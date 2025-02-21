@@ -209,7 +209,6 @@ ApplicationWindow {
         sourceComponent: Component {
             WelcomePage {
                 root: root
-                colors: colors
             }
         }
     }
@@ -247,10 +246,10 @@ ApplicationWindow {
         }
     }
 
-    Colors {
-        id: colors
-        root: root
-    }
+    //Colors {
+    //    id: colors
+    //    root: root
+    //}
 
     //Retr0MineSettings {
     //    id: settings
@@ -271,7 +270,6 @@ ApplicationWindow {
     SettingsPage {
         id: settingsWindow
         root: root
-        colors: colors
         grid: grid
     }
 
@@ -282,7 +280,6 @@ ApplicationWindow {
     LoadWindow {
         id: loadWindow
         root: root
-        colors: colors
         errorWindow: errorWindow
     }
 
@@ -294,7 +291,6 @@ ApplicationWindow {
     LeaderboardPage {
         id: leaderboardWindow
         root: root
-        colors: colors
     }
 
     TopBar {
@@ -305,7 +301,6 @@ ApplicationWindow {
         settingsWindow: settingsWindow
         leaderboardWindow: leaderboardWindow
         aboutLoader: aboutLoader
-        colors: colors
     }
 
     ScrollView {
@@ -400,7 +395,6 @@ ApplicationWindow {
                     width: root.cellSize
                     height: root.cellSize
                     root: root
-                    colors: colors
                     audioEngine: audioEngine
                     grid: grid
                     numberFont: numberFont.name

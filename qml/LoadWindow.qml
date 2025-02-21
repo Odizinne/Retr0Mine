@@ -8,7 +8,6 @@ import QtQuick.Controls.impl
 Popup {
     id: loadWindow
     required property var root
-    required property var colors
     required property var errorWindow
 
     width: 300
@@ -118,7 +117,7 @@ Popup {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.rightMargin: 10
                         source: "qrc:/icons/delete.png"
-                        color: loadWindow.colors.foregroundColor
+                        color: Colors.foregroundColor
                         height: 16
                         width: 40
                         MouseArea {
