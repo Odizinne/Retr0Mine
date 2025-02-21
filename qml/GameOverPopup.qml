@@ -17,9 +17,6 @@ Popup {
     property string gameOverLabelText: "Game Over"
     property string gameOverLabelColor: "#d12844"
     property bool newRecordVisible: false
-    property int seed: -1
-    property int clickX: -1
-    property int clickY: -1
 
     Shortcut {
         sequence: "Return"

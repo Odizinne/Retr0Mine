@@ -20,10 +20,10 @@ Item {
         repeat: false
         onTriggered: {
             if (!root.root.gameOver) {
-                for (let effect of clickPool) {
+                for (let effect of root.clickPool) {
                     if (!effect.playing) {
                         effect.play()
-                        clickCooldown = true
+                        root.clickCooldown = true
                         cooldownTimer.restart()
                         return
                     }

@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Retr0Mine
 
 ApplicationWindow {
     id: settingsPage
@@ -267,7 +266,7 @@ ApplicationWindow {
                                     Layout.preferredWidth: height
                                     Layout.alignment: Qt.AlignRight
                                     ButtonGroup.group: difficultyGroup
-                                    checked: settingsPage.root.diffidx === parent.index
+                                    checked: Retr0MineSettings.difficulty === parent.index
                                     onClicked: {
                                         const idx = difficultyGroup.buttons.indexOf(this)
                                         const difficultySet = settingsPage.root.difficultySettings[idx]
@@ -276,14 +275,13 @@ ApplicationWindow {
                                         settingsPage.root.mineCount = difficultySet.mines
                                         settingsPage.root.initGame()
                                         Retr0MineSettings.difficulty = idx
-                                        settingsPage.root.diffidx = idx
                                     }
                                 }
                             }
                         }
 
                         RowLayout {
-                            enabled: settingsPage.root.diffidx === 4
+                            enabled: Retr0MineSettings.difficulty === 4
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Width:")
@@ -302,7 +300,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            enabled: settingsPage.root.diffidx === 4
+                            enabled: Retr0MineSettings.difficulty === 4
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Height:")
@@ -320,7 +318,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            enabled: settingsPage.root.diffidx === 4
+                            enabled: Retr0MineSettings.difficulty === 4
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Mines:")
@@ -338,7 +336,7 @@ ApplicationWindow {
                         }
 
                         Button {
-                            enabled: settingsPage.root.diffidx === 4
+                            enabled: Retr0MineSettings.difficulty === 4
                             Layout.rightMargin: 5
                             text: qsTr("Apply")
                             Layout.alignment: Qt.AlignRight

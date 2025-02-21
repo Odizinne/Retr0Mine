@@ -39,7 +39,6 @@ ApplicationWindow {
     property bool isGamescope: mainWindow.gamescope
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
-    property int diffidx: 0
     property bool gameOver: false
     property int revealedCount: 0
     property int flaggedCount: 0
@@ -120,7 +119,6 @@ ApplicationWindow {
         root.gridSizeX = difficultySet.x
         root.gridSizeY = difficultySet.y
         root.mineCount = difficultySet.mines
-        root.diffidx = Retr0MineSettings.difficulty
 
         let leaderboardData = mainWindow.loadLeaderboard()
         if (leaderboardData) {
@@ -520,23 +518,29 @@ ApplicationWindow {
             gridSizeX = data.gameState.gridSizeX
             gridSizeY = data.gameState.gridSizeY
             mineCount = data.gameState.mineCount
-            gameOverPopup.clickX = data.gameState.firstClickX
-            gameOverPopup.clickY = data.gameState.firstClickY
-            gameOverPopup.seed = data.gameState.gameSeed
-            diffidx = root.difficultyRetr0MineSettings.findIndex(diff =>
-                                                        diff.x === gridSizeX &&
-                                                        diff.y === gridSizeY &&
-                                                        diff.mines === mineCount
-                                                        )
-            if (diffidx === -1) {
-                diffidx = 0
-                console.warn("No matching difficulty found, defaulting to Easy")
-            }
+
+
             mines = data.gameState.mines
             numbers = data.gameState.numbers
             if (!gameLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
                 console.error("Failed to initialize game logic from save")
                 return false
+            }
+
+            let foundDifficulty = difficultySettings.findIndex(setting =>
+                setting.x === gridSizeX &&
+                setting.y === gridSizeY &&
+                setting.mines === mineCount
+            )
+
+            if (foundDifficulty === 0 || foundDifficulty === 1 ||
+                foundDifficulty === 2 || foundDifficulty === 3) {
+                Retr0MineSettings.difficulty = foundDifficulty
+            } else {
+                Retr0MineSettings.difficulty = 4
+                Retr0MineSettings.customWidth = gridSizeX
+                Retr0MineSettings.customHeight = gridSizeY
+                Retr0MineSettings.customMines = mineCount
             }
 
             gameTimer.resumeFrom(savedCentiseconds)
