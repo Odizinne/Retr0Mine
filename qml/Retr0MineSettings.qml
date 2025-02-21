@@ -1,6 +1,10 @@
+pragma Singleton
 import QtCore
+import QtQuick
 
 Settings {
+    id: settings
+
     property int themeIndex: 0
     property int languageIndex: 0
     property int difficulty: 0

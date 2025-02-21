@@ -22,7 +22,7 @@ ApplicationWindow {
         { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
         { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
         { text: "Retr0", x: 50, y: 32, mines: 320 },
-        { text: qsTr("Custom"), x: settings.customWidth, y: settings.customHeight, mines: settings.customMines },
+        { text: qsTr("Custom"), x: Retr0MineSettings.customWidth, y: Retr0MineSettings.customHeight, mines: Retr0MineSettings.customMines },
     ]
     property bool isSteamEnabled: mainWindow.steamEnabled
     property bool flag1Unlocked: mainWindow.unlockedFlag1
@@ -31,9 +31,9 @@ ApplicationWindow {
     property bool anim1Unlocked: mainWindow.unlockedAnim1
     property bool anim2Unlocked: mainWindow.unlockedAnim2
     property string flagPath: {
-        if (root.isSteamEnabled && settings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
-        if (root.isSteamEnabled && settings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
-        if (root.isSteamEnabled && settings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
+        if (root.isSteamEnabled && Retr0MineSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
+        if (root.isSteamEnabled && Retr0MineSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
+        if (root.isSteamEnabled && Retr0MineSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
     property bool isGamescope: mainWindow.gamescope
@@ -52,7 +52,7 @@ ApplicationWindow {
     property var numbers: []
     property bool shouldUpdateSize: true
     property int cellSize: {
-        switch (settings.cellSize) {
+        switch (Retr0MineSettings.cellSize) {
             case 0: return 35;
             case 1: return isGamescope ? 43 : 45;
             case 2: return 55;
@@ -67,7 +67,7 @@ ApplicationWindow {
     property bool blockAnim: true
 
     onClosing: {
-        if (settings.loadLastGame && gameStarted && !gameOver) {
+        if (Retr0MineSettings.loadLastGame && gameStarted && !gameOver) {
             saveGame("internalGameState.json")
         }
     }
@@ -116,11 +116,11 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        const difficultySet = root.difficultySettings[settings.difficulty]
+        const difficultySet = root.difficultySettings[Retr0MineSettings.difficulty]
         root.gridSizeX = difficultySet.x
         root.gridSizeY = difficultySet.y
         root.mineCount = difficultySet.mines
-        root.diffidx = settings.difficulty
+        root.diffidx = Retr0MineSettings.difficulty
 
         let leaderboardData = mainWindow.loadLeaderboard()
         if (leaderboardData) {
@@ -209,7 +209,6 @@ ApplicationWindow {
         sourceComponent: Component {
             WelcomePage {
                 root: root
-                settings: settings
                 colors: colors
             }
         }
@@ -227,7 +226,7 @@ ApplicationWindow {
 
     FontLoader {
         id: numberFont
-        source: switch (settings.fontIndex) {
+        source: switch (Retr0MineSettings.fontIndex) {
             case 0:
                 "qrc:/fonts/FiraSans-SemiBold.ttf"
                 break
@@ -250,32 +249,28 @@ ApplicationWindow {
 
     Colors {
         id: colors
-        settings: settings
         root: root
     }
 
-    Retr0MineSettings {
-        id: settings
-        startFullScreen: root.isGamescope ? true : false
-    }
+    //Retr0MineSettings {
+    //    id: settings
+    //    startFullScreen: root.isGamescope ? true : false
+    //}
 
     AudioEffectsEngine {
         id: audioEngine
         root: root
-        packIndex: settings.soundPackIndex
     }
 
     GameOverPopup {
         id: gameOverPopup
         root: root
-        settings: settings
         numberFont: numberFont
     }
 
     SettingsPage {
         id: settingsWindow
         root: root
-        settings: settings
         colors: colors
         grid: grid
     }
@@ -305,7 +300,6 @@ ApplicationWindow {
     TopBar {
         id: topBar
         root: root
-        settings: settings
         saveWindow: saveWindow
         loadWindow: loadWindow
         settingsWindow: settingsWindow
@@ -406,7 +400,6 @@ ApplicationWindow {
                     width: root.cellSize
                     height: root.cellSize
                     root: root
-                    settings: settings
                     colors: colors
                     audioEngine: audioEngine
                     grid: grid
@@ -447,7 +440,7 @@ ApplicationWindow {
         }
         root.visibility = ApplicationWindow.Windowed
 
-        if (settings.startFullScreen || root.isGamescope) {
+        if (Retr0MineSettings.startFullScreen || root.isGamescope) {
             root.visibility = 5
         }
     }
@@ -536,7 +529,7 @@ ApplicationWindow {
             gameOverPopup.clickX = data.gameState.firstClickX
             gameOverPopup.clickY = data.gameState.firstClickY
             gameOverPopup.seed = data.gameState.gameSeed
-            diffidx = root.difficultySettings.findIndex(diff =>
+            diffidx = root.difficultyRetr0MineSettings.findIndex(diff =>
                                                         diff.x === gridSizeX &&
                                                         diff.y === gridSizeY &&
                                                         diff.mines === mineCount
@@ -609,7 +602,7 @@ ApplicationWindow {
     }
 
     function revealConnectedCells(index) {
-        if (!settings.autoreveal || !gameStarted || gameOver) return;
+        if (!Retr0MineSettings.autoreveal || !gameStarted || gameOver) return;
         let cell = grid.itemAtIndex(index) as Cell;
         if (!cell.revealed || numbers[index] <= 0) return;
 
@@ -692,7 +685,7 @@ ApplicationWindow {
         }
         root.noAnimReset = false
 
-        if (settings.animations) {
+        if (Retr0MineSettings.animations) {
             for (let i = 0; i < gridSizeX * gridSizeY; i++) {
                 let cell = grid.itemAtIndex(i) as Cell
                 if (cell) {
@@ -913,12 +906,12 @@ ApplicationWindow {
                 cell.safeQuestioned = false
                 flaggedCount++
             } else if (cell.flagged) {
-                if (settings.enableQuestionMarks) {
+                if (Retr0MineSettings.enableQuestionMarks) {
                     cell.flagged = false
                     cell.questioned = true
                     cell.safeQuestioned = false
                     flaggedCount--
-                } else if (settings.enableSafeQuestionMarks) {
+                } else if (Retr0MineSettings.enableSafeQuestionMarks) {
                     cell.flagged = false
                     cell.questioned = false
                     cell.safeQuestioned = true
@@ -930,7 +923,7 @@ ApplicationWindow {
                     flaggedCount--
                 }
             } else if (cell.questioned) {
-                if (settings.enableSafeQuestionMarks) {
+                if (Retr0MineSettings.enableSafeQuestionMarks) {
                     cell.questioned = false
                     cell.safeQuestioned = true
                 } else {

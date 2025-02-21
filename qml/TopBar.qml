@@ -5,7 +5,6 @@ import QtQuick.Layouts
 RowLayout {
     id: topBar
     required property var root
-    required property var settings
     required property var saveWindow
     required property var loadWindow
     required property var settingsWindow

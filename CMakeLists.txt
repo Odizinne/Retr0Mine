@@ -35,6 +35,32 @@ set(HEADERS
     include/steamintegration.h
 )
 
+set(QML_FILES
+    qml/Colors.qml
+    qml/AudioEffectsEngine.qml
+    qml/Cell.qml
+    qml/SettingsPage.qml
+    qml/GameOverPopup.qml
+    qml/AboutPage.qml
+    qml/LoadWindow.qml
+    qml/SaveWindow.qml
+    qml/ErrorWindow.qml
+    qml/TopBar.qml
+    qml/LeaderboardPage.qml
+    qml/TempScrollBar.qml
+    qml/WelcomePage.qml
+    qml/Main.qml
+    qml/InfoIcon.qml
+)
+
+set(QML_SINGLETONS
+    qml/Retr0MineSettings.qml
+)
+
+set_source_files_properties(${QML_SINGLETONS}
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
+)
+
 # Create the executable
 add_executable(appRetr0Mine
     ${SOURCES}
@@ -49,23 +75,7 @@ add_executable(appRetr0Mine
 qt_add_qml_module(appRetr0Mine
     URI Retr0Mine
     VERSION 1.0
-    QML_FILES
-        qml/Colors.qml
-        qml/Retr0MineSettings.qml
-        qml/AudioEffectsEngine.qml
-        qml/Cell.qml
-        qml/SettingsPage.qml
-        qml/GameOverPopup.qml
-        qml/AboutPage.qml
-        qml/LoadWindow.qml
-        qml/SaveWindow.qml
-        qml/ErrorWindow.qml
-        qml/TopBar.qml
-        qml/LeaderboardPage.qml
-        qml/TempScrollBar.qml
-        qml/WelcomePage.qml
-        qml/Main.qml
-        qml/InfoIcon.qml
+    QML_FILES ${QML_FILES} ${QML_SINGLETONS}
 )
 
 target_include_directories(appRetr0Mine PRIVATE

@@ -1,23 +1,23 @@
 import QtQuick
+import Retr0Mine
 
 QtObject {
     required property var root
-    required property var settings
 
     readonly property color foregroundColor: {
-        if (root.isGamescope && (settings.themeIndex === 0 || settings.themeIndex === 1)) {
+        if (root.isGamescope && (Retr0MineSettings.themeIndex === 0 || Retr0MineSettings.themeIndex === 1)) {
             return "white"
         } else {
             return Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
         }
     }
     readonly property color frameColor: {
-        if (root.isGamescope && settings.themeIndex === 0) {
+        if (root.isGamescope && Retr0MineSettings.themeIndex === 0) {
             return Qt.rgba(1, 1, 1, 0.075)
-        } else if (root.isGamescope && settings.themeIndex === 1) {
+        } else if (root.isGamescope && Retr0MineSettings.themeIndex === 1) {
             return Qt.rgba(1, 1, 1, 0.15)
         } else {
-            if (settings.themeIndex === 0) return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.075) : Qt.rgba(0, 0, 0, 0.15)
+            if (Retr0MineSettings.themeIndex === 0) return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.075) : Qt.rgba(0, 0, 0, 0.15)
             else return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
         }
     }
@@ -49,7 +49,7 @@ QtObject {
         if (!revealed) return "black"
         if (isMine) return "transparent"
 
-        const palette = numberPalettes[settings.colorBlindness] || numberPalettes[0]
+        const palette = numberPalettes[Retr0MineSettings.colorBlindness] || numberPalettes[0]
         return palette[number] || "black"
     }
 }

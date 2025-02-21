@@ -3,12 +3,12 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Retr0Mine
 
 ApplicationWindow {
     id: settingsPage
     title: qsTr("Settings")
     required property var root
-    required property var settings
     required property var colors
     required property var grid
 
@@ -81,7 +81,7 @@ ApplicationWindow {
                     Layout.preferredWidth: restoreDefaultsPopup.buttonWidth
                     Layout.fillWidth: true
                     onClicked: {
-                        settingsPage.settings.welcomeMessageShown = false
+                        Retr0MineSettings.welcomeMessageShown = false
                         settingsPage.root.mainWindow.restartRetr0Mine()
                     }
                 }
@@ -276,7 +276,7 @@ ApplicationWindow {
                                         settingsPage.root.gridSizeY = difficultySet.y
                                         settingsPage.root.mineCount = difficultySet.mines
                                         settingsPage.root.initGame()
-                                        settingsPage.settings.difficulty = idx
+                                        Retr0MineSettings.difficulty = idx
                                         settingsPage.root.diffidx = idx
                                     }
                                 }
@@ -297,8 +297,8 @@ ApplicationWindow {
                                 from: 8
                                 to: 50
                                 editable: true
-                                value: settingsPage.settings.customWidth
-                                onValueChanged: settingsPage.settings.customWidth = value
+                                value: Retr0MineSettings.customWidth
+                                onValueChanged: Retr0MineSettings.customWidth = value
                             }
                         }
 
@@ -315,8 +315,8 @@ ApplicationWindow {
                                 from: 8
                                 to: 50
                                 editable: true
-                                value: settingsPage.settings.customHeight
-                                onValueChanged: settingsPage.settings.customHeight = value
+                                value: Retr0MineSettings.customHeight
+                                onValueChanged: Retr0MineSettings.customHeight = value
                             }
                         }
 
@@ -333,8 +333,8 @@ ApplicationWindow {
                                 from: 1
                                 to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 4)
                                 editable: true
-                                value: settingsPage.settings.customMines
-                                onValueChanged: settingsPage.settings.customMines = value
+                                value: Retr0MineSettings.customMines
+                                onValueChanged: Retr0MineSettings.customMines = value
                             }
                         }
 
@@ -344,9 +344,9 @@ ApplicationWindow {
                             text: qsTr("Apply")
                             Layout.alignment: Qt.AlignRight
                             onClicked: {
-                                settingsPage.root.gridSizeX = settingsPage.settings.customWidth
-                                settingsPage.root.gridSizeY = settingsPage.settings.customHeight
-                                settingsPage.root.mineCount = settingsPage.settings.customMines
+                                settingsPage.root.gridSizeX = Retr0MineSettings.customWidth
+                                settingsPage.root.gridSizeY = Retr0MineSettings.customHeight
+                                settingsPage.root.mineCount = Retr0MineSettings.customMines
                                 settingsPage.root.initGame()
                             }
                         }
@@ -375,9 +375,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: invert
-                                checked: settingsPage.settings.invertLRClick
+                                checked: Retr0MineSettings.invertLRClick
                                 onCheckedChanged: {
-                                    settingsPage.settings.invertLRClick = checked
+                                    Retr0MineSettings.invertLRClick = checked
                                 }
                             }
                         }
@@ -394,9 +394,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: autoreveal
-                                checked: settingsPage.settings.autoreveal
+                                checked: Retr0MineSettings.autoreveal
                                 onCheckedChanged: {
-                                    settingsPage.settings.autoreveal = checked
+                                    Retr0MineSettings.autoreveal = checked
                                 }
                             }
                         }
@@ -413,9 +413,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: questionMarksSwitch
-                                checked: settingsPage.settings.enableQuestionMarks
+                                checked: Retr0MineSettings.enableQuestionMarks
                                 onCheckedChanged: {
-                                    settingsPage.settings.enableQuestionMarks = checked
+                                    Retr0MineSettings.enableQuestionMarks = checked
                                     if (!checked) {
                                         for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
                                             let cell = settingsPage.grid.itemAtIndex(i) as Cell
@@ -440,9 +440,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: safeQuestionMarksSwitch
-                                checked: settingsPage.settings.enableSafeQuestionMarks
+                                checked: Retr0MineSettings.enableSafeQuestionMarks
                                 onCheckedChanged: {
-                                    settingsPage.settings.enableSafeQuestionMarks = checked
+                                    Retr0MineSettings.enableSafeQuestionMarks = checked
                                     if (!checked) {
                                         for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
                                             let cell = settingsPage.grid.itemAtIndex(i) as Cell
@@ -468,9 +468,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: loadLastGameSwitch
-                                checked: settingsPage.settings.loadLastGame
+                                checked: Retr0MineSettings.loadLastGame
                                 onCheckedChanged: {
-                                    settingsPage.settings.loadLastGame = checked
+                                    Retr0MineSettings.loadLastGame = checked
                                 }
                             }
                         }
@@ -499,9 +499,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: animationsSettings
-                                checked: settingsPage.settings.animations
+                                checked: Retr0MineSettings.animations
                                 onCheckedChanged: {
-                                    settingsPage.settings.animations = checked
+                                    Retr0MineSettings.animations = checked
                                     for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
                                         let cell = settingsPage.grid.itemAtIndex(i) as Cell
                                         if (cell) {
@@ -524,9 +524,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: cellFrameSettings
-                                checked: settingsPage.settings.cellFrame
+                                checked: Retr0MineSettings.cellFrame
                                 onCheckedChanged: {
-                                    settingsPage.settings.cellFrame = checked
+                                    Retr0MineSettings.cellFrame = checked
                                 }
                             }
                         }
@@ -543,9 +543,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: dimSatisfiedSwitch
-                                checked: settingsPage.settings.dimSatisfied
+                                checked: Retr0MineSettings.dimSatisfied
                                 onCheckedChanged: {
-                                    settingsPage.settings.dimSatisfied = checked
+                                    Retr0MineSettings.dimSatisfied = checked
                                 }
                             }
                         }
@@ -565,9 +565,9 @@ ApplicationWindow {
                             Switch {
                                 id: startFullScreenSwitch
                                 enabled: !settingsPage.root.isGamescope
-                                checked: settingsPage.settings.startFullScreen || settingsPage.root.isGamescope
+                                checked: Retr0MineSettings.startFullScreen || settingsPage.root.isGamescope
                                 onCheckedChanged: {
-                                    settingsPage.settings.startFullScreen = checked
+                                    Retr0MineSettings.startFullScreen = checked
                                 }
                             }
                         }
@@ -583,9 +583,9 @@ ApplicationWindow {
                                 id: colorSchemeComboBox
                                 model: ["Fira Sans", "Noto Serif", "Space Mono", "Orbitron", "Pixelify"]
                                 Layout.rightMargin: 5
-                                currentIndex: settingsPage.settings.fontIndex
+                                currentIndex: Retr0MineSettings.fontIndex
                                 onActivated: {
-                                    settingsPage.settings.fontIndex = currentIndex
+                                    Retr0MineSettings.fontIndex = currentIndex
                                 }
                             }
                         }
@@ -635,9 +635,9 @@ ApplicationWindow {
                                     ToolTip.text: qsTr("Unlocked with a secret achievement")
                                     ToolTip.delay: 1000
                                 }
-                                currentIndex: settingsPage.settings.gridResetAnimationIndex
+                                currentIndex: Retr0MineSettings.gridResetAnimationIndex
                                 onActivated: {
-                                    settingsPage.settings.gridResetAnimationIndex = currentIndex
+                                    Retr0MineSettings.gridResetAnimationIndex = currentIndex
                                 }
                             }
                         }
@@ -662,13 +662,13 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     checkable: true
                                     icon.source: "qrc:/icons/flag.png"
-                                    checked: settingsPage.settings.flagSkinIndex === 0 || !settingsPage.root.isSteamEnabled
+                                    checked: Retr0MineSettings.flagSkinIndex === 0 || !settingsPage.root.isSteamEnabled
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
                                     Layout.alignment: Qt.AlignHCenter
                                     onCheckedChanged: {
-                                        if (checked) settingsPage.settings.flagSkinIndex = 0
+                                        if (checked) Retr0MineSettings.flagSkinIndex = 0
                                     }
                                 }
                             }
@@ -679,7 +679,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     enabled: settingsPage.root.flag1Unlocked
                                     checkable: true
-                                    checked: settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 1
+                                    checked: settingsPage.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 1
                                     icon.source: settingsPage.root.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
@@ -688,7 +688,7 @@ ApplicationWindow {
                                     ToolTip.visible: hovered && !enabled
                                     ToolTip.text: qsTr("Unlock Trust Your Instincts achievement")
                                     onCheckedChanged: {
-                                        if (checked) settingsPage.settings.flagSkinIndex = 1
+                                        if (checked) Retr0MineSettings.flagSkinIndex = 1
                                     }
                                 }
                             }
@@ -699,7 +699,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     enabled: settingsPage.root.flag2Unlocked
                                     checkable: true
-                                    checked: settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 2
+                                    checked: settingsPage.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 2
                                     icon.source: settingsPage.root.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
@@ -708,7 +708,7 @@ ApplicationWindow {
                                     ToolTip.visible: hovered && !enabled
                                     ToolTip.text: qsTr("Unlock Master Tactician achievement")
                                     onCheckedChanged: {
-                                        if (checked) settingsPage.settings.flagSkinIndex = 2
+                                        if (checked) Retr0MineSettings.flagSkinIndex = 2
                                     }
                                 }
                             }
@@ -719,7 +719,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     enabled: settingsPage.root.flag3Unlocked
                                     checkable: true
-                                    checked: settingsPage.root.flag1Unlocked && settingsPage.settings.flagSkinIndex === 3
+                                    checked: settingsPage.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 3
                                     icon.source: settingsPage.root.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
@@ -728,7 +728,7 @@ ApplicationWindow {
                                     ToolTip.visible: hovered && !enabled
                                     ToolTip.text: qsTr("Unlock Minefield Legend achievement")
                                     onCheckedChanged: {
-                                        if (checked) settingsPage.settings.flagSkinIndex = 3
+                                        if (checked) Retr0MineSettings.flagSkinIndex = 3
                                     }
                                 }
                             }
@@ -758,9 +758,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: soundEffectSwitch
-                                checked: settingsPage.settings.soundEffects
+                                checked: Retr0MineSettings.soundEffects
                                 onCheckedChanged: {
-                                    settingsPage.settings.soundEffects = checked
+                                    Retr0MineSettings.soundEffects = checked
                                 }
                             }
                         }
@@ -775,9 +775,9 @@ ApplicationWindow {
                                 id: soundVolumeSlider
                                 from: 0
                                 to: 1
-                                value: settingsPage.settings.volume
+                                value: Retr0MineSettings.volume
                                 onValueChanged: {
-                                    settingsPage.settings.volume = value
+                                    Retr0MineSettings.volume = value
                                 }
                             }
                         }
@@ -792,9 +792,9 @@ ApplicationWindow {
                                 id: soundpackComboBox
                                 Layout.rightMargin: 5
                                 model: ["Pop", "Windows", "KDE", "Floraphonic"]
-                                currentIndex: settingsPage.settings.soundPackIndex
+                                currentIndex: Retr0MineSettings.soundPackIndex
                                 onActivated: {
-                                    settingsPage.settings.soundPackIndex = currentIndex
+                                    Retr0MineSettings.soundPackIndex = currentIndex
                                 }
                             }
                         }
@@ -899,9 +899,9 @@ ApplicationWindow {
                                     qsTr("Tritanopia")
                                 ]
                                 Layout.rightMargin: 5
-                                currentIndex: settingsPage.settings.colorBlindness
+                                currentIndex: Retr0MineSettings.colorBlindness
                                 onActivated: {
-                                    settingsPage.settings.colorBlindness = currentIndex
+                                    Retr0MineSettings.colorBlindness = currentIndex
                                 }
                             }
                         }
@@ -917,7 +917,7 @@ ApplicationWindow {
                                 model: [qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
                                 Layout.rightMargin: 5
                                 currentIndex: {
-                                    switch(settingsPage.settings.cellSize) {
+                                    switch(Retr0MineSettings.cellSize) {
                                         case 0: return 0;
                                         case 1: return 1;
                                         case 2: return 2;
@@ -926,7 +926,7 @@ ApplicationWindow {
                                 }
 
                                 onActivated: {
-                                    settingsPage.settings.cellSize = currentIndex
+                                    Retr0MineSettings.cellSize = currentIndex
                                     if (!settingsPage.root.isMaximized && !settingsPage.root.isFullScreen) {
                                         settingsPage.root.minimumWidth = settingsPage.root.getInitialWidth()
                                         settingsPage.root.minimumHeight = settingsPage.root.getInitialHeight()
@@ -949,9 +949,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: highContrastFlagSwitch
-                                checked: settingsPage.settings.contrastFlag
+                                checked: Retr0MineSettings.contrastFlag
                                 onCheckedChanged: {
-                                    settingsPage.settings.contrastFlag = checked
+                                    Retr0MineSettings.contrastFlag = checked
                                 }
                             }
                         }
@@ -983,10 +983,10 @@ ApplicationWindow {
                                 ]
                                 property int previousLanguageIndex: currentIndex
                                 Layout.rightMargin: 5
-                                currentIndex: settingsPage.settings.languageIndex
+                                currentIndex: Retr0MineSettings.languageIndex
                                 onActivated: {
                                     previousLanguageIndex = currentIndex
-                                    settingsPage.settings.languageIndex = currentIndex
+                                    Retr0MineSettings.languageIndex = currentIndex
                                     settingsPage.root.mainWindow.setLanguage(currentIndex)
                                     currentIndex = previousLanguageIndex
                                 }
@@ -1020,7 +1020,7 @@ ApplicationWindow {
                                 id: styleComboBox
                                 model: ["Fluent", "Universal", "Fusion"]
                                 Layout.rightMargin: 5
-                                currentIndex: settingsPage.settings.themeIndex
+                                currentIndex: Retr0MineSettings.themeIndex
                                 onActivated: {
                                     if (settingsPage.root.gameStarted && !settingsPage.root.gameOver) {
                                         settingsPage.root.saveGame("internalGameState.json")
@@ -1043,9 +1043,9 @@ ApplicationWindow {
                                 model: [qsTr("System"), qsTr("Dark"), qsTr("Light")]
                                 Layout.rightMargin: 5
 
-                                currentIndex: settingsPage.settings.colorSchemeIndex
+                                currentIndex: Retr0MineSettings.colorSchemeIndex
                                 onActivated: {
-                                    settingsPage.settings.colorSchemeIndex = currentIndex
+                                    Retr0MineSettings.colorSchemeIndex = currentIndex
                                     settingsPage.root.mainWindow.setThemeColorScheme(currentIndex)
                                 }
                             }

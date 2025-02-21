@@ -6,7 +6,6 @@ Popup {
     anchors.centerIn: parent
     id: gameOverWindow
     required property var root
-    required property var settings
     required property var numberFont
     visible: false
     modal: true

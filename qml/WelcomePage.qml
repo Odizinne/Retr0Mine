@@ -2,11 +2,11 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.impl
+import Retr0Mine
 
 Popup {
     id: welcomePage
     required property var root
-    required property var settings
     required property var colors
     height: 200
     width: 400
@@ -48,7 +48,7 @@ Popup {
                 text: qsTr("Later")
                 onClicked: {
                     welcomePage.visible = false
-                    welcomePage.settings.welcomeMessageShown = true
+                    Retr0MineSettings.welcomeMessageShown = true
                 }
             }
 
@@ -133,8 +133,8 @@ Popup {
                     chordImage.visible = checked
                     classicLabel.visible = !checked
                     classicImage.visible = !checked
-                    welcomePage.settings.autoreveal = checked
-                    welcomePage.settings.invertLRClick = checked
+                    Retr0MineSettings.autoreveal = checked
+                    Retr0MineSettings.invertLRClick = checked
                 }
             }
         }
@@ -203,7 +203,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  welcomePage.settings.contrastFlag) return  welcomePage.colors.foregroundColor
+                        if (  Retr0MineSettings.contrastFlag) return  welcomePage.colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -342,7 +342,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  welcomePage.settings.contrastFlag) return  welcomePage.colors.foregroundColor
+                        if (  Retr0MineSettings.contrastFlag) return  welcomePage.colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -389,11 +389,11 @@ Popup {
             Switch {
                 id: visualsSwitch
                 onCheckedChanged: {
-                    welcomePage.settings.cellFrame = !checked
-                    welcomePage.settings.dimSatisfied = checked
+                    Retr0MineSettings.cellFrame = !checked
+                    Retr0MineSettings.dimSatisfied = checked
                 }
                 Component.onCompleted: {
-                    checked = !welcomePage.settings.cellFrame && welcomePage.settings.dimSatisfied
+                    checked = !Retr0MineSettings.cellFrame && Retr0MineSettings.dimSatisfied
                 }
             }
         }
@@ -412,10 +412,10 @@ Popup {
             Switch {
                 id: accentFlagSwitch
                 onCheckedChanged: {
-                    welcomePage.settings.contrastFlag = !checked
+                    Retr0MineSettings.contrastFlag = !checked
                 }
                 Component.onCompleted: {
-                    checked = !welcomePage.settings.contrastFlag
+                    checked = !Retr0MineSettings.contrastFlag
                 }
             }
         }
@@ -660,7 +660,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                        welcomePage.settings.colorBlindness = 0
+                        Retr0MineSettings.colorBlindness = 0
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -878,7 +878,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                        welcomePage.settings.colorBlindness = 3
+                        Retr0MineSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1100,7 +1100,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         welcomePage.visible = false
-                        welcomePage.settings.colorBlindness = 2
+                        Retr0MineSettings.colorBlindness = 2
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1318,7 +1318,7 @@ Popup {
                     Layout.fillWidth: true
                     onClicked: {
                         welcomePage.visible = false
-                        welcomePage.settings.colorBlindness = 3
+                        Retr0MineSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         welcomePage.height = 150
@@ -1355,7 +1355,7 @@ Popup {
                 text: qsTr("Close")
                 onClicked: {
                     welcomePage.visible = false
-                    welcomePage.settings.welcomeMessageShown = true
+                    Retr0MineSettings.welcomeMessageShown = true
                 }
             }
         }

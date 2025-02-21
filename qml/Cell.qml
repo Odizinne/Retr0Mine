@@ -5,7 +5,6 @@ import QtQuick.Controls
 Item {
     id: cellItem
     required property var root
-    required property var settings
     required property var colors
     required property var audioEngine
     required property int index
@@ -43,7 +42,7 @@ Item {
             cellItem.root.startInitialLoadTimer()
         }
 
-        if (cellItem.settings.animations && !grid.initialAnimationPlayed && !cellItem.root.blockAnim) {
+        if (Retr0MineSettings.animations && !grid.initialAnimationPlayed && !cellItem.root.blockAnim) {
             startFadeIn()
         }
     }
@@ -121,7 +120,7 @@ Item {
         interval: cellItem.diagonalSum * 20
         repeat: false
         onTriggered: {
-            if (cellItem.settings.animations) {
+            if (Retr0MineSettings.animations) {
                 fadeAnimation.start()
             }
         }
@@ -135,9 +134,9 @@ Item {
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
                 return true
-            if (cellItem.animatingReveal && cellItem.settings.cellFrame)
+            if (cellItem.animatingReveal && Retr0MineSettings.cellFrame)
                 return true
-            return cellButton.flat && cellItem.settings.cellFrame
+            return cellButton.flat && Retr0MineSettings.cellFrame
         }
         color: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
@@ -146,12 +145,12 @@ Item {
         }
 
         Behavior on opacity {
-            enabled: cellItem.settings.animations
+            enabled: Retr0MineSettings.animations
             NumberAnimation { duration: 200 }
         }
 
         opacity: {
-            if (!cellItem.settings.dimSatisfied || !cellItem.revealed) return 1
+            if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed) return 1
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index)) return 1
             return cellItem.root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
         }
@@ -166,7 +165,7 @@ Item {
             target: cellItem
             function onRevealedChanged() {
                 if (cellItem.revealed) {
-                    if (cellItem.settings.animations) {
+                    if (Retr0MineSettings.animations) {
                         cellItem.shouldBeFlat = true
                         revealFadeAnimation.start()
                     } else {
@@ -199,7 +198,7 @@ Item {
             scale: cellItem.questioned ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: cellItem.settings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -207,7 +206,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: cellItem.settings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -225,7 +224,7 @@ Item {
             scale: cellItem.safeQuestioned ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: cellItem.settings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -233,7 +232,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: cellItem.settings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -245,7 +244,7 @@ Item {
             anchors.centerIn: parent
             source: cellItem.root.flagPath
             color: {
-                if (cellItem.settings.contrastFlag) return cellItem.colors.foregroundColor
+                if (Retr0MineSettings.contrastFlag) return cellItem.colors.foregroundColor
                 else return sysPalette.accent
             }
             sourceSize.width: cellItem.width / 1.8
@@ -254,7 +253,7 @@ Item {
             scale: cellItem.flagged ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: cellItem.settings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -262,7 +261,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: cellItem.settings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -289,7 +288,7 @@ Item {
                            } else if (cellItem.revealed) {
                                cellItem.root.revealConnectedCells(cellItem.index);
                            } else {
-                               if (cellItem.settings.invertLRClick) {
+                               if (Retr0MineSettings.invertLRClick) {
                                    if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
                                        cellItem.root.reveal(cellItem.index);
                                    } else if (mouse.button === Qt.LeftButton) {
@@ -319,12 +318,12 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         opacity: {
-            if (!cellItem.settings.dimSatisfied || !cellItem.revealed || cellItem.root.numbers[cellItem.index] === 0) return 1
+            if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed || cellItem.root.numbers[cellItem.index] === 0) return 1
             return cellItem.root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
         }
 
         Behavior on opacity {
-            enabled: cellItem.settings.animations
+            enabled: Retr0MineSettings.animations
             NumberAnimation { duration: 200 }
         }
 
@@ -337,7 +336,7 @@ Item {
     }
 
     function startFadeIn() {
-        if (!cellItem.settings.animations) {
+        if (!Retr0MineSettings.animations) {
             opacity = 1
             return
         }
@@ -349,7 +348,7 @@ Item {
             return
         }
 
-        switch (cellItem.settings.gridResetAnimationIndex) {
+        switch (Retr0MineSettings.gridResetAnimationIndex) {
         case 0: // Original diagonal animation
             grid.initialAnimationPlayed = false
             opacity = 0
