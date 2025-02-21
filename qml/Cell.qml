@@ -31,17 +31,17 @@ Item {
     }
 
     Component.onCompleted: {
-        row = Math.floor(index / root.gridSizeX)
-        col = index % root.gridSizeX
+        row = Math.floor(index / GameState.gridSizeX)
+        col = index % GameState.gridSizeX
         diagonalSum = row + col
 
         grid.cellsCreated++
-        if (grid.cellsCreated === cellItem.root.gridSizeX * cellItem.root.gridSizeY) {
-            cellItem.root.gridFullyInitialized = true
+        if (grid.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
+            GameState.gridFullyInitialized = true
             cellItem.root.startInitialLoadTimer()
         }
 
-        if (Retr0MineSettings.animations && !grid.initialAnimationPlayed && !cellItem.root.blockAnim) {
+        if (Retr0MineSettings.animations && !grid.initialAnimationPlayed && !GameState.blockAnim) {
             startFadeIn()
         }
     }
@@ -128,17 +128,17 @@ Item {
     Rectangle {
         anchors.fill: cellButton
         border.width: 2
-        radius: MainWindow.isFluent ? 4 : (cellItem.root.isUniversal ? 0 : 3)
+        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
         border.color: Colors.frameColor
         visible: {
-            if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
+            if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
                 return true
             if (cellItem.animatingReveal && Retr0MineSettings.cellFrame)
                 return true
             return cellButton.flat && Retr0MineSettings.cellFrame
         }
         color: {
-            if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))
+            if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
                 return sysPalette.accent
             return "transparent"
         }
@@ -150,7 +150,7 @@ Item {
 
         opacity: {
             if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed) return 1
-            if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index)) return 1
+            if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index)) return 1
             return cellItem.root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
         }
     }
@@ -158,7 +158,7 @@ Item {
     Button {
         id: cellButton
         anchors.fill: parent
-        anchors.margins: cellItem.root.cellSpacing / 2
+        anchors.margins: GameState.cellSpacing / 2
 
         Connections {
             target: cellItem
@@ -182,7 +182,7 @@ Item {
             anchors.centerIn: parent
             source: "qrc:/icons/bomb.png"
             color: Colors.foregroundColor
-            visible: cellItem.revealed && cellItem.root.mines.includes(cellItem.index)
+            visible: cellItem.revealed && GameState.mines.includes(cellItem.index)
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
         }
@@ -241,7 +241,7 @@ Item {
 
         IconImage {
             anchors.centerIn: parent
-            source: cellItem.root.flagPath
+            source: GameState.flagPath
             color: {
                 if (Retr0MineSettings.contrastFlag) return Colors.foregroundColor
                 else return sysPalette.accent
@@ -275,14 +275,14 @@ Item {
             sourceSize.height: cellItem.height / 2.1
             opacity: 0
             visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
-            source: cellItem.root.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+            source: GameState.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
         }
 
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: (mouse) => {
-                           if (!cellItem.root.gameStarted) {
+                           if (!GameState.gameStarted) {
                                cellItem.root.reveal(cellItem.index);
                            } else if (cellItem.revealed) {
                                cellItem.root.revealConnectedCells(cellItem.index);
@@ -309,15 +309,15 @@ Item {
         anchors.centerIn: parent
         text: {
             if (!cellItem.revealed || cellItem.flagged) return ""
-            if (cellItem.root.mines.includes(cellItem.index)) return ""
-            return cellItem.root.numbers[cellItem.index] === undefined || cellItem.root.numbers[cellItem.index] === 0 ? "" : cellItem.root.numbers[cellItem.index];
+            if (GameState.mines.includes(cellItem.index)) return ""
+            return GameState.numbers[cellItem.index] === undefined || GameState.numbers[cellItem.index] === 0 ? "" : GameState.numbers[cellItem.index];
         }
         font.family: cellItem.numberFont
-        font.pixelSize: cellItem.root.cellSize * 0.60
+        font.pixelSize: GameState.cellSize * 0.60
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         opacity: {
-            if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed || cellItem.root.numbers[cellItem.index] === 0) return 1
+            if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed || GameState.numbers[cellItem.index] === 0) return 1
             return cellItem.root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
         }
 
@@ -328,9 +328,9 @@ Item {
 
         color: Colors.getNumberColor(
             cellItem.revealed,
-            cellItem.root.mines.includes(cellItem.index),
+            GameState.mines.includes(cellItem.index),
             cellItem.index,
-            cellItem.root.numbers[cellItem.index]
+            GameState.numbers[cellItem.index]
         )
     }
 
@@ -340,7 +340,7 @@ Item {
             return
         }
 
-        if (!cellItem.root.isSteamEnabled) {
+        if (!SteamIntegration.initialized) {
             grid.initialAnimationPlayed = false
             opacity = 0
             fadeTimer.restart()

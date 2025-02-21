@@ -2,8 +2,7 @@ import QtQuick
 import QtMultimedia
 
 Item {
-    id: root
-    required property var root
+    id: control
     property int packIndex: Retr0MineSettings.soundPackIndex
     property bool enabled: true
     property bool clickCooldown: false
@@ -11,7 +10,7 @@ Item {
     Timer {
         id: cooldownTimer
         interval: 100
-        onTriggered: root.clickCooldown = false
+        onTriggered: control.clickCooldown = false
     }
 
     Timer {
@@ -19,11 +18,11 @@ Item {
         interval: 20
         repeat: false
         onTriggered: {
-            if (!root.root.gameOver) {
-                for (let effect of root.clickPool) {
+            if (!GameState.gameOver) {
+                for (let effect of control.clickPool) {
                     if (!effect.playing) {
                         effect.play()
-                        root.clickCooldown = true
+                        control.clickCooldown = true
                         cooldownTimer.restart()
                         return
                     }
@@ -34,24 +33,24 @@ Item {
 
     property list<SoundEffect> clickPool: [
         SoundEffect {
-            source: root.getSoundPath("click")
+            source: control.getSoundPath("click")
         },
         SoundEffect {
-            source: root.getSoundPath("click")
+            source: control.getSoundPath("click")
         },
         SoundEffect {
-            source: root.getSoundPath("click")
+            source: control.getSoundPath("click")
         }
     ]
 
     SoundEffect {
         id: winEffect
-        source: root.getSoundPath("win")
+        source: control.getSoundPath("win")
     }
 
     SoundEffect {
         id: looseEffect
-        source: root.getSoundPath("bomb")
+        source: control.getSoundPath("bomb")
     }
 
     function getSoundPath(type) {

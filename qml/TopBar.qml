@@ -43,7 +43,7 @@ RowLayout {
 
                 MenuItem {
                     text: qsTr("Save game")
-                    enabled: control.root.gameStarted && !control.root.gameOver
+                    enabled: GameState.gameStarted && !GameState.gameOver
                     onTriggered: control.saveWindow.visible = true
                 }
 
@@ -55,7 +55,7 @@ RowLayout {
 
                 MenuItem {
                     text: qsTr("Hint")
-                    enabled: control.root.gameStarted && !control.root.gameOver
+                    enabled: GameState.gameStarted && !GameState.gameOver
                     onTriggered: control.root.requestHint()
                 }
 
@@ -114,7 +114,7 @@ RowLayout {
         Button {
             icon.source: "qrc:/icons/bomb.png"
             icon.color: Colors.foregroundColor
-            text: ": " + (control.root.mineCount - control.root.flaggedCount)
+            text: ": " + (GameState.mineCount - GameState.flaggedCount)
             font.pixelSize: 18
             font.bold: true
             onClicked: {

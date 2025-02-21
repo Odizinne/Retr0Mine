@@ -3,8 +3,6 @@ import QtCore
 import QtQuick
 
 Settings {
-    id: root
-
     property bool startFullScreen: MainWindow.gamescope
     property int themeIndex: 0
     property int languageIndex: 0

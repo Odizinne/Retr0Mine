@@ -7,7 +7,6 @@ import QtQuick.Layouts
 
 Popup {
     id: leaderboardPage
-    required property var root
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     visible: false

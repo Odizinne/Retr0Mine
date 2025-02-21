@@ -12,79 +12,32 @@ ApplicationWindow {
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
 
-    readonly property var difficultySettings: [
-        { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
-        { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
-        { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
-        { text: "Retr0", x: 50, y: 32, mines: 320 },
-        { text: qsTr("Custom"), x: Retr0MineSettings.customWidth, y: Retr0MineSettings.customHeight, mines: Retr0MineSettings.customMines },
-    ]
-    property bool flag1Unlocked: SteamIntegration.unlockedFlag1
-    property bool flag2Unlocked: SteamIntegration.unlockedFlag2
-    property bool flag3Unlocked: SteamIntegration.unlockedFlag3
-    property bool anim1Unlocked: SteamIntegration.unlockedAnim1
-    property bool anim2Unlocked: SteamIntegration.unlockedAnim2
-    readonly property string flagPath: {
-        if (SteamIntegration.initialized && Retr0MineSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
-        if (SteamIntegration.initialized && Retr0MineSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
-        if (SteamIntegration.initialized && Retr0MineSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
-        else return "qrc:/icons/flag.png"
-    }
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
-    property bool gameOver: false
-    property int revealedCount: 0
-    property int flaggedCount: 0
-    property int firstClickIndex: -1
-    property bool gameStarted: false
-    property int gridSizeX: 8
-    property int gridSizeY: 8
-    property int mineCount: 10
-    property var mines: []
-    property var numbers: []
     property bool shouldUpdateSize: true
-    property int cellSize: {
-        switch (Retr0MineSettings.cellSize) {
-            case 0: return 35;
-            case 1: return MainWindow.gamescope ? 43 : 45;
-            case 2: return 55;
-            default: return MainWindow.gamescope ? 43 : 45;
+
+    Connections {
+        target: GameState
+        function onGridSizeChanged() {
+            if (!root.isMaximized && !root.isFullScreen && root.shouldUpdateSize) {
+                root.minimumWidth = root.getInitialWidth()
+                root.width = root.getInitialWidth()
+
+                root.minimumHeight = root.getInitialHeight()
+                root.height = root.getInitialHeight()
+
+                // 2px margin of error
+                if (root.width + 2 >= Screen.desktopAvailableWidth * 0.9 ||
+                    root.height + 2 >= Screen.desktopAvailableHeight * 0.9) {
+                    root.visibility = Window.Maximized
+                }
+            }
         }
     }
-    property int cellSpacing: 2
-    property int currentHintCount: 0
-    property bool gridFullyInitialized: false
-    property bool isManuallyLoaded: false
-    property bool noAnimReset: false
-    property bool blockAnim: true
 
     onClosing: {
-        if (Retr0MineSettings.loadLastGame && gameStarted && !gameOver) {
+        if (Retr0MineSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver) {
             saveGame("internalGameState.json")
-        }
-    }
-
-    onGridSizeXChanged: {
-        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
-            minimumWidth = getInitialWidth()
-            width = getInitialWidth()
-
-            // 2px margin of error
-            if (width + 2 >= Screen.desktopAvailableWidth * 0.9) {
-                visibility = Window.Maximized
-            }
-        }
-    }
-
-    onGridSizeYChanged: {
-        if (!isMaximized && !isFullScreen && shouldUpdateSize) {
-            minimumHeight = getInitialHeight()
-            height = getInitialHeight()
-
-            // 2px margin of error
-            if (height + 2 >= Screen.desktopAvailableHeight * 0.9) {
-                visibility = Window.Maximized
-            }
         }
     }
 
@@ -108,10 +61,10 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        const difficultySet = root.difficultySettings[Retr0MineSettings.difficulty]
-        root.gridSizeX = difficultySet.x
-        root.gridSizeY = difficultySet.y
-        root.mineCount = difficultySet.mines
+        const difficultySet = GameState.difficultySettings[Retr0MineSettings.difficulty]
+        GameState.gridSizeX = difficultySet.x
+        GameState.gridSizeY = difficultySet.y
+        GameState.mineCount = difficultySet.mines
 
         let leaderboardData = MainWindow.loadLeaderboard()
         if (leaderboardData) {
@@ -152,7 +105,7 @@ ApplicationWindow {
     }
     Shortcut {
         sequence: StandardKey.Save
-        enabled: root.gameStarted && !root.gameOver
+        enabled: GameState.gameStarted && !GameState.gameOver
         autoRepeat: false
         onActivated: saveWindow.visible = true
     }
@@ -199,7 +152,6 @@ ApplicationWindow {
         active: MainWindow.showWelcome
         sourceComponent: Component {
             WelcomePage {
-                root: root
             }
         }
     }
@@ -239,7 +191,6 @@ ApplicationWindow {
 
     AudioEffectsEngine {
         id: audioEngine
-        root: root
     }
 
     GameOverPopup {
@@ -271,7 +222,6 @@ ApplicationWindow {
 
     LeaderboardPage {
         id: leaderboardWindow
-        root: root
     }
 
     TopBar {
@@ -296,8 +246,8 @@ ApplicationWindow {
             rightMargin: 12
             bottomMargin: 12
         }
-        contentWidth: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
-        contentHeight: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
+        contentWidth: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, gameArea.width)
+        contentHeight: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, gameArea.height)
 
         ScrollBar {
             id: defaultVerticalScrollBar
@@ -308,7 +258,7 @@ ApplicationWindow {
             height: gameArea.height
             visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
             active: !MainWindow.isFluent
-            policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
+            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -321,7 +271,7 @@ ApplicationWindow {
             width: gameArea.width
             visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
             active: !MainWindow.isFluent
-            policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
+            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -334,7 +284,7 @@ ApplicationWindow {
             height: gameArea.height
             visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
             active: MainWindow.isFluent
-            policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
+            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -347,7 +297,7 @@ ApplicationWindow {
             width: gameArea.width
             visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
             active: MainWindow.isFluent
-            policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
+            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -356,31 +306,31 @@ ApplicationWindow {
 
         Item {
             anchors.centerIn: parent
-            width: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeX, gameArea.width)
-            height: Math.max((root.cellSize + root.cellSpacing) * root.gridSizeY, gameArea.height)
+            width: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, gameArea.width)
+            height: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, gameArea.height)
 
             GridView {
                 id: grid
                 anchors.centerIn: parent
-                cellWidth: root.cellSize + root.cellSpacing
-                cellHeight: root.cellSize + root.cellSpacing
-                width: (root.cellSize + root.cellSpacing) * root.gridSizeX
-                height: (root.cellSize + root.cellSpacing) * root.gridSizeY
-                model: root.gridSizeX * root.gridSizeY
+                cellWidth: GameState.cellSize + GameState.cellSpacing
+                cellHeight: GameState.cellSize + GameState.cellSpacing
+                width: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX
+                height: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY
+                model: GameState.gridSizeX * GameState.gridSizeY
                 interactive: false
                 property bool initialAnimationPlayed: false
                 property int cellsCreated: 0
 
                 delegate: Cell {
                     id: cellItem
-                    width: root.cellSize
-                    height: root.cellSize
+                    width: GameState.cellSize
+                    height: GameState.cellSize
                     root: root
                     audioEngine: audioEngine
                     grid: grid
                     numberFont: numberFont.name
-                    row: Math.floor(index / root.gridSizeX)
-                    col: index % root.gridSizeX
+                    row: Math.floor(index / GameState.gridSizeX)
+                    col: index % GameState.gridSizeX
                     opacity: 1
                 }
             }
@@ -399,7 +349,7 @@ ApplicationWindow {
     }
 
     function checkInitialGameState() {
-        if (!gridFullyInitialized) return
+        if (!GameState.gridFullyInitialized) return
 
         let internalSaveData = MainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
@@ -421,21 +371,21 @@ ApplicationWindow {
     }
 
     function getInitialWidth() {
-        return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : width
+        return shouldUpdateSize ? Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : root.width
     }
 
     function getInitialHeight() {
-        return shouldUpdateSize ? Math.min((root.cellSize + root.cellSpacing) * gridSizeY + 74, Screen.desktopAvailableHeight * 0.9) : height
+        return shouldUpdateSize ? Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74, Screen.desktopAvailableHeight * 0.9) : root.height
     }
 
     function requestHint() {
-        if (!gameStarted || gameOver) {
+        if (!GameState.gameStarted || GameState.gameOver) {
             return;
         }
 
         let revealed = [];
         let flagged = [];
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             let cell = grid.itemAtIndex(i) as Cell;
             if (cell.revealed) revealed.push(i);
             if (cell.flagged) flagged.push(i);
@@ -445,7 +395,7 @@ ApplicationWindow {
             let cell = grid.itemAtIndex(mineCell) as Cell;
             cell.highlightHint()
         }
-        currentHintCount++;
+        GameState.currentHintCount++;
     }
 
     function saveGame(filename) {
@@ -453,24 +403,24 @@ ApplicationWindow {
             version: "1.0",
             timestamp: new Date().toISOString(),
             gameState: {
-                gridSizeX: gridSizeX,
-                gridSizeY: gridSizeY,
-                mineCount: mineCount,
-                mines: mines,
-                numbers: numbers,
+                gridSizeX: GameState.gridSizeX,
+                gridSizeY: GameState.gridSizeY,
+                mineCount: GameState.mineCount,
+                mines: GameState.mines,
+                numbers: GameState.numbers,
                 revealedCells: [],
                 flaggedCells: [],
                 questionedCells: [],
                 safeQuestionedCells: [],
                 centiseconds: GameTimer.centiseconds,
-                gameOver: gameOver,
-                gameStarted: gameStarted,
-                firstClickIndex: firstClickIndex,
-                currentHintCount: currentHintCount,
+                gameOver: GameState.gameOver,
+                gameStarted: GameState.gameStarted,
+                firstClickIndex: GameState.firstClickIndex,
+                currentHintCount: GameState.currentHintCount,
             }
         }
 
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             let cell = grid.itemAtIndex(i) as Cell
             if (cell.revealed) saveData.gameState.revealedCells.push(i)
             if (cell.flagged) saveData.gameState.flaggedCells.push(i)
@@ -501,13 +451,13 @@ ApplicationWindow {
             // Get the saved time first
             const savedCentiseconds = data.gameState.centiseconds
             // Rest of your loading logic
-            gridSizeX = data.gameState.gridSizeX
-            gridSizeY = data.gameState.gridSizeY
-            mineCount = data.gameState.mineCount
-            mines = data.gameState.mines
-            numbers = data.gameState.numbers
+            GameState.gridSizeX = data.gameState.gridSizeX
+            GameState.gridSizeY = data.gameState.gridSizeY
+            GameState.mineCount = data.gameState.mineCount
+            GameState.mines = data.gameState.mines
+            GameState.numbers = data.gameState.numbers
 
-            if (!MinesweeperLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
+            if (!MinesweeperLogic.initializeFromSave(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount, GameState.mines)) {
                 console.error("Failed to initialize game logic from save")
                 return false
             }
@@ -528,27 +478,27 @@ ApplicationWindow {
         const data = loadingTimer.savedData
         const savedCentiseconds = loadingTimer.savedCentiseconds
 
-        let foundDifficulty = difficultySettings.findIndex(setting =>
-            setting.x === gridSizeX &&
-            setting.y === gridSizeY &&
-            setting.mines === mineCount
+        let foundDifficulty = GameState.difficultySettings.findIndex(setting =>
+            setting.x === GameState.gridSizeX &&
+            setting.y === GameState.gridSizeY &&
+            setting.mines === GameState.mineCount
         )
         if (foundDifficulty === 0 || foundDifficulty === 1 ||
             foundDifficulty === 2 || foundDifficulty === 3) {
             Retr0MineSettings.difficulty = foundDifficulty
         } else {
             Retr0MineSettings.difficulty = 4
-            Retr0MineSettings.customWidth = gridSizeX
-            Retr0MineSettings.customHeight = gridSizeY
-            Retr0MineSettings.customMines = mineCount
+            Retr0MineSettings.customWidth = GameState.gridSizeX
+            Retr0MineSettings.customHeight = GameState.gridSizeY
+            Retr0MineSettings.customMines = GameState.mineCount
         }
         GameTimer.resumeFrom(savedCentiseconds)
-        root.gameOver = data.gameState.gameOver
-        root.gameStarted = data.gameState.gameStarted
-        root.firstClickIndex = data.gameState.firstClickIndex
-        root.currentHintCount = data.gameState.currentHintCount || 0
+        GameState.gameOver = data.gameState.gameOver
+        GameState.gameStarted = data.gameState.gameStarted
+        GameState.firstClickIndex = data.gameState.firstClickIndex
+        GameState.currentHintCount = data.gameState.currentHintCount || 0
 
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell) {
                 cell.revealed = false
@@ -582,23 +532,23 @@ ApplicationWindow {
             })
         }
 
-        revealedCount = data.gameState.revealedCells.length
-        flaggedCount = data.gameState.flaggedCells.length
+        GameState.revealedCount = data.gameState.revealedCells.length
+        GameState.flaggedCount = data.gameState.flaggedCells.length
 
-        if (gameStarted && !gameOver) {
-            gameTimer.start()
+        if (GameState.gameStarted && !GameState.gameOver) {
+            GameTimer.start()
         }
 
-        isManuallyLoaded = true
+        GameState.isManuallyLoaded = true
     }
 
     function revealConnectedCells(index) {
-        if (!Retr0MineSettings.autoreveal || !gameStarted || gameOver) return;
+        if (!Retr0MineSettings.autoreveal || !GameState.gameStarted || GameState.gameOver) return;
         let cell = grid.itemAtIndex(index) as Cell;
-        if (!cell.revealed || numbers[index] <= 0) return;
+        if (!cell.revealed || GameState.numbers[index] <= 0) return;
 
-        let row = Math.floor(index / gridSizeX);
-        let col = index % gridSizeX;
+        let row = Math.floor(index / GameState.gridSizeX);
+        let col = index % GameState.gridSizeX;
         let flaggedCount = 0;
         let adjacentCells = [];
         let hasQuestionMark = false;
@@ -608,8 +558,8 @@ ApplicationWindow {
                 if (r === 0 && c === 0) continue;
                 let newRow = row + r;
                 let newCol = col + c;
-                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue;
-                let currentPos = newRow * gridSizeX + newCol;
+                if (newRow < 0 || newRow >= GameState.gridSizeY || newCol < 0 || newCol >= GameState.gridSizeX) continue;
+                let currentPos = newRow * GameState.gridSizeX + newCol;
                 let adjacentCell = grid.itemAtIndex(currentPos) as Cell;
 
                 if (adjacentCell.questioned || adjacentCell.safeQuestioned) {
@@ -624,7 +574,7 @@ ApplicationWindow {
             }
         }
 
-        if (!hasQuestionMark && flaggedCount === numbers[index] && adjacentCells.length > 0) {
+        if (!hasQuestionMark && flaggedCount === GameState.numbers[index] && adjacentCells.length > 0) {
             for (let adjacentPos of adjacentCells) {
                 reveal(adjacentPos);
             }
@@ -632,10 +582,10 @@ ApplicationWindow {
     }
 
     function placeMines(firstClickIndex) {
-        const row = Math.floor(firstClickIndex / gridSizeX);
-        const col = firstClickIndex % gridSizeX;
+        const row = Math.floor(firstClickIndex / GameState.gridSizeX);
+        const col = firstClickIndex % GameState.gridSizeX;
 
-        if (!MinesweeperLogic.initializeGame(gridSizeX, gridSizeY, mineCount)) {
+        if (!MinesweeperLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
             console.error("Failed to initialize game!");
             return false;
         }
@@ -646,26 +596,26 @@ ApplicationWindow {
             return false;
         }
 
-        mines = MinesweeperLogic.getMines();
-        numbers = MinesweeperLogic.getNumbers();
+        GameState.mines = MinesweeperLogic.getMines();
+        GameState.numbers = MinesweeperLogic.getNumbers();
         return true;
     }
 
     function initGame() {
-        blockAnim = false
-        mines = []
-        numbers = []
-        gameOver = false
-        revealedCount = 0
-        flaggedCount = 0
-        firstClickIndex = -1
-        gameStarted = false
-        currentHintCount = 0
+        GameState.blockAnim = false
+        GameState.mines = []
+        GameState.numbers = []
+        GameState.gameOver = false
+        GameState.revealedCount = 0
+        GameState.flaggedCount = 0
+        GameState.firstClickIndex = -1
+        GameState.gameStarted = false
+        GameState.currentHintCount = 0
         GameTimer.reset()
-        isManuallyLoaded = false
+        GameState.isManuallyLoaded = false
 
-        root.noAnimReset = true
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+        GameState.noAnimReset = true
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             let cell = grid.itemAtIndex(i) as Cell
             if (cell) {
                 cell.revealed = false
@@ -674,10 +624,10 @@ ApplicationWindow {
                 cell.safeQuestioned = false
             }
         }
-        root.noAnimReset = false
+        GameState.noAnimReset = false
 
         if (Retr0MineSettings.animations) {
-            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                 let cell = grid.itemAtIndex(i) as Cell
                 if (cell) {
                     cell.startFadeIn()
@@ -688,15 +638,15 @@ ApplicationWindow {
 
     function reveal(index) {
         let initialCell = grid.itemAtIndex(index) as Cell
-        if (gameOver || initialCell.revealed || initialCell.flagged) return
+        if (GameState.gameOver || initialCell.revealed || initialCell.flagged) return
 
-        if (!gameStarted) {
-            firstClickIndex = index
+        if (!GameState.gameStarted) {
+            GameState.firstClickIndex = index
             if (!placeMines(index)) {
                 reveal(index)
                 return
             }
-            gameStarted = true
+            GameState.gameStarted = true
             GameTimer.start()
         }
 
@@ -713,11 +663,11 @@ ApplicationWindow {
             if (cell.revealed || cell.flagged) continue
 
             cell.revealed = true
-            revealedCount++
+            GameState.revealedCount++
 
-            if (mines.includes(currentIndex)) {
+            if (GameState.mines.includes(currentIndex)) {
                 cell.isBombClicked = true
-                gameOver = true
+                GameState.gameOver = true
                 GameTimer.stop()
                 revealAllMines()
                 audioEngine.playLoose()
@@ -728,16 +678,16 @@ ApplicationWindow {
                 return
             }
 
-            if (numbers[currentIndex] === 0) {
-                let row = Math.floor(currentIndex / gridSizeX)
-                let col = currentIndex % gridSizeX
+            if (GameState.numbers[currentIndex] === 0) {
+                let row = Math.floor(currentIndex / GameState.gridSizeX)
+                let col = currentIndex % GameState.gridSizeX
                 for (let r = -1; r <= 1; r++) {
                     for (let c = -1; c <= 1; c++) {
                         if (r === 0 && c === 0) continue
                         let newRow = row + r
                         let newCol = col + c
-                        if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
-                        let adjacentIndex = newRow * gridSizeX + newCol
+                        if (newRow < 0 || newRow >= GameState.gridSizeY || newCol < 0 || newCol >= GameState.gridSizeX) continue
+                        let adjacentIndex = newRow * GameState.gridSizeX + newCol
                         let adjacentCell = grid.itemAtIndex(adjacentIndex) as Cell
                         if (adjacentCell.questioned) {
                             adjacentCell.questioned = false
@@ -755,10 +705,10 @@ ApplicationWindow {
     }
 
     function revealAllMines() {
-        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             let cell = grid.itemAtIndex(i) as Cell
             if (cell) {
-                if (mines.includes(i)) {
+                if (GameState.mines.includes(i)) {
                     if (!cell.flagged) {
                         cell.questioned = false
                         cell.revealed = true
@@ -775,21 +725,21 @@ ApplicationWindow {
     }
 
     function getDifficultyLevel() {
-        if (gridSizeX === 9 && gridSizeY === 9 && mineCount === 10) {
+        if (GameState.gridSizeX === 9 && GameState.gridSizeY === 9 && GameState.mineCount === 10) {
             return 'easy';
-        } else if (gridSizeX === 16 && gridSizeY === 16 && mineCount === 40) {
+        } else if (GameState.gridSizeX === 16 && GameState.gridSizeY === 16 && GameState.mineCount === 40) {
             return 'medium';
-        } else if (gridSizeX === 30 && gridSizeY === 16 && mineCount === 99) {
+        } else if (GameState.gridSizeX === 30 && GameState.gridSizeY === 16 && GameState.mineCount === 99) {
             return 'hard';
-        } else if (gridSizeX === 50 && gridSizeY === 32 && mineCount === 320) {
+        } else if (GameState.gridSizeX === 50 && GameState.gridSizeY === 32 && GameState.mineCount === 320) {
             return 'retr0';
         }
         return null;
     }
 
     function checkWin() {
-        if (revealedCount === gridSizeX * gridSizeY - mineCount && !gameOver) {
-            gameOver = true
+        if (GameState.revealedCount === GameState.gridSizeX * GameState.gridSizeY - GameState.mineCount && !GameState.gameOver) {
+            GameState.gameOver = true
             GameTimer.stop()
 
             let leaderboardData = MainWindow.loadGameState("leaderboard.json")
@@ -830,31 +780,31 @@ ApplicationWindow {
 
             MainWindow.saveLeaderboard(JSON.stringify(leaderboard))
 
-            if (!isManuallyLoaded) {
+            if (!GameState.isManuallyLoaded) {
                 if (SteamIntegration.initialized) {
                     const difficulty = getDifficultyLevel();
 
-                    if (currentHintCount === 0) {
+                    if (GameState.currentHintCount === 0) {
                         if (difficulty === 'easy') {
                             if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
                                 SteamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
                                 gameOverPopup.notificationText = qsTr("New flag unlocked!")
                                 gameOverPopup.notificationVisible = true;
-                                root.flag1Unlocked = true;
+                                GameState.flag1Unlocked = true;
                             }
                         } else if (difficulty === 'medium') {
                             if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
                                 SteamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
                                 gameOverPopup.notificationText = qsTr("New flag unlocked!")
                                 gameOverPopup.notificationVisible = true;
-                                root.flag2Unlocked = true;
+                                GameState.flag2Unlocked = true;
                             }
                         } else if (difficulty === 'hard') {
                             if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
                                 SteamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
                                 gameOverPopup.notificationText = qsTr("New flag unlocked!")
                                 gameOverPopup.notificationVisible = true;
-                                root.flag3Unlocked = true;
+                                GameState.flag3Unlocked = true;
                             }
                         }
                     }
@@ -864,13 +814,13 @@ ApplicationWindow {
                             SteamIntegration.unlockAchievement("ACH_SPEED_DEMON");
                             gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
                             gameOverPopup.notificationVisible = true
-                            root.anim2Unlocked = true
+                            GameState.anim2Unlocked = true
                         }
-                        if (currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
+                        if (GameState.currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
                             SteamIntegration.unlockAchievement("ACH_HINT_MASTER");
                             gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
                             gameOverPopup.notificationVisible = true
-                            root.anim1Unlocked = true
+                            GameState.anim1Unlocked = true
                         }
                     }
 
@@ -888,30 +838,30 @@ ApplicationWindow {
     }
 
     function toggleFlag(index) {
-        if (gameOver) return
+        if (GameState.gameOver) return
         let cell = grid.itemAtIndex(index) as Cell
         if (!cell.revealed) {
             if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
                 cell.flagged = true
                 cell.questioned = false
                 cell.safeQuestioned = false
-                flaggedCount++
+                GameState.flaggedCount++
             } else if (cell.flagged) {
                 if (Retr0MineSettings.enableQuestionMarks) {
                     cell.flagged = false
                     cell.questioned = true
                     cell.safeQuestioned = false
-                    flaggedCount--
+                    GameState.flaggedCount--
                 } else if (Retr0MineSettings.enableSafeQuestionMarks) {
                     cell.flagged = false
                     cell.questioned = false
                     cell.safeQuestioned = true
-                    flaggedCount--
+                    GameState.flaggedCount--
                 } else {
                     cell.flagged = false
                     cell.questioned = false
                     cell.safeQuestioned = false
-                    flaggedCount--
+                    GameState.flaggedCount--
                 }
             } else if (cell.questioned) {
                 if (Retr0MineSettings.enableSafeQuestionMarks) {
@@ -928,12 +878,12 @@ ApplicationWindow {
 
     function hasUnrevealedNeighbors(index) {
         // If the cell has no number (0), no need for satisfaction check
-        if (numbers[index] === 0) {
+        if (GameState.numbers[index] === 0) {
             return false
         }
 
-        let row = Math.floor(index / gridSizeX)
-        let col = index % gridSizeX
+        let row = Math.floor(index / GameState.gridSizeX)
+        let col = index % GameState.gridSizeX
         let flagCount = 0
         let unrevealedCount = 0
 
@@ -943,9 +893,9 @@ ApplicationWindow {
                 if (r === 0 && c === 0) continue
                 let newRow = row + r
                 let newCol = col + c
-                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) continue
+                if (newRow < 0 || newRow >= GameState.gridSizeY || newCol < 0 || newCol >= GameState.gridSizeX) continue
 
-                let adjacentCell = grid.itemAtIndex(newRow * gridSizeX + newCol) as Cell
+                let adjacentCell = grid.itemAtIndex(newRow * GameState.gridSizeX + newCol) as Cell
                 if (adjacentCell.flagged) {
                     flagCount++
                 }
@@ -955,7 +905,7 @@ ApplicationWindow {
             }
         }
 
-        return unrevealedCount > 0 || flagCount !== numbers[index]
+        return unrevealedCount > 0 || flagCount !== GameState.numbers[index]
     }
 }
 

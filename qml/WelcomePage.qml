@@ -6,7 +6,6 @@ import Retr0Mine
 
 Popup {
     id: control
-    required property var root
     height: 200
     width: 400
     anchors.centerIn: parent

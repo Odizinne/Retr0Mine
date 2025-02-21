@@ -55,7 +55,7 @@ set(QML_FILES
 set(QML_SINGLETONS
     qml/Retr0MineSettings.qml
     qml/Colors.qml
-    #qml/GameState.qml
+    qml/GameState.qml
 )
 
 set_source_files_properties(${QML_SINGLETONS}

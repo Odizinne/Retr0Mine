@@ -235,7 +235,7 @@ ApplicationWindow {
                         }
 
                         Repeater {
-                            model: control.root.difficultySettings
+                            model: GameState.difficultySettings
                             RowLayout {
                                 id: difficultyRow
                                 Layout.fillWidth: true
@@ -268,10 +268,10 @@ ApplicationWindow {
                                     checked: Retr0MineSettings.difficulty === parent.index
                                     onClicked: {
                                         const idx = difficultyGroup.buttons.indexOf(this)
-                                        const difficultySet = control.root.difficultySettings[idx]
-                                        control.root.gridSizeX = difficultySet.x
-                                        control.root.gridSizeY = difficultySet.y
-                                        control.root.mineCount = difficultySet.mines
+                                        const difficultySet = GameState.difficultySettings[idx]
+                                        GameState.gridSizeX = difficultySet.x
+                                        GameState.gridSizeY = difficultySet.y
+                                        GameState.mineCount = difficultySet.mines
                                         control.root.initGame()
                                         Retr0MineSettings.difficulty = idx
                                     }
@@ -340,9 +340,9 @@ ApplicationWindow {
                             text: qsTr("Apply")
                             Layout.alignment: Qt.AlignRight
                             onClicked: {
-                                control.root.gridSizeX = Retr0MineSettings.customWidth
-                                control.root.gridSizeY = Retr0MineSettings.customHeight
-                                control.root.mineCount = Retr0MineSettings.customMines
+                                GameState.gridSizeX = Retr0MineSettings.customWidth
+                                GameState.gridSizeY = Retr0MineSettings.customHeight
+                                GameState.mineCount = Retr0MineSettings.customMines
                                 control.root.initGame()
                             }
                         }
@@ -413,7 +413,7 @@ ApplicationWindow {
                                 onCheckedChanged: {
                                     Retr0MineSettings.enableQuestionMarks = checked
                                     if (!checked) {
-                                        for (let i = 0; i < control.root.gridSizeX * control.root.gridSizeY; i++) {
+                                        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                                             let cell = control.grid.itemAtIndex(i) as Cell
                                             if (cell && cell.questioned) {
                                                 cell.questioned = false
@@ -440,7 +440,7 @@ ApplicationWindow {
                                 onCheckedChanged: {
                                     Retr0MineSettings.enableSafeQuestionMarks = checked
                                     if (!checked) {
-                                        for (let i = 0; i < control.root.gridSizeX * control.root.gridSizeY; i++) {
+                                        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                                             let cell = control.grid.itemAtIndex(i) as Cell
                                             if (cell && cell.safeQuestioned) {
                                                 cell.safeQuestioned = false
@@ -498,7 +498,7 @@ ApplicationWindow {
                                 checked: Retr0MineSettings.animations
                                 onCheckedChanged: {
                                     Retr0MineSettings.animations = checked
-                                    for (let i = 0; i < control.root.gridSizeX * control.root.gridSizeY; i++) {
+                                    for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                                         let cell = control.grid.itemAtIndex(i) as Cell
                                         if (cell) {
                                             cell.opacity = 1
@@ -604,17 +604,17 @@ ApplicationWindow {
                                 }
 
                                 Component.onCompleted: {
-                                    animationModel.setProperty(1, "enabled", control.root.anim1Unlocked)
-                                    animationModel.setProperty(2, "enabled", control.root.anim2Unlocked)
+                                    animationModel.setProperty(1, "enabled", GameState.anim1Unlocked)
+                                    animationModel.setProperty(2, "enabled", GameState.anim2Unlocked)
                                 }
 
                                 Connections {
-                                    target: control.root
+                                    target: GameState
                                     function onAnim1UnlockedChanged() {
-                                        animationModel.setProperty(1, "enabled", control.root.anim1Unlocked)
+                                        animationModel.setProperty(1, "enabled", GameState.anim1Unlocked)
                                     }
                                     function onAnim2UnlockedChanged() {
-                                        animationModel.setProperty(2, "enabled", control.root.anim2Unlocked)
+                                        animationModel.setProperty(2, "enabled", GameState.anim2Unlocked)
                                     }
                                 }
 
@@ -673,10 +673,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: control.root.flag1Unlocked
+                                    enabled: GameState.flag1Unlocked
                                     checkable: true
-                                    checked: control.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 1
-                                    icon.source: control.root.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
+                                    checked: GameState.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 1
+                                    icon.source: GameState.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -693,10 +693,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: control.root.flag2Unlocked
+                                    enabled: GameState.flag2Unlocked
                                     checkable: true
-                                    checked: control.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 2
-                                    icon.source: control.root.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
+                                    checked: GameState.flag2Unlocked && Retr0MineSettings.flagSkinIndex === 2
+                                    icon.source: GameState.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -713,10 +713,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: control.root.flag3Unlocked
+                                    enabled: GameState.flag3Unlocked
                                     checkable: true
-                                    checked: control.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 3
-                                    icon.source: control.root.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
+                                    checked: GameState.flag3Unlocked && Retr0MineSettings.flagSkinIndex === 3
+                                    icon.source: GameState.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -1018,7 +1018,7 @@ ApplicationWindow {
                                 Layout.rightMargin: 5
                                 currentIndex: Retr0MineSettings.themeIndex
                                 onActivated: {
-                                    if (control.root.gameStarted && !control.root.gameOver) {
+                                    if (GameState.gameStarted && !GameState.gameOver) {
                                         control.root.saveGame("internalGameState.json")
                                     }
                                     MainWindow.restartRetr0Mine(currentIndex)
