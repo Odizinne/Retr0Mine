@@ -36,7 +36,7 @@ Popup {
 
         RowLayout {
             spacing: 10
-            visible: leaderboardPage.root.isSteamEnabled
+            visible: MainWindow.steamEnabled
             Layout.alignment: Qt.AlignCenter
 
             IconImage {
@@ -50,7 +50,7 @@ Popup {
 
             Label {
                 id: baseLabel
-                text: leaderboardPage.root.mainWindow.playerName
+                text: MainWindow.playerName
                 font.bold: true
                 font.pixelSize: 20
                 Layout.preferredHeight: 30
@@ -192,7 +192,7 @@ Popup {
                         retr0Wins: 0
                     }
 
-                    leaderboardPage.root.mainWindow.saveLeaderboard(JSON.stringify(emptyLeaderboard))
+                    MainWindow.saveLeaderboard(JSON.stringify(emptyLeaderboard))
                 }
             }
 

@@ -128,7 +128,7 @@ Item {
     Rectangle {
         anchors.fill: cellButton
         border.width: 2
-        radius: cellItem.root.mainWindow.isFluent ? 4 : (cellItem.root.isUniversal ? 0 : 3)
+        radius: MainWindow.isFluent ? 4 : (cellItem.root.isUniversal ? 0 : 3)
         border.color: Colors.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && cellItem.root.mines.includes(cellItem.index))

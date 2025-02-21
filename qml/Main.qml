@@ -12,31 +12,28 @@ ApplicationWindow {
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
 
-    required property var mainWindow
     required property var steamIntegration
     required property var gameLogic
     required property var gameTimer
 
-    property var difficultySettings: [
+    readonly property var difficultySettings: [
         { text: qsTr("Easy"), x: 9, y: 9, mines: 10 },
         { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
         { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
         { text: "Retr0", x: 50, y: 32, mines: 320 },
         { text: qsTr("Custom"), x: Retr0MineSettings.customWidth, y: Retr0MineSettings.customHeight, mines: Retr0MineSettings.customMines },
     ]
-    property bool isSteamEnabled: mainWindow.steamEnabled
-    property bool flag1Unlocked: mainWindow.unlockedFlag1
-    property bool flag2Unlocked: mainWindow.unlockedFlag2
-    property bool flag3Unlocked: mainWindow.unlockedFlag3
-    property bool anim1Unlocked: mainWindow.unlockedAnim1
-    property bool anim2Unlocked: mainWindow.unlockedAnim2
-    property string flagPath: {
-        if (root.isSteamEnabled && Retr0MineSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
-        if (root.isSteamEnabled && Retr0MineSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
-        if (root.isSteamEnabled && Retr0MineSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
+    property bool flag1Unlocked: MainWindow.unlockedFlag1
+    property bool flag2Unlocked: MainWindow.unlockedFlag2
+    property bool flag3Unlocked: MainWindow.unlockedFlag3
+    property bool anim1Unlocked: MainWindow.unlockedAnim1
+    property bool anim2Unlocked: MainWindow.unlockedAnim2
+    readonly property string flagPath: {
+        if (MainWindow.steamEnabled && Retr0MineSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
+        if (MainWindow.steamEnabled && Retr0MineSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
+        if (MainWindow.steamEnabled && Retr0MineSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
-    property bool isGamescope: mainWindow.gamescope
     property bool isMaximized: visibility === 4
     property bool isFullScreen: visibility === 5
     property bool gameOver: false
@@ -53,9 +50,9 @@ ApplicationWindow {
     property int cellSize: {
         switch (Retr0MineSettings.cellSize) {
             case 0: return 35;
-            case 1: return isGamescope ? 43 : 45;
+            case 1: return MainWindow.gamescope ? 43 : 45;
             case 2: return 55;
-            default: return isGamescope ? 43 : 45;
+            default: return MainWindow.gamescope ? 43 : 45;
         }
     }
     property int cellSpacing: 2
@@ -120,7 +117,7 @@ ApplicationWindow {
         root.gridSizeY = difficultySet.y
         root.mineCount = difficultySet.mines
 
-        let leaderboardData = mainWindow.loadLeaderboard()
+        let leaderboardData = MainWindow.loadLeaderboard()
         if (leaderboardData) {
             try {
                 const leaderboard = JSON.parse(leaderboardData)
@@ -138,7 +135,7 @@ ApplicationWindow {
         }
 
         if (typeof Universal !== undefined) {
-            Universal.theme = root.isGamescope ? Universal.Dark : Universal.System
+            Universal.theme = MainWindow.gamescope ? Universal.Dark : Universal.System
             Universal.accent = sysPalette.accent
         }
     }
@@ -203,7 +200,7 @@ ApplicationWindow {
     Loader {
         id: welcomeLoader
         anchors.fill: parent
-        active: root.mainWindow.showWelcome
+        active: MainWindow.showWelcome
         sourceComponent: Component {
             WelcomePage {
                 root: root
@@ -214,7 +211,7 @@ ApplicationWindow {
     Loader {
         id: aboutLoader
         anchors.fill: parent
-        active: !root.isSteamEnabled
+        active: !MainWindow.steamEnabled
         sourceComponent: Component {
             AboutPage {
             }
@@ -243,16 +240,6 @@ ApplicationWindow {
                 "qrc:/fonts/FiraSans-Bold.ttf"
         }
     }
-
-    //Colors {
-    //    id: colors
-    //    root: root
-    //}
-
-    //Retr0MineSettings {
-    //    id: settings
-    //    startFullScreen: root.isGamescope ? true : false
-    //}
 
     AudioEffectsEngine {
         id: audioEngine
@@ -323,8 +310,8 @@ ApplicationWindow {
             x: parent.width - width
             y: 0
             height: gameArea.height
-            visible: policy === ScrollBar.AlwaysOn && !root.mainWindow.isFluent
-            active: !root.mainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
+            active: !MainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -336,8 +323,8 @@ ApplicationWindow {
             x: 0
             y: parent.height - height
             width: gameArea.width
-            visible: policy === ScrollBar.AlwaysOn && !root.mainWindow.isFluent
-            active: !root.mainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
+            active: !MainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -349,8 +336,8 @@ ApplicationWindow {
             x: parent.width - width
             y: 0
             height: gameArea.height
-            visible: policy === ScrollBar.AlwaysOn && root.mainWindow.isFluent
-            active: root.mainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
+            active: MainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeY > gameArea.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -362,14 +349,14 @@ ApplicationWindow {
             x: 0
             y: parent.height - height
             width: gameArea.width
-            visible: policy === ScrollBar.AlwaysOn && root.mainWindow.isFluent
-            active: root.mainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
+            active: MainWindow.isFluent
             policy: (root.cellSize + root.cellSpacing) * root.gridSizeX > gameArea.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
-        ScrollBar.vertical: root.mainWindow.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
-        ScrollBar.horizontal: root.mainWindow.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
+        ScrollBar.vertical: MainWindow.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
+        ScrollBar.horizontal: MainWindow.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
 
         Item {
             anchors.centerIn: parent
@@ -418,10 +405,10 @@ ApplicationWindow {
     function checkInitialGameState() {
         if (!gridFullyInitialized) return
 
-        let internalSaveData = mainWindow.loadGameState("internalGameState.json")
+        let internalSaveData = MainWindow.loadGameState("internalGameState.json")
         if (internalSaveData) {
             if (loadGame(internalSaveData)) {
-                mainWindow.deleteSaveFile("internalGameState.json")
+                MainWindow.deleteSaveFile("internalGameState.json")
                 root.isManuallyLoaded = false
             } else {
                 console.error("Failed to load internal game state")
@@ -432,7 +419,7 @@ ApplicationWindow {
         }
         root.visibility = ApplicationWindow.Windowed
 
-        if (Retr0MineSettings.startFullScreen || root.isGamescope) {
+        if (Retr0MineSettings.startFullScreen || MainWindow.gamescope) {
             root.visibility = 5
         }
     }
@@ -498,7 +485,16 @@ ApplicationWindow {
             if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
         }
 
-        mainWindow.saveGameState(JSON.stringify(saveData), filename)
+        MainWindow.saveGameState(JSON.stringify(saveData), filename)
+    }
+
+    Timer {
+        id: loadingTimer
+        interval: 100
+        repeat: false
+        onTriggered: root.finishLoading()
+        property var savedData
+        property int savedCentiseconds
     }
 
     function loadGame(saveData) {
@@ -508,96 +504,196 @@ ApplicationWindow {
                 console.error("Incompatible save version")
                 return false
             }
-
             gameTimer.stop()
-
             // Get the saved time first
             const savedCentiseconds = data.gameState.centiseconds
-
             // Rest of your loading logic
             gridSizeX = data.gameState.gridSizeX
             gridSizeY = data.gameState.gridSizeY
             mineCount = data.gameState.mineCount
-
-
             mines = data.gameState.mines
             numbers = data.gameState.numbers
+
             if (!gameLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
                 console.error("Failed to initialize game logic from save")
                 return false
             }
 
-            let foundDifficulty = difficultySettings.findIndex(setting =>
-                setting.x === gridSizeX &&
-                setting.y === gridSizeY &&
-                setting.mines === mineCount
-            )
-
-            if (foundDifficulty === 0 || foundDifficulty === 1 ||
-                foundDifficulty === 2 || foundDifficulty === 3) {
-                Retr0MineSettings.difficulty = foundDifficulty
-            } else {
-                Retr0MineSettings.difficulty = 4
-                Retr0MineSettings.customWidth = gridSizeX
-                Retr0MineSettings.customHeight = gridSizeY
-                Retr0MineSettings.customMines = mineCount
-            }
-
-            gameTimer.resumeFrom(savedCentiseconds)
-
-            root.gameOver = data.gameState.gameOver
-            root.gameStarted = data.gameState.gameStarted
-            root.firstClickIndex = data.gameState.firstClickIndex
-            root.currentHintCount = data.gameState.currentHintCount || 0
-
-            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
-                let cell = grid.itemAtIndex(i)
-                if (cell) {
-                    cell.revealed = false
-                    cell.flagged = false
-                    cell.questioned = false
-                    cell.safeQuestioned = false
-                }
-            }
-
-            data.gameState.revealedCells.forEach(index => {
-                                                     let cell = grid.itemAtIndex(index)
-                                                     if (cell) cell.revealed = true
-                                                 })
-
-            data.gameState.flaggedCells.forEach(index => {
-                                                    let cell = grid.itemAtIndex(index)
-                                                    if (cell) cell.flagged = true
-                                                })
-
-            if (data.gameState.questionedCells) {
-                data.gameState.questionedCells.forEach(index => {
-                                                           let cell = grid.itemAtIndex(index)
-                                                           if (cell) cell.questioned = true
-                                                       })
-            }
-
-            if (data.gameState.safeQuestionedCells) {
-                data.gameState.safeQuestionedCells.forEach(index => {
-                                                               let cell = grid.itemAtIndex(index)
-                                                               if (cell) cell.safeQuestioned = true
-                                                           })
-            }
-
-            revealedCount = data.gameState.revealedCells.length
-            flaggedCount = data.gameState.flaggedCells.length
-
-            if (gameStarted && !gameOver) {
-                gameTimer.start()
-            }
-
-            isManuallyLoaded = true
+            // Store the data for use after the timer
+            loadingTimer.savedData = data
+            loadingTimer.savedCentiseconds = savedCentiseconds
+            loadingTimer.start()
             return true
+
         } catch (e) {
             console.error("Error loading save:", e)
             return false
         }
     }
+
+    function finishLoading() {
+        const data = loadingTimer.savedData
+        const savedCentiseconds = loadingTimer.savedCentiseconds
+
+        let foundDifficulty = difficultySettings.findIndex(setting =>
+            setting.x === gridSizeX &&
+            setting.y === gridSizeY &&
+            setting.mines === mineCount
+        )
+        if (foundDifficulty === 0 || foundDifficulty === 1 ||
+            foundDifficulty === 2 || foundDifficulty === 3) {
+            Retr0MineSettings.difficulty = foundDifficulty
+        } else {
+            Retr0MineSettings.difficulty = 4
+            Retr0MineSettings.customWidth = gridSizeX
+            Retr0MineSettings.customHeight = gridSizeY
+            Retr0MineSettings.customMines = mineCount
+        }
+        gameTimer.resumeFrom(savedCentiseconds)
+        root.gameOver = data.gameState.gameOver
+        root.gameStarted = data.gameState.gameStarted
+        root.firstClickIndex = data.gameState.firstClickIndex
+        root.currentHintCount = data.gameState.currentHintCount || 0
+
+        for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+            let cell = grid.itemAtIndex(i)
+            if (cell) {
+                cell.revealed = false
+                cell.flagged = false
+                cell.questioned = false
+                cell.safeQuestioned = false
+            }
+        }
+
+        data.gameState.revealedCells.forEach(index => {
+            let cell = grid.itemAtIndex(index)
+            if (cell) cell.revealed = true
+        })
+
+        data.gameState.flaggedCells.forEach(index => {
+            let cell = grid.itemAtIndex(index)
+            if (cell) cell.flagged = true
+        })
+
+        if (data.gameState.questionedCells) {
+            data.gameState.questionedCells.forEach(index => {
+                let cell = grid.itemAtIndex(index)
+                if (cell) cell.questioned = true
+            })
+        }
+
+        if (data.gameState.safeQuestionedCells) {
+            data.gameState.safeQuestionedCells.forEach(index => {
+                let cell = grid.itemAtIndex(index)
+                if (cell) cell.safeQuestioned = true
+            })
+        }
+
+        revealedCount = data.gameState.revealedCells.length
+        flaggedCount = data.gameState.flaggedCells.length
+
+        if (gameStarted && !gameOver) {
+            gameTimer.start()
+        }
+
+        isManuallyLoaded = true
+    }
+//    function loadGame(saveData) {
+//        try {
+//            let data = JSON.parse(saveData)
+//            if (!data.version || !data.version.startsWith("1.")) {
+//                console.error("Incompatible save version")
+//                return false
+//            }
+//
+//            gameTimer.stop()
+//
+//            // Get the saved time first
+//            const savedCentiseconds = data.gameState.centiseconds
+//
+//            // Rest of your loading logic
+//            gridSizeX = data.gameState.gridSizeX
+//            gridSizeY = data.gameState.gridSizeY
+//            mineCount = data.gameState.mineCount
+//            mines = data.gameState.mines
+//            numbers = data.gameState.numbers
+//
+//            if (!gameLogic.initializeFromSave(gridSizeX, gridSizeY, mineCount, mines)) {
+//                console.error("Failed to initialize game logic from save")
+//                return false
+//            }
+//
+//            let foundDifficulty = difficultySettings.findIndex(setting =>
+//                setting.x === gridSizeX &&
+//                setting.y === gridSizeY &&
+//                setting.mines === mineCount
+//            )
+//
+//            if (foundDifficulty === 0 || foundDifficulty === 1 ||
+//                foundDifficulty === 2 || foundDifficulty === 3) {
+//                Retr0MineSettings.difficulty = foundDifficulty
+//            } else {
+//                Retr0MineSettings.difficulty = 4
+//                Retr0MineSettings.customWidth = gridSizeX
+//                Retr0MineSettings.customHeight = gridSizeY
+//                Retr0MineSettings.customMines = mineCount
+//            }
+//
+//            gameTimer.resumeFrom(savedCentiseconds)
+//
+//            root.gameOver = data.gameState.gameOver
+//            root.gameStarted = data.gameState.gameStarted
+//            root.firstClickIndex = data.gameState.firstClickIndex
+//            root.currentHintCount = data.gameState.currentHintCount || 0
+//
+//            for (let i = 0; i < gridSizeX * gridSizeY; i++) {
+//                let cell = grid.itemAtIndex(i)
+//                if (cell) {
+//                    cell.revealed = false
+//                    cell.flagged = false
+//                    cell.questioned = false
+//                    cell.safeQuestioned = false
+//                }
+//            }
+//
+//            data.gameState.revealedCells.forEach(index => {
+//                                                     let cell = grid.itemAtIndex(index)
+//                                                     if (cell) cell.revealed = true
+//                                                 })
+//
+//            data.gameState.flaggedCells.forEach(index => {
+//                                                    let cell = grid.itemAtIndex(index)
+//                                                    if (cell) cell.flagged = true
+//                                                })
+//
+//            if (data.gameState.questionedCells) {
+//                data.gameState.questionedCells.forEach(index => {
+//                                                           let cell = grid.itemAtIndex(index)
+//                                                           if (cell) cell.questioned = true
+//                                                       })
+//            }
+//
+//            if (data.gameState.safeQuestionedCells) {
+//                data.gameState.safeQuestionedCells.forEach(index => {
+//                                                               let cell = grid.itemAtIndex(index)
+//                                                               if (cell) cell.safeQuestioned = true
+//                                                           })
+//            }
+//
+//            revealedCount = data.gameState.revealedCells.length
+//            flaggedCount = data.gameState.flaggedCells.length
+//
+//            if (gameStarted && !gameOver) {
+//                gameTimer.start()
+//            }
+//
+//            isManuallyLoaded = true
+//            return true
+//        } catch (e) {
+//            console.error("Error loading save:", e)
+//            return false
+//        }
+//    }
 
     function revealConnectedCells(index) {
         if (!Retr0MineSettings.autoreveal || !gameStarted || gameOver) return;
@@ -799,7 +895,7 @@ ApplicationWindow {
             gameOver = true
             gameTimer.stop()
 
-            let leaderboardData = mainWindow.loadGameState("leaderboard.json")
+            let leaderboardData = MainWindow.loadGameState("leaderboard.json")
             let leaderboard = {}
 
             if (leaderboardData) {
@@ -835,7 +931,7 @@ ApplicationWindow {
                 }
             }
 
-            mainWindow.saveLeaderboard(JSON.stringify(leaderboard))
+            MainWindow.saveLeaderboard(JSON.stringify(leaderboard))
 
             if (!isManuallyLoaded) {
                 if (root.isSteamEnabled) {

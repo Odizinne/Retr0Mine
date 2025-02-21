@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 RowLayout {
-    id: topBar
+    id: control
     required property var root
     required property var saveWindow
     required property var loadWindow
@@ -38,44 +38,44 @@ RowLayout {
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                 MenuItem {
                     text: qsTr("New game")
-                    onTriggered: topBar.root.initGame()
+                    onTriggered: control.root.initGame()
                 }
 
                 MenuItem {
                     text: qsTr("Save game")
-                    enabled: topBar.root.gameStarted && !topBar.root.gameOver
-                    onTriggered: topBar.saveWindow.visible = true
+                    enabled: control.root.gameStarted && !control.root.gameOver
+                    onTriggered: control.saveWindow.visible = true
                 }
 
                 MenuItem {
                     id: loadMenu
                     text: qsTr("Load game")
-                    onTriggered: topBar.loadWindow.visible = true
+                    onTriggered: control.loadWindow.visible = true
                 }
 
                 MenuItem {
                     text: qsTr("Hint")
-                    enabled: topBar.root.gameStarted && !topBar.root.gameOver
-                    onTriggered: topBar.root.requestHint()
+                    enabled: control.root.gameStarted && !control.root.gameOver
+                    onTriggered: control.root.requestHint()
                 }
 
                 MenuSeparator { }
 
                 MenuItem {
                     text: qsTr("Settings")
-                    onTriggered: topBar.settingsWindow.visible = true
+                    onTriggered: control.settingsWindow.visible = true
                 }
 
                 MenuItem {
                     text: qsTr("Leaderboard")
-                    onTriggered: topBar.leaderboardWindow.visible = true
+                    onTriggered: control.leaderboardWindow.visible = true
                 }
 
                 MenuItem {
                     text: qsTr("About")
-                    height: !topBar.root.isSteamEnabled ? implicitHeight : 0
+                    height: !MainWindow.steamEnabled ? implicitHeight : 0
                     visible: height > 0
-                    onTriggered: topBar.aboutLoader.item.visible = true
+                    onTriggered: control.aboutLoader.item.visible = true
                 }
 
                 MenuSeparator { }
@@ -97,7 +97,7 @@ RowLayout {
         Layout.fillWidth: true
         Label {
             id: elapsedTimeLabel
-            text: topBar.root.gameTimer.displayTime
+            text: control.root.gameTimer.displayTime
             font.pixelSize: 18
             Layout.alignment: Qt.AlignCenter
         }
@@ -114,11 +114,11 @@ RowLayout {
         Button {
             icon.source: "qrc:/icons/bomb.png"
             icon.color: Colors.foregroundColor
-            text: ": " + (topBar.root.mineCount - topBar.root.flaggedCount)
+            text: ": " + (control.root.mineCount - control.root.flaggedCount)
             font.pixelSize: 18
             font.bold: true
             onClicked: {
-                topBar.root.requestHint()
+                control.root.requestHint()
             }
         }
     }

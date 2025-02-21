@@ -50,7 +50,7 @@ Popup {
 
                 let saveFileName = saveFilesList.model.get(saveFilesList.currentIndex).name
 
-                let saveData = loadWindow.root.mainWindow.loadGameState(saveFileName)
+                let saveData = MainWindow.loadGameState(saveFileName)
                 if (saveData) {
                     if (!loadWindow.root.loadGame(saveData)) {
                         loadWindow.errorWindow.visible = true
@@ -102,7 +102,7 @@ Popup {
                     text: name.replace(".json", "")
                     onClicked: {
                         saveFilesList.currentIndex = index
-                        let saveData = loadWindow.root.mainWindow.loadGameState(name)
+                        let saveData = MainWindow.loadGameState(name)
                         if (saveData) {
                             if (!loadWindow.root.loadGame(saveData)) {
                                 loadWindow.errorWindow.visible = true
@@ -125,7 +125,7 @@ Popup {
                             width: 32
                             anchors.centerIn: parent
                             onClicked: {
-                                loadWindow.root.mainWindow.deleteSaveFile(saveFile.name)
+                                MainWindow.deleteSaveFile(saveFile.name)
                                 saveFilesList.model.remove(saveFile.index)
                             }
                         }
@@ -144,7 +144,7 @@ Popup {
     onVisibleChanged: {
         if (visible) {
             saveFilesList.model.clear()
-            let saves =loadWindow.root.mainWindow.getSaveFiles()
+            let saves =MainWindow.getSaveFiles()
 
             if (saves.length === 0) {
                 //saveFilesList.model.append({name: qsTr("No saved games found"), enabled: false})

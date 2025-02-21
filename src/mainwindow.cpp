@@ -36,9 +36,7 @@ const QMap<int, QString>& getLanguageIndexMap() {
 
 MainWindow::MainWindow(QObject *parent)
     : QObject{parent}
-    , engine(new QQmlApplicationEngine(this))
     , settings("Odizinne", "Retr0Mine")
-    , rootContext(engine->rootContext())
     , translator(new QTranslator(this))
     , m_gameLogic(new MinesweeperLogic(this))
     , m_gameTimer(new GameTimer(this))
@@ -49,23 +47,48 @@ MainWindow::MainWindow(QObject *parent)
     isRunningOnGamescope = desktop.toLower() == "gamescope";
     m_steamIntegration = new SteamIntegration(this);
     m_steamEnabled = m_steamIntegration->initialize();
-
-    if (!settings.value("welcomeMessageShown", false).toBool()) resetSettings();
-
-    int colorSchemeIndex = settings.value("colorSchemeIndex").toInt();
-    setThemeColorScheme(colorSchemeIndex);
-
-    setupAndLoadQML();
 }
 
 MainWindow::~MainWindow()
 {
-    if (engine) {
-        engine->deleteLater();
-    }
     if (translator) {
         translator->deleteLater();
     }
+}
+
+void MainWindow::init()
+{
+    if (!settings.value("welcomeMessageShown", false).toBool()) {
+        resetSettings();
+    }
+
+    int colorSchemeIndex = settings.value("colorSchemeIndex").toInt();
+    int styleIndex = settings.value("themeIndex", 0).toInt();
+    int languageIndex = settings.value("languageIndex", 0).toInt();
+
+    setThemeColorScheme(colorSchemeIndex);
+    setQMLStyle(styleIndex);
+    setLanguage(languageIndex);
+}
+
+void MainWindow::setThemeColorScheme(int colorSchemeIndex)
+{
+#ifdef _WIN32
+    switch(colorSchemeIndex) {
+    case(0):
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+        break;
+    case(1):
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+        break;
+    case(2):
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+        break;
+    default:
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+        break;
+    }
+#endif
 }
 
 void MainWindow::resetSettings()
@@ -95,28 +118,6 @@ void MainWindow::resetSettings()
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;
-}
-
-void MainWindow::setupAndLoadQML()
-{
-    int styleIndex = settings.value("themeIndex", 0).toInt();
-    int languageIndex = settings.value("languageIndex", 0).toInt();
-
-    setQMLStyle(styleIndex);
-    setLanguage(languageIndex);
-
-    QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-    QQmlEngine::setObjectOwnership(m_steamIntegration, QQmlEngine::CppOwnership);
-    QQmlEngine::setObjectOwnership(m_gameLogic, QQmlEngine::CppOwnership);
-
-    engine->setInitialProperties({
-        {"mainWindow", QVariant::fromValue(this)},
-        {"steamIntegration", QVariant::fromValue(m_steamIntegration)},
-        {"gameLogic", QVariant::fromValue(m_gameLogic)},
-        {"gameTimer", QVariant::fromValue(m_gameTimer)}
-    });
-
-    engine->loadFromModule("Retr0Mine", "Main");
 }
 
 void MainWindow::setQMLStyle(int index)
@@ -153,30 +154,9 @@ void MainWindow::setQMLStyle(int index)
     emit fusionChanged();
 }
 
-void MainWindow::setThemeColorScheme(int colorSchemeIndex)
-{
-#ifdef _WIN32
-    switch(colorSchemeIndex) {
-        case(0):
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
-            break;
-        case(1):
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-            break;
-        case(2):
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
-            break;
-        default:
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
-            break;
-    }
-#endif
-}
-
 void MainWindow::setLanguage(int index)
 {
     QString languageCode;
-
     if (index == 0) {
         if (m_steamIntegration->m_initialized) {
             languageCode = getSteamLanguageMap().value(m_steamIntegration->getSteamUILanguage().toLower(), "en");
@@ -187,17 +167,22 @@ void MainWindow::setLanguage(int index)
     } else {
         languageCode = getLanguageIndexMap().value(index, "en");
     }
-
     loadLanguage(languageCode);
-    engine->retranslate();
-
+    if (qApp) {
+        qApp->installTranslator(translator);
+        if (MainWindowForeign::s_engine) {
+            static_cast<QQmlEngine*>(MainWindowForeign::s_engine)->retranslate();
+        }
+    }
     m_languageIndex = index;
     emit languageIndexChanged();
 }
 
 bool MainWindow::loadLanguage(QString languageCode)
 {
-    qGuiApp->removeTranslator(translator);
+    if (qApp) {
+        qApp->removeTranslator(translator);
+    }
 
     delete translator;
     translator = new QTranslator(this);
@@ -205,7 +190,9 @@ bool MainWindow::loadLanguage(QString languageCode)
     QString filePath = ":/translations/retr0mine_" + languageCode + ".qm";
 
     if (translator->load(filePath)) {
-        qGuiApp->installTranslator(translator);
+        if (qApp) {
+            qApp->installTranslator(translator);
+        }
         return true;
     }
 

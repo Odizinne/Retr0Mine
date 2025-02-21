@@ -3,19 +3,19 @@ import QtQuick.Controls
 import QtQuick.Controls.impl
 
 IconImage {
-    id: root
+    id: control
     property string tooltipText: ""
     property int tooltipDelay: 500
     property string iconColor: "#f6ae57"
     source: "qrc:/icons/info.png"
-    color: root.iconColor
+    color: iconColor
     sourceSize.height: 18
     sourceSize.width: 18
     mipmap: true
     ToolTip {
         visible: mouseArea.containsMouse
-        text: root.tooltipText
-        delay: root.tooltipDelay
+        text: control.tooltipText
+        delay: control.tooltipDelay
     }
     MouseArea {
         id: mouseArea

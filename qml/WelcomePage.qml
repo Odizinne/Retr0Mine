@@ -5,7 +5,7 @@ import QtQuick.Controls.impl
 import Retr0Mine
 
 Popup {
-    id: welcomePage
+    id: control
     required property var root
     height: 200
     width: 400
@@ -46,7 +46,7 @@ Popup {
             Button {
                 text: qsTr("Later")
                 onClicked: {
-                    welcomePage.visible = false
+                    control.visible = false
                     Retr0MineSettings.welcomeMessageShown = true
                 }
             }
@@ -55,11 +55,11 @@ Popup {
                 text: qsTr("Yes")
                 highlighted: true
                 onClicked: {
-                    welcomePage.visible = false
+                    control.visible = false
                     initialConfig.visible = false
                     controlsConfig.visible = true
-                    welcomePage.height = 350
-                    welcomePage.visible = true
+                    control.height = 350
+                    control.visible = true
                 }
             }
         }
@@ -146,12 +146,12 @@ Popup {
             Button {
                 text: "Next"
                 onClicked: {
-                    welcomePage.visible = false
+                    control.visible = false
                     controlsConfig.visible = false
                     visualsConfig.visible = true
-                    welcomePage.height = 300
-                    welcomePage.width = 350
-                    welcomePage.visible = true
+                    control.height = 300
+                    control.width = 350
+                    control.visible = true
                 }
             }
         }
@@ -176,7 +176,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -217,7 +217,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -241,7 +241,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -266,7 +266,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -291,7 +291,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -316,7 +316,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -356,7 +356,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                     border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
@@ -423,12 +423,12 @@ Popup {
             Layout.alignment: Qt.AlignRight
             text: qsTr("Next")
             onClicked: {
-                welcomePage.visible = false
+                control.visible = false
                 visualsConfig.visible = false
                 accessibilityConfig.visible = true
-                welcomePage.visible = true
-                welcomePage.height = 440
-                welcomePage.width = 400
+                control.visible = true
+                control.height = 440
+                control.width = 400
             }
         }
     }
@@ -462,7 +462,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -485,7 +485,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -508,7 +508,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -531,7 +531,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -567,7 +567,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -590,7 +590,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -613,7 +613,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -636,7 +636,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -658,12 +658,12 @@ Popup {
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     onClicked: {
-                        welcomePage.visible = false
+                        control.visible = false
                         Retr0MineSettings.colorBlindness = 0
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
-                        welcomePage.height = 150
-                        welcomePage.visible = true
+                        control.height = 150
+                        control.visible = true
                     }
                 }
             }
@@ -680,7 +680,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -703,7 +703,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -726,7 +726,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -749,7 +749,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -785,7 +785,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -808,7 +808,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -831,7 +831,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -854,7 +854,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -876,12 +876,12 @@ Popup {
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     onClicked: {
-                        welcomePage.visible = false
+                        control.visible = false
                         Retr0MineSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
-                        welcomePage.height = 150
-                        welcomePage.visible = true
+                        control.height = 150
+                        control.visible = true
                     }
                 }
             }
@@ -902,7 +902,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -925,7 +925,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -948,7 +948,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -971,7 +971,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1007,7 +1007,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1030,7 +1030,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1053,7 +1053,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1076,7 +1076,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1098,12 +1098,12 @@ Popup {
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
                     onClicked: {
-                        welcomePage.visible = false
+                        control.visible = false
                         Retr0MineSettings.colorBlindness = 2
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
-                        welcomePage.height = 150
-                        welcomePage.visible = true
+                        control.height = 150
+                        control.visible = true
                     }
                 }
             }
@@ -1120,7 +1120,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1143,7 +1143,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1166,7 +1166,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1189,7 +1189,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1225,7 +1225,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1248,7 +1248,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1271,7 +1271,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1294,7 +1294,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: welcomePage.root.mainWindow.isFluent ? 4 : (welcomePage.root.mainWindow.isUniversal ? 0 : 3)
+                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1316,12 +1316,12 @@ Popup {
                     Layout.columnSpan: 3
                     Layout.fillWidth: true
                     onClicked: {
-                        welcomePage.visible = false
+                        control.visible = false
                         Retr0MineSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
-                        welcomePage.height = 150
-                        welcomePage.visible = true
+                        control.height = 150
+                        control.visible = true
                     }
                 }
             }
@@ -1353,7 +1353,7 @@ Popup {
             Button {
                 text: qsTr("Close")
                 onClicked: {
-                    welcomePage.visible = false
+                    control.visible = false
                     Retr0MineSettings.welcomeMessageShown = true
                 }
             }

@@ -5,16 +5,15 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ApplicationWindow {
-    id: settingsPage
+    id: control
     title: qsTr("Settings")
-    required property var root
     required property var grid
-
+    required property var root
     readonly property int baseWidth: 600
     readonly property int baseHeight: 480
 
-    width: root.isGamescope ? 1280 : baseWidth
-    height: root.isGamescope ? 800 : baseHeight
+    width: MainWindow.gamescope ? 1280 : baseWidth
+    height: MainWindow.gamescope ? 800 : baseHeight
     minimumWidth: width
     minimumHeight: height
     maximumWidth: width
@@ -22,15 +21,15 @@ ApplicationWindow {
     visible: false
     flags: Qt.Dialog
     onVisibleChanged: {
-        if (settingsPage.visible) {
-            if (settingsPage.root.x + settingsPage.root.width + settingsPage.width + 10 <= Screen.width) {
-                settingsPage.x = settingsPage.root.x + settingsPage.root.width + 20
-            } else if (settingsPage.root.x - settingsPage.width - 10 >= 0) {
-                settingsPage.x = settingsPage.root.x - settingsPage.width - 20
+        if (control.visible) {
+            if (control.root.x + control.root.width + control.width + 10 <= Screen.width) {
+                control.x = control.root.x + control.root.width + 20
+            } else if (control.root.x - control.width - 10 >= 0) {
+                control.x = control.root.x - control.width - 20
             } else {
-                settingsPage.x = Screen.width - settingsPage.width - 20
+                control.x = Screen.width - control.width - 20
             }
-            settingsPage.y = settingsPage.root.y + (root.height - settingsPage.height) / 2
+            control.y = control.root.y + (root.height - control.height) / 2
         }
     }
 
@@ -42,9 +41,9 @@ ApplicationWindow {
 
     Shortcut {
         sequence: "Esc"
-        enabled: settingsPage.visible
+        enabled: control.visible
         onActivated: {
-            settingsPage.close()
+            control.close()
         }
     }
 
@@ -80,7 +79,7 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     onClicked: {
                         Retr0MineSettings.welcomeMessageShown = false
-                        settingsPage.root.mainWindow.restartRetr0Mine()
+                        MainWindow.restartRetr0Mine()
                     }
                 }
 
@@ -158,7 +157,7 @@ ApplicationWindow {
                         required property int index
                         icon.source: modelData.icon
                         icon.color: Colors.foregroundColor
-                        text: settingsPage.root.mainWindow.isFluent ? "  " + modelData.text : modelData.text
+                        text: MainWindow.isFluent ? "  " + modelData.text : modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {
                             if (sidebarList.currentIndex !== index) {
@@ -180,8 +179,8 @@ ApplicationWindow {
 
                 Button {
                     text: qsTr("Close")
-                    visible: settingsPage.root.isGamescope || false
-                    onClicked: settingsPage.close()
+                    visible: MainWindow.gamescope || false
+                    onClicked: control.close()
                     Layout.fillWidth: true
                     Layout.leftMargin: 15
                     Layout.rightMargin: 15
@@ -207,7 +206,7 @@ ApplicationWindow {
         ToolSeparator {
             Layout.fillHeight: true
             Layout.leftMargin: {
-                if (settingsPage.root.mainWindow.isUniversal) return -15
+                if (MainWindow.isUniversal) return -15
                 else return -10
             }
 
@@ -228,7 +227,7 @@ ApplicationWindow {
 
                     ColumnLayout {
                         width: parent.width
-                        spacing: settingsPage.root.mainWindow.isFluent ? 15 : 20
+                        spacing: MainWindow.isFluent ? 15 : 20
 
                         ButtonGroup {
                             id: difficultyGroup
@@ -236,7 +235,7 @@ ApplicationWindow {
                         }
 
                         Repeater {
-                            model: settingsPage.root.difficultySettings
+                            model: control.root.difficultySettings
                             RowLayout {
                                 id: difficultyRow
                                 Layout.fillWidth: true
@@ -269,11 +268,11 @@ ApplicationWindow {
                                     checked: Retr0MineSettings.difficulty === parent.index
                                     onClicked: {
                                         const idx = difficultyGroup.buttons.indexOf(this)
-                                        const difficultySet = settingsPage.root.difficultySettings[idx]
-                                        settingsPage.root.gridSizeX = difficultySet.x
-                                        settingsPage.root.gridSizeY = difficultySet.y
-                                        settingsPage.root.mineCount = difficultySet.mines
-                                        settingsPage.root.initGame()
+                                        const difficultySet = control.root.difficultySettings[idx]
+                                        control.root.gridSizeX = difficultySet.x
+                                        control.root.gridSizeY = difficultySet.y
+                                        control.root.mineCount = difficultySet.mines
+                                        control.root.initGame()
                                         Retr0MineSettings.difficulty = idx
                                     }
                                 }
@@ -341,10 +340,10 @@ ApplicationWindow {
                             text: qsTr("Apply")
                             Layout.alignment: Qt.AlignRight
                             onClicked: {
-                                settingsPage.root.gridSizeX = Retr0MineSettings.customWidth
-                                settingsPage.root.gridSizeY = Retr0MineSettings.customHeight
-                                settingsPage.root.mineCount = Retr0MineSettings.customMines
-                                settingsPage.root.initGame()
+                                control.root.gridSizeX = Retr0MineSettings.customWidth
+                                control.root.gridSizeY = Retr0MineSettings.customHeight
+                                control.root.mineCount = Retr0MineSettings.customMines
+                                control.root.initGame()
                             }
                         }
                     }
@@ -414,8 +413,8 @@ ApplicationWindow {
                                 onCheckedChanged: {
                                     Retr0MineSettings.enableQuestionMarks = checked
                                     if (!checked) {
-                                        for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
-                                            let cell = settingsPage.grid.itemAtIndex(i) as Cell
+                                        for (let i = 0; i < control.root.gridSizeX * control.root.gridSizeY; i++) {
+                                            let cell = control.grid.itemAtIndex(i) as Cell
                                             if (cell && cell.questioned) {
                                                 cell.questioned = false
                                             }
@@ -441,8 +440,8 @@ ApplicationWindow {
                                 onCheckedChanged: {
                                     Retr0MineSettings.enableSafeQuestionMarks = checked
                                     if (!checked) {
-                                        for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
-                                            let cell = settingsPage.grid.itemAtIndex(i) as Cell
+                                        for (let i = 0; i < control.root.gridSizeX * control.root.gridSizeY; i++) {
+                                            let cell = control.grid.itemAtIndex(i) as Cell
                                             if (cell && cell.safeQuestioned) {
                                                 cell.safeQuestioned = false
                                             }
@@ -499,8 +498,8 @@ ApplicationWindow {
                                 checked: Retr0MineSettings.animations
                                 onCheckedChanged: {
                                     Retr0MineSettings.animations = checked
-                                    for (let i = 0; i < settingsPage.root.gridSizeX * settingsPage.root.gridSizeY; i++) {
-                                        let cell = settingsPage.grid.itemAtIndex(i) as Cell
+                                    for (let i = 0; i < control.root.gridSizeX * control.root.gridSizeY; i++) {
+                                        let cell = control.grid.itemAtIndex(i) as Cell
                                         if (cell) {
                                             cell.opacity = 1
                                         }
@@ -550,19 +549,19 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
-                                enabled: !settingsPage.root.isGamescope
+                                enabled: !MainWindow.gamescope
                                 text: qsTr("Start in full screen")
                                 Layout.fillWidth: true
                                 MouseArea {
-                                    enabled: !settingsPage.root.isGamescope
+                                    enabled: !MainWindow.gamescope
                                     anchors.fill: parent
                                     onClicked: startFullScreenSwitch.checked = !startFullScreenSwitch.checked
                                 }
                             }
                             Switch {
                                 id: startFullScreenSwitch
-                                enabled: !settingsPage.root.isGamescope
-                                checked: Retr0MineSettings.startFullScreen || settingsPage.root.isGamescope
+                                enabled: !MainWindow.gamescope
+                                checked: Retr0MineSettings.startFullScreen || MainWindow.gamescope
                                 onCheckedChanged: {
                                     Retr0MineSettings.startFullScreen = checked
                                 }
@@ -588,7 +587,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            visible: settingsPage.root.isSteamEnabled
+                            visible: control.root.isSteamEnabled
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Grid reset animation")
@@ -605,17 +604,17 @@ ApplicationWindow {
                                 }
 
                                 Component.onCompleted: {
-                                    animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
-                                    animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
+                                    animationModel.setProperty(1, "enabled", control.root.anim1Unlocked)
+                                    animationModel.setProperty(2, "enabled", control.root.anim2Unlocked)
                                 }
 
                                 Connections {
-                                    target: settingsPage.root
+                                    target: control.root
                                     function onAnim1UnlockedChanged() {
-                                        animationModel.setProperty(1, "enabled", settingsPage.root.anim1Unlocked)
+                                        animationModel.setProperty(1, "enabled", control.root.anim1Unlocked)
                                     }
                                     function onAnim2UnlockedChanged() {
-                                        animationModel.setProperty(2, "enabled", settingsPage.root.anim2Unlocked)
+                                        animationModel.setProperty(2, "enabled", control.root.anim2Unlocked)
                                     }
                                 }
 
@@ -640,7 +639,7 @@ ApplicationWindow {
                         }
 
                         RowLayout {
-                            visible: settingsPage.root.isSteamEnabled
+                            visible: control.root.isSteamEnabled
                             spacing: 10
 
                             ButtonGroup {
@@ -659,7 +658,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     checkable: true
                                     icon.source: "qrc:/icons/flag.png"
-                                    checked: Retr0MineSettings.flagSkinIndex === 0 || !settingsPage.root.isSteamEnabled
+                                    checked: Retr0MineSettings.flagSkinIndex === 0 || !control.root.isSteamEnabled
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -674,10 +673,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: settingsPage.root.flag1Unlocked
+                                    enabled: control.root.flag1Unlocked
                                     checkable: true
-                                    checked: settingsPage.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 1
-                                    icon.source: settingsPage.root.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
+                                    checked: control.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 1
+                                    icon.source: control.root.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -694,10 +693,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: settingsPage.root.flag2Unlocked
+                                    enabled: control.root.flag2Unlocked
                                     checkable: true
-                                    checked: settingsPage.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 2
-                                    icon.source: settingsPage.root.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
+                                    checked: control.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 2
+                                    icon.source: control.root.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -714,10 +713,10 @@ ApplicationWindow {
                                 Button {
                                     Layout.preferredWidth: 45
                                     Layout.preferredHeight: 45
-                                    enabled: settingsPage.root.flag3Unlocked
+                                    enabled: control.root.flag3Unlocked
                                     checkable: true
-                                    checked: settingsPage.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 3
-                                    icon.source: settingsPage.root.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
+                                    checked: control.root.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 3
+                                    icon.source: control.root.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
@@ -924,11 +923,11 @@ ApplicationWindow {
 
                                 onActivated: {
                                     Retr0MineSettings.cellSize = currentIndex
-                                    if (!settingsPage.root.isMaximized && !settingsPage.root.isFullScreen) {
-                                        settingsPage.root.minimumWidth = settingsPage.root.getInitialWidth()
-                                        settingsPage.root.minimumHeight = settingsPage.root.getInitialHeight()
-                                        settingsPage.root.width = settingsPage.root.minimumWidth
-                                        settingsPage.root.height = settingsPage.root.minimumHeight
+                                    if (!control.root.isMaximized && !control.root.isFullScreen) {
+                                        control.root.minimumWidth = control.root.getInitialWidth()
+                                        control.root.minimumHeight = control.root.getInitialHeight()
+                                        control.root.width = control.root.minimumWidth
+                                        control.root.height = control.root.minimumHeight
                                     }
                                 }
                             }
@@ -984,7 +983,7 @@ ApplicationWindow {
                                 onActivated: {
                                     previousLanguageIndex = currentIndex
                                     Retr0MineSettings.languageIndex = currentIndex
-                                    settingsPage.root.mainWindow.setLanguage(currentIndex)
+                                    MainWindow.setLanguage(currentIndex)
                                     currentIndex = previousLanguageIndex
                                 }
                             }
@@ -1019,10 +1018,10 @@ ApplicationWindow {
                                 Layout.rightMargin: 5
                                 currentIndex: Retr0MineSettings.themeIndex
                                 onActivated: {
-                                    if (settingsPage.root.gameStarted && !settingsPage.root.gameOver) {
-                                        settingsPage.root.saveGame("internalGameState.json")
+                                    if (control.root.gameStarted && !control.root.gameOver) {
+                                        control.root.saveGame("internalGameState.json")
                                     }
-                                    settingsPage.root.mainWindow.restartRetr0Mine(currentIndex)
+                                    MainWindow.restartRetr0Mine(currentIndex)
                                 }
                             }
                         }
@@ -1043,7 +1042,7 @@ ApplicationWindow {
                                 currentIndex: Retr0MineSettings.colorSchemeIndex
                                 onActivated: {
                                     Retr0MineSettings.colorSchemeIndex = currentIndex
-                                    settingsPage.root.mainWindow.setThemeColorScheme(currentIndex)
+                                    MainWindow.setThemeColorScheme(currentIndex)
                                 }
                             }
                         }
