@@ -102,6 +102,8 @@ qt_add_translations(appRetr0Mine
     RESOURCE_PREFIX "/translations"
 )
 
+add_dependencies(appRetr0Mine update_translations)
+
 if(WIN32)
     target_compile_definitions(appRetr0Mine PRIVATE
         *CRT*SECURE_NO_WARNINGS
