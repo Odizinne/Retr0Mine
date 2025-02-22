@@ -199,12 +199,28 @@ bool MainWindow::loadLanguage(QString languageCode)
     return false;
 }
 
+void MainWindow::resetRetr0Mine()
+{
+    settings.setValue("welcomeMessageShown", false);
+
+    // Schedule the sync and restart for the next event loop iteration
+    QMetaObject::invokeMethod(this, [this]() {
+        settings.sync();
+        QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
+        QGuiApplication::quit();
+    }, Qt::QueuedConnection);
+}
+
 void MainWindow::restartRetr0Mine(int index)
 {
     settings.setValue("themeIndex", index);
 
-    QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
-    QGuiApplication::quit();
+    // Schedule the sync and restart for the next event loop iteration
+    QMetaObject::invokeMethod(this, [this]() {
+        settings.sync();
+        QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
+        QGuiApplication::quit();
+    }, Qt::QueuedConnection);
 }
 
 QStringList MainWindow::getSaveFiles() const

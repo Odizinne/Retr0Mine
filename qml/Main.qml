@@ -349,13 +349,6 @@ ApplicationWindow {
             grid.initGame()
         }
 
-        //root.width = getIdealWidth()
-        //root.minimumWidth = getIdealWidth()
-        //root.height = getIdealHeight()
-        //root.minimumHeight = getIdealHeight()
-
-        //root.visibility = ApplicationWindow.Windowed
-
         if (Retr0MineSettings.startFullScreen || MainWindow.gamescope) {
             root.visibility = ApplicationWindow.FullScreen
         } else {

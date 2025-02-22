@@ -81,8 +81,7 @@ ApplicationWindow {
                     Layout.preferredWidth: restoreDefaultsPopup.buttonWidth
                     Layout.fillWidth: true
                     onClicked: {
-                        Retr0MineSettings.welcomeMessageShown = false
-                        MainWindow.restartRetr0Mine()
+                        MainWindow.resetRetr0Mine()
                     }
                 }
 
