@@ -8,8 +8,8 @@ QtObject {
     property int flaggedCount: 0
     property int firstClickIndex: -1
     property bool gameStarted: false
-    property int gridSizeX: 8
-    property int gridSizeY: 8
+    property int gridSizeX: 9
+    property int gridSizeY: 9
     property int mineCount: 10
     property var mines: []
     property var numbers: []
@@ -50,12 +50,6 @@ QtObject {
         if (SteamIntegration.initialized && Retr0MineSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
-    signal gridSizeChanged()
-    signal cellSizeUpdated()
-
-    onGridSizeXChanged: gridSizeChanged()
-    onGridSizeYChanged: gridSizeChanged()
-    onCellSizeChanged: cellSizeUpdated()
 
     function getDifficultyLevel() {
         if (GameState.gridSizeX === 9 && GameState.gridSizeY === 9 && GameState.mineCount === 10) {

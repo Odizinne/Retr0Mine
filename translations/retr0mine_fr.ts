@@ -262,7 +262,7 @@
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="147"/>
-        <location filename="../qml/SettingsPage.qml" line="958"/>
+        <location filename="../qml/SettingsPage.qml" line="962"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
@@ -384,24 +384,24 @@ Désactivé: Génère des grilles plus prévisibles</translation>
         <translation type="vanished">Chiffres uniquement</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="999"/>
+        <location filename="../qml/SettingsPage.qml" line="1003"/>
         <source>Application will restart on change
 Current game will be saved and restored</source>
         <translation>L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="1021"/>
+        <location filename="../qml/SettingsPage.qml" line="1025"/>
         <source>Color scheme</source>
         <translation>Thème</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="1027"/>
+        <location filename="../qml/SettingsPage.qml" line="1031"/>
         <source>Dark</source>
         <translation>Sombre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="1027"/>
+        <location filename="../qml/SettingsPage.qml" line="1031"/>
         <source>Light</source>
         <translation>Clair</translation>
     </message>
@@ -421,7 +421,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="927"/>
+        <location filename="../qml/SettingsPage.qml" line="931"/>
         <source>High contrast flags</source>
         <translation>Drapeaux contrastés</translation>
     </message>
@@ -451,13 +451,13 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Très grand</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="994"/>
+        <location filename="../qml/SettingsPage.qml" line="998"/>
         <source>Style</source>
         <translation>Style</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="964"/>
-        <location filename="../qml/SettingsPage.qml" line="1027"/>
+        <location filename="../qml/SettingsPage.qml" line="968"/>
+        <location filename="../qml/SettingsPage.qml" line="1031"/>
         <source>System</source>
         <translation>Système</translation>
     </message>

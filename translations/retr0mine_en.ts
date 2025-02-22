@@ -227,7 +227,7 @@
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="147"/>
-        <location filename="../qml/SettingsPage.qml" line="958"/>
+        <location filename="../qml/SettingsPage.qml" line="962"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -327,23 +327,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="999"/>
+        <location filename="../qml/SettingsPage.qml" line="1003"/>
         <source>Application will restart on change
 Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="1021"/>
+        <location filename="../qml/SettingsPage.qml" line="1025"/>
         <source>Color scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="1027"/>
+        <location filename="../qml/SettingsPage.qml" line="1031"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="1027"/>
+        <location filename="../qml/SettingsPage.qml" line="1031"/>
         <source>Light</source>
         <translation type="unfinished"></translation>
     </message>
@@ -363,7 +363,7 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="927"/>
+        <location filename="../qml/SettingsPage.qml" line="931"/>
         <source>High contrast flags</source>
         <translation type="unfinished"></translation>
     </message>
@@ -393,13 +393,13 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="994"/>
+        <location filename="../qml/SettingsPage.qml" line="998"/>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="964"/>
-        <location filename="../qml/SettingsPage.qml" line="1027"/>
+        <location filename="../qml/SettingsPage.qml" line="968"/>
+        <location filename="../qml/SettingsPage.qml" line="1031"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>

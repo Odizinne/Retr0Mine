@@ -18,19 +18,32 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: GameState
+        function onGridSizeXChanged() {
+            if (root.visibility === ApplicationWindow.Windowed) {
+                root.minimumWidth = root.getInitialWidth()
+                root.width = root.minimumWidth
+            }
+        }
+
+        function onGridSizeYChanged() {
+            if (root.visibility === ApplicationWindow.Windowed) {
+                root.minimumHeight = root.getInitialHeight()
+                root.height = root.minimumHeight
+            }
+        }
+    }
+
     onVisibilityChanged: function(visibility) {
         if (visibility === Window.Windowed) {
-            // First update minimum constraints
             minimumWidth = getInitialWidth()
             minimumHeight = getInitialHeight()
-
-            // Then set the actual size
             width = minimumWidth
             height = minimumHeight
 
-            // Center window if it would be too large
             if (height >= Screen.desktopAvailableHeight * 0.9 ||
-                width >= Screen.desktopAvailableWidth * 0.9) {
+                    width >= Screen.desktopAvailableWidth * 0.9) {
                 x = Screen.width / 2 - width / 2
                 y = Screen.height / 2 - height / 2
             }
@@ -149,22 +162,22 @@ ApplicationWindow {
         id: numberFont
         source: switch (Retr0MineSettings.fontIndex) {
             case 0:
-                "qrc:/fonts/FiraSans-SemiBold.ttf"
-                break
+            "qrc:/fonts/FiraSans-SemiBold.ttf"
+            break
             case 1:
-                "qrc:/fonts/NotoSerif-Regular.ttf"
-                break
+            "qrc:/fonts/NotoSerif-Regular.ttf"
+            break
             case 2:
-                "qrc:/fonts/SpaceMono-Regular.ttf"
-                break
+            "qrc:/fonts/SpaceMono-Regular.ttf"
+            break
             case 3:
-                "qrc:/fonts/Orbitron-Regular.ttf"
-                break
+            "qrc:/fonts/Orbitron-Regular.ttf"
+            break
             case 4:
-                "qrc:/fonts/PixelifySans-Regular.ttf"
-                break
+            "qrc:/fonts/PixelifySans-Regular.ttf"
+            break
             default:
-                "qrc:/fonts/FiraSans-Bold.ttf"
+            "qrc:/fonts/FiraSans-Bold.ttf"
         }
     }
 
@@ -241,7 +254,7 @@ ApplicationWindow {
             visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
             active: !MainWindow.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
         ScrollBar {
@@ -254,7 +267,7 @@ ApplicationWindow {
             visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
             active: !MainWindow.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
         TempScrollBar {
@@ -267,7 +280,7 @@ ApplicationWindow {
             visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
             active: MainWindow.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
         TempScrollBar {
@@ -280,7 +293,7 @@ ApplicationWindow {
             visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
             active: MainWindow.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
-                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
         ScrollBar.vertical: MainWindow.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
@@ -350,18 +363,18 @@ ApplicationWindow {
 
     function getInitialWidth() {
         if (root.visibility === ApplicationWindow.Windowed) {
-        // Always calculate the proper width based on grid size
-        return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
-                Screen.desktopAvailableWidth * 0.9)
-            }
+            // Always calculate the proper width based on grid size
+            return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
+                            Screen.desktopAvailableWidth * 0.9)
+        }
     }
 
     function getInitialHeight() {
         if (root.visibility === ApplicationWindow.Windowed) {
-        // Always calculate the proper height based on grid size
-        return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
-                Screen.desktopAvailableHeight * 0.9)
-            }
+            // Always calculate the proper height based on grid size
+            return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
+                            Screen.desktopAvailableHeight * 0.9)
+        }
     }
 }
 
