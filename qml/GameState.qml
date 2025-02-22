@@ -14,6 +14,7 @@ QtObject {
     property var mines: []
     property var numbers: []
     property int cellSize: getCellSize()
+    property bool bypassAutoSave: false
 
     function getCellSize() {
         const size = GameSettings.cellSize

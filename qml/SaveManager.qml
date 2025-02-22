@@ -5,6 +5,7 @@ import net.odizinne.retr0mine 1.0
 Item {
     id: saveManager
     property var grid: null
+    property var manualSave: false
 
     function setGrid(gridReference) {
         grid = gridReference
@@ -165,6 +166,8 @@ Item {
             if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
         }
 
+        console.log("pass")
         GameCore.saveGameState(JSON.stringify(saveData), filename)
+        SaveManager.manualSave = false
     }
 }

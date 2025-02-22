@@ -82,6 +82,7 @@ ApplicationWindow {
                     Layout.preferredWidth: restoreDefaultsPopup.buttonWidth
                     Layout.fillWidth: true
                     onClicked: {
+                        GameState.bypassAutoSave = true
                         GameCore.resetRetr0Mine()
                     }
                 }
@@ -1013,6 +1014,7 @@ ApplicationWindow {
                                     if (GameState.gameStarted && !GameState.gameOver) {
                                         SaveManager.saveGame("internalGameState.json")
                                     }
+                                    GameState.bypassAutoSave = true
                                     GameCore.restartRetr0Mine(currentIndex)
                                 }
                             }

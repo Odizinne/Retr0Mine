@@ -17,7 +17,7 @@ ApplicationWindow {
             return
         }
 
-        if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver) {
+        if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver && !GameState.bypassAutoSave) {
             close.accepted = false
             if (!isSaving) {
                 isClosing = true
@@ -51,6 +51,7 @@ ApplicationWindow {
 
     Connections {
         target: GameCore
+        enabled: !SaveManager.manualSave
         function onSaveCompleted(success) {
             root.isSaving = false
             Qt.quit()
@@ -261,21 +262,16 @@ ApplicationWindow {
     function checkInitialGameState() {
         if (!GameState.gridFullyInitialized) return
 
-        if (!GameCore.showWelcome) {
-            let internalSaveData = GameCore.loadGameState("internalGameState.json")
-            if (internalSaveData) {
-                if (SaveManager.loadGame(internalSaveData)) {
-                    GameCore.deleteSaveFile("internalGameState.json")
-                    GameState.isManuallyLoaded = false
-                } else {
-                    console.error("Failed to load internal game state")
-                    grid.initGame()
-                }
+        let internalSaveData = GameCore.loadGameState("internalGameState.json")
+        if (internalSaveData) {
+            if (SaveManager.loadGame(internalSaveData)) {
+                GameCore.deleteSaveFile("internalGameState.json")
+                GameState.isManuallyLoaded = false
             } else {
+                console.error("Failed to load internal game state")
                 grid.initGame()
             }
         } else {
-            GameCore.deleteSaveFile("internalGameState.json")
             grid.initGame()
         }
 

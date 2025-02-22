@@ -36,7 +36,7 @@ Item {
         diagonalSum = row + col
 
         grid.cellsCreated++
-        if (grid.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
+        if (grid.cellsCreated === GameState.gridSizeX * GameState.gridSizeY && !GameState.gridFullyInitialized) {
             GameState.gridFullyInitialized = true
             cellItem.root.startInitialLoadTimer()
         }

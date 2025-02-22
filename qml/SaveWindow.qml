@@ -85,6 +85,7 @@ Popup {
                 enabled: false
                 onClicked: {
                     if (saveNameField.text.trim()) {
+                        SaveManager.manualSave = true
                         SaveManager.saveGame(saveNameField.text.trim() + ".json")
                         control.visible = false
                     }
