@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     gameCore->init();
 
-    engine.loadFromModule("Retr0Mine", "Main");
+    engine.loadFromModule("net.odizinne.retr0mine", "Main");
 
     return app.exec();
 }

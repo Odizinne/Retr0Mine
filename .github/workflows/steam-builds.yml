@@ -42,7 +42,6 @@ jobs:
         shell: pwsh
         run: |
           cd build/release
-          Rename-Item -Path "appRetr0Mine.exe" -NewName "Retr0Mine.exe"
           Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
 
       - name: Copy Steam API DLL
@@ -111,7 +110,7 @@ jobs:
           mkdir -p AppDir/usr/lib
           mkdir -p AppDir/usr/share/applications
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
-          mv build/appRetr0Mine AppDir/usr/bin/Retr0Mine
+          mv build/Retr0Mine AppDir/usr/bin/Retr0Mine
           
           #cp lib/steam/linux64/libsteam_api.so AppDir/usr/lib/
 
