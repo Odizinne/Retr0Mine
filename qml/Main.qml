@@ -6,35 +6,33 @@ import QtQuick.Window
 
 ApplicationWindow {
     id: root
-    visibility: ApplicationWindow.Hidden
+    visible: true
     width: getInitialWidth()
     height: getInitialHeight()
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
 
-    property bool isMaximized: visibility === 4
-    property bool isFullScreen: visibility === 5
-    property bool shouldUpdateSize: true
-
     Connections {
         target: GameState
 
-        function updateWindowSize() {
-            if (!root.isMaximized && !root.isFullScreen && root.shouldUpdateSize) {
-                root.minimumWidth = root.getInitialWidth()
+        function onGridSizeChanged() {
+            if (root.visibility === Window.Windowed) {
                 root.width = root.getInitialWidth()
-                root.minimumHeight = root.getInitialHeight()
                 root.height = root.getInitialHeight()
-                // 2px margin of error
-                if (root.width + 2 >= Screen.desktopAvailableWidth * 0.9 ||
-                    root.height + 2 >= Screen.desktopAvailableHeight * 0.9) {
+                root.minimumWidth = root.width
+                root.minimumHeight = root.height
+
+                // Auto-maximize if window would be too large
+                if (root.width >= Screen.desktopAvailableWidth * 0.9 ||
+                    root.height >= Screen.desktopAvailableHeight * 0.9) {
                     root.visibility = Window.Maximized
                 }
             }
         }
 
-        function onGridSizeChanged() { updateWindowSize() }
-        function onCellSizeChanged() { updateWindowSize() }
+        function onCellSizeChanged() {
+            onGridSizeChanged()
+        }
     }
 
     onClosing: {
@@ -44,18 +42,15 @@ ApplicationWindow {
     }
 
     onVisibilityChanged: function(visibility) {
-        const wasMaximized = isMaximized
-        const wasFullScreen = isFullScreen
-        isMaximized = visibility === Window.Maximized
-        isFullScreen = visibility === Window.FullScreen
-        shouldUpdateSize = !isMaximized && !isFullScreen
-        if (wasMaximized || wasFullScreen && visibility === Window.Windowed) {
-            shouldUpdateSize = true
-            minimumWidth = getInitialWidth()
-            minimumHeight = getInitialHeight()
-            width = minimumWidth
-            height = minimumHeight
-            if (height >= Screen.desktopAvailableHeight * 0.9 || width >= Screen.desktopAvailableWidth * 0.9) {
+        if (visibility === Window.Windowed) {
+            width = getInitialWidth()
+            height = getInitialHeight()
+            minimumWidth = width
+            minimumHeight = height
+
+            // Center window if it would be too large
+            if (height >= Screen.desktopAvailableHeight * 0.9 ||
+                width >= Screen.desktopAvailableWidth * 0.9) {
                 x = Screen.width / 2 - width / 2
                 y = Screen.height / 2 - height / 2
             }
@@ -364,7 +359,6 @@ ApplicationWindow {
         } else {
             grid.initGame()
         }
-        root.visibility = ApplicationWindow.Windowed
 
         if (Retr0MineSettings.startFullScreen || MainWindow.gamescope) {
             root.visibility = 5
@@ -372,11 +366,17 @@ ApplicationWindow {
     }
 
     function getInitialWidth() {
-        return shouldUpdateSize ? Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24, Screen.desktopAvailableWidth * 0.9) : root.width
+        return visibility === Window.Windowed ?
+            Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
+                    Screen.desktopAvailableWidth * 0.9) :
+            width
     }
 
     function getInitialHeight() {
-        return shouldUpdateSize ? Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74, Screen.desktopAvailableHeight * 0.9) : root.height
+        return visibility === Window.Windowed ?
+            Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
+                    Screen.desktopAvailableHeight * 0.9) :
+            height
     }
 }
 

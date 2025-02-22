@@ -16,7 +16,6 @@ ApplicationWindow {
     required property int rootX
     required property int rootY
 
-
     width: MainWindow.gamescope ? 1280 : baseWidth
     height: MainWindow.gamescope ? 800 : baseHeight
     minimumWidth: width
