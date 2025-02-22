@@ -1,6 +1,7 @@
 pragma Singleton
 import QtCore
 import QtQuick
+import net.odizinne.retr0mine 1.0
 
 Settings {
     property bool startFullScreen: GameCore.gamescope

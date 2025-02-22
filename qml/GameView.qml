@@ -1,4 +1,5 @@
 import QtQuick.Controls
+import net.odizinne.retr0mine 1.0
 
 ScrollView {
     id: control

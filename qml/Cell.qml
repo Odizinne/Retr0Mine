@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls.impl
 import QtQuick.Controls
+import net.odizinne.retr0mine 1.0
 
 Item {
     id: cellItem

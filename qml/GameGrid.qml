@@ -1,4 +1,5 @@
 import QtQuick
+import net.odizinne.retr0mine 1.0
 
 GridView {
     id: grid

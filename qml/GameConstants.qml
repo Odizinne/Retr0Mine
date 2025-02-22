@@ -1,5 +1,6 @@
 pragma Singleton
 import QtQuick
+import net.odizinne.retr0mine 1.0
 
 Item {
     SystemPalette {

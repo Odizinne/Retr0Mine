@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.impl
 import QtQuick.Layouts
+import net.odizinne.retr0mine 1.0
 
 Popup {
     id: control
