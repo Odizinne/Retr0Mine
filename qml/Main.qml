@@ -96,7 +96,7 @@ ApplicationWindow {
             }
         }
 
-        if (typeof Universal !== undefined) {
+        if (typeof Universal !== "undefined") {
             Universal.theme = GameCore.gamescope ? Universal.Dark : Universal.System
             Universal.accent = GameConstants.accentColor
         }
