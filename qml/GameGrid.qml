@@ -190,7 +190,7 @@ GridView {
             for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                 let cell = grid.itemAtIndex(i) as Cell
                 if (cell) {
-                    cell.startFadeIn()
+                    cell.startGridResetAnimation()
                 }
             }
         }

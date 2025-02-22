@@ -2,6 +2,11 @@ pragma Singleton
 import QtQuick
 
 Item {
+    SystemPalette {
+        id: sysPalette
+        colorGroup: SystemPalette.Active
+    }
+
     function getForegroundColor() {
         if (MainWindow.gamescope && (Retr0MineSettings.themeIndex === 0 || Retr0MineSettings.themeIndex === 1)) {
             return "white"
@@ -22,6 +27,7 @@ Item {
         }
     }
 
+    readonly property color accentColor: sysPalette.accent
     readonly property color foregroundColor: getForegroundColor()
     readonly property color frameColor: getFrameColor()
     readonly property var numberPalettes: ({
@@ -53,4 +59,6 @@ Item {
         const palette = numberPalettes[Retr0MineSettings.colorBlindness] || numberPalettes[0]
         return palette[number] || "black"
     }
+
+
 }

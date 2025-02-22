@@ -13,12 +13,17 @@ QtObject {
     property int mineCount: 10
     property var mines: []
     property var numbers: []
-    property int cellSize: {
-        switch (Retr0MineSettings.cellSize) {
-            case 0: return 35;
-            case 1: return MainWindow.gamescope ? 43 : 45;
-            case 2: return 55;
-            default: return MainWindow.gamescope ? 43 : 45;
+    property int cellSize: getCellSize()
+
+    function getCellSize() {
+        const size = Retr0MineSettings.cellSize
+        const isGamescope = MainWindow.gamescope
+
+        switch (size) {
+            case 0: return 35
+            case 1: return isGamescope ? 43 : 45
+            case 2: return 55
+            default: return isGamescope ? 43 : 45
         }
     }
     property int cellSpacing: 2
@@ -46,9 +51,11 @@ QtObject {
         else return "qrc:/icons/flag.png"
     }
     signal gridSizeChanged()
+    signal cellSizeUpdated()
 
     onGridSizeXChanged: gridSizeChanged()
     onGridSizeYChanged: gridSizeChanged()
+    onCellSizeChanged: cellSizeUpdated()
 
     function getDifficultyLevel() {
         if (GameState.gridSizeX === 9 && GameState.gridSizeY === 9 && GameState.mineCount === 10) {

@@ -9,42 +9,9 @@ Item {
         grid = gridReference
     }
 
-    function saveGame(filename) {
-        let saveData = {
-            version: "1.0",
-            timestamp: new Date().toISOString(),
-            gameState: {
-                gridSizeX: GameState.gridSizeX,
-                gridSizeY: GameState.gridSizeY,
-                mineCount: GameState.mineCount,
-                mines: GameState.mines,
-                numbers: GameState.numbers,
-                revealedCells: [],
-                flaggedCells: [],
-                questionedCells: [],
-                safeQuestionedCells: [],
-                centiseconds: GameTimer.centiseconds,
-                gameOver: GameState.gameOver,
-                gameStarted: GameState.gameStarted,
-                firstClickIndex: GameState.firstClickIndex,
-                currentHintCount: GameState.currentHintCount,
-            }
-        }
-
-        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            let cell = grid.itemAtIndex(i) as Cell
-            if (cell.revealed) saveData.gameState.revealedCells.push(i)
-            if (cell.flagged) saveData.gameState.flaggedCells.push(i)
-            if (cell.questioned) saveData.gameState.questionedCells.push(i)
-            if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
-        }
-
-        MainWindow.saveGameState(JSON.stringify(saveData), filename)
-    }
-
     Timer {
         id: loadingTimer
-        interval: 100
+        interval: 1
         repeat: false
         onTriggered: saveManager.finishLoading()
         property var savedData
@@ -58,25 +25,30 @@ Item {
                 console.error("Incompatible save version")
                 return false
             }
+
             GameTimer.stop()
-            // Get the saved time first
             const savedCentiseconds = data.gameState.centiseconds
-            // Rest of your loading logic
+
+            // Set up initial game state
             GameState.gridSizeX = data.gameState.gridSizeX
             GameState.gridSizeY = data.gameState.gridSizeY
             GameState.mineCount = data.gameState.mineCount
             GameState.mines = data.gameState.mines
-            GameState.numbers = data.gameState.numbers
 
+            // Initialize game logic first
             if (!MinesweeperLogic.initializeFromSave(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount, GameState.mines)) {
                 console.error("Failed to initialize game logic from save")
                 return false
             }
 
-            // Store the data for use after the timer
+            // Set numbers after initialization
+            GameState.numbers = data.gameState.numbers
+
+            // Store data for after grid initialization
             loadingTimer.savedData = data
             loadingTimer.savedCentiseconds = savedCentiseconds
             loadingTimer.start()
+
             return true
 
         } catch (e) {
@@ -88,6 +60,12 @@ Item {
     function finishLoading() {
         const data = loadingTimer.savedData
         const savedCentiseconds = loadingTimer.savedCentiseconds
+
+        // Double check numbers are still set correctly
+        if (!GameState.numbers || GameState.numbers !== data.gameState.numbers) {
+            console.log("Restoring numbers in finishLoading")
+            GameState.numbers = data.gameState.numbers
+        }
 
         let foundDifficulty = GameState.difficultySettings.findIndex(setting =>
             setting.x === GameState.gridSizeX &&
@@ -103,12 +81,14 @@ Item {
             Retr0MineSettings.customHeight = GameState.gridSizeY
             Retr0MineSettings.customMines = GameState.mineCount
         }
+
         GameTimer.resumeFrom(savedCentiseconds)
         GameState.gameOver = data.gameState.gameOver
         GameState.gameStarted = data.gameState.gameStarted
         GameState.firstClickIndex = data.gameState.firstClickIndex
         GameState.currentHintCount = data.gameState.currentHintCount || 0
 
+        // Reset all cells first
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             let cell = grid.itemAtIndex(i)
             if (cell) {
@@ -119,6 +99,7 @@ Item {
             }
         }
 
+        // Apply saved cell states
         data.gameState.revealedCells.forEach(index => {
             let cell = grid.itemAtIndex(index)
             if (cell) cell.revealed = true
@@ -151,5 +132,38 @@ Item {
         }
 
         GameState.isManuallyLoaded = true
+    }
+
+    function saveGame(filename) {
+        let saveData = {
+            version: "1.0",
+            timestamp: new Date().toISOString(),
+            gameState: {
+                gridSizeX: GameState.gridSizeX,
+                gridSizeY: GameState.gridSizeY,
+                mineCount: GameState.mineCount,
+                mines: GameState.mines,
+                numbers: GameState.numbers,
+                revealedCells: [],
+                flaggedCells: [],
+                questionedCells: [],
+                safeQuestionedCells: [],
+                centiseconds: GameTimer.centiseconds,
+                gameOver: GameState.gameOver,
+                gameStarted: GameState.gameStarted,
+                firstClickIndex: GameState.firstClickIndex,
+                currentHintCount: GameState.currentHintCount,
+            }
+        }
+
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+            let cell = grid.itemAtIndex(i) as Cell
+            if (cell.revealed) saveData.gameState.revealedCells.push(i)
+            if (cell.flagged) saveData.gameState.flaggedCells.push(i)
+            if (cell.questioned) saveData.gameState.questionedCells.push(i)
+            if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
+        }
+
+        MainWindow.saveGameState(JSON.stringify(saveData), filename)
     }
 }

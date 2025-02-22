@@ -18,14 +18,13 @@ ApplicationWindow {
 
     Connections {
         target: GameState
-        function onGridSizeChanged() {
+
+        function updateWindowSize() {
             if (!root.isMaximized && !root.isFullScreen && root.shouldUpdateSize) {
                 root.minimumWidth = root.getInitialWidth()
                 root.width = root.getInitialWidth()
-
                 root.minimumHeight = root.getInitialHeight()
                 root.height = root.getInitialHeight()
-
                 // 2px margin of error
                 if (root.width + 2 >= Screen.desktopAvailableWidth * 0.9 ||
                     root.height + 2 >= Screen.desktopAvailableHeight * 0.9) {
@@ -33,6 +32,9 @@ ApplicationWindow {
                 }
             }
         }
+
+        function onGridSizeChanged() { updateWindowSize() }
+        function onCellSizeChanged() { updateWindowSize() }
     }
 
     onClosing: {
@@ -85,13 +87,8 @@ ApplicationWindow {
 
         if (typeof Universal !== undefined) {
             Universal.theme = MainWindow.gamescope ? Universal.Dark : Universal.System
-            Universal.accent = sysPalette.accent
+            Universal.accent = Colors.accentColor
         }
-    }
-
-    SystemPalette {
-        id: sysPalette
-        colorGroup: SystemPalette.Active
     }
 
     BusyIndicator {

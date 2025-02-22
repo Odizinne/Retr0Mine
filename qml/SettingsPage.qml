@@ -16,6 +16,7 @@ ApplicationWindow {
     required property int rootX
     required property int rootY
 
+
     width: MainWindow.gamescope ? 1280 : baseWidth
     height: MainWindow.gamescope ? 800 : baseHeight
     minimumWidth: width
@@ -276,7 +277,7 @@ ApplicationWindow {
                                         GameState.gridSizeX = difficultySet.x
                                         GameState.gridSizeY = difficultySet.y
                                         GameState.mineCount = difficultySet.mines
-                                        control.root.initGame()
+                                        control.grid.initGame()
                                         Retr0MineSettings.difficulty = idx
                                     }
                                 }
@@ -347,7 +348,7 @@ ApplicationWindow {
                                 GameState.gridSizeX = Retr0MineSettings.customWidth
                                 GameState.gridSizeY = Retr0MineSettings.customHeight
                                 GameState.mineCount = Retr0MineSettings.customMines
-                                control.root.initGame()
+                                control.grid.initGame()
                             }
                         }
                     }
@@ -852,11 +853,6 @@ ApplicationWindow {
                                 required property var model
                                 width: ListView.view.width - 20
 
-                                SystemPalette {
-                                    id: sysPalette
-                                    colorGroup: SystemPalette.Active
-                                }
-
                                 RowLayout {
                                     anchors.fill: parent
                                     Label {
@@ -864,7 +860,7 @@ ApplicationWindow {
                                         Layout.fillWidth: true
                                     }
                                     Label {
-                                        color: sysPalette.accent
+                                        color: Colors.accentColor
                                         text: shortcutLine.model.shortcut
                                         font.bold: true
                                     }
@@ -1023,7 +1019,7 @@ ApplicationWindow {
                                 currentIndex: Retr0MineSettings.themeIndex
                                 onActivated: {
                                     if (GameState.gameStarted && !GameState.gameOver) {
-                                        control.root.saveGame("internalGameState.json")
+                                        SaveManager.saveGame("internalGameState.json")
                                     }
                                     MainWindow.restartRetr0Mine(currentIndex)
                                 }

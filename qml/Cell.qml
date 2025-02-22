@@ -20,11 +20,6 @@ Item {
     property int col
     property int diagonalSum
 
-    SystemPalette {
-        id: sysPalette
-        colorGroup: SystemPalette.Active
-    }
-
     function highlightHint() {
         hintAnimation.start();
     }
@@ -41,7 +36,7 @@ Item {
         }
 
         if (Retr0MineSettings.animations && !grid.initialAnimationPlayed && !GameState.blockAnim) {
-            startFadeIn()
+            startGridResetAnimation()
         }
     }
 
@@ -138,7 +133,7 @@ Item {
         }
         color: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
-                return sysPalette.accent
+                return Colors.accentColor
             return "transparent"
         }
 
@@ -243,7 +238,7 @@ Item {
             source: GameState.flagPath
             color: {
                 if (Retr0MineSettings.contrastFlag) return Colors.foregroundColor
-                else return sysPalette.accent
+                else return Colors.accentColor
             }
             sourceSize.width: cellItem.width / 1.8
             sourceSize.height: cellItem.height / 1.8
@@ -333,16 +328,9 @@ Item {
         )
     }
 
-    function startFadeIn() {
+    function startGridResetAnimation() {
         if (!Retr0MineSettings.animations) {
             opacity = 1
-            return
-        }
-
-        if (!SteamIntegration.initialized) {
-            grid.initialAnimationPlayed = false
-            opacity = 0
-            fadeTimer.restart()
             return
         }
 
