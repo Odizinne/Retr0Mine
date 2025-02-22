@@ -13,11 +13,6 @@ Popup {
     modal: true
     visible: true
 
-    SystemPalette {
-        id: sysPalette
-        colorGroup: SystemPalette.Active
-    }
-
     ColumnLayout {
         opacity: 1
         id: initialConfig
@@ -202,7 +197,7 @@ Popup {
                     source: "qrc:/icons/flag.png"
                     color: {
                         if (  GameSettings.contrastFlag) return  Colors.foregroundColor
-                        else return sysPalette.accent
+                        else return Colors.accentColor
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8
@@ -341,7 +336,7 @@ Popup {
                     source: "qrc:/icons/flag.png"
                     color: {
                         if (  GameSettings.contrastFlag) return  Colors.foregroundColor
-                        else return sysPalette.accent
+                        else return Colors.accentColor
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8
