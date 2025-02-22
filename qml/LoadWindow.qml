@@ -7,7 +7,6 @@ import QtQuick.Controls.impl
 
 Popup {
     id: loadWindow
-    required property var root
     required property var errorWindow
 
     width: 300
@@ -52,7 +51,7 @@ Popup {
 
                 let saveData = MainWindow.loadGameState(saveFileName)
                 if (saveData) {
-                    if (!loadWindow.root.loadGame(saveData)) {
+                    if (!SaveManager.loadGame(saveData)) {
                         loadWindow.errorWindow.visible = true
                     }
                     loadWindow.visible = false
@@ -104,7 +103,7 @@ Popup {
                         saveFilesList.currentIndex = index
                         let saveData = MainWindow.loadGameState(name)
                         if (saveData) {
-                            if (!loadWindow.root.loadGame(saveData)) {
+                            if (!SaveManager.loadGame(saveData)) {
                                 loadWindow.errorWindow.visible = true
                             }
                             loadWindow.visible = false

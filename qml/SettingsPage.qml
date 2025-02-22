@@ -11,6 +11,10 @@ ApplicationWindow {
     required property var root
     readonly property int baseWidth: 600
     readonly property int baseHeight: 480
+    required property int rootWidth
+    required property int rootHeight
+    required property int rootX
+    required property int rootY
 
     width: MainWindow.gamescope ? 1280 : baseWidth
     height: MainWindow.gamescope ? 800 : baseHeight
@@ -22,14 +26,14 @@ ApplicationWindow {
     flags: Qt.Dialog
     onVisibleChanged: {
         if (control.visible) {
-            if (control.root.x + control.root.width + control.width + 10 <= Screen.width) {
-                control.x = control.root.x + control.root.width + 20
-            } else if (control.root.x - control.width - 10 >= 0) {
-                control.x = control.root.x - control.width - 20
+            if (control.rootX + control.rootWidth + control.width + 10 <= Screen.width) {
+                control.x = control.rootX + control.rootWidth + 20
+            } else if (control.rootX - control.width - 10 >= 0) {
+                control.x = control.rootX - control.width - 20
             } else {
                 control.x = Screen.width - control.width - 20
             }
-            control.y = control.root.y + (root.height - control.height) / 2
+            control.y = control.rootY + (control.rootHeight - control.height) / 2
         }
     }
 
@@ -926,7 +930,7 @@ ApplicationWindow {
                                     if (!control.root.isMaximized && !control.root.isFullScreen) {
                                         control.root.minimumWidth = control.root.getInitialWidth()
                                         control.root.minimumHeight = control.root.getInitialHeight()
-                                        control.root.width = control.root.minimumWidth
+                                        rootWidth = control.root.minimumWidth
                                         control.root.height = control.root.minimumHeight
                                     }
                                 }

@@ -4,7 +4,6 @@ import QtQuick.Layouts
 
 Popup {
     id: saveWindow
-    required property var root
     width: 300
     height: 140
     modal: true
@@ -85,7 +84,7 @@ Popup {
                 enabled: false
                 onClicked: {
                     if (saveNameField.text.trim()) {
-                        saveWindow.root.saveGame(saveNameField.text.trim() + ".json")
+                        SaveManager.saveGame(saveNameField.text.trim() + ".json")
                         saveWindow.visible = false
                     }
                 }

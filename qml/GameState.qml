@@ -49,4 +49,17 @@ QtObject {
 
     onGridSizeXChanged: gridSizeChanged()
     onGridSizeYChanged: gridSizeChanged()
+
+    function getDifficultyLevel() {
+        if (GameState.gridSizeX === 9 && GameState.gridSizeY === 9 && GameState.mineCount === 10) {
+            return 'easy';
+        } else if (GameState.gridSizeX === 16 && GameState.gridSizeY === 16 && GameState.mineCount === 40) {
+            return 'medium';
+        } else if (GameState.gridSizeX === 30 && GameState.gridSizeY === 16 && GameState.mineCount === 99) {
+            return 'hard';
+        } else if (GameState.gridSizeX === 50 && GameState.gridSizeY === 32 && GameState.mineCount === 320) {
+            return 'retr0';
+        }
+        return null;
+    }
 }

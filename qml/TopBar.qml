@@ -5,6 +5,7 @@ import QtQuick.Layouts
 RowLayout {
     id: control
     required property var root
+    required property var grid
     required property var saveWindow
     required property var loadWindow
     required property var settingsWindow
@@ -38,7 +39,7 @@ RowLayout {
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                 MenuItem {
                     text: qsTr("New game")
-                    onTriggered: control.root.initGame()
+                    onTriggered: control.grid.initGame()
                 }
 
                 MenuItem {
@@ -56,7 +57,7 @@ RowLayout {
                 MenuItem {
                     text: qsTr("Hint")
                     enabled: GameState.gameStarted && !GameState.gameOver
-                    onTriggered: control.root.requestHint()
+                    onTriggered: control.grid.requestHint()
                 }
 
                 MenuSeparator { }
@@ -118,7 +119,7 @@ RowLayout {
             font.pixelSize: 18
             font.bold: true
             onClicked: {
-                control.root.requestHint()
+                control.grid.requestHint()
             }
         }
     }

@@ -5,7 +5,6 @@ import QtQuick.Controls
 Item {
     id: cellItem
     required property var root
-    required property var audioEngine
     required property int index
     required property var grid
     required property string numberFont
@@ -151,7 +150,7 @@ Item {
         opacity: {
             if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed) return 1
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index)) return 1
-            return cellItem.root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
+            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
         }
     }
 
@@ -197,7 +196,7 @@ Item {
             scale: cellItem.questioned ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -205,7 +204,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -223,7 +222,7 @@ Item {
             scale: cellItem.safeQuestioned ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -231,7 +230,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -252,7 +251,7 @@ Item {
             scale: cellItem.flagged ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -260,7 +259,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: Retr0MineSettings.animations && !cellItem.root.noAnimReset
+                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -283,21 +282,21 @@ Item {
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: (mouse) => {
                            if (!GameState.gameStarted) {
-                               cellItem.root.reveal(cellItem.index);
+                               cellItem.grid.reveal(cellItem.index);
                            } else if (cellItem.revealed) {
-                               cellItem.root.revealConnectedCells(cellItem.index);
+                               cellItem.grid.revealConnectedCells(cellItem.index);
                            } else {
                                if (Retr0MineSettings.invertLRClick) {
                                    if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
-                                       cellItem.root.reveal(cellItem.index);
+                                       cellItem.grid.reveal(cellItem.index);
                                    } else if (mouse.button === Qt.LeftButton) {
-                                       cellItem.root.toggleFlag(cellItem.index);
+                                       cellItem.grid.toggleFlag(cellItem.index);
                                    }
                                } else {
                                    if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
-                                       cellItem.root.reveal(cellItem.index);
+                                       cellItem.grid.reveal(cellItem.index);
                                    } else if (mouse.button === Qt.RightButton) {
-                                       cellItem.root.toggleFlag(cellItem.index);
+                                       cellItem.grid.toggleFlag(cellItem.index);
                                    }
                                }
                            }
@@ -318,7 +317,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
         opacity: {
             if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed || GameState.numbers[cellItem.index] === 0) return 1
-            return cellItem.root.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
+            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
         }
 
         Behavior on opacity {

@@ -36,7 +36,6 @@ set(HEADERS
 )
 
 set(QML_FILES
-    qml/AudioEffectsEngine.qml
     qml/Cell.qml
     qml/SettingsPage.qml
     qml/GameOverPopup.qml
@@ -50,12 +49,15 @@ set(QML_FILES
     qml/WelcomePage.qml
     qml/Main.qml
     qml/InfoIcon.qml
+    qml/GameGrid.qml
+    qml/AudioEffectsEngine.qml
 )
 
 set(QML_SINGLETONS
     qml/Retr0MineSettings.qml
     qml/Colors.qml
     qml/GameState.qml
+    qml/SaveManager.qml
 )
 
 set_source_files_properties(${QML_SINGLETONS}

@@ -6,6 +6,7 @@ Popup {
     anchors.centerIn: parent
     id: gameOverWindow
     required property var root
+    required property var grid
     required property var numberFont
     visible: false
     modal: true
@@ -23,7 +24,7 @@ Popup {
         enabled: gameOverWindow.visible
         onActivated: {
             gameOverWindow.visible = false
-            gameOverWindow.root.initGame()
+            gameOverWindow.grid.initGame()
         }
     }
 
@@ -94,7 +95,7 @@ Popup {
             onClicked: {
                 gameOverWindow.visible = false
                 gameOverWindow.notificationVisible = false
-                gameOverWindow.root.initGame()
+                gameOverWindow.grid.initGame()
             }
         }
 
