@@ -6,11 +6,8 @@ import QtQuick.Window
 
 ApplicationWindow {
     id: root
-    visible: true
-    width: getInitialWidth()
-    height: getInitialHeight()
-    minimumWidth: getInitialWidth()
-    minimumHeight: getInitialHeight()
+    //visible: true
+    visibility: ApplicationWindow.Hidden
 
     onClosing: {
         if (Retr0MineSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver) {
@@ -22,23 +19,23 @@ ApplicationWindow {
         target: GameState
         function onGridSizeXChanged() {
             if (root.visibility === ApplicationWindow.Windowed) {
-                root.minimumWidth = root.getInitialWidth()
+                root.minimumWidth = root.getIdealWidth()
                 root.width = root.minimumWidth
             }
         }
 
         function onGridSizeYChanged() {
             if (root.visibility === ApplicationWindow.Windowed) {
-                root.minimumHeight = root.getInitialHeight()
+                root.minimumHeight = root.getIdealHeight()
                 root.height = root.minimumHeight
             }
         }
     }
 
     onVisibilityChanged: function(visibility) {
-        if (visibility === Window.Windowed) {
-            minimumWidth = getInitialWidth()
-            minimumHeight = getInitialHeight()
+        if (visibility === ApplicationWindow.Windowed) {
+            minimumWidth = getIdealWidth()
+            minimumHeight = getIdealHeight()
             width = minimumWidth
             height = minimumHeight
 
@@ -124,10 +121,10 @@ ApplicationWindow {
         sequence: "F11"
         autoRepeat: false
         onActivated: {
-            if (root.visibility === 5) {
+            if (root.visibility === ApplicationWindow.FullScreen) {
                 root.visibility = ApplicationWindow.Windowed;
             } else {
-                root.visibility = 5;
+                root.visibility = ApplicationWindow.FullScreen;
             }
         }
     }
@@ -352,16 +349,27 @@ ApplicationWindow {
             grid.initGame()
         }
 
-        root.width = getInitialWidth()
-        root.minimumWidth = getInitialWidth()
-        root.height = getInitialHeight()
-        root.minimumHeight = getInitialHeight()
+        //root.width = getIdealWidth()
+        //root.minimumWidth = getIdealWidth()
+        //root.height = getIdealHeight()
+        //root.minimumHeight = getIdealHeight()
+
+        //root.visibility = ApplicationWindow.Windowed
+
         if (Retr0MineSettings.startFullScreen || MainWindow.gamescope) {
-            root.visibility = 5
+            root.visibility = ApplicationWindow.FullScreen
+        } else {
+            root.visibility = ApplicationWindow.Windowed
         }
+
+        root.width = getIdealWidth()
+        root.minimumWidth = getIdealWidth()
+        root.height = getIdealHeight()
+        root.minimumHeight = getIdealHeight()
+
     }
 
-    function getInitialWidth() {
+    function getIdealWidth() {
         if (root.visibility === ApplicationWindow.Windowed) {
             // Always calculate the proper width based on grid size
             return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
@@ -369,7 +377,7 @@ ApplicationWindow {
         }
     }
 
-    function getInitialHeight() {
+    function getIdealHeight() {
         if (root.visibility === ApplicationWindow.Windowed) {
             // Always calculate the proper height based on grid size
             return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
