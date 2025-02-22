@@ -280,27 +280,29 @@ Item {
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            onClicked: (mouse) => {
-                           if (!GameState.gameStarted) {
-                               cellItem.grid.reveal(cellItem.index);
-                           } else if (cellItem.revealed) {
-                               cellItem.grid.revealConnectedCells(cellItem.index);
-                           } else {
-                               if (GameSettings.invertLRClick) {
-                                   if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
-                                       cellItem.grid.reveal(cellItem.index);
-                                   } else if (mouse.button === Qt.LeftButton) {
-                                       cellItem.grid.toggleFlag(cellItem.index);
-                                   }
-                               } else {
-                                   if (mouse.button === Qt.LeftButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
-                                       cellItem.grid.reveal(cellItem.index);
-                                   } else if (mouse.button === Qt.RightButton) {
-                                       cellItem.grid.toggleFlag(cellItem.index);
-                                   }
-                               }
-                           }
-                       }
+
+            function handleCellClick(mouse) {
+                if (!GameState.gameStarted) {
+                    cellItem.grid.reveal(cellItem.index);
+                    return;
+                }
+
+                if (cellItem.revealed) {
+                    cellItem.grid.revealConnectedCells(cellItem.index);
+                    return;
+                }
+
+                const canReveal = !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned;
+                const isRevealClick = GameSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
+
+                if (isRevealClick && canReveal) {
+                    cellItem.grid.reveal(cellItem.index);
+                } else if (!isRevealClick) {
+                    cellItem.grid.toggleFlag(cellItem.index);
+                }
+            }
+
+            onClicked: (mouse) => handleCellClick(mouse)
         }
     }
 
