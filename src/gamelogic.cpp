@@ -1,14 +1,14 @@
-#include "minesweeperlogic.h"
+#include "gamelogic.h"
 #include <QDebug>
 #include <QQueue>
 #include <QRandomGenerator>
 
-MinesweeperLogic::MinesweeperLogic(QObject *parent)
+GameLogic::GameLogic(QObject *parent)
     : QObject(parent)
     , m_rng(std::random_device{}())
 {}
 
-bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
+bool GameLogic::initializeGame(int width, int height, int mineCount)
 {
     if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
         return false;
@@ -23,7 +23,7 @@ bool MinesweeperLogic::initializeGame(int width, int height, int mineCount)
     return true;
 }
 
-bool MinesweeperLogic::initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines)
+bool GameLogic::initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines)
 {
     if (width <= 0 || height <= 0 || mineCount <= 0 || mineCount >= width * height) {
         return false;
@@ -41,7 +41,7 @@ bool MinesweeperLogic::initializeFromSave(int width, int height, int mineCount, 
     return true;
 }
 
-void MinesweeperLogic::calculateNumbers()
+void GameLogic::calculateNumbers()
 {
     m_numbers.fill(0, m_width * m_height);
 
@@ -58,7 +58,7 @@ void MinesweeperLogic::calculateNumbers()
     }
 }
 
-int MinesweeperLogic::findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells)
+int GameLogic::findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells)
 {
     QSet<int> revealed;
     QSet<int> flagged;
@@ -184,7 +184,7 @@ int MinesweeperLogic::findMineHint(const QVector<int> &revealedCells, const QVec
 
 
 
-QSet<int> MinesweeperLogic::getNeighbors(int pos) const
+QSet<int> GameLogic::getNeighbors(int pos) const
 {
     QSet<int> neighbors;
     int row = pos / m_width;
@@ -207,7 +207,7 @@ QSet<int> MinesweeperLogic::getNeighbors(int pos) const
     return neighbors;
 }
 
-int MinesweeperLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells)
+int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells)
 {
     struct CellConstraint
     {
@@ -531,7 +531,7 @@ int MinesweeperLogic::solveForHint(const QVector<int> &revealedCells, const QVec
     return -1;
 }
 
-bool MinesweeperLogic::placeLogicalMines(int firstClickX, int firstClickY) {
+bool GameLogic::placeLogicalMines(int firstClickX, int firstClickY) {
     int firstClickIndex = firstClickY * m_width + firstClickX;
 
     struct CellState {

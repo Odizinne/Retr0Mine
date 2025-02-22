@@ -3,7 +3,7 @@ import QtMultimedia
 
 Item {
     id: control
-    property int packIndex: Retr0MineSettings.soundPackIndex
+    property int packIndex: GameSettings.soundPackIndex
     property bool enabled: true
     property bool clickCooldown: false
 
@@ -80,17 +80,17 @@ Item {
     }
 
     function playClick() {
-        if (!Retr0MineSettings.soundEffects || clickCooldown) return
+        if (!GameSettings.soundEffects || clickCooldown) return
         clickDelayTimer.start()
     }
 
     function playWin() {
-        if (!Retr0MineSettings.soundEffects) return
+        if (!GameSettings.soundEffects) return
         winEffect.play()
     }
 
     function playLoose() {
-        if (!Retr0MineSettings.soundEffects) return
+        if (!GameSettings.soundEffects) return
         looseEffect.play()
     }
 }

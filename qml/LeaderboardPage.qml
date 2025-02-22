@@ -191,7 +191,7 @@ Popup {
                         retr0Wins: 0
                     }
 
-                    MainWindow.saveLeaderboard(JSON.stringify(emptyLeaderboard))
+                    GameCore.saveLeaderboard(JSON.stringify(emptyLeaderboard))
                 }
             }
 

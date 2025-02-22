@@ -15,8 +15,8 @@ ApplicationWindow {
     required property int rootX
     required property int rootY
 
-    width: MainWindow.gamescope ? 1280 : baseWidth
-    height: MainWindow.gamescope ? 800 : baseHeight
+    width: GameCore.gamescope ? 1280 : baseWidth
+    height: GameCore.gamescope ? 800 : baseHeight
     minimumWidth: width
     minimumHeight: height
     maximumWidth: width
@@ -81,7 +81,7 @@ ApplicationWindow {
                     Layout.preferredWidth: restoreDefaultsPopup.buttonWidth
                     Layout.fillWidth: true
                     onClicked: {
-                        MainWindow.resetRetr0Mine()
+                        GameCore.resetRetr0Mine()
                     }
                 }
 
@@ -159,7 +159,7 @@ ApplicationWindow {
                         required property int index
                         icon.source: modelData.icon
                         icon.color: Colors.foregroundColor
-                        text: MainWindow.isFluent ? "  " + modelData.text : modelData.text
+                        text: GameCore.isFluent ? "  " + modelData.text : modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {
                             if (sidebarList.currentIndex !== index) {
@@ -181,7 +181,7 @@ ApplicationWindow {
 
                 Button {
                     text: qsTr("Close")
-                    visible: MainWindow.gamescope || false
+                    visible: GameCore.gamescope || false
                     onClicked: control.close()
                     Layout.fillWidth: true
                     Layout.leftMargin: 15
@@ -208,7 +208,7 @@ ApplicationWindow {
         ToolSeparator {
             Layout.fillHeight: true
             Layout.leftMargin: {
-                if (MainWindow.isUniversal) return -15
+                if (GameCore.isUniversal) return -15
                 else return -10
             }
 
@@ -229,7 +229,7 @@ ApplicationWindow {
 
                     ColumnLayout {
                         width: parent.width
-                        spacing: MainWindow.isFluent ? 15 : 20
+                        spacing: GameCore.isFluent ? 15 : 20
 
                         ButtonGroup {
                             id: difficultyGroup
@@ -267,7 +267,7 @@ ApplicationWindow {
                                     Layout.preferredWidth: height
                                     Layout.alignment: Qt.AlignRight
                                     ButtonGroup.group: difficultyGroup
-                                    checked: Retr0MineSettings.difficulty === parent.index
+                                    checked: GameSettings.difficulty === parent.index
                                     onClicked: {
                                         const idx = difficultyGroup.buttons.indexOf(this)
                                         const difficultySet = GameState.difficultySettings[idx]
@@ -275,14 +275,14 @@ ApplicationWindow {
                                         GameState.gridSizeY = difficultySet.y
                                         GameState.mineCount = difficultySet.mines
                                         control.grid.initGame()
-                                        Retr0MineSettings.difficulty = idx
+                                        GameSettings.difficulty = idx
                                     }
                                 }
                             }
                         }
 
                         RowLayout {
-                            enabled: Retr0MineSettings.difficulty === 4
+                            enabled: GameSettings.difficulty === 4
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Width:")
@@ -295,13 +295,13 @@ ApplicationWindow {
                                 from: 8
                                 to: 50
                                 editable: true
-                                value: Retr0MineSettings.customWidth
-                                onValueChanged: Retr0MineSettings.customWidth = value
+                                value: GameSettings.customWidth
+                                onValueChanged: GameSettings.customWidth = value
                             }
                         }
 
                         RowLayout {
-                            enabled: Retr0MineSettings.difficulty === 4
+                            enabled: GameSettings.difficulty === 4
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Height:")
@@ -313,13 +313,13 @@ ApplicationWindow {
                                 from: 8
                                 to: 50
                                 editable: true
-                                value: Retr0MineSettings.customHeight
-                                onValueChanged: Retr0MineSettings.customHeight = value
+                                value: GameSettings.customHeight
+                                onValueChanged: GameSettings.customHeight = value
                             }
                         }
 
                         RowLayout {
-                            enabled: Retr0MineSettings.difficulty === 4
+                            enabled: GameSettings.difficulty === 4
                             Layout.fillWidth: true
                             Label {
                                 text: qsTr("Mines:")
@@ -331,20 +331,20 @@ ApplicationWindow {
                                 from: 1
                                 to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 4)
                                 editable: true
-                                value: Retr0MineSettings.customMines
-                                onValueChanged: Retr0MineSettings.customMines = value
+                                value: GameSettings.customMines
+                                onValueChanged: GameSettings.customMines = value
                             }
                         }
 
                         Button {
-                            enabled: Retr0MineSettings.difficulty === 4
+                            enabled: GameSettings.difficulty === 4
                             Layout.rightMargin: 5
                             text: qsTr("Apply")
                             Layout.alignment: Qt.AlignRight
                             onClicked: {
-                                GameState.gridSizeX = Retr0MineSettings.customWidth
-                                GameState.gridSizeY = Retr0MineSettings.customHeight
-                                GameState.mineCount = Retr0MineSettings.customMines
+                                GameState.gridSizeX = GameSettings.customWidth
+                                GameState.gridSizeY = GameSettings.customHeight
+                                GameState.mineCount = GameSettings.customMines
                                 control.grid.initGame()
                             }
                         }
@@ -373,9 +373,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: invert
-                                checked: Retr0MineSettings.invertLRClick
+                                checked: GameSettings.invertLRClick
                                 onCheckedChanged: {
-                                    Retr0MineSettings.invertLRClick = checked
+                                    GameSettings.invertLRClick = checked
                                 }
                             }
                         }
@@ -392,9 +392,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: autoreveal
-                                checked: Retr0MineSettings.autoreveal
+                                checked: GameSettings.autoreveal
                                 onCheckedChanged: {
-                                    Retr0MineSettings.autoreveal = checked
+                                    GameSettings.autoreveal = checked
                                 }
                             }
                         }
@@ -411,9 +411,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: questionMarksSwitch
-                                checked: Retr0MineSettings.enableQuestionMarks
+                                checked: GameSettings.enableQuestionMarks
                                 onCheckedChanged: {
-                                    Retr0MineSettings.enableQuestionMarks = checked
+                                    GameSettings.enableQuestionMarks = checked
                                     if (!checked) {
                                         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                                             let cell = control.grid.itemAtIndex(i) as Cell
@@ -438,9 +438,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: safeQuestionMarksSwitch
-                                checked: Retr0MineSettings.enableSafeQuestionMarks
+                                checked: GameSettings.enableSafeQuestionMarks
                                 onCheckedChanged: {
-                                    Retr0MineSettings.enableSafeQuestionMarks = checked
+                                    GameSettings.enableSafeQuestionMarks = checked
                                     if (!checked) {
                                         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                                             let cell = control.grid.itemAtIndex(i) as Cell
@@ -466,9 +466,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: loadLastGameSwitch
-                                checked: Retr0MineSettings.loadLastGame
+                                checked: GameSettings.loadLastGame
                                 onCheckedChanged: {
-                                    Retr0MineSettings.loadLastGame = checked
+                                    GameSettings.loadLastGame = checked
                                 }
                             }
                         }
@@ -497,9 +497,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: animationsSettings
-                                checked: Retr0MineSettings.animations
+                                checked: GameSettings.animations
                                 onCheckedChanged: {
-                                    Retr0MineSettings.animations = checked
+                                    GameSettings.animations = checked
                                     for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                                         let cell = control.grid.itemAtIndex(i) as Cell
                                         if (cell) {
@@ -522,9 +522,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: cellFrameSettings
-                                checked: Retr0MineSettings.cellFrame
+                                checked: GameSettings.cellFrame
                                 onCheckedChanged: {
-                                    Retr0MineSettings.cellFrame = checked
+                                    GameSettings.cellFrame = checked
                                 }
                             }
                         }
@@ -541,9 +541,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: dimSatisfiedSwitch
-                                checked: Retr0MineSettings.dimSatisfied
+                                checked: GameSettings.dimSatisfied
                                 onCheckedChanged: {
-                                    Retr0MineSettings.dimSatisfied = checked
+                                    GameSettings.dimSatisfied = checked
                                 }
                             }
                         }
@@ -551,21 +551,21 @@ ApplicationWindow {
                         RowLayout {
                             Layout.fillWidth: true
                             Label {
-                                enabled: !MainWindow.gamescope
+                                enabled: !GameCore.gamescope
                                 text: qsTr("Start in full screen")
                                 Layout.fillWidth: true
                                 MouseArea {
-                                    enabled: !MainWindow.gamescope
+                                    enabled: !GameCore.gamescope
                                     anchors.fill: parent
                                     onClicked: startFullScreenSwitch.checked = !startFullScreenSwitch.checked
                                 }
                             }
                             Switch {
                                 id: startFullScreenSwitch
-                                enabled: !MainWindow.gamescope
-                                checked: Retr0MineSettings.startFullScreen || MainWindow.gamescope
+                                enabled: !GameCore.gamescope
+                                checked: GameSettings.startFullScreen || GameCore.gamescope
                                 onCheckedChanged: {
-                                    Retr0MineSettings.startFullScreen = checked
+                                    GameSettings.startFullScreen = checked
                                 }
                             }
                         }
@@ -581,9 +581,9 @@ ApplicationWindow {
                                 id: colorSchemeComboBox
                                 model: ["Fira Sans", "Noto Serif", "Space Mono", "Orbitron", "Pixelify"]
                                 Layout.rightMargin: 5
-                                currentIndex: Retr0MineSettings.fontIndex
+                                currentIndex: GameSettings.fontIndex
                                 onActivated: {
-                                    Retr0MineSettings.fontIndex = currentIndex
+                                    GameSettings.fontIndex = currentIndex
                                 }
                             }
                         }
@@ -633,9 +633,9 @@ ApplicationWindow {
                                     ToolTip.text: qsTr("Unlocked with a secret achievement")
                                     ToolTip.delay: 1000
                                 }
-                                currentIndex: Retr0MineSettings.gridResetAnimationIndex
+                                currentIndex: GameSettings.gridResetAnimationIndex
                                 onActivated: {
-                                    Retr0MineSettings.gridResetAnimationIndex = currentIndex
+                                    GameSettings.gridResetAnimationIndex = currentIndex
                                 }
                             }
                         }
@@ -660,13 +660,13 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     checkable: true
                                     icon.source: "qrc:/icons/flag.png"
-                                    checked: Retr0MineSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
+                                    checked: GameSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
                                     icon.width: 35
                                     icon.height: 35
                                     ButtonGroup.group: buttonGroup
                                     Layout.alignment: Qt.AlignHCenter
                                     onCheckedChanged: {
-                                        if (checked) Retr0MineSettings.flagSkinIndex = 0
+                                        if (checked) GameSettings.flagSkinIndex = 0
                                     }
                                 }
                             }
@@ -677,7 +677,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     enabled: GameState.flag1Unlocked
                                     checkable: true
-                                    checked: GameState.flag1Unlocked && Retr0MineSettings.flagSkinIndex === 1
+                                    checked: GameState.flag1Unlocked && GameSettings.flagSkinIndex === 1
                                     icon.source: GameState.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
@@ -686,7 +686,7 @@ ApplicationWindow {
                                     ToolTip.visible: hovered && !enabled
                                     ToolTip.text: qsTr("Unlock Trust Your Instincts achievement")
                                     onCheckedChanged: {
-                                        if (checked) Retr0MineSettings.flagSkinIndex = 1
+                                        if (checked) GameSettings.flagSkinIndex = 1
                                     }
                                 }
                             }
@@ -697,7 +697,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     enabled: GameState.flag2Unlocked
                                     checkable: true
-                                    checked: GameState.flag2Unlocked && Retr0MineSettings.flagSkinIndex === 2
+                                    checked: GameState.flag2Unlocked && GameSettings.flagSkinIndex === 2
                                     icon.source: GameState.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
@@ -706,7 +706,7 @@ ApplicationWindow {
                                     ToolTip.visible: hovered && !enabled
                                     ToolTip.text: qsTr("Unlock Master Tactician achievement")
                                     onCheckedChanged: {
-                                        if (checked) Retr0MineSettings.flagSkinIndex = 2
+                                        if (checked) GameSettings.flagSkinIndex = 2
                                     }
                                 }
                             }
@@ -717,7 +717,7 @@ ApplicationWindow {
                                     Layout.preferredHeight: 45
                                     enabled: GameState.flag3Unlocked
                                     checkable: true
-                                    checked: GameState.flag3Unlocked && Retr0MineSettings.flagSkinIndex === 3
+                                    checked: GameState.flag3Unlocked && GameSettings.flagSkinIndex === 3
                                     icon.source: GameState.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
                                     icon.width: 35
                                     icon.height: 35
@@ -726,7 +726,7 @@ ApplicationWindow {
                                     ToolTip.visible: hovered && !enabled
                                     ToolTip.text: qsTr("Unlock Minefield Legend achievement")
                                     onCheckedChanged: {
-                                        if (checked) Retr0MineSettings.flagSkinIndex = 3
+                                        if (checked) GameSettings.flagSkinIndex = 3
                                     }
                                 }
                             }
@@ -756,9 +756,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: soundEffectSwitch
-                                checked: Retr0MineSettings.soundEffects
+                                checked: GameSettings.soundEffects
                                 onCheckedChanged: {
-                                    Retr0MineSettings.soundEffects = checked
+                                    GameSettings.soundEffects = checked
                                 }
                             }
                         }
@@ -773,9 +773,9 @@ ApplicationWindow {
                                 id: soundVolumeSlider
                                 from: 0
                                 to: 1
-                                value: Retr0MineSettings.volume
+                                value: GameSettings.volume
                                 onValueChanged: {
-                                    Retr0MineSettings.volume = value
+                                    GameSettings.volume = value
                                 }
                             }
                         }
@@ -790,9 +790,9 @@ ApplicationWindow {
                                 id: soundpackComboBox
                                 Layout.rightMargin: 5
                                 model: ["Pop", "Windows", "KDE", "Floraphonic"]
-                                currentIndex: Retr0MineSettings.soundPackIndex
+                                currentIndex: GameSettings.soundPackIndex
                                 onActivated: {
-                                    Retr0MineSettings.soundPackIndex = currentIndex
+                                    GameSettings.soundPackIndex = currentIndex
                                 }
                             }
                         }
@@ -892,9 +892,9 @@ ApplicationWindow {
                                     qsTr("Tritanopia")
                                 ]
                                 Layout.rightMargin: 5
-                                currentIndex: Retr0MineSettings.colorBlindness
+                                currentIndex: GameSettings.colorBlindness
                                 onActivated: {
-                                    Retr0MineSettings.colorBlindness = currentIndex
+                                    GameSettings.colorBlindness = currentIndex
                                 }
                             }
                         }
@@ -910,7 +910,7 @@ ApplicationWindow {
                                 model: [qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
                                 Layout.rightMargin: 5
                                 currentIndex: {
-                                    switch(Retr0MineSettings.cellSize) {
+                                    switch(GameSettings.cellSize) {
                                         case 0: return 0;
                                         case 1: return 1;
                                         case 2: return 2;
@@ -919,7 +919,7 @@ ApplicationWindow {
                                 }
 
                                 onActivated: {
-                                    Retr0MineSettings.cellSize = currentIndex
+                                    GameSettings.cellSize = currentIndex
                                 }
                             }
                         }
@@ -936,9 +936,9 @@ ApplicationWindow {
                             }
                             Switch {
                                 id: highContrastFlagSwitch
-                                checked: Retr0MineSettings.contrastFlag
+                                checked: GameSettings.contrastFlag
                                 onCheckedChanged: {
-                                    Retr0MineSettings.contrastFlag = checked
+                                    GameSettings.contrastFlag = checked
                                 }
                             }
                         }
@@ -970,11 +970,11 @@ ApplicationWindow {
                                 ]
                                 property int previousLanguageIndex: currentIndex
                                 Layout.rightMargin: 5
-                                currentIndex: Retr0MineSettings.languageIndex
+                                currentIndex: GameSettings.languageIndex
                                 onActivated: {
                                     previousLanguageIndex = currentIndex
-                                    Retr0MineSettings.languageIndex = currentIndex
-                                    MainWindow.setLanguage(currentIndex)
+                                    GameSettings.languageIndex = currentIndex
+                                    GameCore.setLanguage(currentIndex)
                                     currentIndex = previousLanguageIndex
                                 }
                             }
@@ -1007,12 +1007,12 @@ ApplicationWindow {
                                 id: styleComboBox
                                 model: ["Fluent", "Universal", "Fusion"]
                                 Layout.rightMargin: 5
-                                currentIndex: Retr0MineSettings.themeIndex
+                                currentIndex: GameSettings.themeIndex
                                 onActivated: {
                                     if (GameState.gameStarted && !GameState.gameOver) {
                                         SaveManager.saveGame("internalGameState.json")
                                     }
-                                    MainWindow.restartRetr0Mine(currentIndex)
+                                    GameCore.restartRetr0Mine(currentIndex)
                                 }
                             }
                         }
@@ -1030,10 +1030,10 @@ ApplicationWindow {
                                 model: [qsTr("System"), qsTr("Dark"), qsTr("Light")]
                                 Layout.rightMargin: 5
 
-                                currentIndex: Retr0MineSettings.colorSchemeIndex
+                                currentIndex: GameSettings.colorSchemeIndex
                                 onActivated: {
-                                    Retr0MineSettings.colorSchemeIndex = currentIndex
-                                    MainWindow.setThemeColorScheme(currentIndex)
+                                    GameSettings.colorSchemeIndex = currentIndex
+                                    GameCore.setThemeColorScheme(currentIndex)
                                 }
                             }
                         }

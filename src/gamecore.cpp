@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "gamecore.h"
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -35,7 +35,7 @@ const QMap<int, QString>& getLanguageIndexMap() {
 }
 }
 
-MainWindow::MainWindow(QObject *parent)
+GameCore::GameCore(QObject *parent)
     : QObject{parent}
     , settings("Odizinne", "Retr0Mine")
     , translator(new QTranslator(this))
@@ -46,14 +46,14 @@ MainWindow::MainWindow(QObject *parent)
     isRunningOnGamescope = desktop.toLower() == "gamescope";
 }
 
-MainWindow::~MainWindow()
+GameCore::~GameCore()
 {
     if (translator) {
         translator->deleteLater();
     }
 }
 
-void MainWindow::init()
+void GameCore::init()
 {
     if (!settings.value("welcomeMessageShown", false).toBool()) {
         resetSettings();
@@ -68,7 +68,7 @@ void MainWindow::init()
     setLanguage(languageIndex);
 }
 
-void MainWindow::setThemeColorScheme(int colorSchemeIndex)
+void GameCore::setThemeColorScheme(int colorSchemeIndex)
 {
 #ifdef _WIN32
     switch(colorSchemeIndex) {
@@ -88,7 +88,7 @@ void MainWindow::setThemeColorScheme(int colorSchemeIndex)
 #endif
 }
 
-void MainWindow::resetSettings()
+void GameCore::resetSettings()
 {
     settings.setValue("themeIndex", 0);
     settings.setValue("languageIndex", 0);
@@ -117,7 +117,7 @@ void MainWindow::resetSettings()
     shouldShowWelcomeMessage = true;
 }
 
-void MainWindow::setQMLStyle(int index)
+void GameCore::setQMLStyle(int index)
 {
     QString style;
     m_isFluent = false;
@@ -151,7 +151,7 @@ void MainWindow::setQMLStyle(int index)
     emit fusionChanged();
 }
 
-void MainWindow::setLanguage(int index)
+void GameCore::setLanguage(int index)
 {
     QString languageCode;
     if (index == 0) {
@@ -170,15 +170,15 @@ void MainWindow::setLanguage(int index)
     loadLanguage(languageCode);
     if (qApp) {
         qApp->installTranslator(translator);
-        if (MainWindowForeign::s_engine) {
-            static_cast<QQmlEngine*>(MainWindowForeign::s_engine)->retranslate();
+        if (GameCoreForeign::s_engine) {
+            static_cast<QQmlEngine*>(GameCoreForeign::s_engine)->retranslate();
         }
     }
     m_languageIndex = index;
     emit languageIndexChanged();
 }
 
-bool MainWindow::loadLanguage(QString languageCode)
+bool GameCore::loadLanguage(QString languageCode)
 {
     if (qApp) {
         qApp->removeTranslator(translator);
@@ -199,7 +199,7 @@ bool MainWindow::loadLanguage(QString languageCode)
     return false;
 }
 
-void MainWindow::resetRetr0Mine()
+void GameCore::resetRetr0Mine()
 {
     settings.setValue("welcomeMessageShown", false);
 
@@ -211,7 +211,7 @@ void MainWindow::resetRetr0Mine()
     }, Qt::QueuedConnection);
 }
 
-void MainWindow::restartRetr0Mine(int index)
+void GameCore::restartRetr0Mine(int index)
 {
     settings.setValue("themeIndex", index);
 
@@ -223,7 +223,7 @@ void MainWindow::restartRetr0Mine(int index)
     }, Qt::QueuedConnection);
 }
 
-QStringList MainWindow::getSaveFiles() const
+QStringList GameCore::getSaveFiles() const
 {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
@@ -235,7 +235,7 @@ QStringList MainWindow::getSaveFiles() const
     return files;
 }
 
-bool MainWindow::saveGameState(const QString &data, const QString &filename) const
+bool GameCore::saveGameState(const QString &data, const QString &filename) const
 {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
@@ -254,7 +254,7 @@ bool MainWindow::saveGameState(const QString &data, const QString &filename) con
     return false;
 }
 
-QString MainWindow::loadGameState(const QString &filename) const
+QString GameCore::loadGameState(const QString &filename) const
 {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
@@ -268,7 +268,7 @@ QString MainWindow::loadGameState(const QString &filename) const
     return QString();
 }
 
-void MainWindow::deleteSaveFile(const QString &filename)
+void GameCore::deleteSaveFile(const QString &filename)
 {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
@@ -276,13 +276,13 @@ void MainWindow::deleteSaveFile(const QString &filename)
     QFile::remove(fullPath);
 }
 
-QString MainWindow::getLeaderboardPath() const
+QString GameCore::getLeaderboardPath() const
 {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     return QDir(savePath).filePath("leaderboard.json");
 }
 
-bool MainWindow::saveLeaderboard(const QString &data) const
+bool GameCore::saveLeaderboard(const QString &data) const
 {
     QString filePath = getLeaderboardPath();
     QDir saveDir = QFileInfo(filePath).dir();
@@ -301,7 +301,7 @@ bool MainWindow::saveLeaderboard(const QString &data) const
     return false;
 }
 
-QString MainWindow::loadLeaderboard() const
+QString GameCore::loadLeaderboard() const
 {
     QFile file(getLeaderboardPath());
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {

@@ -35,7 +35,7 @@ Item {
             cellItem.root.startInitialLoadTimer()
         }
 
-        if (Retr0MineSettings.animations && !grid.initialAnimationPlayed && !GameState.blockAnim) {
+        if (GameSettings.animations && !grid.initialAnimationPlayed && !GameState.blockAnim) {
             startGridResetAnimation()
         }
     }
@@ -113,7 +113,7 @@ Item {
         interval: cellItem.diagonalSum * 20
         repeat: false
         onTriggered: {
-            if (Retr0MineSettings.animations) {
+            if (GameSettings.animations) {
                 fadeAnimation.start()
             }
         }
@@ -122,14 +122,14 @@ Item {
     Rectangle {
         anchors.fill: cellButton
         border.width: 2
-        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
         border.color: Colors.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
                 return true
-            if (cellItem.animatingReveal && Retr0MineSettings.cellFrame)
+            if (cellItem.animatingReveal && GameSettings.cellFrame)
                 return true
-            return cellButton.flat && Retr0MineSettings.cellFrame
+            return cellButton.flat && GameSettings.cellFrame
         }
         color: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
@@ -138,12 +138,12 @@ Item {
         }
 
         Behavior on opacity {
-            enabled: Retr0MineSettings.animations
+            enabled: GameSettings.animations
             NumberAnimation { duration: 200 }
         }
 
         opacity: {
-            if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed) return 1
+            if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index)) return 1
             return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
         }
@@ -158,7 +158,7 @@ Item {
             target: cellItem
             function onRevealedChanged() {
                 if (cellItem.revealed) {
-                    if (Retr0MineSettings.animations) {
+                    if (GameSettings.animations) {
                         cellItem.shouldBeFlat = true
                         revealFadeAnimation.start()
                     } else {
@@ -191,7 +191,7 @@ Item {
             scale: cellItem.questioned ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
+                enabled: GameSettings.animations && !GameState.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -199,7 +199,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
+                enabled: GameSettings.animations && !GameState.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -217,7 +217,7 @@ Item {
             scale: cellItem.safeQuestioned ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
+                enabled: GameSettings.animations && !GameState.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -225,7 +225,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
+                enabled: GameSettings.animations && !GameState.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -237,7 +237,7 @@ Item {
             anchors.centerIn: parent
             source: GameState.flagPath
             color: {
-                if (Retr0MineSettings.contrastFlag) return Colors.foregroundColor
+                if (GameSettings.contrastFlag) return Colors.foregroundColor
                 else return Colors.accentColor
             }
             sourceSize.width: cellItem.width / 1.8
@@ -246,7 +246,7 @@ Item {
             scale: cellItem.flagged ? 1 : 1.3
 
             Behavior on opacity {
-                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
+                enabled: GameSettings.animations && !GameState.noAnimReset
                 OpacityAnimator {
                     duration: 300
                     easing.type: Easing.OutQuad
@@ -254,7 +254,7 @@ Item {
             }
 
             Behavior on scale {
-                enabled: Retr0MineSettings.animations && !GameState.noAnimReset
+                enabled: GameSettings.animations && !GameState.noAnimReset
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.OutBack
@@ -281,7 +281,7 @@ Item {
                            } else if (cellItem.revealed) {
                                cellItem.grid.revealConnectedCells(cellItem.index);
                            } else {
-                               if (Retr0MineSettings.invertLRClick) {
+                               if (GameSettings.invertLRClick) {
                                    if (mouse.button === Qt.RightButton && !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
                                        cellItem.grid.reveal(cellItem.index);
                                    } else if (mouse.button === Qt.LeftButton) {
@@ -311,12 +311,12 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         opacity: {
-            if (!Retr0MineSettings.dimSatisfied || !cellItem.revealed || GameState.numbers[cellItem.index] === 0) return 1
+            if (!GameSettings.dimSatisfied || !cellItem.revealed || GameState.numbers[cellItem.index] === 0) return 1
             return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
         }
 
         Behavior on opacity {
-            enabled: Retr0MineSettings.animations
+            enabled: GameSettings.animations
             NumberAnimation { duration: 200 }
         }
 
@@ -329,12 +329,12 @@ Item {
     }
 
     function startGridResetAnimation() {
-        if (!Retr0MineSettings.animations) {
+        if (!GameSettings.animations) {
             opacity = 1
             return
         }
 
-        switch (Retr0MineSettings.gridResetAnimationIndex) {
+        switch (GameSettings.gridResetAnimationIndex) {
         case 0: // Original diagonal animation
             grid.initialAnimationPlayed = false
             opacity = 0

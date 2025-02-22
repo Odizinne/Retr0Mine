@@ -1,11 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef GAMECORE_H
+#define GAMECORE_H
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QTranslator>
 
-class MainWindow : public QObject
+class GameCore : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool showWelcome READ getShowWelcome CONSTANT)
@@ -16,8 +16,8 @@ class MainWindow : public QObject
     Q_PROPERTY(bool isFusion READ getIsFusion NOTIFY fusionChanged)
 
 public:
-    explicit MainWindow(QObject *parent = nullptr);
-    ~MainWindow() override;
+    explicit GameCore(QObject *parent = nullptr);
+    ~GameCore() override;
 
     // Initial setup methods
     void init();
@@ -68,17 +68,17 @@ signals:
     void fusionChanged();
 };
 
-struct MainWindowForeign
+struct GameCoreForeign
 {
     Q_GADGET
-    QML_FOREIGN(MainWindow)
+    QML_FOREIGN(GameCore)
     QML_SINGLETON
-    QML_NAMED_ELEMENT(MainWindow)
+    QML_NAMED_ELEMENT(GameCore)
 public:
-    inline static MainWindow* s_singletonInstance = nullptr;
+    inline static GameCore* s_singletonInstance = nullptr;
     inline static QJSEngine* s_engine = nullptr;  // Moved to public
 
-    static MainWindow* create(QQmlEngine*, QJSEngine* engine)
+    static GameCore* create(QQmlEngine*, QJSEngine* engine)
     {
         Q_ASSERT(s_singletonInstance);
         Q_ASSERT(engine->thread() == s_singletonInstance->thread());
@@ -91,4 +91,4 @@ public:
     }
 };
 
-#endif // MAINWINDOW_H
+#endif // GAMECORE_H

@@ -46,7 +46,7 @@ Popup {
                 text: qsTr("Later")
                 onClicked: {
                     control.visible = false
-                    Retr0MineSettings.welcomeMessageShown = true
+                    GameSettings.welcomeMessageShown = true
                 }
             }
 
@@ -131,8 +131,8 @@ Popup {
                     chordImage.visible = checked
                     classicLabel.visible = !checked
                     classicImage.visible = !checked
-                    Retr0MineSettings.autoreveal = checked
-                    Retr0MineSettings.invertLRClick = checked
+                    GameSettings.autoreveal = checked
+                    GameSettings.invertLRClick = checked
                 }
             }
         }
@@ -175,7 +175,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -201,7 +201,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  Retr0MineSettings.contrastFlag) return  Colors.foregroundColor
+                        if (  GameSettings.contrastFlag) return  Colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -216,7 +216,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -240,7 +240,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -265,7 +265,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -290,7 +290,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -315,7 +315,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
@@ -340,7 +340,7 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  Retr0MineSettings.contrastFlag) return  Colors.foregroundColor
+                        if (  GameSettings.contrastFlag) return  Colors.foregroundColor
                         else return sysPalette.accent
                     }
                     visible: true
@@ -355,7 +355,7 @@ Popup {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
@@ -387,11 +387,11 @@ Popup {
             Switch {
                 id: visualsSwitch
                 onCheckedChanged: {
-                    Retr0MineSettings.cellFrame = !checked
-                    Retr0MineSettings.dimSatisfied = checked
+                    GameSettings.cellFrame = !checked
+                    GameSettings.dimSatisfied = checked
                 }
                 Component.onCompleted: {
-                    checked = !Retr0MineSettings.cellFrame && Retr0MineSettings.dimSatisfied
+                    checked = !GameSettings.cellFrame && GameSettings.dimSatisfied
                 }
             }
         }
@@ -410,10 +410,10 @@ Popup {
             Switch {
                 id: accentFlagSwitch
                 onCheckedChanged: {
-                    Retr0MineSettings.contrastFlag = !checked
+                    GameSettings.contrastFlag = !checked
                 }
                 Component.onCompleted: {
-                    checked = !Retr0MineSettings.contrastFlag
+                    checked = !GameSettings.contrastFlag
                 }
             }
         }
@@ -461,7 +461,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -484,7 +484,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -507,7 +507,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -530,7 +530,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -566,7 +566,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -589,7 +589,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -612,7 +612,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -635,7 +635,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -658,7 +658,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         control.visible = false
-                        Retr0MineSettings.colorBlindness = 0
+                        GameSettings.colorBlindness = 0
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         control.height = 150
@@ -679,7 +679,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -702,7 +702,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -725,7 +725,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -748,7 +748,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -784,7 +784,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -807,7 +807,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -830,7 +830,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -853,7 +853,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -876,7 +876,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         control.visible = false
-                        Retr0MineSettings.colorBlindness = 3
+                        GameSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         control.height = 150
@@ -901,7 +901,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -924,7 +924,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -947,7 +947,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -970,7 +970,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1006,7 +1006,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1029,7 +1029,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1052,7 +1052,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1075,7 +1075,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1098,7 +1098,7 @@ Popup {
                     Layout.columnSpan: 3
                     onClicked: {
                         control.visible = false
-                        Retr0MineSettings.colorBlindness = 2
+                        GameSettings.colorBlindness = 2
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         control.height = 150
@@ -1119,7 +1119,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1142,7 +1142,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1165,7 +1165,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1188,7 +1188,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1224,7 +1224,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1247,7 +1247,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1270,7 +1270,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1293,7 +1293,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: MainWindow.isFluent ? 4 : (MainWindow.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
                         border.color:  Colors.frameColor
@@ -1316,7 +1316,7 @@ Popup {
                     Layout.fillWidth: true
                     onClicked: {
                         control.visible = false
-                        Retr0MineSettings.colorBlindness = 3
+                        GameSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         finishedConfig.visible = true
                         control.height = 150
@@ -1353,7 +1353,7 @@ Popup {
                 text: qsTr("Close")
                 onClicked: {
                     control.visible = false
-                    Retr0MineSettings.welcomeMessageShown = true
+                    GameSettings.welcomeMessageShown = true
                 }
             }
         }

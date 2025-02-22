@@ -1,7 +1,7 @@
-#include "mainwindow.h"
+#include "gamecore.h"
 #include "steamintegration.h"
 #include "gametimer.h"
-#include "minesweeperlogic.h"
+#include "gamelogic.h"
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLoggingCategory>
@@ -15,18 +15,18 @@ int main(int argc, char *argv[])
     QGuiApplication::setWindowIcon(QIcon(":/icons/icon.png"));
 
     SteamIntegration* steamIntegration = new SteamIntegration();
-    MainWindow* mainWindow = new MainWindow();
+    GameCore* gameCore = new GameCore();
     GameTimer* gameTimer = new GameTimer();
-    MinesweeperLogic* minesweeperLogic = new MinesweeperLogic();
+    GameLogic* gameLogic = new GameLogic();
 
     SteamIntegrationForeign::s_singletonInstance = steamIntegration;
-    MainWindowForeign::s_singletonInstance = mainWindow;
+    GameCoreForeign::s_singletonInstance = gameCore;
     GameTimerForeign::s_singletonInstance = gameTimer;
-    MinesweeperLogicForeign::s_singletonInstance = minesweeperLogic;
+    GameLogicForeign::s_singletonInstance = gameLogic;
 
     QQmlApplicationEngine engine;
 
-    mainWindow->init();
+    gameCore->init();
 
     engine.loadFromModule("Retr0Mine", "Main");
 

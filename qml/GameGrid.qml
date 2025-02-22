@@ -27,7 +27,7 @@ GridView {
             if (cell.revealed) revealed.push(i);
             if (cell.flagged) flagged.push(i);
         }
-        let mineCell = MinesweeperLogic.findMineHint(revealed, flagged);
+        let mineCell = GameLogic.findMineHint(revealed, flagged);
         if (mineCell !== -1) {
             let cell = grid.itemAtIndex(mineCell) as Cell;
             cell.highlightHint()
@@ -36,7 +36,7 @@ GridView {
     }
 
     function revealConnectedCells(index) {
-        if (!Retr0MineSettings.autoreveal || !GameState.gameStarted || GameState.gameOver) return;
+        if (!GameSettings.autoreveal || !GameState.gameStarted || GameState.gameOver) return;
         let cell = grid.itemAtIndex(index) as Cell;
         if (!cell.revealed || GameState.numbers[index] <= 0) return;
 
@@ -145,19 +145,19 @@ GridView {
         const row = Math.floor(firstClickIndex / GameState.gridSizeX);
         const col = firstClickIndex % GameState.gridSizeX;
 
-        if (!MinesweeperLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
+        if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
             console.error("Failed to initialize game!");
             return false;
         }
 
-        const result = MinesweeperLogic.placeLogicalMines(col, row);
+        const result = GameLogic.placeLogicalMines(col, row);
         if (!result) {
             console.error("Failed to place mines!");
             return false;
         }
 
-        GameState.mines = MinesweeperLogic.getMines();
-        GameState.numbers = MinesweeperLogic.getNumbers();
+        GameState.mines = GameLogic.getMines();
+        GameState.numbers = GameLogic.getNumbers();
         return true;
     }
 
@@ -186,7 +186,7 @@ GridView {
         }
         GameState.noAnimReset = false
 
-        if (Retr0MineSettings.animations) {
+        if (GameSettings.animations) {
             for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                 let cell = grid.itemAtIndex(i) as Cell
                 if (cell) {
@@ -221,7 +221,7 @@ GridView {
             GameState.gameOver = true
             GameTimer.stop()
 
-            let leaderboardData = MainWindow.loadGameState("leaderboard.json")
+            let leaderboardData = GameCore.loadGameState("leaderboard.json")
             let leaderboard = {}
 
             if (leaderboardData) {
@@ -257,7 +257,7 @@ GridView {
                 }
             }
 
-            MainWindow.saveLeaderboard(JSON.stringify(leaderboard))
+            GameCore.saveLeaderboard(JSON.stringify(leaderboard))
 
             if (!GameState.isManuallyLoaded) {
                 if (SteamIntegration.initialized) {
@@ -326,12 +326,12 @@ GridView {
                 cell.safeQuestioned = false
                 GameState.flaggedCount++
             } else if (cell.flagged) {
-                if (Retr0MineSettings.enableQuestionMarks) {
+                if (GameSettings.enableQuestionMarks) {
                     cell.flagged = false
                     cell.questioned = true
                     cell.safeQuestioned = false
                     GameState.flaggedCount--
-                } else if (Retr0MineSettings.enableSafeQuestionMarks) {
+                } else if (GameSettings.enableSafeQuestionMarks) {
                     cell.flagged = false
                     cell.questioned = false
                     cell.safeQuestioned = true
@@ -343,7 +343,7 @@ GridView {
                     GameState.flaggedCount--
                 }
             } else if (cell.questioned) {
-                if (Retr0MineSettings.enableSafeQuestionMarks) {
+                if (GameSettings.enableSafeQuestionMarks) {
                     cell.questioned = false
                     cell.safeQuestioned = true
                 } else {

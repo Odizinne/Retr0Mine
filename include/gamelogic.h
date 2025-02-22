@@ -1,5 +1,5 @@
-#ifndef MINESWEEPERLOGIC_H
-#define MINESWEEPERLOGIC_H
+#ifndef GAMELOGIC_H
+#define GAMELOGIC_H
 #include <QMap>
 #include <QObject>
 #include <QSet>
@@ -26,7 +26,7 @@ inline size_t qHash(const MineSolverInfo &info, size_t seed = 0)
     return hashValue;
 }
 
-class MinesweeperLogic : public QObject
+class GameLogic : public QObject
 {
     Q_OBJECT
 public:
@@ -39,7 +39,7 @@ public:
         QSet<int> neighbors;
     };
 
-    explicit MinesweeperLogic(QObject *parent = nullptr);
+    explicit GameLogic(QObject *parent = nullptr);
 
     Q_INVOKABLE bool initializeGame(int width, int height, int mineCount);
     Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines);
@@ -63,17 +63,17 @@ private:
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
 };
 
-struct MinesweeperLogicForeign
+struct GameLogicForeign
 {
     Q_GADGET
-    QML_FOREIGN(MinesweeperLogic)
+    QML_FOREIGN(GameLogic)
     QML_SINGLETON
-    QML_NAMED_ELEMENT(MinesweeperLogic)
+    QML_NAMED_ELEMENT(GameLogic)
 public:
-    inline static MinesweeperLogic* s_singletonInstance = nullptr;
+    inline static GameLogic* s_singletonInstance = nullptr;
     inline static QJSEngine* s_engine = nullptr;
 
-    static MinesweeperLogic* create(QQmlEngine*, QJSEngine* engine)
+    static GameLogic* create(QQmlEngine*, QJSEngine* engine)
     {
         Q_ASSERT(s_singletonInstance);
         Q_ASSERT(engine->thread() == s_singletonInstance->thread());
@@ -86,4 +86,4 @@ public:
     }
 };
 
-#endif // MINESWEEPERLOGIC_H
+#endif // GAMELOGIC_H

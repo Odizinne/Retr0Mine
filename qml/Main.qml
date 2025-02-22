@@ -10,7 +10,7 @@ ApplicationWindow {
     visibility: ApplicationWindow.Hidden
 
     onClosing: {
-        if (Retr0MineSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver) {
+        if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver) {
             SaveManager.saveGame("internalGameState.json")
         }
     }
@@ -48,12 +48,12 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        const difficultySet = GameState.difficultySettings[Retr0MineSettings.difficulty]
+        const difficultySet = GameState.difficultySettings[GameSettings.difficulty]
         GameState.gridSizeX = difficultySet.x
         GameState.gridSizeY = difficultySet.y
         GameState.mineCount = difficultySet.mines
 
-        let leaderboardData = MainWindow.loadLeaderboard()
+        let leaderboardData = GameCore.loadLeaderboard()
         if (leaderboardData) {
             try {
                 const leaderboard = JSON.parse(leaderboardData)
@@ -71,7 +71,7 @@ ApplicationWindow {
         }
 
         if (typeof Universal !== undefined) {
-            Universal.theme = MainWindow.gamescope ? Universal.Dark : Universal.System
+            Universal.theme = GameCore.gamescope ? Universal.Dark : Universal.System
             Universal.accent = Colors.accentColor
         }
     }
@@ -138,7 +138,7 @@ ApplicationWindow {
     Loader {
         id: welcomeLoader
         anchors.fill: parent
-        active: MainWindow.showWelcome
+        active: GameCore.showWelcome
         sourceComponent: Component {
             WelcomePage {
             }
@@ -157,7 +157,7 @@ ApplicationWindow {
 
     FontLoader {
         id: numberFont
-        source: switch (Retr0MineSettings.fontIndex) {
+        source: switch (GameSettings.fontIndex) {
             case 0:
             "qrc:/fonts/FiraSans-SemiBold.ttf"
             break
@@ -178,7 +178,7 @@ ApplicationWindow {
         }
     }
 
-    AudioEffectsEngine {
+    GameAudio {
         id: audioEngine
     }
 
@@ -248,8 +248,8 @@ ApplicationWindow {
             x: parent.width - width
             y: 0
             height: gameArea.height
-            visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
-            active: !MainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
+            active: !GameCore.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -261,8 +261,8 @@ ApplicationWindow {
             x: 0
             y: parent.height - height
             width: gameArea.width
-            visible: policy === ScrollBar.AlwaysOn && !MainWindow.isFluent
-            active: !MainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
+            active: !GameCore.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -274,8 +274,8 @@ ApplicationWindow {
             x: parent.width - width
             y: 0
             height: gameArea.height
-            visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
-            active: MainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
+            active: GameCore.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -287,14 +287,14 @@ ApplicationWindow {
             x: 0
             y: parent.height - height
             width: gameArea.width
-            visible: policy === ScrollBar.AlwaysOn && MainWindow.isFluent
-            active: MainWindow.isFluent
+            visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
+            active: GameCore.isFluent
             policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
-        ScrollBar.vertical: MainWindow.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
-        ScrollBar.horizontal: MainWindow.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
+        ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
+        ScrollBar.horizontal: GameCore.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
 
         Item {
             anchors.centerIn: parent
@@ -336,10 +336,10 @@ ApplicationWindow {
     function checkInitialGameState() {
         if (!GameState.gridFullyInitialized) return
 
-        let internalSaveData = MainWindow.loadGameState("internalGameState.json")
+        let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (internalSaveData) {
             if (SaveManager.loadGame(internalSaveData)) {
-                MainWindow.deleteSaveFile("internalGameState.json")
+                GameCore.deleteSaveFile("internalGameState.json")
                 GameState.isManuallyLoaded = false
             } else {
                 console.error("Failed to load internal game state")
@@ -349,7 +349,7 @@ ApplicationWindow {
             grid.initGame()
         }
 
-        if (Retr0MineSettings.startFullScreen || MainWindow.gamescope) {
+        if (GameSettings.startFullScreen || GameCore.gamescope) {
             root.visibility = ApplicationWindow.FullScreen
         } else {
             root.visibility = ApplicationWindow.Windowed

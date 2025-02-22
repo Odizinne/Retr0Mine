@@ -23,15 +23,15 @@ qt_policy(SET QTP0004 NEW)
 set(SOURCES
     src/main.cpp
     src/gametimer.cpp
-    src/mainwindow.cpp
-    src/minesweeperlogic.cpp
+    src/gamecore.cpp
+    src/gamelogic.cpp
     src/steamintegration.cpp
 )
 
 set(HEADERS
     include/gametimer.h
-    include/mainwindow.h
-    include/minesweeperlogic.h
+    include/gamecore.h
+    include/gamelogic.h
     include/steamintegration.h
 )
 
@@ -50,11 +50,11 @@ set(QML_FILES
     qml/Main.qml
     qml/InfoIcon.qml
     qml/GameGrid.qml
-    qml/AudioEffectsEngine.qml
+    qml/GameAudio.qml
 )
 
 set(QML_SINGLETONS
-    qml/Retr0MineSettings.qml
+    qml/GameSettings.qml
     qml/Colors.qml
     qml/GameState.qml
     qml/SaveManager.qml

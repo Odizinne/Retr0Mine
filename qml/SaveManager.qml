@@ -36,7 +36,7 @@ Item {
             GameState.mines = data.gameState.mines
 
             // Initialize game logic first
-            if (!MinesweeperLogic.initializeFromSave(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount, GameState.mines)) {
+            if (!GameLogic.initializeFromSave(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount, GameState.mines)) {
                 console.error("Failed to initialize game logic from save")
                 return false
             }
@@ -74,12 +74,12 @@ Item {
         )
         if (foundDifficulty === 0 || foundDifficulty === 1 ||
             foundDifficulty === 2 || foundDifficulty === 3) {
-            Retr0MineSettings.difficulty = foundDifficulty
+            GameSettings.difficulty = foundDifficulty
         } else {
-            Retr0MineSettings.difficulty = 4
-            Retr0MineSettings.customWidth = GameState.gridSizeX
-            Retr0MineSettings.customHeight = GameState.gridSizeY
-            Retr0MineSettings.customMines = GameState.mineCount
+            GameSettings.difficulty = 4
+            GameSettings.customWidth = GameState.gridSizeX
+            GameSettings.customHeight = GameState.gridSizeY
+            GameSettings.customMines = GameState.mineCount
         }
 
         GameTimer.resumeFrom(savedCentiseconds)
@@ -164,6 +164,6 @@ Item {
             if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
         }
 
-        MainWindow.saveGameState(JSON.stringify(saveData), filename)
+        GameCore.saveGameState(JSON.stringify(saveData), filename)
     }
 }

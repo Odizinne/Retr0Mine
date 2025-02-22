@@ -8,19 +8,19 @@ Item {
     }
 
     function getForegroundColor() {
-        if (MainWindow.gamescope && (Retr0MineSettings.themeIndex === 0 || Retr0MineSettings.themeIndex === 1)) {
+        if (GameCore.gamescope && (GameSettings.themeIndex === 0 || GameSettings.themeIndex === 1)) {
             return "white"
         }
         return Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
     }
 
     function getFrameColor() {
-        if (MainWindow.gamescope && Retr0MineSettings.themeIndex === 0) {
+        if (GameCore.gamescope && GameSettings.themeIndex === 0) {
             return Qt.rgba(1, 1, 1, 0.075)
-        } else if (MainWindow.gamescope && Retr0MineSettings.themeIndex === 1) {
+        } else if (GameCore.gamescope && GameSettings.themeIndex === 1) {
             return Qt.rgba(1, 1, 1, 0.15)
         } else {
-            if (Retr0MineSettings.themeIndex === 0) {
+            if (GameSettings.themeIndex === 0) {
                 return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.075) : Qt.rgba(0, 0, 0, 0.15)
             }
             return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
@@ -56,7 +56,7 @@ Item {
     function getNumberColor(revealed, isMine, index, number) {
         if (!revealed) return "black"
         if (isMine) return "transparent"
-        const palette = numberPalettes[Retr0MineSettings.colorBlindness] || numberPalettes[0]
+        const palette = numberPalettes[GameSettings.colorBlindness] || numberPalettes[0]
         return palette[number] || "black"
     }
 
