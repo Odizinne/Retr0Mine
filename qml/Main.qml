@@ -12,29 +12,6 @@ ApplicationWindow {
     minimumWidth: getInitialWidth()
     minimumHeight: getInitialHeight()
 
-    Connections {
-        target: GameState
-
-        function onGridSizeChanged() {
-            if (root.visibility === Window.Windowed) {
-                root.width = root.getInitialWidth()
-                root.height = root.getInitialHeight()
-                root.minimumWidth = root.width
-                root.minimumHeight = root.height
-
-                // Auto-maximize if window would be too large
-                if (root.width >= Screen.desktopAvailableWidth * 0.9 ||
-                    root.height >= Screen.desktopAvailableHeight * 0.9) {
-                    root.visibility = Window.Maximized
-                }
-            }
-        }
-
-        function onCellSizeChanged() {
-            onGridSizeChanged()
-        }
-    }
-
     onClosing: {
         if (Retr0MineSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver) {
             SaveManager.saveGame("internalGameState.json")
@@ -43,10 +20,13 @@ ApplicationWindow {
 
     onVisibilityChanged: function(visibility) {
         if (visibility === Window.Windowed) {
-            width = getInitialWidth()
-            height = getInitialHeight()
-            minimumWidth = width
-            minimumHeight = height
+            // First update minimum constraints
+            minimumWidth = getInitialWidth()
+            minimumHeight = getInitialHeight()
+
+            // Then set the actual size
+            width = minimumWidth
+            height = minimumHeight
 
             // Center window if it would be too large
             if (height >= Screen.desktopAvailableHeight * 0.9 ||
@@ -360,23 +340,29 @@ ApplicationWindow {
             grid.initGame()
         }
 
+        root.width = getInitialWidth()
+        root.minimumWidth = getInitialWidth()
+        root.height = getInitialHeight()
+        root.minimumHeight = getInitialHeight()
         if (Retr0MineSettings.startFullScreen || MainWindow.gamescope) {
             root.visibility = 5
         }
     }
 
     function getInitialWidth() {
-        return visibility === Window.Windowed ?
-            Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
-                    Screen.desktopAvailableWidth * 0.9) :
-            width
+        if (root.visibility === ApplicationWindow.Windowed) {
+        // Always calculate the proper width based on grid size
+        return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
+                Screen.desktopAvailableWidth * 0.9)
+            }
     }
 
     function getInitialHeight() {
-        return visibility === Window.Windowed ?
-            Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
-                    Screen.desktopAvailableHeight * 0.9) :
-            height
+        if (root.visibility === ApplicationWindow.Windowed) {
+        // Always calculate the proper height based on grid size
+        return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
+                Screen.desktopAvailableHeight * 0.9)
+            }
     }
 }
 
