@@ -174,7 +174,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Colors.frameColor
+                    border.color:  GameConstants.frameColor
                 }
 
                 Text {
@@ -196,8 +196,8 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  GameSettings.contrastFlag) return  Colors.foregroundColor
-                        else return Colors.accentColor
+                        if (  GameSettings.contrastFlag) return  GameConstants.foregroundColor
+                        else return GameConstants.accentColor
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8
@@ -215,7 +215,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Colors.frameColor
+                    border.color:  GameConstants.frameColor
                 }
 
                 Text {
@@ -239,7 +239,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Colors.frameColor
+                    border.color:  GameConstants.frameColor
                 }
 
                 Text {
@@ -264,7 +264,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Colors.frameColor
+                    border.color:  GameConstants.frameColor
                 }
 
                 Text {
@@ -289,7 +289,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Colors.frameColor
+                    border.color:  GameConstants.frameColor
                 }
 
                 Text {
@@ -314,7 +314,7 @@ Popup {
                     border.width: 2
                     visible: visualsSwitch.checked ? false : true
                     color: "transparent"
-                    border.color:  Colors.frameColor
+                    border.color:  GameConstants.frameColor
                 }
 
                 Text {
@@ -335,8 +335,8 @@ Popup {
                     anchors.centerIn: parent
                     source: "qrc:/icons/flag.png"
                     color: {
-                        if (  GameSettings.contrastFlag) return  Colors.foregroundColor
-                        else return Colors.accentColor
+                        if (  GameSettings.contrastFlag) return  GameConstants.foregroundColor
+                        else return GameConstants.accentColor
                     }
                     visible: true
                     sourceSize.width: 35 / 1.8
@@ -354,7 +354,7 @@ Popup {
                     border.width: 2
                     color: "transparent"
                     visible: visualsSwitch.checked ? false : true
-                    border.color:  Colors.frameColor
+                    border.color:  GameConstants.frameColor
                 }
 
                 Text {
@@ -459,7 +459,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -482,7 +482,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -505,7 +505,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -528,7 +528,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -564,7 +564,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -587,7 +587,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -610,7 +610,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -633,13 +633,13 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Colors.foregroundColor
+                        color:  GameConstants.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -677,7 +677,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -700,7 +700,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -723,7 +723,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -746,7 +746,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -782,7 +782,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -805,7 +805,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -828,7 +828,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -851,13 +851,13 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Colors.foregroundColor
+                        color:  GameConstants.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -899,7 +899,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -922,7 +922,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -945,7 +945,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -968,7 +968,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1004,7 +1004,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1027,7 +1027,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1050,7 +1050,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1073,13 +1073,13 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Colors.foregroundColor
+                        color:  GameConstants.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -1117,7 +1117,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1140,7 +1140,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1163,7 +1163,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1186,7 +1186,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1222,7 +1222,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1245,7 +1245,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1268,7 +1268,7 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
@@ -1291,13 +1291,13 @@ Popup {
                         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                         border.width: 2
                         color: "transparent"
-                        border.color:  Colors.frameColor
+                        border.color:  GameConstants.frameColor
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: "8"
-                        color:  Colors.foregroundColor
+                        color:  GameConstants.foregroundColor
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter

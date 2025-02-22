@@ -4,7 +4,6 @@ import QtQuick.Layouts
 
 RowLayout {
     id: control
-    required property var root
     required property var grid
     required property var saveWindow
     required property var loadWindow
@@ -114,7 +113,7 @@ RowLayout {
         }
         Button {
             icon.source: "qrc:/icons/bomb.png"
-            icon.color: Colors.foregroundColor
+            icon.color: GameConstants.foregroundColor
             text: ": " + (GameState.mineCount - GameState.flaggedCount)
             font.pixelSize: 18
             font.bold: true

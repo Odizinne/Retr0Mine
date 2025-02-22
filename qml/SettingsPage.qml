@@ -158,7 +158,7 @@ ApplicationWindow {
                         required property var modelData
                         required property int index
                         icon.source: modelData.icon
-                        icon.color: Colors.foregroundColor
+                        icon.color: GameConstants.foregroundColor
                         text: GameCore.isFluent ? "  " + modelData.text : modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {
@@ -857,7 +857,7 @@ ApplicationWindow {
                                         Layout.fillWidth: true
                                     }
                                     Label {
-                                        color: Colors.accentColor
+                                        color: GameConstants.accentColor
                                         text: shortcutLine.model.shortcut
                                         font.bold: true
                                     }

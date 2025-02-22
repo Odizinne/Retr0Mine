@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ApplicationWindow {
-    id: errorWindow
+    id: control
     title: qsTr("Error")
     width: 300
     height: 150
@@ -25,7 +25,7 @@ ApplicationWindow {
         Button {
             text: qsTr("OK")
             Layout.alignment: Qt.AlignRight
-            onClicked: errorWindow.close()
+            onClicked: control.close()
         }
     }
 }

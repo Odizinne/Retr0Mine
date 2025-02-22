@@ -6,12 +6,25 @@ import QtQuick.Window
 
 ApplicationWindow {
     id: root
-    //visible: true
     visibility: ApplicationWindow.Hidden
+    property bool isSaving: false
+    property bool isClosing: false
 
-    onClosing: {
+    onClosing: function(close) {
+        if (isClosing) {
+            close.accepted = true
+            return
+        }
+
         if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver) {
-            SaveManager.saveGame("internalGameState.json")
+            close.accepted = false
+            if (!isSaving) {
+                isClosing = true
+                isSaving = true
+                SaveManager.saveGame("internalGameState.json")
+            }
+        } else {
+            close.accepted = true
         }
     }
 
@@ -23,12 +36,23 @@ ApplicationWindow {
                 root.width = root.minimumWidth
             }
         }
-
         function onGridSizeYChanged() {
             if (root.visibility === ApplicationWindow.Windowed) {
                 root.minimumHeight = root.getIdealHeight()
                 root.height = root.minimumHeight
             }
+        }
+        function onCellSizeChanged() {
+            onGridSizeXChanged()
+            onGridSizeYChanged()
+        }
+    }
+
+    Connections {
+        target: GameCore
+        function onSaveCompleted(success) {
+            root.isSaving = false
+            Qt.quit()
         }
     }
 
@@ -72,7 +96,7 @@ ApplicationWindow {
 
         if (typeof Universal !== undefined) {
             Universal.theme = GameCore.gamescope ? Universal.Dark : Universal.System
-            Universal.accent = Colors.accentColor
+            Universal.accent = GameConstants.accentColor
         }
     }
 
@@ -155,38 +179,9 @@ ApplicationWindow {
         }
     }
 
-    FontLoader {
-        id: numberFont
-        source: switch (GameSettings.fontIndex) {
-            case 0:
-            "qrc:/fonts/FiraSans-SemiBold.ttf"
-            break
-            case 1:
-            "qrc:/fonts/NotoSerif-Regular.ttf"
-            break
-            case 2:
-            "qrc:/fonts/SpaceMono-Regular.ttf"
-            break
-            case 3:
-            "qrc:/fonts/Orbitron-Regular.ttf"
-            break
-            case 4:
-            "qrc:/fonts/PixelifySans-Regular.ttf"
-            break
-            default:
-            "qrc:/fonts/FiraSans-Bold.ttf"
-        }
-    }
-
-    GameAudio {
-        id: audioEngine
-    }
-
     GameOverPopup {
         id: gameOverPopup
-        root: root
         grid: grid
-        numberFont: numberFont
     }
 
     SettingsPage {
@@ -198,13 +193,8 @@ ApplicationWindow {
         rootY: root.y
     }
 
-    ErrorWindow {
-        id: errorWindow
-    }
-
     LoadWindow {
         id: loadWindow
-        errorWindow: errorWindow
     }
 
     SaveWindow {
@@ -217,7 +207,6 @@ ApplicationWindow {
 
     TopBar {
         id: topBar
-        root: root
         grid: grid
         saveWindow: saveWindow
         loadWindow: loadWindow
@@ -226,7 +215,7 @@ ApplicationWindow {
         aboutLoader: aboutLoader
     }
 
-    ScrollView {
+    GameView {
         id: gameArea
         anchors {
             left: parent.left
@@ -238,63 +227,6 @@ ApplicationWindow {
             rightMargin: 12
             bottomMargin: 12
         }
-        contentWidth: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, gameArea.width)
-        contentHeight: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, gameArea.height)
-
-        ScrollBar {
-            id: defaultVerticalScrollBar
-            parent: gameArea
-            orientation: Qt.Vertical
-            x: parent.width - width
-            y: 0
-            height: gameArea.height
-            visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
-            active: !GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        }
-
-        ScrollBar {
-            id: defaultHorizontalScrollBar
-            parent: gameArea
-            orientation: Qt.Horizontal
-            x: 0
-            y: parent.height - height
-            width: gameArea.width
-            visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
-            active: !GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        }
-
-        TempScrollBar {
-            id: fluentVerticalScrollBar
-            parent: gameArea
-            orientation: Qt.Vertical
-            x: parent.width - width
-            y: 0
-            height: gameArea.height
-            visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
-            active: GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameArea.height ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        }
-
-        TempScrollBar {
-            id: fluentHorizontalScrollBar
-            parent: gameArea
-            orientation: Qt.Horizontal
-            x: 0
-            y: parent.height - height
-            width: gameArea.width
-            visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
-            active: GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameArea.width ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        }
-
-        ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
-        ScrollBar.horizontal: GameCore.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
 
         Item {
             anchors.centerIn: parent
@@ -303,20 +235,12 @@ ApplicationWindow {
 
             GameGrid {
                 id: grid
-                audioEngine: audioEngine
                 leaderboardWindow: leaderboardWindow
                 gameOverPopup: gameOverPopup
                 Component.onCompleted: SaveManager.setGrid(grid)
                 delegate: Cell {
-                    id: cellItem
-                    width: GameState.cellSize
-                    height: GameState.cellSize
                     root: root
                     grid: grid
-                    numberFont: numberFont.name
-                    row: Math.floor(index / GameState.gridSizeX)
-                    col: index % GameState.gridSizeX
-                    opacity: 1
                 }
             }
         }
@@ -336,16 +260,21 @@ ApplicationWindow {
     function checkInitialGameState() {
         if (!GameState.gridFullyInitialized) return
 
-        let internalSaveData = GameCore.loadGameState("internalGameState.json")
-        if (internalSaveData) {
-            if (SaveManager.loadGame(internalSaveData)) {
-                GameCore.deleteSaveFile("internalGameState.json")
-                GameState.isManuallyLoaded = false
+        if (!GameCore.showWelcome) {
+            let internalSaveData = GameCore.loadGameState("internalGameState.json")
+            if (internalSaveData) {
+                if (SaveManager.loadGame(internalSaveData)) {
+                    GameCore.deleteSaveFile("internalGameState.json")
+                    GameState.isManuallyLoaded = false
+                } else {
+                    console.error("Failed to load internal game state")
+                    grid.initGame()
+                }
             } else {
-                console.error("Failed to load internal game state")
                 grid.initGame()
             }
         } else {
+            GameCore.deleteSaveFile("internalGameState.json")
             grid.initGame()
         }
 

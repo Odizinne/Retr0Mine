@@ -4,10 +4,15 @@ import QtQuick.Controls
 
 Item {
     id: cellItem
+    width: GameState.cellSize
+    height: GameState.cellSize
+    row: Math.floor(index / GameState.gridSizeX)
+    col: index % GameState.gridSizeX
+    opacity: 1
+
     required property var root
     required property int index
     required property var grid
-    required property string numberFont
 
     property bool revealed: false
     property bool flagged: false
@@ -123,7 +128,7 @@ Item {
         anchors.fill: cellButton
         border.width: 2
         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-        border.color: Colors.frameColor
+        border.color: GameConstants.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
                 return true
@@ -133,7 +138,7 @@ Item {
         }
         color: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
-                return Colors.accentColor
+                return GameConstants.accentColor
             return "transparent"
         }
 
@@ -175,7 +180,7 @@ Item {
         IconImage {
             anchors.centerIn: parent
             source: "qrc:/icons/bomb.png"
-            color: Colors.foregroundColor
+            color: GameConstants.foregroundColor
             visible: cellItem.revealed && GameState.mines.includes(cellItem.index)
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
@@ -184,7 +189,7 @@ Item {
         IconImage {
             anchors.centerIn: parent
             source: "qrc:/icons/questionmark.png"
-            color: Colors.foregroundColor
+            color: GameConstants.foregroundColor
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
             opacity: cellItem.questioned ? 1 : 0
@@ -237,8 +242,8 @@ Item {
             anchors.centerIn: parent
             source: GameState.flagPath
             color: {
-                if (GameSettings.contrastFlag) return Colors.foregroundColor
-                else return Colors.accentColor
+                if (GameSettings.contrastFlag) return GameConstants.foregroundColor
+                else return GameConstants.accentColor
             }
             sourceSize.width: cellItem.width / 1.8
             sourceSize.height: cellItem.height / 1.8
@@ -306,7 +311,7 @@ Item {
             if (GameState.mines.includes(cellItem.index)) return ""
             return GameState.numbers[cellItem.index] === undefined || GameState.numbers[cellItem.index] === 0 ? "" : GameState.numbers[cellItem.index];
         }
-        font.family: cellItem.numberFont
+        font.family: GameConstants.numberFont.name
         font.pixelSize: GameState.cellSize * 0.60
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -320,12 +325,12 @@ Item {
             NumberAnimation { duration: 200 }
         }
 
-        color: Colors.getNumberColor(
-            cellItem.revealed,
-            GameState.mines.includes(cellItem.index),
-            cellItem.index,
-            GameState.numbers[cellItem.index]
-        )
+        color: GameConstants.getNumberColor(
+                   cellItem.revealed,
+                   GameState.mines.includes(cellItem.index),
+                   cellItem.index,
+                   GameState.numbers[cellItem.index]
+                   )
     }
 
     function startGridResetAnimation() {

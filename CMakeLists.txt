@@ -51,11 +51,12 @@ set(QML_FILES
     qml/InfoIcon.qml
     qml/GameGrid.qml
     qml/GameAudio.qml
+    qml/GameView.qml
 )
 
 set(QML_SINGLETONS
     qml/GameSettings.qml
-    qml/Colors.qml
+    qml/GameConstants.qml
     qml/GameState.qml
     qml/SaveManager.qml
 )
@@ -64,7 +65,6 @@ set_source_files_properties(${QML_SINGLETONS}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
 
-# Create the executable
 add_executable(appRetr0Mine
     ${SOURCES}
     ${HEADERS}

@@ -3,16 +3,16 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Popup {
-    id: aboutPage
+    id: control
     width: height + 12
     anchors.centerIn: parent
     modal: true
 
     Shortcut {
         sequence: "Esc"
-        enabled: aboutPage.visible
+        enabled: control.visible
         onActivated: {
-            aboutPage.visible = false
+            control.visible = false
         }
     }
 

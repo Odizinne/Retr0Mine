@@ -60,5 +60,25 @@ Item {
         return palette[number] || "black"
     }
 
-
+    readonly property FontLoader numberFont: FontLoader {
+        source: switch (GameSettings.fontIndex) {
+            case 0:
+                "qrc:/fonts/FiraSans-SemiBold.ttf"
+                break
+            case 1:
+                "qrc:/fonts/NotoSerif-Regular.ttf"
+                break
+            case 2:
+                "qrc:/fonts/SpaceMono-Regular.ttf"
+                break
+            case 3:
+                "qrc:/fonts/Orbitron-Regular.ttf"
+                break
+            case 4:
+                "qrc:/fonts/PixelifySans-Regular.ttf"
+                break
+            default:
+                "qrc:/fonts/FiraSans-Bold.ttf"
+        }
+    }
 }

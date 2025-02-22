@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Popup {
-    id: saveWindow
+    id: control
     width: 300
     height: 140
     modal: true
@@ -13,15 +13,15 @@ Popup {
 
     Shortcut {
         sequence: "Esc"
-        enabled: saveWindow.visible
+        enabled: control.visible
         onActivated: {
-            saveWindow.visible = false
+            control.visible = false
         }
     }
 
     Shortcut {
         sequence: "Return"
-        enabled: saveWindow.visible
+        enabled: control.visible
         onActivated: {
             if (saveButton.enabled) {
                 saveButton.click()
@@ -71,21 +71,21 @@ Popup {
             Button {
                 id: cancelButton
                 text: qsTr("Cancel")
-                Layout.preferredWidth: saveWindow.buttonWidth
+                Layout.preferredWidth: control.buttonWidth
                 Layout.fillWidth: true
-                onClicked: saveWindow.visible = false
+                onClicked: control.visible = false
             }
 
             Button {
                 id: saveButton
                 text: qsTr("Save")
-                Layout.preferredWidth: saveWindow.buttonWidth
+                Layout.preferredWidth: control.buttonWidth
                 Layout.fillWidth: true
                 enabled: false
                 onClicked: {
                     if (saveNameField.text.trim()) {
                         SaveManager.saveGame(saveNameField.text.trim() + ".json")
-                        saveWindow.visible = false
+                        control.visible = false
                     }
                 }
             }

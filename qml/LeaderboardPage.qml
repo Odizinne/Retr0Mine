@@ -6,7 +6,7 @@ import QtQuick.Controls.impl
 import QtQuick.Layouts
 
 Popup {
-    id: leaderboardPage
+    id: control
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     visible: false
@@ -22,9 +22,9 @@ Popup {
 
     Shortcut {
         sequence: "Esc"
-        enabled: leaderboardPage.visible
+        enabled: control.visible
         onActivated: {
-            leaderboardPage.visible = false
+            control.visible = false
         }
     }
 
@@ -40,7 +40,7 @@ Popup {
 
             IconImage {
                 source: "qrc:/icons/steam.png"
-                color: Colors.foregroundColor
+                color: GameConstants.foregroundColor
                 sourceSize.height: 20
                 sourceSize.width: 20
                 Layout.preferredHeight: 30
@@ -109,22 +109,22 @@ Popup {
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Label {
-                        text: leaderboardPage.easyTime
+                        text: control.easyTime
                         horizontalAlignment: Text.AlignHCenter
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Label {
-                        text: leaderboardPage.mediumTime
+                        text: control.mediumTime
                         horizontalAlignment: Text.AlignHCenter
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Label {
-                        text: leaderboardPage.hardTime
+                        text: control.hardTime
                         horizontalAlignment: Text.AlignHCenter
                         Layout.alignment: Qt.AlignHCenter
                     }
                     Label {
-                        text: leaderboardPage.retr0Time
+                        text: control.retr0Time
                         horizontalAlignment: Text.AlignHCenter
                         Layout.alignment: Qt.AlignHCenter
                     }
@@ -141,22 +141,22 @@ Popup {
                         Layout.alignment: Qt.AlignRight
                     }
                     Label {
-                        text: leaderboardPage.easyWins.toString()
+                        text: control.easyWins.toString()
                         horizontalAlignment: Text.AlignRight
                         Layout.alignment: Qt.AlignRight
                     }
                     Label {
-                        text: leaderboardPage.mediumWins.toString()
+                        text: control.mediumWins.toString()
                         horizontalAlignment: Text.AlignRight
                         Layout.alignment: Qt.AlignRight
                     }
                     Label {
-                        text: leaderboardPage.hardWins.toString()
+                        text: control.hardWins.toString()
                         horizontalAlignment: Text.AlignRight
                         Layout.alignment: Qt.AlignRight
                     }
                     Label {
-                        text: leaderboardPage.retr0Wins.toString()
+                        text: control.retr0Wins.toString()
                         horizontalAlignment: Text.AlignRight
                         Layout.alignment: Qt.AlignRight
                     }
@@ -171,14 +171,14 @@ Popup {
                 Layout.fillWidth: true
                 Layout.bottomMargin: 15
                 onClicked: {
-                    leaderboardPage.easyTime = ""
-                    leaderboardPage.mediumTime = ""
-                    leaderboardPage.hardTime = ""
-                    leaderboardPage.retr0Time = ""
-                    leaderboardPage.easyWins = 0
-                    leaderboardPage.mediumWins = 0
-                    leaderboardPage.hardWins = 0
-                    leaderboardPage.retr0Wins = 0
+                    control.easyTime = ""
+                    control.mediumTime = ""
+                    control.hardTime = ""
+                    control.retr0Time = ""
+                    control.easyWins = 0
+                    control.mediumWins = 0
+                    control.hardWins = 0
+                    control.retr0Wins = 0
 
                     let emptyLeaderboard = {
                         easyTime: "",
@@ -198,7 +198,7 @@ Popup {
             Button {
                 text: qsTr("Close")
                 Layout.fillWidth: true
-                onClicked: leaderboardPage.visible = false
+                onClicked: control.visible = false
                 Layout.bottomMargin: 15
             }
         }

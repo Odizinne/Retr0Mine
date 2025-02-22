@@ -30,7 +30,7 @@ public:
 
     // QML invokable methods
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
-    Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename) const;
+    Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename);
     Q_INVOKABLE QString loadGameState(const QString &filename) const;
     Q_INVOKABLE QStringList getSaveFiles() const;
     Q_INVOKABLE void restartRetr0Mine(int index);
@@ -66,6 +66,7 @@ signals:
     void fluentChanged();
     void universalChanged();
     void fusionChanged();
+    void saveCompleted(bool success);
 };
 
 struct GameCoreForeign

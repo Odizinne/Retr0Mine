@@ -235,22 +235,23 @@ QStringList GameCore::getSaveFiles() const
     return files;
 }
 
-bool GameCore::saveGameState(const QString &data, const QString &filename) const
+bool GameCore::saveGameState(const QString &data, const QString &filename)
 {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-
     QDir saveDir(savePath);
     if (!saveDir.exists()) {
         saveDir.mkpath(".");
     }
-
     QFile file(saveDir.filePath(filename));
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream stream(&file);
         stream << data;
+        stream.flush();  // Make sure to flush
         file.close();
+        emit saveCompleted(true);
         return true;
     }
+    emit saveCompleted(false);
     return false;
 }
 

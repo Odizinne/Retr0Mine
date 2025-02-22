@@ -4,10 +4,8 @@ import QtQuick.Layouts
 
 Popup {
     anchors.centerIn: parent
-    id: gameOverWindow
-    required property var root
+    id: control
     required property var grid
-    required property var numberFont
     visible: false
     modal: true
     closePolicy: Popup.NoAutoClose
@@ -21,17 +19,17 @@ Popup {
 
     Shortcut {
         sequence: "Return"
-        enabled: gameOverWindow.visible
+        enabled: control.visible
         onActivated: {
-            gameOverWindow.visible = false
-            gameOverWindow.grid.initGame()
+            control.visible = false
+            control.grid.initGame()
         }
     }
 
     Shortcut {
         sequence: "Esc"
-        enabled: gameOverWindow.visible
-        onActivated: gameOverWindow.visible = false
+        enabled: control.visible
+        onActivated: control.visible = false
     }
 
     enter: Transition {
@@ -62,17 +60,17 @@ Popup {
         Label {
             id: gameOverLabel
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: gameOverWindow.gameOverLabelText
-            color: gameOverWindow.gameOverLabelColor
+            text: control.gameOverLabelText
+            color: control.gameOverLabelColor
             Layout.columnSpan: 2
-            font.family: gameOverWindow.numberFont.name
+            font.family: GameConstants.numberFont.name
             font.pixelSize: 16
         }
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: gameOverWindow.notificationText
-            visible: gameOverWindow.notificationVisible
+            text: control.notificationText
+            visible: control.notificationVisible
             font.pixelSize: 13
             font.bold: true
             Layout.columnSpan: 2
@@ -82,7 +80,7 @@ Popup {
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             text: qsTr("New record saved")
-            visible: gameOverWindow.newRecordVisible
+            visible: control.newRecordVisible
             Layout.columnSpan: 2
             font.pixelSize: 13
         }
@@ -91,11 +89,11 @@ Popup {
             id: retryButton
             text: qsTr("Retry")
             Layout.fillWidth: true
-            Layout.preferredWidth: gameOverWindow.buttonWidth
+            Layout.preferredWidth: control.buttonWidth
             onClicked: {
-                gameOverWindow.visible = false
-                gameOverWindow.notificationVisible = false
-                gameOverWindow.grid.initGame()
+                control.visible = false
+                control.notificationVisible = false
+                control.grid.initGame()
             }
         }
 
@@ -103,10 +101,10 @@ Popup {
             id: closeButton
             text: qsTr("Close")
             Layout.fillWidth: true
-            Layout.preferredWidth: gameOverWindow.buttonWidth
+            Layout.preferredWidth: control.buttonWidth
             onClicked: {
-                gameOverWindow.visible = false
-                gameOverWindow.notificationVisible = false
+                control.visible = false
+                control.notificationVisible = false
             }
         }
     }

@@ -13,7 +13,10 @@ GridView {
     property int cellsCreated: 0
     required property var leaderboardWindow
     required property var gameOverPopup
-    required property var audioEngine
+
+    GameAudio {
+        id: audioEngine
+    }
 
     function requestHint() {
         if (!GameState.gameStarted || GameState.gameOver) {

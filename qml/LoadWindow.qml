@@ -6,26 +6,28 @@ import QtQuick.Layouts
 import QtQuick.Controls.impl
 
 Popup {
-    id: loadWindow
-    required property var errorWindow
-
+    id: control
     width: 300
     height: 320
     modal: true
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
 
+    ErrorWindow {
+        id: errorWindow
+    }
+
     Shortcut {
         sequence: "Esc"
-        enabled: loadWindow.visible
+        enabled: control.visible
         onActivated: {
-            loadWindow.visible = false
+            control.visible = false
         }
     }
 
     Shortcut {
         sequence: "Up"
-        enabled: loadWindow.visible
+        enabled: control.visible
         onActivated: {
             saveFilesList.currentIndex = Math.max(0, saveFilesList.currentIndex - 1)
         }
@@ -33,7 +35,7 @@ Popup {
 
     Shortcut {
         sequence: "Down"
-        enabled: loadWindow.visible
+        enabled: control.visible
         onActivated: {
             saveFilesList.currentIndex = Math.min(saveFilesList.model.count - 1, saveFilesList.currentIndex + 1)
         }
@@ -41,7 +43,7 @@ Popup {
 
     Shortcut {
         sequence: "Return"
-        enabled: loadWindow.visible
+        enabled: control.visible
         onActivated: {
             if (saveFilesList.currentIndex >= 0 &&
                 saveFilesList.currentIndex < saveFilesList.model.count &&
@@ -52,9 +54,9 @@ Popup {
                 let saveData = GameCore.loadGameState(saveFileName)
                 if (saveData) {
                     if (!SaveManager.loadGame(saveData)) {
-                        loadWindow.errorWindow.visible = true
+                        errorWindow.visible = true
                     }
-                    loadWindow.visible = false
+                    control.visible = false
                 }
             }
         }
@@ -104,9 +106,9 @@ Popup {
                         let saveData = GameCore.loadGameState(name)
                         if (saveData) {
                             if (!SaveManager.loadGame(saveData)) {
-                                loadWindow.errorWindow.visible = true
+                                errorWindow.visible = true
                             }
-                            loadWindow.visible = false
+                            control.visible = false
                         }
                     }
 
@@ -116,7 +118,7 @@ Popup {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.rightMargin: 10
                         source: "qrc:/icons/delete.png"
-                        color: Colors.foregroundColor
+                        color: GameConstants.foregroundColor
                         height: 16
                         width: 40
                         MouseArea {
@@ -136,7 +138,7 @@ Popup {
         Button {
             text: qsTr("Cancel")
             Layout.fillWidth: true
-            onClicked: loadWindow.visible = false
+            onClicked: control.visible = false
         }
     }
 
