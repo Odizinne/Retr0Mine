@@ -8,7 +8,6 @@ ApplicationWindow {
     id: control
     title: qsTr("Settings")
     required property var grid
-    required property var root
     readonly property int baseWidth: 600
     readonly property int baseHeight: 480
     required property int rootWidth
@@ -922,12 +921,6 @@ ApplicationWindow {
 
                                 onActivated: {
                                     Retr0MineSettings.cellSize = currentIndex
-                                    if (!control.root.isMaximized && !control.root.isFullScreen) {
-                                        control.root.minimumWidth = control.root.getInitialWidth()
-                                        control.root.minimumHeight = control.root.getInitialHeight()
-                                        rootWidth = control.root.minimumWidth
-                                        control.root.height = control.root.minimumHeight
-                                    }
                                 }
                             }
                         }

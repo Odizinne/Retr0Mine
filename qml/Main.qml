@@ -181,7 +181,6 @@ ApplicationWindow {
 
     SettingsPage {
         id: settingsWindow
-        root: root
         grid: grid
         rootWidth: root.width
         rootHeight: root.height
