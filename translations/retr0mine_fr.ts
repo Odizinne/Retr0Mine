@@ -30,20 +30,20 @@
 <context>
     <name>GameGrid</name>
     <message>
-        <location filename="../qml/GameGrid.qml" line="270"/>
-        <location filename="../qml/GameGrid.qml" line="277"/>
-        <location filename="../qml/GameGrid.qml" line="284"/>
+        <location filename="../qml/GameGrid.qml" line="273"/>
+        <location filename="../qml/GameGrid.qml" line="280"/>
+        <location filename="../qml/GameGrid.qml" line="287"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/GameGrid.qml" line="294"/>
-        <location filename="../qml/GameGrid.qml" line="300"/>
+        <location filename="../qml/GameGrid.qml" line="297"/>
+        <location filename="../qml/GameGrid.qml" line="303"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
     <message>
-        <location filename="../qml/GameGrid.qml" line="310"/>
+        <location filename="../qml/GameGrid.qml" line="313"/>
         <source>Victory</source>
         <translation>Victoire</translation>
     </message>
@@ -51,7 +51,7 @@
 <context>
     <name>GameOverPopup</name>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="84"/>
+        <location filename="../qml/GameOverPopup.qml" line="82"/>
         <source>New record saved</source>
         <translation>Nouveau record sauvegardé</translation>
     </message>
@@ -60,12 +60,12 @@
         <translation type="vanished">Premier click: X: %1, Y: %2, seed: %3</translation>
     </message>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="92"/>
+        <location filename="../qml/GameOverPopup.qml" line="90"/>
         <source>Retry</source>
         <translation>Rejouer</translation>
     </message>
     <message>
-        <location filename="../qml/GameOverPopup.qml" line="104"/>
+        <location filename="../qml/GameOverPopup.qml" line="102"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -144,12 +144,12 @@
 <context>
     <name>LoadWindow</name>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="137"/>
+        <location filename="../qml/LoadWindow.qml" line="139"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/LoadWindow.qml" line="74"/>
+        <location filename="../qml/LoadWindow.qml" line="76"/>
         <source>No saved games found</source>
         <translation>Aucune partie sauvegardée</translation>
     </message>
@@ -421,6 +421,11 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="910"/>
+        <source>Small</source>
+        <translation>Petit</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="930"/>
         <source>High contrast flags</source>
         <translation>Drapeaux contrastés</translation>
@@ -446,9 +451,8 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Grand</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="910"/>
         <source>Extra Large</source>
-        <translation>Très grand</translation>
+        <translation type="vanished">Très grand</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="997"/>
@@ -560,42 +564,42 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="41"/>
+        <location filename="../qml/TopBar.qml" line="40"/>
         <source>New game</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="58"/>
+        <location filename="../qml/TopBar.qml" line="57"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="46"/>
+        <location filename="../qml/TopBar.qml" line="45"/>
         <source>Save game</source>
         <translation>Sauver</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="53"/>
+        <location filename="../qml/TopBar.qml" line="52"/>
         <source>Load game</source>
         <translation>Charger</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="66"/>
+        <location filename="../qml/TopBar.qml" line="65"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="71"/>
+        <location filename="../qml/TopBar.qml" line="70"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="76"/>
+        <location filename="../qml/TopBar.qml" line="75"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="85"/>
+        <location filename="../qml/TopBar.qml" line="84"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -603,39 +607,39 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>WelcomePage</name>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="26"/>
+        <location filename="../qml/WelcomePage.qml" line="21"/>
         <source>Welcome to Retr0Mine</source>
         <translation>Bienvenue dans Retr0Mine</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="36"/>
+        <location filename="../qml/WelcomePage.qml" line="31"/>
         <source>Would you like to configure some quick settings to enhance your experience? Everything can still be adjusted later.</source>
         <translation>Voulez-vous configurer quelques réglages rapides pour améliorer votre expérience ? Tout pourra être réajusté plus tard.</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="46"/>
+        <location filename="../qml/WelcomePage.qml" line="41"/>
         <source>Later</source>
         <translation>Plus tard</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="54"/>
+        <location filename="../qml/WelcomePage.qml" line="49"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="120"/>
+        <location filename="../qml/WelcomePage.qml" line="115"/>
         <source>Classic</source>
         <translation>Classique</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="92"/>
+        <location filename="../qml/WelcomePage.qml" line="87"/>
         <source>- Left click on cell to reveal
 - Right click on cell to flag</source>
         <translation>- Clique gauche sur une cellule pour révéler
 - Clique droit sur une cellule pour poser un drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="111"/>
+        <location filename="../qml/WelcomePage.qml" line="106"/>
         <source>- Any click on satisfied number to reveal
 - Left click on cell to flag
 - Right click on cell to reveal</source>
@@ -644,62 +648,62 @@ La partie en cours sera sauvegardée et restaurée</translation>
 - Clique droit sur une cellule pour révéler</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="120"/>
+        <location filename="../qml/WelcomePage.qml" line="115"/>
         <source>Chord</source>
         <translation>Accord</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="380"/>
+        <location filename="../qml/WelcomePage.qml" line="375"/>
         <source>Enable enhanced visuals</source>
         <translation>Activer les améliorations visuelles</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="403"/>
+        <location filename="../qml/WelcomePage.qml" line="398"/>
         <source>System color for flags</source>
         <translation>Couleur système pour les drapeaux</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="423"/>
+        <location filename="../qml/WelcomePage.qml" line="418"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="443"/>
+        <location filename="../qml/WelcomePage.qml" line="438"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="656"/>
+        <location filename="../qml/WelcomePage.qml" line="651"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="874"/>
+        <location filename="../qml/WelcomePage.qml" line="869"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1096"/>
+        <location filename="../qml/WelcomePage.qml" line="1091"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1314"/>
+        <location filename="../qml/WelcomePage.qml" line="1309"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1336"/>
+        <location filename="../qml/WelcomePage.qml" line="1331"/>
         <source>You&apos;re all set!</source>
         <translation>Tout est prêt!</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1342"/>
+        <location filename="../qml/WelcomePage.qml" line="1337"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
     </message>
     <message>
-        <location filename="../qml/WelcomePage.qml" line="1353"/>
+        <location filename="../qml/WelcomePage.qml" line="1348"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

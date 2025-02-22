@@ -907,7 +907,7 @@ ApplicationWindow {
                             }
                             ComboBox {
                                 id: cellSizeComboBox
-                                model: [qsTr("Normal"), qsTr("Large"), qsTr("Extra Large")]
+                                model: [qsTr("Small"), qsTr("Normal"), qsTr("Large")]
                                 Layout.rightMargin: 5
                                 currentIndex: {
                                     switch(GameSettings.cellSize) {
