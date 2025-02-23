@@ -188,7 +188,7 @@ bool GameCore::loadLanguage(QString languageCode)
     delete translator;
     translator = new QTranslator(this);
 
-    QString filePath = ":/translations/retr0mine_" + languageCode + ".qm";
+    QString filePath = ":/i18n/Retr0Mine_" + languageCode + ".qm";
 
     if (translator->load(filePath)) {
         if (qApp) {

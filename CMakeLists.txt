@@ -15,7 +15,11 @@ find_package(Qt6 REQUIRED COMPONENTS
     QuickControls2
     LinguistTools
 )
-qt_standard_project_setup(REQUIRES 6.5)
+qt_standard_project_setup(
+    REQUIRES 6.5
+    I18N_SOURCE_LANGUAGE en
+    I18N_TRANSLATED_LANGUAGES fr
+)
 qt_policy(SET QTP0004 NEW)
 set(SOURCES
     src/main.cpp
@@ -84,11 +88,13 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     Qt6::QuickControls2
 )
 qt_add_translations(${CMAKE_PROJECT_NAME}
-    TS_FILES
-        translations/retr0mine_en.ts
-        translations/retr0mine_fr.ts
-    RESOURCE_PREFIX "/translations"
+    TS_FILE_DIR "translations"
 )
+#    TS_FILES
+#        translations/retr0mine_en.ts
+#        translations/retr0mine_fr.ts
+#    RESOURCE_PREFIX "/translations"
+#)
 #add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 if(WIN32)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
