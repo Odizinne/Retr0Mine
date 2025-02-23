@@ -824,7 +824,6 @@ ApplicationWindow {
                     id: shortcutsPane
                     ScrollView {
                         anchors.fill: parent
-                        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
                         ListView {
                             anchors.fill: parent
@@ -866,7 +865,7 @@ ApplicationWindow {
                             delegate: Frame {
                                 id: shortcutLine
                                 required property var model
-                                width: ListView.view.width - 20
+                                width: ListView.view.width -5
 
                                 RowLayout {
                                     anchors.fill: parent
