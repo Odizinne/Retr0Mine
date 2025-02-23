@@ -13,6 +13,7 @@ GridView {
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
     required property var leaderboardWindow
+    property int generationAttempt
 
     GameAudio {
         id: audioEngine
@@ -84,7 +85,13 @@ GridView {
         if (!GameState.gameStarted) {
             GameState.firstClickIndex = index
             if (!placeMines(index)) {
-                reveal(index)
+                if (grid.generationAttempt < 100) {
+                    grid.generationAttempt++
+                    reveal(index)
+                } else {
+                    console.warn("Maximum placeMines attempts reached")
+                    grid.generationAttempt = 0
+                }
                 return
             }
             GameState.gameStarted = true
