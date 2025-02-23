@@ -9,7 +9,7 @@ Item {
 
     Timer {
         id: cooldownTimer
-        interval: 100
+        interval: 25
         onTriggered: control.clickCooldown = false
     }
 
