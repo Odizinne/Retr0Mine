@@ -151,7 +151,7 @@ Item {
         opacity: {
             if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index)) return 1
-            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.5
+            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity
         }
     }
 
@@ -320,7 +320,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
         opacity: {
             if (!GameSettings.dimSatisfied || !cellItem.revealed || GameState.numbers[cellItem.index] === 0) return 1
-            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : 0.25
+            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
         }
 
         Behavior on opacity {

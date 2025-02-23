@@ -552,6 +552,22 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
+                            enabled: GameSettings.dimSatisfied
+                            Label {
+                                text: qsTr("Dim level")
+                                Layout.fillWidth: true
+                            }
+                            Slider {
+                                id: dimmedOpacitySlider
+                                from: 0.3
+                                to: 0.8
+                                value: GameSettings.satisfiedOpacity
+                                onValueChanged: GameSettings.satisfiedOpacity = value
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.fillWidth: true
                             Label {
                                 enabled: !GameCore.gamescope
                                 text: qsTr("Start in full screen")

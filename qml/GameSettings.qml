@@ -30,5 +30,6 @@ Settings {
     property int colorSchemeIndex: 0
     property int gridResetAnimationIndex: 0
     property int fontIndex: 0
+    property real satisfiedOpacity: 0.50
 }
 
