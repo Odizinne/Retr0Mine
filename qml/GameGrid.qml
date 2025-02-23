@@ -13,7 +13,6 @@ GridView {
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
     required property var leaderboardWindow
-    required property var gameOverPopup
 
     GameAudio {
         id: audioEngine
@@ -109,13 +108,11 @@ GridView {
             if (GameState.mines.includes(currentIndex)) {
                 cell.isBombClicked = true
                 GameState.gameOver = true
+                GameState.gameWon = false
                 GameTimer.stop()
                 revealAllMines()
                 audioEngine.playLoose()
-                gameOverPopup.gameOverLabelText = "Game over"
-                gameOverPopup.gameOverLabelColor = "#d12844"
-                gameOverPopup.newRecordVisible = false
-                gameOverPopup.visible = true
+                GameState.displayPostGame = true
                 return
             }
 
@@ -223,6 +220,7 @@ GridView {
     function checkWin() {
         if (GameState.revealedCount === GameState.gridSizeX * GameState.gridSizeY - GameState.mineCount && !GameState.gameOver) {
             GameState.gameOver = true
+            GameState.gameWon = true
             GameTimer.stop()
 
             let leaderboardData = GameCore.loadGameState("leaderboard.json")
@@ -255,9 +253,7 @@ GridView {
                     leaderboard[timeField] = formattedTime;
                     leaderboard[centisecondsField] = centiseconds;
                     leaderboardWindow[timeField] = formattedTime;
-                    gameOverPopup.newRecordVisible = true
-                } else {
-                    gameOverPopup.newRecordVisible = false
+                    GameState.displayNewRecord = true
                 }
             }
 
@@ -271,22 +267,22 @@ GridView {
                         if (difficulty === 'easy') {
                             if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
                                 SteamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
-                                gameOverPopup.notificationText = qsTr("New flag unlocked!")
-                                gameOverPopup.notificationVisible = true;
+                                GameState.notificationText = qsTr("New flag unlocked!")
+                                GameState.displayNotification = true;
                                 GameState.flag1Unlocked = true;
                             }
                         } else if (difficulty === 'medium') {
                             if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
                                 SteamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
-                                gameOverPopup.notificationText = qsTr("New flag unlocked!")
-                                gameOverPopup.notificationVisible = true;
+                                GameState.notificationText = qsTr("New flag unlocked!")
+                                GameState.displayNotification = true;
                                 GameState.flag2Unlocked = true;
                             }
                         } else if (difficulty === 'hard') {
                             if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
                                 SteamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
-                                gameOverPopup.notificationText = qsTr("New flag unlocked!")
-                                gameOverPopup.notificationVisible = true;
+                                GameState.notificationText = qsTr("New flag unlocked!")
+                                GameState.displayNotification = true;
                                 GameState.flag3Unlocked = true;
                             }
                         }
@@ -295,14 +291,14 @@ GridView {
                     if (difficulty === 'easy') {
                         if (Math.floor(GameTimer.centiseconds / 100) < 15 && !SteamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
                             SteamIntegration.unlockAchievement("ACH_SPEED_DEMON");
-                            gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
-                            gameOverPopup.notificationVisible = true
+                            GameState.notificationText = qsTr("New grid animation unlocked!")
+                            GameState.displayNotification = true
                             GameState.anim2Unlocked = true
                         }
                         if (GameState.currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
                             SteamIntegration.unlockAchievement("ACH_HINT_MASTER");
-                            gameOverPopup.notificationText = qsTr("New grid animation unlocked!")
-                            gameOverPopup.notificationVisible = true
+                            GameState.notificationText = qsTr("New grid animation unlocked!")
+                            GameState.displayNotification = true
                             GameState.anim1Unlocked = true
                         }
                     }
@@ -311,9 +307,7 @@ GridView {
                 }
             }
 
-            gameOverPopup.gameOverLabelText = qsTr("Victory")
-            gameOverPopup.gameOverLabelColor = "#28d13c"
-            gameOverPopup.visible = true
+            GameState.displayPostGame = true
             audioEngine.playWin()
         } else {
             audioEngine.playClick()

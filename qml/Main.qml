@@ -166,7 +166,7 @@ ApplicationWindow {
         anchors.fill: parent
         active: GameCore.showWelcome
         sourceComponent: Component {
-            WelcomePage {
+            WelcomePopup {
             }
         }
     }
@@ -176,17 +176,16 @@ ApplicationWindow {
         anchors.fill: parent
         active: !SteamIntegration.initialized
         sourceComponent: Component {
-            AboutPage {
+            AboutPopup {
             }
         }
     }
 
-    GameOverPopup {
-        id: gameOverPopup
+    PostgamePopup {
         grid: grid
     }
 
-    SettingsPage {
+    SettingsWindow {
         id: settingsWindow
         grid: grid
         rootWidth: root.width
@@ -195,15 +194,15 @@ ApplicationWindow {
         rootY: root.y
     }
 
-    LoadWindow {
+    LoadPopup {
         id: loadWindow
     }
 
-    SaveWindow {
+    SavePopup {
         id: saveWindow
     }
 
-    LeaderboardPage {
+    LeaderboardPopup {
         id: leaderboardWindow
     }
 
@@ -238,7 +237,6 @@ ApplicationWindow {
             GameGrid {
                 id: grid
                 leaderboardWindow: leaderboardWindow
-                gameOverPopup: gameOverPopup
                 Component.onCompleted: SaveManager.setGrid(grid)
                 delegate: Cell {
                     root: root

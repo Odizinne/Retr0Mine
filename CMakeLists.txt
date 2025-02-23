@@ -32,16 +32,16 @@ set(HEADERS
 )
 set(QML_FILES
     qml/Cell.qml
-    qml/SettingsPage.qml
-    qml/GameOverPopup.qml
-    qml/AboutPage.qml
-    qml/LoadWindow.qml
-    qml/SaveWindow.qml
+    qml/SettingsWindow.qml
+    qml/PostgamePopup.qml
+    qml/AboutPopup.qml
+    qml/LoadPopup.qml
+    qml/SavePopup.qml
     qml/ErrorWindow.qml
     qml/TopBar.qml
-    qml/LeaderboardPage.qml
+    qml/LeaderboardPopup.qml
     qml/TempScrollBar.qml
-    qml/WelcomePage.qml
+    qml/WelcomePopup.qml
     qml/Main.qml
     qml/InfoIcon.qml
     qml/GameGrid.qml

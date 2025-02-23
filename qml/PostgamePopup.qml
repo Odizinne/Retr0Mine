@@ -6,16 +6,11 @@ Popup {
     anchors.centerIn: parent
     id: control
     required property var grid
-    visible: false
+    visible: GameState.displayPostGame
     modal: true
     closePolicy: Popup.NoAutoClose
     width: 300
     property int buttonWidth: Math.max(retryButton.implicitWidth, closeButton.implicitWidth)
-    property string notificationText
-    property bool notificationVisible: false
-    property string gameOverLabelText: "Game Over"
-    property string gameOverLabelColor: "#d12844"
-    property bool newRecordVisible: false
 
     Shortcut {
         sequence: "Return"
@@ -29,48 +24,27 @@ Popup {
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
-        onActivated: control.visible = false
-    }
-
-    enter: Transition {
-        NumberAnimation {
-            property: "opacity"
-            from: 0.0
-            to: 1.0
-            duration: 200
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    exit: Transition {
-        NumberAnimation {
-            property: "opacity"
-            from: 1.0
-            to: 0.0
-            duration: 200
-            easing.type: Easing.InOutQuad
-        }
+        onActivated: retryButton.clicked()
     }
 
     GridLayout {
-        id: popupLayout
         anchors.fill: parent
         columns: 2
         rowSpacing: 15
         Label {
-            id: gameOverLabel
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: control.gameOverLabelText
-            color: control.gameOverLabelColor
+            text: GameState.postgameText
+            color: GameState.postgameColor
             Layout.columnSpan: 2
             font.family: GameConstants.numberFont.name
             font.pixelSize: 16
         }
 
         Label {
+            id: notificationLabel
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: control.notificationText
-            visible: control.notificationVisible
+            text: GameState.notificationText
+            visible: GameState.displayNotification
             font.pixelSize: 13
             font.bold: true
             Layout.columnSpan: 2
@@ -78,9 +52,10 @@ Popup {
         }
 
         Label {
+            id: recordLabel
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             text: qsTr("New record saved")
-            visible: control.newRecordVisible
+            visible: GameState.displayNewRecord
             Layout.columnSpan: 2
             font.pixelSize: 13
         }
@@ -90,10 +65,11 @@ Popup {
             text: qsTr("Retry")
             Layout.fillWidth: true
             Layout.preferredWidth: control.buttonWidth
-            onClicked: {
-                control.visible = false
-                control.notificationVisible = false
+            onClicked: {                
                 control.grid.initGame()
+                GameState.displayNewRecord = false
+                GameState.displayNotification = false
+                GameState.displayPostGame = false
             }
         }
 
@@ -103,8 +79,9 @@ Popup {
             Layout.fillWidth: true
             Layout.preferredWidth: control.buttonWidth
             onClicked: {
-                control.visible = false
-                control.notificationVisible = false
+                GameState.displayNewRecord = false
+                GameState.displayNotification = false
+                GameState.displayPostGame = false
             }
         }
     }
