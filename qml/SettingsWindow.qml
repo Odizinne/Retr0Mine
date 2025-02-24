@@ -370,11 +370,11 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: invert.checked = !invert.checked
+                                    onClicked: invertLRSwitch.click()
                                 }
                             }
                             Switch {
-                                id: invert
+                                id: invertLRSwitch
                                 checked: GameSettings.invertLRClick
                                 onCheckedChanged: {
                                     GameSettings.invertLRClick = checked
@@ -389,11 +389,11 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: autoreveal.checked = !autoreveal.checked
+                                    onClicked: autorevealSwitch.click()
                                 }
                             }
                             Switch {
-                                id: autoreveal
+                                id: autorevealSwitch
                                 checked: GameSettings.autoreveal
                                 onCheckedChanged: {
                                     GameSettings.autoreveal = checked
@@ -408,7 +408,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: questionMarksSwitch.checked = !questionMarksSwitch.checked
+                                    onClicked: questionMarksSwitch.click()
                                 }
                             }
                             Switch {
@@ -435,7 +435,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: safeQuestionMarksSwitch.checked = !safeQuestionMarksSwitch.checked
+                                    onClicked: safeQuestionMarksSwitch.click()
                                 }
                             }
                             Switch {
@@ -463,7 +463,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: loadLastGameSwitch.checked = !loadLastGameSwitch.checked
+                                    onClicked: loadLastGameSwitch.click()
                                 }
                             }
                             Switch {
@@ -494,11 +494,11 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: animationsSettings.checked = !animationsSettings.checked
+                                    onClicked: animationsSwitch.click()
                                 }
                             }
                             Switch {
-                                id: animationsSettings
+                                id: animationsSwitch
                                 checked: GameSettings.animations
                                 onCheckedChanged: {
                                     GameSettings.animations = checked
@@ -519,11 +519,11 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: cellFrameSettings.checked = !cellFrameSettings.checked
+                                    onClicked: cellFrameSwitch.click()
                                 }
                             }
                             Switch {
-                                id: cellFrameSettings
+                                id: cellFrameSwitch
                                 checked: GameSettings.cellFrame
                                 onCheckedChanged: {
                                     GameSettings.cellFrame = checked
@@ -538,7 +538,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: dimSatisfiedSwitch.checked = !dimSatisfiedSwitch.checked
+                                    onClicked: dimSatisfiedSwitch.click()
                                 }
                             }
                             Switch {
@@ -575,7 +575,7 @@ ApplicationWindow {
                                 MouseArea {
                                     enabled: !GameCore.gamescope
                                     anchors.fill: parent
-                                    onClicked: startFullScreenSwitch.checked = !startFullScreenSwitch.checked
+                                    onClicked: startFullScreenSwitch.click()
                                 }
                             }
                             Switch {
@@ -672,80 +672,72 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                             }
 
-                            ColumnLayout {
-                                Button {
-                                    Layout.preferredWidth: 45
-                                    Layout.preferredHeight: 45
-                                    checkable: true
-                                    icon.source: "qrc:/icons/flag.png"
-                                    checked: GameSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
-                                    icon.width: 35
-                                    icon.height: 35
-                                    ButtonGroup.group: buttonGroup
-                                    Layout.alignment: Qt.AlignHCenter
-                                    onCheckedChanged: {
-                                        if (checked) GameSettings.flagSkinIndex = 0
-                                    }
+                            Button {
+                                Layout.preferredWidth: 45
+                                Layout.preferredHeight: 45
+                                checkable: true
+                                icon.source: "qrc:/icons/flag.png"
+                                checked: GameSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
+                                icon.width: 35
+                                icon.height: 35
+                                ButtonGroup.group: buttonGroup
+                                Layout.alignment: Qt.AlignHCenter
+                                onCheckedChanged: {
+                                    if (checked) GameSettings.flagSkinIndex = 0
                                 }
                             }
 
-                            ColumnLayout {
-                                Button {
-                                    Layout.preferredWidth: 45
-                                    Layout.preferredHeight: 45
-                                    enabled: GameState.flag1Unlocked
-                                    checkable: true
-                                    checked: GameState.flag1Unlocked && GameSettings.flagSkinIndex === 1
-                                    icon.source: GameState.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
-                                    icon.width: 35
-                                    icon.height: 35
-                                    ButtonGroup.group: buttonGroup
-                                    Layout.alignment: Qt.AlignHCenter
-                                    ToolTip.visible: hovered && !enabled
-                                    ToolTip.text: qsTr("Unlock Trust Your Instincts achievement")
-                                    onCheckedChanged: {
-                                        if (checked) GameSettings.flagSkinIndex = 1
-                                    }
+                            Button {
+                                Layout.preferredWidth: 45
+                                Layout.preferredHeight: 45
+                                enabled: GameState.flag1Unlocked
+                                checkable: true
+                                checked: GameState.flag1Unlocked && GameSettings.flagSkinIndex === 1
+                                icon.source: GameState.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
+                                icon.width: 35
+                                icon.height: 35
+                                ButtonGroup.group: buttonGroup
+                                Layout.alignment: Qt.AlignHCenter
+                                ToolTip.visible: hovered && !enabled
+                                ToolTip.text: qsTr("Unlock Trust Your Instincts achievement")
+                                onCheckedChanged: {
+                                    if (checked) GameSettings.flagSkinIndex = 1
                                 }
                             }
 
-                            ColumnLayout {
-                                Button {
-                                    Layout.preferredWidth: 45
-                                    Layout.preferredHeight: 45
-                                    enabled: GameState.flag2Unlocked
-                                    checkable: true
-                                    checked: GameState.flag2Unlocked && GameSettings.flagSkinIndex === 2
-                                    icon.source: GameState.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
-                                    icon.width: 35
-                                    icon.height: 35
-                                    ButtonGroup.group: buttonGroup
-                                    Layout.alignment: Qt.AlignHCenter
-                                    ToolTip.visible: hovered && !enabled
-                                    ToolTip.text: qsTr("Unlock Master Tactician achievement")
-                                    onCheckedChanged: {
-                                        if (checked) GameSettings.flagSkinIndex = 2
-                                    }
+                            Button {
+                                Layout.preferredWidth: 45
+                                Layout.preferredHeight: 45
+                                enabled: GameState.flag2Unlocked
+                                checkable: true
+                                checked: GameState.flag2Unlocked && GameSettings.flagSkinIndex === 2
+                                icon.source: GameState.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
+                                icon.width: 35
+                                icon.height: 35
+                                ButtonGroup.group: buttonGroup
+                                Layout.alignment: Qt.AlignHCenter
+                                ToolTip.visible: hovered && !enabled
+                                ToolTip.text: qsTr("Unlock Master Tactician achievement")
+                                onCheckedChanged: {
+                                    if (checked) GameSettings.flagSkinIndex = 2
                                 }
                             }
 
-                            ColumnLayout {
-                                Button {
-                                    Layout.preferredWidth: 45
-                                    Layout.preferredHeight: 45
-                                    enabled: GameState.flag3Unlocked
-                                    checkable: true
-                                    checked: GameState.flag3Unlocked && GameSettings.flagSkinIndex === 3
-                                    icon.source: GameState.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
-                                    icon.width: 35
-                                    icon.height: 35
-                                    ButtonGroup.group: buttonGroup
-                                    Layout.alignment: Qt.AlignHCenter
-                                    ToolTip.visible: hovered && !enabled
-                                    ToolTip.text: qsTr("Unlock Minefield Legend achievement")
-                                    onCheckedChanged: {
-                                        if (checked) GameSettings.flagSkinIndex = 3
-                                    }
+                            Button {
+                                Layout.preferredWidth: 45
+                                Layout.preferredHeight: 45
+                                enabled: GameState.flag3Unlocked
+                                checkable: true
+                                checked: GameState.flag3Unlocked && GameSettings.flagSkinIndex === 3
+                                icon.source: GameState.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
+                                icon.width: 35
+                                icon.height: 35
+                                ButtonGroup.group: buttonGroup
+                                Layout.alignment: Qt.AlignHCenter
+                                ToolTip.visible: hovered && !enabled
+                                ToolTip.text: qsTr("Unlock Minefield Legend achievement")
+                                onCheckedChanged: {
+                                    if (checked) GameSettings.flagSkinIndex = 3
                                 }
                             }
                         }
@@ -769,7 +761,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: soundEffectSwitch.checked = !soundEffectSwitch.checked
+                                    onClicked: soundEffectSwitch.click()
                                 }
                             }
                             Switch {
@@ -948,7 +940,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: highContrastFlagSwitch.checked = !highContrastFlagSwitch.checked
+                                    onClicked: highContrastFlagSwitch.click()
                                 }
                             }
                             Switch {
