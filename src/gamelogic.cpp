@@ -1226,7 +1226,7 @@ bool GameLogic::placeNoGuessMines(int firstClickX, int firstClickY) {
     };
 
     // Try multiple times to generate a valid board
-    const int MAX_ATTEMPTS = 5;
+    const int MAX_ATTEMPTS = 1;
 
     for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
         // Initialize a new board state

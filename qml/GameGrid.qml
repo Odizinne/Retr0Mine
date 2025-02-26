@@ -81,16 +81,29 @@ GridView {
     function reveal(index) {
         let initialCell = grid.itemAtIndex(index) as Cell
         if (GameState.gameOver || initialCell.revealed || initialCell.flagged) return
-
         if (!GameState.gameStarted) {
             GameState.firstClickIndex = index
-            if (!placeMines(index)) {
+            if (!placeNoGuessMines(index)) {
                 if (grid.generationAttempt < 100) {
                     grid.generationAttempt++
                     reveal(index)
                 } else {
-                    console.warn("Maximum placeMines attempts reached")
+                    console.warn("Maximum placeNoGuessMines attempts reached, trying regular placeMines")
                     grid.generationAttempt = 0
+
+                    // Try regular placeMines as fallback
+                    let regularPlacingAttempt = 0
+                    while (!placeMines(index) && regularPlacingAttempt < 100) {
+                        regularPlacingAttempt++
+                    }
+
+                    if (regularPlacingAttempt >= 100) {
+                        console.warn("Maximum placeMines attempts also reached")
+                        return
+                    }
+
+                    GameState.gameStarted = true
+                    GameTimer.start()
                 }
                 return
             }
@@ -150,6 +163,32 @@ GridView {
     }
 
     function placeMines(firstClickIndex) {
+        var row, col;
+        if (GameSettings.safeFirstClick) {
+            row = Math.floor(firstClickIndex / GameState.gridSizeX);
+            col = firstClickIndex % GameState.gridSizeX;
+        } else {
+            row = -1
+            col = -1
+        }
+
+        if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
+            console.error("Failed to initialize game!");
+            return false;
+        }
+
+        const result = GameLogic.placeLogicalMines(col, row);
+        if (!result) {
+            console.error("Failed to place mines!");
+            return false;
+        }
+
+        GameState.mines = GameLogic.getMines();
+        GameState.numbers = GameLogic.getNumbers();
+        return true;
+    }
+
+    function placeNoGuessMines(firstClickIndex) {
         var row, col;
         if (GameSettings.safeFirstClick) {
             row = Math.floor(firstClickIndex / GameState.gridSizeX);

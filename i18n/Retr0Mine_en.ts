@@ -140,15 +140,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GameGrid</name>
     <message>
-        <location filename="../qml/GameGrid.qml" line="283"/>
-        <location filename="../qml/GameGrid.qml" line="290"/>
-        <location filename="../qml/GameGrid.qml" line="297"/>
+        <location filename="../qml/GameGrid.qml" line="322"/>
+        <location filename="../qml/GameGrid.qml" line="329"/>
+        <location filename="../qml/GameGrid.qml" line="336"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/GameGrid.qml" line="307"/>
-        <location filename="../qml/GameGrid.qml" line="313"/>
+        <location filename="../qml/GameGrid.qml" line="346"/>
+        <location filename="../qml/GameGrid.qml" line="352"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
