@@ -15,11 +15,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     QuickControls2
     LinguistTools
 )
-qt_standard_project_setup(
-    REQUIRES 6.5
-    I18N_SOURCE_LANGUAGE en
-    I18N_TRANSLATED_LANGUAGES fr
-)
+qt_standard_project_setup(REQUIRES 6.5)
 qt_policy(SET QTP0004 NEW)
 set(SOURCES
     src/main.cpp
@@ -35,28 +31,38 @@ set(HEADERS
     include/steamintegration.h
 )
 set(QML_FILES
+    qml/Main.qml
     qml/Cell.qml
     qml/SettingsWindow.qml
-    qml/PostgamePopup.qml
-    qml/AboutPopup.qml
-    qml/LoadPopup.qml
-    qml/SavePopup.qml
     qml/ErrorWindow.qml
     qml/TopBar.qml
-    qml/LeaderboardPopup.qml
     qml/TempScrollBar.qml
-    qml/WelcomePopup.qml
-    qml/Main.qml
     qml/InfoIcon.qml
     qml/GameGrid.qml
     qml/GameAudio.qml
     qml/GameView.qml
+    qml/SettingsPanes/AccessibilityPane.qml
+    qml/SettingsPanes/AdvancedPane.qml
+    qml/SettingsPanes/DifficultyPane.qml
+    qml/SettingsPanes/GameplayPane.qml
+    qml/SettingsPanes/LanguagePane.qml
+    qml/SettingsPanes/ShortcutsPane.qml
+    qml/SettingsPanes/SoundsPane.qml
+    qml/SettingsPanes/VisualsPane.qml
+    qml/Popups/RestorePopup.qml
+    qml/Popups/PostgamePopup.qml
+    qml/Popups/AboutPopup.qml
+    qml/Popups/LoadPopup.qml
+    qml/Popups/SavePopup.qml
+    qml/Popups/LeaderboardPopup.qml
+    qml/Popups/WelcomePopup.qml
+
 )
 set(QML_SINGLETONS
-    qml/GameSettings.qml
-    qml/GameConstants.qml
-    qml/GameState.qml
-    qml/SaveManager.qml
+    qml/Singletons/GameSettings.qml
+    qml/Singletons/GameConstants.qml
+    qml/Singletons/GameState.qml
+    qml/Singletons/SaveManager.qml
 )
 set_source_files_properties(${QML_SINGLETONS}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
@@ -88,14 +94,12 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     Qt6::QuickControls2
 )
 qt_add_translations(${CMAKE_PROJECT_NAME}
-    TS_FILE_DIR "translations"
+    TS_FILES
+        i18n/retr0mine_en.ts
+        i18n/retr0mine_fr.ts
+    RESOURCE_PREFIX "/i18n"
 )
-#    TS_FILES
-#        translations/retr0mine_en.ts
-#        translations/retr0mine_fr.ts
-#    RESOURCE_PREFIX "/translations"
-#)
-#add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
+add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 if(WIN32)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
         *CRT*SECURE_NO_WARNINGS

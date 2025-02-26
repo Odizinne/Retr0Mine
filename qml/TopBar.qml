@@ -99,6 +99,7 @@ RowLayout {
         Label {
             id: elapsedTimeLabel
             text: GameTimer.displayTime
+            visible: GameSettings.displayTimer
             font.pixelSize: 18
             Layout.alignment: Qt.AlignCenter
         }

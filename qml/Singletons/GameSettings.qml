@@ -31,5 +31,7 @@ Settings {
     property int gridResetAnimationIndex: 0
     property int fontIndex: 0
     property real satisfiedOpacity: 0.50
+    property bool displayTimer: true
+    property bool safeFirstClick: true
 }
 

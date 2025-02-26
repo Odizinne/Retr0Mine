@@ -150,8 +150,14 @@ GridView {
     }
 
     function placeMines(firstClickIndex) {
-        const row = Math.floor(firstClickIndex / GameState.gridSizeX);
-        const col = firstClickIndex % GameState.gridSizeX;
+        var row, col;
+        if (GameSettings.safeFirstClick) {
+            row = Math.floor(firstClickIndex / GameState.gridSizeX);
+            col = firstClickIndex % GameState.gridSizeX;
+        } else {
+            row = -1
+            col = -1
+        }
 
         if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
             console.error("Failed to initialize game!");

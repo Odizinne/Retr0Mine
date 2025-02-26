@@ -113,6 +113,8 @@ void GameCore::resetSettings()
     settings.setValue("flagSkinIndex", 0);
     settings.setValue("fontIndex", 0);
     settings.setValue("satisfiedOpacity", 0.5);
+    settings.setValue("displayTimer", true);
+    settings.setValue("safeFirstClick", true);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;

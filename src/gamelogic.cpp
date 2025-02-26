@@ -532,7 +532,8 @@ int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int
 }
 
 bool GameLogic::placeLogicalMines(int firstClickX, int firstClickY) {
-    int firstClickIndex = firstClickY * m_width + firstClickX;
+    bool safeFirstClick = (firstClickX != -1 && firstClickY != -1);
+    int firstClickIndex = safeFirstClick ? (firstClickY * m_width + firstClickX) : -1;
 
     struct CellState {
         bool isMine = false;
@@ -566,41 +567,44 @@ bool GameLogic::placeLogicalMines(int firstClickX, int firstClickY) {
         cells[i].unrevealedNeighbors = cells[i].neighbors.size();
     }
 
-    // Create initial safe area
-    QQueue<int> toReveal;
+    // Create safe area only if we have a valid first click
     QSet<int> safeCells;
-    safeCells.insert(firstClickIndex);
 
-    // Add neighbors with a bias towards cardinal directions
-    for (int i = 0; i < cells.size(); ++i) {
-        int row = i / m_width;
-        int col = i % m_width;
+    if (safeFirstClick) {
+        QQueue<int> toReveal;
+        safeCells.insert(firstClickIndex);
 
-        if (std::abs(row - firstClickY) <= 1 && std::abs(col - firstClickX) <= 1) {
-            // Always add direct cardinal neighbors
-            if (row == firstClickY || col == firstClickX) {
-                safeCells.insert(i);
-            }
-            // Add diagonals with less priority
-            else if (QRandomGenerator::global()->bounded(100) < 50) {
-                safeCells.insert(i);
+        // Add neighbors with a bias towards cardinal directions
+        for (int i = 0; i < cells.size(); ++i) {
+            int row = i / m_width;
+            int col = i % m_width;
+
+            if (std::abs(row - firstClickY) <= 1 && std::abs(col - firstClickX) <= 1) {
+                // Always add direct cardinal neighbors
+                if (row == firstClickY || col == firstClickX) {
+                    safeCells.insert(i);
+                }
+                // Add diagonals with less priority
+                else if (QRandomGenerator::global()->bounded(100) < 50) {
+                    safeCells.insert(i);
+                }
             }
         }
-    }
 
-    toReveal.enqueue(firstClickIndex);
+        toReveal.enqueue(firstClickIndex);
 
-    while (!toReveal.isEmpty()) {
-        int current = toReveal.dequeue();
-        if (cells[current].isRevealed) continue;
+        while (!toReveal.isEmpty()) {
+            int current = toReveal.dequeue();
+            if (cells[current].isRevealed) continue;
 
-        cells[current].isRevealed = true;
-        safeCells.insert(current);
+            cells[current].isRevealed = true;
+            safeCells.insert(current);
 
-        // Add neighbors to safe cells
-        for (int neighbor : cells[current].neighbors) {
-            if (!cells[neighbor].isRevealed) {
-                safeCells.insert(neighbor);
+            // Add neighbors to safe cells
+            for (int neighbor : cells[current].neighbors) {
+                if (!cells[neighbor].isRevealed) {
+                    safeCells.insert(neighbor);
+                }
             }
         }
     }
@@ -608,7 +612,7 @@ bool GameLogic::placeLogicalMines(int firstClickX, int firstClickY) {
     // Initialize candidates for mine placement
     QVector<int> candidates;
     for (int i = 0; i < cells.size(); ++i) {
-        if (!safeCells.contains(i)) {
+        if (!safeFirstClick || !safeCells.contains(i)) {
             candidates.append(i);
         }
     }
