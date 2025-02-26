@@ -10,7 +10,7 @@ ScrollView {
         id: defaultVerticalScrollBar
         parent: control
         orientation: Qt.Vertical
-        x: parent.width - width
+        x: parent.width - width + 12
         y: 0
         height: control.height
         visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
@@ -24,7 +24,7 @@ ScrollView {
         parent: control
         orientation: Qt.Horizontal
         x: 0
-        y: parent.height - height
+        y: parent.height - height + 12
         width: control.width
         visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
         active: !GameCore.isFluent
@@ -36,7 +36,7 @@ ScrollView {
         id: fluentVerticalScrollBar
         parent: control
         orientation: Qt.Vertical
-        x: parent.width - width
+        x: parent.width - width + 12
         y: 0
         height: control.height
         visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
@@ -50,7 +50,7 @@ ScrollView {
         parent: control
         orientation: Qt.Horizontal
         x: 0
-        y: parent.height - height
+        y: parent.height - height + 12
         width: control.width
         visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
         active: GameCore.isFluent

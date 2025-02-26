@@ -164,7 +164,7 @@ GridView {
             return false;
         }
 
-        const result = GameLogic.placeLogicalMines(col, row);
+        const result = GameLogic.placeNoGuessMines(col, row);
         if (!result) {
             console.error("Failed to place mines!");
             return false;
