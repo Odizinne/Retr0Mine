@@ -101,12 +101,10 @@ GridView {
                         console.warn("Maximum placeMines attempts also reached")
                         return
                     }
-
-                    GameState.gameStarted = true
-                    GameTimer.start()
                 }
                 return
             }
+
             GameState.gameStarted = true
             GameTimer.start()
         }
