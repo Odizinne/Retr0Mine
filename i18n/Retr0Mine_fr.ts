@@ -11,7 +11,7 @@
 <context>
     <name>AboutPopup</name>
     <message>
-        <location filename="../qml/Popups/AboutPopup.qml" line="40"/>
+        <location filename="../qml/Popups/AboutPopup.qml" line="39"/>
         <source>by Odizinne</source>
         <translation>par Odizinne</translation>
     </message>
@@ -107,22 +107,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="69"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="67"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="88"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="86"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="106"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="104"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="123"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="121"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -148,17 +148,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GameGrid</name>
     <message>
-        <location filename="../qml/GameGrid.qml" line="342"/>
-        <location filename="../qml/GameGrid.qml" line="349"/>
-        <location filename="../qml/GameGrid.qml" line="356"/>
         <source>New flag unlocked!</source>
-        <translation>Nouveau drapeau débloqué!</translation>
+        <translation type="vanished">Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/GameGrid.qml" line="366"/>
-        <location filename="../qml/GameGrid.qml" line="372"/>
         <source>New grid animation unlocked!</source>
-        <translation>Nouvelle animation de grille débloquée!</translation>
+        <translation type="vanished">Nouvelle animation de grille débloquée!</translation>
     </message>
     <message>
         <source>Victory</source>
@@ -220,37 +215,37 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GameplayPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="16"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="14"/>
         <source>First click protection</source>
         <translation>Protection du premier clic</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="25"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="23"/>
         <source>First click always lands on a safe tile</source>
         <translation>Premier clic toujours sur une case sûre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="40"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="38"/>
         <source>Invert left and right click</source>
         <translation>Inverser clic gauche et droit</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="59"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="57"/>
         <source>Quick reveal connected cells</source>
         <translation>Révéler cellules adjacentes</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="78"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="76"/>
         <source>Enable question marks</source>
         <translation>Activer les points d&apos;intérrogation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="105"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="103"/>
         <source>Enable green question marks</source>
         <translation>Activer les points d&apos;intérrogation verts</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="133"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="131"/>
         <source>Load last game on start</source>
         <translation>Charger la dernière partie au démarrage</translation>
     </message>
@@ -314,6 +309,33 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
 </context>
 <context>
+    <name>GridBackend</name>
+    <message>
+        <source>New flag unlocked!</source>
+        <translation type="obsolete">Nouveau drapeau débloqué!</translation>
+    </message>
+    <message>
+        <source>New grid animation unlocked!</source>
+        <translation type="obsolete">Nouvelle animation de grille débloquée!</translation>
+    </message>
+</context>
+<context>
+    <name>GridBridge</name>
+    <message>
+        <location filename="../qml/Singletons/GridBridge.qml" line="344"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="351"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="358"/>
+        <source>New flag unlocked!</source>
+        <translation type="unfinished">Nouveau drapeau débloqué!</translation>
+    </message>
+    <message>
+        <location filename="../qml/Singletons/GridBridge.qml" line="368"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="374"/>
+        <source>New grid animation unlocked!</source>
+        <translation type="unfinished">Nouvelle animation de grille débloquée!</translation>
+    </message>
+</context>
+<context>
     <name>LanguagePane</name>
     <message>
         <location filename="../qml/SettingsPanes/LanguagePane.qml" line="15"/>
@@ -364,47 +386,47 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>LeaderboardPopup</name>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="75"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="73"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="81"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="79"/>
         <source>Easy</source>
         <translation>Facile</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="86"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="84"/>
         <source>Medium</source>
         <translation>intermédiaire</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="91"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="89"/>
         <source>Hard</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="96"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="94"/>
         <source>Retr0</source>
         <translation>Retr0</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="107"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="105"/>
         <source>Time</source>
         <translation>Temps</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="139"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="137"/>
         <source>Wins</source>
         <translation>Victoires</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="171"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="169"/>
         <source>Clear</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="200"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="198"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -465,19 +487,62 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
 </context>
 <context>
+    <name>MainMenu</name>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="9"/>
+        <source>New game</source>
+        <translation type="unfinished">Nouveau</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="14"/>
+        <source>Save game</source>
+        <translation type="unfinished">Sauver</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="21"/>
+        <source>Load game</source>
+        <translation type="unfinished">Charger</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="26"/>
+        <source>Hint</source>
+        <translation type="unfinished">Indice</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="34"/>
+        <source>Settings</source>
+        <translation type="unfinished">Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="39"/>
+        <source>Leaderboard</source>
+        <translation type="unfinished">Classement</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="44"/>
+        <source>About</source>
+        <translation type="unfinished">À propos</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="53"/>
+        <source>Exit</source>
+        <translation type="unfinished">Quitter</translation>
+    </message>
+</context>
+<context>
     <name>PostgamePopup</name>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="57"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="53"/>
         <source>New record saved</source>
         <translation>Nouveau record sauvegardé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="65"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="61"/>
         <source>Retry</source>
         <translation>Rejouer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="78"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="74"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -503,27 +568,27 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>SavePopup</name>
     <message>
-        <location filename="../qml/Popups/SavePopup.qml" line="39"/>
+        <location filename="../qml/Popups/SavePopup.qml" line="40"/>
         <source>Enter save file name</source>
         <translation>Nom du fichier</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/SavePopup.qml" line="47"/>
+        <location filename="../qml/Popups/SavePopup.qml" line="48"/>
         <source>This filename is reserved for internal use</source>
         <translation>Réservé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/SavePopup.qml" line="50"/>
+        <location filename="../qml/Popups/SavePopup.qml" line="51"/>
         <source>Filename cannot contain:</source>
         <translation>Ne peux pas contenir:</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/SavePopup.qml" line="74"/>
+        <location filename="../qml/Popups/SavePopup.qml" line="75"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/SavePopup.qml" line="82"/>
+        <location filename="../qml/Popups/SavePopup.qml" line="83"/>
         <source>Save</source>
         <translation>Sauver</translation>
     </message>
@@ -842,52 +907,52 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation type="vanished">Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="81"/>
+        <location filename="../qml/SettingsWindow.qml" line="65"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="85"/>
+        <location filename="../qml/SettingsWindow.qml" line="69"/>
         <source>Gameplay</source>
         <translation>Gameplay</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="89"/>
+        <location filename="../qml/SettingsWindow.qml" line="73"/>
         <source>Visuals</source>
         <translation>Visuels</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="93"/>
+        <location filename="../qml/SettingsWindow.qml" line="77"/>
         <source>Sound</source>
         <translation>Sons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="97"/>
+        <location filename="../qml/SettingsWindow.qml" line="81"/>
         <source>Shortcuts</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="101"/>
+        <location filename="../qml/SettingsWindow.qml" line="85"/>
         <source>Accessibility</source>
         <translation>Accessibilité</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="105"/>
+        <location filename="../qml/SettingsWindow.qml" line="89"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="109"/>
+        <location filename="../qml/SettingsWindow.qml" line="93"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="142"/>
+        <location filename="../qml/SettingsWindow.qml" line="126"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="158"/>
+        <location filename="../qml/SettingsWindow.qml" line="142"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>
@@ -1165,125 +1230,117 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="41"/>
         <source>New game</source>
-        <translation>Nouveau</translation>
+        <translation type="vanished">Nouveau</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="58"/>
         <source>Hint</source>
-        <translation>Indice</translation>
+        <translation type="vanished">Indice</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="46"/>
         <source>Save game</source>
-        <translation>Sauver</translation>
+        <translation type="vanished">Sauver</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="53"/>
         <source>Load game</source>
-        <translation>Charger</translation>
+        <translation type="vanished">Charger</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="66"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation type="vanished">Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="71"/>
         <source>Leaderboard</source>
-        <translation>Classement</translation>
+        <translation type="vanished">Classement</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="76"/>
         <source>About</source>
-        <translation>À propos</translation>
+        <translation type="vanished">À propos</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="85"/>
         <source>Exit</source>
-        <translation>Quitter</translation>
+        <translation type="vanished">Quitter</translation>
     </message>
 </context>
 <context>
     <name>VisualsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="19"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="17"/>
         <source>Animations</source>
         <translation>Animations</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="45"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="43"/>
         <source>Display timer</source>
         <translation>Afficher le chrono</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="63"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="61"/>
         <source>Start in full screen</source>
         <translation>Plein écran au lancement</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="84"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="82"/>
         <source>Revealed cells frame</source>
         <translation>Cadre des cellules</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="103"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="101"/>
         <source>Dim satisfied cells</source>
         <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="123"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="121"/>
         <source>Dim level</source>
         <translation>Niveau d&apos;atténuation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="138"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="136"/>
         <source>Numbers font</source>
         <translation>Police d&apos;affichage des chiffres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="157"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="155"/>
         <source>Grid reset animation</source>
         <translation>Animation de réinitialisation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="165"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="163"/>
         <source>Wave</source>
         <translation>Vague</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="166"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="164"/>
         <source>Fade</source>
         <translation>Fondu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="167"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="165"/>
         <source>Spin</source>
         <translation>Rotation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="195"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="193"/>
         <source>Unlocked with a secret achievement</source>
         <translation>Se débloque avec un succès caché</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="216"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="214"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="247"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="245"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation>Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="265"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="263"/>
         <source>Unlock Master Tactician achievement</source>
         <translation>Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="283"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="281"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation>Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
     </message>

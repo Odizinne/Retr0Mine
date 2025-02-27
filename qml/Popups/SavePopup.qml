@@ -10,13 +10,14 @@ Popup {
     modal: true
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
+    visible: ComponentsContext.savePopupVisible
     property int buttonWidth: Math.max(saveButton.implicitWidth, cancelButton.implicitWidth)
 
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
         onActivated: {
-            control.visible = false
+            ComponentsContext.savePopupVisible = false
         }
     }
 
@@ -74,7 +75,7 @@ Popup {
                 text: qsTr("Cancel")
                 Layout.preferredWidth: control.buttonWidth
                 Layout.fillWidth: true
-                onClicked: control.visible = false
+                onClicked: ComponentsContext.savePopupVisible = false
             }
 
             Button {
@@ -87,7 +88,7 @@ Popup {
                     if (saveNameField.text.trim()) {
                         SaveManager.manualSave = true
                         SaveManager.saveGame(saveNameField.text.trim() + ".json")
-                        control.visible = false
+                        ComponentsContext.savePopupVisible = false
                     }
                 }
             }

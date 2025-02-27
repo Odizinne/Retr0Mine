@@ -6,8 +6,6 @@ import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
 Pane {
-    id: pane
-    required property var control
     ColumnLayout {
         width: parent.width
         spacing: GameCore.isFluent ? 10 : 20
@@ -55,7 +53,7 @@ Pane {
                         GameState.gridSizeX = difficultySet.x
                         GameState.gridSizeY = difficultySet.y
                         GameState.mineCount = difficultySet.mines
-                        pane.control.grid.initGame()
+                        GridBridge.initGame()
                         GameSettings.difficulty = idx
                     }
                 }
@@ -126,7 +124,7 @@ Pane {
                 GameState.gridSizeX = GameSettings.customWidth
                 GameState.gridSizeY = GameSettings.customHeight
                 GameState.mineCount = GameSettings.customMines
-                pane.control.grid.initGame()
+                GridBridge.initGame()
             }
         }
     }

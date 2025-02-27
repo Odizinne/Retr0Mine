@@ -42,6 +42,7 @@ set(QML_FILES
     qml/GameGrid.qml
     qml/GameAudio.qml
     qml/GameView.qml
+    qml/MainMenu.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml
     qml/SettingsPanes/DifficultyPane.qml
@@ -64,6 +65,8 @@ set(QML_SINGLETONS
     qml/Singletons/GameConstants.qml
     qml/Singletons/GameState.qml
     qml/Singletons/SaveManager.qml
+    qml/Singletons/GridBridge.qml
+    qml/Singletons/ComponentsContext.qml
 )
 set_source_files_properties(${QML_SINGLETONS}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE

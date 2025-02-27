@@ -7,13 +7,12 @@ Popup {
     width: height + 12
     anchors.centerIn: parent
     modal: true
+    visible: ComponentsContext.aboutPopupVisible
 
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
-        onActivated: {
-            control.visible = false
-        }
+        onActivated: ComponentsContext.aboutPopupVisible = false
     }
 
     ColumnLayout {

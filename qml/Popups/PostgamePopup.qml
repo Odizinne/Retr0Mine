@@ -5,7 +5,6 @@ import QtQuick.Layouts
 Popup {
     anchors.centerIn: parent
     id: control
-    required property var grid
     visible: GameState.displayPostGame
     modal: true
     closePolicy: Popup.NoAutoClose
@@ -15,16 +14,13 @@ Popup {
     Shortcut {
         sequence: "Return"
         enabled: control.visible
-        onActivated: {
-            control.visible = false
-            control.grid.initGame()
-        }
+        onActivated: retryButton.clicked()
     }
 
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
-        onActivated: retryButton.clicked()
+        onActivated: closeButton.clicked()
     }
 
     GridLayout {
@@ -66,7 +62,7 @@ Popup {
             Layout.fillWidth: true
             Layout.preferredWidth: control.buttonWidth
             onClicked: {                
-                control.grid.initGame()
+                GridBridge.initGame()
                 GameState.displayNewRecord = false
                 GameState.displayNotification = false
                 GameState.displayPostGame = false

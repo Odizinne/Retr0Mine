@@ -10,7 +10,7 @@ Popup {
     id: control
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
-    visible: false
+    visible: ComponentsContext.leaderboardPopupVisible
     modal: true
     property string easyTime: ""
     property string mediumTime: ""
@@ -24,9 +24,7 @@ Popup {
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
-        onActivated: {
-            control.visible = false
-        }
+        onActivated: ComponentsContext.leaderboardPopupVisible = false
     }
 
     ColumnLayout {
@@ -199,7 +197,7 @@ Popup {
             Button {
                 text: qsTr("Close")
                 Layout.fillWidth: true
-                onClicked: control.visible = false
+                onClicked: ComponentsContext.leaderboardPopupVisible = false
                 Layout.bottomMargin: 15
             }
         }

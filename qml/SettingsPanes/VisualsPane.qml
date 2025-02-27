@@ -6,8 +6,6 @@ import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
 Pane {
-    id: pane
-    required property var control
     ColumnLayout {
         spacing: 20
         width: parent.width
@@ -29,7 +27,7 @@ Pane {
                 onCheckedChanged: {
                     GameSettings.animations = checked
                     for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                        let cell = pane.control.grid.itemAtIndex(i) as Cell
+                        let cell = GridBridge.grid.itemAtIndex(i) as Cell
                         if (cell) {
                             cell.opacity = 1
                         }

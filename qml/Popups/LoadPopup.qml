@@ -13,7 +13,7 @@ Popup {
     modal: true
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
-
+    visible: ComponentsContext.loadPopupVisible
     ErrorWindow {
         id: errorWindow
     }
@@ -22,7 +22,7 @@ Popup {
         sequence: "Esc"
         enabled: control.visible
         onActivated: {
-            control.visible = false
+            ComponentsContext.loadPopupVisible = false
         }
     }
 
@@ -139,7 +139,7 @@ Popup {
         Button {
             text: qsTr("Cancel")
             Layout.fillWidth: true
-            onClicked: control.visible = false
+            onClicked: ComponentsContext.loadPopupVisible = false
         }
     }
 
@@ -148,9 +148,7 @@ Popup {
             saveFilesList.model.clear()
             let saves =GameCore.getSaveFiles()
 
-            if (saves.length === 0) {
-                //saveFilesList.model.append({name: qsTr("No saved games found"), enabled: false})
-            } else {
+            if (!saves.length === 0) {
                 saves.forEach(function(save) {
                     saveFilesList.model.append({name: save, enabled: true})
                 })

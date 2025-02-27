@@ -9,8 +9,8 @@ Popup {
     height: implicitHeight + 40
     width: stupidMessagesLabel.width + 40
     visible: false
-
-    property bool generating: false
+    anchors.centerIn: parent
+    property bool generating: GameState.isGeneratingGrid
     property var generationMessages: [
         qsTr("Generating board..."),
         qsTr("Placing mines in corners..."),
@@ -50,7 +50,7 @@ Popup {
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: 10
+        spacing: 20
 
         BusyIndicator {
             Layout.preferredHeight: 48
@@ -61,6 +61,7 @@ Popup {
         Label {
             id: stupidMessagesLabel
             text: control.currentMessage
+            font.italic: true
             Layout.alignment: Qt.AlignHCenter
         }
     }

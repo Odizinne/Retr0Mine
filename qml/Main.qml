@@ -116,31 +116,39 @@ ApplicationWindow {
         sequence: StandardKey.Save
         enabled: GameState.gameStarted && !GameState.gameOver
         autoRepeat: false
-        onActivated: saveWindow.visible = true
+        onActivated: ComponentsContext.savePopupVisible = true
     }
 
     Shortcut {
         sequence: StandardKey.Open
         autoRepeat: false
-        onActivated: loadWindow.visible = true
+        onActivated: ComponentsContext.loadPopupVisible = true
     }
 
     Shortcut {
         sequence: StandardKey.New
         autoRepeat: false
-        onActivated: grid.initGame()
+        onActivated: GridBridge.initGame()
     }
 
     Shortcut {
         sequence: "Ctrl+P"
         autoRepeat: false
-        onActivated: !settingsWindow.visible ? settingsWindow.show() : settingsWindow.close()
+        onActivated: {
+            if (ComponentsContext.settingsWindowVisible) {
+                // close is needed for proper DWM next opening animation
+                settingsWindow.close()
+                ComponentsContext.settingsWindowVisible = false
+            } else {
+                ComponentsContext.settingsWindowVisible = true
+            }
+        }
     }
 
     Shortcut {
         sequence: "Ctrl+L"
         autoRepeat: false
-        onActivated: leaderboardWindow.visible = true
+        onActivated: ComponentsContext.leaderboardPopupVisible = true
     }
 
     Shortcut {
@@ -158,7 +166,7 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+H"
         autoRepeat: false
-        onActivated: grid.requestHint()
+        onActivated: GridBridge.requestHint()
     }
 
     Loader {
@@ -181,45 +189,25 @@ ApplicationWindow {
         }
     }
 
-    GenerationPopup {
-        id: generationPopup
-        anchors.centerIn: parent
-        generating: GameState.isGeneratingGrid
-    }
+    GenerationPopup { }
 
-    PostgamePopup {
-        grid: grid
-    }
+    PostgamePopup { }
 
     SettingsWindow {
         id: settingsWindow
-        grid: grid
-        rootWidth: root.width
-        rootHeight: root.height
-        rootX: root.x
-        rootY: root.y
     }
 
-    LoadPopup {
-        id: loadWindow
-    }
+    LoadPopup { }
 
-    SavePopup {
-        id: saveWindow
-    }
+    SavePopup { }
 
     LeaderboardPopup {
         id: leaderboardWindow
+        Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
     }
 
     TopBar {
         id: topBar
-        grid: grid
-        saveWindow: saveWindow
-        loadWindow: loadWindow
-        settingsWindow: settingsWindow
-        leaderboardWindow: leaderboardWindow
-        aboutLoader: aboutLoader
     }
 
     GameView {
@@ -242,11 +230,12 @@ ApplicationWindow {
 
             GameGrid {
                 id: grid
-                leaderboardWindow: leaderboardWindow
-                Component.onCompleted: SaveManager.setGrid(grid)
+                Component.onCompleted: {
+                    GridBridge.setGrid(grid)
+                    SaveManager.setGrid(grid)
+                }
                 delegate: Cell {
                     root: root
-                    grid: grid
                 }
             }
         }
@@ -273,10 +262,10 @@ ApplicationWindow {
                 GameState.isManuallyLoaded = false
             } else {
                 console.error("Failed to load internal game state")
-                grid.initGame()
+                GridBridge.initGame()
             }
         } else {
-            grid.initGame()
+            GridBridge.initGame()
         }
 
         if (GameSettings.startFullScreen || GameCore.gamescope) {

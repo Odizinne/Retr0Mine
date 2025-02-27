@@ -6,7 +6,7 @@ import net.odizinne.retr0mine 1.0
 Popup {
     anchors.centerIn: parent
     id: control
-    visible: false
+    visible: ComponentsContext.restorePopupVisible
     modal: true
     property int buttonWidth: Math.max(restoreButton.implicitWidth, cancelButton.implicitWidth)
 
@@ -44,7 +44,7 @@ Popup {
                 text: qsTr("Cancel")
                 Layout.preferredWidth: control.buttonWidth
                 Layout.fillWidth: true
-                onClicked: control.visible = false
+                onClicked: ComponentsContext.restorePopupVisible = false
             }
         }
     }

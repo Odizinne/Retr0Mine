@@ -8,13 +8,8 @@ import net.odizinne.retr0mine 1.0
 ApplicationWindow {
     id: control
     title: qsTr("Settings")
-    required property var grid
     readonly property int baseWidth: 600
     readonly property int baseHeight: 480
-    required property int rootWidth
-    required property int rootHeight
-    required property int rootX
-    required property int rootY
 
     width: GameCore.gamescope ? 1280 : baseWidth
     height: GameCore.gamescope ? 800 : baseHeight
@@ -22,20 +17,9 @@ ApplicationWindow {
     minimumHeight: height
     maximumWidth: width
     maximumHeight: height
-    visible: false
+    visible: ComponentsContext.settingsWindowVisible
     flags: Qt.Dialog
-    onVisibleChanged: {
-        if (control.visible) {
-            if (control.rootX + control.rootWidth + control.width + 10 <= Screen.width) {
-                control.x = control.rootX + control.rootWidth + 20
-            } else if (control.rootX - control.width - 10 >= 0) {
-                control.x = control.rootX - control.width - 20
-            } else {
-                control.x = Screen.width - control.width - 20
-            }
-            control.y = control.rootY + (control.rootHeight - control.height) / 2
-        }
-    }
+    onClosing: ComponentsContext.settingsWindowVisible = false
 
     BusyIndicator {
         // stupid, but allow continuous engine update
@@ -47,13 +31,13 @@ ApplicationWindow {
         sequence: "Esc"
         enabled: control.visible
         onActivated: {
+            // close is needed for proper DWM next opening animation
             control.close()
+            ComponentsContext.settingsWindowVisible = false
         }
     }
 
-    RestorePopup {
-        id: restoreDefaultsPopup
-    }
+    RestorePopup { }
 
     RowLayout {
         anchors.fill: parent
@@ -157,9 +141,7 @@ ApplicationWindow {
                     Layout.preferredHeight: 30
                     text: qsTr("Restore defaults")
                     highlighted: true
-                    onClicked: {
-                        restoreDefaultsPopup.open()
-                    }
+                    onClicked: ComponentsContext.restorePopupVisible = true
                 }
             }
         }
@@ -183,7 +165,6 @@ ApplicationWindow {
             Component {
                 id: difficultyPaneComponent
                 DifficultyPane {
-                    control: control
                     enabled: !GameState.isGeneratingGrid
                 }
             }
@@ -191,7 +172,6 @@ ApplicationWindow {
             Component {
                 id: gameplayPaneComponent
                 GameplayPane {
-                    control: control
                     enabled: !GameState.isGeneratingGrid
                 }
             }
@@ -199,7 +179,6 @@ ApplicationWindow {
             Component {
                 id: visualsPaneComponent
                 VisualsPane {
-                    control: control
                     enabled: !GameState.isGeneratingGrid
                 }
             }

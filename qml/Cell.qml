@@ -14,7 +14,7 @@ Item {
 
     required property var root
     required property int index
-    required property var grid
+    //required property var grid
 
     property bool revealed: false
     property bool flagged: false
@@ -36,13 +36,13 @@ Item {
         col = index % GameState.gridSizeX
         diagonalSum = row + col
 
-        grid.cellsCreated++
-        if (grid.cellsCreated === GameState.gridSizeX * GameState.gridSizeY && !GameState.gridFullyInitialized) {
+        GridBridge.cellsCreated++
+        if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY && !GameState.gridFullyInitialized) {
             GameState.gridFullyInitialized = true
             cellItem.root.startInitialLoadTimer()
         }
 
-        if (GameSettings.animations && !grid.initialAnimationPlayed && !GameState.blockAnim) {
+        if (GameSettings.animations && !GridBridge.initialAnimationPlayed && !GameState.blockAnim) {
             startGridResetAnimation()
         }
     }
@@ -152,7 +152,7 @@ Item {
         opacity: {
             if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index)) return 1
-            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity
+            return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity
         }
     }
 
@@ -285,12 +285,12 @@ Item {
 
             function handleCellClick(mouse) {
                 if (!GameState.gameStarted) {
-                    cellItem.grid.reveal(cellItem.index);
+                    GridBridge.reveal(cellItem.index);
                     return;
                 }
 
                 if (cellItem.revealed) {
-                    cellItem.grid.revealConnectedCells(cellItem.index);
+                    GridBridge.revealConnectedCells(cellItem.index);
                     return;
                 }
 
@@ -298,9 +298,9 @@ Item {
                 const isRevealClick = GameSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
 
                 if (isRevealClick && canReveal) {
-                    cellItem.grid.reveal(cellItem.index);
+                    GridBridge.reveal(cellItem.index);
                 } else if (!isRevealClick) {
-                    cellItem.grid.toggleFlag(cellItem.index);
+                    GridBridge.toggleFlag(cellItem.index);
                 }
             }
 
@@ -321,7 +321,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
         opacity: {
             if (!GameSettings.dimSatisfied || !cellItem.revealed || GameState.numbers[cellItem.index] === 0) return 1
-            return cellItem.grid.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
+            return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
         }
 
         Behavior on opacity {
@@ -345,19 +345,19 @@ Item {
 
         switch (GameSettings.gridResetAnimationIndex) {
         case 0: // Original diagonal animation
-            grid.initialAnimationPlayed = false
+            GridBridge.initialAnimationPlayed = false
             opacity = 0
             fadeTimer.restart()
             break
 
         case 1: // New fade out -> fade in animation
-            grid.initialAnimationPlayed = false
+            GridBridge.initialAnimationPlayed = false
             opacity = 0
             resetFadeOutAnimation.start()
             break
 
         case 2: // Spin animation
-            grid.initialAnimationPlayed = false
+            GridBridge.initialAnimationPlayed = false
             opacity = 1
             resetSpinAnimation.start()
             break
