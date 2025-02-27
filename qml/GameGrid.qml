@@ -84,16 +84,16 @@ GridView {
 
         var row, col;
         if (GameSettings.safeFirstClick) {
-            row = Math.floor(index / GameState.gridSizeX);
-            col = index % GameState.gridSizeX;
+            row = Math.floor(index / GameState.gridSizeX)
+            col = index % GameState.gridSizeX
         } else {
             row = -1
             col = -1
         }
 
         if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
-            console.error("Failed to initialize game");
-            return false;
+            console.error("Failed to initialize game")
+            return false
         }
 
         // Use our new async method instead of the synchronous one
@@ -102,11 +102,11 @@ GridView {
         // Connect to the signal for this generation attempt
         function onBoardGenerated(success) {
             if (success) {
-                GameState.mines = GameLogic.getMines();
-                GameState.numbers = GameLogic.getNumbers();
+                GameState.mines = GameLogic.getMines()
+                GameState.numbers = GameLogic.getNumbers()
                 GameState.gameStarted = true
-                GameTimer.start()
                 GameState.isGeneratingGrid = false
+                GameTimer.start()
 
                 // Continue with the reveal operation
                 let currentIndex = GameState.firstClickIndex
@@ -143,7 +143,7 @@ GridView {
                 // Disconnect the signal
                 GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
             } else {
-                console.error("Failed to place mines, trying again...");
+                console.error("Failed to place mines, trying again...")
                 if (grid.generationAttempt < 100) {
                     grid.generationAttempt++
 
@@ -151,10 +151,10 @@ GridView {
                     GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
 
                     // Try again asynchronously
-                    GameLogic.generateBoardAsync(col, row);
+                    GameLogic.generateBoardAsync(col, row)
                 } else {
                     console.warn("Maximum attempts reached")
-
+                    GameState.isGeneratingGrid = false
                     // Disconnect the signal
                     GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
                 }
@@ -165,10 +165,10 @@ GridView {
         GameLogic.boardGenerationCompleted.connect(onBoardGenerated)
 
         // Start the async generation
-        GameLogic.generateBoardAsync(col, row);
+        GameLogic.generateBoardAsync(col, row)
 
         // Return true to indicate that generation has started, not completed
-        return true;
+        return true
     }
 
     function reveal(index) {
