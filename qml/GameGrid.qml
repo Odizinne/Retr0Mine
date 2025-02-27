@@ -78,23 +78,50 @@ GridView {
         }
     }
 
+    function generateField(index) {
+        GameState.firstClickIndex = index
+
+        var row, col;
+        if (GameSettings.safeFirstClick) {
+            row = Math.floor(index / GameState.gridSizeX);
+            col = index % GameState.gridSizeX;
+        } else {
+            row = -1
+            col = -1
+        }
+
+        if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
+            console.error("Failed to initialize game");
+            return false;
+        }
+
+        const result = GameLogic.generateBoard(col, row);
+        if (!result) {
+            console.error("Failed to place mines, trying again...");
+            if (grid.generationAttempt < 100) {
+                grid.generationAttempt++
+                generateField(index)
+            } else {
+                console.warn("Maximum attempts reached")
+                return false;
+            }
+        } else {
+            GameState.mines = GameLogic.getMines();
+            GameState.numbers = GameLogic.getNumbers();
+            GameState.gameStarted = true
+            GameTimer.start()
+            return true;
+        }
+    }
+
     function reveal(index) {
         let initialCell = grid.itemAtIndex(index) as Cell
         if (GameState.gameOver || initialCell.revealed || initialCell.flagged) return
         if (!GameState.gameStarted) {
-            GameState.firstClickIndex = index
-            if (!placeMines(index)) {
-                if (grid.generationAttempt < 100) {
-                    grid.generationAttempt++
-                    reveal(index)
-                } else {
-                    console.warn("Maximum placeMines attempts also reached")
-                    return
-                }
+            generateField(index)
+            if (!GameState.gameStarted) {
+                console.warn("Could not generated board")
             }
-
-            GameState.gameStarted = true
-            GameTimer.start()
         }
 
         let cellsToReveal = [index]
@@ -146,32 +173,6 @@ GridView {
         }
 
         checkWin()
-    }
-
-    function placeMines(firstClickIndex) {
-        var row, col;
-        if (GameSettings.safeFirstClick) {
-            row = Math.floor(firstClickIndex / GameState.gridSizeX);
-            col = firstClickIndex % GameState.gridSizeX;
-        } else {
-            row = -1
-            col = -1
-        }
-
-        if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
-            console.error("Failed to initialize game!");
-            return false;
-        }
-
-        const result = GameLogic.generateBoard(col, row);
-        if (!result) {
-            console.error("Failed to place mines!");
-            return false;
-        }
-
-        GameState.mines = GameLogic.getMines();
-        GameState.numbers = GameLogic.getNumbers();
-        return true;
     }
 
     function initGame() {
