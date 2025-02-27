@@ -273,6 +273,11 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
+        <source>Calculation of multipliers based on colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
         <source>Running out of clever loading messages...</source>
         <translation type="unfinished"></translation>
     </message>

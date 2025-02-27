@@ -304,6 +304,11 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
+        <source>Calculation of multipliers based on colors</source>
+        <translation>Calcul des multiplicateurs en fonction des couleurs</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
         <source>Running out of clever loading messages...</source>
         <translation>Plus d&apos;inspiration pour les messages de chargement...</translation>
     </message>

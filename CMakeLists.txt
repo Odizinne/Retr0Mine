@@ -101,7 +101,7 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
         i18n/Retr0Mine_fr.ts
     RESOURCE_PREFIX "/i18n"
 )
-#add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
+add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 if(WIN32)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
         *CRT*SECURE_NO_WARNINGS
