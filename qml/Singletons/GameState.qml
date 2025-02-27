@@ -15,7 +15,7 @@ QtObject {
     property var numbers: []
     property int cellSize: getCellSize()
     property bool bypassAutoSave: false
-
+    property bool isGeneratingGrid: false
     function getCellSize() {
         const size = GameSettings.cellSize
         const isGamescope = GameCore.gamescope

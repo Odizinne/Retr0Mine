@@ -5,6 +5,8 @@
 #include <QSet>
 #include <QVector>
 #include <QQmlEngine>
+#include <QFuture>
+#include <QtConcurrent>
 #include <random>
 
 struct MineSolverInfo
@@ -47,6 +49,11 @@ public:
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
     Q_INVOKABLE bool generateBoard(int firstClickX, int firstClickY);
     Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
+
+    Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY);
+
+signals:
+    void boardGenerationCompleted(bool success);
 
 private:
     int m_width;

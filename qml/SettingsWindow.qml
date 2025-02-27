@@ -184,6 +184,7 @@ ApplicationWindow {
                 id: difficultyPaneComponent
                 DifficultyPane {
                     control: control
+                    enabled: !GameState.isGeneratingGrid
                 }
             }
 
@@ -191,6 +192,7 @@ ApplicationWindow {
                 id: gameplayPaneComponent
                 GameplayPane {
                     control: control
+                    enabled: !GameState.isGeneratingGrid
                 }
             }
 
@@ -198,32 +200,43 @@ ApplicationWindow {
                 id: visualsPaneComponent
                 VisualsPane {
                     control: control
+                    enabled: !GameState.isGeneratingGrid
                 }
             }
 
             Component {
                 id: soundPaneComponent
-                SoundsPane { }
+                SoundsPane {
+                    enabled: !GameState.isGeneratingGrid
+                }
             }
 
             Component {
                 id: shortcutsPaneComponent
-                ShortcutsPane { }
+                ShortcutsPane {
+                    enabled: !GameState.isGeneratingGrid
+                }
             }
 
             Component {
                 id: accessibilityPaneComponent
-                AccessibilityPane { }
+                AccessibilityPane {
+                    enabled: !GameState.isGeneratingGrid
+                }
             }
 
             Component {
                 id: languagePaneComponent
-                LanguagePane { }
+                LanguagePane {
+                    enabled: !GameState.isGeneratingGrid
+                }
             }
 
             Component {
                 id: advancedPaneComponent
-                AdvancedPane { }
+                AdvancedPane {
+                    enabled: !GameState.isGeneratingGrid
+                }
             }
         }
     }

@@ -79,6 +79,7 @@ GridView {
     }
 
     function generateField(index) {
+        GameState.isGeneratingGrid = true
         GameState.firstClickIndex = index
 
         var row, col;
@@ -95,35 +96,92 @@ GridView {
             return false;
         }
 
-        const result = GameLogic.generateBoard(col, row);
-        if (!result) {
-            console.error("Failed to place mines, trying again...");
-            if (grid.generationAttempt < 100) {
-                grid.generationAttempt++
-                generateField(index)
+        // Use our new async method instead of the synchronous one
+        grid.generationAttempt = 0
+
+        // Connect to the signal for this generation attempt
+        function onBoardGenerated(success) {
+            if (success) {
+                GameState.mines = GameLogic.getMines();
+                GameState.numbers = GameLogic.getNumbers();
+                GameState.gameStarted = true
+                GameTimer.start()
+                GameState.isGeneratingGrid = false
+
+                // Continue with the reveal operation
+                let currentIndex = GameState.firstClickIndex
+                let cell = grid.itemAtIndex(currentIndex)
+                if (cell && !cell.revealed) {
+                    cell.revealed = true
+                    GameState.revealedCount++
+
+                    if (GameState.numbers[currentIndex] === 0) {
+                        let row = Math.floor(currentIndex / GameState.gridSizeX)
+                        let col = currentIndex % GameState.gridSizeX
+                        for (let r = -1; r <= 1; r++) {
+                            for (let c = -1; c <= 1; c++) {
+                                if (r === 0 && c === 0) continue
+                                let newRow = row + r
+                                let newCol = col + c
+                                if (newRow < 0 || newRow >= GameState.gridSizeY || newCol < 0 || newCol >= GameState.gridSizeX) continue
+                                let adjacentIndex = newRow * GameState.gridSizeX + newCol
+                                let adjacentCell = grid.itemAtIndex(adjacentIndex)
+                                if (adjacentCell.questioned) {
+                                    adjacentCell.questioned = false
+                                }
+                                if (adjacentCell.safeQuestioned) {
+                                    adjacentCell.safeQuestioned = false
+                                }
+                                reveal(adjacentIndex)
+                            }
+                        }
+                    }
+
+                    checkWin()
+                }
+
+                // Disconnect the signal
+                GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
             } else {
-                console.warn("Maximum attempts reached")
-                return false;
+                console.error("Failed to place mines, trying again...");
+                if (grid.generationAttempt < 100) {
+                    grid.generationAttempt++
+
+                    // Disconnect before retrying
+                    GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
+
+                    // Try again asynchronously
+                    GameLogic.generateBoardAsync(col, row);
+                } else {
+                    console.warn("Maximum attempts reached")
+
+                    // Disconnect the signal
+                    GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
+                }
             }
-        } else {
-            GameState.mines = GameLogic.getMines();
-            GameState.numbers = GameLogic.getNumbers();
-            GameState.gameStarted = true
-            GameTimer.start()
-            return true;
         }
+
+        // Connect to the signal
+        GameLogic.boardGenerationCompleted.connect(onBoardGenerated)
+
+        // Start the async generation
+        GameLogic.generateBoardAsync(col, row);
+
+        // Return true to indicate that generation has started, not completed
+        return true;
     }
 
     function reveal(index) {
         let initialCell = grid.itemAtIndex(index) as Cell
         if (GameState.gameOver || initialCell.revealed || initialCell.flagged) return
+
         if (!GameState.gameStarted) {
+            // Start the async generation - the actual reveal happens after board is generated
             generateField(index)
-            if (!GameState.gameStarted) {
-                console.warn("Could not generated board")
-            }
+            return
         }
 
+        // Continue with normal reveal logic for subsequent clicks
         let cellsToReveal = [index]
         let visited = new Set()
         while (cellsToReveal.length > 0) {
@@ -176,6 +234,7 @@ GridView {
     }
 
     function initGame() {
+        if (GameState.isGeneratingGrid) return
         GameState.blockAnim = false
         GameState.mines = []
         GameState.numbers = []

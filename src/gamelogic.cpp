@@ -1031,3 +1031,19 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
     // If we couldn't generate a valid board in any attempt
     return false;
 }
+
+void GameLogic::generateBoardAsync(int firstClickX, int firstClickY) {
+    // Store the future to avoid the nodiscard warning
+    QFuture<void> future = QtConcurrent::run([this, firstClickX, firstClickY]() {
+        // Run the board generation in a separate thread
+        bool success = this->generateBoard(firstClickX, firstClickY);
+
+        // Emit the signal from the main thread when done
+        QMetaObject::invokeMethod(this, [this, success]() {
+            emit boardGenerationCompleted(success);
+        }, Qt::QueuedConnection);
+    });
+
+    // We could store this future if we needed to cancel or check its status later
+    // For now, we just ensure it's not discarded to satisfy the compiler
+}

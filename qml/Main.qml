@@ -181,6 +181,37 @@ ApplicationWindow {
         }
     }
 
+    GenerationPopup {
+        id: generationPopup
+        anchors.centerIn: parent
+        visible: false  // Initially not visible, we'll control this manually
+
+        Timer {
+            id: showDelayTimer
+            interval: 100
+            repeat: false
+            onTriggered: {
+                if (GameState.isGeneratingGrid) {
+                    generationPopup.visible = true
+                }
+            }
+        }
+
+        Connections {
+            target: GameState
+            function onIsGeneratingGridChanged() {
+                if (GameState.isGeneratingGrid) {
+                    // Grid generation started, but let's wait 100ms before showing
+                    showDelayTimer.restart()
+                } else {
+                    // Grid generation stopped, hide immediately
+                    showDelayTimer.stop()
+                    generationPopup.visible = false
+                }
+            }
+        }
+    }
+
     PostgamePopup {
         grid: grid
     }

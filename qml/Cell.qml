@@ -10,6 +10,7 @@ Item {
     row: Math.floor(index / GameState.gridSizeX)
     col: index % GameState.gridSizeX
     opacity: 1
+    enabled: !GameState.isGeneratingGrid
 
     required property var root
     required property int index

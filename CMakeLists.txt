@@ -14,6 +14,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Multimedia
     QuickControls2
     LinguistTools
+    Concurrent
 )
 qt_standard_project_setup(REQUIRES 6.5)
 qt_policy(SET QTP0004 NEW)
@@ -56,7 +57,7 @@ set(QML_FILES
     qml/Popups/SavePopup.qml
     qml/Popups/LeaderboardPopup.qml
     qml/Popups/WelcomePopup.qml
-
+    qml/Popups/GenerationPopup.qml
 )
 set(QML_SINGLETONS
     qml/Singletons/GameSettings.qml
@@ -92,6 +93,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     Qt6::Quick
     Qt6::Multimedia
     Qt6::QuickControls2
+    Qt6::Concurrent
 )
 qt_add_translations(${CMAKE_PROJECT_NAME}
     TS_FILES
