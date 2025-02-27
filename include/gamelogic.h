@@ -45,8 +45,7 @@ public:
     Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines);
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
-    Q_INVOKABLE bool placeLogicalMines(int firstClickX, int firstClickY);
-    Q_INVOKABLE bool placeNoGuessMines(int firstClickX, int firstClickY);
+    Q_INVOKABLE bool generateBoard(int firstClickX, int firstClickY);
     Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
 
 private:
