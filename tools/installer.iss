@@ -3,7 +3,7 @@
 #define AppPublisher "Odizinne"
 #define AppURL "https://github.com/Odizinne/Retr0Mine"
 #define AppExeName "Retr0Mine.exe"
-#define AppIcon "Resources\icons\icon.ico"
+#define AppIcon "..\Resources\icons\icon.ico"
 
 [Setup]
 AppId={{8A9C6942-5CA3-4A02-B701-E7B4E862D635}}
@@ -33,7 +33,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "build\Retr0Mine\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\build\release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"; IconFilename: "{app}\{#AppExeName}"

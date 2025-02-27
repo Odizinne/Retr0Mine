@@ -51,7 +51,7 @@ jobs:
         shell: pwsh
         run: |
           cd build\release
-          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\Resources\qml"
+          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\qml"
           windeployqt6 `
               --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
               --no-opengl-sw `
@@ -79,13 +79,13 @@ jobs:
         shell: pwsh
         run: |
           $env:Path += ";${env:ProgramFiles(x86)}\Inno Setup 6"
-          iscc.exe installer.iss
+          iscc.exe tools/installer.iss
 
       - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_Installer
-          path: Output/Retr0Mine_Installer.exe
+          path: tools/Output/Retr0Mine_Installer.exe
 
   linux-build:
     runs-on: ubuntu-latest
@@ -205,7 +205,7 @@ jobs:
           name: Retr0Mine_Linux
       - name: Download Steam Deck Installer Desktop File
         run: |
-          wget https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/Retr0Mine_SteamDeckInstaller.desktop
+          wget https://raw.githubusercontent.com/Odizinne/Retr0Mine/main/tools/Retr0Mine_SteamDeckInstaller.desktop
       - name: Bump version and create release
         id: bump_release
         run: |
