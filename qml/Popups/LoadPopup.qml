@@ -146,9 +146,9 @@ Popup {
     onVisibleChanged: {
         if (visible) {
             saveFilesList.model.clear()
-            let saves =GameCore.getSaveFiles()
+            let saves = GameCore.getSaveFiles()
 
-            if (!saves.length === 0) {
+            if (saves.length > 0) {
                 saves.forEach(function(save) {
                     saveFilesList.model.append({name: save, enabled: true})
                 })

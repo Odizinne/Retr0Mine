@@ -7,17 +7,12 @@ Item {
     property var grid: null
     property var manualSave: false
 
+    // Properties to store saved data (replacing timer properties)
+    property var savedData
+    property int savedCentiseconds
+
     function setGrid(gridReference) {
         grid = gridReference
-    }
-
-    Timer {
-        id: loadingTimer
-        interval: 1
-        repeat: false
-        onTriggered: saveManager.finishLoading()
-        property var savedData
-        property int savedCentiseconds
     }
 
     function loadGame(saveData) {
@@ -46,10 +41,10 @@ Item {
             // Set numbers after initialization
             GameState.numbers = data.gameState.numbers
 
-            // Store data for after grid initialization
-            loadingTimer.savedData = data
-            loadingTimer.savedCentiseconds = savedCentiseconds
-            loadingTimer.start()
+            // Store data for after grid initialization and schedule finishLoading
+            saveManager.savedData = data
+            saveManager.savedCentiseconds = savedCentiseconds
+            Qt.callLater(saveManager.finishLoading)
 
             return true
 
@@ -60,8 +55,8 @@ Item {
     }
 
     function finishLoading() {
-        const data = loadingTimer.savedData
-        const savedCentiseconds = loadingTimer.savedCentiseconds
+        const data = saveManager.savedData
+        const savedCentiseconds = saveManager.savedCentiseconds
 
         // Double check numbers are still set correctly
         if (!GameState.numbers || GameState.numbers !== data.gameState.numbers) {
