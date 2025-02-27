@@ -140,15 +140,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GameGrid</name>
     <message>
-        <location filename="../qml/GameGrid.qml" line="282"/>
-        <location filename="../qml/GameGrid.qml" line="289"/>
-        <location filename="../qml/GameGrid.qml" line="296"/>
+        <location filename="../qml/GameGrid.qml" line="342"/>
+        <location filename="../qml/GameGrid.qml" line="349"/>
+        <location filename="../qml/GameGrid.qml" line="356"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/GameGrid.qml" line="306"/>
-        <location filename="../qml/GameGrid.qml" line="312"/>
+        <location filename="../qml/GameGrid.qml" line="366"/>
+        <location filename="../qml/GameGrid.qml" line="372"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -221,6 +221,59 @@ Current game will be saved and restored</source>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="133"/>
         <source>Load last game on start</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GenerationPopup</name>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="15"/>
+        <source>Generating board...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="16"/>
+        <source>Placing mines in corners...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
+        <source>Checking if 1 + 1 = 2...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
+        <source>Counting digits very carefully...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
+        <source>Asking mines to play fair...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
+        <source>Calibrating mine detectors...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
+        <source>Convincing mines not to move...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
+        <source>Consulting probability experts...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
+        <source>Hiding mines under suspicious squares...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
+        <source>Running out of clever loading messages...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

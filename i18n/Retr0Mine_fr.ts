@@ -21,52 +21,52 @@
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="15"/>
         <source>Color correction</source>
-        <translation type="unfinished">Correction de couleur</translation>
+        <translation>Correction de couleur</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="21"/>
         <source>None</source>
-        <translation type="unfinished">Aucune</translation>
+        <translation>Aucune</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="22"/>
         <source>Deuteranopia</source>
-        <translation type="unfinished">Deuteranopie</translation>
+        <translation>Deuteranopie</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="23"/>
         <source>Protanopia</source>
-        <translation type="unfinished">Protanopie</translation>
+        <translation>Protanopie</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="24"/>
         <source>Tritanopia</source>
-        <translation type="unfinished">Tritanopie</translation>
+        <translation>Tritanopie</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="37"/>
         <source>Cell size</source>
-        <translation type="unfinished">Taille des cellules</translation>
+        <translation>Taille des cellules</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="42"/>
         <source>Small</source>
-        <translation type="unfinished">Petit</translation>
+        <translation>Petit</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="42"/>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="42"/>
         <source>Large</source>
-        <translation type="unfinished">Grand</translation>
+        <translation>Grand</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="62"/>
         <source>High contrast flags</source>
-        <translation type="unfinished">Drapeaux contrastés</translation>
+        <translation>Drapeaux contrastés</translation>
     </message>
 </context>
 <context>
@@ -74,34 +74,34 @@
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="14"/>
         <source>Style</source>
-        <translation type="unfinished">Style</translation>
+        <translation>Style</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="19"/>
         <source>Application will restart on change
 Current game will be saved and restored</source>
-        <translation type="unfinished">L&apos;application redémarrera après le changement
+        <translation>L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="42"/>
         <source>Color scheme</source>
-        <translation type="unfinished">Thème</translation>
+        <translation>Thème</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
         <source>System</source>
-        <translation type="unfinished">Système</translation>
+        <translation>Système</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
         <source>Dark</source>
-        <translation type="unfinished">Sombre</translation>
+        <translation>Sombre</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
         <source>Light</source>
-        <translation type="unfinished">Clair</translation>
+        <translation>Clair</translation>
     </message>
 </context>
 <context>
@@ -109,22 +109,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="69"/>
         <source>Width:</source>
-        <translation type="unfinished">Largeur:</translation>
+        <translation>Largeur:</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="88"/>
         <source>Height:</source>
-        <translation type="unfinished">Hauteur:</translation>
+        <translation>Hauteur:</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="106"/>
         <source>Mines:</source>
-        <translation type="unfinished">Mines:</translation>
+        <translation>Mines:</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="123"/>
         <source>Apply</source>
-        <translation type="unfinished">Appliquer</translation>
+        <translation>Appliquer</translation>
     </message>
 </context>
 <context>
@@ -148,15 +148,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GameGrid</name>
     <message>
-        <location filename="../qml/GameGrid.qml" line="282"/>
-        <location filename="../qml/GameGrid.qml" line="289"/>
-        <location filename="../qml/GameGrid.qml" line="296"/>
+        <location filename="../qml/GameGrid.qml" line="342"/>
+        <location filename="../qml/GameGrid.qml" line="349"/>
+        <location filename="../qml/GameGrid.qml" line="356"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/GameGrid.qml" line="306"/>
-        <location filename="../qml/GameGrid.qml" line="312"/>
+        <location filename="../qml/GameGrid.qml" line="366"/>
+        <location filename="../qml/GameGrid.qml" line="372"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -222,37 +222,90 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="16"/>
         <source>First click protection</source>
-        <translation type="unfinished">Protection du premier clic</translation>
+        <translation>Protection du premier clic</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="25"/>
         <source>First click always lands on a safe tile</source>
-        <translation type="unfinished">Premier clic toujours sur une case sûre</translation>
+        <translation>Premier clic toujours sur une case sûre</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="40"/>
         <source>Invert left and right click</source>
-        <translation type="unfinished">Inverser clic gauche et droit</translation>
+        <translation>Inverser clic gauche et droit</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="59"/>
         <source>Quick reveal connected cells</source>
-        <translation type="unfinished">Révéler cellules adjacentes</translation>
+        <translation>Révéler cellules adjacentes</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="78"/>
         <source>Enable question marks</source>
-        <translation type="unfinished">Activer les points d&apos;intérrogation</translation>
+        <translation>Activer les points d&apos;intérrogation</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="105"/>
         <source>Enable green question marks</source>
-        <translation type="unfinished">Activer les points d&apos;intérrogation verts</translation>
+        <translation>Activer les points d&apos;intérrogation verts</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="133"/>
         <source>Load last game on start</source>
-        <translation type="unfinished">Charger la dernière partie au démarrage</translation>
+        <translation>Charger la dernière partie au démarrage</translation>
+    </message>
+</context>
+<context>
+    <name>GenerationPopup</name>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="15"/>
+        <source>Generating board...</source>
+        <translation>Création de la grille en cours...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="16"/>
+        <source>Placing mines in corners...</source>
+        <translation>Placement des mines dans les coins...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
+        <source>Checking if 1 + 1 = 2...</source>
+        <translation>Vérification du calcul 1 + 1 = 2...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
+        <source>Counting digits very carefully...</source>
+        <translation>Comptage précis des chiffres...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
+        <source>Asking mines to play fair...</source>
+        <translation>Négociation avec les mines pour jouer fair-play...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
+        <source>Calibrating mine detectors...</source>
+        <translation>Étalonnage des détecteurs en cours...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
+        <source>Convincing mines not to move...</source>
+        <translation>Demande aux mines de ne pas se déplacer...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
+        <source>Consulting probability experts...</source>
+        <translation>Consultation des experts en probabilités...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
+        <source>Hiding mines under suspicious squares...</source>
+        <translation>Camouflage des mines sous les cases louches...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
+        <source>Running out of clever loading messages...</source>
+        <translation>Plus d&apos;inspiration pour les messages de chargement...</translation>
     </message>
 </context>
 <context>
@@ -260,12 +313,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/LanguagePane.qml" line="15"/>
         <source>Language</source>
-        <translation type="unfinished">Langue</translation>
+        <translation>Langue</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/LanguagePane.qml" line="21"/>
         <source>System</source>
-        <translation type="unfinished">Système</translation>
+        <translation>Système</translation>
     </message>
 </context>
 <context>
@@ -429,17 +482,17 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/Popups/RestorePopup.qml" line="21"/>
         <source>Restore all settings to default?</source>
-        <translation type="unfinished">Restaurer les paramètres par défaut?</translation>
+        <translation>Restaurer les paramètres par défaut?</translation>
     </message>
     <message>
         <location filename="../qml/Popups/RestorePopup.qml" line="33"/>
         <source>Restore</source>
-        <translation type="unfinished">Restaurer</translation>
+        <translation>Restaurer</translation>
     </message>
     <message>
         <location filename="../qml/Popups/RestorePopup.qml" line="44"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -1053,37 +1106,37 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="18"/>
         <source>Fullscreen</source>
-        <translation type="unfinished">Plein écran</translation>
+        <translation>Plein écran</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="22"/>
         <source>New game</source>
-        <translation type="unfinished">Nouveau</translation>
+        <translation>Nouveau</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="26"/>
         <source>Save game</source>
-        <translation type="unfinished">Sauver</translation>
+        <translation>Sauver</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="30"/>
         <source>Open settings</source>
-        <translation type="unfinished">Paramètres</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="34"/>
         <source>Hint</source>
-        <translation type="unfinished">Indice</translation>
+        <translation>Indice</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="38"/>
         <source>Leaderboard</source>
-        <translation type="unfinished">Classement</translation>
+        <translation>Classement</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="42"/>
         <source>Quit</source>
-        <translation type="unfinished">Quitter</translation>
+        <translation>Quitter</translation>
     </message>
 </context>
 <context>
@@ -1091,17 +1144,17 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/SoundsPane.qml" line="15"/>
         <source>Sound effects</source>
-        <translation type="unfinished">Effets sonores</translation>
+        <translation>Effets sonores</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/SoundsPane.qml" line="34"/>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/SoundsPane.qml" line="51"/>
         <source>Soundpack</source>
-        <translation type="unfinished">Pack de sons</translation>
+        <translation>Pack de sons</translation>
     </message>
 </context>
 <context>
@@ -1152,82 +1205,82 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="19"/>
         <source>Animations</source>
-        <translation type="unfinished">Animations</translation>
+        <translation>Animations</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="45"/>
         <source>Display timer</source>
-        <translation type="unfinished">Afficher le chrono</translation>
+        <translation>Afficher le chrono</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="63"/>
         <source>Start in full screen</source>
-        <translation type="unfinished">Plein écran au lancement</translation>
+        <translation>Plein écran au lancement</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="84"/>
         <source>Revealed cells frame</source>
-        <translation type="unfinished">Cadre des cellules</translation>
+        <translation>Cadre des cellules</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="103"/>
         <source>Dim satisfied cells</source>
-        <translation type="unfinished">Atténuer les cellules résolues</translation>
+        <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="123"/>
         <source>Dim level</source>
-        <translation type="unfinished">Niveau d&apos;atténuation</translation>
+        <translation>Niveau d&apos;atténuation</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="138"/>
         <source>Numbers font</source>
-        <translation type="unfinished">Police d&apos;affichage des chiffres</translation>
+        <translation>Police d&apos;affichage des chiffres</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="157"/>
         <source>Grid reset animation</source>
-        <translation type="unfinished">Animation de réinitialisation</translation>
+        <translation>Animation de réinitialisation</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="165"/>
         <source>Wave</source>
-        <translation type="unfinished">Vague</translation>
+        <translation>Vague</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="166"/>
         <source>Fade</source>
-        <translation type="unfinished">Fondu</translation>
+        <translation>Fondu</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="167"/>
         <source>Spin</source>
-        <translation type="unfinished">Rotation</translation>
+        <translation>Rotation</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="195"/>
         <source>Unlocked with a secret achievement</source>
-        <translation type="unfinished">Se débloque avec un succès caché</translation>
+        <translation>Se débloque avec un succès caché</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="216"/>
         <source>Flag</source>
-        <translation type="unfinished">Drapeau</translation>
+        <translation>Drapeau</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="247"/>
         <source>Unlock Trust Your Instincts achievement</source>
-        <translation type="unfinished">Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
+        <translation>Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="265"/>
         <source>Unlock Master Tactician achievement</source>
-        <translation type="unfinished">Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
+        <translation>Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="283"/>
         <source>Unlock Minefield Legend achievement</source>
-        <translation type="unfinished">Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
+        <translation>Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
     </message>
 </context>
 <context>
