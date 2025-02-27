@@ -97,8 +97,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 )
 qt_add_translations(${CMAKE_PROJECT_NAME}
     TS_FILES
-        i18n/retr0mine_en.ts
-        i18n/retr0mine_fr.ts
+        i18n/Retr0Mine_en.ts
+        i18n/Retr0Mine_fr.ts
     RESOURCE_PREFIX "/i18n"
 )
 #add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
