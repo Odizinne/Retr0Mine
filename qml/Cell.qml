@@ -12,9 +12,7 @@ Item {
     opacity: 1
     enabled: !GameState.isGeneratingGrid
 
-    required property var root
     required property int index
-    //required property var grid
 
     property bool revealed: false
     property bool flagged: false
@@ -39,7 +37,9 @@ Item {
         GridBridge.cellsCreated++
         if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY && !GameState.gridFullyInitialized) {
             GameState.gridFullyInitialized = true
-            cellItem.root.startInitialLoadTimer()
+            Qt.callLater(function() {
+                ComponentsContext.allCellsReady()
+            })
         }
 
         if (GameSettings.animations && !GridBridge.initialAnimationPlayed && !GameState.blockAnim) {

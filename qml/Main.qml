@@ -58,6 +58,13 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: ComponentsContext
+        function onAllCellsReady() {
+            root.checkInitialGameState()
+        }
+    }
+
     onVisibilityChanged: function(visibility) {
         if (visibility === ApplicationWindow.Windowed) {
             minimumWidth = getIdealWidth()
@@ -234,22 +241,9 @@ ApplicationWindow {
                     GridBridge.setGrid(grid)
                     SaveManager.setGrid(grid)
                 }
-                delegate: Cell {
-                    root: root
-                }
+                delegate: Cell { }
             }
         }
-    }
-
-    Timer {
-        id: initialLoadTimer
-        interval: 1
-        repeat: false
-        onTriggered: root.checkInitialGameState()
-    }
-
-    function startInitialLoadTimer() {
-        initialLoadTimer.start()
     }
 
     function checkInitialGameState() {
