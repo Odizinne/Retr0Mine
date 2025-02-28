@@ -4,12 +4,13 @@ import net.odizinne.retr0mine 1.0
 
 Flickable {
     id: control
-
+    property bool verticalScrollbarEnabled: true
+    property bool horizontalScrollbarEnabled: true
     ScrollBar {
         id: defaultVerticalScrollBar
         parent: control
         orientation: Qt.Vertical
-        visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
+        visible: control.verticalScrollbarEnabled && policy === ScrollBar.AlwaysOn && !GameCore.isFluent
         active: !GameCore.isFluent
         policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > control.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
@@ -18,7 +19,7 @@ Flickable {
     ScrollBar {
         id: defaultHorizontalScrollBar
         parent: control
-        visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
+        visible: control.horizontalScrollbarEnabled && policy === ScrollBar.AlwaysOn && !GameCore.isFluent
         active: !GameCore.isFluent
         policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > control.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
@@ -27,7 +28,7 @@ Flickable {
     TempScrollBar {
         id: fluentVerticalScrollBar
         parent: control
-        visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
+        visible: control.verticalScrollbarEnabled && policy === ScrollBar.AlwaysOn && GameCore.isFluent
         active: GameCore.isFluent
         policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > control.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
@@ -36,7 +37,7 @@ Flickable {
     TempScrollBar {
         id: fluentHorizontalScrollBar
         parent: control
-        visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
+        visible: control.horizontalScrollbarEnabled && policy === ScrollBar.AlwaysOn && GameCore.isFluent
         active: GameCore.isFluent
         policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > control.width ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff

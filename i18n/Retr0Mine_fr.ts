@@ -402,7 +402,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/MainMenu.qml" line="51"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide</translation>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="58"/>
@@ -449,14 +449,59 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>RulesPopup</name>
     <message>
-        <location filename="../qml/Popups/RulesPopup.qml" line="27"/>
+        <location filename="../qml/Popups/RulesPopup.qml" line="29"/>
         <source>How to Play Minesweeper</source>
-        <translation type="unfinished"></translation>
+        <translation>Comment jouer au démineur</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/RulesPopup.qml" line="81"/>
+        <location filename="../qml/Popups/RulesPopup.qml" line="61"/>
+        <source>&lt;h2&gt;Objective&lt;/h2&gt;&lt;p&gt;Find all the mines on the board without detonating any of them.&lt;/p&gt;
+&lt;h3&gt;Basic Controls&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Classic Mode:&lt;/b&gt;
+&lt;br&gt;   - Left click: Reveal a cell
+&lt;br&gt;   - Right click: Flag a suspected mine&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;• Chord Mode:&lt;/b&gt;
+&lt;br&gt;   - Left click: Flag a suspected mine
+&lt;br&gt;   - Right click: Reveal a cell
+&lt;br&gt;   - Click on a revealed number: Reveal adjacent cells if enough flags placed&lt;/p&gt;
+&lt;h3&gt;Game Elements&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Numbers:&lt;/b&gt; When you reveal a cell, a number may appear. This indicates how many mines are adjacent to that cell (in the 8 surrounding cells).
+&lt;br&gt;&lt;b&gt;• Blank Cell:&lt;/b&gt; If you reveal a cell with no adjacent mines, it will be blank and automatically reveal adjacent cells.
+&lt;br&gt;&lt;b&gt;• Flags:&lt;/b&gt; Use flags to mark where you think mines are located.
+&lt;br&gt;&lt;b&gt;• Question Marks:&lt;/b&gt; Use question marks (if enabled) to mark cells you&apos;re uncertain about.&lt;/p&gt;
+&lt;h3&gt;Game Strategies&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Start in a corner or edge:&lt;/b&gt; This gives you fewer adjacent cells to worry about initially.
+&lt;br&gt;&lt;b&gt;• Use the numbers:&lt;/b&gt; If a &apos;1&apos; cell has only one unrevealed adjacent cell, that cell must contain a mine.
+&lt;br&gt;&lt;b&gt;• Use flagged mines:&lt;/b&gt; Once a numbered cell has all its adjacent mines flagged, the remaining adjacent cells are safe.
+&lt;br&gt;&lt;b&gt;• Chord technique:&lt;/b&gt; Click on a number when you&apos;ve flagged all its adjacent mines to reveal all other adjacent cells at once.&lt;/p&gt;
+&lt;h3&gt;When You&apos;re Stuck&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Try a different area:&lt;/b&gt; If you&apos;re stuck in one area of the grid, move to another section where you might find new clues.
+&lt;br&gt;&lt;b&gt;• Look for new patterns:&lt;/b&gt; Sometimes taking a fresh look at the board can reveal patterns you didn&apos;t notice before.
+&lt;br&gt;&lt;b&gt;• Use probability:&lt;/b&gt; In some cases, you may need to make an educated guess based on the information available.&lt;/p&gt;
+&lt;h3&gt;Winning the Game&lt;/h3&gt;&lt;p&gt;You win when all non-mine cells have been revealed. You don&apos;t have to flag all mines to win, just reveal all safe cells.&lt;/p&gt;
+&lt;p&gt;Have fun and good luck finding those mines!&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Objectif&lt;/h2&gt;&lt;p&gt;Trouvez toutes les mines sur le plateau sans en déclencher aucune.&lt;/p&gt;
+&lt;h3&gt;Contrôles de base&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Mode Classique :&lt;/b&gt;
+&lt;br&gt; - Clic gauche : Révéler une case
+&lt;br&gt; - Clic droit : Marquer une mine suspectée&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;• Mode Accord :&lt;/b&gt;
+&lt;br&gt; - Clic gauche : Marquer une mine suspectée
+&lt;br&gt; - Clic droit : Révéler une case
+&lt;br&gt; - Clic sur un nombre révélé : Révéler les cases adjacentes si suffisamment de drapeaux sont placés&lt;/p&gt;
+&lt;h3&gt;Éléments du jeu&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Nombres :&lt;/b&gt; Quand vous révélez une case, un nombre peut apparaître. Cela indique combien de mines sont adjacentes à cette case (dans les 8 cases environnantes).
+&lt;br&gt;&lt;b&gt;• Case vide :&lt;/b&gt; Si vous révélez une case sans mines adjacentes, elle sera vide et révélera automatiquement les cases adjacentes.
+&lt;br&gt;&lt;b&gt;• Drapeaux :&lt;/b&gt; Utilisez les drapeaux pour marquer où vous pensez que les mines sont situées.
+&lt;br&gt;&lt;b&gt;• Points d&apos;interrogation :&lt;/b&gt; Utilisez les points d&apos;interrogation (si activés) pour marquer les cases dont vous n&apos;êtes pas certain.&lt;/p&gt;
+&lt;h3&gt;Stratégies de jeu&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Commencez par un coin ou un bord :&lt;/b&gt; Cela vous donne moins de cases adjacentes à gérer au début.
+&lt;br&gt;&lt;b&gt;• Utilisez les nombres :&lt;/b&gt; Si une case marquée &apos;1&apos; n&apos;a qu&apos;une seule case adjacente non révélée, cette case doit contenir une mine.
+&lt;br&gt;&lt;b&gt;• Utilisez les mines marquées :&lt;/b&gt; Une fois que toutes les mines adjacentes à une case numérotée sont marquées, les autres cases adjacentes sont sûres.
+&lt;br&gt;&lt;b&gt;• Technique Accord :&lt;/b&gt; Cliquez sur un nombre lorsque vous avez marqué toutes ses mines adjacentes pour révéler toutes les autres cases adjacentes en une fois.&lt;/p&gt;
+&lt;h3&gt;Quand vous êtes bloqué&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Essayez une zone différente :&lt;/b&gt; Si vous êtes bloqué dans une zone de la grille, déplacez-vous vers une autre section où vous pourriez trouver de nouveaux indices.
+&lt;br&gt;&lt;b&gt;• Cherchez de nouveaux motifs :&lt;/b&gt; Parfois, un regard neuf sur le plateau peut révéler des motifs que vous n&apos;aviez pas remarqués auparavant.
+&lt;br&gt;&lt;b&gt;• Utilisez les probabilités :&lt;/b&gt; Dans certains cas, vous devrez peut-être faire une supposition éclairée basée sur les informations disponibles.&lt;/p&gt;
+&lt;h3&gt;Gagner la partie&lt;/h3&gt;&lt;p&gt;Vous gagnez lorsque toutes les cases sans mines ont été révélées. Vous n&apos;avez pas besoin de marquer toutes les mines pour gagner, juste de révéler toutes les cases sûres.&lt;/p&gt;
+&lt;p&gt;Amusez-vous bien et bonne chance pour trouver ces mines !&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/RulesPopup.qml" line="87"/>
         <source>Close</source>
-        <translation type="unfinished">Fermer</translation>
+        <translation>Fermer</translation>
     </message>
 </context>
 <context>

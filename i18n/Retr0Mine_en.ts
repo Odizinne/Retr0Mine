@@ -448,12 +448,37 @@ Current game will be saved and restored</source>
 <context>
     <name>RulesPopup</name>
     <message>
-        <location filename="../qml/Popups/RulesPopup.qml" line="27"/>
+        <location filename="../qml/Popups/RulesPopup.qml" line="29"/>
         <source>How to Play Minesweeper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/RulesPopup.qml" line="81"/>
+        <location filename="../qml/Popups/RulesPopup.qml" line="61"/>
+        <source>&lt;h2&gt;Objective&lt;/h2&gt;&lt;p&gt;Find all the mines on the board without detonating any of them.&lt;/p&gt;
+&lt;h3&gt;Basic Controls&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Classic Mode:&lt;/b&gt;
+&lt;br&gt;   - Left click: Reveal a cell
+&lt;br&gt;   - Right click: Flag a suspected mine&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;• Chord Mode:&lt;/b&gt;
+&lt;br&gt;   - Left click: Flag a suspected mine
+&lt;br&gt;   - Right click: Reveal a cell
+&lt;br&gt;   - Click on a revealed number: Reveal adjacent cells if enough flags placed&lt;/p&gt;
+&lt;h3&gt;Game Elements&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Numbers:&lt;/b&gt; When you reveal a cell, a number may appear. This indicates how many mines are adjacent to that cell (in the 8 surrounding cells).
+&lt;br&gt;&lt;b&gt;• Blank Cell:&lt;/b&gt; If you reveal a cell with no adjacent mines, it will be blank and automatically reveal adjacent cells.
+&lt;br&gt;&lt;b&gt;• Flags:&lt;/b&gt; Use flags to mark where you think mines are located.
+&lt;br&gt;&lt;b&gt;• Question Marks:&lt;/b&gt; Use question marks (if enabled) to mark cells you&apos;re uncertain about.&lt;/p&gt;
+&lt;h3&gt;Game Strategies&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Start in a corner or edge:&lt;/b&gt; This gives you fewer adjacent cells to worry about initially.
+&lt;br&gt;&lt;b&gt;• Use the numbers:&lt;/b&gt; If a &apos;1&apos; cell has only one unrevealed adjacent cell, that cell must contain a mine.
+&lt;br&gt;&lt;b&gt;• Use flagged mines:&lt;/b&gt; Once a numbered cell has all its adjacent mines flagged, the remaining adjacent cells are safe.
+&lt;br&gt;&lt;b&gt;• Chord technique:&lt;/b&gt; Click on a number when you&apos;ve flagged all its adjacent mines to reveal all other adjacent cells at once.&lt;/p&gt;
+&lt;h3&gt;When You&apos;re Stuck&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Try a different area:&lt;/b&gt; If you&apos;re stuck in one area of the grid, move to another section where you might find new clues.
+&lt;br&gt;&lt;b&gt;• Look for new patterns:&lt;/b&gt; Sometimes taking a fresh look at the board can reveal patterns you didn&apos;t notice before.
+&lt;br&gt;&lt;b&gt;• Use probability:&lt;/b&gt; In some cases, you may need to make an educated guess based on the information available.&lt;/p&gt;
+&lt;h3&gt;Winning the Game&lt;/h3&gt;&lt;p&gt;You win when all non-mine cells have been revealed. You don&apos;t have to flag all mines to win, just reveal all safe cells.&lt;/p&gt;
+&lt;p&gt;Have fun and good luck finding those mines!&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/RulesPopup.qml" line="87"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
