@@ -57,7 +57,7 @@ Popup {
                     if (!SaveManager.loadGame(saveData)) {
                         errorWindow.visible = true
                     }
-                    control.visible = false
+                    ComponentsContext.loadPopupVisible = false
                 }
             }
         }
@@ -109,7 +109,7 @@ Popup {
                             if (!SaveManager.loadGame(saveData)) {
                                 errorWindow.visible = true
                             }
-                            control.visible = false
+                            ComponentsContext.loadPopupVisible = false
                         }
                     }
 
