@@ -1,5 +1,5 @@
-#ifndef GAMECORE_H
-#define GAMECORE_H
+#pragma once
+
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QSettings>
@@ -91,5 +91,3 @@ public:
         return s_singletonInstance;
     }
 };
-
-#endif // GAMECORE_H

@@ -1,6 +1,5 @@
-// steamintegration.h
-#ifndef STEAMINTEGRATION_H
-#define STEAMINTEGRATION_H
+#pragma once
+
 #include <QObject>
 #include <QQmlEngine>
 #include <steam_api.h>
@@ -67,5 +66,3 @@ public:
         return s_singletonInstance;
     }
 };
-
-#endif // STEAMINTEGRATION_H

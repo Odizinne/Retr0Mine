@@ -1,6 +1,5 @@
-// gametimer.h
-#ifndef GAMETIMER_H
-#define GAMETIMER_H
+#pragma once
+
 #include <QObject>
 #include <QTimer>
 #include <QElapsedTimer>
@@ -61,5 +60,3 @@ public:
         return s_singletonInstance;
     }
 };
-
-#endif // GAMETIMER_H

@@ -1,5 +1,5 @@
-#ifndef GAMELOGIC_H
-#define GAMELOGIC_H
+#pragma once
+
 #include <QMap>
 #include <QObject>
 #include <QSet>
@@ -92,5 +92,3 @@ public:
         return s_singletonInstance;
     }
 };
-
-#endif // GAMELOGIC_H
