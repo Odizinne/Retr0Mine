@@ -33,6 +33,10 @@ inline size_t qHash(const MineSolverInfo &info, size_t seed = 0)
 class GameLogic : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int currentAttempt READ currentAttempt NOTIFY currentAttemptChanged)
+    Q_PROPERTY(int totalAttempts READ totalAttempts NOTIFY totalAttemptsChanged)
+    Q_PROPERTY(int minesPlaced READ minesPlaced NOTIFY minesPlacedChanged)
+    Q_PROPERTY(int totalMines READ totalMines NOTIFY totalMinesChanged)
 public:
     struct Cell
     {
@@ -50,14 +54,24 @@ public:
     Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines);
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
-    bool generateBoard(int firstClickX, int firstClickY);
+    Q_INVOKABLE bool generateBoard(int firstClickX, int firstClickY);
     Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
 
     Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY);
     Q_INVOKABLE void cancelGeneration();
 
+    // Progress information accessors
+    int currentAttempt() const { return m_currentAttempt; }
+    int totalAttempts() const { return m_totalAttempts; }
+    int minesPlaced() const { return m_minesPlaced; }
+    int totalMines() const { return m_mineCount; }
+
 signals:
     void boardGenerationCompleted(bool success);
+    void currentAttemptChanged();
+    void totalAttemptsChanged();
+    void minesPlacedChanged();
+    void totalMinesChanged();
 
 private:
     int m_width;
@@ -72,9 +86,17 @@ private:
     std::atomic<bool> m_cancelGeneration;
     QFutureWatcher<void>* m_generationWatcher;
 
+    // Progress tracking
+    std::atomic<int> m_currentAttempt;
+    std::atomic<int> m_totalAttempts;
+    std::atomic<int> m_minesPlaced;
+
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
+
+    // Helper method to update progress and emit signals via queued connection
+    void updateProgress(int attempt, int totalAttempts, int minesPlaced);
 };
 
 struct GameLogicForeign

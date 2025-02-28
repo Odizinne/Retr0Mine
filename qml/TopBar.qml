@@ -14,37 +14,50 @@ RowLayout {
         leftMargin: 12
         rightMargin: 12
     }
+    spacing: 0
 
-    Button {
-        Layout.alignment: Qt.AlignLeft
-        Layout.preferredHeight: 35
-        text: "Menu"
-        onClicked: {
-            mainMenu.visible = !mainMenu.visible
-        }
+    RowLayout {
+        Layout.preferredWidth: parent.width / 3
+        Layout.fillHeight: true
 
-        MainMenu {
-            id: mainMenu
+        Button {
+            Layout.preferredHeight: 35
+            text: "Menu"
+            onClicked: {
+                mainMenu.visible = !mainMenu.visible
+            }
+            MainMenu {
+                id: mainMenu
+            }
         }
     }
 
-    Label {
-        id: elapsedTimeLabel
-        text: GameTimer.displayTime
-        visible: GameSettings.displayTimer
-        font.pixelSize: 18
-        Layout.alignment: Qt.AlignCenter
+    RowLayout {
+        Layout.preferredWidth: parent.width / 3
+        Layout.fillHeight: true
+
+        Label {
+            id: elapsedTimeLabel
+            text: GameTimer.displayTime
+            visible: GameSettings.displayTimer
+            font.pixelSize: 18
+            Layout.alignment: Qt.AlignCenter
+        }
     }
 
-    Button {
-        Layout.alignment: Qt.AlignRight
-        icon.source: "qrc:/icons/bomb.png"
-        icon.color: GameConstants.foregroundColor
-        text: ": " + (GameState.mineCount - GameState.flaggedCount)
-        font.pixelSize: 18
-        font.bold: true
-        onClicked: {
-            GridBridge.requestHint()
+    RowLayout {
+        Layout.preferredWidth: parent.width / 3
+        Layout.fillHeight: true
+
+        Button {
+            Layout.preferredHeight: 35
+            icon.source: "qrc:/icons/bomb.png"
+            icon.color: GameConstants.foregroundColor
+            text: ": " + (GameState.mineCount - GameState.flaggedCount)
+            font.pixelSize: 18
+            font.bold: true
+            onClicked: GridBridge.requestHint()
+            Layout.alignment: Qt.AlignRight
         }
     }
 }

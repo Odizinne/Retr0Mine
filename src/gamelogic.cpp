@@ -8,6 +8,9 @@ GameLogic::GameLogic(QObject *parent)
     , m_rng(std::random_device{}())
     , m_cancelGeneration(false)
     , m_generationWatcher(new QFutureWatcher<void>(this))
+    , m_currentAttempt(0)
+    , m_totalAttempts(0)
+    , m_minesPlaced(0)
 {
     connect(m_generationWatcher, &QFutureWatcher<void>::finished, this, [this]() {
         // Only emit if not cancelled
@@ -35,6 +38,14 @@ bool GameLogic::initializeGame(int width, int height, int mineCount)
     m_mineCount = mineCount;
     m_mines.clear();
     m_numbers.resize(width * height);
+
+    // Reset progress counters
+    updateProgress(0, 0, 0);
+
+    // Emit totalMines signal since m_mineCount changed
+    QMetaObject::invokeMethod(this, [this]() {
+        emit totalMinesChanged();
+    }, Qt::QueuedConnection);
 
     return true;
 }
@@ -1089,6 +1100,9 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             std::swap(candidates[i], candidates[j]);
         }
 
+        // Reset mines placed counter for this attempt
+        updateProgress(m_currentAttempt.load(), m_totalAttempts.load(), 0);
+
         // Place mines one by one, ensuring the board remains solvable
         int placedMines = 0;
         for (int i = 0; i < candidates.size() && placedMines < m_mineCount; ++i) {
@@ -1106,6 +1120,11 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
                 // Accept this mine placement
                 board.placeMine(candidates[i]);
                 placedMines++;
+
+                // Update placed mines progress - update every few mines or on significant milestones
+                if (placedMines % 5 == 0 || placedMines == 1 || placedMines == m_mineCount) {
+                    updateProgress(m_currentAttempt.load(), m_totalAttempts.load(), placedMines);
+                }
             }
         }
 
@@ -1116,6 +1135,9 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
 
         // Check if we placed all mines
         if (placedMines == m_mineCount) {
+            // Make sure we show all mines are placed
+            updateProgress(m_currentAttempt.load(), m_totalAttempts.load(), m_mineCount);
+
             // Transfer the generated board to the game state
             m_mines = board.getMines();
             m_numbers = board.calculateNumbers();
@@ -1131,27 +1153,31 @@ void GameLogic::generateBoardAsync(int firstClickX, int firstClickY) {
     // Cancel any ongoing generation
     cancelGeneration();
 
+    // Set initial progress values
+    const int MAX_ATTEMPTS = 100; // Maximum number of attempts
+    updateProgress(1, MAX_ATTEMPTS, 0);
+
     // Create a new future
-    QFuture<void> future = QtConcurrent::run([this, firstClickX, firstClickY]() {
+    QFuture<void> future = QtConcurrent::run([this, firstClickX, firstClickY, MAX_ATTEMPTS]() {
         // Run the board generation in a separate thread
         bool success = false;
+        int attempt = 1;
 
-        // Periodically check for cancellation
-        while (!m_cancelGeneration.load()) {
+        // Try repeatedly until success or cancellation
+        while (!success && attempt <= MAX_ATTEMPTS && !m_cancelGeneration.load()) {
+            // Update attempt counter
+            updateProgress(attempt, MAX_ATTEMPTS, 0);
+
+            // Try to generate board
             success = this->generateBoard(firstClickX, firstClickY);
-            if (success) {
-                break;
-            }
 
-            // If generation fails but we're not cancelled, we might want to retry
-            // But first check if we're cancelled
-            if (m_cancelGeneration.load()) {
-                break;
+            if (!success && !m_cancelGeneration.load()) {
+                attempt++;
             }
         }
 
-        // Clear data if cancelled
-        if (m_cancelGeneration.load()) {
+        // Clear data if cancelled or failed
+        if (m_cancelGeneration.load() || !success) {
             m_mines.clear();
             m_numbers.clear();
         }
@@ -1161,6 +1187,22 @@ void GameLogic::generateBoardAsync(int firstClickX, int firstClickY) {
     m_generationWatcher->setFuture(future);
 }
 
+void GameLogic::updateProgress(int attempt, int totalAttempts, int minesPlaced)
+{
+    // Update the atomic values
+    m_currentAttempt.store(attempt);
+    m_totalAttempts.store(totalAttempts);
+    m_minesPlaced.store(minesPlaced);
+
+    // Emit signals using queued connection to ensure thread safety
+    QMetaObject::invokeMethod(this, [this]() {
+        emit currentAttemptChanged();
+        emit totalAttemptsChanged();
+        emit minesPlacedChanged();
+    }, Qt::QueuedConnection);
+}
+
+// Update cancelGeneration to reset progress
 void GameLogic::cancelGeneration()
 {
     // Set atomic flag to signal threads to stop
@@ -1171,6 +1213,7 @@ void GameLogic::cancelGeneration()
         m_generationWatcher->waitForFinished();
     }
 
-    // Reset the flag
+    // Reset the flag and progress
     m_cancelGeneration.store(false);
+    updateProgress(0, 0, 0);
 }

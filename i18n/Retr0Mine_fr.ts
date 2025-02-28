@@ -253,62 +253,62 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GenerationPopup</name>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="16"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
         <source>Generating board...</source>
         <translation>Création de la grille en cours...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
         <source>Placing mines in corners...</source>
         <translation>Placement des mines dans les coins...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
         <source>Checking if 1 + 1 = 2...</source>
         <translation>Vérification du calcul 1 + 1 = 2...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
         <source>Counting digits very carefully...</source>
         <translation>Comptage précis des chiffres...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
         <source>Asking mines to play fair...</source>
         <translation>Négociation avec les mines pour jouer fair-play...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
         <source>Calibrating mine detectors...</source>
         <translation>Étalonnage des détecteurs en cours...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
         <source>Convincing mines not to move...</source>
         <translation>Demande aux mines de ne pas se déplacer...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
         <source>Consulting probability experts...</source>
         <translation>Consultation des experts en probabilités...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
         <source>Hiding mines under suspicious squares...</source>
         <translation>Camouflage des mines sous les cases louches...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="26"/>
         <source>Calculation of multipliers based on colors</source>
         <translation>Calcul des multiplicateurs en fonction des couleurs</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="26"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="27"/>
         <source>Running out of clever loading messages...</source>
         <translation>Plus d&apos;inspiration pour les messages de chargement...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="86"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="92"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuler</translation>
     </message>

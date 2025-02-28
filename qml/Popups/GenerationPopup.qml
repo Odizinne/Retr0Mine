@@ -1,13 +1,14 @@
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick 2.15
+import net.odizinne.retr0mine 1.0
 
 Popup {
     id: control
     modal: true
     closePolicy: Popup.NoAutoClose
-    height: implicitHeight + 40
-    width: stupidMessagesLabel.width + 40
+    height: implicitHeight + 20
+    width: 300
     visible: false
     anchors.centerIn: parent
 
@@ -66,24 +67,31 @@ Popup {
     }
 
     ColumnLayout {
+        id: mainLayout
         anchors.centerIn: parent
-        spacing: 20
-
-        BusyIndicator {
-            Layout.preferredHeight: 48
-            Layout.preferredWidth: 48
-            Layout.alignment: Qt.AlignHCenter
-        }
+        spacing: 15
 
         Label {
             id: stupidMessagesLabel
             text: control.currentMessage
-            font.italic: true
+            Layout.preferredWidth: mineProgress.width
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+        }
+
+        ProgressBar {
+            id: mineProgress
+            value: GameLogic.minesPlaced
+            from: 0
+            to: Math.max(1, GameLogic.totalMines)
+            Layout.preferredWidth: 220
             Layout.alignment: Qt.AlignHCenter
         }
 
         Button {
             text: qsTr("Cancel")
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: 10
             onClicked: GridBridge.cancelGeneration()
         }
     }
