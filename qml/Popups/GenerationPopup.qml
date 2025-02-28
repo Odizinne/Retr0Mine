@@ -81,5 +81,10 @@ Popup {
             font.italic: true
             Layout.alignment: Qt.AlignHCenter
         }
+
+        Button {
+            text: qsTr("Cancel")
+            onClicked: GridBridge.cancelGeneration()
+        }
     }
 }

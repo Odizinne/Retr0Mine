@@ -6,7 +6,23 @@
 GameLogic::GameLogic(QObject *parent)
     : QObject(parent)
     , m_rng(std::random_device{}())
-{}
+    , m_cancelGeneration(false)
+    , m_generationWatcher(new QFutureWatcher<void>(this))
+{
+    connect(m_generationWatcher, &QFutureWatcher<void>::finished, this, [this]() {
+        // Only emit if not cancelled
+        if (!m_cancelGeneration.load()) {
+            // The future is already finished so we can check if it was successful
+            // by testing if mines were generated
+            emit boardGenerationCompleted(!m_mines.isEmpty());
+        }
+    });
+}
+
+GameLogic::~GameLogic()
+{
+    cancelGeneration();
+}
 
 bool GameLogic::initializeGame(int width, int height, int mineCount)
 {
@@ -532,6 +548,11 @@ int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int
 }
 
 bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
+    // Check for cancellation at the beginning
+    if (m_cancelGeneration.load()) {
+        return false;
+    }
+
     // Valid first click coordinates
     bool safeFirstClick = (firstClickX != -1 && firstClickY != -1);
     int firstClickIndex = safeFirstClick ? (firstClickY * m_width + firstClickX) : -1;
@@ -616,7 +637,12 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
         }
 
         // Check if the board is fully solvable without guessing
-        bool isFullySolvable() {
+        bool isFullySolvable(const std::atomic<bool>& cancelFlag) {
+            // Check for cancellation
+            if (cancelFlag.load()) {
+                return false;
+            }
+
             // Create a copy of the board for simulation
             BoardState simBoard = *this;
 
@@ -628,7 +654,7 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             }
 
             // Try to solve the board
-            return simBoard.solveCompletely();
+            return simBoard.solveCompletely(cancelFlag);
         }
 
         // Calculate numbers for generating the final board
@@ -673,13 +699,18 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
         int m_height;
 
         // Use a constraint solver approach to determine if the board is solvable
-        bool solveCompletely() {
+        bool solveCompletely(const std::atomic<bool>& cancelFlag) {
             // Keep track of which cells have been processed
             QSet<int> processedCells;
 
             // Keep trying to make progress until we can't anymore
             bool progress = true;
             while (progress) {
+                // Check for cancellation
+                if (cancelFlag.load()) {
+                    return false;
+                }
+
                 progress = false;
 
                 // For each revealed cell, check if we can make logical deductions
@@ -730,7 +761,7 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
 
                 // If we can't make progress with basic rules, try more advanced solving
                 if (!progress) {
-                    progress = solveWithCSP();
+                    progress = solveWithCSP(cancelFlag);
                 }
             }
 
@@ -746,7 +777,12 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
         }
 
         // Constraint Satisfaction Problem (CSP) solver for more complex patterns
-        bool solveWithCSP() {
+        bool solveWithCSP(const std::atomic<bool>& cancelFlag) {
+            // Check for cancellation
+            if (cancelFlag.load()) {
+                return false;
+            }
+
             // Find all boundary cells (revealed cells with unrevealed neighbors)
             QVector<int> boundaryCells;
             for (int i = 0; i < m_cells.size(); ++i) {
@@ -777,9 +813,14 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
                 }
             }
 
+            // Check for cancellation before potentially long operations
+            if (cancelFlag.load()) {
+                return false;
+            }
+
             // If frontier is too large, partial solving might be needed
             if (frontierCells.size() > 12) { // Limit for tractable solving
-                return solveLargeCSP(boundaryCells, QVector<int>(frontierCells.begin(), frontierCells.end()));
+                return solveLargeCSP(boundaryCells, QVector<int>(frontierCells.begin(), frontierCells.end()), cancelFlag);
             }
 
             // Generate all possible mine configurations for the frontier
@@ -788,7 +829,12 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             QVector<int> frontierList(frontierCells.begin(), frontierCells.end());
 
             // Use a constraint-based approach to find all valid configurations
-            generateValidConfigurations(boundaryCells, frontierList, currentConfig, 0, possibleConfigs);
+            generateValidConfigurations(boundaryCells, frontierList, currentConfig, 0, possibleConfigs, cancelFlag);
+
+            // Check for cancellation after potentially long operations
+            if (cancelFlag.load()) {
+                return false;
+            }
 
             if (possibleConfigs.isEmpty()) {
                 return false; // No valid configurations - board is unsolvable
@@ -824,12 +870,22 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
         }
 
         // Solve large CSP problems by breaking them into subproblems
-        bool solveLargeCSP(const QVector<int>& boundaryCells, const QVector<int>& frontierCells) {
+        bool solveLargeCSP(const QVector<int>& boundaryCells, const QVector<int>& frontierCells, const std::atomic<bool>& cancelFlag) {
+            // Check for cancellation
+            if (cancelFlag.load()) {
+                return false;
+            }
+
             // Find connected components in the boundary
             QVector<QSet<int>> components;
             QSet<int> visitedBoundary;
 
             for (int cell : boundaryCells) {
+                // Check for cancellation in the loop
+                if (cancelFlag.load()) {
+                    return false;
+                }
+
                 if (visitedBoundary.contains(cell)) continue;
 
                 // Find a connected component
@@ -839,6 +895,11 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
                 visitedBoundary.insert(cell);
 
                 while (!queue.isEmpty()) {
+                    // Check for cancellation in nested loop
+                    if (cancelFlag.load()) {
+                        return false;
+                    }
+
                     int current = queue.dequeue();
                     component.insert(current);
 
@@ -875,6 +936,11 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             // Solve each component separately
             bool progress = false;
             for (const auto& component : components) {
+                // Check for cancellation in component loop
+                if (cancelFlag.load()) {
+                    return false;
+                }
+
                 // Get frontier cells for this component
                 QSet<int> componentFrontier;
                 for (int cell : component) {
@@ -893,7 +959,12 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
                     QVector<QVector<bool>> possibleConfigs;
                     QVector<bool> currentConfig(compFrontier.size(), false);
 
-                    generateValidConfigurations(compBoundary, compFrontier, currentConfig, 0, possibleConfigs);
+                    generateValidConfigurations(compBoundary, compFrontier, currentConfig, 0, possibleConfigs, cancelFlag);
+
+                    // Check for cancellation after potentially long operations
+                    if (cancelFlag.load()) {
+                        return false;
+                    }
 
                     if (possibleConfigs.isEmpty()) {
                         return false; // No valid configurations - component is unsolvable
@@ -936,10 +1007,11 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             QVector<bool>& currentConfig,
             int index,
             QVector<QVector<bool>>& validConfigs,
+            const std::atomic<bool>& cancelFlag,
             int maxConfigs = 500
             ) {
-            // Limit the number of configurations to avoid excessive computation
-            if (validConfigs.size() >= maxConfigs) return;
+            // Check for cancellation or max configs reached
+            if (cancelFlag.load() || validConfigs.size() >= maxConfigs) return;
 
             if (index == frontierCells.size()) {
                 // Check if this configuration satisfies all constraints
@@ -975,11 +1047,14 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             // Try both options for this cell: mine or not mine
             // First, not a mine
             currentConfig[index] = false;
-            generateValidConfigurations(boundaryCells, frontierCells, currentConfig, index + 1, validConfigs, maxConfigs);
+            generateValidConfigurations(boundaryCells, frontierCells, currentConfig, index + 1, validConfigs, cancelFlag, maxConfigs);
+
+            // Check cancellation before continuing
+            if (cancelFlag.load()) return;
 
             // Then a mine
             currentConfig[index] = true;
-            generateValidConfigurations(boundaryCells, frontierCells, currentConfig, index + 1, validConfigs, maxConfigs);
+            generateValidConfigurations(boundaryCells, frontierCells, currentConfig, index + 1, validConfigs, cancelFlag, maxConfigs);
         }
     };
 
@@ -987,6 +1062,11 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
     const int MAX_ATTEMPTS = 1;
 
     for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+        // Check for cancellation at the start of each attempt
+        if (m_cancelGeneration.load()) {
+            return false;
+        }
+
         // Initialize a new board state
         BoardState board(m_width, m_height);
 
@@ -996,6 +1076,11 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
 
         // Get candidates for mine placement
         QVector<int> candidates = board.getMineCandidates();
+
+        // Check for cancellation before shuffling and mine placement
+        if (m_cancelGeneration.load()) {
+            return false;
+        }
 
         // Shuffle candidates
         for (int i = candidates.size() - 1; i > 0; --i) {
@@ -1007,16 +1092,26 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
         // Place mines one by one, ensuring the board remains solvable
         int placedMines = 0;
         for (int i = 0; i < candidates.size() && placedMines < m_mineCount; ++i) {
+            // Check for cancellation inside the mine placement loop
+            if (m_cancelGeneration.load()) {
+                return false;
+            }
+
             // Create a temporary board to test this mine placement
             BoardState testBoard = board;
             testBoard.placeMine(candidates[i]);
 
             // Check if the board is still solvable with this mine
-            if (testBoard.isFullySolvable()) {
+            if (testBoard.isFullySolvable(m_cancelGeneration)) {
                 // Accept this mine placement
                 board.placeMine(candidates[i]);
                 placedMines++;
             }
+        }
+
+        // Check for cancellation before finalizing
+        if (m_cancelGeneration.load()) {
+            return false;
         }
 
         // Check if we placed all mines
@@ -1033,17 +1128,49 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
 }
 
 void GameLogic::generateBoardAsync(int firstClickX, int firstClickY) {
-    // Store the future to avoid the nodiscard warning
+    // Cancel any ongoing generation
+    cancelGeneration();
+
+    // Create a new future
     QFuture<void> future = QtConcurrent::run([this, firstClickX, firstClickY]() {
         // Run the board generation in a separate thread
-        bool success = this->generateBoard(firstClickX, firstClickY);
+        bool success = false;
 
-        // Emit the signal from the main thread when done
-        QMetaObject::invokeMethod(this, [this, success]() {
-            emit boardGenerationCompleted(success);
-        }, Qt::QueuedConnection);
+        // Periodically check for cancellation
+        while (!m_cancelGeneration.load()) {
+            success = this->generateBoard(firstClickX, firstClickY);
+            if (success) {
+                break;
+            }
+
+            // If generation fails but we're not cancelled, we might want to retry
+            // But first check if we're cancelled
+            if (m_cancelGeneration.load()) {
+                break;
+            }
+        }
+
+        // Clear data if cancelled
+        if (m_cancelGeneration.load()) {
+            m_mines.clear();
+            m_numbers.clear();
+        }
     });
 
-    // We could store this future if we needed to cancel or check its status later
-    // For now, we just ensure it's not discarded to satisfy the compiler
+    // Set the future to be watched
+    m_generationWatcher->setFuture(future);
+}
+
+void GameLogic::cancelGeneration()
+{
+    // Set atomic flag to signal threads to stop
+    m_cancelGeneration.store(true);
+
+    // Wait for any running generation to complete
+    if (m_generationWatcher->isRunning()) {
+        m_generationWatcher->waitForFinished();
+    }
+
+    // Reset the flag
+    m_cancelGeneration.store(false);
 }

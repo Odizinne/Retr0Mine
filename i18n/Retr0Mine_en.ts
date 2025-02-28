@@ -211,73 +211,78 @@ Current game will be saved and restored</source>
 <context>
     <name>GenerationPopup</name>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="15"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="16"/>
         <source>Generating board...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="16"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
         <source>Placing mines in corners...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
         <source>Checking if 1 + 1 = 2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
         <source>Counting digits very carefully...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
         <source>Asking mines to play fair...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
         <source>Calibrating mine detectors...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
         <source>Convincing mines not to move...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
         <source>Consulting probability experts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
         <source>Hiding mines under suspicious squares...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
         <source>Calculation of multipliers based on colors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="26"/>
         <source>Running out of clever loading messages...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/GenerationPopup.qml" line="86"/>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="344"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="351"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="358"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="397"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="404"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="411"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="368"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="374"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="421"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="427"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>

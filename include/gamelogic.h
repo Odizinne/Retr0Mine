@@ -6,8 +6,10 @@
 #include <QVector>
 #include <QQmlEngine>
 #include <QFuture>
+#include <QFutureWatcher>
 #include <QtConcurrent>
 #include <random>
+#include <atomic>
 
 struct MineSolverInfo
 {
@@ -42,15 +44,17 @@ public:
     };
 
     explicit GameLogic(QObject *parent = nullptr);
+    ~GameLogic() override;
 
     Q_INVOKABLE bool initializeGame(int width, int height, int mineCount);
     Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines);
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
-    Q_INVOKABLE bool generateBoard(int firstClickX, int firstClickY);
+    bool generateBoard(int firstClickX, int firstClickY);
     Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
 
     Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY);
+    Q_INVOKABLE void cancelGeneration();
 
 signals:
     void boardGenerationCompleted(bool success);
@@ -65,6 +69,9 @@ private:
     QSet<MineSolverInfo> m_information;
     QMap<int, QSet<MineSolverInfo>> m_informationsForSpace;
     QMap<int, bool> m_solvedSpaces;
+    std::atomic<bool> m_cancelGeneration;
+    QFutureWatcher<void>* m_generationWatcher;
+
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);

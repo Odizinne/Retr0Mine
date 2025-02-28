@@ -8,6 +8,7 @@ QtObject {
     property int generationAttempt
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
+    property bool generationCancelled: false
 
     function setGrid(gridReference) {
         grid = gridReference
@@ -19,6 +20,27 @@ QtObject {
 
     function setLeaderboardWindow(leaderboardWindowReference) {
         leaderboardWindow = leaderboardWindowReference
+    }
+
+    function cancelGeneration() {
+        generationCancelled = true
+        GameState.isGeneratingGrid = false
+
+        // Call the C++ method to cancel the generation thread
+        GameLogic.cancelGeneration()
+
+        // Disconnect all generation signals to prevent any late callbacks from affecting the game
+        try {
+            GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
+        } catch (e) {
+            // Signal may not be connected, ignore
+        }
+
+        // Reset game state
+        GameState.gameStarted = false
+        GameState.firstClickIndex = -1
+        GameState.mines = []
+        GameState.numbers = []
     }
 
     function requestHint() {
@@ -80,9 +102,98 @@ QtObject {
         }
     }
 
+    // Callback function for board generation
+    // Defined at the object level to be easily disconnected later
+    function onBoardGenerated(success) {
+        // Check if generation was cancelled
+        if (generationCancelled) {
+            generationCancelled = false
+            // Disconnect the signal if still connected
+            try {
+                GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
+            } catch (e) {
+                // Signal was already disconnected, ignore
+            }
+            return
+        }
+
+        if (success) {
+            GameState.mines = GameLogic.getMines()
+            GameState.numbers = GameLogic.getNumbers()
+            GameState.gameStarted = true
+            GameState.isGeneratingGrid = false
+            GameTimer.start()
+
+            // Continue with the reveal operation
+            let currentIndex = GameState.firstClickIndex
+            let cell = grid.itemAtIndex(currentIndex)
+            if (cell && !cell.revealed) {
+                cell.revealed = true
+                GameState.revealedCount++
+
+                if (GameState.numbers[currentIndex] === 0) {
+                    let row = Math.floor(currentIndex / GameState.gridSizeX)
+                    let col = currentIndex % GameState.gridSizeX
+                    for (let r = -1; r <= 1; r++) {
+                        for (let c = -1; c <= 1; c++) {
+                            if (r === 0 && c === 0) continue
+                            let newRow = row + r
+                            let newCol = col + c
+                            if (newRow < 0 || newRow >= GameState.gridSizeY || newCol < 0 || newCol >= GameState.gridSizeX) continue
+                            let adjacentIndex = newRow * GameState.gridSizeX + newCol
+                            let adjacentCell = grid.itemAtIndex(adjacentIndex)
+                            if (adjacentCell.questioned) {
+                                adjacentCell.questioned = false
+                            }
+                            if (adjacentCell.safeQuestioned) {
+                                adjacentCell.safeQuestioned = false
+                            }
+                            reveal(adjacentIndex)
+                        }
+                    }
+                }
+
+                checkWin()
+            }
+
+            // Disconnect the signal
+            GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
+        } else {
+            console.error("Failed to place mines, trying again...")
+            if (generationAttempt < 100 && !generationCancelled) {
+                generationAttempt++
+
+                // Disconnect before retrying to prevent multiple callbacks
+                GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
+
+                if (!generationCancelled) {
+                    // Reconnect and try again
+                    GameLogic.boardGenerationCompleted.connect(onBoardGenerated)
+
+                    let row = -1, col = -1
+                    if (GameSettings.safeFirstClick) {
+                        row = Math.floor(GameState.firstClickIndex / GameState.gridSizeX)
+                        col = GameState.firstClickIndex % GameState.gridSizeX
+                    }
+
+                    // Try again asynchronously
+                    GameLogic.generateBoardAsync(col, row)
+                }
+            } else {
+                console.warn("Maximum attempts reached or generation cancelled")
+                if (!generationCancelled) {
+                    GameState.isGeneratingGrid = false
+                }
+                // Disconnect the signal
+                GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
+            }
+        }
+    }
+
     function generateField(index) {
         GameState.isGeneratingGrid = true
         GameState.firstClickIndex = index
+        generationCancelled = false  // Reset cancellation flag
 
         var row, col;
         if (GameSettings.safeFirstClick) {
@@ -102,68 +213,6 @@ QtObject {
         generationAttempt = 0
 
         // Connect to the signal for this generation attempt
-        function onBoardGenerated(success) {
-            if (success) {
-                GameState.mines = GameLogic.getMines()
-                GameState.numbers = GameLogic.getNumbers()
-                GameState.gameStarted = true
-                GameState.isGeneratingGrid = false
-                GameTimer.start()
-
-                // Continue with the reveal operation
-                let currentIndex = GameState.firstClickIndex
-                let cell = grid.itemAtIndex(currentIndex)
-                if (cell && !cell.revealed) {
-                    cell.revealed = true
-                    GameState.revealedCount++
-
-                    if (GameState.numbers[currentIndex] === 0) {
-                        let row = Math.floor(currentIndex / GameState.gridSizeX)
-                        let col = currentIndex % GameState.gridSizeX
-                        for (let r = -1; r <= 1; r++) {
-                            for (let c = -1; c <= 1; c++) {
-                                if (r === 0 && c === 0) continue
-                                let newRow = row + r
-                                let newCol = col + c
-                                if (newRow < 0 || newRow >= GameState.gridSizeY || newCol < 0 || newCol >= GameState.gridSizeX) continue
-                                let adjacentIndex = newRow * GameState.gridSizeX + newCol
-                                let adjacentCell = grid.itemAtIndex(adjacentIndex)
-                                if (adjacentCell.questioned) {
-                                    adjacentCell.questioned = false
-                                }
-                                if (adjacentCell.safeQuestioned) {
-                                    adjacentCell.safeQuestioned = false
-                                }
-                                reveal(adjacentIndex)
-                            }
-                        }
-                    }
-
-                    checkWin()
-                }
-
-                // Disconnect the signal
-                GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
-            } else {
-                console.error("Failed to place mines, trying again...")
-                if (generationAttempt < 100) {
-                    generationAttempt++
-
-                    // Disconnect before retrying
-                    GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
-
-                    // Try again asynchronously
-                    GameLogic.generateBoardAsync(col, row)
-                } else {
-                    console.warn("Maximum attempts reached")
-                    GameState.isGeneratingGrid = false
-                    // Disconnect the signal
-                    GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
-                }
-            }
-        }
-
-        // Connect to the signal
         GameLogic.boardGenerationCompleted.connect(onBoardGenerated)
 
         // Start the async generation
@@ -236,7 +285,11 @@ QtObject {
     }
 
     function initGame() {
-        if (GameState.isGeneratingGrid) return
+        if (GameState.isGeneratingGrid) {
+            // Cancel any ongoing generation
+            cancelGeneration()
+        }
+
         GameState.blockAnim = false
         GameState.mines = []
         GameState.numbers = []
