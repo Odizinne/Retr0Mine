@@ -10,6 +10,7 @@ Popup {
     width: stupidMessagesLabel.width + 40
     visible: false
     anchors.centerIn: parent
+
     property bool generating: GameState.isGeneratingGrid
     property var generationMessages: [
         qsTr("Generating board..."),
@@ -26,6 +27,22 @@ Popup {
     ]
 
     property string currentMessage: ""
+    property string previousMessage: ""
+
+    function getRandomMessage() {
+        if (generationMessages.length <= 1) {
+            return generationMessages[0];
+        }
+
+        var message;
+        do {
+            var randomIndex = Math.floor(Math.random() * generationMessages.length);
+            message = generationMessages[randomIndex];
+        } while (message === previousMessage);
+
+        previousMessage = message;
+        return message;
+    }
 
     Timer {
         id: showDelayTimer
@@ -33,18 +50,18 @@ Popup {
         repeat: false
         onTriggered: {
             if (control.generating) {
-                control.currentMessage = control.generationMessages[Math.floor(Math.random() * control.generationMessages.length)]
-                control.visible = true
+                control.currentMessage = control.getRandomMessage();
+                control.visible = true;
             }
         }
     }
 
     onGeneratingChanged: {
         if (generating) {
-            showDelayTimer.restart()
+            showDelayTimer.restart();
         } else {
-            showDelayTimer.stop()
-            control.visible = false
+            showDelayTimer.stop();
+            control.visible = false;
         }
     }
 
