@@ -540,52 +540,52 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="65"/>
+        <location filename="../qml/SettingsWindow.qml" line="78"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="69"/>
+        <location filename="../qml/SettingsWindow.qml" line="82"/>
         <source>Gameplay</source>
         <translation>Gameplay</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="73"/>
+        <location filename="../qml/SettingsWindow.qml" line="86"/>
         <source>Visuals</source>
         <translation>Visuels</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="77"/>
+        <location filename="../qml/SettingsWindow.qml" line="90"/>
         <source>Sound</source>
         <translation>Sons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="81"/>
+        <location filename="../qml/SettingsWindow.qml" line="94"/>
         <source>Shortcuts</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="85"/>
+        <location filename="../qml/SettingsWindow.qml" line="98"/>
         <source>Accessibility</source>
         <translation>Accessibilité</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="89"/>
+        <location filename="../qml/SettingsWindow.qml" line="102"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="93"/>
+        <location filename="../qml/SettingsWindow.qml" line="106"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="126"/>
+        <location filename="../qml/SettingsWindow.qml" line="139"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="142"/>
+        <location filename="../qml/SettingsWindow.qml" line="155"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>

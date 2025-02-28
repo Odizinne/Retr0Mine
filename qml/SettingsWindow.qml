@@ -27,6 +27,19 @@ ApplicationWindow {
         opacity: 0
     }
 
+    MouseArea {
+        // Normalize cursor shape in gamescope
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.ArrowCursor
+        propagateComposedEvents: true
+        visible: GameCore.gamescope
+        z: -1
+        onPressed: function(mouse) { mouse.accepted = false; }
+        onReleased: function(mouse) { mouse.accepted = false; }
+        onClicked: function(mouse) { mouse.accepted = false; }
+    }
+
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
