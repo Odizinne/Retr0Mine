@@ -122,4 +122,8 @@ elseif(UNIX AND NOT APPLE)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/linux64/libsteam_api.so
     )
+elseif(APPLE)
+    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/osx/libsteam_api.dylib
+    )
 endif()
