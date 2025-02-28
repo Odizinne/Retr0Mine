@@ -92,7 +92,11 @@ Popup {
             text: qsTr("Cancel")
             Layout.alignment: Qt.AlignHCenter
             Layout.topMargin: 10
-            onClicked: GridBridge.cancelGeneration()
+            onClicked: {
+                if (!GameState.gameStarted) {
+                    GridBridge.cancelGeneration()
+                }
+            }
         }
     }
 }
