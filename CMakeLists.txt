@@ -59,6 +59,7 @@ set(QML_FILES
     qml/Popups/LeaderboardPopup.qml
     qml/Popups/WelcomePopup.qml
     qml/Popups/GenerationPopup.qml
+    qml/Popups/RulesPopup.qml
 )
 set(QML_SINGLETONS
     qml/Singletons/GameSettings.qml

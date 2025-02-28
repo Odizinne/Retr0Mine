@@ -196,6 +196,7 @@ ApplicationWindow {
         }
     }
 
+    RulesPopup { }
     GenerationPopup { }
 
     PostgamePopup { }

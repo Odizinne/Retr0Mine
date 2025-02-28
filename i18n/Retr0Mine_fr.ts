@@ -400,7 +400,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="53"/>
+        <location filename="../qml/MainMenu.qml" line="51"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="58"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -439,6 +444,19 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <location filename="../qml/Popups/RestorePopup.qml" line="44"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>RulesPopup</name>
+    <message>
+        <location filename="../qml/Popups/RulesPopup.qml" line="27"/>
+        <source>How to Play Minesweeper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/RulesPopup.qml" line="81"/>
+        <source>Close</source>
+        <translation type="unfinished">Fermer</translation>
     </message>
 </context>
 <context>

@@ -7,6 +7,7 @@ QtObject {
     property bool leaderboardPopupVisible: false
     property bool restorePopupVisible: false
     property bool aboutPopupVisible: false
+    property bool rulesPopupVisible: false
     property bool settingsWindowVisible: false
 
     signal allCellsReady()

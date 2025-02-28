@@ -47,6 +47,11 @@ Menu {
         onTriggered: ComponentsContext.aboutPopupVisible = true
     }
 
+    MenuItem {
+        text: qsTr("Help")
+        onTriggered: ComponentsContext.rulesPopupVisible = true
+    }
+
     MenuSeparator { }
 
     MenuItem {
