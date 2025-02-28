@@ -1,10 +1,9 @@
 import QtQuick.Controls
+import QtQuick
 import net.odizinne.retr0mine 1.0
 
-ScrollView {
+Flickable {
     id: control
-    contentWidth: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, control.width)
-    contentHeight: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, control.height)
 
     ScrollBar {
         id: defaultVerticalScrollBar

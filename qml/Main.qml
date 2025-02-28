@@ -218,7 +218,7 @@ ApplicationWindow {
     }
 
     GameView {
-        id: gameArea
+        id: gameView
         anchors {
             left: parent.left
             right: parent.right
@@ -229,11 +229,15 @@ ApplicationWindow {
             rightMargin: 12
             bottomMargin: 12
         }
+        contentWidth: gridContainer.width
+        contentHeight: gridContainer.height
+        clip: true
 
         Item {
+            id: gridContainer
             anchors.centerIn: parent
-            width: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, gameArea.width)
-            height: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, gameArea.height)
+            width: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, gameView.width)
+            height: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, gameView.height)
 
             GameGrid {
                 id: grid
@@ -277,7 +281,6 @@ ApplicationWindow {
 
     function getIdealWidth() {
         if (root.visibility === ApplicationWindow.Windowed) {
-            // Always calculate the proper width based on grid size
             return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
                             Screen.desktopAvailableWidth * 0.9)
         }
@@ -285,7 +288,6 @@ ApplicationWindow {
 
     function getIdealHeight() {
         if (root.visibility === ApplicationWindow.Windowed) {
-            // Always calculate the proper height based on grid size
             return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
                             Screen.desktopAvailableHeight * 0.9)
         }
