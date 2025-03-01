@@ -108,7 +108,16 @@ ApplicationWindow {
             Universal.accent = GameConstants.accentColor
         }
 
-        visibility = ApplicationWindow.Windowed
+        if (GameSettings.startFullScreen || GameCore.gamescope) {
+            root.visibility = ApplicationWindow.FullScreen
+        } else {
+            root.visibility = ApplicationWindow.Windowed
+        }
+
+        root.width = getIdealWidth()
+        root.minimumWidth = getIdealWidth()
+        root.height = getIdealHeight()
+        root.minimumHeight = getIdealHeight()
     }
 
     GridLoadingIndicator {
@@ -306,18 +315,6 @@ ApplicationWindow {
         } else {
             GridBridge.initGame()
         }
-
-        if (GameSettings.startFullScreen || GameCore.gamescope) {
-            root.visibility = ApplicationWindow.FullScreen
-        } else {
-            root.visibility = ApplicationWindow.Windowed
-        }
-
-        root.width = getIdealWidth()
-        root.minimumWidth = getIdealWidth()
-        root.height = getIdealHeight()
-        root.minimumHeight = getIdealHeight()
-
     }
 
     function getIdealWidth() {

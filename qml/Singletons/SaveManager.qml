@@ -6,8 +6,6 @@ Item {
     id: saveManager
     property var grid: null
     property var manualSave: false
-
-    // Properties to store saved data (replacing timer properties)
     property var savedData
     property int savedCentiseconds
 
@@ -26,19 +24,16 @@ Item {
             GameTimer.stop()
             const savedCentiseconds = data.gameState.centiseconds
 
-            // Set up initial game state
             GameState.gridSizeX = data.gameState.gridSizeX
             GameState.gridSizeY = data.gameState.gridSizeY
             GameState.mineCount = data.gameState.mineCount
             GameState.mines = data.gameState.mines
 
-            // Initialize game logic first
             if (!GameLogic.initializeFromSave(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount, GameState.mines)) {
                 console.error("Failed to initialize game logic from save")
                 return false
             }
 
-            // Set numbers after initialization
             GameState.numbers = data.gameState.numbers
 
             // Store data for after grid initialization and schedule finishLoading
@@ -85,39 +80,42 @@ Item {
         GameState.firstClickIndex = data.gameState.firstClickIndex
         GameState.currentHintCount = data.gameState.currentHintCount || 0
 
-        // Reset all cells first
+        // Reset all cells first - use GridBridge.withCell for safety
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            let cell = grid.itemAtIndex(i)
-            if (cell) {
+            GridBridge.withCell(i, function(cell) {
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
                 cell.safeQuestioned = false
-            }
+            })
         }
 
-        // Apply saved cell states
+        // Apply saved cell states - use GridBridge.withCell for safety
         data.gameState.revealedCells.forEach(index => {
-            let cell = grid.itemAtIndex(index)
-            if (cell) cell.revealed = true
+            GridBridge.withCell(index, function(cell) {
+                cell.revealed = true
+            })
         })
 
         data.gameState.flaggedCells.forEach(index => {
-            let cell = grid.itemAtIndex(index)
-            if (cell) cell.flagged = true
+            GridBridge.withCell(index, function(cell) {
+                cell.flagged = true
+            })
         })
 
         if (data.gameState.questionedCells) {
             data.gameState.questionedCells.forEach(index => {
-                let cell = grid.itemAtIndex(index)
-                if (cell) cell.questioned = true
+                GridBridge.withCell(index, function(cell) {
+                    cell.questioned = true
+                })
             })
         }
 
         if (data.gameState.safeQuestionedCells) {
             data.gameState.safeQuestionedCells.forEach(index => {
-                let cell = grid.itemAtIndex(index)
-                if (cell) cell.safeQuestioned = true
+                GridBridge.withCell(index, function(cell) {
+                    cell.safeQuestioned = true
+                })
             })
         }
 
@@ -154,14 +152,15 @@ Item {
         }
 
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            let cell = grid.itemAtIndex(i) as Cell
+            const cell = GridBridge.getCell(i)
+            if (!cell) continue
+
             if (cell.revealed) saveData.gameState.revealedCells.push(i)
             if (cell.flagged) saveData.gameState.flaggedCells.push(i)
             if (cell.questioned) saveData.gameState.questionedCells.push(i)
             if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
         }
 
-        console.log("pass")
         GameCore.saveGameState(JSON.stringify(saveData), filename)
         SaveManager.manualSave = false
     }
