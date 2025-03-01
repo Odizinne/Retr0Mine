@@ -17,10 +17,13 @@ Item {
     ColumnLayout {
         anchors.centerIn: parent
         spacing: 20
-        BusyIndicator {
+
+        ProgressBar {
+            Layout.preferredWidth: 160
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: 64
-            Layout.preferredHeight: 64
+            from: 0
+            to: (GameState.gridSizeX * GameState.gridSizeY)
+            value: GridBridge.cellsCreated
         }
 
         Label {

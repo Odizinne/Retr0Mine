@@ -99,22 +99,22 @@ Current game will be saved and restored</source>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="67"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="70"/>
         <source>Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="86"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="89"/>
         <source>Height:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="104"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="107"/>
         <source>Mines:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="121"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="124"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,16 +274,24 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="397"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="404"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="411"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="453"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="460"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="467"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="421"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="427"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="483"/>
         <source>New grid animation unlocked!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>GridLoadingIndicator</name>
+    <message>
+        <location filename="../qml/GridLoadingIndicator.qml" line="30"/>
+        <source>Creating cells...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -364,47 +372,47 @@ Current game will be saved and restored</source>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="9"/>
+        <location filename="../qml/MainMenu.qml" line="10"/>
         <source>New game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="14"/>
+        <location filename="../qml/MainMenu.qml" line="18"/>
         <source>Save game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="21"/>
+        <location filename="../qml/MainMenu.qml" line="25"/>
         <source>Load game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="26"/>
+        <location filename="../qml/MainMenu.qml" line="30"/>
         <source>Hint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="34"/>
+        <location filename="../qml/MainMenu.qml" line="38"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="39"/>
+        <location filename="../qml/MainMenu.qml" line="43"/>
         <source>Leaderboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="44"/>
+        <location filename="../qml/MainMenu.qml" line="48"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="51"/>
+        <location filename="../qml/MainMenu.qml" line="55"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="58"/>
+        <location filename="../qml/MainMenu.qml" line="62"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -519,52 +527,52 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="78"/>
+        <location filename="../qml/SettingsWindow.qml" line="72"/>
         <source>Difficulty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="82"/>
+        <location filename="../qml/SettingsWindow.qml" line="76"/>
         <source>Gameplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="86"/>
+        <location filename="../qml/SettingsWindow.qml" line="80"/>
         <source>Visuals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="90"/>
+        <location filename="../qml/SettingsWindow.qml" line="84"/>
         <source>Sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="94"/>
+        <location filename="../qml/SettingsWindow.qml" line="88"/>
         <source>Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="98"/>
+        <location filename="../qml/SettingsWindow.qml" line="92"/>
         <source>Accessibility</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="102"/>
+        <location filename="../qml/SettingsWindow.qml" line="96"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="106"/>
+        <location filename="../qml/SettingsWindow.qml" line="100"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="139"/>
+        <location filename="../qml/SettingsWindow.qml" line="133"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="155"/>
+        <location filename="../qml/SettingsWindow.qml" line="149"/>
         <source>Restore defaults</source>
         <translation type="unfinished"></translation>
     </message>

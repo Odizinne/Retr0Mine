@@ -255,7 +255,7 @@ ApplicationWindow {
         opacity: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) ? 1 : 0
 
         Behavior on opacity {
-            enabled: opacity === 0
+            enabled: gameView.opacity === 0
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.InOutQuad

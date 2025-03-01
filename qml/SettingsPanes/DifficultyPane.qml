@@ -48,10 +48,11 @@ Pane {
                     ButtonGroup.group: difficultyGroup
                     checked: GameSettings.difficulty === parent.index
                     onClicked: {
-                        GameState.difficultyChanged = true
-                        GridBridge.cellsCreated = 0
                         const idx = difficultyGroup.buttons.indexOf(this)
                         const difficultySet = GameState.difficultySettings[idx]
+                        if (GameSettings.difficulty === idx) return
+                        GameState.difficultyChanged = true
+                        GridBridge.cellsCreated = 0
                         GameState.gridSizeX = difficultySet.x
                         GameState.gridSizeY = difficultySet.y
                         GameState.mineCount = difficultySet.mines
