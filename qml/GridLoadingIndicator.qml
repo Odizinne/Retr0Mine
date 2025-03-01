@@ -14,18 +14,20 @@ Item {
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: 20
+        spacing: 8
 
-        Label {
-            id: loadingLabel
-            text: qsTr("Creating cells...")
-            font.pixelSize: 18
-            font.family: GameConstants.numberFont.name
+        Image {
+            id: logo
+            source: "qrc:/images/retr0mine_logo.png"
+            sourceSize.width: 756 * 0.35
+            sourceSize.height: 110 * 0.35
             Layout.alignment: Qt.AlignCenter
+            antialiasing: true
+            mipmap: true
         }
 
         ProgressBar {
-            Layout.preferredWidth: loadingLabel.width
+            Layout.preferredWidth: logo.sourceSize.width - 6
             Layout.alignment: Qt.AlignCenter
             from: 0
             to: (GameState.gridSizeX * GameState.gridSizeY)

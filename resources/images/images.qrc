@@ -2,5 +2,6 @@
     <qresource prefix="/images">
         <file>chord.gif</file>
         <file>classic.gif</file>
+        <file>retr0mine_logo.png</file>
     </qresource>
 </RCC>
