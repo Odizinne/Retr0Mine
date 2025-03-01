@@ -61,7 +61,8 @@ Popup {
             text: qsTr("Retry")
             Layout.fillWidth: true
             Layout.preferredWidth: control.buttonWidth
-            onClicked: {                
+            onClicked: {
+                GameState.difficultyChanged = false
                 GridBridge.initGame()
                 GameState.displayNewRecord = false
                 GameState.displayNotification = false
@@ -75,6 +76,7 @@ Popup {
             Layout.fillWidth: true
             Layout.preferredWidth: control.buttonWidth
             onClicked: {
+                GameState.difficultyChanged = false
                 GameState.displayNewRecord = false
                 GameState.displayNotification = false
                 GameState.displayPostGame = false
