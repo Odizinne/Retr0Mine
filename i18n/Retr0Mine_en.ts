@@ -288,14 +288,6 @@ Current game will be saved and restored</source>
     </message>
 </context>
 <context>
-    <name>GridLoadingIndicator</name>
-    <message>
-        <location filename="../qml/GridLoadingIndicator.qml" line="21"/>
-        <source>Creating cells...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>LanguagePane</name>
     <message>
         <location filename="../qml/SettingsPanes/LanguagePane.qml" line="15"/>
@@ -311,47 +303,53 @@ Current game will be saved and restored</source>
 <context>
     <name>LeaderboardPopup</name>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="73"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="75"/>
         <source>Difficulty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="79"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="81"/>
         <source>Easy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="84"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="86"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="89"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="91"/>
         <source>Hard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="94"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="96"/>
         <source>Retr0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="105"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="107"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="137"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="139"/>
         <source>Wins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="169"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="172"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="204"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="198"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="179"/>
+        <source>Confirm?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="211"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

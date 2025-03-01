@@ -12,6 +12,7 @@ Popup {
     closePolicy: Popup.NoAutoClose
     visible: ComponentsContext.leaderboardPopupVisible
     modal: true
+    property bool confirmErase: false
     property string easyTime: ""
     property string mediumTime: ""
     property string hardTime: ""
@@ -20,11 +21,18 @@ Popup {
     property int mediumWins: 0
     property int hardWins: 0
     property int retr0Wins: 0
+    property int buttonWidth: Math.min(closeButton.width, clearButton.width)
+
+    onVisibleChanged: {
+        if (!visible) {
+            control.confirmErase = false
+        }
+    }
 
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
-        onActivated: ComponentsContext.leaderboardPopupVisible = false
+        onActivated: closeButton.click()
     }
 
     ColumnLayout {
@@ -166,10 +174,17 @@ Popup {
         RowLayout {
             spacing: 10
             Button {
-                text: qsTr("Clear")
+                id: clearButton
+                text: control.confirmErase ? qsTr("Confirm?") : qsTr("Clear")
                 Layout.fillWidth: true
+                Layout.preferredWidth: control.buttonWidth
                 Layout.bottomMargin: 15
                 onClicked: {
+                    if (!control.confirmErase) {
+                        control.confirmErase = true
+                        return
+                    }
+
                     control.easyTime = ""
                     control.mediumTime = ""
                     control.hardTime = ""
@@ -191,14 +206,17 @@ Popup {
                     }
 
                     GameCore.saveLeaderboard(JSON.stringify(emptyLeaderboard))
+                    control.confirmErase = false
                 }
             }
 
             Button {
+                id: closeButton
                 text: qsTr("Close")
                 Layout.fillWidth: true
-                onClicked: ComponentsContext.leaderboardPopupVisible = false
+                Layout.preferredWidth: control.buttonWidth
                 Layout.bottomMargin: 15
+                onClicked: ComponentsContext.leaderboardPopupVisible = false
             }
         }
     }
