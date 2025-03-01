@@ -1,10 +1,15 @@
 #include "steamintegration.h"
 #include <QDebug>
+#include <QSettings>
 
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
     , m_initialized(false)
 {
+    // Read initial difficulty from settings
+    QSettings settings("Odizinne", "Retr0Mine");
+    m_difficulty = settings.value("difficulty", 0).toInt();
+
     initialize();
 }
 
@@ -19,13 +24,19 @@ bool SteamIntegration::initialize()
     m_initialized = true;
     updatePlayerName();
 
+    // Initial rich presence update
+    updateRichPresence();
+
     return true;
 }
-
 
 void SteamIntegration::shutdown()
 {
     if (m_initialized) {
+        ISteamFriends* steamFriends = SteamFriends();
+        if (steamFriends) {
+            steamFriends->ClearRichPresence();
+        }
         SteamAPI_Shutdown();
         m_initialized = false;
     }
@@ -108,4 +119,59 @@ bool SteamIntegration::incrementTotalWin()
         return false;
 
     return steamUserStats->StoreStats();
+}
+
+// Rich presence related methods
+void SteamIntegration::setDifficulty(int difficulty)
+{
+    if (m_difficulty != difficulty) {
+        m_difficulty = difficulty;
+
+        // Also update the settings so it persists
+        QSettings settings("Odizinne", "Retr0Mine");
+        settings.setValue("difficulty", difficulty);
+
+        updateRichPresence();
+    }
+}
+
+QString SteamIntegration::getDifficultyString() const
+{
+    QString language = getSteamUILanguage();
+
+    if (language.toLower() == "french") {
+        switch (m_difficulty) {
+        case 0: return "Facile";
+        case 1: return "Moyen";
+        case 2: return "Difficile";
+        case 3: return "Retr0";
+        case 4: return "Personnalisé";
+        default: return "Inconnu";
+        }
+    } else {
+        switch (m_difficulty) {
+        case 0: return "Easy";
+        case 1: return "Medium";
+        case 2: return "Hard";
+        case 3: return "Retr0";
+        case 4: return "Custom";
+        default: return "Unknown";
+        }
+    }
+}
+
+void SteamIntegration::updateRichPresence()
+{
+    if (!m_initialized) {
+        return;
+    }
+
+    ISteamFriends* steamFriends = SteamFriends();
+    if (!steamFriends) {
+        qDebug() << "Rich Presence update failed: Could not get SteamFriends interface";
+        return;
+    }
+
+    steamFriends->SetRichPresence("difficulty", getDifficultyString().toUtf8().constData());
+    steamFriends->SetRichPresence("steam_display", "#PlayingDifficulty");
 }

@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <steam_api.h>
+#include <QSettings>
 
 class SteamIntegration : public QObject
 {
@@ -14,6 +15,7 @@ class SteamIntegration : public QObject
     Q_PROPERTY(bool unlockedAnim2 READ getUnlockedAnim2 CONSTANT)
     Q_PROPERTY(QString playerName READ getPlayerName NOTIFY playerNameChanged)
     Q_PROPERTY(bool initialized READ isInitialized CONSTANT)
+    Q_PROPERTY(int difficulty MEMBER m_difficulty WRITE setDifficulty)
 
 public:
     explicit SteamIntegration(QObject *parent = nullptr);
@@ -28,6 +30,11 @@ public:
     QString getPlayerName() const { return m_playerName; }
     bool isInitialized() const { return m_initialized; }
 
+    // Rich presence related
+    void setDifficulty(int difficulty);
+    Q_INVOKABLE void updateRichPresence();
+    QString getDifficultyString() const;
+
     // Getters for achievements
     bool getUnlockedFlag1() const { return isAchievementUnlocked("ACH_NO_HINT_EASY"); }
     bool getUnlockedFlag2() const { return isAchievementUnlocked("ACH_NO_HINT_MEDIUM"); }
@@ -38,6 +45,7 @@ public:
 private:
     bool m_initialized;
     QString m_playerName;
+    int m_difficulty;
     void updatePlayerName();
 
 signals:

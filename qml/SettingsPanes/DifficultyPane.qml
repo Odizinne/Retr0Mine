@@ -58,6 +58,7 @@ Pane {
                         GameState.mineCount = difficultySet.mines
                         GridBridge.initGame()
                         GameSettings.difficulty = idx
+                        SteamIntegration.difficulty = idx
                     }
                 }
             }

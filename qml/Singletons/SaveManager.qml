@@ -173,5 +173,6 @@ Item {
 
         GameCore.saveGameState(JSON.stringify(saveData), filename)
         SaveManager.manualSave = false
+        SteamIntegration.difficulty = GameSettings.difficulty
     }
 }
