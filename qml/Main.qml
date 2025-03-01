@@ -232,6 +232,11 @@ ApplicationWindow {
         Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
     }
 
+    BusyIndicator {
+        opacity: 0
+        // continous window update (steam overlay)
+    }
+
     TopBar {
         id: topBar
     }

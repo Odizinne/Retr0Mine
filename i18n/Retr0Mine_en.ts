@@ -290,7 +290,7 @@ Current game will be saved and restored</source>
 <context>
     <name>GridLoadingIndicator</name>
     <message>
-        <location filename="../qml/GridLoadingIndicator.qml" line="30"/>
+        <location filename="../qml/GridLoadingIndicator.qml" line="23"/>
         <source>Creating cells...</source>
         <translation type="unfinished"></translation>
     </message>

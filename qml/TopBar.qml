@@ -41,6 +41,7 @@ RowLayout {
             text: GameTimer.displayTime
             visible: GameSettings.displayTimer
             font.pixelSize: 18
+            font.family: GameConstants.numberFont.name
             Layout.alignment: Qt.AlignCenter
         }
     }
