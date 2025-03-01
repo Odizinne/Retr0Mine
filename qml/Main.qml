@@ -286,7 +286,6 @@ ApplicationWindow {
                 id: grid
                 Component.onCompleted: {
                     GridBridge.setGrid(grid)
-                    SaveManager.setGrid(grid)
                 }
                 delegate: Loader {
                     id: cellLoader

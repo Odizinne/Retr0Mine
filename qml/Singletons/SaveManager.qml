@@ -4,14 +4,9 @@ import net.odizinne.retr0mine 1.0
 
 Item {
     id: saveManager
-    property var grid: null
     property var manualSave: false
     property var savedData
     property int savedCentiseconds
-
-    function setGrid(gridReference) {
-        grid = gridReference
-    }
 
     function loadGame(saveData) {
         try {
