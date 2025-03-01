@@ -107,6 +107,8 @@ ApplicationWindow {
             Universal.theme = GameCore.gamescope ? Universal.Dark : Universal.System
             Universal.accent = GameConstants.accentColor
         }
+
+        visibility = ApplicationWindow.Windowed
     }
 
     BusyIndicator {
@@ -261,7 +263,14 @@ ApplicationWindow {
                     GridBridge.setGrid(grid)
                     SaveManager.setGrid(grid)
                 }
-                delegate: Cell { }
+                delegate: Loader {
+                    id: cellLoader
+                    asynchronous: true
+                    required property int index
+                    sourceComponent: Cell {
+                        index: cellLoader.index  // Pass it to the Cell
+                    }
+                }
             }
         }
     }
