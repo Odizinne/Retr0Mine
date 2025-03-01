@@ -23,6 +23,13 @@ Item {
 
             GameTimer.stop()
             const savedCentiseconds = data.gameState.centiseconds
+            const gridSizeChanged = (GameState.gridSizeX !== data.gameState.gridSizeX ||
+                                     GameState.gridSizeY !== data.gameState.gridSizeY)
+
+            if (gridSizeChanged) {
+                console.log("Grid dimensions changed, resetting cellsCreated counter")
+                GridBridge.cellsCreated = 0
+            }
 
             GameState.gridSizeX = data.gameState.gridSizeX
             GameState.gridSizeY = data.gameState.gridSizeY
@@ -50,6 +57,14 @@ Item {
     }
 
     function finishLoading() {
+        // Check if all cells have been created
+        if (GridBridge.cellsCreated < GameState.gridSizeX * GameState.gridSizeY) {
+            Qt.callLater(function() {
+                saveManager.finishLoading()
+            })
+            return
+        }
+
         const data = saveManager.savedData
         const savedCentiseconds = saveManager.savedCentiseconds
 
