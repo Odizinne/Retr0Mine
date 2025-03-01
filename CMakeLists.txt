@@ -43,6 +43,7 @@ set(QML_FILES
     qml/GameAudio.qml
     qml/GameView.qml
     qml/MainMenu.qml
+    qml/GridLoadingIndicator.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml
     qml/SettingsPanes/DifficultyPane.qml

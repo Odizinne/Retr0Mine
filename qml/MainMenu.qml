@@ -1,4 +1,5 @@
 import QtQuick.Controls
+import net.odizinne.retr0mine
 
 Menu {
     topMargin: 60
@@ -7,7 +8,10 @@ Menu {
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     MenuItem {
         text: qsTr("New game")
-        onTriggered: GridBridge.initGame()
+        onTriggered: {
+            GameState.difficultyChanged = false
+            GridBridge.initGame()
+        }
     }
 
     MenuItem {

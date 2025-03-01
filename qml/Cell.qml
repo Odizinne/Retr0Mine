@@ -42,7 +42,7 @@ Item {
             })
         }
 
-        if (GameSettings.animations && !GridBridge.initialAnimationPlayed && !GameState.blockAnim) {
+        if (GameSettings.animations && !GridBridge.initialAnimationPlayed && !GameState.blockAnim && !GameState.difficultyChanged) {
             startGridResetAnimation()
         }
     }

@@ -365,8 +365,10 @@ QtObject {
         }
 
         GameState.noAnimReset = false;
-
         if (GameSettings.animations) {
+            if (GameState.difficultyChanged) {
+                return
+            }
             for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                 withCell(i, function(cell) {
                     cell.startGridResetAnimation();

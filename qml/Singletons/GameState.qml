@@ -71,4 +71,5 @@ QtObject {
     property bool displayNotification: false
     property bool displayNewRecord: false
     property bool displayPostGame: false
+    property bool difficultyChanged: false
 }

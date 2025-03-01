@@ -111,10 +111,8 @@ ApplicationWindow {
         visibility = ApplicationWindow.Windowed
     }
 
-    BusyIndicator {
-        // stupid, but allow continuous engine update
-        // without too much hassle (needed for steam overlay)
-        opacity: 0
+    GridLoadingIndicator {
+        anchors.fill: gameView
     }
 
     MouseArea {
@@ -152,7 +150,10 @@ ApplicationWindow {
     Shortcut {
         sequence: StandardKey.New
         autoRepeat: false
-        onActivated: GridBridge.initGame()
+        onActivated: {
+            GameState.difficultyChanged = false
+            GridBridge.initGame()
+        }
     }
 
     Shortcut {
@@ -250,6 +251,16 @@ ApplicationWindow {
         contentWidth: gridContainer.width
         contentHeight: gridContainer.height
         clip: true
+        enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)
+        opacity: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) ? 1 : 0
+
+        Behavior on opacity {
+            enabled: opacity === 0
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutQuad
+            }
+        }
 
         Item {
             id: gridContainer
