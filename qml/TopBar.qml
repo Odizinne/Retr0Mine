@@ -43,6 +43,19 @@ RowLayout {
             font.pixelSize: 18
             font.family: GameConstants.numberFont.name
             Layout.alignment: Qt.AlignCenter
+
+            ToolTip {
+                visible: timeMouseArea.containsMouse
+                delay: 500
+                text: qsTr("Click to pause")
+            }
+
+            MouseArea {
+                id: timeMouseArea
+                anchors.fill: parent
+                onClicked: GameState.paused = true
+                hoverEnabled: true
+            }
         }
     }
 

@@ -236,6 +236,8 @@ ApplicationWindow {
 
     SavePopup { }
 
+    PausePopup { }
+
     LeaderboardPopup {
         id: leaderboardWindow
         Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
@@ -266,10 +268,10 @@ ApplicationWindow {
         contentHeight: gridContainer.height
         clip: true
         enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)
-        opacity: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) ? 1 : 0
+        opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) && !GameState.paused) ? 1 : 0
 
         Behavior on opacity {
-            enabled: GameSettings.animations && gameView.opacity === 0
+            enabled: GameSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.InOutQuad
@@ -292,7 +294,7 @@ ApplicationWindow {
                     asynchronous: true
                     required property int index
                     sourceComponent: Cell {
-                        index: cellLoader.index  // Pass it to the Cell
+                        index: cellLoader.index
                     }
                 }
             }

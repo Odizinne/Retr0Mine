@@ -72,4 +72,10 @@ QtObject {
     property bool displayNewRecord: false
     property bool displayPostGame: false
     property bool difficultyChanged: false
+    property bool paused: false
+
+    onPausedChanged: {
+        if (paused) GameTimer.pause()
+        else GameTimer.resume()
+    }
 }

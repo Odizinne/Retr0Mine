@@ -99,22 +99,22 @@ Current game will be saved and restored</source>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="70"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="71"/>
         <source>Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="89"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="90"/>
         <source>Height:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="107"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="108"/>
         <source>Mines:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="124"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="125"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
@@ -303,53 +303,52 @@ Current game will be saved and restored</source>
 <context>
     <name>LeaderboardPopup</name>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="75"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="81"/>
         <source>Difficulty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="81"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="87"/>
         <source>Easy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="86"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="92"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="91"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="97"/>
         <source>Hard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="96"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="102"/>
         <source>Retr0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="107"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="113"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="139"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="145"/>
         <source>Wins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="172"/>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="204"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="178"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="179"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="178"/>
         <source>Confirm?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="211"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="215"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -416,6 +415,19 @@ Current game will be saved and restored</source>
     </message>
 </context>
 <context>
+    <name>PausePopup</name>
+    <message>
+        <location filename="../qml/Popups/PausePopup.qml" line="18"/>
+        <source>Paused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PausePopup.qml" line="24"/>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PostgamePopup</name>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="53"/>
@@ -428,7 +440,7 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="74"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="75"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -628,6 +640,14 @@ Current game will be saved and restored</source>
     <message>
         <location filename="../qml/SettingsPanes/SoundsPane.qml" line="51"/>
         <source>Soundpack</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TopBar</name>
+    <message>
+        <location filename="../qml/TopBar.qml" line="50"/>
+        <source>Click to pause</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
