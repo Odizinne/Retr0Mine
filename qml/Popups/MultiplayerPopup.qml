@@ -118,6 +118,7 @@ Popup {
         }
 
         RowLayout {
+            visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend
             Label {
                 text: "Friends"
                 Layout.fillWidth: true

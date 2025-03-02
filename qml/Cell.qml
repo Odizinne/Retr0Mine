@@ -10,7 +10,7 @@ Item {
     row: Math.floor(index / GameState.gridSizeX)
     col: index % GameState.gridSizeX
     opacity: 1
-    enabled: !GameState.isGeneratingGrid
+        enabled: !(GridBridge.isProcessingNetworkAction && !SteamIntegration.isHost) && !GameState.isGeneratingGrid
 
     required property int index
 
