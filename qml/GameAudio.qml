@@ -1,6 +1,6 @@
 import QtQuick
 import QtMultimedia
-
+import net.odizinne.retr0mine
 Item {
     id: control
     property int packIndex: GameSettings.soundPackIndex
@@ -34,23 +34,28 @@ Item {
     property list<SoundEffect> clickPool: [
         SoundEffect {
             source: control.getSoundPath("click")
+            volume: GameSettings.volume
         },
         SoundEffect {
             source: control.getSoundPath("click")
+            volume: GameSettings.volume
         },
         SoundEffect {
             source: control.getSoundPath("click")
+            volume: GameSettings.volume
         }
     ]
 
     SoundEffect {
         id: winEffect
         source: control.getSoundPath("win")
+        volume: GameSettings.volume
     }
 
     SoundEffect {
         id: looseEffect
         source: control.getSoundPath("bomb")
+        volume: GameSettings.volume
     }
 
     function getSoundPath(type) {
