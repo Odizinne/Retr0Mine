@@ -13,6 +13,11 @@ from dotenv import load_dotenv
 
 colorama.init()
 
+def get_env_path():
+    """Return path to .env file in user's home directory"""
+    home_dir = os.path.expanduser("~")
+    return os.path.join(home_dir, ".retr0mine.env")
+
 def show_progress_bar(downloaded, total, action="Downloading"):
     progress = downloaded / total
     bar_length = 40
@@ -154,83 +159,85 @@ def download_github_artifacts(github_token):
                     
             linux_artifact_path = os.path.join(target_dir, "usr", "bin", "Retr0Mine")
     
-    return windows_artifact_path, linux_artifact_path
+    return windows_artifact_path, linux_artifact_path, commit_info
+
+def update_env_variable(variable_name, value):
+    """Update a variable in the .env file"""
+    env_path = get_env_path()
+    
+    # Create or read existing content
+    env_content = ""
+    if os.path.exists(env_path):
+        with open(env_path, "r") as env_file:
+            env_content = env_file.read()
+    
+    # Update or add the variable
+    if f"{variable_name}=" in env_content:
+        # Variable exists, update it
+        lines = env_content.split("\n")
+        updated_lines = []
+        for line in lines:
+            if line.startswith(f"{variable_name}="):
+                updated_lines.append(f"{variable_name}={value}")
+            else:
+                updated_lines.append(line)
+        env_content = "\n".join(updated_lines)
+    else:
+        # Variable doesn't exist, add it
+        if env_content and not env_content.endswith("\n"):
+            env_content += "\n"
+        env_content += f"{variable_name}={value}"
+    
+    # Create directory if it doesn't exist
+    env_dir = os.path.dirname(env_path)
+    if env_dir and not os.path.exists(env_dir):
+        os.makedirs(env_dir)
+        
+    # Write updated content back to file
+    with open(env_path, "w") as env_file:
+        env_file.write(env_content)
+    
+    return env_path
 
 def get_username_from_env():
-    load_dotenv()
+    # Load from user's home directory
+    load_dotenv(get_env_path())
     username = os.getenv("STEAM_USERNAME")
     
     if not username:
         print(Fore.YELLOW + "Steam username not found in .env file" + Style.RESET_ALL)
         username = input("Enter your Steam username: ")
         
-        env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
-        
-        env_content = ""
-        if os.path.exists(env_path):
-            with open(env_path, "r") as env_file:
-                env_content = env_file.read()
-        
-        if "STEAM_USERNAME" in env_content:
-            lines = env_content.split("\n")
-            updated_lines = []
-            for line in lines:
-                if line.startswith("STEAM_USERNAME="):
-                    updated_lines.append(f"STEAM_USERNAME={username}")
-                else:
-                    updated_lines.append(line)
-            env_content = "\n".join(updated_lines)
-        else:
-            if env_content and not env_content.endswith("\n"):
-                env_content += "\n"
-            env_content += f"STEAM_USERNAME={username}"
-        
-        with open(env_path, "w") as env_file:
-            env_file.write(env_content)
-            
+        env_path = update_env_variable("STEAM_USERNAME", username)
         print(Fore.GREEN + f"Username saved to .env file: {env_path}" + Style.RESET_ALL)
     
     return username
 
 def get_github_token_from_env():
-    load_dotenv()
+    # Load from user's home directory
+    load_dotenv(get_env_path())
     token = os.getenv("GITHUB_TOKEN")
     
     if not token:
         print(Fore.YELLOW + "Github token not found in .env file" + Style.RESET_ALL)
         token = input("Enter your github token: ")
         
-        env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
-        
-        env_content = ""
-        if os.path.exists(env_path):
-            with open(env_path, "r") as env_file:
-                env_content = env_file.read()
-        
-        if "GITHUB_TOKEN" in env_content:
-            lines = env_content.split("\n")
-            updated_lines = []
-            for line in lines:
-                if line.startswith("GITHUB_TOKEN="):
-                    updated_lines.append(f"GITHUB_TOKEN={token}")
-                else:
-                    updated_lines.append(line)
-            env_content = "\n".join(updated_lines)
-        else:
-            if env_content and not env_content.endswith("\n"):
-                env_content += "\n"
-            env_content += f"GITHUB_TOKEN={token}"
-        
-        with open(env_path, "w") as env_file:
-            env_file.write(env_content)
-            
+        env_path = update_env_variable("GITHUB_TOKEN", token)
         print(Fore.GREEN + f"Github token saved to .env file: {env_path}" + Style.RESET_ALL)
     
     return token
 
-def apply_drm_and_upload(windows_exe, username, password):
+def apply_drm_and_upload(windows_exe, username, password, commit_info=None):
     steam_cmd = r"C:\Users\Flora\Documents\ContentBuilder\builder\steamcmd.exe"
     app_build = r"C:\Users\Flora\Documents\ContentBuilder\scripts\app_3478030.vdf"
+    
+    # Create build description based on commit info
+    build_desc = "Auto upload"
+    if commit_info:
+        build_desc = f"{commit_info['sha']} - {commit_info['message']}"
+        # Steam has a limit on description length
+        if len(build_desc) > 50:
+            build_desc = build_desc[:47] + "..."
     
     upload_command = [
         steam_cmd,
@@ -241,6 +248,7 @@ def apply_drm_and_upload(windows_exe, username, password):
     ]
    
     print(Fore.YELLOW + f"Applying DRM to Windows build and uploading to Steam..." + Style.RESET_ALL)
+    print(Fore.YELLOW + f"Build description: {build_desc}" + Style.RESET_ALL)
     subprocess.run(upload_command)
    
     print(Fore.GREEN + "Process complete!" + Style.RESET_ALL)
@@ -252,13 +260,13 @@ if __name__ == "__main__":
     password = getpass.getpass("Enter your Steam password: ")
 
     print(Fore.MAGENTA + "Starting GitHub artifacts download..." + Style.RESET_ALL)
-    windows_exe, linux_exe = download_github_artifacts(token)
+    windows_exe, linux_exe, commit_info = download_github_artifacts(token)
     
     if windows_exe and os.path.exists(windows_exe) and linux_exe and os.path.exists(linux_exe):
         print(Fore.GREEN + "Content ready!" + Style.RESET_ALL)
         if password != "skip":
             print(Fore.MAGENTA + "Starting Steam wrap and upload..." + Style.RESET_ALL)
-            apply_drm_and_upload(windows_exe, username, password)
+            apply_drm_and_upload(windows_exe, username, password, commit_info)
         else:
             print(Fore.YELLOW + "Password skipped, no steam upload." + Style.RESET_ALL)
     else:
