@@ -196,10 +196,14 @@ Popup {
             }
 
             Button {
-                text: "Leave Lobby"
+                text: "Cancel"
                 Layout.fillWidth: true
-                enabled: SteamIntegration.isInMultiplayerGame
-                onClicked: SteamIntegration.leaveLobby()
+                //enabled: SteamIntegration.isInMultiplayerGame
+                onClicked: {
+                    if (SteamIntegration.isInMultiplayerGame)
+                    SteamIntegration.leaveLobby()
+                    ComponentsContext.multiplayerPopupVisible = false
+                }
             }
         }
     }
