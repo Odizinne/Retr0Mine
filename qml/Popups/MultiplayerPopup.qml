@@ -11,7 +11,7 @@ Popup {
     height: 500
     modal: true
     focus: true
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+    closePolicy: Popup.NoAutoClose
     anchors.centerIn: parent
     visible: ComponentsContext.multiplayerPopupVisible
 
@@ -199,12 +199,14 @@ Popup {
             Button {
                 text: "Cancel"
                 Layout.fillWidth: true
-                //enabled: SteamIntegration.isInMultiplayerGame
-                onClicked: {
-                    if (SteamIntegration.isInMultiplayerGame)
-                    SteamIntegration.leaveLobby()
-                    ComponentsContext.multiplayerPopupVisible = false
-                }
+                enabled: SteamIntegration.isInMultiplayerGame
+                onClicked: SteamIntegration.leaveLobby()
+            }
+
+            Button {
+                text: "Close"
+                Layout.fillWidth: true
+                onClicked: ComponentsContext.multiplayerPopupVisible = false
             }
         }
     }
