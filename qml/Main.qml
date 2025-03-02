@@ -30,6 +30,46 @@ ApplicationWindow {
     }
 
     Connections {
+        target: SteamIntegration
+
+        // Handle lobby ready status - start a new game when lobby is ready
+        function onLobbyReadyChanged() {
+            if (SteamIntegration.isLobbyReady) {
+                if (SteamIntegration.isHost) {
+                    console.log("Host starting new multiplayer game");
+                    // Start a new game
+                    GridBridge.initGame();
+
+                    // Make sure both players are on same difficulty
+                    const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
+                    GameState.gridSizeX = difficultySet.x;
+                    GameState.gridSizeY = difficultySet.y;
+                    GameState.mineCount = difficultySet.mines;
+
+                    // Send initial grid to client as soon as cells are ready
+                    Qt.callLater(function() {
+                        if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
+                            GridBridge.sendGridStateToClient();
+                        }
+                    });
+                }
+            }
+        }
+
+        // Handle disconnections
+        function onIsInMultiplayerGameChanged() {
+            if (!SteamIntegration.isInMultiplayerGame && GridBridge.isProcessingNetworkAction) {
+                // We were disconnected during a network operation
+                GridBridge.isProcessingNetworkAction = false;
+
+                // Show a notification
+                // (You could add a more user-friendly notification system)
+                console.log("Disconnected from multiplayer game");
+            }
+        }
+    }
+
+    Connections {
         target: GameState
         function onGridSizeXChanged() {
             if (root.visibility === ApplicationWindow.Windowed) {
