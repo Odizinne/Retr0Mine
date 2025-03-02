@@ -243,7 +243,7 @@ def apply_drm_and_upload(windows_exe, username, password, commit_info=None):
         steam_cmd,
         "+login", username, password,
         "+drm_wrap", "3478030", windows_exe, windows_exe, "drmtoolp", "0",
-        "+run_app_build", app_build,
+        "+run_app_build", "-desc", build_desc, app_build,
         "+quit"
     ]
    
