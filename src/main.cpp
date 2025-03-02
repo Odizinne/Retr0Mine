@@ -24,6 +24,14 @@ int main(int argc, char *argv[])
     GameTimerForeign::s_singletonInstance = gameTimer;
     GameLogicForeign::s_singletonInstance = gameLogic;
 
+    QTimer *steamCallbackTimer = new QTimer();
+    QObject::connect(steamCallbackTimer, &QTimer::timeout, []() {
+        if (SteamIntegrationForeign::s_singletonInstance) {
+            SteamIntegrationForeign::s_singletonInstance->runCallbacks();
+        }
+    });
+    steamCallbackTimer->start(100);
+
     QQmlApplicationEngine engine;
 
     gameCore->init();

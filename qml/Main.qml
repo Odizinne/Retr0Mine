@@ -238,6 +238,7 @@ ApplicationWindow {
 
     PausePopup { }
 
+    MultiplayerPopup { }
     LeaderboardPopup {
         id: leaderboardWindow
         Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)

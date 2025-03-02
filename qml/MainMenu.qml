@@ -35,6 +35,11 @@ Menu {
     MenuSeparator { }
 
     MenuItem {
+        text: qsTr("Multiplayer")
+        onTriggered: ComponentsContext.multiplayerPopupVisible = true
+    }
+
+    MenuItem {
         text: qsTr("Settings")
         onTriggered: ComponentsContext.settingsWindowVisible = true
     }

@@ -8,6 +8,7 @@ QtObject {
     property bool restorePopupVisible: false
     property bool aboutPopupVisible: false
     property bool rulesPopupVisible: false
+    property bool multiplayerPopupVisible: false
     property bool settingsWindowVisible: false
 
     signal allCellsReady()
