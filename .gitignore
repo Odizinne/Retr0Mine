@@ -3,3 +3,4 @@ build/
 CMakeLists.txt.user
 .vscode
 .qmlls.ini
+tools/.env
