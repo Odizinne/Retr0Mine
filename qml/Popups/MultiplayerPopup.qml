@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -23,13 +25,16 @@ Popup {
     // Refresh the friends list when popup is opened
     onVisibleChanged: {
         if (visible) {
-            friendsList.clear()
             refreshFriendsList()
         }
     }
 
     function refreshFriendsList() {
         refreshing = true
+
+        // Clear the list first to avoid duplicates
+        friendsList.clear()
+
         // Get online friends from SteamIntegration
         var friends = SteamIntegration.getOnlineFriends()
 
@@ -62,8 +67,15 @@ Popup {
         }
 
         // Status information
-        GroupBox {
-            title: "Status"
+        RowLayout {
+            Label {
+                text: "Status"
+                font.pixelSize: 14
+                font.bold: true
+            }
+        }
+
+        Frame {
             Layout.fillWidth: true
 
             GridLayout {
@@ -80,8 +92,8 @@ Popup {
 
                 Label { text: "Role:" }
                 Label {
-                    text: SteamIntegration.isHost ? "Host" : "Client"
-                    visible: SteamIntegration.isInMultiplayerGame
+                    text: SteamIntegration.isInMultiplayerGame ? (SteamIntegration.isHost ? "Host" : "Client") : "Null"
+                    visible: true
                 }
 
                 Label { text: "Connected Player:" }
@@ -92,9 +104,9 @@ Popup {
 
                 Label { text: "Lobby Ready:" }
                 Label {
-                    text: SteamIntegration.isLobbyReady ? "Yes" : "No"
-                    color: SteamIntegration.isLobbyReady ? "green" : "red"
-                    visible: SteamIntegration.isInMultiplayerGame
+                    text: SteamIntegration.isInMultiplayerGame ? (SteamIntegration.isLobbyReady ? "Yes" : "No") : "Null"
+                    color: SteamIntegration.isInMultiplayerGame ? (SteamIntegration.isLobbyReady ? "green" : "red") : "gray"
+                    visible: true
                 }
 
                 Label { text: "Connection Status:" }
@@ -105,9 +117,23 @@ Popup {
             }
         }
 
-        // Friends list (only visible when host or not in a game)
-        GroupBox {
-            title: "Friends"
+        RowLayout {
+            Label {
+                text: "Friends"
+                Layout.fillWidth: true
+                font.pixelSize: 14
+                font.bold: true
+            }
+
+            Button {
+                text: "Refresh"
+                Layout.alignment: Qt.AlignHCenter
+                enabled: !multiplayerPopup.refreshing
+                onClicked: multiplayerPopup.refreshFriendsList()
+            }
+        }
+
+        Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true
             visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend
@@ -122,37 +148,37 @@ Popup {
                     Layout.fillHeight: true
                     model: friendsList
                     clip: true
+                    highlightMoveDuration: 0
+                    currentIndex: 0
 
                     delegate: ItemDelegate {
+                        id: delegate
                         width: friendsListView.width
+                        required property string name
+                        required property string steamId
+                        required property int index
 
                         RowLayout {
-                            //width: parent.width
                             anchors.fill: parent
                             anchors.leftMargin: 15
-                            anchors.rightMargin: 5
+                            anchors.rightMargin: 15
 
                             Label {
-                                text: model.name
+                                text: delegate.name
                                 Layout.fillWidth: true
                             }
 
                             Button {
-                                text: "Invite"
-                                enabled: SteamIntegration.canInviteFriend
+                                text: "+"
+                                Layout.preferredWidth: 25
+                                Layout.preferredHeight: 25
+                                enabled: SteamIntegration.canInviteFriend && !SteamIntegration.isLobbyReady
                                 onClicked: {
-                                    SteamIntegration.inviteFriend(model.steamId)
+                                    SteamIntegration.inviteFriend(delegate.steamId)
                                 }
                             }
                         }
                     }
-                }
-
-                Button {
-                    text: "Refresh Friends List"
-                    Layout.alignment: Qt.AlignHCenter
-                    enabled: !multiplayerPopup.refreshing
-                    onClicked: multiplayerPopup.refreshFriendsList()
                 }
             }
         }
