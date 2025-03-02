@@ -32,39 +32,111 @@ ApplicationWindow {
     Connections {
         target: SteamIntegration
 
-        // Handle lobby ready status - start a new game when lobby is ready
+        // Handle multiplayer status changes
+        function onIsInMultiplayerGameChanged() {
+            if (SteamIntegration.isInMultiplayerGame) {
+                console.log("Entered multiplayer mode as",
+                    SteamIntegration.isHost ? "host" : "client");
+
+                // Reset any in-progress game if joining a multiplayer session
+                GridBridge.initGame();
+
+                // Set the appropriate difficulty (medium by default for multiplayer)
+                GameSettings.difficulty = 1; // Medium difficulty
+                const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
+                GameState.gridSizeX = difficultySet.x;
+                GameState.gridSizeY = difficultySet.y;
+                GameState.mineCount = difficultySet.mines;
+            } else {
+                console.log("Left multiplayer mode");
+
+                // Reset processing state
+                if (GridBridge.isProcessingNetworkAction) {
+                    GridBridge.isProcessingNetworkAction = false;
+                }
+
+                // Return to single player after leaving multiplayer
+                GridBridge.initGame();
+            }
+        }
+
+        // Handle lobby ready status
         function onLobbyReadyChanged() {
             if (SteamIntegration.isLobbyReady) {
+                console.log("Lobby ready, initializing game");
+
                 if (SteamIntegration.isHost) {
-                    console.log("Host starting new multiplayer game");
-                    // Start a new game
+                    // Host needs to properly initialize the game and send state
                     GridBridge.initGame();
 
-                    // Make sure both players are on same difficulty
-                    const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
-                    GameState.gridSizeX = difficultySet.x;
-                    GameState.gridSizeY = difficultySet.y;
-                    GameState.mineCount = difficultySet.mines;
+                    // Wait until cells are created before sending initial state
+                    if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
+                        // Send the initial blank grid to the client
+                        GridBridge.sendGridStateToClient();
+                        console.log("Host sent initial grid state");
+                    } else {
+                        // Set up a timer to check when cells are ready
+                        let checkCount = 0;
+                        let cellCreationTimer = Qt.createQmlObject(`
+                            import QtQuick
+                            Timer {
+                                interval: 100
+                                repeat: true
+                                running: true
+                            }
+                        `, root);
 
-                    // Send initial grid to client as soon as cells are ready
-                    Qt.callLater(function() {
-                        if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
-                            GridBridge.sendGridStateToClient();
-                        }
-                    });
+                        cellCreationTimer.triggered.connect(function() {
+                            checkCount++;
+                            if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
+                                // Cells are ready, send state
+                                GridBridge.sendGridStateToClient();
+                                console.log("Host sent initial grid state after waiting");
+                                cellCreationTimer.stop();
+                                cellCreationTimer.destroy();
+                            } else if (checkCount > 50) {
+                                // Give up after 5 seconds
+                                console.error("Failed to wait for cell creation");
+                                cellCreationTimer.stop();
+                                cellCreationTimer.destroy();
+                            }
+                        });
+                    }
+                } else {
+                    // Client just needs to wait for grid state from host
+                    console.log("Client waiting for initial grid state");
                 }
             }
         }
 
-        // Handle disconnections
-        function onIsInMultiplayerGameChanged() {
-            if (!SteamIntegration.isInMultiplayerGame && GridBridge.isProcessingNetworkAction) {
-                // We were disconnected during a network operation
-                GridBridge.isProcessingNetworkAction = false;
+        // Additional event to handle connection events
+        function onConnectedPlayerChanged() {
+            if (SteamIntegration.connectedPlayerName) {
+                console.log("Player connected:", SteamIntegration.connectedPlayerName);
+            } else if (SteamIntegration.isInMultiplayerGame) {
+                console.log("Player disconnected");
+            }
+        }
 
-                // Show a notification
-                // (You could add a more user-friendly notification system)
-                console.log("Disconnected from multiplayer game");
+        // Track connection failures
+        function onConnectionFailed(reason) {
+            console.error("Connection failed:", reason);
+        }
+    }
+
+    // Also add connections to ComponentsContext to track cell creation
+    Connections {
+        target: ComponentsContext
+        function onAllCellsReady() {
+            console.log("All cells ready, count:", GridBridge.cellsCreated);
+
+            // If we're in a multiplayer lobby as host, send initial grid state
+            if (SteamIntegration.isInMultiplayerGame &&
+                SteamIntegration.isHost &&
+                SteamIntegration.isLobbyReady) {
+
+                console.log("Host sending initial grid state after cells ready");
+                GridBridge.sendGridStateToClient();
             }
         }
     }

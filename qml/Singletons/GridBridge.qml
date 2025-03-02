@@ -21,12 +21,22 @@ QtObject {
     }
 
     function safeArrayIncludes(array, value) {
-        // Safely check if an array includes a value, handling null/undefined arrays
+        // For single player, just use the normal includes
+        if (!SteamIntegration.isInMultiplayerGame) {
+            return array && array.includes(value);
+        }
+
+        // For multiplayer, do the more careful check
         return Array.isArray(array) && array !== null && array.includes(value);
     }
 
     function safeArrayGet(array, index) {
-        // Safely get a value from an array, handling null/undefined arrays or indices
+        // For single player, just access directly
+        if (!SteamIntegration.isInMultiplayerGame) {
+            return array && array[index];
+        }
+
+        // For multiplayer, do the more careful check
         return Array.isArray(array) && array !== null && index >= 0 && index < array.length ? array[index] : undefined;
     }
 
@@ -361,8 +371,7 @@ QtObject {
             cell.revealed = true;
             GameState.revealedCount++;
 
-            // Use safe array check
-            if (safeArrayIncludes(GameState.mines, currentIndex)) {
+            if (GameState.mines.includes(currentIndex)) {
                 cell.isBombClicked = true;
                 GameState.gameOver = true;
                 GameState.gameWon = false;
@@ -373,8 +382,8 @@ QtObject {
                 return;
             }
 
-            // Use safe array access
-            if (safeArrayGet(GameState.numbers, currentIndex) === 0) {
+            const cellNumber = GameState.numbers[currentIndex];
+            if (cellNumber === 0) {
                 let row = Math.floor(currentIndex / GameState.gridSizeX);
                 let col = currentIndex % GameState.gridSizeX;
 
@@ -453,7 +462,7 @@ QtObject {
     function revealAllMines() {
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             withCell(i, function(cell) {
-                if (safeArrayIncludes(GameState.mines, i)) {
+                if (GameState.mines.includes(i)) {
                     if (!cell.flagged) {
                         cell.questioned = false;
                         cell.revealed = true;
@@ -640,9 +649,8 @@ QtObject {
     }
 
     function hasUnrevealedNeighbors(index) {
-        // If the cell has no number (0) or numbers is null, no need for satisfaction check
-        const cellNumber = safeArrayGet(GameState.numbers, index);
-        if (cellNumber === undefined || cellNumber === 0) {
+        // If the cell has no number (0), no need for satisfaction check
+        if (GameState.numbers[index] === 0) {
             return false;
         }
 
@@ -674,7 +682,7 @@ QtObject {
             }
         }
 
-        return unrevealedCount > 0 || flagCount !== cellNumber;
+        return unrevealedCount > 0 || flagCount !== GameState.numbers[index];
     }
 
     // ---- MULTIPLAYER METHODS ----

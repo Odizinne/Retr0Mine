@@ -312,17 +312,18 @@ Item {
         anchors.centerIn: parent
         text: {
             if (!cellItem.revealed || cellItem.flagged) return ""
-            if (GridBridge.safeArrayIncludes(GameState.mines, cellItem.index)) return ""
-            const num = safeArrayGet(GameState.numbers, cellItem.index)
-            return num === undefined || num === 0 ? "" : num;
+            if (GameState.mines && GameState.mines.includes(cellItem.index)) return ""
+            const num = GameState.numbers && GameState.numbers[cellItem.index]
+            return num === undefined || num === 0 ? "" : num
         }
         font.family: GameConstants.numberFont.name
         font.pixelSize: GameState.cellSize * 0.60
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         opacity: {
-            const num = GridBridge.safeArrayGet(GameState.numbers, cellItem.index)
-            if (!GameSettings.dimSatisfied || !cellItem.revealed || num === 0) return 1
+            if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
+            const num = GameState.numbers && GameState.numbers[cellItem.index]
+            if (num === 0) return 1
             return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
         }
 
@@ -333,9 +334,9 @@ Item {
 
         color: GameConstants.getNumberColor(
                    cellItem.revealed,
-                   GridBridge.safeArrayIncludes(GameState.mines, cellItem.index),
+                   GameState.mines && GameState.mines.includes(cellItem.index),
                    cellItem.index,
-                   GridBridge.safeArrayGet(GameState.numbers, cellItem.index)
+                   GameState.numbers && GameState.numbers[cellItem.index]
                    )
     }
 
