@@ -20,6 +20,27 @@ QtObject {
         SteamIntegration.gameStateReceived.connect(applyGameState);
     }
 
+    // Utility function to convert object arrays to proper arrays
+    function convertObjectToArray(obj, name) {
+        let resultArray = [];
+        if (Array.isArray(obj)) {
+            resultArray = Array.from(obj);
+            console.log("Processing " + name + " as array, length:", resultArray.length);
+        } else if (typeof obj === 'object' && obj !== null) {
+            // Convert object to array
+            console.log("Processing " + name + " as object");
+            for (let prop in obj) {
+                if (!isNaN(parseInt(prop))) {
+                    resultArray.push(parseInt(obj[prop]));
+                }
+            }
+            console.log("Converted " + name + " to array, length:", resultArray.length);
+        } else {
+            console.log(name + " is empty or invalid");
+        }
+        return resultArray;
+    }
+
     function safeArrayIncludes(array, value) {
         // For single player, just use the normal includes
         if (!SteamIntegration.isInMultiplayerGame) {
@@ -55,6 +76,16 @@ QtObject {
         const cell = getCell(index);
         if (cell) {
             operation(cell);
+
+            // For multiplayer client, force update the visual state
+            if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+                if (cell.revealed && cell.button && !cell.button.flat) {
+                    // Force the button to be flat if the cell is revealed
+                    cell.button.flat = true;
+                    cell.button.opacity = 1;
+                }
+            }
+
             return true;
         }
         return false;
@@ -717,6 +748,13 @@ QtObject {
 
         console.log("Sending grid state to client");
 
+        console.log("SENDING STATE: Mines array type:", typeof GameState.mines);
+        console.log("SENDING STATE: Mines array isArray:", Array.isArray(GameState.mines));
+        console.log("SENDING STATE: Mines array length:", GameState.mines ? GameState.mines.length : "N/A");
+        console.log("SENDING STATE: Numbers array type:", typeof GameState.numbers);
+        console.log("SENDING STATE: Numbers array isArray:", Array.isArray(GameState.numbers));
+        console.log("SENDING STATE: Numbers array length:", GameState.numbers ? GameState.numbers.length : "N/A");
+
         // Build a state object with all necessary grid information
         var gameState = {
             gridSizeX: GameState.gridSizeX,
@@ -765,13 +803,6 @@ QtObject {
             if (cell.safeQuestioned) gameState.safeQuestionedCells.push(i);
         }
 
-        console.log("SENDING STATE: Mines array type:", typeof GameState.mines);
-        console.log("SENDING STATE: Mines array isArray:", Array.isArray(GameState.mines));
-        console.log("SENDING STATE: Mines array length:", GameState.mines ? GameState.mines.length : "N/A");
-        console.log("SENDING STATE: Numbers array type:", typeof GameState.numbers);
-        console.log("SENDING STATE: Numbers array isArray:", Array.isArray(GameState.numbers));
-        console.log("SENDING STATE: Numbers array length:", GameState.numbers ? GameState.numbers.length : "N/A");
-
         // Send the state
         SteamIntegration.sendGameState(gameState);
     }
@@ -780,6 +811,15 @@ QtObject {
     function applyGameState(gameState) {
         console.log("Applying received game state");
 
+        console.log("RECEIVING STATE: Mines array type:", typeof gameState.mines);
+        console.log("RECEIVING STATE: Mines array isArray:", Array.isArray(gameState.mines));
+        console.log("RECEIVING STATE: Mines array length:", gameState.mines ? gameState.mines.length : "N/A");
+        console.log("RECEIVING STATE: Numbers array type:", typeof gameState.numbers);
+        console.log("RECEIVING STATE: Numbers array isArray:", Array.isArray(gameState.numbers));
+        console.log("RECEIVING STATE: Numbers array length:", gameState.numbers ? gameState.numbers.length : "N/A");
+        console.log("RECEIVING STATE: revealedCells type:", typeof gameState.revealedCells);
+        console.log("RECEIVING STATE: revealedCells isArray:", Array.isArray(gameState.revealedCells));
+
         // First check if we received valid data
         if (!gameState) {
             console.error("Received invalid game state");
@@ -787,13 +827,19 @@ QtObject {
             return;
         }
 
-        // Log info about arrays
-        console.log("RECEIVING STATE: Mines array type:", typeof gameState.mines);
-        console.log("RECEIVING STATE: Mines array isArray:", Array.isArray(gameState.mines));
-        console.log("RECEIVING STATE: Mines array length:", gameState.mines ? gameState.mines.length : "N/A");
-        console.log("RECEIVING STATE: Numbers array type:", typeof gameState.numbers);
-        console.log("RECEIVING STATE: Numbers array isArray:", Array.isArray(gameState.numbers));
-        console.log("RECEIVING STATE: Numbers array length:", gameState.numbers ? gameState.numbers.length : "N/A");
+        // Check if grid dimensions match
+        if (GameState.gridSizeX !== gameState.gridSizeX ||
+            GameState.gridSizeY !== gameState.gridSizeY) {
+            console.log("Grid size changed:", gameState.gridSizeX, "x", gameState.gridSizeY);
+
+            // Grid size changed, need to resize
+            GameState.gridSizeX = gameState.gridSizeX;
+            GameState.gridSizeY = gameState.gridSizeY;
+
+            // We need to wait for the grid to be recreated
+            // This is handled in Main.qml via the grid size change signals
+            return;
+        }
 
         // Better deserialization for mines array
         if (gameState.mines) {
@@ -821,7 +867,7 @@ QtObject {
         if (gameState.numbers) {
             if (Array.isArray(gameState.numbers)) {
                 console.log("Updating numbers array as array, length:", gameState.numbers.length);
-                GameState.numbers = Array.from(gameState.numbers);
+                GameState.numbers = Array.from(gameState.numbers); // Ensure proper array conversion
             } else {
                 console.log("Received numbers as object, converting");
                 // Try to convert from object
@@ -851,57 +897,56 @@ QtObject {
             });
         }
 
-        // Apply cell states from received data with more debug info
-        if (Array.isArray(gameState.revealedCells)) {
-            console.log("Processing revealedCells array, length:", gameState.revealedCells.length);
-            gameState.revealedCells.forEach(index => {
-                const result = withCell(index, function(cell) {
-                    // Skip animation for client
-                    if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
-                        // For client, we need to set both the revealed flag and directly update the button
-                        cell.revealed = true;
-                        cell.shouldBeFlat = true;
+        // Process revealed cells - handle both array and object cases
+        let revealedCellsArray = convertObjectToArray(gameState.revealedCells, "revealedCells");
+        let flaggedCellsArray = convertObjectToArray(gameState.flaggedCells, "flaggedCells");
+        let questionedCellsArray = convertObjectToArray(gameState.questionedCells, "questionedCells");
+        let safeQuestionedCellsArray = convertObjectToArray(gameState.safeQuestionedCells, "safeQuestionedCells");
 
-                        // Force buttons to be flat without animation
-                        try {
-                            cell.button.flat = true;
-                            cell.button.opacity = 1;
-                        } catch (e) {
-                            console.error("Error setting button flat:", e);
-                        }
-                    } else {
-                        cell.revealed = true;
+        // Apply revealed cells
+        console.log("Applying", revealedCellsArray.length, "revealed cells");
+        revealedCellsArray.forEach(index => {
+            const result = withCell(index, function(cell) {
+                // Skip animation for client
+                if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+                    // For client, we need to set both the revealed flag and directly update the button
+                    cell.revealed = true;
+                    cell.shouldBeFlat = true;
+
+                    // Force buttons to be flat without animation
+                    try {
+                        cell.button.flat = true;
+                        cell.button.opacity = 1;
+                    } catch (e) {
+                        console.error("Error setting button flat:", e);
                     }
-                });
-                console.log("Set cell", index, "revealed, success:", result);
+                } else {
+                    cell.revealed = true;
+                }
             });
-        } else {
-            console.error("revealedCells is not an array:", typeof gameState.revealedCells);
-        }
+            console.log("Set cell", index, "revealed, success:", result);
+        });
 
-        if (Array.isArray(gameState.flaggedCells)) {
-            gameState.flaggedCells.forEach(index => {
-                withCell(index, function(cell) {
-                    cell.flagged = true;
-                });
+        // Apply flagged cells
+        flaggedCellsArray.forEach(index => {
+            withCell(index, function(cell) {
+                cell.flagged = true;
             });
-        }
+        });
 
-        if (Array.isArray(gameState.questionedCells)) {
-            gameState.questionedCells.forEach(index => {
-                withCell(index, function(cell) {
-                    cell.questioned = true;
-                });
+        // Apply questioned cells
+        questionedCellsArray.forEach(index => {
+            withCell(index, function(cell) {
+                cell.questioned = true;
             });
-        }
+        });
 
-        if (Array.isArray(gameState.safeQuestionedCells)) {
-            gameState.safeQuestionedCells.forEach(index => {
-                withCell(index, function(cell) {
-                    cell.safeQuestioned = true;
-                });
+        // Apply safe questioned cells
+        safeQuestionedCellsArray.forEach(index => {
+            withCell(index, function(cell) {
+                cell.safeQuestioned = true;
             });
-        }
+        });
 
         // Update game state
         GameState.gameOver = gameState.gameOver || false;
