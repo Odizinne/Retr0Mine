@@ -52,6 +52,7 @@ RowLayout {
 
             MouseArea {
                 id: timeMouseArea
+                enabled: GameState.gameStarted && !GameState.gameOver
                 anchors.fill: parent
                 onClicked: GameState.paused = true
                 hoverEnabled: true
