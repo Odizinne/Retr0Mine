@@ -3,6 +3,7 @@
 #include <QSettings>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
@@ -720,4 +721,11 @@ void SteamIntegration::handleGameState(const QByteArray& data)
     QVariantMap gameState = doc.object().toVariantMap();
     qDebug() << "SteamIntegration: Received game state with keys:" << gameState.keys();
     emit gameStateReceived(gameState);
+
+    qDebug() << "SteamIntegration: JSON data size:" << data.size();
+    qDebug() << "SteamIntegration: First 100 chars:" << (data.size() > 100 ? data.left(100) : data);
+    qDebug() << "SteamIntegration: Mines array in JSON:" << doc.object()["mines"].isArray()
+             << "size:" << (doc.object()["mines"].isArray() ? doc.object()["mines"].toArray().size() : -1);
+    qDebug() << "SteamIntegration: Numbers array in JSON:" << doc.object()["numbers"].isArray()
+             << "size:" << (doc.object()["numbers"].isArray() ? doc.object()["numbers"].toArray().size() : -1);
 }

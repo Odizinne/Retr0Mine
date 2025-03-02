@@ -722,8 +722,27 @@ QtObject {
             gridSizeX: GameState.gridSizeX,
             gridSizeY: GameState.gridSizeY,
             mineCount: GameState.mineCount,
-            mines: Array.isArray(GameState.mines) ? GameState.mines.slice() : [],
-            numbers: Array.isArray(GameState.numbers) ? GameState.numbers.slice() : [],
+            // More robust array conversion
+            mines: (function() {
+                if (!GameState.mines) return [];
+                if (Array.isArray(GameState.mines)) return Array.from(GameState.mines);
+                // Try to convert object to array
+                let result = [];
+                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                    if (GameState.mines[i] !== undefined) result.push(i);
+                }
+                return result;
+            })(),
+            numbers: (function() {
+                if (!GameState.numbers) return [];
+                if (Array.isArray(GameState.numbers)) return Array.from(GameState.numbers);
+                // Try to convert object to array
+                let result = [];
+                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                    result[i] = GameState.numbers[i] || 0;
+                }
+                return result;
+            })(),
             revealedCells: [],
             flaggedCells: [],
             questionedCells: [],
@@ -746,6 +765,13 @@ QtObject {
             if (cell.safeQuestioned) gameState.safeQuestionedCells.push(i);
         }
 
+        console.log("SENDING STATE: Mines array type:", typeof GameState.mines);
+        console.log("SENDING STATE: Mines array isArray:", Array.isArray(GameState.mines));
+        console.log("SENDING STATE: Mines array length:", GameState.mines ? GameState.mines.length : "N/A");
+        console.log("SENDING STATE: Numbers array type:", typeof GameState.numbers);
+        console.log("SENDING STATE: Numbers array isArray:", Array.isArray(GameState.numbers));
+        console.log("SENDING STATE: Numbers array length:", GameState.numbers ? GameState.numbers.length : "N/A");
+
         // Send the state
         SteamIntegration.sendGameState(gameState);
     }
@@ -753,6 +779,13 @@ QtObject {
     // Called when the client receives a game state update from host
     function applyGameState(gameState) {
         console.log("Applying received game state");
+
+        console.log("RECEIVING STATE: Mines array type:", typeof gameState.mines);
+        console.log("RECEIVING STATE: Mines array isArray:", Array.isArray(gameState.mines));
+        console.log("RECEIVING STATE: Mines array length:", gameState.mines ? gameState.mines.length : "N/A");
+        console.log("RECEIVING STATE: Numbers array type:", typeof gameState.numbers);
+        console.log("RECEIVING STATE: Numbers array isArray:", Array.isArray(gameState.numbers));
+        console.log("RECEIVING STATE: Numbers array length:", gameState.numbers ? gameState.numbers.length : "N/A");
 
         // First check if we received valid data
         if (!gameState) {
@@ -775,12 +808,25 @@ QtObject {
             return;
         }
 
-        // Ensure we have valid arrays before assigning
-        if (Array.isArray(gameState.mines)) {
-            console.log("Updating mines array, length:", gameState.mines.length);
-            GameState.mines = gameState.mines.slice(); // Create a copy of the array
+        // Better deserialization
+        if (gameState.mines) {
+            if (Array.isArray(gameState.mines)) {
+                console.log("Updating mines array as array, length:", gameState.mines.length);
+                GameState.mines = Array.from(gameState.mines); // Ensure proper array conversion
+            } else {
+                console.log("Received mines as object, converting");
+                // Try to convert from object
+                let minesArray = [];
+                for (let prop in gameState.mines) {
+                    if (!isNaN(parseInt(prop))) {
+                        minesArray.push(parseInt(gameState.mines[prop]));
+                    }
+                }
+                GameState.mines = minesArray;
+            }
+            console.log("Final mines array length:", GameState.mines.length);
         } else {
-            console.error("Received invalid mines array");
+            console.error("Received no mines data");
             GameState.mines = [];
         }
 
