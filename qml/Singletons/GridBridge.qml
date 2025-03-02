@@ -20,6 +20,16 @@ QtObject {
         SteamIntegration.gameStateReceived.connect(applyGameState);
     }
 
+    function safeArrayIncludes(array, value) {
+        // Safely check if an array includes a value, handling null/undefined arrays
+        return Array.isArray(array) && array !== null && array.includes(value);
+    }
+
+    function safeArrayGet(array, index) {
+        // Safely get a value from an array, handling null/undefined arrays or indices
+        return Array.isArray(array) && array !== null && index >= 0 && index < array.length ? array[index] : undefined;
+    }
+
     // Helper function to safely get a cell
     function getCell(index) {
         if (!grid) return null;
@@ -351,7 +361,8 @@ QtObject {
             cell.revealed = true;
             GameState.revealedCount++;
 
-            if (GameState.mines.includes(currentIndex)) {
+            // Use safe array check
+            if (safeArrayIncludes(GameState.mines, currentIndex)) {
                 cell.isBombClicked = true;
                 GameState.gameOver = true;
                 GameState.gameWon = false;
@@ -362,7 +373,8 @@ QtObject {
                 return;
             }
 
-            if (GameState.numbers[currentIndex] === 0) {
+            // Use safe array access
+            if (safeArrayGet(GameState.numbers, currentIndex) === 0) {
                 let row = Math.floor(currentIndex / GameState.gridSizeX);
                 let col = currentIndex % GameState.gridSizeX;
 
@@ -441,7 +453,7 @@ QtObject {
     function revealAllMines() {
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             withCell(i, function(cell) {
-                if (GameState.mines.includes(i)) {
+                if (safeArrayIncludes(GameState.mines, i)) {
                     if (!cell.flagged) {
                         cell.questioned = false;
                         cell.revealed = true;
@@ -628,8 +640,9 @@ QtObject {
     }
 
     function hasUnrevealedNeighbors(index) {
-        // If the cell has no number (0), no need for satisfaction check
-        if (GameState.numbers[index] === 0) {
+        // If the cell has no number (0) or numbers is null, no need for satisfaction check
+        const cellNumber = safeArrayGet(GameState.numbers, index);
+        if (cellNumber === undefined || cellNumber === 0) {
             return false;
         }
 
@@ -661,7 +674,7 @@ QtObject {
             }
         }
 
-        return unrevealedCount > 0 || flagCount !== GameState.numbers[index];
+        return unrevealedCount > 0 || flagCount !== cellNumber;
     }
 
     // ---- MULTIPLAYER METHODS ----
@@ -689,6 +702,11 @@ QtObject {
 
     // Called when the host needs to send current grid state to client
     function sendGridStateToClient() {
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
+            console.log("Not sending grid state: not in multiplayer or not host");
+            return;
+        }
+
         console.log("Sending grid state to client");
 
         // Build a state object with all necessary grid information
@@ -696,8 +714,8 @@ QtObject {
             gridSizeX: GameState.gridSizeX,
             gridSizeY: GameState.gridSizeY,
             mineCount: GameState.mineCount,
-            mines: GameState.mines,
-            numbers: GameState.numbers,
+            mines: Array.isArray(GameState.mines) ? GameState.mines.slice() : [],
+            numbers: Array.isArray(GameState.numbers) ? GameState.numbers.slice() : [],
             revealedCells: [],
             flaggedCells: [],
             questionedCells: [],
@@ -728,7 +746,14 @@ QtObject {
     function applyGameState(gameState) {
         console.log("Applying received game state");
 
-        // First check if grid dimensions match
+        // First check if we received valid data
+        if (!gameState) {
+            console.error("Received invalid game state");
+            isProcessingNetworkAction = false;
+            return;
+        }
+
+        // Check if grid dimensions match
         if (GameState.gridSizeX !== gameState.gridSizeX ||
             GameState.gridSizeY !== gameState.gridSizeY) {
             console.log("Grid size changed:", gameState.gridSizeX, "x", gameState.gridSizeY);
@@ -742,11 +767,26 @@ QtObject {
             return;
         }
 
-        // Update mines and numbers
-        GameState.mineCount = gameState.mineCount;
-        GameState.mines = gameState.mines;
-        GameState.numbers = gameState.numbers;
-        GameState.gameStarted = gameState.gameStarted;
+        // Ensure we have valid arrays before assigning
+        if (Array.isArray(gameState.mines)) {
+            console.log("Updating mines array, length:", gameState.mines.length);
+            GameState.mines = gameState.mines.slice(); // Create a copy of the array
+        } else {
+            console.error("Received invalid mines array");
+            GameState.mines = [];
+        }
+
+        if (Array.isArray(gameState.numbers)) {
+            console.log("Updating numbers array, length:", gameState.numbers.length);
+            GameState.numbers = gameState.numbers.slice(); // Create a copy of the array
+        } else {
+            console.error("Received invalid numbers array");
+            GameState.numbers = [];
+        }
+
+        // Update other game state
+        GameState.mineCount = gameState.mineCount || 0;
+        GameState.gameStarted = gameState.gameStarted || false;
 
         // Reset all cells first
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
@@ -759,19 +799,23 @@ QtObject {
         }
 
         // Apply cell states from received data
-        gameState.revealedCells.forEach(index => {
-            withCell(index, function(cell) {
-                cell.revealed = true;
+        if (Array.isArray(gameState.revealedCells)) {
+            gameState.revealedCells.forEach(index => {
+                withCell(index, function(cell) {
+                    cell.revealed = true;
+                });
             });
-        });
+        }
 
-        gameState.flaggedCells.forEach(index => {
-            withCell(index, function(cell) {
-                cell.flagged = true;
+        if (Array.isArray(gameState.flaggedCells)) {
+            gameState.flaggedCells.forEach(index => {
+                withCell(index, function(cell) {
+                    cell.flagged = true;
+                });
             });
-        });
+        }
 
-        if (gameState.questionedCells) {
+        if (Array.isArray(gameState.questionedCells)) {
             gameState.questionedCells.forEach(index => {
                 withCell(index, function(cell) {
                     cell.questioned = true;
@@ -779,7 +823,7 @@ QtObject {
             });
         }
 
-        if (gameState.safeQuestionedCells) {
+        if (Array.isArray(gameState.safeQuestionedCells)) {
             gameState.safeQuestionedCells.forEach(index => {
                 withCell(index, function(cell) {
                     cell.safeQuestioned = true;
@@ -788,10 +832,10 @@ QtObject {
         }
 
         // Update game state
-        GameState.gameOver = gameState.gameOver;
-        GameState.gameWon = gameState.gameWon;
-        GameState.revealedCount = gameState.revealedCount;
-        GameState.flaggedCount = gameState.flaggedCount;
+        GameState.gameOver = gameState.gameOver || false;
+        GameState.gameWon = gameState.gameWon || false;
+        GameState.revealedCount = gameState.revealedCount || 0;
+        GameState.flaggedCount = gameState.flaggedCount || 0;
 
         // Finish processing
         isProcessingNetworkAction = false;
