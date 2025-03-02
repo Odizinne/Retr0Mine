@@ -10,7 +10,7 @@ Item {
     row: Math.floor(index / GameState.gridSizeX)
     col: index % GameState.gridSizeX
     opacity: 1
-        enabled: !(GridBridge.isProcessingNetworkAction && !SteamIntegration.isHost) && !GameState.isGeneratingGrid
+    enabled: !(GridBridge.isProcessingNetworkAction && !SteamIntegration.isHost) && !GameState.isGeneratingGrid
 
     required property int index
 
@@ -132,14 +132,14 @@ Item {
         radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
         border.color: GameConstants.frameColor
         visible: {
-            if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
+            if (cellItem.revealed && cellItem.isBombClicked && GridBridge.safeArrayIncludes(GameState.mines, cellItem.index))
                 return true
             if (cellItem.animatingReveal && GameSettings.cellFrame)
                 return true
             return cellButton.flat && GameSettings.cellFrame
         }
         color: {
-            if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
+            if (cellItem.revealed && cellItem.isBombClicked && GridBridge.safeArrayIncludes(GameState.mines, cellItem.index))
                 return GameConstants.accentColor
             return "transparent"
         }
@@ -151,7 +151,7 @@ Item {
 
         opacity: {
             if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
-            if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index)) return 1
+            if (cellItem.revealed && cellItem.isBombClicked && GridBridge.safeArrayIncludes(GameState.mines, cellItem.index)) return 1
             return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity
         }
     }
@@ -183,7 +183,7 @@ Item {
             anchors.centerIn: parent
             source: "qrc:/icons/bomb.png"
             color: GameConstants.foregroundColor
-            visible: cellItem.revealed && GameState.mines.includes(cellItem.index)
+            visible: cellItem.revealed && GridBridge.safeArrayIncludes(GameState.mines, cellItem.index)
             sourceSize.width: cellItem.width / 2.1
             sourceSize.height: cellItem.height / 2.1
         }
@@ -276,7 +276,7 @@ Item {
             sourceSize.height: cellItem.height / 2.1
             opacity: 0
             visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
-            source: GameState.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+            source: GridBridge.safeArrayIncludes(GameState.mines, cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
         }
 
         MouseArea {
@@ -312,8 +312,8 @@ Item {
         anchors.centerIn: parent
         text: {
             if (!cellItem.revealed || cellItem.flagged) return ""
-            if (GameState.mines && GameState.mines.includes(cellItem.index)) return ""
-            const num = GameState.numbers && GameState.numbers[cellItem.index]
+            if (GridBridge.safeArrayIncludes(GameState.mines, cellItem.index)) return ""
+            const num = GridBridge.safeArrayGet(GameState.numbers, cellItem.index)
             return num === undefined || num === 0 ? "" : num
         }
         font.family: GameConstants.numberFont.name
@@ -322,7 +322,7 @@ Item {
         verticalAlignment: Text.AlignVCenter
         opacity: {
             if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
-            const num = GameState.numbers && GameState.numbers[cellItem.index]
+            const num = GridBridge.safeArrayGet(GameState.numbers, cellItem.index)
             if (num === 0) return 1
             return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
         }
@@ -334,10 +334,10 @@ Item {
 
         color: GameConstants.getNumberColor(
                    cellItem.revealed,
-                   GameState.mines && GameState.mines.includes(cellItem.index),
+                   GridBridge.safeArrayIncludes(GameState.mines, cellItem.index),
                    cellItem.index,
-                   GameState.numbers && GameState.numbers[cellItem.index]
-                   )
+                   GridBridge.safeArrayGet(GameState.numbers, cellItem.index)
+               )
     }
 
     function startGridResetAnimation() {

@@ -830,11 +830,22 @@ QtObject {
             GameState.mines = [];
         }
 
-        if (Array.isArray(gameState.numbers)) {
-            console.log("Updating numbers array, length:", gameState.numbers.length);
-            GameState.numbers = gameState.numbers.slice(); // Create a copy of the array
+        if (gameState.numbers) {
+            if (Array.isArray(gameState.numbers)) {
+                console.log("Updating numbers array as array, length:", gameState.numbers.length);
+                GameState.numbers = Array.from(gameState.numbers); // Ensure proper array conversion
+            } else {
+                console.log("Received numbers as object, converting");
+                // Try to convert from object
+                let numbersArray = [];
+                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                    numbersArray[i] = gameState.numbers[i] !== undefined ? gameState.numbers[i] : 0;
+                }
+                GameState.numbers = numbersArray;
+                console.log("Converted numbers array length:", numbersArray.length);
+            }
         } else {
-            console.error("Received invalid numbers array");
+            console.error("Received no numbers data");
             GameState.numbers = [];
         }
 
