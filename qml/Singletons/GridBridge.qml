@@ -780,13 +780,6 @@ QtObject {
     function applyGameState(gameState) {
         console.log("Applying received game state");
 
-        console.log("RECEIVING STATE: Mines array type:", typeof gameState.mines);
-        console.log("RECEIVING STATE: Mines array isArray:", Array.isArray(gameState.mines));
-        console.log("RECEIVING STATE: Mines array length:", gameState.mines ? gameState.mines.length : "N/A");
-        console.log("RECEIVING STATE: Numbers array type:", typeof gameState.numbers);
-        console.log("RECEIVING STATE: Numbers array isArray:", Array.isArray(gameState.numbers));
-        console.log("RECEIVING STATE: Numbers array length:", gameState.numbers ? gameState.numbers.length : "N/A");
-
         // First check if we received valid data
         if (!gameState) {
             console.error("Received invalid game state");
@@ -794,21 +787,15 @@ QtObject {
             return;
         }
 
-        // Check if grid dimensions match
-        if (GameState.gridSizeX !== gameState.gridSizeX ||
-            GameState.gridSizeY !== gameState.gridSizeY) {
-            console.log("Grid size changed:", gameState.gridSizeX, "x", gameState.gridSizeY);
+        // Log info about arrays
+        console.log("RECEIVING STATE: Mines array type:", typeof gameState.mines);
+        console.log("RECEIVING STATE: Mines array isArray:", Array.isArray(gameState.mines));
+        console.log("RECEIVING STATE: Mines array length:", gameState.mines ? gameState.mines.length : "N/A");
+        console.log("RECEIVING STATE: Numbers array type:", typeof gameState.numbers);
+        console.log("RECEIVING STATE: Numbers array isArray:", Array.isArray(gameState.numbers));
+        console.log("RECEIVING STATE: Numbers array length:", gameState.numbers ? gameState.numbers.length : "N/A");
 
-            // Grid size changed, need to resize
-            GameState.gridSizeX = gameState.gridSizeX;
-            GameState.gridSizeY = gameState.gridSizeY;
-
-            // We need to wait for the grid to be recreated
-            // This is handled in Main.qml via the grid size change signals
-            return;
-        }
-
-        // Better deserialization
+        // Better deserialization for mines array
         if (gameState.mines) {
             if (Array.isArray(gameState.mines)) {
                 console.log("Updating mines array as array, length:", gameState.mines.length);
@@ -830,16 +817,17 @@ QtObject {
             GameState.mines = [];
         }
 
+        // Better deserialization for numbers array
         if (gameState.numbers) {
             if (Array.isArray(gameState.numbers)) {
                 console.log("Updating numbers array as array, length:", gameState.numbers.length);
-                GameState.numbers = Array.from(gameState.numbers); // Ensure proper array conversion
+                GameState.numbers = Array.from(gameState.numbers);
             } else {
                 console.log("Received numbers as object, converting");
                 // Try to convert from object
                 let numbersArray = [];
                 for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                    numbersArray[i] = gameState.numbers[i] !== undefined ? gameState.numbers[i] : 0;
+                    numbersArray[i] = gameState.numbers[i] !== undefined ? parseInt(gameState.numbers[i]) : 0;
                 }
                 GameState.numbers = numbersArray;
                 console.log("Converted numbers array length:", numbersArray.length);
@@ -863,13 +851,32 @@ QtObject {
             });
         }
 
-        // Apply cell states from received data
+        // Apply cell states from received data with more debug info
         if (Array.isArray(gameState.revealedCells)) {
+            console.log("Processing revealedCells array, length:", gameState.revealedCells.length);
             gameState.revealedCells.forEach(index => {
-                withCell(index, function(cell) {
-                    cell.revealed = true;
+                const result = withCell(index, function(cell) {
+                    // Skip animation for client
+                    if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+                        // For client, we need to set both the revealed flag and directly update the button
+                        cell.revealed = true;
+                        cell.shouldBeFlat = true;
+
+                        // Force buttons to be flat without animation
+                        try {
+                            cell.button.flat = true;
+                            cell.button.opacity = 1;
+                        } catch (e) {
+                            console.error("Error setting button flat:", e);
+                        }
+                    } else {
+                        cell.revealed = true;
+                    }
                 });
+                console.log("Set cell", index, "revealed, success:", result);
             });
+        } else {
+            console.error("revealedCells is not an array:", typeof gameState.revealedCells);
         }
 
         if (Array.isArray(gameState.flaggedCells)) {
