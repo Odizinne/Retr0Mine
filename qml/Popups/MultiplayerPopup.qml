@@ -55,7 +55,9 @@ Popup {
 
     Item {
         anchors.fill: parent
-        visible: SteamIntegration.connectedPlayerName !== "" && !SteamIntegration.isP2PConnected
+        visible: (SteamIntegration.connectedPlayerName !== "" && !SteamIntegration.isP2PConnected) ||
+                 (SteamIntegration.isHost && SteamIntegration.isP2PConnected && !GridBridge.clientGridReady)
+
         ColumnLayout {
             anchors.centerIn: parent
             spacing: 15
@@ -69,7 +71,9 @@ Popup {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 14
-                text: qsTr("Establishing connection with ") + SteamIntegration.connectedPlayerName
+                text: SteamIntegration.isP2PConnected
+                      ? SteamIntegration.connectedPlayerName + qsTr(" is generating grid...")
+                      : qsTr("Establishing connection with ") + SteamIntegration.connectedPlayerName + "..."
             }
         }
     }
@@ -80,7 +84,7 @@ Popup {
         font.bold: true
         color: "#28d13c"
         anchors.centerIn: parent
-        visible: SteamIntegration.connectedPlayerName !== "" && SteamIntegration.isP2PConnected
+        visible: SteamIntegration.connectedPlayerName !== "" && SteamIntegration.isP2PConnected && GridBridge.clientGridReady
     }
 
     ToolTip {
