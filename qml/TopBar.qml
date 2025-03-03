@@ -58,6 +58,15 @@ RowLayout {
                 hoverEnabled: true
             }
         }
+
+        Label {
+            id: coopFriendLabel
+            text: qsTr("Coop:") + SteamIntegration.connectedPlayerName
+            visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
+            font.pixelSize: 14
+            font.family: GameConstants.numberFont.name
+            Layout.alignment: Qt.AlignCenter
+        }
     }
 
     RowLayout {

@@ -7,8 +7,8 @@ import net.odizinne.retr0mine 1.0
 
 Popup {
     id: multiplayerPopup
-    width: 400
-    height: 500
+    width: 350
+    height: 350
     modal: true
     focus: true
     closePolicy: Popup.NoAutoClose
@@ -52,86 +52,51 @@ Popup {
         id: friendsList
     }
 
+    Item {
+        anchors.fill: parent
+        visible: SteamIntegration.connectedPlayerName !== "" && !SteamIntegration.isP2PConnected
+        ColumnLayout {
+            anchors.centerIn: parent
+
+            BusyIndicator {
+                Layout.alignment: Qt.AlignCenter
+                Layout.preferredWidth: 48
+                Layout.preferredHeight: 48
+            }
+
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.pixelSize: 14
+                text: qsTr("Establishing connection with ") + SteamIntegration.connectedPlayerName
+            }
+        }
+    }
+    Label {
+        text: qsTr("Ready")
+        font.pixelSize: 16
+        font.bold: true
+        color: "#28d13c"
+        anchors.centerIn: parent
+        visible: SteamIntegration.connectedPlayerName !== "" && SteamIntegration.isP2PConnected
+    }
+
     // Main content
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 10
 
-        // Title
-        Label {
-            text: "Multiplayer"
-            font.bold: true
-            font.pixelSize: 18
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        // Status information
         RowLayout {
-            Label {
-                text: "Status"
-                font.pixelSize: 14
-                font.bold: true
-            }
-        }
+            opacity: ((!SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend) &&
+                      SteamIntegration.connectedPlayerName === "") ? 1 : 0
+            enabled: opacity === 1
 
-        Frame {
-            Layout.fillWidth: true
-
-            GridLayout {
-                columns: 2
-                columnSpacing: 10
-                rowSpacing: 5
-                width: parent.width
-
-                Label { text: "Multiplayer Active:" }
-                Label {
-                    text: SteamIntegration.isInMultiplayerGame ? "Yes" : "No"
-                    color: SteamIntegration.isInMultiplayerGame ? "green" : "red"
-                }
-
-                Label { text: "Role:" }
-                Label {
-                    text: SteamIntegration.isInMultiplayerGame ? (SteamIntegration.isHost ? "Host" : "Client") : "Null"
-                    visible: true
-                }
-
-                Label { text: "Connected Player:" }
-                Label {
-                    text: SteamIntegration.connectedPlayerName ? SteamIntegration.connectedPlayerName : "None"
-                    color: SteamIntegration.connectedPlayerName ? "green" : "gray"
-                }
-
-                Label { text: "Lobby Ready:" }
-                Label {
-                    text: SteamIntegration.isInMultiplayerGame ? (SteamIntegration.isLobbyReady ? "Yes" : "No") : "Null"
-                    color: SteamIntegration.isInMultiplayerGame ? (SteamIntegration.isLobbyReady ? "green" : "red") : "gray"
-                    visible: true
-                }
-
-                Label { text: "Connection Status:" }
-                Label {
-                    text: SteamIntegration.isConnecting ? "Connecting..." : "Idle"
-                    color: SteamIntegration.isConnecting ? "orange" : "black"
-                }
-
-                Label { text: "p2p:" }
-                Label {
-                    text: SteamIntegration.isP2PConnected ? "connected" : "connecting..."
-                    color: SteamIntegration.isP2PConnected ? "green" : "orange"
-                }
-            }
-        }
-
-        RowLayout {
-            visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend
             Label {
                 text: "Friends"
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 font.bold: true
             }
-
             Button {
                 text: "Refresh"
                 Layout.alignment: Qt.AlignHCenter
@@ -143,7 +108,9 @@ Popup {
         Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend
+            opacity: ((!SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend) &&
+                      SteamIntegration.connectedPlayerName === "") ? 1 : 0
+            enabled: opacity === 1
 
             ColumnLayout {
                 width: parent.width
@@ -165,6 +132,8 @@ Popup {
                         required property string steamId
                         required property int index
 
+                        property bool inviteDisabled: false
+
                         RowLayout {
                             anchors.fill: parent
                             anchors.leftMargin: 15
@@ -179,9 +148,20 @@ Popup {
                                 text: "+"
                                 Layout.preferredWidth: 25
                                 Layout.preferredHeight: 25
-                                enabled: SteamIntegration.canInviteFriend && !SteamIntegration.isLobbyReady
+                                enabled: SteamIntegration.canInviteFriend &&
+                                         !SteamIntegration.isLobbyReady &&
+                                         !delegate.inviteDisabled
                                 onClicked: {
+                                    // Disable all invite buttons
+                                    for (var i = 0; i < friendsList.count; i++) {
+                                        friendsListView.itemAtIndex(i).inviteDisabled = true;
+                                    }
+
+                                    // Invite the friend
                                     SteamIntegration.inviteFriend(delegate.steamId)
+
+                                    // Re-enable buttons after 5 seconds
+                                    inviteDisableTimer.restart();
                                 }
                             }
                         }
@@ -205,9 +185,11 @@ Popup {
             Button {
                 text: "Cancel"
                 Layout.fillWidth: true
-                enabled: SteamIntegration.isInMultiplayerGame
+                //enabled: SteamIntegration.isInMultiplayerGame
                 onClicked: {
-                    SteamIntegration.leaveLobby()
+                    if (SteamIntegration.isInMultiplayerGame) {
+                        SteamIntegration.leaveLobby()
+                    }
                     ComponentsContext.multiplayerPopupVisible = false
                 }
             }
@@ -268,6 +250,16 @@ Popup {
         }
     }
 
+    Timer {
+        id: inviteDisableTimer
+        interval: 5000
+        onTriggered: {
+            // Re-enable all invite buttons
+            for (var i = 0; i < friendsList.count; i++) {
+                friendsListView.itemAtIndex(i).inviteDisabled = false;
+            }
+        }
+    }
     // Function to show notifications
     function showNotification(text, color) {
         statusNotification.notificationText = text
