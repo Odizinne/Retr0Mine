@@ -13,6 +13,8 @@ QtObject {
 
     // New multiplayer properties
     property bool isProcessingNetworkAction: false
+    property var pendingActions: []
+    property bool minesInitialized: false
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer
@@ -283,13 +285,15 @@ QtObject {
                 }
             });
 
-            // In multiplayer, if we're the host, send mines list to client after generation
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                // Send only mines list initially
+                // Send only mines list first, before any cell actions
+                minesInitialized = true;
                 sendMinesListToClient();
 
-                // Then send the first revealed cell
-                sendCellUpdateToClient(currentIndex, "reveal");
+                // Only after sending mines, then send the first revealed cell
+                Qt.callLater(function() {
+                    sendCellUpdateToClient(currentIndex, "reveal");
+                });
             }
 
             // Disconnect the signal
@@ -794,20 +798,61 @@ QtObject {
             GameState.gridSizeY = Number(minesData.gridSizeY);
         }
 
-        // IMPORTANT: Create a clean mines array from the received data
-        const cleanMinesArray = [];
+        // IMPORTANT: Extract mines with more robust methods
+        let cleanMinesArray = [];
 
-        if (Array.isArray(minesData.mines)) {
-            // If it's an array, extract each position as a simple number
-            for (let i = 0; i < minesData.mines.length; i++) {
-                cleanMinesArray.push(Number(minesData.mines[i]));
-            }
-        } else if (typeof minesData.mines === 'object' && minesData.mines !== null) {
-            // If it's an object, extract values
-            for (let key in minesData.mines) {
-                if (minesData.mines.hasOwnProperty(key) && !isNaN(Number(minesData.mines[key]))) {
-                    cleanMinesArray.push(Number(minesData.mines[key]));
+        console.log("Raw mines data:", JSON.stringify(minesData.mines));
+        console.log("mines data type:", typeof minesData.mines);
+
+        // More robust extraction method
+        try {
+            if (Array.isArray(minesData.mines)) {
+                console.log("mines is a proper Array with length:", minesData.mines.length);
+                cleanMinesArray = minesData.mines.map(Number);
+            } else if (typeof minesData.mines === 'string') {
+                // Try to parse if it's a JSON string
+                console.log("mines is a string, trying to parse");
+                const parsed = JSON.parse(minesData.mines);
+                if (Array.isArray(parsed)) {
+                    cleanMinesArray = parsed.map(Number);
                 }
+            } else if (typeof minesData.mines === 'object' && minesData.mines !== null) {
+                console.log("mines is an object with keys:", Object.keys(minesData.mines));
+
+                // Check if it's an array-like object with numeric keys and a 'length' property
+                if (minesData.mines.hasOwnProperty('length') && typeof minesData.mines.length === 'number') {
+                    console.log("mines has length property:", minesData.mines.length);
+                    // Convert array-like object to array
+                    for (let i = 0; i < minesData.mines.length; i++) {
+                        if (minesData.mines[i] !== undefined) {
+                            cleanMinesArray.push(Number(minesData.mines[i]));
+                        }
+                    }
+                } else {
+                    // Try to extract values from object properties
+                    for (let key in minesData.mines) {
+                        if (minesData.mines.hasOwnProperty(key) && !isNaN(Number(minesData.mines[key]))) {
+                            cleanMinesArray.push(Number(minesData.mines[key]));
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("Error extracting mines:", e);
+        }
+
+        // One last attempt - try direct property access if we have nothing yet
+        if (cleanMinesArray.length === 0 && minesData.mines) {
+            console.log("Trying direct property access");
+            try {
+                // Check if mines has a property "0", "1", etc. (array-like object)
+                for (let i = 0; i < 100; i++) { // Try up to 100 potential mines
+                    if (minesData.mines[i] !== undefined) {
+                        cleanMinesArray.push(Number(minesData.mines[i]));
+                    }
+                }
+            } catch (e) {
+                console.error("Error in direct property access:", e);
             }
         }
 
@@ -817,7 +862,7 @@ QtObject {
         }
 
         console.log("Extracted clean mines array, length:", cleanMinesArray.length);
-        console.log("Mine positions (first 10):", cleanMinesArray.slice(0, 10));
+        console.log("Mine positions:", cleanMinesArray);
 
         // CRITICAL: Update the game state with our clean array
         GameState.mineCount = Number(minesData.mineCount) || cleanMinesArray.length;
@@ -859,25 +904,43 @@ QtObject {
         if (SteamIntegration.isHost) {
             // Host receives action from client
             if (actionType === "reveal") {
+                console.log("Host processing reveal action for cell:", cellIndex);
                 performReveal(cellIndex);
                 // Send individual cell update back to client
                 sendCellUpdateToClient(cellIndex, "reveal");
             } else if (actionType === "flag") {
+                console.log("Host processing flag action for cell:", cellIndex);
                 performToggleFlag(cellIndex);
                 sendCellUpdateToClient(cellIndex, "flag");
             } else if (actionType === "revealConnected") {
+                console.log("Host processing revealConnected action for cell:", cellIndex);
                 performRevealConnectedCells(cellIndex);
                 sendCellUpdateToClient(cellIndex, "revealConnected");
+            } else if (actionType === "requestSync") {
+                console.log("Client requested full sync, sending mines list");
+                sendMinesListToClient();
             }
         } else {
             // Client receives action from host
+            if (!minesInitialized && actionType !== "gameOver") {
+                // Buffer actions until mines data is received
+                console.log("Buffering action until mines data is received:", actionType, cellIndex);
+                pendingActions.push({type: actionType, index: cellIndex});
+                isProcessingNetworkAction = false;
+                return;
+            }
+
             if (actionType === "reveal") {
+                console.log("Client processing reveal action for cell:", cellIndex);
                 performReveal(cellIndex);
             } else if (actionType === "flag") {
+                console.log("Client processing flag action for cell:", cellIndex);
                 performToggleFlag(cellIndex);
             } else if (actionType === "revealConnected") {
+                console.log("Client processing revealConnected action for cell:", cellIndex);
                 performRevealConnectedCells(cellIndex);
             } else if (actionType === "gameOver") {
+                console.log("Client processing gameOver action, win status:", cellIndex);
                 // Handle game over state
                 GameState.gameOver = true;
                 GameState.gameWon = cellIndex === 1; // 1 for win, 0 for loss
@@ -917,19 +980,21 @@ QtObject {
             const success = applyMinesAndCalculateNumbers(gameState);
 
             if (success) {
-                // Reset all cells to initial state
-                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                    withCell(i, function(cell) {
-                        cell.revealed = false;
-                        cell.flagged = false;
-                        cell.questioned = false;
-                        cell.safeQuestioned = false;
+                // Mark that we have initialized mines
+                minesInitialized = true;
+
+                // Process any pending actions
+                if (pendingActions.length > 0) {
+                    console.log("Processing", pendingActions.length, "buffered actions");
+                    // Use setTimeout to process after current function finishes
+                    Qt.callLater(function() {
+                        pendingActions.forEach(function(action) {
+                            console.log("Processing buffered action:", action.type, action.index);
+                            handleNetworkAction(action.type, action.index);
+                        });
+                        pendingActions = [];
                     });
                 }
-
-                // Finish processing
-                isProcessingNetworkAction = false;
-                console.log("Mines data applied and numbers calculated successfully");
             }
             return;
         }
