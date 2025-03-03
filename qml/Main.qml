@@ -34,8 +34,6 @@ ApplicationWindow {
 
         function onConnectionSucceeded() {
             // Only show popup when joining as client (not as host)
-            console.log(SteamIntegration.isInMultiplayerGame)
-            console.log(SteamIntegration.isHost)
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 ComponentsContext.multiplayerPopupVisible = true
             }
