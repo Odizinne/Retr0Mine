@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.impl
 import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
@@ -71,6 +72,7 @@ Popup {
             }
         }
     }
+
     Label {
         text: qsTr("Ready")
         font.pixelSize: 16
@@ -78,6 +80,34 @@ Popup {
         color: "#28d13c"
         anchors.centerIn: parent
         visible: SteamIntegration.connectedPlayerName !== "" && SteamIntegration.isP2PConnected
+    }
+
+    ToolTip {
+        id: inviteSentToolTip
+        visible: true
+        x: (parent.width - width) / 2
+        y: 20
+        opacity: 0
+        contentItem: Label {
+            text: qsTr("Invite sent")
+            color: "#28d13c" // Green color
+            font.pixelSize: 14
+        }
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 200
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+        Timer {
+            id: inviteSentToolTipTimer
+            interval: 3000
+            onTriggered: {
+                inviteSentToolTip.opacity = 0
+            }
+        }
     }
 
     // Main content
@@ -125,43 +155,57 @@ Popup {
                     highlightMoveDuration: 0
                     currentIndex: 0
 
-                    delegate: ItemDelegate {
+                    delegate: Item {
                         id: delegate
                         width: friendsListView.width
+                        height: 40
                         required property string name
                         required property string steamId
                         required property int index
-
                         property bool inviteDisabled: false
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: 15
-                            anchors.rightMargin: 15
+                            anchors.leftMargin: 5
+                            anchors.rightMargin: 5
+                            IconImage {
+                                source: "qrc:/icons/steam.png"
+                                color: GameConstants.foregroundColor
+                                sourceSize.height: 16
+                                sourceSize.width: 16
+                                Layout.preferredHeight: 16
+                                Layout.preferredWidth: 16
+                            }
 
                             Label {
+                                id: friendNameLabel
                                 text: delegate.name
                                 Layout.fillWidth: true
                             }
 
                             Button {
-                                text: "+"
-                                Layout.preferredWidth: 25
-                                Layout.preferredHeight: 25
+                                Layout.preferredWidth: height
                                 enabled: SteamIntegration.canInviteFriend &&
                                          !SteamIntegration.isLobbyReady &&
                                          !delegate.inviteDisabled
                                 onClicked: {
-                                    // Disable all invite buttons
                                     for (var i = 0; i < friendsList.count; i++) {
                                         friendsListView.itemAtIndex(i).inviteDisabled = true;
                                     }
-
-                                    // Invite the friend
                                     SteamIntegration.inviteFriend(delegate.steamId)
-
-                                    // Re-enable buttons after 5 seconds
+                                    inviteSentToolTip.opacity = 1
+                                    inviteSentToolTipTimer.start()
                                     inviteDisableTimer.restart();
+                                }
+
+                                IconImage {
+                                    anchors.centerIn: parent
+                                    source: "qrc:/icons/mail.png"
+                                    color: parent.enabled ? GameConstants.foregroundColor : "grey"
+                                    sourceSize.height: 16
+                                    sourceSize.width: 16
+                                    Layout.preferredHeight: 16
+                                    Layout.preferredWidth: 16
                                 }
                             }
                         }
@@ -176,14 +220,14 @@ Popup {
             spacing: 10
 
             Button {
-                text: "Create Lobby"
+                text: qsTr("Host")
                 Layout.fillWidth: true
                 enabled: !SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting
                 onClicked: SteamIntegration.createLobby()
             }
 
             Button {
-                text: "Cancel"
+                text: qsTr("Cancel")
                 Layout.fillWidth: true
                 //enabled: SteamIntegration.isInMultiplayerGame
                 onClicked: {
@@ -195,58 +239,11 @@ Popup {
             }
 
             Button {
-                text: "Start"
+                text: qsTr("Start")
                 Layout.fillWidth: true
                 enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting && SteamIntegration.isP2PConnected
                 onClicked: ComponentsContext.multiplayerPopupVisible = false
             }
-        }
-    }
-
-    // Connection status notifications
-    Connections {
-        target: SteamIntegration
-
-        function onConnectionFailed(reason) {
-            multiplayerPopup.showNotification("Connection failed: " + reason, "red")
-        }
-
-        function onConnectionSucceeded() {
-            multiplayerPopup.showNotification("Connected successfully!", "green")
-        }
-
-        function onConnectedPlayerChanged() {
-            if (SteamIntegration.connectedPlayerName) {
-                multiplayerPopup.showNotification("Player connected: " + SteamIntegration.connectedPlayerName, "green")
-            }
-        }
-    }
-
-    // Notification area
-    Rectangle {
-        id: statusNotification
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
-        width: notificationText.width + 20
-        height: notificationText.height + 10
-        color: "green"
-        radius: 5
-        visible: false
-
-        property string notificationText: ""
-
-        Text {
-            id: notificationText
-            anchors.centerIn: parent
-            text: statusNotification.notificationText
-            color: "white"
-        }
-
-        Timer {
-            id: statusNotificationTimer
-            interval: 3000
-            onTriggered: statusNotification.visible = false
         }
     }
 
@@ -259,12 +256,5 @@ Popup {
                 friendsListView.itemAtIndex(i).inviteDisabled = false;
             }
         }
-    }
-    // Function to show notifications
-    function showNotification(text, color) {
-        statusNotification.notificationText = text
-        statusNotification.color = color
-        statusNotification.visible = true
-        statusNotificationTimer.restart()
     }
 }
