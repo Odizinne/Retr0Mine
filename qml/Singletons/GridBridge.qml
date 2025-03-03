@@ -1028,7 +1028,7 @@ QtObject {
                 return;
             }
 
-            if (!minesInitialized && actionType !== "gameOver") {
+            if (!minesInitialized && actionType !== "gameOver" && actionType !== "startGame") {
                 // Buffer actions until mines data is received
                 console.log("Buffering action until mines data is received:", actionType, cellIndex);
                 pendingActions.push({type: actionType, index: cellIndex});
@@ -1047,9 +1047,7 @@ QtObject {
                 performRevealConnectedCells(cellIndex);
             } else if (actionType === "startGame") {
                 console.log("Client received start game command from host")
-                console.log(ComponentsContext.multiplayerPopupVisible)
                 ComponentsContext.multiplayerPopupVisible = false
-                console.log(ComponentsContext.multiplayerPopupVisible)
             } else if (actionType === "gameOver") {
                 console.log("Client processing gameOver action, win status:", cellIndex);
                 // Handle game over state
