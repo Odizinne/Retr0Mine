@@ -77,7 +77,7 @@ public:
     QString getConnectedPlayerName() const { return m_connectedPlayerName; }
     bool isLobbyReady() const { return m_lobbyReady; }
     bool canInviteFriend() const { return m_initialized && m_inMultiplayerGame && m_isHost; }
-
+    void startP2PInitialization();
 private:
     // Existing members
     bool m_initialized;
@@ -105,7 +105,7 @@ private:
     void processNetworkMessages();
     void handleGameAction(const QByteArray& data);
     void handleGameState(const QByteArray& data);
-
+    void sendP2PInitPing();
     // Multiplayer state
     CSteamID m_currentLobbyId;
     CSteamID m_connectedPlayerId;
@@ -113,6 +113,8 @@ private:
     bool m_isHost;
     bool m_isConnecting;
     bool m_lobbyReady;
+    bool m_p2pInitialized;
+    QTimer m_p2pInitTimer;
     QString m_connectedPlayerName;
     QTimer m_networkTimer;
 
@@ -135,6 +137,7 @@ signals:
     void connectionFailed(QString reason);
     void connectionSucceeded();
     void inviteReceived(QString friendName, QString lobbyId);
+    void p2pInitialized();
 };
 
 struct SteamIntegrationForeign

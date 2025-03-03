@@ -12,6 +12,7 @@ SteamIntegration::SteamIntegration(QObject *parent)
     , m_isHost(false)
     , m_isConnecting(false)
     , m_lobbyReady(false)
+    , m_p2pInitialized(false)
 // Remove the STEAM_CALLBACK initializers - they're automatically handled by the macro
 {
     // Read initial difficulty from settings
@@ -21,7 +22,9 @@ SteamIntegration::SteamIntegration(QObject *parent)
     initialize();
 
     // Setup periodic network message checking
+    connect(&m_p2pInitTimer, &QTimer::timeout, this, &SteamIntegration::sendP2PInitPing);
     connect(&m_networkTimer, &QTimer::timeout, this, &SteamIntegration::processNetworkMessages);
+
     m_networkTimer.setInterval(50); // Check for network messages every 50ms
 }
 
@@ -439,6 +442,9 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
         m_connectedPlayerId = lobbyOwner;
         m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
         emit connectedPlayerChanged();
+
+        // Start P2P initialization
+        startP2PInitialization();
     }
 
     // Start P2P networking
@@ -502,6 +508,9 @@ void SteamIntegration::OnLobbyChatUpdate(LobbyChatUpdate_t *pCallback)
                 m_lobbyReady = true;
                 emit lobbyReadyChanged();
             }
+
+            // Start P2P initialization
+            startP2PInitialization();
 
             qDebug() << "SteamIntegration: Player joined lobby:" << m_connectedPlayerName;
         }
@@ -620,7 +629,33 @@ void SteamIntegration::processNetworkMessages()
             qDebug() << "SteamIntegration: Received message type:" << messageType
                      << "size:" << messageData.size() << "from:" << senderId.ConvertToUint64();
 
+            // Mark P2P as initialized on first message from either side
+            if (!m_p2pInitialized) {
+                qDebug() << "SteamIntegration: P2P connection fully established!";
+                m_p2pInitialized = true;
+                emit p2pInitialized();
+
+                // Stop the ping timer if it's running
+                m_p2pInitTimer.stop();
+            }
+
             switch (messageType) {
+            case 'P': // Ping/Pong for P2P initialization
+                if (messageData == "PING") {
+                    // Respond with PONG
+                    QByteArray response;
+                    response.append('P');
+                    response.append("PONG");
+                    SteamNetworking()->SendP2PPacket(
+                        senderId,
+                        response.constData(),
+                        response.size(),
+                        k_EP2PSendReliable
+                        );
+                }
+                // If we received a PONG, we don't need to do anything special
+                // The connection is already marked as initialized above
+                break;
             case 'A': // Action (reveal/flag)
                 handleGameAction(messageData);
                 break;
@@ -728,4 +763,44 @@ void SteamIntegration::handleGameState(const QByteArray& data)
              << "size:" << (doc.object()["mines"].isArray() ? doc.object()["mines"].toArray().size() : -1);
     qDebug() << "SteamIntegration: Numbers array in JSON:" << doc.object()["numbers"].isArray()
              << "size:" << (doc.object()["numbers"].isArray() ? doc.object()["numbers"].toArray().size() : -1);
+}
+
+void SteamIntegration::sendP2PInitPing()
+{
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid() || m_p2pInitialized) {
+        m_p2pInitTimer.stop();
+        return;
+    }
+
+    qDebug() << "SteamIntegration: Sending P2P initialization ping";
+
+    // Create a simple ping message
+    QByteArray data;
+    data.append('P'); // P for Ping
+    data.append("PING");
+
+    // Send the ping - if it fails, we'll try again on next timer tick
+    SteamNetworking()->SendP2PPacket(
+        m_connectedPlayerId,
+        data.constData(),
+        data.size(),
+        k_EP2PSendReliable
+        );
+}
+
+void SteamIntegration::startP2PInitialization()
+{
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid() || m_p2pInitialized) {
+        return;
+    }
+
+    qDebug() << "SteamIntegration: Starting P2P initialization process";
+    m_p2pInitialized = false;
+
+    // Start the ping timer - send pings until we get a response
+    m_p2pInitTimer.setInterval(500); // Try every 500ms
+    m_p2pInitTimer.start();
+
+    // Send first ping immediately
+    sendP2PInitPing();
 }

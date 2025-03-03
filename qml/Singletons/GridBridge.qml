@@ -17,6 +17,7 @@ QtObject {
     property bool minesInitialized: false
     property bool clientReadyForActions: false  // Tracks if client is ready to receive actions
     property var pendingInitialActions: []      // Stores initial actions that came with board generation
+    property bool p2pConnected: false
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer
