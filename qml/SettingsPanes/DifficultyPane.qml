@@ -7,7 +7,7 @@ import net.odizinne.retr0mine 1.0
 
 Pane {
     ColumnLayout {
-        enabled: SteamIntegration.isInMultiplayerGame ? SteamIntegration.isHost : true
+        enabled: !SteamIntegration.isInMultiplayerGame
         width: parent.width
         spacing: GameCore.isFluent ? 10 : 20
 
