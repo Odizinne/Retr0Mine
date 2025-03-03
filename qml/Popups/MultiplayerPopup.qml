@@ -240,7 +240,12 @@ Popup {
                 text: qsTr("Start")
                 Layout.fillWidth: true
                 enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting && SteamIntegration.isP2PConnected
-                onClicked: ComponentsContext.multiplayerPopupVisible = false
+                onClicked: {
+                    if (SteamIntegration.isHost) {
+                        SteamIntegration.sendGameAction("startGame", 0)
+                    }
+                    ComponentsContext.multiplayerPopupVisible = false
+                }
             }
 
             Button {
