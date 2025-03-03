@@ -703,13 +703,23 @@ QtObject {
         withCell(index, function(cell) {
             if (!cell.revealed) {
                 if (SteamIntegration.isInMultiplayerGame) {
-                    // Simplified flagging for multiplayer
-                    if (!cell.flagged) {
+                    // Modified multiplayer flagging with question marks enabled
+                    if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
                         cell.flagged = true;
+                        cell.questioned = false;
+                        cell.safeQuestioned = false;
                         GameState.flaggedCount++;
-                    } else {
+                    } else if (cell.flagged) {
+                        // Always enable question marks in multiplayer
                         cell.flagged = false;
+                        cell.questioned = true;
+                        cell.safeQuestioned = false;
                         GameState.flaggedCount--;
+                    } else if (cell.questioned) {
+                        cell.questioned = false;
+                    } else if (cell.safeQuestioned) {
+                        // In multiplayer, always go from question mark back to empty (no safe question marks)
+                        cell.safeQuestioned = false;
                     }
                 } else {
                     // Original single-player flagging logic
