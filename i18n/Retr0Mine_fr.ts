@@ -275,15 +275,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="615"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="622"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="629"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="625"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="632"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="639"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="639"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="645"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="649"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="655"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -423,47 +423,52 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>MultiplayerPopup</name>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="72"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="75"/>
+        <source> is generating grid...</source>
+        <translation> génère la grille...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="76"/>
         <source>Establishing connection with </source>
         <translation>Connexion en cours avec </translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="78"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="82"/>
         <source>Ready</source>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="78"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="82"/>
         <source>Waiting for host</source>
         <translation>En attente de l&apos;hôte</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="93"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="97"/>
         <source>Invite sent</source>
         <translation>Invitation envoyée</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="126"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="130"/>
         <source>Friends</source>
         <translation>Contacts</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="132"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="136"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="229"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="233"/>
         <source>Host</source>
         <translation>Héberger</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="254"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="262"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="240"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="244"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>
