@@ -560,8 +560,9 @@ QtObject {
             GameState.gameWon = true;
             GameTimer.stop();
 
-            // Disable leaderboard updates in multiplayer
+            // Skip ALL leaderboard and achievement updates in multiplayer
             if (!SteamIntegration.isInMultiplayerGame) {
+                // Leaderboard updates for single player only
                 let leaderboardData = GameCore.loadGameState("leaderboard.json");
                 let leaderboard = {};
 
@@ -602,6 +603,7 @@ QtObject {
 
                 GameCore.saveLeaderboard(JSON.stringify(leaderboard));
 
+                // Achievement updates for single player only
                 if (!GameState.isManuallyLoaded) {
                     if (SteamIntegration.initialized) {
                         const difficulty = GameState.getDifficultyLevel();
@@ -651,6 +653,7 @@ QtObject {
                 }
             }
 
+            // Always display post-game UI for both single player and multiplayer
             GameState.displayPostGame = true;
             if (audioEngine) audioEngine.playWin();
 
