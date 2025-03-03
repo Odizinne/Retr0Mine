@@ -9,6 +9,7 @@ Pane {
         width: parent.width
 
         RowLayout {
+            enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
             Label {
                 text: qsTr("Style")

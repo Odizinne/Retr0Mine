@@ -71,6 +71,7 @@ Pane {
         }
 
         RowLayout {
+            enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
             Label {
                 text: qsTr("Enable question marks")
@@ -98,6 +99,7 @@ Pane {
         }
 
         RowLayout {
+            enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
             Label {
                 text: qsTr("Enable green question marks")
