@@ -22,5 +22,6 @@
         <file>info.png</file>
         <file>steam.png</file>
         <file>github.png</file>
+        <file>mail.png</file>
     </qresource>
 </RCC>
