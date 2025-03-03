@@ -224,7 +224,7 @@ Popup {
 
             Button {
                 id: hostButton
-                visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost
+                visible: !SteamIntegration.isInMultiplayerGame
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Host")
                 Layout.fillWidth: true
@@ -234,6 +234,7 @@ Popup {
 
             Button {
                 id: startButton
+                visible: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
                 Layout.fillWidth: true
