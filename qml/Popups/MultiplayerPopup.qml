@@ -84,7 +84,9 @@ Popup {
         font.bold: true
         color: "#28d13c"
         anchors.centerIn: parent
-        visible: SteamIntegration.connectedPlayerName !== "" && SteamIntegration.isP2PConnected && GridBridge.clientGridReady
+        visible: SteamIntegration.connectedPlayerName !== "" &&
+                 SteamIntegration.isP2PConnected &&
+                 (SteamIntegration.isHost ? GridBridge.clientGridReady : true)
     }
 
     ToolTip {

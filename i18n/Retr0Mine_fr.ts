@@ -443,32 +443,32 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>En attente de l&apos;hôte</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="97"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="99"/>
         <source>Invite sent</source>
         <translation>Invitation envoyée</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="130"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="132"/>
         <source>Friends</source>
         <translation>Contacts</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="136"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="138"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="233"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="235"/>
         <source>Host</source>
         <translation>Héberger</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="262"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="264"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="244"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="246"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>
