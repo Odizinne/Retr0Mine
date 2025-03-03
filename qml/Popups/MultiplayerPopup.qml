@@ -15,7 +15,7 @@ Popup {
     closePolicy: Popup.NoAutoClose
     anchors.centerIn: parent
     visible: ComponentsContext.multiplayerPopupVisible
-
+    property int buttonWidth: Math.max(hostButton.width, cancelButton.width, startButton.width)
     property bool refreshing: false
 
     // Close function
@@ -58,6 +58,7 @@ Popup {
         visible: SteamIntegration.connectedPlayerName !== "" && !SteamIntegration.isP2PConnected
         ColumnLayout {
             anchors.centerIn: parent
+            spacing: 15
 
             BusyIndicator {
                 Layout.alignment: Qt.AlignCenter
@@ -222,6 +223,8 @@ Popup {
             spacing: 10
 
             Button {
+                id: hostButton
+                Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Host")
                 Layout.fillWidth: true
                 enabled: !SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting
@@ -229,9 +232,10 @@ Popup {
             }
 
             Button {
+                id: cancelButton
+                Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Cancel")
                 Layout.fillWidth: true
-                //enabled: SteamIntegration.isInMultiplayerGame
                 onClicked: {
                     if (SteamIntegration.isInMultiplayerGame) {
                         SteamIntegration.leaveLobby()
@@ -241,6 +245,8 @@ Popup {
             }
 
             Button {
+                id: startButton
+                Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
                 Layout.fillWidth: true
                 enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting && SteamIntegration.isP2PConnected
