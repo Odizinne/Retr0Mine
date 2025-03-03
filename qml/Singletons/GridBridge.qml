@@ -689,37 +689,49 @@ QtObject {
 
         withCell(index, function(cell) {
             if (!cell.revealed) {
-                if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
-                    cell.flagged = true;
-                    cell.questioned = false;
-                    cell.safeQuestioned = false;
-                    GameState.flaggedCount++;
-                } else if (cell.flagged) {
-                    if (GameSettings.enableQuestionMarks) {
-                        cell.flagged = false;
-                        cell.questioned = true;
-                        cell.safeQuestioned = false;
-                        GameState.flaggedCount--;
-                    } else if (GameSettings.enableSafeQuestionMarks) {
-                        cell.flagged = false;
-                        cell.questioned = false;
-                        cell.safeQuestioned = true;
-                        GameState.flaggedCount--;
+                if (SteamIntegration.isInMultiplayerGame) {
+                    // Simplified flagging for multiplayer
+                    if (!cell.flagged) {
+                        cell.flagged = true;
+                        GameState.flaggedCount++;
                     } else {
                         cell.flagged = false;
-                        cell.questioned = false;
-                        cell.safeQuestioned = false;
                         GameState.flaggedCount--;
                     }
-                } else if (cell.questioned) {
-                    if (GameSettings.enableSafeQuestionMarks) {
+                } else {
+                    // Original single-player flagging logic
+                    if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
+                        cell.flagged = true;
                         cell.questioned = false;
-                        cell.safeQuestioned = true;
-                    } else {
-                        cell.questioned = false;
+                        cell.safeQuestioned = false;
+                        GameState.flaggedCount++;
+                    } else if (cell.flagged) {
+                        if (GameSettings.enableQuestionMarks) {
+                            cell.flagged = false;
+                            cell.questioned = true;
+                            cell.safeQuestioned = false;
+                            GameState.flaggedCount--;
+                        } else if (GameSettings.enableSafeQuestionMarks) {
+                            cell.flagged = false;
+                            cell.questioned = false;
+                            cell.safeQuestioned = true;
+                            GameState.flaggedCount--;
+                        } else {
+                            cell.flagged = false;
+                            cell.questioned = false;
+                            cell.safeQuestioned = false;
+                            GameState.flaggedCount--;
+                        }
+                    } else if (cell.questioned) {
+                        if (GameSettings.enableSafeQuestionMarks) {
+                            cell.questioned = false;
+                            cell.safeQuestioned = true;
+                        } else {
+                            cell.questioned = false;
+                        }
+                    } else if (cell.safeQuestioned) {
+                        cell.safeQuestioned = false;
                     }
-                } else if (cell.safeQuestioned) {
-                    cell.safeQuestioned = false;
                 }
             }
         });

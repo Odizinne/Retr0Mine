@@ -8,6 +8,7 @@ Menu {
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     MenuItem {
         text: qsTr("New game")
+        enabled: !(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)
         onTriggered: {
             GameState.difficultyChanged = false
             GridBridge.initGame()
@@ -16,19 +17,20 @@ Menu {
 
     MenuItem {
         text: qsTr("Save game")
-        enabled: GameState.gameStarted && !GameState.gameOver
+        enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
         onTriggered: ComponentsContext.savePopupVisible = true
     }
 
     MenuItem {
         id: loadMenu
         text: qsTr("Load game")
+        enabled: !SteamIntegration.isInMultiplayerGame
         onTriggered: ComponentsContext.loadPopupVisible = true
     }
 
     MenuItem {
         text: qsTr("Hint")
-        enabled: GameState.gameStarted && !GameState.gameOver
+        enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
         onTriggered: GridBridge.requestHint()
     }
 
