@@ -26,6 +26,7 @@ class SteamIntegration : public QObject
     Q_PROPERTY(bool isConnecting READ isConnecting NOTIFY connectingStatusChanged)
     Q_PROPERTY(bool isLobbyReady READ isLobbyReady NOTIFY lobbyReadyChanged)
     Q_PROPERTY(bool canInviteFriend READ canInviteFriend NOTIFY canInviteFriendChanged)
+    Q_PROPERTY(bool isP2PConnected READ isP2PConnected NOTIFY p2pInitialized)
 
 public:
     explicit SteamIntegration(QObject *parent = nullptr);
@@ -77,6 +78,7 @@ public:
     QString getConnectedPlayerName() const { return m_connectedPlayerName; }
     bool isLobbyReady() const { return m_lobbyReady; }
     bool canInviteFriend() const { return m_initialized && m_inMultiplayerGame && m_isHost; }
+    bool isP2PConnected() const { return m_p2pInitialized; }
     void startP2PInitialization();
 private:
     // Existing members

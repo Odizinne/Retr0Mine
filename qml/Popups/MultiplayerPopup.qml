@@ -114,6 +114,12 @@ Popup {
                     text: SteamIntegration.isConnecting ? "Connecting..." : "Idle"
                     color: SteamIntegration.isConnecting ? "orange" : "black"
                 }
+
+                Label { text: "p2p:" }
+                Label {
+                    text: SteamIntegration.isP2PConnected ? "connected" : "connecting..."
+                    color: SteamIntegration.isP2PConnected ? "green" : "orange"
+                }
             }
         }
 
