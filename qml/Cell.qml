@@ -10,7 +10,7 @@ Item {
     row: Math.floor(index / GameState.gridSizeX)
     col: index % GameState.gridSizeX
     opacity: 1
-    enabled: !(GridBridge.isProcessingNetworkAction && !SteamIntegration.isHost) && !GameState.isGeneratingGrid
+    enabled: !GameState.isGeneratingGrid
     property alias button: cellButton
     required property int index
 
@@ -282,7 +282,7 @@ Item {
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-
+            enabled: !(GridBridge.isProcessingNetworkAction && !SteamIntegration.isHost)
             function handleCellClick(mouse) {
                 if (!GameState.gameStarted) {
                     GridBridge.reveal(cellItem.index);
