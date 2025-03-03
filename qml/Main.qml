@@ -109,7 +109,8 @@ ApplicationWindow {
             // when the board is actually generated in onBoardGenerated
 
             // Continue with normal game initialization for single player
-            if (!SteamIntegration.isInMultiplayerGame) {
+            if (!SteamIntegration.isInMultiplayerGame && GameState.firstRun) {
+                GameState.firstRun = false
                 root.checkInitialGameState();
             }
         }
@@ -389,8 +390,6 @@ ApplicationWindow {
     }
 
     function checkInitialGameState() {
-        if (!GameState.gridFullyInitialized) return
-
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (internalSaveData) {
             if (SaveManager.loadGame(internalSaveData)) {

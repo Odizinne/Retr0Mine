@@ -35,8 +35,7 @@ Item {
         diagonalSum = row + col
 
         GridBridge.cellsCreated++
-        if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY && !GameState.gridFullyInitialized) {
-            GameState.gridFullyInitialized = true
+        if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
             Qt.callLater(function() {
                 ComponentsContext.allCellsReady()
             })

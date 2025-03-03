@@ -29,8 +29,8 @@ QtObject {
     }
     property int cellSpacing: 2
     property int currentHintCount: 0
-    property bool gridFullyInitialized: false
     property bool isManuallyLoaded: false
+    property bool firstRun: true
     property bool noAnimReset: false
     property bool blockAnim: true
     readonly property var difficultySettings: [
