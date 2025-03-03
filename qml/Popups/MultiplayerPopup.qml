@@ -206,12 +206,16 @@ Popup {
                 text: "Cancel"
                 Layout.fillWidth: true
                 enabled: SteamIntegration.isInMultiplayerGame
-                onClicked: SteamIntegration.leaveLobby()
+                onClicked: {
+                    SteamIntegration.leaveLobby()
+                    ComponentsContext.multiplayerPopupVisible = false
+                }
             }
 
             Button {
-                text: "Close"
+                text: "Start"
                 Layout.fillWidth: true
+                enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting && SteamIntegration.isP2PConnected
                 onClicked: ComponentsContext.multiplayerPopupVisible = false
             }
         }
