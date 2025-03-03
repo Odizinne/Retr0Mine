@@ -39,7 +39,7 @@ RowLayout {
         Label {
             id: elapsedTimeLabel
             text: GameTimer.displayTime
-            visible: GameSettings.displayTimer
+            visible: GameSettings.displayTimer && !SteamIntegration.isInMultiplayerGame
             font.pixelSize: 18
             font.family: GameConstants.numberFont.name
             Layout.alignment: Qt.AlignCenter
