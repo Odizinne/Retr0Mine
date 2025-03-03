@@ -123,13 +123,13 @@ Popup {
             enabled: opacity === 1
 
             Label {
-                text: "Friends"
+                text: qsTr("Friends")
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 font.bold: true
             }
             Button {
-                text: "Refresh"
+                text: qsTr("Refresh")
                 Layout.alignment: Qt.AlignHCenter
                 enabled: !multiplayerPopup.refreshing
                 onClicked: multiplayerPopup.refreshFriendsList()
