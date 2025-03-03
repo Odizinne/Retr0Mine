@@ -120,9 +120,13 @@ ApplicationWindow {
         function onAllCellsReady() {
             console.log("All cells ready, count:", GridBridge.cellsCreated);
 
-            // If we're in a multiplayer lobby as host and cells are ready
-            // We don't need to immediately send state - we'll handle this
-            // when the board is actually generated in onBoardGenerated
+            // If in multiplayer as client, notify host that grid is ready
+            if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+                // Only send if the cell count matches expected grid size
+                if (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) {
+                    GridBridge.notifyGridReady();
+                }
+            }
 
             // Continue with normal game initialization for single player
             if (!SteamIntegration.isInMultiplayerGame && GameState.firstRun) {
