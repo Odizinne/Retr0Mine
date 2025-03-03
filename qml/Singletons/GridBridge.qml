@@ -1315,8 +1315,13 @@ QtObject {
     function prepareMultiplayerGrid(gridX, gridY, mineCount) {
         console.log("Preparing multiplayer grid:", gridX, "x", gridY, "mines:", mineCount);
 
-        // Reset cells created to ensure proper grid loading
-        cellsCreated = 0;
+        // Only reset cellsCreated if grid dimensions have changed
+        if (GameState.gridSizeX !== gridX || GameState.gridSizeY !== gridY) {
+            console.log("Grid dimensions changed - resetting cellsCreated counter");
+            cellsCreated = 0;
+        } else {
+            console.log("Grid dimensions unchanged - keeping existing cells");
+        }
 
         // Update grid dimensions and mine count
         GameState.gridSizeX = gridX;
