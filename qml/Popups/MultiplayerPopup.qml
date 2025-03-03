@@ -168,13 +168,15 @@ Popup {
                             anchors.fill: parent
                             anchors.leftMargin: 5
                             anchors.rightMargin: 5
+                            spacing: 10
                             IconImage {
                                 source: "qrc:/icons/steam.png"
                                 color: GameConstants.foregroundColor
-                                sourceSize.height: 16
-                                sourceSize.width: 16
-                                Layout.preferredHeight: 16
-                                Layout.preferredWidth: 16
+                                sourceSize.height: 14
+                                sourceSize.width: 14
+                                Layout.preferredHeight: 14
+                                Layout.preferredWidth: 14
+                                Layout.topMargin: 2
                             }
 
                             Label {
