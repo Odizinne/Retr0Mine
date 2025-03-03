@@ -391,31 +391,31 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="40"/>
-        <source>Coop</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/MainMenu.qml" line="45"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="50"/>
+        <location filename="../qml/MainMenu.qml" line="45"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="55"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="62"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
+        <source>Coop (beta)</source>
+        <translation>Coop (beta)</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="55"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="69"/>
+        <location filename="../qml/MainMenu.qml" line="62"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>

@@ -52,7 +52,7 @@ bool SteamIntegration::initialize()
 
     // Add this line to check for connect_lobby parameters right after initialization
     // We only want to do this ONCE at startup, not repeatedly
-    QTimer::singleShot(500, this, &SteamIntegration::checkForPendingInvites);
+    //QTimer::singleShot(500, this, &SteamIntegration::checkForPendingInvites);
 
     // Initial rich presence update
     updateRichPresence();
