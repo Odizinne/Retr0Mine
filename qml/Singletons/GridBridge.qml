@@ -485,6 +485,21 @@ QtObject {
             cancelGeneration();
         }
 
+        // Reset multiplayer state
+        if (SteamIntegration.isInMultiplayerGame) {
+            // If host, notify client about game reset
+            if (SteamIntegration.isHost) {
+                console.log("Host notifying client about game reset");
+                SteamIntegration.sendGameAction("resetGame", 0);
+            }
+
+            minesInitialized = false;
+            clientReadyForActions = false;
+            pendingInitialActions = [];
+            pendingActions = [];
+            isProcessingNetworkAction = false;
+        }
+
         GameState.blockAnim = false;
         GameState.mines = [];
         GameState.numbers = [];
@@ -505,6 +520,14 @@ QtObject {
                 cell.flagged = false;
                 cell.questioned = false;
                 cell.safeQuestioned = false;
+            });
+        }
+
+        // If client in multiplayer, request sync from host
+        if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+            console.log("Client requesting sync for new game");
+            Qt.callLater(function() {
+                requestFullSync();
             });
         }
 
@@ -985,7 +1008,45 @@ QtObject {
                     console.log("Checking if client has processed mines");
                     SteamIntegration.sendGameAction("minesReady", 0);
                 });
-            }
+                // Inside handleNetworkAction, in the client section
+                } else if (actionType === "resetGame") {
+                    console.log("Client received game reset notification");
+
+                    // Reset client-side state
+                    minesInitialized = false;
+                    pendingActions = [];
+                    isProcessingNetworkAction = false;
+                    GameState.mines = [];
+                    GameState.numbers = [];
+                    GameState.gameOver = false;
+                    GameState.gameStarted = false;
+                    GameState.revealedCount = 0;
+                    GameState.flaggedCount = 0;
+
+                    // Reset all grid cells
+                    for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                        withCell(i, function(cell) {
+                            cell.revealed = false;
+                            cell.flagged = false;
+                            cell.questioned = false;
+                            cell.safeQuestioned = false;
+                        });
+                    }
+
+                    // Start grid reset animation if enabled
+                    if (GameSettings.animations && !GameState.difficultyChanged) {
+                        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                            withCell(i, function(cell) {
+                                cell.startGridResetAnimation();
+                            });
+                        }
+                    }
+
+                    // Request sync from host
+                    Qt.callLater(function() {
+                        requestFullSync();
+                    });
+                }
         } else {
             // Client receives action from host
             if (actionType === "minesReady") {
