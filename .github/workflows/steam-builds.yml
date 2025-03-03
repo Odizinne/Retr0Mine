@@ -2,8 +2,6 @@ name: Steam build linux and windows
 
 on:
   push:
-    branches:
-      - main
 
 env:
   QT_VERSION: '6.8.2'
