@@ -1080,7 +1080,7 @@ QtObject {
                         });
                     }
                 }
-
+                GameState.displayPostGame = false
                 // Request sync from host
                 Qt.callLater(function() {
                     requestFullSync();
