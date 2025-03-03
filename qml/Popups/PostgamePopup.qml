@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import net.odizinne.retr0mine 1.0
 
 Popup {
     anchors.centerIn: parent
@@ -13,7 +14,7 @@ Popup {
 
     Shortcut {
         sequence: "Return"
-        enabled: control.visible
+        enabled: control.visible && retryButton.visible
         onActivated: retryButton.clicked()
     }
 
@@ -27,6 +28,7 @@ Popup {
         anchors.fill: parent
         columns: 2
         rowSpacing: 15
+
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             text: GameState.postgameText
@@ -56,11 +58,24 @@ Popup {
             font.pixelSize: 13
         }
 
+        // If multiplayer client, show waiting message
+        Label {
+            id: clientWaitingLabel
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            text: qsTr("Waiting for host to start new game...")
+            visible: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost
+            Layout.columnSpan: 2
+            font.pixelSize: 13
+            font.italic: true
+        }
+
         Button {
             id: retryButton
             text: qsTr("Retry")
             Layout.fillWidth: true
             Layout.preferredWidth: control.buttonWidth
+            // Hide the retry button for multiplayer clients
+            visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost
             onClicked: {
                 GameState.difficultyChanged = false
                 GridBridge.initGame()
@@ -74,6 +89,8 @@ Popup {
             id: closeButton
             text: qsTr("Close")
             Layout.fillWidth: true
+            // If no retry button (client), expand this button to full width
+            Layout.columnSpan: retryButton.visible ? 1 : 2
             Layout.preferredWidth: control.buttonWidth
             onClicked: {
                 GameState.difficultyChanged = false
