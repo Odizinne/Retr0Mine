@@ -1296,4 +1296,35 @@ QtObject {
 
         return true;
     }
+
+    function prepareMultiplayerGrid(gridX, gridY, mineCount) {
+        console.log("Preparing multiplayer grid:", gridX, "x", gridY, "mines:", mineCount);
+
+        // Reset cells created to ensure proper grid loading
+        cellsCreated = 0;
+
+        // Update grid dimensions and mine count
+        GameState.gridSizeX = gridX;
+        GameState.gridSizeY = gridY;
+        GameState.mineCount = mineCount;
+
+        // Mark this as a multiplayer game setup
+        GameState.difficultyChanged = true;
+    }
+
+    function handleMultiplayerGridSync(data) {
+        console.log("Received multiplayer grid sync data:", JSON.stringify(data));
+
+        // Prepare the grid with received parameters
+        prepareMultiplayerGrid(
+            data.gridSizeX,
+            data.gridSizeY,
+            data.mineCount
+        );
+
+        // Send acknowledgment back to host
+        if (!SteamIntegration.isHost) {
+            SteamIntegration.sendGameAction("gridSyncAck", 0);
+        }
+    }
 }

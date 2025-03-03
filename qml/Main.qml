@@ -32,6 +32,39 @@ ApplicationWindow {
     Connections {
         target: SteamIntegration
 
+        function onGameStateReceived(gameState) {
+            // Check if this is a grid sync packet
+            if (gameState.gridSync) {
+                console.log("Received grid sync game state");
+                GridBridge.handleMultiplayerGridSync(gameState);
+            }
+        }
+
+        function onLobbyReadyChanged() {
+            if (SteamIntegration.isLobbyReady) {
+                console.log("Lobby ready, initializing multiplayer game");
+
+                if (SteamIntegration.isHost) {
+                    // Get current host's difficulty settings
+                    const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
+
+                    // Prepare grid sync data packet
+                    const gridSyncData = {
+                        gridSync: true,
+                        gridSizeX: difficultySet.x,
+                        gridSizeY: difficultySet.y,
+                        mineCount: difficultySet.mines
+                    };
+
+                    console.log("Sending grid sync:", JSON.stringify(gridSyncData));
+                    SteamIntegration.sendGameState(gridSyncData);
+                } else {
+                    // Client will wait for grid sync from host
+                    console.log("Client waiting for grid sync");
+                }
+            }
+        }
+
         function onConnectionSucceeded() {
             // Only show popup when joining as client (not as host)
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
@@ -64,23 +97,6 @@ ApplicationWindow {
 
                 // Return to single player after leaving multiplayer
                 GridBridge.initGame();
-            }
-        }
-
-        function onLobbyReadyChanged() {
-            if (SteamIntegration.isLobbyReady) {
-                console.log("Lobby ready, initializing game");
-
-                if (SteamIntegration.isHost) {
-                    // Host needs to properly initialize the game
-                    GridBridge.initGame();
-
-                    // No need to immediately send state - we'll send mines after generation
-                    // This is now handled in the onBoardGenerated function in GridBridge
-                } else {
-                    // Client just needs to wait for mines list from host
-                    console.log("Client waiting for mines data");
-                }
             }
         }
 
