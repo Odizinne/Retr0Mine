@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QCoreApplication>
 
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
@@ -13,7 +14,6 @@ SteamIntegration::SteamIntegration(QObject *parent)
     , m_isConnecting(false)
     , m_lobbyReady(false)
     , m_p2pInitialized(false)
-// Remove the STEAM_CALLBACK initializers - they're automatically handled by the macro
 {
     // Read initial difficulty from settings
     QSettings settings("Odizinne", "Retr0Mine");
@@ -24,6 +24,11 @@ SteamIntegration::SteamIntegration(QObject *parent)
     // Setup periodic network message checking
     connect(&m_p2pInitTimer, &QTimer::timeout, this, &SteamIntegration::sendP2PInitPing);
     connect(&m_networkTimer, &QTimer::timeout, this, &SteamIntegration::processNetworkMessages);
+
+    // Create a Steam callback timer to ensure callbacks are processed regularly
+    QTimer* callbackTimer = new QTimer(this);
+    connect(callbackTimer, &QTimer::timeout, this, &SteamIntegration::runCallbacks);
+    callbackTimer->start(100); // Process Steam callbacks every 100ms
 
     m_networkTimer.setInterval(50); // Check for network messages every 50ms
 }
@@ -44,6 +49,10 @@ bool SteamIntegration::initialize()
     }
     m_initialized = true;
     updatePlayerName();
+
+    // Add this line to check for connect_lobby parameters right after initialization
+    // We only want to do this ONCE at startup, not repeatedly
+    QTimer::singleShot(500, this, &SteamIntegration::checkForPendingInvites);
 
     // Initial rich presence update
     updateRichPresence();
@@ -446,9 +455,19 @@ void SteamIntegration::joinLobbyWithFriend(const QString& friendIdStr)
 void SteamIntegration::leaveLobby()
 {
     qDebug() << "SteamIntegration: Leaving lobby";
-    if (!m_initialized || !m_inMultiplayerGame)
+    if (!m_initialized)
         return;
 
+    // Even if we think we're not in a multiplayer game, try to clean up
+    // This helps with edge cases where the state got out of sync
+
+    // If we have a valid lobby ID, try to leave it directly first
+    if (m_currentLobbyId.IsValid()) {
+        qDebug() << "SteamIntegration: Leaving lobby ID:" << m_currentLobbyId.ConvertToUint64();
+        SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
+    }
+
+    // Then do thorough cleanup
     cleanupMultiplayerSession();
 }
 
@@ -621,23 +640,36 @@ void SteamIntegration::OnGameOverlayActivated(GameOverlayActivated_t *pCallback)
 
 void SteamIntegration::OnGameLobbyJoinRequested(GameLobbyJoinRequested_t *pCallback)
 {
-    // This callback is triggered when the player accepts a lobby invite from Steam
-    qDebug() << "SteamIntegration: Game lobby join requested for lobby:" << pCallback->m_steamIDLobby.ConvertToUint64();
+    // This callback is triggered when the player accepts a lobby invite from the Steam overlay
+    uint64 lobbyID = pCallback->m_steamIDLobby.ConvertToUint64();
+    qDebug() << "SteamIntegration: Game lobby join requested for lobby:" << lobbyID;
 
     if (m_inMultiplayerGame) {
         // Already in a game, need to leave first
         qDebug() << "SteamIntegration: Already in a game, leaving first";
         leaveLobby();
+
+        // Give a little time for cleanup before joining
+        QTimer::singleShot(500, [this, lobbyID]() {
+            // Join the requested lobby after cleanup
+            m_isConnecting = true;
+            emit connectingStatusChanged();
+
+            SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(CSteamID(lobbyID));
+            m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
+
+            qDebug() << "SteamIntegration: Join requested lobby call made after leaving previous game";
+        });
+    } else {
+        // Join the requested lobby immediately
+        m_isConnecting = true;
+        emit connectingStatusChanged();
+
+        SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(pCallback->m_steamIDLobby);
+        m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
+
+        qDebug() << "SteamIntegration: Join requested lobby call made, waiting for callback";
     }
-
-    // Join the requested lobby
-    m_isConnecting = true;
-    emit connectingStatusChanged();
-
-    SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(pCallback->m_steamIDLobby);
-    m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
-
-    qDebug() << "SteamIntegration: Join requested lobby call made, waiting for callback";
 }
 
 void SteamIntegration::processNetworkMessages()
@@ -842,4 +874,76 @@ void SteamIntegration::startP2PInitialization()
 
     // Send first ping immediately
     sendP2PInitPing();
+}
+
+void SteamIntegration::checkForPendingInvites()
+{
+    if (!m_initialized) {
+        qDebug() << "SteamIntegration: Cannot check for pending invites - Steam not initialized";
+        return;
+    }
+
+    if (m_inMultiplayerGame) {
+        qDebug() << "SteamIntegration: Already in multiplayer game, not checking pending invites";
+        return;
+    }
+
+    qDebug() << "SteamIntegration: Checking for pending invites...";
+
+    // METHOD 1: Check command line arguments for +connect_lobby parameter
+    QStringList args = QCoreApplication::arguments();
+    qDebug() << "SteamIntegration: Command line args:" << args.join(" ");
+
+    QString lobbyIdStr;
+    for (int i = 0; i < args.size(); i++) {
+        QString arg = args[i];
+        if (arg.startsWith("+connect_lobby")) {
+            // Handle both "+connect_lobby 12345" and "+connect_lobby=12345" formats
+            if (arg == "+connect_lobby" && i + 1 < args.size()) {
+                lobbyIdStr = args[i + 1];
+            } else if (arg.startsWith("+connect_lobby=")) {
+                lobbyIdStr = arg.mid(15); // Extract ID after '='
+            }
+
+            qDebug() << "SteamIntegration: Found connect_lobby arg with value:" << lobbyIdStr;
+            break;
+        }
+    }
+
+    if (!lobbyIdStr.isEmpty()) {
+        bool ok;
+        uint64 lobbyId = lobbyIdStr.toULongLong(&ok);
+        if (ok && lobbyId != 0) {
+            qDebug() << "SteamIntegration: Joining lobby from command line:" << lobbyId;
+            acceptInvite(QString::number(lobbyId));
+            return;
+        }
+    }
+
+    // METHOD 2: Check if we have a valid lobby from SteamGameCoordinator
+    if (SteamUtils()) {
+        // Check for pending invites through the Steam API
+        uint32 appID = SteamUtils()->GetAppID();
+        qDebug() << "SteamIntegration: AppID:" << appID;
+
+        // METHOD 3: Check for any lobby the user has recently been invited to
+        // GetLobbyByIndex returns a CSteamID directly, not a bool with output parameter
+        CSteamID lobbyId = SteamMatchmaking()->GetLobbyByIndex(0);
+        if (lobbyId.IsValid()) {
+            // Verify this is a recent invite to our game
+            const char* gameIdStr = SteamMatchmaking()->GetLobbyData(lobbyId, "game");
+            if (gameIdStr && QString(gameIdStr) == "Retr0Mine") {
+                qDebug() << "SteamIntegration: Found pending Retr0Mine lobby invite:" << lobbyId.ConvertToUint64();
+                acceptInvite(QString::number(lobbyId.ConvertToUint64()));
+                return;
+            }
+        }
+    }
+
+    qDebug() << "SteamIntegration: No pending invites found through automatic methods";
+
+    // IMPORTANT: This method is only called once at startup to handle the case
+    // where the game was launched by clicking on an invite.
+    // For invites received while the game is running, we rely on the
+    // OnGameLobbyJoinRequested callback which is automatically triggered by Steam.
 }
