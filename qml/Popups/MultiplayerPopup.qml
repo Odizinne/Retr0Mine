@@ -17,16 +17,15 @@ Popup {
 
     property bool refreshing: false
 
+    // Close function
     function close() {
         ComponentsContext.multiplayerPopupVisible = false
     }
 
+    // Refresh the friends list when popup is opened
     onVisibleChanged: {
         if (visible) {
             refreshFriendsList()
-            if(!SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting) {
-                SteamIntegration.createLobby()
-            }
         }
     }
 
@@ -48,15 +47,18 @@ Popup {
         refreshing = false
     }
 
+    // Data model for friends list
     ListModel {
         id: friendsList
     }
 
+    // Main content
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 10
 
+        // Title
         Label {
             text: "Multiplayer"
             font.bold: true
@@ -64,17 +66,12 @@ Popup {
             Layout.alignment: Qt.AlignHCenter
         }
 
+        // Status information
         RowLayout {
             Label {
                 text: "Status"
                 font.pixelSize: 14
                 font.bold: true
-                Layout.fillWidth: true
-            }
-
-            Label {
-                text: SteamIntegration.isConnecting ? "Connecting..." : "Ready"
-                color: SteamIntegration.isConnecting ? "orange" : "Green"
             }
         }
 
@@ -121,7 +118,7 @@ Popup {
         }
 
         RowLayout {
-            visible: !SteamIntegration.isInMultiplayerGame && SteamIntegration.canInviteFriend && !SteamIntegration.connectedPlayerName
+            visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend
             Label {
                 text: "Friends"
                 Layout.fillWidth: true
@@ -140,7 +137,7 @@ Popup {
         Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            visible: !SteamIntegration.isInMultiplayerGame && SteamIntegration.canInviteFriend && !SteamIntegration.connectedPlayerName
+            visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend
 
             ColumnLayout {
                 width: parent.width
@@ -176,7 +173,7 @@ Popup {
                                 text: "+"
                                 Layout.preferredWidth: 25
                                 Layout.preferredHeight: 25
-                                enabled: SteamIntegration.canInviteFriend && !SteamIntegration.isLobbyReady && !SteamIntegration.connectedPlayerName
+                                enabled: SteamIntegration.canInviteFriend && !SteamIntegration.isLobbyReady
                                 onClicked: {
                                     SteamIntegration.inviteFriend(delegate.steamId)
                                 }
@@ -192,31 +189,24 @@ Popup {
             Layout.fillWidth: true
             spacing: 10
 
-            //Button {
-            //    text: "Create Lobby"
-            //    Layout.fillWidth: true
-            //    enabled: !SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting
-            //    onClicked: SteamIntegration.createLobby()
-            //}
+            Button {
+                text: "Create Lobby"
+                Layout.fillWidth: true
+                enabled: !SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting
+                onClicked: SteamIntegration.createLobby()
+            }
 
             Button {
                 text: "Cancel"
                 Layout.fillWidth: true
                 enabled: SteamIntegration.isInMultiplayerGame
-                onClicked: {
-                    SteamIntegration.leaveLobby()
-                    ComponentsContext.multiplayerPopupVisible = false
-                }
-
+                onClicked: SteamIntegration.leaveLobby()
             }
 
             Button {
-                text: "Start"
+                text: "Close"
                 Layout.fillWidth: true
-                enabled: SteamIntegration.connectedPlayerName
-                onClicked: {
-                    ComponentsContext.multiplayerPopupVisible = false
-                }
+                onClicked: ComponentsContext.multiplayerPopupVisible = false
             }
         }
     }
