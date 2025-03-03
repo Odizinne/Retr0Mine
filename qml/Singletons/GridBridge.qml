@@ -160,9 +160,9 @@ QtObject {
         // Check if we're in multiplayer
         if (SteamIntegration.isInMultiplayerGame) {
             if (SteamIntegration.isHost) {
-                // We're host: process locally and then sync
+                // We're host: process locally and then send only the cell update
                 performRevealConnectedCells(index);
-                sendGridStateToClient();
+                sendCellUpdateToClient(index, "revealConnected");
             } else {
                 // We're client: send request to host and wait
                 isProcessingNetworkAction = true;
@@ -223,8 +223,6 @@ QtObject {
         }
     }
 
-    // Callback function for board generation
-    // Defined at the object level to be easily disconnected later
     function onBoardGenerated(success) {
         // Check if generation was cancelled
         if (generationCancelled) {
@@ -285,9 +283,13 @@ QtObject {
                 }
             });
 
-            // In multiplayer, if we're the host, send updated state to client
+            // In multiplayer, if we're the host, send mines list to client after generation
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                sendGridStateToClient();
+                // Send only mines list initially
+                sendMinesListToClient();
+
+                // Then send the first revealed cell
+                sendCellUpdateToClient(currentIndex, "reveal");
             }
 
             // Disconnect the signal
@@ -360,9 +362,16 @@ QtObject {
         // Check if we're in multiplayer
         if (SteamIntegration.isInMultiplayerGame) {
             if (SteamIntegration.isHost) {
-                // We're host: process locally and then sync
+                // We're host: process locally and then send only the cell update
                 performReveal(index);
-                sendGridStateToClient();
+                // Note: performReveal can reveal multiple cells for 0-tiles
+                // We'll handle that by tracking the revealed cells
+
+                // For simplicity, instead of tracking all revealed cells in performReveal,
+                // we'll just send the initial index as "reveal" action
+                // The host has already processed the full chain reveal
+                // The client will handle the chain reveal when it gets this action
+                sendCellUpdateToClient(index, "reveal");
             } else {
                 // We're client: send request to host and wait
                 isProcessingNetworkAction = true;
@@ -410,6 +419,13 @@ QtObject {
                 revealAllMines();
                 if (audioEngine) audioEngine.playLoose();
                 GameState.displayPostGame = true;
+
+                // In multiplayer, if we're the host, send game over notification to client
+                if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
+                    // Send game over message with loss status (0 = loss)
+                    SteamIntegration.sendGameAction("gameOver", 0);
+                }
+
                 return;
             }
 
@@ -609,9 +625,10 @@ QtObject {
             GameState.displayPostGame = true;
             if (audioEngine) audioEngine.playWin();
 
-            // In multiplayer, if we're the host, send updated state to client
+            // In multiplayer, if we're the host, send game over notification to client
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                sendGridStateToClient();
+                // Send game over message with win status (1 = win)
+                SteamIntegration.sendGameAction("gameOver", 1);
             }
         } else {
             if (audioEngine) audioEngine.playClick();
@@ -622,9 +639,9 @@ QtObject {
         // Check if we're in multiplayer
         if (SteamIntegration.isInMultiplayerGame) {
             if (SteamIntegration.isHost) {
-                // We're host: process locally and then sync
+                // We're host: process locally and then send only the cell update
                 performToggleFlag(index);
-                sendGridStateToClient();
+                sendCellUpdateToClient(index, "flag");
             } else {
                 // We're client: send request to host and wait
                 isProcessingNetworkAction = true;
@@ -718,107 +735,172 @@ QtObject {
 
     // ---- MULTIPLAYER METHODS ----
 
+    function sendMinesListToClient() {
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
+            console.log("Not sending mines: not in multiplayer or not host");
+            return;
+        }
+
+        if (!GameState.mines || GameState.mines.length === 0) {
+            console.error("Cannot send empty mines list");
+            return;
+        }
+
+        // Important! Create a CLEAN array of mine positions
+        // This ensures we send raw numbers without any objects or references
+        const cleanMinesArray = [];
+        for (let i = 0; i < GameState.mines.length; i++) {
+            cleanMinesArray.push(Number(GameState.mines[i]));
+        }
+
+        console.log("Sending mines list to client, count:", cleanMinesArray.length);
+        console.log("Mine positions (first 10):", cleanMinesArray.slice(0, 10));
+
+        // Create a mines-only data packet with CLEAN data
+        const minesData = {
+            gridSizeX: Number(GameState.gridSizeX),
+            gridSizeY: Number(GameState.gridSizeY),
+            mineCount: Number(GameState.mineCount),
+            mines: cleanMinesArray // Using our clean array
+        };
+
+        // Send the mines data
+        SteamIntegration.sendGameState(minesData);
+    }
+
+    function sendCellUpdateToClient(index, action) {
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
+            return;
+        }
+
+        console.log("Sending cell update:", index, action);
+        SteamIntegration.sendGameAction(action, index);
+    }
+
+    function applyMinesAndCalculateNumbers(minesData) {
+        console.log("Applying mines data and calculating numbers");
+
+        // First check if we received valid data
+        if (!minesData || !minesData.mines) {
+            console.error("Received invalid mines data");
+            return false;
+        }
+
+        // Update grid dimensions if needed
+        if (GameState.gridSizeX !== minesData.gridSizeX ||
+            GameState.gridSizeY !== minesData.gridSizeY) {
+            console.log("Grid size changed:", minesData.gridSizeX, "x", minesData.gridSizeY);
+            GameState.gridSizeX = Number(minesData.gridSizeX);
+            GameState.gridSizeY = Number(minesData.gridSizeY);
+        }
+
+        // IMPORTANT: Create a clean mines array from the received data
+        const cleanMinesArray = [];
+
+        if (Array.isArray(minesData.mines)) {
+            // If it's an array, extract each position as a simple number
+            for (let i = 0; i < minesData.mines.length; i++) {
+                cleanMinesArray.push(Number(minesData.mines[i]));
+            }
+        } else if (typeof minesData.mines === 'object' && minesData.mines !== null) {
+            // If it's an object, extract values
+            for (let key in minesData.mines) {
+                if (minesData.mines.hasOwnProperty(key) && !isNaN(Number(minesData.mines[key]))) {
+                    cleanMinesArray.push(Number(minesData.mines[key]));
+                }
+            }
+        }
+
+        if (cleanMinesArray.length === 0) {
+            console.error("Failed to extract any valid mine positions");
+            return false;
+        }
+
+        console.log("Extracted clean mines array, length:", cleanMinesArray.length);
+        console.log("Mine positions (first 10):", cleanMinesArray.slice(0, 10));
+
+        // CRITICAL: Update the game state with our clean array
+        GameState.mineCount = Number(minesData.mineCount) || cleanMinesArray.length;
+        GameState.mines = cleanMinesArray;
+
+        // Calculate numbers using our clean mines array
+        try {
+            // Make sure we pass a proper QVector<int> to the C++ method
+            const calculatedNumbers = GameLogic.calculateNumbersFromMines(
+                Number(GameState.gridSizeX),
+                Number(GameState.gridSizeY),
+                cleanMinesArray
+            );
+
+            // Verify the numbers
+            if (calculatedNumbers && calculatedNumbers.length === GameState.gridSizeX * GameState.gridSizeY) {
+                GameState.numbers = calculatedNumbers;
+                console.log("Numbers calculated successfully, length:", calculatedNumbers.length);
+            } else {
+                console.error("Invalid numbers calculated, expected length:",
+                             GameState.gridSizeX * GameState.gridSizeY,
+                             "got:", calculatedNumbers ? calculatedNumbers.length : 0);
+                return false;
+            }
+        } catch (e) {
+            console.error("Error calculating numbers:", e);
+            return false;
+        }
+
+        // Mark game as started
+        GameState.gameStarted = true;
+        return true;
+    }
+
     // Process game actions received from network
     function handleNetworkAction(actionType, cellIndex) {
         console.log("Received action:", actionType, "for cell:", cellIndex);
 
-        if (!SteamIntegration.isHost) {
-            console.warn("Client received action request but is not host!");
-            return;
-        }
+        if (SteamIntegration.isHost) {
+            // Host receives action from client
+            if (actionType === "reveal") {
+                performReveal(cellIndex);
+                // Send individual cell update back to client
+                sendCellUpdateToClient(cellIndex, "reveal");
+            } else if (actionType === "flag") {
+                performToggleFlag(cellIndex);
+                sendCellUpdateToClient(cellIndex, "flag");
+            } else if (actionType === "revealConnected") {
+                performRevealConnectedCells(cellIndex);
+                sendCellUpdateToClient(cellIndex, "revealConnected");
+            }
+        } else {
+            // Client receives action from host
+            if (actionType === "reveal") {
+                performReveal(cellIndex);
+            } else if (actionType === "flag") {
+                performToggleFlag(cellIndex);
+            } else if (actionType === "revealConnected") {
+                performRevealConnectedCells(cellIndex);
+            } else if (actionType === "gameOver") {
+                // Handle game over state
+                GameState.gameOver = true;
+                GameState.gameWon = cellIndex === 1; // 1 for win, 0 for loss
+                GameTimer.stop();
 
-        if (actionType === "reveal") {
-            performReveal(cellIndex);
-        } else if (actionType === "flag") {
-            performToggleFlag(cellIndex);
-        } else if (actionType === "revealConnected") {
-            performRevealConnectedCells(cellIndex);
-        }
-
-        // Send updated state back to client
-        sendGridStateToClient();
-    }
-
-    // Called when the host needs to send current grid state to client
-    function sendGridStateToClient() {
-        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
-            console.log("Not sending grid state: not in multiplayer or not host");
-            return;
-        }
-
-        console.log("Sending grid state to client");
-
-        console.log("SENDING STATE: Mines array type:", typeof GameState.mines);
-        console.log("SENDING STATE: Mines array isArray:", Array.isArray(GameState.mines));
-        console.log("SENDING STATE: Mines array length:", GameState.mines ? GameState.mines.length : "N/A");
-        console.log("SENDING STATE: Numbers array type:", typeof GameState.numbers);
-        console.log("SENDING STATE: Numbers array isArray:", Array.isArray(GameState.numbers));
-        console.log("SENDING STATE: Numbers array length:", GameState.numbers ? GameState.numbers.length : "N/A");
-
-        // Build a state object with all necessary grid information
-        var gameState = {
-            gridSizeX: GameState.gridSizeX,
-            gridSizeY: GameState.gridSizeY,
-            mineCount: GameState.mineCount,
-            // More robust array conversion
-            mines: (function() {
-                if (!GameState.mines) return [];
-                if (Array.isArray(GameState.mines)) return Array.from(GameState.mines);
-                // Try to convert object to array
-                let result = [];
-                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                    if (GameState.mines[i] !== undefined) result.push(i);
+                if (GameState.gameWon) {
+                    if (audioEngine) audioEngine.playWin();
+                } else {
+                    if (audioEngine) audioEngine.playLoose();
+                    revealAllMines();
                 }
-                return result;
-            })(),
-            numbers: (function() {
-                if (!GameState.numbers) return [];
-                if (Array.isArray(GameState.numbers)) return Array.from(GameState.numbers);
-                // Try to convert object to array
-                let result = [];
-                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                    result[i] = GameState.numbers[i] || 0;
-                }
-                return result;
-            })(),
-            revealedCells: [],
-            flaggedCells: [],
-            questionedCells: [],
-            safeQuestionedCells: [],
-            gameOver: GameState.gameOver,
-            gameWon: GameState.gameWon,
-            revealedCount: GameState.revealedCount,
-            flaggedCount: GameState.flaggedCount,
-            gameStarted: GameState.gameStarted
-        };
 
-        // Collect current cell states
-        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            const cell = getCell(i);
-            if (!cell) continue;
+                GameState.displayPostGame = true;
+            }
 
-            if (cell.revealed) gameState.revealedCells.push(i);
-            if (cell.flagged) gameState.flaggedCells.push(i);
-            if (cell.questioned) gameState.questionedCells.push(i);
-            if (cell.safeQuestioned) gameState.safeQuestionedCells.push(i);
+            // Action finished processing
+            isProcessingNetworkAction = false;
         }
-
-        // Send the state
-        SteamIntegration.sendGameState(gameState);
     }
 
     // Called when the client receives a game state update from host
     function applyGameState(gameState) {
         console.log("Applying received game state");
-
-        console.log("RECEIVING STATE: Mines array type:", typeof gameState.mines);
-        console.log("RECEIVING STATE: Mines array isArray:", Array.isArray(gameState.mines));
-        console.log("RECEIVING STATE: Mines array length:", gameState.mines ? gameState.mines.length : "N/A");
-        console.log("RECEIVING STATE: Numbers array type:", typeof gameState.numbers);
-        console.log("RECEIVING STATE: Numbers array isArray:", Array.isArray(gameState.numbers));
-        console.log("RECEIVING STATE: Numbers array length:", gameState.numbers ? gameState.numbers.length : "N/A");
-        console.log("RECEIVING STATE: revealedCells type:", typeof gameState.revealedCells);
-        console.log("RECEIVING STATE: revealedCells isArray:", Array.isArray(gameState.revealedCells));
 
         // First check if we received valid data
         if (!gameState) {
@@ -827,146 +909,177 @@ QtObject {
             return;
         }
 
-        // Check if grid dimensions match
-        if (GameState.gridSizeX !== gameState.gridSizeX ||
-            GameState.gridSizeY !== gameState.gridSizeY) {
-            console.log("Grid size changed:", gameState.gridSizeX, "x", gameState.gridSizeY);
+        // Check if this is a mines-only packet (initial board setup)
+        if (gameState.mines && !gameState.revealedCells && !gameState.numbers) {
+            console.log("Received mines-only data - initializing board");
 
-            // Grid size changed, need to resize
-            GameState.gridSizeX = gameState.gridSizeX;
-            GameState.gridSizeY = gameState.gridSizeY;
+            // Process mines and calculate numbers locally
+            const success = applyMinesAndCalculateNumbers(gameState);
 
-            // We need to wait for the grid to be recreated
-            // This is handled in Main.qml via the grid size change signals
+            if (success) {
+                // Reset all cells to initial state
+                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                    withCell(i, function(cell) {
+                        cell.revealed = false;
+                        cell.flagged = false;
+                        cell.questioned = false;
+                        cell.safeQuestioned = false;
+                    });
+                }
+
+                // Finish processing
+                isProcessingNetworkAction = false;
+                console.log("Mines data applied and numbers calculated successfully");
+            }
             return;
         }
 
-        // Better deserialization for mines array
-        if (gameState.mines) {
-            if (Array.isArray(gameState.mines)) {
-                console.log("Updating mines array as array, length:", gameState.mines.length);
-                GameState.mines = Array.from(gameState.mines); // Ensure proper array conversion
-            } else {
-                console.log("Received mines as object, converting");
-                // Try to convert from object
-                let minesArray = [];
-                for (let prop in gameState.mines) {
-                    if (!isNaN(parseInt(prop))) {
-                        minesArray.push(parseInt(gameState.mines[prop]));
+        // If it's a full game state (for backward compatibility or initial sync)
+        if (gameState.mines && gameState.numbers) {
+            console.log("Received full game state");
+
+            // Check if grid dimensions match
+            if (GameState.gridSizeX !== gameState.gridSizeX ||
+                GameState.gridSizeY !== gameState.gridSizeY) {
+                console.log("Grid size changed:", gameState.gridSizeX, "x", gameState.gridSizeY);
+
+                // Grid size changed, need to resize
+                GameState.gridSizeX = gameState.gridSizeX;
+                GameState.gridSizeY = gameState.gridSizeY;
+
+                // We need to wait for the grid to be recreated
+                // This is handled in Main.qml via the grid size change signals
+                return;
+            }
+
+            // Process mines array
+            let minesArray = convertObjectToArray(gameState.mines, "mines");
+            GameState.mines = minesArray;
+            console.log("Mines array length:", GameState.mines.length);
+
+            // Process numbers array
+            let numbersArray = convertObjectToArray(gameState.numbers, "numbers");
+            GameState.numbers = numbersArray;
+            console.log("Numbers array length:", GameState.numbers.length);
+
+            // Update other game state
+            GameState.mineCount = gameState.mineCount || 0;
+            GameState.gameStarted = gameState.gameStarted || false;
+
+            // Reset all cells first
+            for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                withCell(i, function(cell) {
+                    cell.revealed = false;
+                    cell.flagged = false;
+                    cell.questioned = false;
+                    cell.safeQuestioned = false;
+                });
+            }
+
+            // Process cell states
+            let revealedCellsArray = convertObjectToArray(gameState.revealedCells, "revealedCells");
+            let flaggedCellsArray = convertObjectToArray(gameState.flaggedCells, "flaggedCells");
+            let questionedCellsArray = convertObjectToArray(gameState.questionedCells, "questionedCells");
+            let safeQuestionedCellsArray = convertObjectToArray(gameState.safeQuestionedCells, "safeQuestionedCells");
+
+            // Apply revealed cells
+            console.log("Applying", revealedCellsArray.length, "revealed cells");
+            revealedCellsArray.forEach(index => {
+                withCell(index, function(cell) {
+                    // Skip animation for client
+                    if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+                        // For client, we need to set both the revealed flag and directly update the button
+                        cell.revealed = true;
+                        cell.shouldBeFlat = true;
+
+                        // Force buttons to be flat without animation
+                        try {
+                            cell.button.flat = true;
+                            cell.button.opacity = 1;
+                        } catch (e) {
+                            console.error("Error setting button flat:", e);
+                        }
+                    } else {
+                        cell.revealed = true;
                     }
-                }
-                GameState.mines = minesArray;
-            }
-            console.log("Final mines array length:", GameState.mines.length);
-        } else {
-            console.error("Received no mines data");
-            GameState.mines = [];
-        }
-
-        // Better deserialization for numbers array
-        if (gameState.numbers) {
-            if (Array.isArray(gameState.numbers)) {
-                console.log("Updating numbers array as array, length:", gameState.numbers.length);
-                GameState.numbers = Array.from(gameState.numbers); // Ensure proper array conversion
-            } else {
-                console.log("Received numbers as object, converting");
-                // Try to convert from object
-                let numbersArray = [];
-                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                    numbersArray[i] = gameState.numbers[i] !== undefined ? parseInt(gameState.numbers[i]) : 0;
-                }
-                GameState.numbers = numbersArray;
-                console.log("Converted numbers array length:", numbersArray.length);
-            }
-        } else {
-            console.error("Received no numbers data");
-            GameState.numbers = [];
-        }
-
-        // Update other game state
-        GameState.mineCount = gameState.mineCount || 0;
-        GameState.gameStarted = gameState.gameStarted || false;
-
-        // Reset all cells first
-        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            withCell(i, function(cell) {
-                cell.revealed = false;
-                cell.flagged = false;
-                cell.questioned = false;
-                cell.safeQuestioned = false;
+                });
             });
-        }
 
-        // Process revealed cells - handle both array and object cases
-        let revealedCellsArray = convertObjectToArray(gameState.revealedCells, "revealedCells");
-        let flaggedCellsArray = convertObjectToArray(gameState.flaggedCells, "flaggedCells");
-        let questionedCellsArray = convertObjectToArray(gameState.questionedCells, "questionedCells");
-        let safeQuestionedCellsArray = convertObjectToArray(gameState.safeQuestionedCells, "safeQuestionedCells");
+            // Apply flagged cells
+            flaggedCellsArray.forEach(index => {
+                withCell(index, function(cell) {
+                    cell.flagged = true;
+                });
+            });
 
-        // Apply revealed cells
-        console.log("Applying", revealedCellsArray.length, "revealed cells");
-        revealedCellsArray.forEach(index => {
-            const result = withCell(index, function(cell) {
-                // Skip animation for client
-                if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
-                    // For client, we need to set both the revealed flag and directly update the button
-                    cell.revealed = true;
-                    cell.shouldBeFlat = true;
+            // Apply questioned cells
+            questionedCellsArray.forEach(index => {
+                withCell(index, function(cell) {
+                    cell.questioned = true;
+                });
+            });
 
-                    // Force buttons to be flat without animation
-                    try {
-                        cell.button.flat = true;
-                        cell.button.opacity = 1;
-                    } catch (e) {
-                        console.error("Error setting button flat:", e);
-                    }
+            // Apply safe questioned cells
+            safeQuestionedCellsArray.forEach(index => {
+                withCell(index, function(cell) {
+                    cell.safeQuestioned = true;
+                });
+            });
+
+            // Update game state
+            GameState.gameOver = gameState.gameOver || false;
+            GameState.gameWon = gameState.gameWon || false;
+            GameState.revealedCount = gameState.revealedCount || 0;
+            GameState.flaggedCount = gameState.flaggedCount || 0;
+
+            // Update display for game over
+            if (GameState.gameOver) {
+                GameState.displayPostGame = true;
+                if (GameState.gameWon) {
+                    if (audioEngine) audioEngine.playWin();
                 } else {
-                    cell.revealed = true;
+                    if (audioEngine) audioEngine.playLoose();
                 }
-            });
-            console.log("Set cell", index, "revealed, success:", result);
-        });
-
-        // Apply flagged cells
-        flaggedCellsArray.forEach(index => {
-            withCell(index, function(cell) {
-                cell.flagged = true;
-            });
-        });
-
-        // Apply questioned cells
-        questionedCellsArray.forEach(index => {
-            withCell(index, function(cell) {
-                cell.questioned = true;
-            });
-        });
-
-        // Apply safe questioned cells
-        safeQuestionedCellsArray.forEach(index => {
-            withCell(index, function(cell) {
-                cell.safeQuestioned = true;
-            });
-        });
-
-        // Update game state
-        GameState.gameOver = gameState.gameOver || false;
-        GameState.gameWon = gameState.gameWon || false;
-        GameState.revealedCount = gameState.revealedCount || 0;
-        GameState.flaggedCount = gameState.flaggedCount || 0;
+            }
+        }
 
         // Finish processing
         isProcessingNetworkAction = false;
-
         console.log("Game state applied successfully");
+    }
 
-        // Update display for game over
-        if (GameState.gameOver) {
-            GameState.displayPostGame = true;
-            if (GameState.gameWon) {
-                if (audioEngine) audioEngine.playWin();
-            } else {
-                if (audioEngine) audioEngine.playLoose();
-            }
+    // Legacy method for backward compatibility
+    function sendGridStateToClient() {
+        console.log("Legacy sendGridStateToClient called - using optimized approach instead");
+        // Note: This method is left here for backward compatibility, but now
+        // we use the more targeted approaches above
+    }
+
+    function requestFullSync() {
+        if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
+            return; // Only clients should request sync
         }
+
+        console.log("Client requesting full sync from host");
+        SteamIntegration.sendGameAction("requestSync", 0);
+    }
+
+    // Add this call at the end of performReveal on the client side if it detects an issue
+    function verifyClientState() {
+        // Only run on clients
+        if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
+            return true;
+        }
+
+        // Check if we have valid mine and number data
+        if (!GameState.mines || GameState.mines.length === 0 ||
+            !GameState.numbers || GameState.numbers.length === 0 ||
+            GameState.mines.length > GameState.gridSizeX * GameState.gridSizeY) {
+            console.error("Client has invalid game state - requesting sync");
+            requestFullSync();
+            return false;
+        }
+
+        return true;
     }
 }

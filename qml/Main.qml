@@ -42,11 +42,11 @@ ApplicationWindow {
                 GridBridge.initGame();
 
                 // Set the appropriate difficulty (medium by default for multiplayer)
-                GameSettings.difficulty = 1; // Medium difficulty
-                const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
-                GameState.gridSizeX = difficultySet.x;
-                GameState.gridSizeY = difficultySet.y;
-                GameState.mineCount = difficultySet.mines;
+                //GameSettings.difficulty = 1; // Medium difficulty
+                //const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
+                //GameState.gridSizeX = difficultySet.x;
+                //GameState.gridSizeY = difficultySet.y;
+                //GameState.mineCount = difficultySet.mines;
             } else {
                 console.log("Left multiplayer mode");
 
@@ -60,51 +60,19 @@ ApplicationWindow {
             }
         }
 
-        // Handle lobby ready status
         function onLobbyReadyChanged() {
             if (SteamIntegration.isLobbyReady) {
                 console.log("Lobby ready, initializing game");
 
                 if (SteamIntegration.isHost) {
-                    // Host needs to properly initialize the game and send state
+                    // Host needs to properly initialize the game
                     GridBridge.initGame();
 
-                    // Wait until cells are created before sending initial state
-                    if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
-                        // Send the initial blank grid to the client
-                        GridBridge.sendGridStateToClient();
-                        console.log("Host sent initial grid state");
-                    } else {
-                        // Set up a timer to check when cells are ready
-                        let checkCount = 0;
-                        let cellCreationTimer = Qt.createQmlObject(`
-                            import QtQuick
-                            Timer {
-                                interval: 100
-                                repeat: true
-                                running: true
-                            }
-                        `, root);
-
-                        cellCreationTimer.triggered.connect(function() {
-                            checkCount++;
-                            if (GridBridge.cellsCreated === GameState.gridSizeX * GameState.gridSizeY) {
-                                // Cells are ready, send state
-                                GridBridge.sendGridStateToClient();
-                                console.log("Host sent initial grid state after waiting");
-                                cellCreationTimer.stop();
-                                cellCreationTimer.destroy();
-                            } else if (checkCount > 50) {
-                                // Give up after 5 seconds
-                                console.error("Failed to wait for cell creation");
-                                cellCreationTimer.stop();
-                                cellCreationTimer.destroy();
-                            }
-                        });
-                    }
+                    // No need to immediately send state - we'll send mines after generation
+                    // This is now handled in the onBoardGenerated function in GridBridge
                 } else {
-                    // Client just needs to wait for grid state from host
-                    console.log("Client waiting for initial grid state");
+                    // Client just needs to wait for mines list from host
+                    console.log("Client waiting for mines data");
                 }
             }
         }
@@ -124,19 +92,18 @@ ApplicationWindow {
         }
     }
 
-    // Also add connections to ComponentsContext to track cell creation
     Connections {
         target: ComponentsContext
         function onAllCellsReady() {
             console.log("All cells ready, count:", GridBridge.cellsCreated);
 
-            // If we're in a multiplayer lobby as host, send initial grid state
-            if (SteamIntegration.isInMultiplayerGame &&
-                SteamIntegration.isHost &&
-                SteamIntegration.isLobbyReady) {
+            // If we're in a multiplayer lobby as host and cells are ready
+            // We don't need to immediately send state - we'll handle this
+            // when the board is actually generated in onBoardGenerated
 
-                console.log("Host sending initial grid state after cells ready");
-                GridBridge.sendGridStateToClient();
+            // Continue with normal game initialization for single player
+            if (!SteamIntegration.isInMultiplayerGame) {
+                root.checkInitialGameState();
             }
         }
     }

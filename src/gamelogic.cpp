@@ -68,6 +68,65 @@ bool GameLogic::initializeFromSave(int width, int height, int mineCount, const Q
     return true;
 }
 
+QVector<int> GameLogic::calculateNumbersFromMines(int width, int height, const QVector<int> &mines)
+{
+    // Create a copy of the current width/height to restore later
+    int originalWidth = m_width;
+    int originalHeight = m_height;
+
+    // Set the temporary dimensions
+    m_width = width;
+    m_height = height;
+
+    // Create a temporary numbers vector with correct size
+    QVector<int> numbers(width * height, 0);
+
+    // Debug output
+    qDebug() << "calculateNumbersFromMines called with grid:" << width << "x" << height;
+    qDebug() << "Total mines:" << mines.size();
+    if (!mines.isEmpty()) {
+        qDebug() << "First few mine positions:" << mines.mid(0, qMin(5, mines.size()));
+    }
+
+    // Calculate adjacent mine counts (similar to calculateNumbers())
+    for (int mine : mines) {
+        if (mine < 0 || mine >= width * height) {
+            qDebug() << "Skipping invalid mine position:" << mine;
+            continue; // Skip invalid mine positions
+        }
+
+        numbers[mine] = -1; // Mark mine position
+
+        // Get neighbors and update their counts
+        QSet<int> neighbors = getNeighbors(mine);
+        for (int neighbor : neighbors) {
+            if (neighbor < 0 || neighbor >= width * height) {
+                qDebug() << "Invalid neighbor position:" << neighbor << "for mine at" << mine;
+                continue;
+            }
+
+            if (numbers[neighbor] >= 0) {
+                numbers[neighbor]++;
+            }
+        }
+    }
+
+    // Debug output
+    int nonZeroCount = 0;
+    for (int i = 0; i < numbers.size() && nonZeroCount < 10; i++) {
+        if (numbers[i] != 0) {
+            nonZeroCount++;
+            qDebug() << "Sample number at" << i << ":" << numbers[i];
+        }
+    }
+
+    // Restore original dimensions
+    m_width = originalWidth;
+    m_height = originalHeight;
+
+    return numbers;
+}
+
 void GameLogic::calculateNumbers()
 {
     m_numbers.fill(0, m_width * m_height);
