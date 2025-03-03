@@ -1045,6 +1045,10 @@ QtObject {
             } else if (actionType === "revealConnected") {
                 console.log("Client processing revealConnected action for cell:", cellIndex);
                 performRevealConnectedCells(cellIndex);
+            } else if (actionType === "startGame") {
+                console.log("Client received start game command from host")
+                // Close multiplayer popup on client side
+                ComponentsContext.multiplayerPopupVisible = false
             } else if (actionType === "gameOver") {
                 console.log("Client processing gameOver action, win status:", cellIndex);
                 // Handle game over state
