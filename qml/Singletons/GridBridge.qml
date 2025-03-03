@@ -18,11 +18,19 @@ QtObject {
     property bool clientReadyForActions: false  // Tracks if client is ready to receive actions
     property var pendingInitialActions: []      // Stores initial actions that came with board generation
     property bool p2pConnected: false
+    property bool clientGridReady: false
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer
         SteamIntegration.gameActionReceived.connect(handleNetworkAction);
         SteamIntegration.gameStateReceived.connect(applyGameState);
+
+        // Reset clientGridReady when player leaves multiplayer
+        SteamIntegration.multiplayerStatusChanged.connect(function() {
+            if (!SteamIntegration.isInMultiplayerGame) {
+                clientGridReady = false;
+            }
+        });
     }
 
     // Utility function to convert object arrays to proper arrays
@@ -492,8 +500,10 @@ QtObject {
                 SteamIntegration.sendGameAction("resetGame", 0);
             }
 
+            // Reset multiplayer flags
             minesInitialized = false;
             clientReadyForActions = false;
+            clientGridReady = false;  // Reset the grid ready flag
             pendingInitialActions = [];
             pendingActions = [];
             isProcessingNetworkAction = false;
@@ -977,7 +987,12 @@ QtObject {
 
         if (SteamIntegration.isHost) {
             // Host receives action from client
-            if (actionType === "reveal") {
+            if (actionType === "gridReady") {
+                console.log("Host received grid ready notification from client");
+                clientGridReady = true;
+                // No need to send response, just update the flag
+                return;
+            } else if (actionType === "reveal") {
                 console.log("Host processing reveal action for cell:", cellIndex);
                 performReveal(cellIndex);
                 // Send individual cell update back to client
@@ -1315,6 +1330,10 @@ QtObject {
     function handleMultiplayerGridSync(data) {
         console.log("Received multiplayer grid sync data:", JSON.stringify(data));
 
+        // Check if we need to resize the grid
+        let gridNeedsRecreation = (GameState.gridSizeX !== data.gridSizeX ||
+                                  GameState.gridSizeY !== data.gridSizeY);
+
         // Prepare the grid with received parameters
         prepareMultiplayerGrid(
             data.gridSizeX,
@@ -1325,6 +1344,20 @@ QtObject {
         // Send acknowledgment back to host
         if (!SteamIntegration.isHost) {
             SteamIntegration.sendGameAction("gridSyncAck", 0);
+
+            // If grid dimensions are the same and cells are already created,
+            // we can immediately notify that we're ready
+            if (!gridNeedsRecreation && GridBridge.cellsCreated === (data.gridSizeX * data.gridSizeY)) {
+                console.log("Grid already matches expected size, sending ready immediately");
+                Qt.callLater(notifyGridReady);
+            }
+        }
+    }
+
+    function notifyGridReady() {
+        if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+            console.log("Client notifying host that grid is ready");
+            SteamIntegration.sendGameAction("gridReady", 0);
         }
     }
 }

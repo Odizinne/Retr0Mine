@@ -239,7 +239,11 @@ Popup {
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
                 Layout.fillWidth: true
-                enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting && SteamIntegration.isP2PConnected
+                // Add the clientGridReady check to the enabled condition
+                enabled: SteamIntegration.isInMultiplayerGame &&
+                         !SteamIntegration.isConnecting &&
+                         SteamIntegration.isP2PConnected &&
+                         GridBridge.clientGridReady
                 onClicked: {
                     if (SteamIntegration.isHost) {
                         SteamIntegration.sendGameAction("startGame", 0)
