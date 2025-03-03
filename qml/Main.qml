@@ -10,6 +10,16 @@ ApplicationWindow {
     visibility: ApplicationWindow.Hidden
     property bool isSaving: false
     property bool isClosing: false
+    property Timer starterTimer: Timer {
+        interval: 1000
+        repeat: false
+        onTriggered: {
+            // Check for pending invites only once at startup
+            if (SteamIntegration.initialized) {
+                SteamIntegration.checkForPendingInvites()
+            }
+        }
+    }
 
     onClosing: function(close) {
         if (isClosing) {
@@ -166,13 +176,6 @@ ApplicationWindow {
         function onSaveCompleted(success) {
             root.isSaving = false
             Qt.quit()
-        }
-    }
-
-    Connections {
-        target: ComponentsContext
-        function onAllCellsReady() {
-            root.checkInitialGameState()
         }
     }
 
@@ -426,6 +429,7 @@ ApplicationWindow {
         } else {
             GridBridge.initGame()
         }
+        starterTimer.start()
     }
 
     function getIdealWidth() {

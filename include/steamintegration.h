@@ -64,6 +64,7 @@ public:
     Q_INVOKABLE QStringList getOnlineFriends();
     Q_INVOKABLE void inviteFriend(const QString& friendId);
     Q_INVOKABLE void acceptInvite(const QString& lobbyId);
+    Q_INVOKABLE void checkForPendingInvites();
 
     // P2P networking
     Q_INVOKABLE bool sendGameAction(const QString& actionType, int cellIndex);
