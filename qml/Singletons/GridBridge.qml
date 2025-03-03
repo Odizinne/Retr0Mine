@@ -15,6 +15,8 @@ QtObject {
     property bool isProcessingNetworkAction: false
     property var pendingActions: []
     property bool minesInitialized: false
+    property bool clientReadyForActions: false  // Tracks if client is ready to receive actions
+    property var pendingInitialActions: []      // Stores initial actions that came with board generation
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer
@@ -286,13 +288,21 @@ QtObject {
             });
 
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                // Send only mines list first, before any cell actions
+                // Reset ready flag when starting new game
+                clientReadyForActions = false;
+                pendingInitialActions = [];
+
+                // Send mines list first
                 minesInitialized = true;
                 sendMinesListToClient();
 
-                // Only after sending mines, then send the first revealed cell
+                // Store the initial reveal action instead of sending immediately
+                pendingInitialActions.push({type: "reveal", index: currentIndex});
+
+                // Start checking if client has processed mines
                 Qt.callLater(function() {
-                    sendCellUpdateToClient(currentIndex, "reveal");
+                    console.log("Checking if client has processed mines");
+                    SteamIntegration.sendGameAction("minesReady", 0);
                 });
             }
 
@@ -777,6 +787,13 @@ QtObject {
             return;
         }
 
+        // If client isn't ready yet, queue initial actions
+        if (!clientReadyForActions && action === "reveal") {
+            console.log("Client not ready, queuing action:", action, index);
+            pendingInitialActions.push({type: action, index: index});
+            return;
+        }
+
         console.log("Sending cell update:", index, action);
         SteamIntegration.sendGameAction(action, index);
     }
@@ -894,7 +911,34 @@ QtObject {
 
         // Mark game as started
         GameState.gameStarted = true;
-        return true;
+
+        // Indicate success
+        const success = true;
+
+        // If successful, and we're a client, send acknowledgment to host
+        if (success && SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+            // Mark that we have initialized mines
+            minesInitialized = true;
+
+            // Acknowledge to host that we're ready for actions
+            console.log("Client sending readyForActions acknowledgment to host");
+            SteamIntegration.sendGameAction("readyForActions", 0);
+
+            // Process any pending actions
+            if (pendingActions.length > 0) {
+                console.log("Processing", pendingActions.length, "buffered actions");
+                // Use setTimeout to process after current function finishes
+                Qt.callLater(function() {
+                    pendingActions.forEach(function(action) {
+                        console.log("Processing buffered action:", action.type, action.index);
+                        handleNetworkAction(action.type, action.index);
+                    });
+                    pendingActions = [];
+                });
+            }
+        }
+
+        return success;
     }
 
     // Process game actions received from network
@@ -919,9 +963,44 @@ QtObject {
             } else if (actionType === "requestSync") {
                 console.log("Client requested full sync, sending mines list");
                 sendMinesListToClient();
+            } else if (actionType === "readyForActions") {
+                console.log("Host received client readiness confirmation");
+                clientReadyForActions = true;
+
+                // Now we can send any pending initial actions
+                if (pendingInitialActions.length > 0) {
+                    console.log("Sending", pendingInitialActions.length, "pending initial actions");
+                    pendingInitialActions.forEach(function(action) {
+                        sendCellUpdateToClient(action.index, action.type);
+                    });
+                    pendingInitialActions = [];
+                }
+            } else if (actionType === "requestMines") {
+                console.log("Client requested mines data, sending immediately");
+                sendMinesListToClient();
+
+                // After a moment, check if client has processed mines
+                Qt.callLater(function() {
+                    console.log("Checking if client has processed mines");
+                    SteamIntegration.sendGameAction("minesReady", 0);
+                });
             }
         } else {
             // Client receives action from host
+            if (actionType === "minesReady") {
+                // Check if we already have mines data
+                if (minesInitialized) {
+                    console.log("Client confirms mines data is ready");
+                    // Send acknowledgment to host that we're ready for actions
+                    SteamIntegration.sendGameAction("readyForActions", 0);
+                } else {
+                    console.log("Client received mines readiness check but mines not initialized");
+                    // Request mines data directly
+                    SteamIntegration.sendGameAction("requestMines", 0);
+                }
+                return;
+            }
+
             if (!minesInitialized && actionType !== "gameOver") {
                 // Buffer actions until mines data is received
                 console.log("Buffering action until mines data is received:", actionType, cellIndex);
