@@ -30,11 +30,7 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
 SteamIntegration::~SteamIntegration()
 {
-    // Make sure to clean up any active multiplayer session
-    if (m_inMultiplayerGame) {
-        leaveLobby();
-    }
-
+    cleanupMultiplayerSession();
     shutdown();
 }
 
@@ -69,6 +65,74 @@ void SteamIntegration::shutdown()
         SteamAPI_Shutdown();
         m_initialized = false;
     }
+}
+
+void SteamIntegration::cleanupMultiplayerSession()
+{
+    qDebug() << "SteamIntegration: Cleaning up multiplayer session";
+
+    // First stop all timers to prevent callbacks during cleanup
+    m_networkTimer.stop();
+    m_p2pInitTimer.stop();
+
+    // Close any open P2P sessions
+    if (m_initialized) {
+        ISteamNetworking* steamNetworking = SteamNetworking();
+        if (steamNetworking) {
+            // Close session with connected player if we have one
+            if (m_connectedPlayerId.IsValid()) {
+                qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
+                steamNetworking->CloseP2PSessionWithUser(m_connectedPlayerId);
+            }
+
+            // For safety, also flush any remaining P2P packets
+            for (int i = 0; i < 3; i++) {
+                uint32 msgSize;
+                while (steamNetworking->IsP2PPacketAvailable(&msgSize)) {
+                    // Read and discard any pending packets
+                    QByteArray buffer(msgSize, 0);
+                    CSteamID senderId;
+                    steamNetworking->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId);
+                }
+
+                // Run callbacks to process any pending network events
+                if (m_initialized) {
+                    SteamAPI_RunCallbacks();
+                }
+            }
+        }
+    }
+
+    // Leave the lobby if we're in one
+    if (m_initialized && m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
+        qDebug() << "SteamIntegration: Leaving lobby:" << m_currentLobbyId.ConvertToUint64();
+        SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
+    }
+
+    // Reset all multiplayer state variables
+    m_inMultiplayerGame = false;
+    m_isHost = false;
+    m_lobbyReady = false;
+    m_p2pInitialized = false;
+    m_isConnecting = false;
+    m_currentLobbyId = CSteamID();
+    m_connectedPlayerId = CSteamID();
+    m_connectedPlayerName = "";
+
+    // Update rich presence back to single player if we're still initialized
+    if (m_initialized) {
+        updateRichPresence();
+    }
+
+    // Emit signals to update UI state if we're not in destruction
+    emit multiplayerStatusChanged();
+    emit hostStatusChanged();
+    emit lobbyReadyChanged();
+    emit connectedPlayerChanged();
+    emit canInviteFriendChanged();
+    emit p2pInitialized();
+
+    qDebug() << "SteamIntegration: Multiplayer session cleaned up";
 }
 
 void SteamIntegration::unlockAchievement(const QString &achievementId)
@@ -385,32 +449,7 @@ void SteamIntegration::leaveLobby()
     if (!m_initialized || !m_inMultiplayerGame)
         return;
 
-    if (m_currentLobbyId.IsValid()) {
-        SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
-    }
-
-    // Close P2P sessions
-    if (m_connectedPlayerId.IsValid()) {
-        SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
-    }
-
-    m_networkTimer.stop();
-    m_inMultiplayerGame = false;
-    m_isHost = false;
-    m_lobbyReady = false;
-    m_connectedPlayerId = CSteamID();
-    m_connectedPlayerName = "";
-
-    emit multiplayerStatusChanged();
-    emit hostStatusChanged();
-    emit lobbyReadyChanged();
-    emit connectedPlayerChanged();
-    emit canInviteFriendChanged();
-
-    // Update rich presence back to single player
-    updateRichPresence();
-
-    qDebug() << "SteamIntegration: Lobby left successfully";
+    cleanupMultiplayerSession();
 }
 
 void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)

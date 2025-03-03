@@ -17,6 +17,10 @@ ApplicationWindow {
             return
         }
 
+        if (SteamIntegration.isInMultiplayerGame) {
+            SteamIntegration.cleanupMultiplayerSession()
+        }
+
         if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver && !GameState.bypassAutoSave) {
             close.accepted = false
             if (!isSaving) {

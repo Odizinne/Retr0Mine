@@ -60,6 +60,7 @@ public:
     Q_INVOKABLE void createLobby();
     Q_INVOKABLE void joinLobbyWithFriend(const QString& friendId);
     Q_INVOKABLE void leaveLobby();
+    Q_INVOKABLE void cleanupMultiplayerSession();
     Q_INVOKABLE QStringList getOnlineFriends();
     Q_INVOKABLE void inviteFriend(const QString& friendId);
     Q_INVOKABLE void acceptInvite(const QString& lobbyId);
