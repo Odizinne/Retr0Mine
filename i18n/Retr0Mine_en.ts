@@ -442,32 +442,32 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="97"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="99"/>
         <source>Invite sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="130"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="132"/>
         <source>Friends</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="136"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="138"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="233"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="235"/>
         <source>Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="262"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="264"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="244"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="246"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
