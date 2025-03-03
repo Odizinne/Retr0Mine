@@ -318,7 +318,6 @@ ApplicationWindow {
     }
 
     Loader {
-        id: welcomeLoader
         anchors.fill: parent
         active: GameCore.showWelcome
         sourceComponent: Component {
@@ -328,12 +327,18 @@ ApplicationWindow {
     }
 
     Loader {
-        id: aboutLoader
         anchors.fill: parent
-        active: !SteamIntegration.initialized
-        sourceComponent: Component {
-            AboutPopup {
-            }
+        active: true
+        sourceComponent: SteamIntegration.initialized ? multiplayerPopupComponent : aboutPopupComponent
+
+        Component {
+            id: multiplayerPopupComponent
+            MultiplayerPopup { }
+        }
+
+        Component {
+            id: aboutPopupComponent
+            AboutPopup { }
         }
     }
 

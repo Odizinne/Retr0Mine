@@ -390,31 +390,31 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="40"/>
-        <source>Coop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/MainMenu.qml" line="45"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="50"/>
+        <location filename="../qml/MainMenu.qml" line="45"/>
         <source>Leaderboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="55"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="62"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
+        <source>Coop (beta)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="55"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="69"/>
+        <location filename="../qml/MainMenu.qml" line="62"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>

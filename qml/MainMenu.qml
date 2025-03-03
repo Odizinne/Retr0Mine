@@ -37,11 +37,6 @@ Menu {
     MenuSeparator { }
 
     MenuItem {
-        text: qsTr("Coop")
-        onTriggered: ComponentsContext.multiplayerPopupVisible = true
-    }
-
-    MenuItem {
         text: qsTr("Settings")
         onTriggered: ComponentsContext.settingsWindowVisible = true
     }
@@ -52,10 +47,8 @@ Menu {
     }
 
     MenuItem {
-        text: qsTr("About")
-        height: !SteamIntegration.initialized ? implicitHeight : 0
-        visible: height > 0
-        onTriggered: ComponentsContext.aboutPopupVisible = true
+        text: SteamIntegration.initialized ? qsTr("Coop (beta)") : qsTr("About")
+        onTriggered: SteamIntegration.initialized ? ComponentsContext.multiplayerPopupVisible = true : ComponentsContext.aboutPopupVisible = true
     }
 
     MenuItem {
