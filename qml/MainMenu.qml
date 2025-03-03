@@ -37,7 +37,7 @@ Menu {
     MenuSeparator { }
 
     MenuItem {
-        text: qsTr("Multiplayer")
+        text: qsTr("Coop")
         onTriggered: ComponentsContext.multiplayerPopupVisible = true
     }
 

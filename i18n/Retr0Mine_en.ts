@@ -65,33 +65,33 @@
 <context>
     <name>AdvancedPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="14"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="15"/>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="19"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="20"/>
         <source>Application will restart on change
 Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="42"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="43"/>
         <source>Color scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>Light</source>
         <translation type="unfinished"></translation>
     </message>
@@ -99,22 +99,22 @@ Current game will be saved and restored</source>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="71"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="72"/>
         <source>Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="90"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="91"/>
         <source>Height:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="108"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="109"/>
         <source>Mines:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="125"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="126"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
@@ -193,17 +193,17 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="76"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="77"/>
         <source>Enable question marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="103"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="105"/>
         <source>Enable green question marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="131"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="133"/>
         <source>Load last game on start</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,15 +274,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="453"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="460"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="467"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="613"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="620"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="627"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="483"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="637"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="643"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -374,43 +374,81 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="18"/>
+        <location filename="../qml/MainMenu.qml" line="19"/>
         <source>Save game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="25"/>
+        <location filename="../qml/MainMenu.qml" line="26"/>
         <source>Load game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="30"/>
+        <location filename="../qml/MainMenu.qml" line="32"/>
         <source>Hint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="38"/>
+        <location filename="../qml/MainMenu.qml" line="40"/>
+        <source>Coop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="45"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="43"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
         <source>Leaderboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="48"/>
+        <location filename="../qml/MainMenu.qml" line="55"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="55"/>
+        <location filename="../qml/MainMenu.qml" line="62"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="62"/>
+        <location filename="../qml/MainMenu.qml" line="69"/>
         <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MultiplayerPopup</name>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="71"/>
+        <source>Establishing connection with </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="77"/>
+        <source>Ready</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="92"/>
+        <source>Invite sent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="223"/>
+        <source>Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="230"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="242"/>
+        <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -430,17 +468,22 @@ Current game will be saved and restored</source>
 <context>
     <name>PostgamePopup</name>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="53"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="55"/>
         <source>New record saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="61"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="65"/>
+        <source>Waiting for host to start new game...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="74"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="75"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="90"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -648,6 +691,11 @@ Current game will be saved and restored</source>
     <message>
         <location filename="../qml/TopBar.qml" line="50"/>
         <source>Click to pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/TopBar.qml" line="64"/>
+        <source>Coop: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
