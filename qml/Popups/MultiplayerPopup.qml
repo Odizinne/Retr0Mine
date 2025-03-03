@@ -75,7 +75,7 @@ Popup {
     }
 
     Label {
-        text: qsTr("Ready")
+        text: SteamIntegration.isHost ? qsTr("Ready") : qsTr("Waiting for host")
         font.pixelSize: 16
         font.bold: true
         color: "#28d13c"
@@ -224,11 +224,21 @@ Popup {
 
             Button {
                 id: hostButton
+                visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Host")
                 Layout.fillWidth: true
                 enabled: !SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting
                 onClicked: SteamIntegration.createLobby()
+            }
+
+            Button {
+                id: startButton
+                Layout.preferredWidth: multiplayerPopup.buttonWidth
+                text: qsTr("Start")
+                Layout.fillWidth: true
+                enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting && SteamIntegration.isP2PConnected
+                onClicked: ComponentsContext.multiplayerPopupVisible = false
             }
 
             Button {
@@ -242,15 +252,6 @@ Popup {
                     }
                     ComponentsContext.multiplayerPopupVisible = false
                 }
-            }
-
-            Button {
-                id: startButton
-                Layout.preferredWidth: multiplayerPopup.buttonWidth
-                text: qsTr("Start")
-                Layout.fillWidth: true
-                enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting && SteamIntegration.isP2PConnected
-                onClicked: ComponentsContext.multiplayerPopupVisible = false
             }
         }
     }
