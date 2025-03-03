@@ -27,8 +27,11 @@ ApplicationWindow {
             return
         }
 
+        var bypassSaving
         if (SteamIntegration.isInMultiplayerGame) {
-            SteamIntegration.cleanupMultiplayerSession()
+            // Pass true to indicate we're shutting down
+            GameState.bypassAutoSave = true
+            SteamIntegration.cleanupMultiplayerSession(true)
         }
 
         if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver && !GameState.bypassAutoSave) {

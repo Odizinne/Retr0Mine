@@ -76,9 +76,9 @@ void SteamIntegration::shutdown()
     }
 }
 
-void SteamIntegration::cleanupMultiplayerSession()
+void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
 {
-    qDebug() << "SteamIntegration: Cleaning up multiplayer session";
+    qDebug() << "SteamIntegration: Cleaning up multiplayer session, shutdown:" << isShuttingDown;
 
     // First stop all timers to prevent callbacks during cleanup
     m_networkTimer.stop();
@@ -94,18 +94,24 @@ void SteamIntegration::cleanupMultiplayerSession()
                 steamNetworking->CloseP2PSessionWithUser(m_connectedPlayerId);
             }
 
-            // For safety, also flush any remaining P2P packets
-            for (int i = 0; i < 3; i++) {
+            // For safety, flush any remaining P2P packets, but only do limited work during shutdown
+            int iterations = isShuttingDown ? 1 : 3;
+            for (int i = 0; i < iterations; i++) {
                 uint32 msgSize;
-                while (steamNetworking->IsP2PPacketAvailable(&msgSize)) {
+                // Limit number of packets to process during shutdown
+                int maxPackets = isShuttingDown ? 5 : 100;
+                int packetCount = 0;
+
+                while (steamNetworking->IsP2PPacketAvailable(&msgSize) && packetCount < maxPackets) {
                     // Read and discard any pending packets
                     QByteArray buffer(msgSize, 0);
                     CSteamID senderId;
                     steamNetworking->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId);
+                    packetCount++;
                 }
 
-                // Run callbacks to process any pending network events
-                if (m_initialized) {
+                // Run callbacks to process any pending network events, but only if not shutting down
+                if (m_initialized && !isShuttingDown) {
                     SteamAPI_RunCallbacks();
                 }
             }
@@ -129,17 +135,19 @@ void SteamIntegration::cleanupMultiplayerSession()
     m_connectedPlayerName = "";
 
     // Update rich presence back to single player if we're still initialized
-    if (m_initialized) {
+    if (m_initialized && !isShuttingDown) {
         updateRichPresence();
     }
 
-    // Emit signals to update UI state if we're not in destruction
-    emit multiplayerStatusChanged();
-    emit hostStatusChanged();
-    emit lobbyReadyChanged();
-    emit connectedPlayerChanged();
-    emit canInviteFriendChanged();
-    emit p2pInitialized();
+    // Emit signals to update UI state if we're not shutting down
+    if (!isShuttingDown) {
+        emit multiplayerStatusChanged();
+        emit hostStatusChanged();
+        emit lobbyReadyChanged();
+        emit connectedPlayerChanged();
+        emit canInviteFriendChanged();
+        emit p2pInitialized();
+    }
 
     qDebug() << "SteamIntegration: Multiplayer session cleaned up";
 }
