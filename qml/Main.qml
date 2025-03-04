@@ -447,7 +447,7 @@ ApplicationWindow {
 
     function getIdealHeight() {
         if (root.visibility === ApplicationWindow.Windowed) {
-            return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 74,
+            return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 69,
                             Screen.desktopAvailableHeight * 0.9)
         }
     }

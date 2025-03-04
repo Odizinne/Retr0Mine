@@ -4,14 +4,14 @@ import net.odizinne.retr0mine 1.0
 
 Item {
     id: control
-    height: 40
+    height: 35
     anchors {
         left: parent.left
         right: parent.right
         top: parent.top
         topMargin: 12
-        leftMargin: 12
-        rightMargin: 12
+        leftMargin: 13
+        rightMargin: 15
     }
 
     Button {
