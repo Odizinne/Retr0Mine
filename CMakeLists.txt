@@ -44,6 +44,7 @@ set(QML_FILES
     qml/GameView.qml
     qml/MainMenu.qml
     qml/GridLoadingIndicator.qml
+    qml/PingIndicator.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml
     qml/SettingsPanes/DifficultyPane.qml
