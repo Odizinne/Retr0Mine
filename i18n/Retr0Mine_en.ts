@@ -274,15 +274,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="687"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="694"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="701"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="688"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="695"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="702"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="711"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="717"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="712"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="718"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -467,7 +467,12 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="277"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="279"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="287"/>
         <source>Quit session</source>
         <translation type="unfinished"></translation>
     </message>
