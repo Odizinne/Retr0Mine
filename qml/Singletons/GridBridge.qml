@@ -665,6 +665,9 @@ QtObject {
                 const difficulty = GameState.getDifficultyLevel()
                 if (difficulty === "medium" || difficulty === "hard" || difficulty === "retr0") {
                     SteamIntegration.unlockAchievement("ACH_WIN_COOP");
+                    if (SteamIntegration.isHost) {
+                        SteamIntegration.sendGameAction("unlockCoopAchievement", 0);
+                    }
                 }
             }
 
@@ -1134,6 +1137,14 @@ QtObject {
                 Qt.callLater(function() {
                     requestFullSync();
                 });
+            } else if (actionType === "unlockCoopAchievement") {
+                console.log("Client received coop achievement unlock notification");
+                if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+                    const difficulty = GameState.getDifficultyLevel();
+                    if (difficulty === "medium" || difficulty === "hard" || difficulty === "retr0") {
+                        SteamIntegration.unlockAchievement("ACH_WIN_COOP");
+                    }
+                }
             }
 
             // Action finished processing
