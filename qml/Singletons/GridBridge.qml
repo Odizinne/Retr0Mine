@@ -22,6 +22,9 @@ QtObject {
     property bool sessionRunning: false
     property bool mpPopupCloseButtonVisible: false
     property bool allowClientReveal: false
+    property var chunkedMines: []
+    property int receivedChunks: 0
+    property int expectedTotalChunks: 0
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer
@@ -858,7 +861,6 @@ QtObject {
 
     function sendMinesListToClient() {
         if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
-            console.log("Not sending mines: not in multiplayer or not host");
             return;
         }
 
@@ -867,26 +869,52 @@ QtObject {
             return;
         }
 
-        // Important! Create a CLEAN array of mine positions
-        // This ensures we send raw numbers without any objects or references
-        const cleanMinesArray = [];
-        for (let i = 0; i < GameState.mines.length; i++) {
-            cleanMinesArray.push(Number(GameState.mines[i]));
+        // Create a clean array of mine positions
+        const cleanMinesArray = GameState.mines.map(pos => Number(pos));
+
+        // If mines array is small enough, send it as one packet
+        if (cleanMinesArray.length <= 100) {  // Adjust this threshold as needed
+            console.log("Sending mines list as single packet, count:", cleanMinesArray.length);
+
+            const minesData = {
+                gridSizeX: Number(GameState.gridSizeX),
+                gridSizeY: Number(GameState.gridSizeY),
+                mineCount: Number(GameState.mineCount),
+                mines: cleanMinesArray,
+                chunkIndex: 0,
+                totalChunks: 1
+            };
+
+            SteamIntegration.sendGameState(minesData);
+        } else {
+            // For larger arrays, split into chunks
+            const chunkSize = 50;  // Adjust chunk size as needed
+            const totalChunks = Math.ceil(cleanMinesArray.length / chunkSize);
+
+            console.log("Sending mines list in", totalChunks, "chunks, total mines:", cleanMinesArray.length);
+
+            for (let i = 0; i < totalChunks; i++) {
+                const startIndex = i * chunkSize;
+                const endIndex = Math.min(startIndex + chunkSize, cleanMinesArray.length);
+                const chunkArray = cleanMinesArray.slice(startIndex, endIndex);
+
+                const chunkData = {
+                    gridSizeX: Number(GameState.gridSizeX),
+                    gridSizeY: Number(GameState.gridSizeY),
+                    mineCount: Number(GameState.mineCount),
+                    mines: chunkArray,
+                    chunkIndex: i,
+                    totalChunks: totalChunks,
+                    isChunked: true
+                };
+
+                console.log("Sending chunk", i+1, "of", totalChunks, "size:", chunkArray.length);
+                SteamIntegration.sendGameState(chunkData);
+
+                // Small delay between chunks to prevent network congestion
+                Qt.callLater(() => {});
+            }
         }
-
-        console.log("Sending mines list to client, count:", cleanMinesArray.length);
-        console.log("Mine positions (first 10):", cleanMinesArray.slice(0, 10));
-
-        // Create a mines-only data packet with CLEAN data
-        const minesData = {
-            gridSizeX: Number(GameState.gridSizeX),
-            gridSizeY: Number(GameState.gridSizeY),
-            mineCount: Number(GameState.mineCount),
-            mines: cleanMinesArray // Using our clean array
-        };
-
-        // Send the mines data
-        SteamIntegration.sendGameState(minesData);
     }
 
     function sendCellUpdateToClient(index, action) {
@@ -1234,7 +1262,7 @@ QtObject {
         }
     }
 
-    // Called when the client receives a game state update from host
+    // Then replace the current applyGameState function with this:
     function applyGameState(gameState) {
         console.log("Applying received game state");
 
@@ -1242,6 +1270,71 @@ QtObject {
         if (!gameState) {
             console.error("Received invalid game state");
             isProcessingNetworkAction = false;
+            return;
+        }
+
+        // Check if this is a chunked mines data packet
+        if (gameState.isChunked) {
+            console.log("Received chunked mines data - chunk " + (gameState.chunkIndex + 1) + " of " + gameState.totalChunks);
+
+            // If this is the first chunk, reset our arrays and counters
+            if (gameState.chunkIndex === 0) {
+                chunkedMines = [];
+                receivedChunks = 0;
+                expectedTotalChunks = gameState.totalChunks;
+            }
+
+            // Add this chunk's mines to our array
+            if (Array.isArray(gameState.mines)) {
+                chunkedMines = chunkedMines.concat(gameState.mines.map(Number));
+            } else if (typeof gameState.mines === 'object' && gameState.mines !== null) {
+                // Handle object-style array if needed
+                for (let prop in gameState.mines) {
+                    if (!isNaN(parseInt(prop))) {
+                        chunkedMines.push(Number(gameState.mines[prop]));
+                    }
+                }
+            }
+
+            receivedChunks++;
+            console.log("Chunk received, now have " + receivedChunks + " of " + expectedTotalChunks + " chunks");
+
+            // If we've received all expected chunks, process the complete mines data
+            if (receivedChunks === expectedTotalChunks) {
+                console.log("All chunks received, processing " + chunkedMines.length + " mines");
+
+                // Create a complete mines data object
+                const completeData = {
+                    gridSizeX: Number(gameState.gridSizeX),
+                    gridSizeY: Number(gameState.gridSizeY),
+                    mineCount: Number(gameState.mineCount),
+                    mines: chunkedMines
+                };
+
+                // Process the complete mines data
+                const success = applyMinesAndCalculateNumbers(completeData);
+
+                if (success) {
+                    // Mark that we have initialized mines
+                    minesInitialized = true;
+
+                    // Send acknowledgment to host that we're ready for actions
+                    console.log("Client sending readyForActions acknowledgment to host");
+                    SteamIntegration.sendGameAction("readyForActions", 0);
+
+                    // Process any pending actions
+                    if (pendingActions.length > 0) {
+                        console.log("Processing", pendingActions.length, "buffered actions");
+                        Qt.callLater(function() {
+                            pendingActions.forEach(function(action) {
+                                console.log("Processing buffered action:", action.type, action.index);
+                                handleNetworkAction(action.type, action.index);
+                            });
+                            pendingActions = [];
+                        });
+                    }
+                }
+            }
             return;
         }
 
@@ -1255,6 +1348,10 @@ QtObject {
             if (success) {
                 // Mark that we have initialized mines
                 minesInitialized = true;
+
+                // Acknowledge to host that we're ready for actions
+                console.log("Client sending readyForActions acknowledgment to host");
+                SteamIntegration.sendGameAction("readyForActions", 0);
 
                 // Process any pending actions
                 if (pendingActions.length > 0) {
