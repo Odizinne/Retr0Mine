@@ -125,11 +125,25 @@ Pane {
             Layout.rightMargin: 5
             text: qsTr("Apply")
             Layout.alignment: Qt.AlignRight
+            property int previousCustomWidth: 0
+            property int previousCustomHeight: 0
             onClicked: {
+                if (previousCustomWidth !== GameSettings.customWidth || previousCustomHeight !== GameSettings.customHeight) {
+                    GridBridge.cellsCreated = 0
+                }
+
                 GameState.gridSizeX = GameSettings.customWidth
                 GameState.gridSizeY = GameSettings.customHeight
                 GameState.mineCount = GameSettings.customMines
+
+                previousCustomWidth = GameSettings.customWidth
+                previousCustomHeight = GameSettings.customHeight
                 GridBridge.initGame()
+            }
+
+            Component.onCompleted: {
+                previousCustomWidth = GameSettings.customWidth
+                previousCustomHeight = GameSettings.customHeight
             }
         }
     }
