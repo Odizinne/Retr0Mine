@@ -109,7 +109,7 @@ Popup {
             Layout.alignment: Qt.AlignCenter
             to: GameState.gridSizeX * GameState.gridSizeY
             value: GridBridge.cellsCreated
-            visible: !SteamIntegration.isHost && (GameState.gridSizeX * GameState.gridSizeY) !== GridBridge.cellsCreated
+            visible:  SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && (GameState.gridSizeX * GameState.gridSizeY) !== GridBridge.cellsCreated
         }
     }
 
