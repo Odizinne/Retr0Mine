@@ -321,10 +321,17 @@ Item {
         Shortcut {
             sequence: "G"
             autoRepeat: false
-            enabled: cellMouseArea.isHovered && GameState.gameStarted
+            enabled: cellMouseArea.isHovered && GameState.gameStarted && !pingCooldown.running
             onActivated: {
                 GridBridge.sendPing(cellItem.index)
+                pingCooldown.start()
             }
+        }
+
+        Timer {
+            id: pingCooldown
+            interval: 500 // 0.5 seconds
+            repeat: false
         }
     }
 
