@@ -26,6 +26,15 @@ Popup {
     onVisibleChanged: {
         if (visible) {
             refreshFriendsList()
+
+            ComponentsContext.savePopupVisible = false
+            ComponentsContext.loadPopupVisible = false
+            ComponentsContext.leaderboardPopupVisible = false
+            ComponentsContext.restorePopupVisible = false
+            ComponentsContext.aboutPopupVisible = false
+            ComponentsContext.rulesPopupVisible = false
+            ComponentsContext.settingsWindowVisible = false
+            GameState.displayPostGame = false
         }
     }
 
