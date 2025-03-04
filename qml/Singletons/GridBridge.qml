@@ -465,8 +465,14 @@ QtObject {
 
                 // In multiplayer, if we're the host, send game over notification to client
                 if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                    // Send game over message with loss status (0 = loss)
-                    SteamIntegration.sendGameAction("gameOver", 0);
+                    // Make sure we send the final cell state before game over
+                    sendCellUpdateToClient(currentIndex, "finalReveal");
+
+                    // Wait a moment to ensure cell updates are processed before game over
+                    Qt.callLater(function() {
+                        // Send game over message with loss status (0 = loss)
+                        SteamIntegration.sendGameAction("gameOver", 0);
+                    });
                 }
 
                 return;
@@ -590,117 +596,136 @@ QtObject {
             GameState.gameWon = true;
             GameTimer.stop();
 
-            // Skip ALL leaderboard and achievement updates in multiplayer
-            if (!SteamIntegration.isInMultiplayerGame) {
-                // Leaderboard updates for single player only
-                let leaderboardData = GameCore.loadGameState("leaderboard.json");
-                let leaderboard = {};
-
-                if (leaderboardData) {
-                    try {
-                        leaderboard = JSON.parse(leaderboardData);
-                    } catch (e) {
-                        console.error("Failed to parse leaderboard data:", e);
+            // In multiplayer mode, we need special handling
+            if (SteamIntegration.isInMultiplayerGame) {
+                // If we're the host, make sure to sync final cell state BEFORE sending game over
+                if (SteamIntegration.isHost) {
+                    // Ensure all revealed cells are properly synchronized first
+                    for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+                        const cell = getCell(i);
+                        if (cell && cell.revealed && !GameState.mines.includes(i)) {
+                            // Force send all revealed cells to ensure client has latest state
+                            sendCellUpdateToClient(i, "finalReveal");
+                        }
                     }
+
+                    // Wait a moment to ensure cell updates are processed before game over
+                    Qt.callLater(function() {
+                        // Send game over message with win status (1 = win)
+                        SteamIntegration.sendGameAction("gameOver", 1);
+                    });
                 }
 
+                // For both host and client, we need to display the game over UI
+                GameState.displayPostGame = true;
+                if (audioEngine) audioEngine.playWin();
+
+                // Handle achievement unlocking for multiplayer
                 const difficulty = GameState.getDifficultyLevel();
-                if (difficulty) {
-                    const timeField = difficulty + 'Time';
-                    const winsField = difficulty + 'Wins';
-                    const centisecondsField = difficulty + 'Centiseconds';
-                    const formattedTime = GameTimer.getDetailedTime();
-                    const centiseconds = GameTimer.centiseconds;
-
-                    if (!leaderboard[winsField]) {
-                        leaderboard[winsField] = 0;
-                    }
-
-                    leaderboard[winsField]++;
-                    if (leaderboardWindow) {
-                        leaderboardWindow[winsField] = leaderboard[winsField];
-                    }
-
-                    if (!leaderboard[centisecondsField] || centiseconds < leaderboard[centisecondsField]) {
-                        leaderboard[timeField] = formattedTime;
-                        leaderboard[centisecondsField] = centiseconds;
-                        if (leaderboardWindow) {
-                            leaderboardWindow[timeField] = formattedTime;
-                        }
-                        GameState.displayNewRecord = true;
-                    }
-                }
-
-                GameCore.saveLeaderboard(JSON.stringify(leaderboard));
-
-                // Achievement updates for single player only
-                if (!GameState.isManuallyLoaded) {
-                    if (SteamIntegration.initialized) {
-                        const difficulty = GameState.getDifficultyLevel();
-
-                        if (GameState.currentHintCount === 0) {
-                            if (difficulty === 'easy') {
-                                if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
-                                    SteamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
-                                    GameState.notificationText = qsTr("New flag unlocked!");
-                                    GameState.displayNotification = true;
-                                    GameState.flag1Unlocked = true;
-                                }
-                            } else if (difficulty === 'medium') {
-                                if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
-                                    SteamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
-                                    GameState.notificationText = qsTr("New flag unlocked!");
-                                    GameState.displayNotification = true;
-                                    GameState.flag2Unlocked = true;
-                                }
-                            } else if (difficulty === 'hard') {
-                                if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
-                                    SteamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
-                                    GameState.notificationText = qsTr("New flag unlocked!");
-                                    GameState.displayNotification = true;
-                                    GameState.flag3Unlocked = true;
-                                }
-                            }
-                        }
-
-                        if (difficulty === 'easy') {
-                            if (Math.floor(GameTimer.centiseconds / 100) < 15 && !SteamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
-                                SteamIntegration.unlockAchievement("ACH_SPEED_DEMON");
-                                GameState.notificationText = qsTr("New grid animation unlocked!");
-                                GameState.displayNotification = true;
-                                GameState.anim2Unlocked = true;
-                            }
-                            if (GameState.currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
-                                SteamIntegration.unlockAchievement("ACH_HINT_MASTER");
-                                GameState.notificationText = qsTr("New grid animation unlocked!");
-                                GameState.displayNotification = true;
-                                GameState.anim1Unlocked = true;
-                            }
-                        }
-
-                        SteamIntegration.incrementTotalWin();
-                    }
-                }
-            } else {
-                const difficulty = GameState.getDifficultyLevel()
                 if (difficulty === "medium" || difficulty === "hard" || difficulty === "retr0") {
                     SteamIntegration.unlockAchievement("ACH_WIN_COOP");
                     if (SteamIntegration.isHost) {
                         SteamIntegration.sendGameAction("unlockCoopAchievement", 0);
                     }
                 }
+
+                return;  // Exit early for multiplayer
             }
 
+            // Skip ALL leaderboard and achievement updates in multiplayer
+            // Leaderboard updates for single player only
+            let leaderboardData = GameCore.loadGameState("leaderboard.json");
+            let leaderboard = {};
+
+            if (leaderboardData) {
+                try {
+                    leaderboard = JSON.parse(leaderboardData);
+                } catch (e) {
+                    console.error("Failed to parse leaderboard data:", e);
+                }
+            }
+
+            const difficulty = GameState.getDifficultyLevel();
+            if (difficulty) {
+                const timeField = difficulty + 'Time';
+                const winsField = difficulty + 'Wins';
+                const centisecondsField = difficulty + 'Centiseconds';
+                const formattedTime = GameTimer.getDetailedTime();
+                const centiseconds = GameTimer.centiseconds;
+
+                if (!leaderboard[winsField]) {
+                    leaderboard[winsField] = 0;
+                }
+
+                leaderboard[winsField]++;
+                if (leaderboardWindow) {
+                    leaderboardWindow[winsField] = leaderboard[winsField];
+                }
+
+                if (!leaderboard[centisecondsField] || centiseconds < leaderboard[centisecondsField]) {
+                    leaderboard[timeField] = formattedTime;
+                    leaderboard[centisecondsField] = centiseconds;
+                    if (leaderboardWindow) {
+                        leaderboardWindow[timeField] = formattedTime;
+                    }
+                    GameState.displayNewRecord = true;
+                }
+            }
+
+            GameCore.saveLeaderboard(JSON.stringify(leaderboard));
+
+            // Achievement updates for single player only
+            if (!GameState.isManuallyLoaded) {
+                if (SteamIntegration.initialized) {
+                    const difficulty = GameState.getDifficultyLevel();
+
+                    if (GameState.currentHintCount === 0) {
+                        if (difficulty === 'easy') {
+                            if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
+                                SteamIntegration.unlockAchievement("ACH_NO_HINT_EASY");
+                                GameState.notificationText = qsTr("New flag unlocked!");
+                                GameState.displayNotification = true;
+                                GameState.flag1Unlocked = true;
+                            }
+                        } else if (difficulty === 'medium') {
+                            if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
+                                SteamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM");
+                                GameState.notificationText = qsTr("New flag unlocked!");
+                                GameState.displayNotification = true;
+                                GameState.flag2Unlocked = true;
+                            }
+                        } else if (difficulty === 'hard') {
+                            if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
+                                SteamIntegration.unlockAchievement("ACH_NO_HINT_HARD");
+                                GameState.notificationText = qsTr("New flag unlocked!");
+                                GameState.displayNotification = true;
+                                GameState.flag3Unlocked = true;
+                            }
+                        }
+                    }
+
+                    if (difficulty === 'easy') {
+                        if (Math.floor(GameTimer.centiseconds / 100) < 15 && !SteamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
+                            SteamIntegration.unlockAchievement("ACH_SPEED_DEMON");
+                            GameState.notificationText = qsTr("New grid animation unlocked!");
+                            GameState.displayNotification = true;
+                            GameState.anim2Unlocked = true;
+                        }
+                        if (GameState.currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
+                            SteamIntegration.unlockAchievement("ACH_HINT_MASTER");
+                            GameState.notificationText = qsTr("New grid animation unlocked!");
+                            GameState.displayNotification = true;
+                            GameState.anim1Unlocked = true;
+                        }
+                    }
+
+                    SteamIntegration.incrementTotalWin();
+                }
+            }
 
             // Always display post-game UI for both single player and multiplayer
             GameState.displayPostGame = true;
             if (audioEngine) audioEngine.playWin();
-
-            // In multiplayer, if we're the host, send game over notification to client
-            if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                // Send game over message with win status (1 = win)
-                SteamIntegration.sendGameAction("gameOver", 1);
-            }
         } else {
             if (audioEngine) audioEngine.playClick();
         }
@@ -1097,7 +1122,28 @@ QtObject {
                 return;
             }
 
-            if (actionType === "reveal") {
+            if (actionType === "finalReveal") {
+                console.log("Client processing final reveal action for cell:", cellIndex);
+                // For final reveals, we need to force reveal the cell
+                withCell(cellIndex, function(cell) {
+                    if (!cell.revealed) {
+                        cell.revealed = true;
+                        // Force the button to be flat without animation
+                        cell.shouldBeFlat = true;
+                        if (cell.button) {
+                            cell.button.flat = true;
+                            cell.button.opacity = 1;
+                        }
+
+                        // Update the bomb state if needed
+                        if (GameState.mines.includes(cellIndex)) {
+                            cell.isBombClicked = true;
+                        }
+
+                        GameState.revealedCount++;
+                    }
+                });
+            } else if (actionType === "reveal") {
                 console.log("Client processing reveal action for cell:", cellIndex);
                 performReveal(cellIndex);
             } else if (actionType === "flag") {
