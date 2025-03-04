@@ -103,7 +103,7 @@ ApplicationWindow {
                 if (GridBridge.isProcessingNetworkAction) {
                     GridBridge.isProcessingNetworkAction = false;
                 }
-                GridBridge.sessionRunnig = false;
+                GridBridge.sessionRunning = false;
                 GridBridge.mpPopupCloseButtonVisible = false;
                 GridBridge.initGame();
             }
@@ -114,6 +114,8 @@ ApplicationWindow {
             if (SteamIntegration.connectedPlayerName) {
                 console.log("Player connected:", SteamIntegration.connectedPlayerName);
             } else if (SteamIntegration.isInMultiplayerGame) {
+                GridBridge.sessionRunning = false;
+                GridBridge.mpPopupCloseButtonVisible = false;
                 console.log("Player disconnected");
             }
         }

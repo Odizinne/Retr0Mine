@@ -292,6 +292,8 @@ Popup {
                     }
                     GridBridge.sessionRunning = false
                     ComponentsContext.multiplayerPopupVisible = false
+
+
                 }
             }
         }
