@@ -319,8 +319,8 @@ Item {
 
         // Add this right after the MouseArea:
         Shortcut {
-            sequence: "Ctrl+G"
-            enabled: SteamIntegration.isInMultiplayerGame && cellMouseArea.isHovered && GameState.gameStarted
+            sequence: "G"
+            enabled: cellMouseArea.isHovered && GameState.gameStarted
             onActivated: {
                 GridBridge.sendPing(cellItem.index)
             }

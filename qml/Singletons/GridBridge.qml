@@ -1638,17 +1638,16 @@ QtObject {
     }
 
     function sendPing(cellIndex) {
-        if (!SteamIntegration.isInMultiplayerGame || !GameState.gameStarted) {
+        if (!GameState.gameStarted) {
             return;
         }
 
-        console.log("Sending ping for cell:", cellIndex);
+        if (SteamIntegration.isInMultiplayerGame) {
+            console.log("Sending ping for cell:", cellIndex);
+            SteamIntegration.sendGameAction("ping", cellIndex);
+        }
 
-        // Show ping on local grid
         showPingAtCell(cellIndex);
-
-        // Send ping action to other player
-        SteamIntegration.sendGameAction("ping", cellIndex);
     }
 
     function showPingAtCell(cellIndex) {
