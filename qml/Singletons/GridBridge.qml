@@ -21,6 +21,7 @@ QtObject {
     property bool clientGridReady: false
     property bool sessionRunning: false
     property bool mpPopupCloseButtonVisible: false
+    property bool allowClientReveal: false
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer
@@ -1148,6 +1149,7 @@ QtObject {
             } else if (actionType === "reveal") {
                 console.log("Client processing reveal action for cell:", cellIndex);
                 performReveal(cellIndex);
+                allowClientReveal = true
             } else if (actionType === "flag") {
                 console.log("Client processing flag action for cell:", cellIndex);
                 performToggleFlag(cellIndex);
@@ -1177,6 +1179,7 @@ QtObject {
 
                 // Reset client-side state
                 minesInitialized = false;
+                allowClientReveal = false;
                 pendingActions = [];
                 isProcessingNetworkAction = false;
                 GameState.mines = [];

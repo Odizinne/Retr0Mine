@@ -96,6 +96,7 @@ ApplicationWindow {
                     SteamIntegration.isHost ? "host" : "client");
 
                 // Reset any in-progress game if joining a multiplayer session
+                GridBridge.allowClientReveal = false;
                 GridBridge.initGame();
             } else {
                 console.log("Left multiplayer mode");
@@ -408,6 +409,7 @@ ApplicationWindow {
                 Component.onCompleted: {
                     GridBridge.setGrid(grid)
                 }
+                enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !GridBridge.allowClientReveal ? false : true
                 delegate: Loader {
                     id: cellLoader
                     asynchronous: true
