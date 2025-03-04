@@ -530,7 +530,7 @@ QtObject {
             // Reset multiplayer flags
             minesInitialized = false;
             clientReadyForActions = false;
-            clientGridReady = false;  // Reset the grid ready flag
+            //clientGridReady = false;  // Reset the grid ready flag
             pendingInitialActions = [];
             pendingActions = [];
             isProcessingNetworkAction = false;
