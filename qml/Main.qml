@@ -97,22 +97,13 @@ ApplicationWindow {
 
                 // Reset any in-progress game if joining a multiplayer session
                 GridBridge.initGame();
-
-                // Set the appropriate difficulty (medium by default for multiplayer)
-                //GameSettings.difficulty = 1; // Medium difficulty
-                //const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
-                //GameState.gridSizeX = difficultySet.x;
-                //GameState.gridSizeY = difficultySet.y;
-                //GameState.mineCount = difficultySet.mines;
             } else {
                 console.log("Left multiplayer mode");
 
-                // Reset processing state
                 if (GridBridge.isProcessingNetworkAction) {
                     GridBridge.isProcessingNetworkAction = false;
                 }
 
-                // Return to single player after leaving multiplayer
                 GridBridge.initGame();
             }
         }
@@ -262,19 +253,21 @@ ApplicationWindow {
 
     Shortcut {
         sequence: StandardKey.Save
-        enabled: GameState.gameStarted && !GameState.gameOver
+        enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
         autoRepeat: false
         onActivated: ComponentsContext.savePopupVisible = true
     }
 
     Shortcut {
         sequence: StandardKey.Open
+        enabled: !SteamIntegration.isInMultiplayerGame
         autoRepeat: false
         onActivated: ComponentsContext.loadPopupVisible = true
     }
 
     Shortcut {
         sequence: StandardKey.New
+        enabled: !(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)
         autoRepeat: false
         onActivated: {
             GameState.difficultyChanged = false

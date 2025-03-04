@@ -30,7 +30,7 @@ Menu {
 
     MenuItem {
         text: qsTr("Hint")
-        enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
+        enabled: GameState.gameStarted && !GameState.gameOver
         onTriggered: GridBridge.requestHint()
     }
 
