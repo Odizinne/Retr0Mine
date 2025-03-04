@@ -320,6 +320,7 @@ Item {
         // Add this right after the MouseArea:
         Shortcut {
             sequence: "G"
+            autoRepeat: false
             enabled: cellMouseArea.isHovered && GameState.gameStarted
             onActivated: {
                 GridBridge.sendPing(cellItem.index)
