@@ -661,7 +661,13 @@ QtObject {
                         SteamIntegration.incrementTotalWin();
                     }
                 }
+            } else {
+                const difficulty = GameState.getDifficultyLevel()
+                if (difficulty === "medium" || difficulty === "hard" || difficulty === "retr0") {
+                    SteamIntegration.unlockAchievement("ACH_WIN_COOP");
+                }
             }
+
 
             // Always display post-game UI for both single player and multiplayer
             GameState.displayPostGame = true;
