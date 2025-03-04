@@ -87,16 +87,33 @@ Popup {
         }
     }
 
-    Label {
-        text: GridBridge.sessionRunning ? qsTr("Session in progress") : (SteamIntegration.isHost ? qsTr("Ready") : (GridBridge.cellsCreated !== (GameState.gridSizeX * GameState.gridSizeY) ? qsTr("Creating cells...") : qsTr("Waiting for host")))
-        font.pixelSize: 16
-        font.bold: true
-        color: "#28d13c"
+    ColumnLayout {
         anchors.centerIn: parent
-        visible: SteamIntegration.connectedPlayerName !== "" &&
-                 SteamIntegration.isP2PConnected &&
-                 (SteamIntegration.isHost ? GridBridge.clientGridReady : true)
+        spacing: 12
+
+        Label {
+            id: statusLabel
+            text: GridBridge.sessionRunning ? qsTr("Session in progress") : (SteamIntegration.isHost ? qsTr("Ready") : (GridBridge.cellsCreated !== (GameState.gridSizeX * GameState.gridSizeY) ? qsTr("Creating cells...") : qsTr("Waiting for host")))
+            font.pixelSize: 16
+            font.bold: true
+            Layout.alignment: Qt.AlignCenter
+            //color: "#28d13c"
+            visible: SteamIntegration.connectedPlayerName !== "" &&
+                     SteamIntegration.isP2PConnected &&
+                     (SteamIntegration.isHost ? GridBridge.clientGridReady : true)
+        }
+
+        ProgressBar {
+            from: 0
+            Layout.preferredWidth: statusLabel.width
+            Layout.alignment: Qt.AlignCenter
+            to: GameState.gridSizeX * GameState.gridSizeY
+            value: GridBridge.cellsCreated
+            visible: !SteamIntegration.isHost && (GameState.gridSizeX * GameState.gridSizeY) !== GridBridge.cellsCreated
+        }
     }
+
+
 
     ToolTip {
         id: inviteSentToolTip
