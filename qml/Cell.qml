@@ -278,9 +278,13 @@ Item {
         }
 
         MouseArea {
+            id: cellMouseArea
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             enabled: !(GridBridge.isProcessingNetworkAction && !SteamIntegration.isHost)
+            hoverEnabled: true
+            property bool isHovered: false
+
             function handleCellClick(mouse) {
                 if (!GameState.gameStarted) {
                     GridBridge.reveal(cellItem.index);
@@ -302,7 +306,24 @@ Item {
                 }
             }
 
+            onEntered: {
+                isHovered = true
+            }
+
+            onExited: {
+                isHovered = false
+            }
+
             onClicked: (mouse) => handleCellClick(mouse)
+        }
+
+        // Add this right after the MouseArea:
+        Shortcut {
+            sequence: "Ctrl+G"
+            enabled: SteamIntegration.isInMultiplayerGame && cellMouseArea.isHovered && GameState.gameStarted
+            onActivated: {
+                GridBridge.sendPing(cellItem.index)
+            }
         }
     }
 

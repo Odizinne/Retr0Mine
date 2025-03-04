@@ -1128,6 +1128,12 @@ QtObject {
                 console.log("Host processing hint request from client");
                 processHintRequest();
                 // The actual hint cell is sent back in processHintRequest
+            } // For the host case in handleNetworkAction (around line 4016)
+            // Add this after the requestHint case:
+            else if (actionType === "ping") {
+                console.log("Host received ping at cell:", cellIndex);
+                // Just show the ping locally and relay back to other clients if needed
+                showPingAtCell(cellIndex);
             }
         } else {
             // Client receives action from host
@@ -1254,6 +1260,10 @@ QtObject {
                     cell.highlightHint();
                 });
                 GameState.currentHintCount++;
+                isProcessingNetworkAction = false;
+            } else if (actionType === "ping") {
+                console.log("Client received ping at cell:", cellIndex);
+                showPingAtCell(cellIndex);
                 isProcessingNetworkAction = false;
             }
 
@@ -1624,6 +1634,53 @@ QtObject {
         if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
             console.log("Client notifying host that grid is ready");
             SteamIntegration.sendGameAction("gridReady", 0);
+        }
+    }
+
+    function sendPing(cellIndex) {
+        if (!SteamIntegration.isInMultiplayerGame || !GameState.gameStarted) {
+            return;
+        }
+
+        console.log("Sending ping for cell:", cellIndex);
+
+        // Show ping on local grid
+        showPingAtCell(cellIndex);
+
+        // Send ping action to other player
+        SteamIntegration.sendGameAction("ping", cellIndex);
+    }
+
+    function showPingAtCell(cellIndex) {
+        if (cellIndex < 0 || cellIndex >= GameState.gridSizeX * GameState.gridSizeY) {
+            console.error("Invalid cell index for ping:", cellIndex);
+            return;
+        }
+
+        const cell = getCell(cellIndex);
+        if (!cell) {
+            console.error("Cannot find cell for ping:", cellIndex);
+            return;
+        }
+
+        // Create ping indicator dynamically
+        const pingComponent = Qt.createComponent("../PingIndicator.qml");
+        if (pingComponent.status === Component.Ready) {
+            const pingObject = pingComponent.createObject(cell, {
+                "anchors.centerIn": cell
+            });
+
+            // Auto-destroy after animation completes (3s total duration of animation)
+            const pingTimer = Qt.createQmlObject(
+                'import QtQuick; Timer { interval: 3000; running: true; repeat: false; }',
+                cell, "pingTimer");
+
+            pingTimer.triggered.connect(function() {
+                pingObject.destroy();
+                pingTimer.destroy();
+            });
+        } else {
+            console.error("Error creating ping indicator:", pingComponent.errorString());
         }
     }
 }
