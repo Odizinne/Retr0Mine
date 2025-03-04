@@ -88,7 +88,7 @@ Popup {
     }
 
     Label {
-        text: SteamIntegration.isHost ? qsTr("Ready") : qsTr("Waiting for host")
+        text: GridBridge.sessionRunning ? qsTr("Session in progress") : (SteamIntegration.isHost ? qsTr("Ready") : qsTr("Waiting for host"))
         font.pixelSize: 16
         font.bold: true
         color: "#28d13c"
@@ -260,11 +260,13 @@ Popup {
                 enabled: SteamIntegration.isInMultiplayerGame &&
                          !SteamIntegration.isConnecting &&
                          SteamIntegration.isP2PConnected &&
-                         GridBridge.clientGridReady
+                         GridBridge.clientGridReady &&
+                         !GridBridge.sessionRunning
                 onClicked: {
                     if (SteamIntegration.isHost) {
                         SteamIntegration.sendGameAction("startGame", 0)
                     }
+                    GridBridge.sessionRunning = true
                     ComponentsContext.multiplayerPopupVisible = false
                 }
             }
@@ -272,12 +274,13 @@ Popup {
             Button {
                 id: cancelButton
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
-                text: qsTr("Cancel")
+                text: qsTr("Quit")
                 Layout.fillWidth: true
                 onClicked: {
                     if (SteamIntegration.isInMultiplayerGame) {
                         SteamIntegration.leaveLobby()
                     }
+                    GridBridge.sessionRunning = false
                     ComponentsContext.multiplayerPopupVisible = false
                 }
             }

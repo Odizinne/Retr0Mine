@@ -19,6 +19,7 @@ QtObject {
     property var pendingInitialActions: []      // Stores initial actions that came with board generation
     property bool p2pConnected: false
     property bool clientGridReady: false
+    property bool sessionRunning: false
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer

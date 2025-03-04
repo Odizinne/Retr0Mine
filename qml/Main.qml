@@ -103,7 +103,7 @@ ApplicationWindow {
                 if (GridBridge.isProcessingNetworkAction) {
                     GridBridge.isProcessingNetworkAction = false;
                 }
-
+                GridBridge.sessionRunnig = false;
                 GridBridge.initGame();
             }
         }
