@@ -1281,9 +1281,37 @@ QtObject {
                 GameState.gridSizeY !== gameState.gridSizeY) {
                 console.log("Grid size changed:", gameState.gridSizeX, "x", gameState.gridSizeY);
 
-                // Grid size changed, need to resize
+                // Update grid dimensions
                 GameState.gridSizeX = gameState.gridSizeX;
                 GameState.gridSizeY = gameState.gridSizeY;
+                GameState.mineCount = gameState.mineCount || 0;
+
+                // Update difficulty setting to match the new dimensions
+                let matchedDifficulty = -1;
+
+                // Check against standard difficulty settings
+                for (let i = 0; i < 4; i++) {
+                    const diffSet = GameState.difficultySettings[i];
+                    if (diffSet.x === GameState.gridSizeX &&
+                        diffSet.y === GameState.gridSizeY &&
+                        diffSet.mines === GameState.mineCount) {
+                        matchedDifficulty = i;
+                        break;
+                    }
+                }
+
+                if (matchedDifficulty >= 0) {
+                    // Standard difficulty found
+                    console.log("Setting difficulty to match received dimensions:", matchedDifficulty);
+                    GameSettings.difficulty = matchedDifficulty;
+                } else {
+                    // No match, update custom settings
+                    console.log("Setting custom difficulty for received dimensions");
+                    GameSettings.customWidth = GameState.gridSizeX;
+                    GameSettings.customHeight = GameState.gridSizeY;
+                    GameSettings.customMines = GameState.mineCount;
+                    GameSettings.difficulty = 4; // Custom difficulty index
+                }
 
                 // We need to wait for the grid to be recreated
                 // This is handled in Main.qml via the grid size change signals
@@ -1454,6 +1482,33 @@ QtObject {
             data.gridSizeY,
             data.mineCount
         );
+
+        // Update difficulty setting to match the new dimensions
+        let matchedDifficulty = -1;
+
+        // Check against standard difficulty settings
+        for (let i = 0; i < 4; i++) {
+            const diffSet = GameState.difficultySettings[i];
+            if (diffSet.x === data.gridSizeX &&
+                diffSet.y === data.gridSizeY &&
+                diffSet.mines === data.mineCount) {
+                matchedDifficulty = i;
+                break;
+            }
+        }
+
+        if (matchedDifficulty >= 0) {
+            // Standard difficulty found
+            console.log("Setting difficulty to match received dimensions:", matchedDifficulty);
+            GameSettings.difficulty = matchedDifficulty;
+        } else {
+            // No match, update custom settings
+            console.log("Setting custom difficulty for received dimensions");
+            GameSettings.customWidth = data.gridSizeX;
+            GameSettings.customHeight = data.gridSizeY;
+            GameSettings.customMines = data.mineCount;
+            GameSettings.difficulty = 4; // Custom difficulty index
+        }
 
         // Send acknowledgment back to host
         if (!SteamIntegration.isHost) {
