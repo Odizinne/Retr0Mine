@@ -23,7 +23,6 @@ Popup {
         ComponentsContext.multiplayerPopupVisible = false
     }
 
-    // Refresh the friends list when popup is opened
     onVisibleChanged: {
         if (visible) {
             refreshFriendsList()
@@ -32,23 +31,24 @@ Popup {
 
     function refreshFriendsList() {
         refreshing = true
-
-        // Clear the list first to avoid duplicates
         friendsList.clear()
-
-        // Get online friends from SteamIntegration
         var friends = SteamIntegration.getOnlineFriends()
 
         for (var i = 0; i < friends.length; i++) {
             var parts = friends[i].split(":")
             var name = parts[0]
             var steamId = parts[1]
-            friendsList.append({ name: name, steamId: steamId })
+            var avatarHandle = parseInt(parts[2])
+
+            friendsList.append({
+                name: name,
+                steamId: steamId,
+                avatarHandle: avatarHandle
+            })
         }
         refreshing = false
     }
 
-    // Data model for friends list
     ListModel {
         id: friendsList
     }
@@ -97,7 +97,7 @@ Popup {
         opacity: 0
         contentItem: Label {
             text: qsTr("Invite sent")
-            color: "#28d13c" // Green color
+            color: "#28d13c"
             font.pixelSize: 14
         }
 
@@ -168,6 +168,7 @@ Popup {
                         height: 40
                         required property string name
                         required property string steamId
+                        required property string avatarHandle
                         required property int index
                         property bool inviteDisabled: false
 
@@ -176,14 +177,15 @@ Popup {
                             anchors.leftMargin: 5
                             anchors.rightMargin: 5
                             spacing: 10
-                            IconImage {
-                                source: "qrc:/icons/steam.png"
-                                color: GameConstants.foregroundColor
-                                sourceSize.height: 14
-                                sourceSize.width: 14
-                                Layout.preferredHeight: 14
-                                Layout.preferredWidth: 14
-                                Layout.topMargin: 2
+
+                            Image {
+                                Layout.preferredHeight: 24
+                                Layout.preferredWidth: 24
+                                source: delegate.avatarHandle > 0 ?
+                                        SteamIntegration.getAvatarImageForHandle(delegate.avatarHandle) :
+                                        "qrc:/icons/steam.png"
+                                asynchronous: true
+                                fillMode: Image.PreserveAspectFit
                             }
 
                             Label {

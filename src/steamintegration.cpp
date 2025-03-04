@@ -5,6 +5,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QCoreApplication>
+#include <QBuffer>
+#include <QImage>
 
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
@@ -392,11 +394,47 @@ QStringList SteamIntegration::getOnlineFriends()
         if (steamFriends->GetFriendPersonaState(friendId) != k_EPersonaStateOffline) {
             QString name = QString::fromUtf8(steamFriends->GetFriendPersonaName(friendId));
             QString id = QString::number(friendId.ConvertToUint64());
-            friendList.append(name + ":" + id); // Format: "FriendName:SteamID"
+
+            // Get avatar image handle
+            int avatarHandle = steamFriends->GetSmallFriendAvatar(friendId);
+
+            // Format: "FriendName:SteamID:AvatarHandle"
+            friendList.append(name + ":" + id + ":" + QString::number(avatarHandle));
         }
     }
 
     return friendList;
+}
+
+QString SteamIntegration::getAvatarImageForHandle(int handle)
+{
+    if (!m_initialized || handle == 0)
+        return QString();
+
+    ISteamUtils* steamUtils = SteamUtils();
+    if (!steamUtils)
+        return QString();
+
+    uint32 width, height;
+    if (!steamUtils->GetImageSize(handle, &width, &height) || width == 0 || height == 0)
+        return QString();
+
+    QByteArray imageData(width * height * 4, 0);
+    if (!steamUtils->GetImageRGBA(handle, reinterpret_cast<uint8*>(imageData.data()), imageData.size()))
+        return QString();
+
+    // Convert the RGBA data to a QImage
+    QImage image(reinterpret_cast<const uchar*>(imageData.data()), width, height, QImage::Format_RGBA8888);
+
+    // Convert to PNG and then to base64
+    QByteArray pngData;
+    QBuffer buffer(&pngData);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG");
+    buffer.close();
+
+    // Create data URL
+    return QString("data:image/png;base64,") + pngData.toBase64();
 }
 
 void SteamIntegration::inviteFriend(const QString& friendId)

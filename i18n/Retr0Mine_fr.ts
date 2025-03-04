@@ -458,17 +458,17 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="235"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="237"/>
         <source>Host</source>
         <translation>Héberger</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="264"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="266"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="246"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="248"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>

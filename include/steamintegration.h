@@ -62,6 +62,7 @@ public:
     Q_INVOKABLE void leaveLobby();
     Q_INVOKABLE void cleanupMultiplayerSession(bool isShuttingDown = false);
     Q_INVOKABLE QStringList getOnlineFriends();
+    Q_INVOKABLE QString getAvatarImageForHandle(int handle);
     Q_INVOKABLE void inviteFriend(const QString& friendId);
     Q_INVOKABLE void acceptInvite(const QString& lobbyId);
     Q_INVOKABLE void checkForPendingInvites();
