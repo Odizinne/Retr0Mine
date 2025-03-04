@@ -105,11 +105,21 @@ Popup {
 
         ProgressBar {
             from: 0
-            Layout.preferredWidth: statusLabel.width
+            id: cellProgressBar
+            Layout.preferredWidth: 300
             Layout.alignment: Qt.AlignCenter
             to: GameState.gridSizeX * GameState.gridSizeY
             value: GridBridge.cellsCreated
-            visible:  SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && (GameState.gridSizeX * GameState.gridSizeY) !== GridBridge.cellsCreated
+            opacity: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && ((GameState.gridSizeX * GameState.gridSizeY) !== GridBridge.cellsCreated) ? 1 : 0
+        }
+
+        Label {
+            text: qsTr("Press G while hovering a cell to signal it")
+            Layout.preferredWidth: 300
+            wrapMode: Text.WordWrap
+            Layout.alignment: Qt.AlignCenter
+            horizontalAlignment: Text.AlignHCenter
+            opacity: statusLabel.visible || cellProgressBar.opacity === 1 ? 0.7 : 0 || (SteamIntegration.isP2PConnected && GridBridge.clientGridReady)
         }
     }
 
@@ -119,7 +129,7 @@ Popup {
         id: inviteSentToolTip
         visible: true
         x: (parent.width - width) / 2
-        y: 20
+        y: 10
         opacity: 0
         contentItem: Label {
             text: qsTr("Invite sent")

@@ -453,37 +453,42 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Création des cellules...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="125"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="117"/>
+        <source>Press G while hovering a cell to signal it</source>
+        <translation>Appuyez sur G en surlovant une cellule pour la signaler</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="134"/>
         <source>Invite sent</source>
         <translation>Invitation envoyée</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="158"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="167"/>
         <source>Friends</source>
         <translation>Contacts</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="164"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="173"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="263"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="272"/>
         <source>Host</source>
         <translation>Héberger</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="296"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="305"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="304"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="313"/>
         <source>Quit session</source>
         <translation>Quitter la session</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="274"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="283"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>
