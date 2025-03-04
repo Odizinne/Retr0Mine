@@ -450,7 +450,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/Popups/MultiplayerPopup.qml" line="96"/>
         <source>Creating cells...</source>
-        <translation type="unfinished"></translation>
+        <translation>Création des cellules...</translation>
     </message>
     <message>
         <location filename="../qml/Popups/MultiplayerPopup.qml" line="125"/>
