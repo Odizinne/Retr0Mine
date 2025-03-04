@@ -252,7 +252,7 @@ Popup {
             Button {
                 id: startButton
                 highlighted: enabled
-                visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost
+                visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !GridBridge.mpPopupCloseButtonVisible
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
                 Layout.fillWidth: true
@@ -266,15 +266,25 @@ Popup {
                     if (SteamIntegration.isHost) {
                         SteamIntegration.sendGameAction("startGame", 0)
                     }
-                    GridBridge.sessionRunning = true
                     ComponentsContext.multiplayerPopupVisible = false
+                    GridBridge.sessionRunning = true
+                    GridBridge.mpPopupCloseButtonVisible = true
                 }
+            }
+
+            Button {
+                id: closeButton
+                visible: GridBridge.mpPopupCloseButtonVisible
+                Layout.preferredWidth: multiplayerPopup.buttonWidth
+                text: qsTr("Close")
+                Layout.fillWidth: true
+                onClicked: ComponentsContext.multiplayerPopupVisible = false
             }
 
             Button {
                 id: cancelButton
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
-                text: qsTr("Quit")
+                text: qsTr("Quit session")
                 Layout.fillWidth: true
                 onClicked: {
                     if (SteamIntegration.isInMultiplayerGame) {

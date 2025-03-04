@@ -20,6 +20,7 @@ QtObject {
     property bool p2pConnected: false
     property bool clientGridReady: false
     property bool sessionRunning: false
+    property bool mpPopupCloseButtonVisible: false
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer

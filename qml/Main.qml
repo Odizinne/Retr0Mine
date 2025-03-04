@@ -104,6 +104,7 @@ ApplicationWindow {
                     GridBridge.isProcessingNetworkAction = false;
                 }
                 GridBridge.sessionRunnig = false;
+                GridBridge.mpPopupCloseButtonVisible = false;
                 GridBridge.initGame();
             }
         }
