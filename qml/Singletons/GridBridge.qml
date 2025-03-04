@@ -138,16 +138,30 @@ QtObject {
     }
 
     function requestHint() {
-        // Disable hints in multiplayer
-        if (SteamIntegration.isInMultiplayerGame) {
-            console.log("Hints are disabled in multiplayer mode");
-            return;
-        }
-
         if (!GameState.gameStarted || GameState.gameOver) {
             return;
         }
 
+        // Check if we're in multiplayer
+        if (SteamIntegration.isInMultiplayerGame) {
+            if (SteamIntegration.isHost) {
+                // Host processes hint locally
+                processHintRequest();
+            } else {
+                // Client sends request to host
+                console.log("Client requesting hint from host");
+                isProcessingNetworkAction = true;
+                SteamIntegration.sendGameAction("requestHint", 0);
+                // The response will come back through handleNetworkAction
+            }
+            return;
+        }
+
+        // Regular single-player hint processing
+        processHintRequest();
+    }
+
+    function processHintRequest() {
         let revealed = [];
         let flagged = [];
 
@@ -161,6 +175,12 @@ QtObject {
 
         let mineCell = GameLogic.findMineHint(revealed, flagged);
         if (mineCell !== -1) {
+            // In multiplayer host mode, we need to send this cell index to the client
+            if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
+                console.log("Host sending hint to client for cell:", mineCell);
+                SteamIntegration.sendGameAction("sendHint", mineCell);
+            }
+
             withCell(mineCell, function(cell) {
                 cell.highlightHint();
             });
@@ -1048,6 +1068,10 @@ QtObject {
                     console.log("Checking if client has processed mines");
                     SteamIntegration.sendGameAction("minesReady", 0);
                 });
+            } else if (actionType === "requestHint") {
+                console.log("Host processing hint request from client");
+                processHintRequest();
+                // The actual hint cell is sent back in processHintRequest
             }
         } else {
             // Client receives action from host
@@ -1145,6 +1169,13 @@ QtObject {
                         SteamIntegration.unlockAchievement("ACH_WIN_COOP");
                     }
                 }
+            } else if (actionType === "sendHint") {
+                console.log("Client received hint for cell:", cellIndex);
+                withCell(cellIndex, function(cell) {
+                    cell.highlightHint();
+                });
+                GameState.currentHintCount++;
+                isProcessingNetworkAction = false;
             }
 
             // Action finished processing
