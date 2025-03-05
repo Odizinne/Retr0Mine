@@ -10,7 +10,6 @@ Item {
     row: Math.floor(index / GameState.gridSizeX)
     col: index % GameState.gridSizeX
     opacity: 1
-    enabled: !GameState.isGeneratingGrid
     property alias button: cellButton
     required property int index
 
@@ -283,7 +282,7 @@ Item {
             id: cellMouseArea
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            enabled: !(NetworkManager.isProcessingNetworkAction && !SteamIntegration.isHost)
+            enabled: !(NetworkManager.isProcessingNetworkAction && !SteamIntegration.isHost) || !GameState.isGeneratingGrid
             hoverEnabled: true
             property bool isHovered: false
 
