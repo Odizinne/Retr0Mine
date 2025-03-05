@@ -32,6 +32,35 @@ QtObject {
                 clientGridReady = false;
             }
         });
+
+        SteamIntegration.lobbyReadyChanged.connect(function() {
+            if (SteamIntegration.isLobbyReady && SteamIntegration.isHost) {
+                console.log("NetworkManager: Lobby ready, sending grid sync");
+                syncGridSettingsToClient();
+            }
+        });
+    }
+
+    function syncGridSettingsToClient() {
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
+            return;
+        }
+
+        console.log("NetworkManager: Syncing grid settings to client");
+
+        // Get current host's difficulty settings
+        const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
+
+        // Prepare grid sync data packet
+        const gridSyncData = {
+            gridSync: true,
+            gridSizeX: difficultySet.x,
+            gridSizeY: difficultySet.y,
+            mineCount: difficultySet.mines
+        };
+
+        console.log("Sending grid sync:", JSON.stringify(gridSyncData));
+        SteamIntegration.sendGameState(gridSyncData);
     }
 
     // Utility function to convert object arrays to proper arrays
