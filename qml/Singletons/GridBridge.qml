@@ -419,6 +419,7 @@ QtObject {
                 cell.flagged = false;
                 cell.questioned = false;
                 cell.safeQuestioned = false;
+                cell.isBombClicked = false;
             });
         }
 
