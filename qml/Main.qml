@@ -11,7 +11,7 @@ ApplicationWindow {
     property bool isSaving: false
     property bool isClosing: false
     property Timer starterTimer: Timer {
-        interval: 1000
+        interval: 0
         repeat: false
         onTriggered: {
             // Check for pending invites only once at startup

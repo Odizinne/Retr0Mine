@@ -97,6 +97,10 @@ ApplicationWindow {
                             icon: "qrc:/icons/language.png",
                         },
                         {
+                            text: qsTr("Multiplayer"),
+                            icon: "qrc:/icons/multiplayer.png",
+                        },
+                        {
                             text: qsTr("Advanced"),
                             icon: "qrc:/icons/debug.png",
                         }
@@ -122,7 +126,8 @@ ApplicationWindow {
                                     case 4: stackView.push(shortcutsPaneComponent); break;
                                     case 5: stackView.push(accessibilityPaneComponent); break;
                                     case 6: stackView.push(languagePaneComponent); break;
-                                    case 7: stackView.push(advancedPaneComponent); break;
+                                    case 7: stackView.push(multiplayerPaneComponent); break;
+                                    case 8: stackView.push(advancedPaneComponent); break;
                                 }
                             }
                         }
@@ -214,6 +219,13 @@ ApplicationWindow {
             Component {
                 id: languagePaneComponent
                 LanguagePane {
+                    enabled: !GameState.isGeneratingGrid
+                }
+            }
+
+            Component {
+                id: multiplayerPaneComponent
+                MultiplayerPane {
                     enabled: !GameState.isGeneratingGrid
                 }
             }

@@ -23,5 +23,6 @@
         <file>steam.png</file>
         <file>github.png</file>
         <file>mail.png</file>
+        <file>multiplayer.png</file>
     </qresource>
 </RCC>

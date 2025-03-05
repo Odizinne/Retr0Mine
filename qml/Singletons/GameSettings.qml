@@ -33,5 +33,7 @@ Settings {
     property real satisfiedOpacity: 0.50
     property bool displayTimer: true
     property bool safeFirstClick: true
+    property int pingColorIndex: 1
+    property string pingCustomColor: "E95420"
 }
 

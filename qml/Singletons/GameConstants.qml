@@ -82,4 +82,42 @@ Item {
                 "qrc:/fonts/FiraSans-Bold.ttf"
         }
     }
+
+    property string pingColor: {
+        switch(GameSettings.pingColorIndex) {
+            case 0:
+                GameConstants.foregroundColor
+            break;
+            case 1:
+                "#E95420"
+            break;
+            case 2:
+                "#DD0077"
+            break;
+            case 3:
+                "#26A269"
+            break;
+            case 4:
+                "#3584E4"
+            break;
+            case 5:
+                "#5E5CBB"
+            break;
+            case 6:
+                "#E01B24"
+            break;
+            case 7:
+                "#E5A50A"
+            break;
+            case 8:
+                "#" + GameSettings.pingCustomColor
+            break;
+
+        }
+
+    }
 }
+
+
+
+

@@ -53,6 +53,7 @@ set(QML_FILES
     qml/SettingsPanes/ShortcutsPane.qml
     qml/SettingsPanes/SoundsPane.qml
     qml/SettingsPanes/VisualsPane.qml
+    qml/SettingsPanes/MultiplayerPane.qml
     qml/Popups/RestorePopup.qml
     qml/Popups/PostgamePopup.qml
     qml/Popups/AboutPopup.qml

@@ -31,7 +31,7 @@ Item {
         anchors.centerIn: parent
         radius: width / 2
         border.width: 4
-        border.color: GameConstants.foregroundColor
+        border.color: GameConstants.pingColor
         color: "transparent"
 
         ParallelAnimation {
@@ -74,7 +74,7 @@ Item {
         anchors.centerIn: parent
         radius: width / 2
         border.width: 4
-        border.color: GameConstants.foregroundColor
+        border.color: GameConstants.pingColor
         color: "transparent"
 
         ParallelAnimation {
@@ -117,7 +117,7 @@ Item {
         anchors.centerIn: parent
         radius: width / 2
         border.width: 4
-        border.color: GameConstants.foregroundColor
+        border.color: GameConstants.pingColor
         color: "transparent"
 
         ParallelAnimation {

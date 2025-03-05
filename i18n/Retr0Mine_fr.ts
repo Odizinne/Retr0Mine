@@ -275,15 +275,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="692"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="699"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="706"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="527"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="534"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="541"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="716"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="722"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="551"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="557"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -421,6 +421,64 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
 </context>
 <context>
+    <name>MultiplayerPane</name>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="15"/>
+        <source>Ping color</source>
+        <translation>Couleur du signal</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="21"/>
+        <source>Contrasted</source>
+        <translation>Contrasté</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="22"/>
+        <source>Orange</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="23"/>
+        <source>Magenta</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="24"/>
+        <source>Green</source>
+        <translation>Vert</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="25"/>
+        <source>Blue</source>
+        <translation>Bleu</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="26"/>
+        <source>Purple</source>
+        <translation>Violet</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="27"/>
+        <source>Red</source>
+        <translation>Rouge</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="28"/>
+        <source>Yellow</source>
+        <translation>Jaune</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="29"/>
+        <source>Custom</source>
+        <translation>Perso</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="39"/>
+        <source>Custom color</source>
+        <translation>Couleur personnalisée</translation>
+    </message>
+</context>
+<context>
     <name>MultiplayerPopup</name>
     <message>
         <location filename="../qml/Popups/MultiplayerPopup.qml" line="84"/>
@@ -453,7 +511,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Création des cellules...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="117"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="116"/>
         <source>Press G while hovering a cell to signal it</source>
         <translation>Appuyez sur G en surlovant une cellule pour la signaler</translation>
     </message>
@@ -677,16 +735,21 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsWindow.qml" line="100"/>
+        <source>Multiplayer</source>
+        <translation>Multijoueur</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsWindow.qml" line="104"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="133"/>
+        <location filename="../qml/SettingsWindow.qml" line="138"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="149"/>
+        <location filename="../qml/SettingsWindow.qml" line="154"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>
@@ -750,14 +813,9 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="43"/>
+        <location filename="../qml/TopBar.qml" line="86"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
-    </message>
-    <message>
-        <location filename="../qml/TopBar.qml" line="59"/>
-        <source>Coop: </source>
-        <translation></translation>
     </message>
 </context>
 <context>
