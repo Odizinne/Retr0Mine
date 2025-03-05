@@ -1273,9 +1273,9 @@ QtObject {
                 }
                 GameState.displayPostGame = false
                 // Request sync from host
-                Qt.callLater(function() {
-                    requestFullSync();
-                });
+                //Qt.callLater(function() {
+                //    requestFullSync();
+                //});
             } else if (actionType === "unlockCoopAchievement") {
                 console.log("Client received coop achievement unlock notification");
                 if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
