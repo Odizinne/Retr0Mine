@@ -24,6 +24,7 @@ Item {
     property int row
     property int col
     property int diagonalSum
+    property bool inCooldown: false
 
     function highlightHint() {
         hintAnimation.start();
@@ -286,6 +287,16 @@ Item {
             property bool isHovered: false
 
             function handleCellClick(mouse) {
+                // Return early if cell is in cooldown but ONLY if a flag action was attempted
+                const isRevealClick = GameSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
+                const isFlagClick = !isRevealClick;
+
+                if (cellItem.inCooldown && isFlagClick) {
+                    // Show some feedback that the cell is in cooldown
+                    cooldownAnimation.start();
+                    return;
+                }
+
                 if (!GameState.gameStarted) {
                     GridBridge.reveal(cellItem.index);
                     return;
@@ -297,11 +308,10 @@ Item {
                 }
 
                 const canReveal = !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned;
-                const isRevealClick = GameSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
 
                 if (isRevealClick && canReveal) {
                     GridBridge.reveal(cellItem.index);
-                } else if (!isRevealClick) {
+                } else if (isFlagClick) {
                     GridBridge.toggleFlag(cellItem.index);
                 }
             }

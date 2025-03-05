@@ -25,6 +25,9 @@ QtObject {
     property var chunkedMines: []
     property int receivedChunks: 0
     property int expectedTotalChunks: 0
+    property var flagCooldowns: ({}) // Object to track cells with active cooldowns
+    property int flagCooldownDuration: 1000 // 1 second cooldown
+    property var flagOwners: ({})
 
     Component.onCompleted: {
         // Connect to SteamIntegration signals for multiplayer
@@ -740,20 +743,37 @@ QtObject {
     function toggleFlag(index) {
         // Check if we're in multiplayer
         if (SteamIntegration.isInMultiplayerGame) {
+            // Check if the cell is in cooldown for this player
+            if (isCellInCooldown(index)) {
+                console.log("Cell " + index + " is in cooldown for this player, ignoring flag action");
+
+                // Show cooldown feedback on the cell
+                withCell(index, function(cell) {
+                    if (cell.cooldownAnimation) {
+                        cell.cooldownAnimation.start();
+                    }
+                });
+
+                return;
+            }
+
             if (SteamIntegration.isHost) {
                 // We're host: process locally and then send only the cell update
                 performToggleFlag(index);
                 sendCellUpdateToClient(index, "flag");
+                // Start cooldown after processing - this flag is owned by host
+                startFlagCooldown(index, true);
             } else {
                 // We're client: send request to host and wait
                 isProcessingNetworkAction = true;
                 SteamIntegration.sendGameAction("flag", index);
                 // The grid will update when we get a response
+                // Cooldown will be started by host and sent back to client
             }
             return;
         }
 
-        // Regular single-player flag toggle
+        // Regular single-player flag toggle (no cooldown needed)
         performToggleFlag(index);
     }
 
@@ -1076,7 +1096,6 @@ QtObject {
         return success;
     }
 
-    // Process game actions received from network
     function handleNetworkAction(actionType, cellIndex) {
         console.log("Received action:", actionType, "for cell:", cellIndex);
 
@@ -1094,8 +1113,19 @@ QtObject {
                 sendCellUpdateToClient(cellIndex, "reveal");
             } else if (actionType === "flag") {
                 console.log("Host processing flag action for cell:", cellIndex);
+
+                // Add cooldown check
+                if (flagCooldowns[cellIndex] !== undefined && flagOwners[cellIndex] === true) {
+                    console.log("Cell " + cellIndex + " is in cooldown for client, ignoring flag action");
+                    SteamIntegration.sendGameAction("flagRejected", cellIndex);
+                    return;
+                }
+
                 performToggleFlag(cellIndex);
                 sendCellUpdateToClient(cellIndex, "flag");
+
+                // Start cooldown - this flag is now owned by the client
+                startFlagCooldown(cellIndex, false); // false = client owns it
             } else if (actionType === "revealConnected") {
                 console.log("Host processing revealConnected action for cell:", cellIndex);
                 performRevealConnectedCells(cellIndex);
@@ -1265,6 +1295,37 @@ QtObject {
                 console.log("Client received ping at cell:", cellIndex);
                 showPingAtCell(cellIndex);
                 isProcessingNetworkAction = false;
+            } else if (actionType === "hostFlagCooldown") {
+                console.log("Client received cooldown notification for host-owned flag:", cellIndex);
+
+                // Host placed the flag, so client should see cooldown
+                startFlagCooldown(cellIndex, true); // true = host owns it
+
+                // Client should see the cooldown indicator
+                withCell(cellIndex, function(cell) {
+                    cell.inCooldown = true;
+                });
+
+                isProcessingNetworkAction = false;
+            } else if (actionType === "clientFlagCooldown") {
+                console.log("Client received cooldown notification for client-owned flag:", cellIndex);
+
+                // Client placed the flag, so client should NOT see cooldown
+                startFlagCooldown(cellIndex, false); // false = client owns it
+
+                // No visual indicator needed since client owns this flag
+                isProcessingNetworkAction = false;
+            } else if (actionType === "flagRejected") {
+                console.log("Flag action rejected for cell:", cellIndex);
+                // The cell was in cooldown, action was rejected
+                isProcessingNetworkAction = false;
+
+                // Show cooldown feedback on the cell
+                withCell(cellIndex, function(cell) {
+                    if (cell.cooldownAnimation) {
+                        cell.cooldownAnimation.start();
+                    }
+                });
             }
 
             // Action finished processing
@@ -1680,6 +1741,59 @@ QtObject {
             });
         } else {
             console.error("Error creating ping indicator:", pingComponent.errorString());
+        }
+    }
+
+    function isCellInCooldown(index) {
+        // If the cell is not in cooldown at all, return false
+        if (flagCooldowns[index] === undefined) {
+            return false;
+        }
+
+        // Check if the current player is the one who placed the flag
+        const isPlayerHost = SteamIntegration.isHost;
+        const isFlagOwnedByHost = flagOwners[index] === true;
+
+        // The cooldown only applies to the player who didn't place the flag
+        // If the flag was placed by host, client is in cooldown (and vice versa)
+        return isPlayerHost !== isFlagOwnedByHost;
+    }
+
+    function startFlagCooldown(index, isHostOwner) {
+        flagCooldowns[index] = true;
+        // If isHostOwner is provided, use it; otherwise default to current player
+        flagOwners[index] = isHostOwner !== undefined ? isHostOwner : SteamIntegration.isHost;
+
+        // Create a timer to clear the cooldown after the duration
+        const timerId = Qt.createQmlObject(
+            `import QtQuick; Timer {
+                interval: ${flagCooldownDuration};
+                repeat: false;
+                running: true;
+                onTriggered: {
+                    GridBridge.clearFlagCooldown(${index});
+                }
+            }`,
+            Qt.application,
+            "cooldownTimer_" + index
+        );
+
+        // Send cooldown info to other player if in multiplayer
+        if (SteamIntegration.isInMultiplayerGame) {
+            // Send a different action type based on who placed the flag
+            const actionType = flagOwners[index] ? "hostFlagCooldown" : "clientFlagCooldown";
+            SteamIntegration.sendGameAction(actionType, index);
+        }
+    }
+
+    function clearFlagCooldown(index) {
+        delete flagCooldowns[index];
+        delete flagOwners[index];
+
+        // Notify cells to update their visual state
+        const cell = getCell(index);
+        if (cell) {
+            cell.inCooldown = false;
         }
     }
 }
