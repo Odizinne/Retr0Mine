@@ -7,7 +7,7 @@
 #include <QCoreApplication>
 #include <QBuffer>
 #include <QImage>
-
+#include <QThread>
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
     , m_initialized(false)
@@ -37,7 +37,16 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
 SteamIntegration::~SteamIntegration()
 {
-    cleanupMultiplayerSession();
+    cleanupMultiplayerSession(true);
+
+    // Flush remaining callbacks
+    if (m_initialized) {
+        for (int i = 0; i < 10; i++) {
+            SteamAPI_RunCallbacks();
+            QThread::msleep(10);
+        }
+    }
+
     shutdown();
 }
 
@@ -51,12 +60,6 @@ bool SteamIntegration::initialize()
     }
     m_initialized = true;
     updatePlayerName();
-
-    // Add this line to check for connect_lobby parameters right after initialization
-    // We only want to do this ONCE at startup, not repeatedly
-    //QTimer::singleShot(500, this, &SteamIntegration::checkForPendingInvites);
-
-    // Initial rich presence update
     updateRichPresence();
 
     return true;
@@ -89,34 +92,31 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
     // Close any open P2P sessions
     if (m_initialized) {
         ISteamNetworking* steamNetworking = SteamNetworking();
-        if (steamNetworking) {
-            // Close session with connected player if we have one
-            if (m_connectedPlayerId.IsValid()) {
-                qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
-                steamNetworking->CloseP2PSessionWithUser(m_connectedPlayerId);
-            }
+        if (steamNetworking && m_connectedPlayerId.IsValid()) {
+            qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
+            steamNetworking->CloseP2PSessionWithUser(m_connectedPlayerId);
 
-            // For safety, flush any remaining P2P packets, but only do limited work during shutdown
-            int iterations = isShuttingDown ? 1 : 3;
-            for (int i = 0; i < iterations; i++) {
-                uint32 msgSize;
-                // Limit number of packets to process during shutdown
-                int maxPackets = isShuttingDown ? 5 : 100;
-                int packetCount = 0;
-
-                while (steamNetworking->IsP2PPacketAvailable(&msgSize) && packetCount < maxPackets) {
-                    // Read and discard any pending packets
-                    QByteArray buffer(msgSize, 0);
-                    CSteamID senderId;
-                    steamNetworking->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId);
-                    packetCount++;
-                }
-
-                // Run callbacks to process any pending network events, but only if not shutting down
-                if (m_initialized && !isShuttingDown) {
+            // Add a delay and process callbacks to allow the session to close properly
+            if (isShuttingDown) {
+                // Process callbacks a few times to allow session closure to complete
+                for (int i = 0; i < 5; i++) {
                     SteamAPI_RunCallbacks();
+                    QThread::msleep(10); // Short delay
                 }
             }
+        }
+
+        // Process any remaining packets
+        uint32 msgSize;
+        int maxPackets = 50;
+        int packetCount = 0;
+
+        while (steamNetworking && steamNetworking->IsP2PPacketAvailable(&msgSize) && packetCount < maxPackets) {
+            // Read and discard any pending packets
+            QByteArray buffer(msgSize, 0);
+            CSteamID senderId;
+            steamNetworking->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId);
+            packetCount++;
         }
     }
 
@@ -124,9 +124,17 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
     if (m_initialized && m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
         qDebug() << "SteamIntegration: Leaving lobby:" << m_currentLobbyId.ConvertToUint64();
         SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
+
+        // Allow time for the lobby leave operation to complete
+        if (isShuttingDown) {
+            for (int i = 0; i < 3; i++) {
+                SteamAPI_RunCallbacks();
+                QThread::msleep(10);
+            }
+        }
     }
 
-    // Reset all multiplayer state variables
+    // Reset multiplayer state variables
     m_inMultiplayerGame = false;
     m_isHost = false;
     m_lobbyReady = false;
@@ -136,12 +144,17 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
     m_connectedPlayerId = CSteamID();
     m_connectedPlayerName = "";
 
-    // Update rich presence back to single player if we're still initialized
+    // Run callbacks one final time
+    if (isShuttingDown && m_initialized) {
+        SteamAPI_RunCallbacks();
+    }
+
+    // Update rich presence if not shutting down
     if (m_initialized && !isShuttingDown) {
         updateRichPresence();
     }
 
-    // Emit signals to update UI state if we're not shutting down
+    // Emit signals if not shutting down
     if (!isShuttingDown) {
         emit multiplayerStatusChanged();
         emit hostStatusChanged();
