@@ -27,15 +27,6 @@ QtObject {
         if (cell) {
             operation(cell);
 
-            // For multiplayer client, force update the visual state
-            if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
-                if (cell.revealed && cell.button && !cell.button.flat) {
-                    // Force the button to be flat if the cell is revealed
-                    cell.button.flat = true;
-                    cell.button.opacity = 1;
-                }
-            }
-
             return true;
         }
         return false;
