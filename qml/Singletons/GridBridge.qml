@@ -592,16 +592,24 @@ QtObject {
                 if (SteamIntegration.isInMultiplayerGame) {
                     // Modified multiplayer flagging with question marks enabled
                     if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
-                        cell.flagged = true;
-                        cell.questioned = false;
-                        cell.safeQuestioned = false;
-                        GameState.flaggedCount++;
+                        // Only place flag if we haven't reached max flags yet
+                        if (GameState.flaggedCount < GameState.mineCount) {
+                            cell.flagged = true;
+                            cell.questioned = false;
+                            cell.safeQuestioned = false;
+                            GameState.flaggedCount++;
+                        } else {
+                            // If max flags reached, go directly to question mark
+                            cell.flagged = false;
+                            cell.questioned = true;
+                            cell.safeQuestioned = false;
+                        }
                     } else if (cell.flagged) {
                         // Always enable question marks in multiplayer
                         cell.flagged = false;
                         cell.questioned = true;
                         cell.safeQuestioned = false;
-                        GameState.flaggedCount--;
+                        GameState.flaggedCount--; // Decrement only when removing a flag
                     } else if (cell.questioned) {
                         cell.questioned = false;
                         flagCompletelyRemoved = true; // Flag cycle is complete
@@ -613,26 +621,40 @@ QtObject {
                 } else {
                     // Original single-player flagging logic
                     if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
-                        cell.flagged = true;
-                        cell.questioned = false;
-                        cell.safeQuestioned = false;
-                        GameState.flaggedCount++;
+                        // Only place flag if we haven't reached max flags yet
+                        if (GameState.flaggedCount < GameState.mineCount) {
+                            cell.flagged = true;
+                            cell.questioned = false;
+                            cell.safeQuestioned = false;
+                            GameState.flaggedCount++;
+                        } else if (GameSettings.enableQuestionMarks) {
+                            // If max flags reached, go directly to question mark
+                            cell.flagged = false;
+                            cell.questioned = true;
+                            cell.safeQuestioned = false;
+                        } else if (GameSettings.enableSafeQuestionMarks) {
+                            // If max flags reached, go directly to safe question mark
+                            cell.flagged = false;
+                            cell.questioned = false;
+                            cell.safeQuestioned = true;
+                        }
+                        // If no question marks enabled and max flags reached, do nothing
                     } else if (cell.flagged) {
                         if (GameSettings.enableQuestionMarks) {
                             cell.flagged = false;
                             cell.questioned = true;
                             cell.safeQuestioned = false;
-                            GameState.flaggedCount--;
+                            GameState.flaggedCount--; // Decrement only when removing a flag
                         } else if (GameSettings.enableSafeQuestionMarks) {
                             cell.flagged = false;
                             cell.questioned = false;
                             cell.safeQuestioned = true;
-                            GameState.flaggedCount--;
+                            GameState.flaggedCount--; // Decrement only when removing a flag
                         } else {
                             cell.flagged = false;
                             cell.questioned = false;
                             cell.safeQuestioned = false;
-                            GameState.flaggedCount--;
+                            GameState.flaggedCount--; // Decrement only when removing a flag
                             flagCompletelyRemoved = true; // Flag cycle is complete
                         }
                     } else if (cell.questioned) {
@@ -690,14 +712,4 @@ QtObject {
 
         return unrevealedCount > 0 || flagCount !== GameState.numbers[index];
     }
-
-    // Function to notify the NetworkManager about grid readiness
-    //function notifyGridReady() {
-    //
-    //}
-
-    // Function to send a ping to the NetworkManager
-    //function sendPing(cellIndex) {
-    //    NetworkManager.sendPing(cellIndex);
-    //}
 }
