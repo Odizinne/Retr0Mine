@@ -130,7 +130,6 @@ ApplicationWindow {
     Connections {
         target: ComponentsContext
         function onAllCellsReady() {
-            console.log("All cells ready, count:", GridBridge.cellsCreated);
 
             // If in multiplayer as client, notify host that grid is ready
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {

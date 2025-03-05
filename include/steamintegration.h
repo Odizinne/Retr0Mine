@@ -99,7 +99,6 @@ private:
     STEAM_CALLBACK(SteamIntegration, OnLobbyChatUpdate, LobbyChatUpdate_t);
     STEAM_CALLBACK(SteamIntegration, OnP2PSessionRequest, P2PSessionRequest_t);
     STEAM_CALLBACK(SteamIntegration, OnP2PSessionConnectFail, P2PSessionConnectFail_t);
-    STEAM_CALLBACK(SteamIntegration, OnGameOverlayActivated, GameOverlayActivated_t);
     STEAM_CALLBACK(SteamIntegration, OnGameLobbyJoinRequested, GameLobbyJoinRequested_t);
 
     // Callback handlers for specific API calls

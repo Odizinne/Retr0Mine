@@ -530,7 +530,7 @@ QtObject {
 
         // Reset multiplayer state and notify client if we're the host
         if (SteamIntegration.isInMultiplayerGame) {
-            if (SteamIntegration.isHost) {
+            if (SteamIntegration.isHost && SteamIntegration.isP2PConnected) {
                 console.log("Host notifying client about game reset");
                 SteamIntegration.sendGameAction("resetGame", 0);
             }

@@ -323,7 +323,6 @@ void SteamIntegration::createLobby()
     // We're creating a lobby for 2 players (host + 1 friend)
     SteamAPICall_t apiCall = SteamMatchmaking()->CreateLobby(k_ELobbyTypePrivate, 2);
 
-    qDebug() << "SteamIntegration: CreateLobby API call handle:" << apiCall;
     if (apiCall == k_uAPICallInvalid) {
         qDebug() << "SteamIntegration: CreateLobby API call failed";
         emit connectionFailed("Failed to create Steam API call");
@@ -332,7 +331,6 @@ void SteamIntegration::createLobby()
 
     // Register the callback for this specific API call
     m_lobbyCreatedCallback.Set(apiCall, this, &SteamIntegration::OnLobbyCreated);
-    qDebug() << "SteamIntegration: Registered callback for LobbyCreated_t";
 
     m_isConnecting = true;
     emit connectingStatusChanged();
@@ -340,8 +338,6 @@ void SteamIntegration::createLobby()
 
 void SteamIntegration::OnLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure)
 {
-    qDebug() << "SteamIntegration: OnLobbyCreated callback received";
-
     m_isConnecting = false;
     emit connectingStatusChanged();
 
@@ -374,8 +370,6 @@ void SteamIntegration::OnLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure
     m_networkTimer.start();
 
     emit connectionSucceeded();
-
-    qDebug() << "SteamIntegration: Lobby setup complete, waiting for connections";
 }
 
 QStringList SteamIntegration::getOnlineFriends()
@@ -567,9 +561,6 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
 
 void SteamIntegration::OnLobbyDataUpdate(LobbyDataUpdate_t *pCallback)
 {
-    // This callback is triggered when lobby data changes
-    qDebug() << "SteamIntegration: Lobby data updated";
-
     // Check if this is our lobby
     if (m_currentLobbyId.ConvertToUint64() != pCallback->m_ulSteamIDLobby)
         return;
@@ -673,15 +664,6 @@ void SteamIntegration::OnP2PSessionConnectFail(P2PSessionConnectFail_t *pCallbac
         emit connectionFailed(errorReason);
         leaveLobby();
     }
-}
-
-void SteamIntegration::OnGameOverlayActivated(GameOverlayActivated_t *pCallback)
-{
-    // This callback is triggered when the Steam overlay is opened/closed
-    qDebug() << "SteamIntegration: Steam overlay " << (pCallback->m_bActive ? "activated" : "deactivated");
-
-    // You can use this to pause the game when the overlay is active
-    // pCallback->m_bActive is true when overlay is opened, false when closed
 }
 
 void SteamIntegration::OnGameLobbyJoinRequested(GameLobbyJoinRequested_t *pCallback)
@@ -938,7 +920,6 @@ void SteamIntegration::checkForPendingInvites()
 
     // METHOD 1: Check command line arguments for +connect_lobby parameter
     QStringList args = QCoreApplication::arguments();
-    qDebug() << "SteamIntegration: Command line args:" << args.join(" ");
 
     QString lobbyIdStr;
     for (int i = 0; i < args.size(); i++) {
@@ -951,7 +932,6 @@ void SteamIntegration::checkForPendingInvites()
                 lobbyIdStr = arg.mid(15); // Extract ID after '='
             }
 
-            qDebug() << "SteamIntegration: Found connect_lobby arg with value:" << lobbyIdStr;
             break;
         }
     }
@@ -960,7 +940,6 @@ void SteamIntegration::checkForPendingInvites()
         bool ok;
         uint64 lobbyId = lobbyIdStr.toULongLong(&ok);
         if (ok && lobbyId != 0) {
-            qDebug() << "SteamIntegration: Joining lobby from command line:" << lobbyId;
             acceptInvite(QString::number(lobbyId));
             return;
         }
@@ -970,7 +949,6 @@ void SteamIntegration::checkForPendingInvites()
     if (SteamUtils()) {
         // Check for pending invites through the Steam API
         uint32 appID = SteamUtils()->GetAppID();
-        qDebug() << "SteamIntegration: AppID:" << appID;
 
         // METHOD 3: Check for any lobby the user has recently been invited to
         // GetLobbyByIndex returns a CSteamID directly, not a bool with output parameter
@@ -987,9 +965,4 @@ void SteamIntegration::checkForPendingInvites()
     }
 
     qDebug() << "SteamIntegration: No pending invites found through automatic methods";
-
-    // IMPORTANT: This method is only called once at startup to handle the case
-    // where the game was launched by clicking on an invite.
-    // For invites received while the game is running, we rely on the
-    // OnGameLobbyJoinRequested callback which is automatically triggered by Steam.
 }
