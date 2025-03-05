@@ -1253,6 +1253,8 @@ QtObject {
                 GameState.revealedCount = 0;
                 GameState.flaggedCount = 0;
 
+                GameState.noAnimReset = true;
+
                 // Reset all grid cells
                 for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                     withCell(i, function(cell) {
@@ -1262,6 +1264,8 @@ QtObject {
                         cell.safeQuestioned = false;
                     });
                 }
+
+                GameState.noAnimReset = false;
 
                 // Start grid reset animation if enabled
                 if (GameSettings.animations && !GameState.difficultyChanged) {
