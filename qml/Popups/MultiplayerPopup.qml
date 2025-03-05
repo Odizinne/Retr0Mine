@@ -171,6 +171,7 @@ Popup {
             }
             Button {
                 text: qsTr("Refresh")
+                focusPolicy: Qt.NoFocus
                 Layout.alignment: Qt.AlignHCenter
                 enabled: !multiplayerPopup.refreshing
                 onClicked: multiplayerPopup.refreshFriendsList()
@@ -231,6 +232,7 @@ Popup {
 
                             Button {
                                 Layout.preferredWidth: height
+                                focusPolicy: Qt.NoFocus
                                 enabled: SteamIntegration.canInviteFriend &&
                                          !SteamIntegration.isLobbyReady &&
                                          !delegate.inviteDisabled
