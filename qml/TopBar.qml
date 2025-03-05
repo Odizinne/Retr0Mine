@@ -105,6 +105,7 @@ Item {
         text: ": " + (GameState.mineCount - GameState.flaggedCount)
         font.pixelSize: 18
         font.bold: true
+        highlighted: GameState.flaggedCount === GameState.mineCount
         onClicked: GridBridge.requestHint()
     }
 }
