@@ -28,6 +28,49 @@ Item {
         }
     }
 
+    Item {
+        visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        width: coopFriendLabel.width + coopAvatarImage.width + 8
+        height: 35
+
+        Image {
+            id: coopAvatarImage
+            width: 24
+            height: 24
+            sourceSize.width: 24
+            sourceSize.height: 24
+            source: {
+                if (SteamIntegration.initialized && SteamIntegration.connectedPlayerName !== "") {
+                    var avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(SteamIntegration.connectedPlayerName)
+                    return avatarHandle > 0 ? SteamIntegration.getAvatarImageForHandle(avatarHandle) : "qrc:/icons/steam.png"
+                }
+                return "qrc:/icons/steam.png"
+            }
+            fillMode: Image.PreserveAspectCrop
+            anchors.verticalCenter: parent.verticalCenter
+            Rectangle {
+                width: 26
+                height: 26
+                anchors.centerIn: parent
+                color: "transparent"
+                border.color: GameConstants.foregroundColor
+                border.width: 1
+                opacity: 0.3
+            }
+        }
+
+        Label {
+            id: coopFriendLabel
+            anchors.left: coopAvatarImage.right
+            anchors.leftMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            text: SteamIntegration.connectedPlayerName
+            font.pixelSize: 14
+            font.family: GameConstants.numberFont.name
+        }
+    }
     Label {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -50,16 +93,6 @@ Item {
             onClicked: GameState.paused = true
             hoverEnabled: true
         }
-    }
-
-    Label {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        id: coopFriendLabel
-        text: qsTr("Coop: ") + SteamIntegration.connectedPlayerName
-        visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
-        font.pixelSize: 14
-        font.family: GameConstants.numberFont.name
     }
 
     Button {

@@ -966,3 +966,24 @@ void SteamIntegration::checkForPendingInvites()
 
     qDebug() << "SteamIntegration: No pending invites found through automatic methods";
 }
+
+int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
+    if (!m_initialized)
+        return 0;
+
+    ISteamFriends* steamFriends = SteamFriends();
+    if (!steamFriends)
+        return 0;
+
+    int friendCount = steamFriends->GetFriendCount(k_EFriendFlagImmediate);
+    for (int i = 0; i < friendCount; i++) {
+        CSteamID friendId = steamFriends->GetFriendByIndex(i, k_EFriendFlagImmediate);
+        QString friendName = QString::fromUtf8(steamFriends->GetFriendPersonaName(friendId));
+
+        if (friendName == playerName) {
+            return steamFriends->GetSmallFriendAvatar(friendId);
+        }
+    }
+
+    return 0;
+}
