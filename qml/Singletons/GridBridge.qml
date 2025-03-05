@@ -528,7 +528,7 @@ QtObject {
             cancelGeneration();
         }
 
-        // Reset multiplayer state and notify client if we're the host
+        // Handle multiplayer networking logic
         if (SteamIntegration.isInMultiplayerGame) {
             if (SteamIntegration.isHost && SteamIntegration.isP2PConnected) {
                 console.log("Host notifying client about game reset");
@@ -538,12 +538,16 @@ QtObject {
             // Reset multiplayer flags
             minesInitialized = false;
             clientReadyForActions = false;
-            //clientGridReady = false;  // Reset the grid ready flag
             pendingInitialActions = [];
             pendingActions = [];
             isProcessingNetworkAction = false;
         }
 
+        // Call the shared implementation
+        performInitGame();
+    }
+
+    function performInitGame() {
         GameState.blockAnim = false;
         GameState.mines = [];
         GameState.numbers = [];
@@ -1097,18 +1101,27 @@ QtObject {
         console.log("Received action:", actionType, "for cell:", cellIndex);
 
         if (SteamIntegration.isHost) {
-            // Host receives action from client
-            if (actionType === "gridReady") {
+            handleHostAction(actionType, cellIndex);
+        } else {
+            handleClientAction(actionType, cellIndex);
+        }
+    }
+
+    function handleHostAction(actionType, cellIndex) {
+        switch(actionType) {
+            case "gridReady":
                 console.log("Host received grid ready notification from client");
                 clientGridReady = true;
-                // No need to send response, just update the flag
-                return;
-            } else if (actionType === "reveal") {
+                break;
+
+            case "reveal":
                 console.log("Host processing reveal action for cell:", cellIndex);
                 performReveal(cellIndex);
                 // Send individual cell update back to client
                 sendCellUpdateToClient(cellIndex, "reveal");
-            } else if (actionType === "flag") {
+                break;
+
+            case "flag":
                 console.log("Host processing flag action for cell:", cellIndex);
 
                 // Add cooldown check
@@ -1123,17 +1136,24 @@ QtObject {
 
                 // Start cooldown - this flag is now owned by the client
                 startFlagCooldown(cellIndex, false); // false = client owns it
-            } else if (actionType === "revealConnected") {
+                break;
+
+            case "revealConnected":
                 console.log("Host processing revealConnected action for cell:", cellIndex);
                 performRevealConnectedCells(cellIndex);
                 sendCellUpdateToClient(cellIndex, "revealConnected");
-            } else if (actionType === "requestSync") {
+                break;
+
+            case "requestSync":
                 console.log("Client requested full sync, sending mines list");
                 sendMinesListToClient();
-            } else if (actionType === "readyForActions") {
+                break;
+
+            case "readyForActions":
                 console.log("Host received client readiness confirmation");
                 clientReadyForActions = true;
 
+                // Now we can send any pending initial actions
                 if (pendingInitialActions.length > 0) {
                     console.log("Sending", pendingInitialActions.length, "pending initial actions");
                     pendingInitialActions.forEach(function(action) {
@@ -1141,46 +1161,61 @@ QtObject {
                     });
                     pendingInitialActions = [];
                 }
-            } else if (actionType === "requestMines") {
+                break;
+
+            case "requestMines":
                 console.log("Client requested mines data, sending immediately");
                 sendMinesListToClient();
 
+                // After a moment, check if client has processed mines
                 Qt.callLater(function() {
                     console.log("Checking if client has processed mines");
                     SteamIntegration.sendGameAction("minesReady", 0);
                 });
-            } else if (actionType === "requestHint") {
+                break;
+
+            case "requestHint":
                 console.log("Host processing hint request from client");
                 processHintRequest();
-            } else if (actionType === "ping") {
+                // The actual hint cell is sent back in processHintRequest
+                break;
+
+            case "ping":
                 console.log("Host received ping at cell:", cellIndex);
+                // Just show the ping locally and relay back to other clients if needed
                 showPingAtCell(cellIndex);
-            }
-        } else {
-            // Client receives action from host
-            if (actionType === "minesReady") {
-                // Check if we already have mines data
-                if (minesInitialized) {
-                    console.log("Client confirms mines data is ready");
-                    // Send acknowledgment to host that we're ready for actions
-                    SteamIntegration.sendGameAction("readyForActions", 0);
-                } else {
-                    console.log("Client received mines readiness check but mines not initialized");
-                    // Request mines data directly
-                    SteamIntegration.sendGameAction("requestMines", 0);
-                }
-                return;
-            }
+                break;
 
-            if (!minesInitialized && actionType !== "gameOver" && actionType !== "startGame") {
-                // Buffer actions until mines data is received
-                console.log("Buffering action until mines data is received:", actionType, cellIndex);
-                pendingActions.push({type: actionType, index: cellIndex});
-                isProcessingNetworkAction = false;
-                return;
-            }
+            default:
+                console.log("Host received unknown action type:", actionType);
+        }
+    }
 
-            if (actionType === "finalReveal") {
+    function handleClientAction(actionType, cellIndex) {
+        if (actionType === "minesReady") {
+            // Check if we already have mines data
+            if (minesInitialized) {
+                console.log("Client confirms mines data is ready");
+                // Send acknowledgment to host that we're ready for actions
+                SteamIntegration.sendGameAction("readyForActions", 0);
+            } else {
+                console.log("Client received mines readiness check but mines not initialized");
+                // Request mines data directly
+                SteamIntegration.sendGameAction("requestMines", 0);
+            }
+            return;
+        }
+
+        if (!minesInitialized && actionType !== "gameOver" && actionType !== "startGame") {
+            // Buffer actions until mines data is received
+            console.log("Buffering action until mines data is received:", actionType, cellIndex);
+            pendingActions.push({type: actionType, index: cellIndex});
+            isProcessingNetworkAction = false;
+            return;
+        }
+
+        switch(actionType) {
+            case "finalReveal":
                 console.log("Client processing final reveal action for cell:", cellIndex);
                 // For final reveals, we need to force reveal the cell
                 withCell(cellIndex, function(cell) {
@@ -1201,23 +1236,34 @@ QtObject {
                         GameState.revealedCount++;
                     }
                 });
-            } else if (actionType === "reveal") {
+                break;
+
+            case "reveal":
                 console.log("Client processing reveal action for cell:", cellIndex);
                 performReveal(cellIndex);
-                allowClientReveal = true
-            } else if (actionType === "flag") {
+                allowClientReveal = true;
+                break;
+
+            case "flag":
                 console.log("Client processing flag action for cell:", cellIndex);
                 performToggleFlag(cellIndex);
-            } else if (actionType === "revealConnected") {
+                break;
+
+            case "revealConnected":
                 console.log("Client processing revealConnected action for cell:", cellIndex);
                 performRevealConnectedCells(cellIndex);
-            } else if (actionType === "startGame") {
-                console.log("Client received start game command from host")
-                ComponentsContext.multiplayerPopupVisible = false
-            } else if (actionType === "gameOver") {
+                break;
+
+            case "startGame":
+                console.log("Client received start game command from host");
+                ComponentsContext.multiplayerPopupVisible = false;
+                break;
+
+            case "gameOver":
                 console.log("Client processing gameOver action, win status:", cellIndex);
+                // Handle game over state
                 GameState.gameOver = true;
-                GameState.gameWon = cellIndex === 1;
+                GameState.gameWon = cellIndex === 1; // 1 for win, 0 for loss
                 GameTimer.stop();
 
                 if (GameState.gameWon) {
@@ -1228,43 +1274,24 @@ QtObject {
                 }
 
                 GameState.displayPostGame = true;
-            } else if (actionType === "resetGame") {
+                break;
+
+            case "resetGame":
                 console.log("Client received game reset notification");
-                GameState.displayPostGame = false
-                GameState.difficultyChanged = false
+                GameState.displayPostGame = false;
+                GameState.difficultyChanged = false;
+
+                // Reset client-side state
                 minesInitialized = false;
                 allowClientReveal = false;
                 pendingActions = [];
                 isProcessingNetworkAction = false;
-                GameState.blockAnim = false;
-                GameState.mines = [];
-                GameState.numbers = [];
-                GameState.gameOver = false;
-                GameState.gameStarted = false;
-                GameState.revealedCount = 0;
-                GameState.flaggedCount = 0;
 
-                GameState.noAnimReset = true;
+                // Use the shared initialization code
+                performInitGame();
+                break;
 
-                for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                    withCell(i, function(cell) {
-                        cell.revealed = false;
-                        cell.flagged = false;
-                        cell.questioned = false;
-                        cell.safeQuestioned = false;
-                    });
-                }
-
-                GameState.noAnimReset = false;
-
-                if (GameSettings.animations && !GameState.difficultyChanged) {
-                    for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                        withCell(i, function(cell) {
-                            cell.startGridResetAnimation();
-                        });
-                    }
-                }
-            } else if (actionType === "unlockCoopAchievement") {
+            case "unlockCoopAchievement":
                 console.log("Client received coop achievement unlock notification");
                 if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                     const difficulty = GameState.getDifficultyLevel();
@@ -1272,53 +1299,60 @@ QtObject {
                         SteamIntegration.unlockAchievement("ACH_WIN_COOP");
                     }
                 }
-            } else if (actionType === "sendHint") {
+                break;
+
+            case "sendHint":
                 console.log("Client received hint for cell:", cellIndex);
                 withCell(cellIndex, function(cell) {
                     cell.highlightHint();
                 });
                 GameState.currentHintCount++;
                 isProcessingNetworkAction = false;
-            } else if (actionType === "ping") {
+                break;
+
+            case "ping":
                 console.log("Client received ping at cell:", cellIndex);
                 showPingAtCell(cellIndex);
                 isProcessingNetworkAction = false;
-            } else if (actionType === "hostFlagCooldown") {
-                console.log("Client received cooldown notification for host-owned flag:", cellIndex);
+                break;
 
+            case "hostFlagCooldown":
+                console.log("Client received cooldown notification for host-owned flag:", cellIndex);
                 // Host placed the flag, so client should see cooldown
                 startFlagCooldown(cellIndex, true); // true = host owns it
-
                 // Client should see the cooldown indicator
                 withCell(cellIndex, function(cell) {
                     cell.inCooldown = true;
                 });
-
                 isProcessingNetworkAction = false;
-            } else if (actionType === "clientFlagCooldown") {
-                console.log("Client received cooldown notification for client-owned flag:", cellIndex);
+                break;
 
+            case "clientFlagCooldown":
+                console.log("Client received cooldown notification for client-owned flag:", cellIndex);
                 // Client placed the flag, so client should NOT see cooldown
                 startFlagCooldown(cellIndex, false); // false = client owns it
-
                 // No visual indicator needed since client owns this flag
                 isProcessingNetworkAction = false;
-            } else if (actionType === "flagRejected") {
+                break;
+
+            case "flagRejected":
                 console.log("Flag action rejected for cell:", cellIndex);
                 // The cell was in cooldown, action was rejected
                 isProcessingNetworkAction = false;
-
                 // Show cooldown feedback on the cell
                 withCell(cellIndex, function(cell) {
                     if (cell.cooldownAnimation) {
                         cell.cooldownAnimation.start();
                     }
                 });
-            }
+                break;
 
-            // Action finished processing
-            isProcessingNetworkAction = false;
+            default:
+                console.log("Client received unknown action type:", actionType);
         }
+
+        // Action finished processing
+        isProcessingNetworkAction = false;
     }
 
     // Then replace the current applyGameState function with this:
