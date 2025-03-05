@@ -785,6 +785,7 @@ QtObject {
             // Send individual cell update back to client
             sendCellUpdateToClient(cellIndex, "reveal");
             break;
+
         case "flag":
             console.log("Host processing flag action for cell:", cellIndex);
 
@@ -795,11 +796,17 @@ QtObject {
                 return;
             }
 
-            GridBridge.performToggleFlag(cellIndex);
+            const flagRemoved = GridBridge.performToggleFlag(cellIndex);
             sendCellUpdateToClient(cellIndex, "flag");
 
-            // Start cooldown - this flag is now owned by the client
-            startFlagCooldown(cellIndex, false); // false = client owns it
+            // Only start cooldown if the flag wasn't completely removed
+            if (!flagRemoved) {
+                // Start cooldown - this flag is now owned by the client
+                startFlagCooldown(cellIndex, false); // false = client owns it
+            } else {
+                // Clear any existing cooldown data if the flag was completely removed
+                clearFlagCooldown(cellIndex);
+            }
             break;
 
         case "revealConnected":
@@ -1077,17 +1084,23 @@ QtObject {
 
         if (SteamIntegration.isHost) {
             // Host: process locally and send to client
-            GridBridge.performToggleFlag(index);
+            const flagRemoved = GridBridge.performToggleFlag(index);
             sendCellUpdateToClient(index, "flag");
+
             // Start cooldown after processing - this flag is owned by host
-            startFlagCooldown(index, true);
+            if (!flagRemoved) {
+                startFlagCooldown(index, true);
+            } else {
+                // Clear any existing cooldown data if the flag was completely removed
+                clearFlagCooldown(index);
+            }
         } else {
             // Client: send request to host and wait
             isProcessingNetworkAction = true;
             SteamIntegration.sendGameAction("flag", index);
             // Cooldown will be started by host and sent back to client
         }
-        
+
         return true; // Action handled by multiplayer
     }
 

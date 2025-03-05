@@ -583,7 +583,9 @@ QtObject {
     }
 
     function performToggleFlag(index) {
-        if (GameState.gameOver) return;
+        if (GameState.gameOver) return false;
+
+        let flagCompletelyRemoved = false;
 
         withCell(index, function(cell) {
             if (!cell.revealed) {
@@ -602,9 +604,11 @@ QtObject {
                         GameState.flaggedCount--;
                     } else if (cell.questioned) {
                         cell.questioned = false;
+                        flagCompletelyRemoved = true; // Flag cycle is complete
                     } else if (cell.safeQuestioned) {
                         // In multiplayer, always go from question mark back to empty (no safe question marks)
                         cell.safeQuestioned = false;
+                        flagCompletelyRemoved = true; // Flag cycle is complete
                     }
                 } else {
                     // Original single-player flagging logic
@@ -629,6 +633,7 @@ QtObject {
                             cell.questioned = false;
                             cell.safeQuestioned = false;
                             GameState.flaggedCount--;
+                            flagCompletelyRemoved = true; // Flag cycle is complete
                         }
                     } else if (cell.questioned) {
                         if (GameSettings.enableSafeQuestionMarks) {
@@ -636,13 +641,17 @@ QtObject {
                             cell.safeQuestioned = true;
                         } else {
                             cell.questioned = false;
+                            flagCompletelyRemoved = true; // Flag cycle is complete
                         }
                     } else if (cell.safeQuestioned) {
                         cell.safeQuestioned = false;
+                        flagCompletelyRemoved = true; // Flag cycle is complete
                     }
                 }
             }
         });
+
+        return flagCompletelyRemoved;
     }
 
     function hasUnrevealedNeighbors(index) {
