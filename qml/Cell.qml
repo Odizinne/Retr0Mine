@@ -282,7 +282,7 @@ Item {
             id: cellMouseArea
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            enabled: !(GridBridge.isProcessingNetworkAction && !SteamIntegration.isHost)
+            enabled: !(NetworkManager.isProcessingNetworkAction && !SteamIntegration.isHost)
             hoverEnabled: true
             property bool isHovered: false
 
@@ -331,7 +331,7 @@ Item {
             autoRepeat: false
             enabled: cellMouseArea.isHovered && GameState.gameStarted && !pingCooldown.running
             onActivated: {
-                GridBridge.sendPing(cellItem.index)
+                NetworkManager.sendPing(cellItem.index)
                 pingCooldown.start()
             }
         }

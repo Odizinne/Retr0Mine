@@ -65,7 +65,7 @@ Popup {
     Item {
         anchors.fill: parent
         visible: (SteamIntegration.connectedPlayerName !== "" && !SteamIntegration.isP2PConnected) ||
-                 (SteamIntegration.isHost && SteamIntegration.isP2PConnected && !GridBridge.clientGridReady)
+                 (SteamIntegration.isHost && SteamIntegration.isP2PConnected && !NetworkManager.clientGridReady)
 
         ColumnLayout {
             anchors.centerIn: parent
@@ -93,14 +93,13 @@ Popup {
 
         Label {
             id: statusLabel
-            text: GridBridge.sessionRunning ? qsTr("Session in progress") : (SteamIntegration.isHost ? qsTr("Ready") : (GridBridge.cellsCreated !== (GameState.gridSizeX * GameState.gridSizeY) ? qsTr("Creating cells...") : qsTr("Waiting for host")))
+            text: NetworkManager.sessionRunning ? qsTr("Session in progress") : (SteamIntegration.isHost ? qsTr("Ready") : (GridBridge.cellsCreated !== (GameState.gridSizeX * GameState.gridSizeY) ? qsTr("Creating cells...") : qsTr("Waiting for host")))
             font.pixelSize: 16
             font.bold: true
             Layout.alignment: Qt.AlignCenter
-            //color: "#28d13c"
             visible: SteamIntegration.connectedPlayerName !== "" &&
                      SteamIntegration.isP2PConnected &&
-                     (SteamIntegration.isHost ? GridBridge.clientGridReady : true)
+                     (SteamIntegration.isHost ? NetworkManager.clientGridReady : true)
         }
 
         ProgressBar {
@@ -119,7 +118,7 @@ Popup {
             wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignCenter
             horizontalAlignment: Text.AlignHCenter
-            opacity: statusLabel.visible || cellProgressBar.opacity === 1 ? 0.7 : 0 || (SteamIntegration.isP2PConnected && GridBridge.clientGridReady)
+            opacity: statusLabel.visible || cellProgressBar.opacity === 1 ? 0.7 : 0 || (SteamIntegration.isP2PConnected && NetworkManager.clientGridReady)
         }
     }
 
@@ -279,7 +278,7 @@ Popup {
             Button {
                 id: startButton
                 highlighted: enabled
-                visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !GridBridge.mpPopupCloseButtonVisible
+                visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.mpPopupCloseButtonVisible
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
                 Layout.fillWidth: true
@@ -287,21 +286,21 @@ Popup {
                 enabled: SteamIntegration.isInMultiplayerGame &&
                          !SteamIntegration.isConnecting &&
                          SteamIntegration.isP2PConnected &&
-                         GridBridge.clientGridReady &&
-                         !GridBridge.sessionRunning
+                         NetworkManager.clientGridReady &&
+                         !NetworkManager.sessionRunning
                 onClicked: {
                     if (SteamIntegration.isHost) {
                         SteamIntegration.sendGameAction("startGame", 0)
                     }
                     ComponentsContext.multiplayerPopupVisible = false
-                    GridBridge.sessionRunning = true
-                    GridBridge.mpPopupCloseButtonVisible = true
+                    NetworkManager.sessionRunning = true
+                    NetworkManager.mpPopupCloseButtonVisible = true
                 }
             }
 
             Button {
                 id: closeButton
-                visible: GridBridge.mpPopupCloseButtonVisible
+                visible: NetworkManager.mpPopupCloseButtonVisible
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Close")
                 Layout.fillWidth: true
@@ -317,7 +316,7 @@ Popup {
                     if (SteamIntegration.isInMultiplayerGame) {
                         SteamIntegration.leaveLobby()
                     }
-                    GridBridge.sessionRunning = false
+                    NetworkManager.sessionRunning = false
                     ComponentsContext.multiplayerPopupVisible = false
 
 

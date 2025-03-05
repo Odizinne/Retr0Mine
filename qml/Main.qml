@@ -53,7 +53,7 @@ ApplicationWindow {
             // Check if this is a grid sync packet
             if (gameState.gridSync) {
                 console.log("Received grid sync game state");
-                GridBridge.handleMultiplayerGridSync(gameState);
+                NetworkManager.handleMultiplayerGridSync(gameState);
             }
         }
 
@@ -96,16 +96,16 @@ ApplicationWindow {
                     SteamIntegration.isHost ? "host" : "client");
 
                 // Reset any in-progress game if joining a multiplayer session
-                GridBridge.allowClientReveal = false;
+                NetworkManager.allowClientReveal = false;
                 GridBridge.initGame();
             } else {
                 console.log("Left multiplayer mode");
 
-                if (GridBridge.isProcessingNetworkAction) {
-                    GridBridge.isProcessingNetworkAction = false;
+                if (NetworkManager.isProcessingNetworkAction) {
+                    NetworkManager.isProcessingNetworkAction = false;
                 }
-                GridBridge.sessionRunning = false;
-                GridBridge.mpPopupCloseButtonVisible = false;
+                NetworkManager.sessionRunning = false;
+                NetworkManager.mpPopupCloseButtonVisible = false;
                 GridBridge.initGame();
             }
         }
@@ -115,8 +115,8 @@ ApplicationWindow {
             if (SteamIntegration.connectedPlayerName) {
                 console.log("Player connected:", SteamIntegration.connectedPlayerName);
             } else if (SteamIntegration.isInMultiplayerGame) {
-                GridBridge.sessionRunning = false;
-                GridBridge.mpPopupCloseButtonVisible = false;
+                NetworkManager.sessionRunning = false;
+                NetworkManager.mpPopupCloseButtonVisible = false;
                 console.log("Player disconnected");
             }
         }
@@ -135,7 +135,7 @@ ApplicationWindow {
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 // Only send if the cell count matches expected grid size
                 if (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) {
-                    GridBridge.notifyGridReady();
+                    NetworkManager.notifyGridReady();
                 }
             }
 
@@ -408,7 +408,7 @@ ApplicationWindow {
                 Component.onCompleted: {
                     GridBridge.setGrid(grid)
                 }
-                enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !GridBridge.allowClientReveal ? false : true
+                enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !NetworkManager.allowClientReveal ? false : true
                 delegate: Loader {
                     id: cellLoader
                     asynchronous: true

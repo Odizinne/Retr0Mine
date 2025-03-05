@@ -90,7 +90,6 @@ Item {
         GameState.firstClickIndex = data.gameState.firstClickIndex
         GameState.currentHintCount = data.gameState.currentHintCount || 0
 
-        // Reset all cells first - use GridBridge.withCell for safety
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             GridBridge.withCell(i, function(cell) {
                 cell.revealed = false
@@ -100,7 +99,6 @@ Item {
             })
         }
 
-        // Apply saved cell states - use GridBridge.withCell for safety
         data.gameState.revealedCells.forEach(index => {
             GridBridge.withCell(index, function(cell) {
                 cell.revealed = true

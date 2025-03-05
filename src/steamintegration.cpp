@@ -8,6 +8,7 @@
 #include <QBuffer>
 #include <QImage>
 #include <QThread>
+
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
     , m_initialized(false)
@@ -17,7 +18,6 @@ SteamIntegration::SteamIntegration(QObject *parent)
     , m_lobbyReady(false)
     , m_p2pInitialized(false)
 {
-    // Read initial difficulty from settings
     QSettings settings("Odizinne", "Retr0Mine");
     m_difficulty = settings.value("difficulty", 0).toInt();
 
@@ -30,9 +30,9 @@ SteamIntegration::SteamIntegration(QObject *parent)
     // Create a Steam callback timer to ensure callbacks are processed regularly
     QTimer* callbackTimer = new QTimer(this);
     connect(callbackTimer, &QTimer::timeout, this, &SteamIntegration::runCallbacks);
-    callbackTimer->start(100); // Process Steam callbacks every 100ms
+    callbackTimer->start(100);
 
-    m_networkTimer.setInterval(50); // Check for network messages every 50ms
+    m_networkTimer.setInterval(50);
 }
 
 SteamIntegration::~SteamIntegration()

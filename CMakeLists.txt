@@ -72,6 +72,7 @@ set(QML_SINGLETONS
     qml/Singletons/SaveManager.qml
     qml/Singletons/GridBridge.qml
     qml/Singletons/ComponentsContext.qml
+    qml/Singletons/NetworkManager.qml
 )
 set_source_files_properties(${QML_SINGLETONS}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
