@@ -292,8 +292,6 @@ Item {
                 const isFlagClick = !isRevealClick;
 
                 if (cellItem.inCooldown && isFlagClick) {
-                    // Show some feedback that the cell is in cooldown
-                    cooldownAnimation.start();
                     return;
                 }
 

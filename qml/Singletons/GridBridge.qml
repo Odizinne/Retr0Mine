@@ -568,10 +568,7 @@ QtObject {
         }
 
         GameState.noAnimReset = false;
-        if (GameSettings.animations) {
-            if (GameState.difficultyChanged) {
-                return
-            }
+        if (GameSettings.animations && !GameState.difficultyChanged) {
             for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                 withCell(i, function(cell) {
                     cell.startGridResetAnimation();
@@ -1240,12 +1237,14 @@ QtObject {
                 GameState.displayPostGame = true;
             } else if (actionType === "resetGame") {
                 console.log("Client received game reset notification");
-
+                GameState.displayPostGame = false
+                GameState.difficultyChanged = false
                 // Reset client-side state
                 minesInitialized = false;
                 allowClientReveal = false;
                 pendingActions = [];
                 isProcessingNetworkAction = false;
+                GameState.blockAnim = false;
                 GameState.mines = [];
                 GameState.numbers = [];
                 GameState.gameOver = false;
@@ -1275,7 +1274,6 @@ QtObject {
                         });
                     }
                 }
-                GameState.displayPostGame = false
                 // Request sync from host
                 //Qt.callLater(function() {
                 //    requestFullSync();
