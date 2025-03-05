@@ -465,33 +465,6 @@ void SteamIntegration::acceptInvite(const QString& lobbyId)
     }
 }
 
-void SteamIntegration::joinLobbyWithFriend(const QString& friendIdStr)
-{
-    qDebug() << "SteamIntegration: Attempting to join friend's lobby:" << friendIdStr;
-    if (!m_initialized || m_inMultiplayerGame) {
-        qDebug() << "SteamIntegration: Cannot join lobby - not initialized or already in game";
-        return;
-    }
-
-    uint64 friendId = friendIdStr.toULongLong();
-    CSteamID steamFriendId(friendId);
-
-    // Try to join if friend is in a Retr0Mine lobby
-    if (SteamFriends()->GetFriendGamePlayed(steamFriendId, &m_friendGameInfo)) {
-        if (m_friendGameInfo.m_gameID.AppID() == SteamUtils()->GetAppID()) {
-            CSteamID lobbyId = m_friendGameInfo.m_steamIDLobby;
-            if (lobbyId.IsValid()) {
-                m_isConnecting = true;
-                emit connectingStatusChanged();
-
-                SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(lobbyId);
-                m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
-                qDebug() << "SteamIntegration: Join friend's lobby call made, waiting for callback";
-            }
-        }
-    }
-}
-
 void SteamIntegration::leaveLobby()
 {
     qDebug() << "SteamIntegration: Leaving lobby";

@@ -1134,7 +1134,6 @@ QtObject {
                 console.log("Host received client readiness confirmation");
                 clientReadyForActions = true;
 
-                // Now we can send any pending initial actions
                 if (pendingInitialActions.length > 0) {
                     console.log("Sending", pendingInitialActions.length, "pending initial actions");
                     pendingInitialActions.forEach(function(action) {
@@ -1146,7 +1145,6 @@ QtObject {
                 console.log("Client requested mines data, sending immediately");
                 sendMinesListToClient();
 
-                // After a moment, check if client has processed mines
                 Qt.callLater(function() {
                     console.log("Checking if client has processed mines");
                     SteamIntegration.sendGameAction("minesReady", 0);
@@ -1154,12 +1152,8 @@ QtObject {
             } else if (actionType === "requestHint") {
                 console.log("Host processing hint request from client");
                 processHintRequest();
-                // The actual hint cell is sent back in processHintRequest
-            } // For the host case in handleNetworkAction (around line 4016)
-            // Add this after the requestHint case:
-            else if (actionType === "ping") {
+            } else if (actionType === "ping") {
                 console.log("Host received ping at cell:", cellIndex);
-                // Just show the ping locally and relay back to other clients if needed
                 showPingAtCell(cellIndex);
             }
         } else {
@@ -1222,9 +1216,8 @@ QtObject {
                 ComponentsContext.multiplayerPopupVisible = false
             } else if (actionType === "gameOver") {
                 console.log("Client processing gameOver action, win status:", cellIndex);
-                // Handle game over state
                 GameState.gameOver = true;
-                GameState.gameWon = cellIndex === 1; // 1 for win, 0 for loss
+                GameState.gameWon = cellIndex === 1;
                 GameTimer.stop();
 
                 if (GameState.gameWon) {
@@ -1239,7 +1232,6 @@ QtObject {
                 console.log("Client received game reset notification");
                 GameState.displayPostGame = false
                 GameState.difficultyChanged = false
-                // Reset client-side state
                 minesInitialized = false;
                 allowClientReveal = false;
                 pendingActions = [];
@@ -1254,7 +1246,6 @@ QtObject {
 
                 GameState.noAnimReset = true;
 
-                // Reset all grid cells
                 for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                     withCell(i, function(cell) {
                         cell.revealed = false;
@@ -1266,7 +1257,6 @@ QtObject {
 
                 GameState.noAnimReset = false;
 
-                // Start grid reset animation if enabled
                 if (GameSettings.animations && !GameState.difficultyChanged) {
                     for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                         withCell(i, function(cell) {
@@ -1274,10 +1264,6 @@ QtObject {
                         });
                     }
                 }
-                // Request sync from host
-                //Qt.callLater(function() {
-                //    requestFullSync();
-                //});
             } else if (actionType === "unlockCoopAchievement") {
                 console.log("Client received coop achievement unlock notification");
                 if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
@@ -1584,13 +1570,6 @@ QtObject {
         console.log("Game state applied successfully");
     }
 
-    // Legacy method for backward compatibility
-    function sendGridStateToClient() {
-        console.log("Legacy sendGridStateToClient called - using optimized approach instead");
-        // Note: This method is left here for backward compatibility, but now
-        // we use the more targeted approaches above
-    }
-
     function requestFullSync() {
         if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
             return; // Only clients should request sync
@@ -1598,25 +1577,6 @@ QtObject {
 
         console.log("Client requesting full sync from host");
         SteamIntegration.sendGameAction("requestSync", 0);
-    }
-
-    // Add this call at the end of performReveal on the client side if it detects an issue
-    function verifyClientState() {
-        // Only run on clients
-        if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
-            return true;
-        }
-
-        // Check if we have valid mine and number data
-        if (!GameState.mines || GameState.mines.length === 0 ||
-            !GameState.numbers || GameState.numbers.length === 0 ||
-            GameState.mines.length > GameState.gridSizeX * GameState.gridSizeY) {
-            console.error("Client has invalid game state - requesting sync");
-            requestFullSync();
-            return false;
-        }
-
-        return true;
     }
 
     function prepareMultiplayerGrid(gridX, gridY, mineCount) {

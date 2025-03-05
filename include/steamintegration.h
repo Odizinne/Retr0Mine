@@ -58,7 +58,6 @@ public:
     // New multiplayer methods
     // Lobby management
     Q_INVOKABLE void createLobby();
-    Q_INVOKABLE void joinLobbyWithFriend(const QString& friendId);
     Q_INVOKABLE void leaveLobby();
     Q_INVOKABLE void cleanupMultiplayerSession(bool isShuttingDown = false);
     Q_INVOKABLE QStringList getOnlineFriends();
@@ -141,7 +140,6 @@ signals:
     void gameStateReceived(QVariantMap gameState);
     void connectionFailed(QString reason);
     void connectionSucceeded();
-    void inviteReceived(QString friendName, QString lobbyId);
     void p2pInitialized();
 };
 
