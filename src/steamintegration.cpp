@@ -37,16 +37,54 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
 SteamIntegration::~SteamIntegration()
 {
+    // First, ensure all multiplayer sessions are cleaned up
     cleanupMultiplayerSession(true);
 
-    // Flush remaining callbacks
     if (m_initialized) {
-        for (int i = 0; i < 10; i++) {
+        // Close any P2P sessions explicitly again to be sure
+        ISteamNetworking* steamNetworking = SteamNetworking();
+        if (steamNetworking) {
+            // Get all Steam friends and ensure P2P sessions are closed with each
+            ISteamFriends* steamFriends = SteamFriends();
+            if (steamFriends) {
+                int friendCount = steamFriends->GetFriendCount(k_EFriendFlagImmediate);
+                for (int i = 0; i < friendCount; i++) {
+                    CSteamID friendId = steamFriends->GetFriendByIndex(i, k_EFriendFlagImmediate);
+                    steamNetworking->CloseP2PSessionWithUser(friendId);
+                }
+            }
+
+            // Flush and process all remaining packets
+            uint32 msgSize;
+            while (steamNetworking->IsP2PPacketAvailable(&msgSize)) {
+                QByteArray buffer(msgSize, 0);
+                CSteamID senderId;
+                steamNetworking->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId);
+            }
+        }
+
+        // Run Steam callbacks to process the close requests
+        // Increased iterations with dynamic checking
+        const int MAX_ITERATIONS = 30;
+        for (int i = 0; i < MAX_ITERATIONS; i++) {
             SteamAPI_RunCallbacks();
-            QThread::msleep(10);
+            QThread::msleep(20);
+
+            // Check if there are any pending packets - if not for a few iterations, we can break early
+            if (steamNetworking && !steamNetworking->IsP2PPacketAvailable(nullptr)) {
+                // If we've had a few clean iterations, we can break
+                if (i > 10) break;
+            }
+        }
+
+        // Clear rich presence before shutdown
+        ISteamFriends* steamFriends = SteamFriends();
+        if (steamFriends) {
+            steamFriends->ClearRichPresence();
         }
     }
 
+    // Finally shut down the Steam API
     shutdown();
 }
 
