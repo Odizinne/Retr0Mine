@@ -275,6 +275,7 @@ Popup {
                 Layout.fillWidth: true
                 enabled: !SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting
                 onClicked: SteamIntegration.createLobby()
+                focusPolicy: Qt.NoFocus
             }
 
             Button {
@@ -283,6 +284,7 @@ Popup {
                 visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.mpPopupCloseButtonVisible
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
+                focusPolicy: Qt.NoFocus
                 Layout.fillWidth: true
                 // Add the clientGridReady check to the enabled condition
                 enabled: SteamIntegration.isInMultiplayerGame &&
@@ -313,6 +315,7 @@ Popup {
                 id: cancelButton
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Quit session")
+                focusPolicy: Qt.NoFocus
                 Layout.fillWidth: true
                 onClicked: {
                     if (SteamIntegration.isInMultiplayerGame) {

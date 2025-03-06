@@ -3,6 +3,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QQmlEngine>
+
 class GameTimer : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString displayTime READ displayTime NOTIFY displayTimeChanged)
