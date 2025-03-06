@@ -543,10 +543,32 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
     emit connectingStatusChanged();
 
     if (bIOFailure || pCallback->m_EChatRoomEnterResponse != k_EChatRoomEnterResponseSuccess) {
-        qDebug() << "SteamIntegration: Failed to enter lobby, error:"
-                 << (bIOFailure ? "I/O Failure" : QString::number(pCallback->m_EChatRoomEnterResponse));
-        emit connectionFailed("Failed to enter lobby (error " +
-                              QString(bIOFailure ? "I/O Failure" : QString::number(pCallback->m_EChatRoomEnterResponse)) + ")");
+        QString errorMessage;
+
+        if (bIOFailure) {
+            errorMessage = "I/O Failure";
+        } else {
+            switch (pCallback->m_EChatRoomEnterResponse) {
+            case k_EChatRoomEnterResponseDoesntExist:
+                errorMessage = "Lobby no longer exists";
+                break;
+            case k_EChatRoomEnterResponseNotAllowed:
+            case k_EChatRoomEnterResponseBanned:
+            case k_EChatRoomEnterResponseLimited:
+                errorMessage = "You don't have permission to join this lobby";
+                break;
+            case k_EChatRoomEnterResponseFull:
+                errorMessage = "Lobby is already full";
+                break;
+            case k_EChatRoomEnterResponseError:
+            default:
+                errorMessage = "Unknown error (" + QString::number(pCallback->m_EChatRoomEnterResponse) + ")";
+                break;
+            }
+        }
+
+        qDebug() << "SteamIntegration: Failed to enter lobby, error:" << errorMessage;
+        emit connectionFailed(errorMessage);
         return;
     }
 

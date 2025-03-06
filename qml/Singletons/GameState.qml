@@ -64,6 +64,7 @@ QtObject {
         }
         return null;
     }
+
     property bool gameWon: false
     property string postgameText: gameWon ? qsTr("Victory") : qsTr("Game over")
     property string postgameColor: gameWon ? "#28d13c" : "#d12844"

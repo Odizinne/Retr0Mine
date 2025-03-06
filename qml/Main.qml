@@ -123,7 +123,8 @@ ApplicationWindow {
 
         // Track connection failures
         function onConnectionFailed(reason) {
-            console.error("Connection failed:", reason);
+            ComponentsContext.mpErrorReason = reason;
+            ComponentsContext.multiplayerErrorPopupVisible = true;
         }
     }
 
@@ -341,7 +342,10 @@ ApplicationWindow {
         }
     }
 
+    MultiplayerErrorPopup { }
+
     RulesPopup { }
+
     GenerationPopup { }
 
     PostgamePopup { }
