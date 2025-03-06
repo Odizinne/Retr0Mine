@@ -303,7 +303,7 @@ Popup {
 
             Button {
                 id: closeButton
-                visible: NetworkManager.mpPopupCloseButtonVisible || (!SteamIntegration.isHost && SteamIntegration.isP2PConnected && GridBridge.cellsCreated !== (GameState.gridSizeX * GameState.gridSizeY))
+                visible: NetworkManager.mpPopupCloseButtonVisible || (!SteamIntegration.isHost && SteamIntegration.isP2PConnected && GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY))
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Close")
                 Layout.fillWidth: true
