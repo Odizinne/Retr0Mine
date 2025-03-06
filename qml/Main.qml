@@ -10,16 +10,6 @@ ApplicationWindow {
     visibility: ApplicationWindow.Hidden
     property bool isSaving: false
     property bool isClosing: false
-    property Timer starterTimer: Timer {
-        interval: 0
-        repeat: false
-        onTriggered: {
-            // Check for pending invites only once at startup
-            if (SteamIntegration.initialized) {
-                SteamIntegration.checkForPendingInvites()
-            }
-        }
-    }
 
     onClosing: function(close) {
         if (isClosing) {
@@ -29,7 +19,6 @@ ApplicationWindow {
 
         var bypassSaving
         if (SteamIntegration.isInMultiplayerGame) {
-            // Pass true to indicate we're shutting down
             GameState.bypassAutoSave = true
             SteamIntegration.cleanupMultiplayerSession(true)
         }
@@ -50,7 +39,6 @@ ApplicationWindow {
         target: SteamIntegration
 
         function onGameStateReceived(gameState) {
-            // Check if this is a grid sync packet
             if (gameState.gridSync) {
                 console.log("Received grid sync game state");
                 NetworkManager.handleMultiplayerGridSync(gameState);
@@ -62,10 +50,8 @@ ApplicationWindow {
                 console.log("Lobby ready, initializing multiplayer game");
 
                 if (SteamIntegration.isHost) {
-                    // Get current host's difficulty settings
                     const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
 
-                    // Prepare grid sync data packet
                     const gridSyncData = {
                         gridSync: true,
                         gridSizeX: difficultySet.x,
@@ -76,26 +62,22 @@ ApplicationWindow {
                     console.log("Sending grid sync:", JSON.stringify(gridSyncData));
                     SteamIntegration.sendGameState(gridSyncData);
                 } else {
-                    // Client will wait for grid sync from host
                     console.log("Client waiting for grid sync");
                 }
             }
         }
 
         function onConnectionSucceeded() {
-            // Only show popup when joining as client (not as host)
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 ComponentsContext.multiplayerPopupVisible = true
             }
         }
 
-        // Handle multiplayer status changes
         function onIsInMultiplayerGameChanged() {
             if (SteamIntegration.isInMultiplayerGame) {
                 console.log("Entered multiplayer mode as",
                     SteamIntegration.isHost ? "host" : "client");
 
-                // Reset any in-progress game if joining a multiplayer session
                 NetworkManager.allowClientReveal = false;
                 GridBridge.initGame();
             } else {
@@ -110,7 +92,6 @@ ApplicationWindow {
             }
         }
 
-        // Additional event to handle connection events
         function onConnectedPlayerChanged() {
             if (SteamIntegration.connectedPlayerName) {
                 console.log("Player connected:", SteamIntegration.connectedPlayerName);
@@ -121,7 +102,6 @@ ApplicationWindow {
             }
         }
 
-        // Track connection failures
         function onConnectionFailed(reason) {
             ComponentsContext.mpErrorReason = reason;
             ComponentsContext.multiplayerErrorPopupVisible = true;
@@ -132,15 +112,12 @@ ApplicationWindow {
         target: ComponentsContext
         function onAllCellsReady() {
 
-            // If in multiplayer as client, notify host that grid is ready
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
-                // Only send if the cell count matches expected grid size
                 if (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) {
                     NetworkManager.notifyGridReady();
                 }
             }
 
-            // Continue with normal game initialization for single player
             if (!SteamIntegration.isInMultiplayerGame && GameState.firstRun) {
                 GameState.firstRun = false
                 root.checkInitialGameState();
@@ -438,7 +415,9 @@ ApplicationWindow {
         } else {
             GridBridge.initGame()
         }
-        starterTimer.start()
+        if (SteamIntegration.initialized) {
+            SteamIntegration.checkForPendingInvites()
+        }
     }
 
     function getIdealWidth() {
