@@ -8,6 +8,7 @@
 #include <QBuffer>
 #include <QImage>
 #include <QThread>
+#include <steam_api.h>
 
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)

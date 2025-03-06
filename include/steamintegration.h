@@ -3,8 +3,12 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QTimer>
-#include <steam_api.h>
 #include <QSettings>
+#include <steam/steam_api_common.h>
+#include <steam/isteamfriends.h>
+#include <steam/isteamuser.h>
+#include <steam/isteamnetworking.h>
+#include <steam/isteammatchmaking.h>
 
 class SteamIntegration : public QObject
 {
