@@ -776,8 +776,8 @@ void SteamIntegration::processNetworkMessages()
             char messageType = buffer[0];
             QByteArray messageData = buffer.mid(1);
 
-            qDebug() << "SteamIntegration: Received message type:" << messageType
-                     << "size:" << messageData.size() << "from:" << senderId.ConvertToUint64();
+            //qDebug() << "SteamIntegration: Received message type:" << messageType
+            //         << "size:" << messageData.size() << "from:" << senderId.ConvertToUint64();
 
             // Mark P2P as initialized on first message from either side
             if (!m_p2pInitialized) {
@@ -930,7 +930,7 @@ void SteamIntegration::sendP2PInitPing()
         return;
     }
 
-    qDebug() << "SteamIntegration: Sending P2P initialization ping";
+    //qDebug() << "SteamIntegration: Sending P2P initialization ping";
 
     // Create a simple ping message
     QByteArray data;
