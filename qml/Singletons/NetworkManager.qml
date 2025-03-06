@@ -778,6 +778,10 @@ QtObject {
 
         // Finish processing
         isProcessingNetworkAction = false;
+
+        if (!SteamIntegration.isHost) {
+            reconcileState(gameState);
+        }
         console.log("Game state applied successfully");
     }
 
@@ -809,10 +813,22 @@ QtObject {
             break;
 
         case "reveal":
-            console.log("Host processing reveal action for cell:", cellIndex);
-            GridBridge.performReveal(cellIndex);
-            // Send individual cell update back to client
-            sendCellUpdateToClient(cellIndex, "reveal");
+            console.log("Host validating client reveal for cell:", cellIndex);
+
+            // Process the reveal on the host side
+            const revealResult = GridBridge.performReveal(cellIndex);
+
+            // If the client's action resulted in a game over or major state change,
+            // send an authoritative update to ensure consistency
+            if (GameState.gameOver || revealResult.cascadeReveal) {
+                // Send a compact state update focusing only on changed cells
+                const stateUpdate = {
+                    gameOver: GameState.gameOver,
+                    gameWon: GameState.gameWon,
+                    revealedCells: revealResult.revealedCells
+                };
+                SteamIntegration.sendGameState(stateUpdate);
+            }
             break;
 
         case "flag":
@@ -1061,16 +1077,20 @@ QtObject {
             return false; // Not a multiplayer game
         }
 
+        // Both host and client process the reveal locally first
+        const result = GridBridge.performReveal(index);
+
         if (SteamIntegration.isHost) {
-            // Host: process locally and send to client
-            GridBridge.performReveal(index);
+            // Host: just send the result to client
             sendCellUpdateToClient(index, "reveal");
         } else {
-            // Client: send request to host and wait
-            isProcessingNetworkAction = true;
+            // Client: inform the host about the action (not waiting for permission)
             SteamIntegration.sendGameAction("reveal", index);
+
+            // Important: we're no longer setting isProcessingNetworkAction to true
+            // This allows the client to continue playing without waiting
         }
-        
+
         return true; // Action handled by multiplayer
     }
 
@@ -1238,5 +1258,47 @@ QtObject {
         });
         
         return true;
+    }
+
+    // In NetworkManager.qml, add a reconciliation function:
+    function reconcileState(correctState) {
+        // This function is called when the host sends an authoritative update
+        // that might differ from what the client has locally
+
+        // If we're the host, we don't need to reconcile
+        if (SteamIntegration.isHost) return;
+
+        // For each cell in the correction data, update our local state
+        if (correctState.revealedCells) {
+            correctState.revealedCells.forEach(cellIndex => {
+                const cell = GridBridge.getCell(cellIndex);
+                if (cell && !cell.revealed) {
+                    // This cell should be revealed but isn't in our local state
+                    cell.revealed = true;
+                    GameState.revealedCount++;
+                }
+            });
+        }
+
+        // Similarly for flags, game state, etc.
+        // ...
+
+        // Update game state if needed
+        if (correctState.gameOver !== undefined) {
+            GameState.gameOver = correctState.gameOver;
+            GameState.gameWon = correctState.gameWon || false;
+
+            if (GameState.gameOver) {
+                GameState.displayPostGame = true;
+                GameTimer.stop();
+                // Play appropriate sound
+                if (GameState.gameWon) {
+                    if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
+                } else {
+                    if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
+                    GridBridge.revealAllMines();
+                }
+            }
+        }
     }
 }

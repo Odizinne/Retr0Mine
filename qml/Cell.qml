@@ -282,7 +282,7 @@ Item {
             id: cellMouseArea
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            enabled: !(NetworkManager.isProcessingNetworkAction && !SteamIntegration.isHost) || !GameState.isGeneratingGrid
+            enabled: !GameState.isGeneratingGrid
             hoverEnabled: true
             property bool isHovered: false
 
