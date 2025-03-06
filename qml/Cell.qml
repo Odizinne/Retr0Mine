@@ -24,9 +24,31 @@ Item {
     property int col
     property int diagonalSum
     property bool inCooldown: false
+    property bool localPlayerOwns: false
 
     function highlightHint() {
         hintAnimation.start();
+    }
+
+    onFlaggedChanged: {
+        if (!flagged) {
+            // Reset ownership when flag is removed
+            if (GameSettings.animations) {
+                // Wait for animation to complete before resetting
+                flagRemovalTimer.start();
+            } else {
+                localPlayerOwns = false;
+            }
+        }
+    }
+
+    Timer {
+        id: flagRemovalTimer
+        interval: 300
+        repeat: false
+        onTriggered: {
+            cellItem.localPlayerOwns = false;
+        }
     }
 
     Component.onCompleted: {
@@ -243,8 +265,18 @@ Item {
             anchors.centerIn: parent
             source: GameState.flagPath
             color: {
-                if (GameSettings.contrastFlag) return GameConstants.foregroundColor
-                else return GameConstants.accentColor
+                if (SteamIntegration.isInMultiplayerGame) {
+                    // Different colors for different players
+                    if (cellItem.localPlayerOwns) {
+                        return SteamIntegration.isHost ? "#3584E4" : "#E95420" // Blue for host, orange for client
+                    } else {
+                        return SteamIntegration.isHost ? "#E95420" : "#3584E4" // Opposite colors
+                    }
+                } else {
+                    // Original color logic for single player
+                    if (GameSettings.contrastFlag) return GameConstants.foregroundColor
+                    else return GameConstants.accentColor
+                }
             }
             sourceSize.width: cellItem.width / 1.8
             sourceSize.height: cellItem.height / 1.8
@@ -293,6 +325,12 @@ Item {
 
                 if (cellItem.inCooldown && isFlagClick) {
                     return;
+                }
+
+                console.log("isFlagged:" + cellItem.flagged)
+                // will proably have to also check if cellItem.isFlagged
+                if (isFlagClick && !cellItem.flagged && !cellItem.questioned) {
+                    cellItem.localPlayerOwns = true;
                 }
 
                 if (!GameState.gameStarted) {
