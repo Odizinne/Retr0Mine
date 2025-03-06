@@ -785,8 +785,8 @@ void SteamIntegration::processNetworkMessages()
                 m_p2pInitialized = true;
 
                 // Start ping measurements once connection is established
-                m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
-                m_pingTimer.start();
+                //m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
+                //m_pingTimer.start();
 
                 emit p2pInitialized();
 
