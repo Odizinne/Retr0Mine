@@ -116,9 +116,9 @@ Item {
     }
 
     property string connectionColor: {
-        if (SteamIntegration.currentPing <= 50 && SteamIntegration.currentPing !== -1) {
+        if (SteamIntegration.currentPing <= 100 && SteamIntegration.currentPing !== -1) {
             return "#28d13c"
-        } else if (SteamIntegration.currentPing > 50 && SteamIntegration.currentPing < 100 && SteamIntegration.currentPing !== -1) {
+        } else if (SteamIntegration.currentPing > 100 && SteamIntegration.currentPing < 200 && SteamIntegration.currentPing !== -1) {
             return "orange"
         } else {
             return "#d12844"
@@ -126,9 +126,9 @@ Item {
     }
 
     property int connectionQuality: {
-        if (SteamIntegration.currentPing <= 50) {
+        if (SteamIntegration.currentPing <= 100 && SteamIntegration.currentPing !== -1) {
             return 2
-        } else if (SteamIntegration.currentPing > 50 && SteamIntegration.currentPing < 100 && SteamIntegration.currentPing !== -1) {
+        } else if (SteamIntegration.currentPing > 100 && SteamIntegration.currentPing < 200 && SteamIntegration.currentPing !== -1) {
             return 1
         } else {
             return 0

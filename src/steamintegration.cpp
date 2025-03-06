@@ -1059,7 +1059,6 @@ void SteamIntegration::sendPingRequest()
     }
     // Generate unique ID for this ping request
     qint64 pingId = QDateTime::currentMSecsSinceEpoch();
-    qDebug("pass ping");
     // Store send time with ID
     m_pendingPings[pingId] = QDateTime::currentDateTime();
 
@@ -1098,7 +1097,6 @@ void SteamIntegration::handlePingRequest(const QByteArray& data)
 
 void SteamIntegration::handlePingResponse(const QByteArray& data)
 {
-    // Extract ping ID
     QByteArray idPart = data.mid(5); // Skip "PONG|"
     qint64 pingId = idPart.toLongLong();
 
@@ -1106,7 +1104,6 @@ void SteamIntegration::handlePingResponse(const QByteArray& data)
         QDateTime sendTime = m_pendingPings.take(pingId);
         int pingMs = sendTime.msecsTo(QDateTime::currentDateTime());
 
-        // Update current ping
         m_currentPing = pingMs;
         emit pingUpdated();
     }
