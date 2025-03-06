@@ -5,14 +5,15 @@
 [![Github All Releases](https://img.shields.io/github/downloads/odizinne/Retr0Mine/total.svg)]()
 [![license](https://img.shields.io/github/license/odizinne/Retr0Mine)](https://github.com/Odizinne/Retr0Mine/blob/main/LICENSE)
 
-Modern UI minesweeper with a lot of configuration.  
-Runs on windows | linux.
+### Modern UI minesweeper with a lot of configuration that runs on windows and linux.  
+
+**If you like my work, consider supporting me by buying Retr0Mine on Steam!**  
+You'll get access to exclusive features relying on Steam, such as 2 player coop, achievemnts etc.
+
+[![Available on STEAM](/.assets/available_on_steam.png)](https://store.steampowered.com/app/3478030/Retr0Mine/)
 
 ![image](.assets/screenshot.png)
 
-**If you like my work, consider supporting me by buying Retr0Mine on steam!**
-
-[![Available on STEAM](/.assets/available_on_steam.png)](https://store.steampowered.com/app/3478030/Retr0Mine/)
 
 # Download
 
