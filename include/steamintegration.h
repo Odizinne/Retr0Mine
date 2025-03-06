@@ -27,6 +27,7 @@ class SteamIntegration : public QObject
     Q_PROPERTY(bool isLobbyReady READ isLobbyReady NOTIFY lobbyReadyChanged)
     Q_PROPERTY(bool canInviteFriend READ canInviteFriend NOTIFY canInviteFriendChanged)
     Q_PROPERTY(bool isP2PConnected READ isP2PConnected NOTIFY p2pInitialized)
+    Q_PROPERTY(int currentPing READ getCurrentPing NOTIFY pingUpdated)
 
 public:
     explicit SteamIntegration(QObject *parent = nullptr);
@@ -70,7 +71,8 @@ public:
     // P2P networking
     Q_INVOKABLE bool sendGameAction(const QString& actionType, int cellIndex);
     Q_INVOKABLE bool sendGameState(const QVariantMap& gameState);
-
+    int getCurrentPing() const { return m_currentPing; }
+    Q_INVOKABLE void sendPingRequest();
     // Callback processing - call this regularly
     Q_INVOKABLE void runCallbacks();
 
@@ -121,6 +123,11 @@ private:
     QTimer m_p2pInitTimer;
     QString m_connectedPlayerName;
     QTimer m_networkTimer;
+    void handlePingRequest(const QByteArray& data);
+    void handlePingResponse(const QByteArray& data);
+    int m_currentPing;
+    QMap<qint64, QDateTime> m_pendingPings;
+    QTimer m_pingTimer;
 
     // For invite handling
     FriendGameInfo_t m_friendGameInfo;
@@ -141,6 +148,7 @@ signals:
     void connectionFailed(QString reason);
     void connectionSucceeded();
     void p2pInitialized();
+    void pingUpdated();
 };
 
 struct SteamIntegrationForeign

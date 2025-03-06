@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import net.odizinne.retr0mine 1.0
+import QtQuick.Layouts
 
 Item {
     id: control
@@ -15,6 +16,7 @@ Item {
     }
 
     Button {
+        id: menuButton
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -25,6 +27,46 @@ Item {
         }
         MainMenu {
             id: mainMenu
+        }
+    }
+
+    Item {
+        height: 18
+        //visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
+        anchors.left: menuButton.right
+        anchors.leftMargin: 8
+        anchors.verticalCenter: parent.verticalCenter
+        RowLayout {
+            anchors.fill: parent
+            spacing: 2
+            Rectangle {
+                radius: 1
+                border.width: 1
+                Layout.alignment: Qt.AlignBottom
+                color: GameConstants.connectionColor
+                Layout.preferredHeight: 6
+                Layout.preferredWidth: 6
+            }
+
+            Rectangle {
+                radius: 1
+                border.width: 1
+                opacity: GameConstants.connectionQuality >= 1 ? 1 : 0.5
+                Layout.alignment: Qt.AlignBottom
+                color: GameConstants.connectionColor
+                Layout.preferredHeight: 12
+                Layout.preferredWidth: 6
+            }
+
+            Rectangle {
+                radius: 1
+                border.width: 1
+                opacity: GameConstants.connectionQuality === 2 ? 1 : 0.1
+                Layout.alignment: Qt.AlignBottom
+                color: GameConstants.connectionColor
+                Layout.preferredHeight: 18
+                Layout.preferredWidth: 6
+            }
         }
     }
 
@@ -71,6 +113,7 @@ Item {
             font.family: GameConstants.numberFont.name
         }
     }
+
     Label {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

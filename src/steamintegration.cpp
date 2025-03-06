@@ -17,6 +17,7 @@ SteamIntegration::SteamIntegration(QObject *parent)
     , m_isConnecting(false)
     , m_lobbyReady(false)
     , m_p2pInitialized(false)
+    , m_currentPing(-1)
 {
     QSettings settings("Odizinne", "Retr0Mine");
     m_difficulty = settings.value("difficulty", 0).toInt();
@@ -26,6 +27,7 @@ SteamIntegration::SteamIntegration(QObject *parent)
     // Setup periodic network message checking
     connect(&m_p2pInitTimer, &QTimer::timeout, this, &SteamIntegration::sendP2PInitPing);
     connect(&m_networkTimer, &QTimer::timeout, this, &SteamIntegration::processNetworkMessages);
+    connect(&m_pingTimer, &QTimer::timeout, this, &SteamIntegration::sendPingRequest);
 
     // Create a Steam callback timer to ensure callbacks are processed regularly
     QTimer* callbackTimer = new QTimer(this);
@@ -181,6 +183,9 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
     m_currentLobbyId = CSteamID();
     m_connectedPlayerId = CSteamID();
     m_connectedPlayerName = "";
+    m_pingTimer.stop();
+    m_pendingPings.clear();
+    m_currentPing = -1;
 
     // Run callbacks one final time
     if (isShuttingDown && m_initialized) {
@@ -778,6 +783,11 @@ void SteamIntegration::processNetworkMessages()
             if (!m_p2pInitialized) {
                 qDebug() << "SteamIntegration: P2P connection fully established!";
                 m_p2pInitialized = true;
+
+                // Start ping measurements once connection is established
+                m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
+                m_pingTimer.start();
+
                 emit p2pInitialized();
 
                 // Stop the ping timer if it's running
@@ -785,8 +795,12 @@ void SteamIntegration::processNetworkMessages()
             }
 
             switch (messageType) {
-            case 'P': // Ping/Pong for P2P initialization
-                if (messageData == "PING") {
+            case 'P': // Ping/Pong
+                if (messageData.startsWith("PING|")) {
+                    handlePingRequest(messageData);
+                } else if (messageData.startsWith("PONG|")) {
+                    handlePingResponse(messageData);
+                } else if (messageData == "PING") {
                     // Respond with PONG
                     QByteArray response;
                     response.append('P');
@@ -946,6 +960,10 @@ void SteamIntegration::startP2PInitialization()
     m_p2pInitTimer.setInterval(500); // Try every 500ms
     m_p2pInitTimer.start();
 
+    if (m_p2pInitialized) {
+        m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
+        m_pingTimer.start();
+    }
     // Send first ping immediately
     sendP2PInitPing();
 }
@@ -1033,3 +1051,64 @@ int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
 
     return 0;
 }
+
+void SteamIntegration::sendPingRequest()
+{
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid() || !m_p2pInitialized) {
+        return;
+    }
+    // Generate unique ID for this ping request
+    qint64 pingId = QDateTime::currentMSecsSinceEpoch();
+    qDebug("pass ping");
+    // Store send time with ID
+    m_pendingPings[pingId] = QDateTime::currentDateTime();
+
+    // Format: P|PING|timestamp
+    QByteArray data;
+    data.append('P');
+    data.append("PING|");
+    data.append(QByteArray::number(pingId));
+
+    SteamNetworking()->SendP2PPacket(
+        m_connectedPlayerId,
+        data.constData(),
+        data.size(),
+        k_EP2PSendUnreliable  // Use unreliable for more accurate latency measurement
+        );
+}
+
+void SteamIntegration::handlePingRequest(const QByteArray& data)
+{
+    // Extract ping ID
+    QByteArray idPart = data.mid(5); // Skip "PING|"
+
+    // Send PONG response with same ID
+    QByteArray response;
+    response.append('P');
+    response.append("PONG|");
+    response.append(idPart);
+
+    SteamNetworking()->SendP2PPacket(
+        m_connectedPlayerId,
+        response.constData(),
+        response.size(),
+        k_EP2PSendUnreliable
+        );
+}
+
+void SteamIntegration::handlePingResponse(const QByteArray& data)
+{
+    // Extract ping ID
+    QByteArray idPart = data.mid(5); // Skip "PONG|"
+    qint64 pingId = idPart.toLongLong();
+
+    if (m_pendingPings.contains(pingId)) {
+        QDateTime sendTime = m_pendingPings.take(pingId);
+        int pingMs = sendTime.msecsTo(QDateTime::currentDateTime());
+
+        // Update current ping
+        m_currentPing = pingMs;
+        emit pingUpdated();
+    }
+}
+

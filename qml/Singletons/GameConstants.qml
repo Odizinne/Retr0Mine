@@ -112,9 +112,27 @@ Item {
             case 8:
                 "#" + GameSettings.pingCustomColor
             break;
-
         }
+    }
 
+    property string connectionColor: {
+        if (SteamIntegration.currentPing <= 50 && SteamIntegration.currentPing !== -1) {
+            return "#28d13c"
+        } else if (SteamIntegration.currentPing > 50 && SteamIntegration.currentPing < 100 && SteamIntegration.currentPing !== -1) {
+            return "orange"
+        } else {
+            return "#d12844"
+        }
+    }
+
+    property int connectionQuality: {
+        if (SteamIntegration.currentPing <= 50) {
+            return 2
+        } else if (SteamIntegration.currentPing > 50 && SteamIntegration.currentPing < 100 && SteamIntegration.currentPing !== -1) {
+            return 1
+        } else {
+            return 0
+        }
     }
 }
 
