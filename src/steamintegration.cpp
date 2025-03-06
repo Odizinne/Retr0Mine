@@ -39,55 +39,14 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
 SteamIntegration::~SteamIntegration()
 {
-    // First, ensure all multiplayer sessions are cleaned up
-    cleanupMultiplayerSession(true);
-
     if (m_initialized) {
-        // Close any P2P sessions explicitly again to be sure
-        ISteamNetworking* steamNetworking = SteamNetworking();
-        if (steamNetworking) {
-            // Get all Steam friends and ensure P2P sessions are closed with each
-            ISteamFriends* steamFriends = SteamFriends();
-            if (steamFriends) {
-                int friendCount = steamFriends->GetFriendCount(k_EFriendFlagImmediate);
-                for (int i = 0; i < friendCount; i++) {
-                    CSteamID friendId = steamFriends->GetFriendByIndex(i, k_EFriendFlagImmediate);
-                    steamNetworking->CloseP2PSessionWithUser(friendId);
-                }
-            }
-
-            // Flush and process all remaining packets
-            uint32 msgSize;
-            while (steamNetworking->IsP2PPacketAvailable(&msgSize)) {
-                QByteArray buffer(msgSize, 0);
-                CSteamID senderId;
-                steamNetworking->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId);
-            }
+        cleanupMultiplayerSession(true);
+        if (SteamFriends()) {
+            SteamFriends()->ClearRichPresence();
         }
-
-        // Run Steam callbacks to process the close requests
-        // Increased iterations with dynamic checking
-        const int MAX_ITERATIONS = 30;
-        for (int i = 0; i < MAX_ITERATIONS; i++) {
-            SteamAPI_RunCallbacks();
-            QThread::msleep(20);
-
-            // Check if there are any pending packets - if not for a few iterations, we can break early
-            if (steamNetworking && !steamNetworking->IsP2PPacketAvailable(nullptr)) {
-                // If we've had a few clean iterations, we can break
-                if (i > 10) break;
-            }
-        }
-
-        // Clear rich presence before shutdown
-        ISteamFriends* steamFriends = SteamFriends();
-        if (steamFriends) {
-            steamFriends->ClearRichPresence();
-        }
+        SteamAPI_RunCallbacks();
+        shutdown();
     }
-
-    // Finally shut down the Steam API
-    shutdown();
 }
 
 bool SteamIntegration::initialize()
@@ -125,58 +84,27 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
 {
     qDebug() << "SteamIntegration: Cleaning up multiplayer session, shutdown:" << isShuttingDown;
 
-    // First stop all timers to prevent callbacks during cleanup
+    // Stop all timers to prevent callbacks during cleanup
     m_networkTimer.stop();
     m_p2pInitTimer.stop();
-    m_pingTimer.stop(); // Make sure to stop the ping timer too
+    m_pingTimer.stop();
 
-    // Close any open P2P sessions
-    if (m_initialized) {
-        ISteamNetworking* steamNetworking = SteamNetworking();
-        if (steamNetworking && m_connectedPlayerId.IsValid()) {
-            qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
-            steamNetworking->CloseP2PSessionWithUser(m_connectedPlayerId);
+    // Close any open P2P sessions - this is essential
+    if (m_initialized && m_connectedPlayerId.IsValid()) {
+        qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
+        SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
 
-            // Add more aggressive callback processing
-            const int CALLBACK_ITERATIONS = 10;
-            for (int i = 0; i < CALLBACK_ITERATIONS; i++) {
-                SteamAPI_RunCallbacks();
-                QThread::msleep(50); // Longer delay to ensure packet processing
-            }
-        }
-
-        // Process any remaining packets more aggressively
-        uint32 msgSize;
-        int maxPackets = 100; // Increase max packets processed
-        int packetCount = 0;
-
-        while (steamNetworking && steamNetworking->IsP2PPacketAvailable(&msgSize) && packetCount < maxPackets) {
-            // Read and discard any pending packets
-            QByteArray buffer(msgSize, 0);
-            CSteamID senderId;
-            steamNetworking->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId);
-            packetCount++;
-
-            // Process more callbacks after each packet
-            if (packetCount % 10 == 0) {
-                SteamAPI_RunCallbacks();
-            }
-        }
+        // Run callbacks once to initiate the close request
+        SteamAPI_RunCallbacks();
     }
 
-    // Leave the lobby if we're in one
+    // Leave the lobby if we're in one - also essential
     if (m_initialized && m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
         qDebug() << "SteamIntegration: Leaving lobby:" << m_currentLobbyId.ConvertToUint64();
         SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
 
-        // Allow more time for the lobby leave operation to complete
-        if (isShuttingDown) {
-            const int LOBBY_LEAVE_ITERATIONS = 5;
-            for (int i = 0; i < LOBBY_LEAVE_ITERATIONS; i++) {
-                SteamAPI_RunCallbacks();
-                QThread::msleep(30);
-            }
-        }
+        // Run callbacks once to initiate the leave request
+        SteamAPI_RunCallbacks();
     }
 
     // Reset multiplayer state variables
@@ -190,11 +118,6 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
     m_connectedPlayerName = "";
     m_pendingPings.clear();
     m_currentPing = -1;
-
-    // Run callbacks one final time
-    if (isShuttingDown && m_initialized) {
-        SteamAPI_RunCallbacks();
-    }
 
     // Update rich presence if not shutting down
     if (m_initialized && !isShuttingDown) {
@@ -210,10 +133,6 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
         emit canInviteFriendChanged();
         emit p2pInitialized();
     }
-
-    // Store last cleanup time to prevent rapid reconnections
-    static QDateTime& lastCleanupTime = *new QDateTime();
-    lastCleanupTime = QDateTime::currentDateTime();
 
     qDebug() << "SteamIntegration: Multiplayer session cleaned up";
 }
