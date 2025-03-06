@@ -265,12 +265,12 @@ Item {
             anchors.centerIn: parent
             source: GameState.flagPath
             color: {
-                if (SteamIntegration.isInMultiplayerGame) {
+                if (SteamIntegration.isInMultiplayerGame && GameSettings.mpPlayerColoredFlags) {
                     // Different colors for different players
                     if (cellItem.localPlayerOwns) {
-                        return SteamIntegration.isHost ? "#3584E4" : "#E95420" // Blue for host, orange for client
+                        return SteamIntegration.isHost ? "#47ceff" : "#ff7747" // Blue for host, orange for client
                     } else {
-                        return SteamIntegration.isHost ? "#E95420" : "#3584E4" // Opposite colors
+                        return SteamIntegration.isHost ? "#ff7747" : "#47ceff" // Opposite colors
                     }
                 } else {
                     // Original color logic for single player
@@ -327,8 +327,6 @@ Item {
                     return;
                 }
 
-                console.log("isFlagged:" + cellItem.flagged)
-                // will proably have to also check if cellItem.isFlagged
                 if (isFlagClick && !cellItem.flagged && !cellItem.questioned) {
                     cellItem.localPlayerOwns = true;
                 }

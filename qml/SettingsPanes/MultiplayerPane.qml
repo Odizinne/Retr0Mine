@@ -12,6 +12,26 @@ Pane {
             Layout.fillWidth: true
 
             Label {
+                text: qsTr("Player colored flags")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: mpPlayerColoredFlagsSwitch.click()
+                }
+            }
+            Switch {
+                id: mpPlayerColoredFlagsSwitch
+                checked: GameSettings.mpPlayerColoredFlags
+                onCheckedChanged: {
+                    GameSettings.mpPlayerColoredFlags = checked
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+
+            Label {
                 text: qsTr("Ping color")
                 Layout.fillWidth: true
             }

@@ -35,5 +35,6 @@ Settings {
     property bool safeFirstClick: true
     property int pingColorIndex: 1
     property string pingCustomColor: "E95420"
+    property bool mpPlayerColoredFlags: true
 }
 

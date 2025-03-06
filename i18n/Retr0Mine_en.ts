@@ -160,12 +160,12 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="68"/>
+        <location filename="../qml/Singletons/GameState.qml" line="69"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="68"/>
+        <location filename="../qml/Singletons/GameState.qml" line="69"/>
         <source>Game over</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,15 +274,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="527"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="534"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="541"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="519"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="526"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="533"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="551"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="557"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="543"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="549"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -420,59 +420,82 @@ Current game will be saved and restored</source>
     </message>
 </context>
 <context>
+    <name>MultiplayerErrorPopup</name>
+    <message>
+        <location filename="../qml/Popups/MultiplayerErrorPopup.qml" line="15"/>
+        <source>Error joining multiplayer session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerErrorPopup.qml" line="23"/>
+        <source>Reason: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MultiplayerErrorPopup.qml" line="28"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MultiplayerPane</name>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="15"/>
+        <source>Player colored flags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="35"/>
         <source>Ping color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="21"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="41"/>
         <source>Contrasted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="22"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="42"/>
         <source>Orange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="23"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="43"/>
         <source>Magenta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="24"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="44"/>
         <source>Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="25"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="45"/>
         <source>Blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="26"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="46"/>
         <source>Purple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="27"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="47"/>
         <source>Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="28"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="48"/>
         <source>Yellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="29"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="49"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="39"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="59"/>
         <source>Custom color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -530,22 +553,22 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="272"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="274"/>
         <source>Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="305"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="309"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="313"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="317"/>
         <source>Quit session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="283"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="286"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
@@ -792,7 +815,7 @@ Current game will be saved and restored</source>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="86"/>
+        <location filename="../qml/TopBar.qml" line="143"/>
         <source>Click to pause</source>
         <translation type="unfinished"></translation>
     </message>
