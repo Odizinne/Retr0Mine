@@ -784,10 +784,9 @@ void SteamIntegration::processNetworkMessages()
                 qDebug() << "SteamIntegration: P2P connection fully established!";
                 m_p2pInitialized = true;
 
-                // Start ping measurements once connection is established
-                //m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
-                //m_pingTimer.start();
-
+                sendPingRequest();
+                m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
+                m_pingTimer.start();
                 emit p2pInitialized();
 
                 // Stop the ping timer if it's running
@@ -960,10 +959,10 @@ void SteamIntegration::startP2PInitialization()
     m_p2pInitTimer.setInterval(500); // Try every 500ms
     m_p2pInitTimer.start();
 
-    if (m_p2pInitialized) {
-        m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
-        m_pingTimer.start();
-    }
+    //if (m_p2pInitialized) {
+    //    m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
+    //    m_pingTimer.start();
+    //}
     // Send first ping immediately
     sendP2PInitPing();
 }
