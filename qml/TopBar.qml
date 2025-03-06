@@ -33,7 +33,7 @@ Item {
     Item {
         height: pingLayout.implicitHeight
         width: pingLayout.implicitWidth
-        //visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
+        visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
         anchors.left: menuButton.right
         anchors.leftMargin: 8
         anchors.verticalCenter: parent.verticalCenter
