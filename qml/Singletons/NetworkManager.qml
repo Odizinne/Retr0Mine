@@ -902,6 +902,11 @@ QtObject {
             showPingAtCell(cellIndex);
             break;
 
+        case "gridResetAck":
+            console.log("Host received grid reset acknowledgment from client");
+            // After client acknowledges reset, we know they're ready for new grid settings
+            break;
+
         default:
             console.log("Host received unknown action type:", actionType);
         }
@@ -921,7 +926,7 @@ QtObject {
             return;
         }
 
-        if (!minesInitialized && actionType !== "gameOver" && actionType !== "startGame") {
+        if (!minesInitialized && actionType !== "gameOver" && actionType !== "startGame" && actionType !== "resetMultiplayerGrid" && actionType !== "prepareDifficultyChange") {
             // Buffer actions until mines data is received
             console.log("Buffering action until mines data is received:", actionType, cellIndex);
             pendingActions.push({type: actionType, index: cellIndex});
@@ -1060,6 +1065,57 @@ QtObject {
                     cell.cooldownAnimation.start();
                 }
             });
+            break;
+
+        case "resetMultiplayerGrid":
+            console.log("Client received grid reset command");
+            ComponentsContext.multiplayerPopupVisible = true
+            // Reset important state variables but maintain connection
+            minesInitialized = false;
+            clientReadyForActions = false;
+            clientGridReady = false;
+            allowClientReveal = false;
+            pendingActions = [];
+            isProcessingNetworkAction = false;
+
+            // Reset the game
+            GameState.difficultyChanged = true;
+            GridBridge.cellsCreated = 0;  // Ensure cellsCreated is reset
+            GridBridge.initGame();
+
+            // Send acknowledgment back to host
+            SteamIntegration.sendGameAction("gridResetAck", 0);
+
+            // The new grid settings will come as a separate gridSync message
+            break;
+
+        case "prepareDifficultyChange":
+            console.log("Client preparing for difficulty change, new difficulty:", cellIndex);
+
+            // Update difficulty setting to match host's change
+            GameSettings.difficulty = cellIndex;
+
+            // Immediately update grid dimensions based on the new difficulty
+            const difficultySet = GameState.difficultySettings[cellIndex];
+            GameState.gridSizeX = difficultySet.x;
+            GameState.gridSizeY = difficultySet.y;
+            GameState.mineCount = difficultySet.mines;
+
+            // Force grid recreation immediately
+            GameState.difficultyChanged = true;
+            GridBridge.cellsCreated = 0;  // Reset cell counter to force recreation
+
+            // Reset multiplayer state
+            minesInitialized = false;
+            clientReadyForActions = false;
+            clientGridReady = false;
+            sessionRunning = false;
+            pendingActions = [];
+            isProcessingNetworkAction = false;
+
+            // Immediately initialize a new game with the new settings
+            GridBridge.initGame();
+
             break;
 
         default:
@@ -1300,5 +1356,74 @@ QtObject {
                 }
             }
         }
+    }
+
+    function changeDifficulty(difficultyIndex) {
+        // Only host can change difficulty
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
+            return false;
+        }
+
+        console.log("Host initiating difficulty change to:", difficultyIndex);
+
+        // Update host's difficulty setting
+        GameSettings.difficulty = difficultyIndex;
+        const difficultySet = GameState.difficultySettings[difficultyIndex];
+
+        // Send difficulty change action to client
+        SteamIntegration.sendGameAction("prepareDifficultyChange", difficultyIndex);
+
+        // Allow client some time to prepare
+        Qt.callLater(function() {
+            // Reset multiplayer state
+            sessionRunning = false;
+            minesInitialized = false;
+            clientReadyForActions = false;
+            clientGridReady = false;
+            pendingInitialActions = [];
+            pendingActions = [];
+
+            // Update grid dimensions
+            GameState.gridSizeX = difficultySet.x;
+            GameState.gridSizeY = difficultySet.y;
+            GameState.mineCount = difficultySet.mines;
+
+            // Initialize a new game with the new settings
+            GridBridge.initGame();
+
+            // Sync grid settings to client
+            syncGridSettingsToClient();
+        });
+
+        return true;
+    }
+
+    function resetMultiplayerGrid() {
+        // Only host can initiate a grid reset
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
+            return;
+        }
+
+        console.log("Host initiating multiplayer grid reset");
+        ComponentsContext.multiplayerPopupVisible = true
+        // Reset important state variables but maintain connection
+        minesInitialized = false;
+        clientReadyForActions = false;
+        clientGridReady = false;
+        pendingInitialActions = [];
+        pendingActions = [];
+        isProcessingNetworkAction = false;
+
+        // First reset the game state on host
+        GameState.difficultyChanged = true;
+        GridBridge.initGame();
+
+        // Send a grid reset command to the client
+        SteamIntegration.sendGameAction("resetMultiplayerGrid", 0);
+
+        // Wait a bit before sending the new grid settings to ensure client has processed the reset
+        Qt.callLater(function() {
+            syncGridSettingsToClient();
+        });
     }
 }

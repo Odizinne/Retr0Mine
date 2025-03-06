@@ -7,7 +7,7 @@ import net.odizinne.retr0mine 1.0
 
 Pane {
     ColumnLayout {
-        enabled: !SteamIntegration.isInMultiplayerGame
+        enabled: !(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)
         width: parent.width
         spacing: GameCore.isFluent ? 10 : 20
 
@@ -60,6 +60,9 @@ Pane {
                         GridBridge.initGame()
                         GameSettings.difficulty = idx
                         SteamIntegration.difficulty = idx
+                        if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
+                            NetworkManager.resetMultiplayerGrid()
+                        }
                     }
                 }
             }
@@ -139,6 +142,10 @@ Pane {
                 previousCustomWidth = GameSettings.customWidth
                 previousCustomHeight = GameSettings.customHeight
                 GridBridge.initGame()
+
+                if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
+                    NetworkManager.resetMultiplayerGrid()
+                }
             }
 
             Component.onCompleted: {
