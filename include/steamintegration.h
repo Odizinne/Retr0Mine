@@ -89,6 +89,7 @@ public:
     bool canInviteFriend() const { return m_initialized && m_inMultiplayerGame && m_isHost; }
     bool isP2PConnected() const { return m_p2pInitialized; }
     void startP2PInitialization();
+
 private:
     // Existing members
     bool m_initialized;

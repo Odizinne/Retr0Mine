@@ -237,6 +237,7 @@ bool SteamIntegration::incrementTotalWin()
 // Rich presence related methods
 void SteamIntegration::setDifficulty(int difficulty)
 {
+    if (m_p2pInitialized) return;
     if (m_difficulty != difficulty) {
         m_difficulty = difficulty;
 
@@ -285,14 +286,16 @@ void SteamIntegration::updateRichPresence()
         return;
     }
 
-    if (m_inMultiplayerGame) {
-        // Set multiplayer-specific rich presence
-        steamFriends->SetRichPresence("status", m_isHost ? "Hosting" : "Playing with friend");
-        steamFriends->SetRichPresence("steam_display", "#PlayingMultiplayer");
+    if (m_inMultiplayerGame && m_p2pInitialized) {
+        // Once P2P is connected, both host and client show "Playing with friend"
+        steamFriends->SetRichPresence("status", "Playing with friend");
+        steamFriends->SetRichPresence("steam_display", "#PlayingCoopGame");
+        qDebug() << "Rich presence set to coop";
     } else {
-        // Regular rich presence
+        // Regular rich presence or before P2P is established
         steamFriends->SetRichPresence("difficulty", getDifficultyString().toUtf8().constData());
         steamFriends->SetRichPresence("steam_display", "#PlayingDifficulty");
+        qDebug() << "Rich presence set to solo";
     }
 }
 
@@ -550,7 +553,7 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
     emit connectionSucceeded();
 
     // Update rich presence to show multiplayer status
-    updateRichPresence();
+    //updateRichPresence();
 
     qDebug() << "SteamIntegration: Lobby join complete";
 }
@@ -733,6 +736,7 @@ void SteamIntegration::processNetworkMessages()
                 m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
                 m_pingTimer.start();
                 emit p2pInitialized();
+                updateRichPresence();
 
                 // Stop the ping timer if it's running
                 m_p2pInitTimer.stop();
