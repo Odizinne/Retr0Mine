@@ -41,11 +41,12 @@ SteamIntegration::SteamIntegration(QObject *parent)
 SteamIntegration::~SteamIntegration()
 {
     if (m_initialized) {
-        cleanupMultiplayerSession(true);
-        if (SteamFriends()) {
-            SteamFriends()->ClearRichPresence();
+        // Make sure we clean up multiplayer properly before shutting down
+        if (m_inMultiplayerGame || m_connectedPlayerId.IsValid()) {
+            cleanupMultiplayerSession(true);
         }
-        SteamAPI_RunCallbacks();
+
+        // Then shut down Steam API cleanly
         shutdown();
     }
 }
@@ -68,14 +69,33 @@ bool SteamIntegration::initialize()
 void SteamIntegration::shutdown()
 {
     if (m_initialized) {
+        // Stop all network timers first
+        m_networkTimer.stop();
+        m_p2pInitTimer.stop();
+        m_pingTimer.stop();
+
+        // First, properly close P2P sessions
+        if (m_connectedPlayerId.IsValid()) {
+            SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
+            SteamAPI_RunCallbacks(); // Process the close request
+        }
+
+        // Then leave any lobbies
+        if (m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
+            SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
+            SteamAPI_RunCallbacks(); // Process the leave request
+        }
+
+        // Clear rich presence
         ISteamFriends* steamFriends = SteamFriends();
         if (steamFriends) {
             steamFriends->ClearRichPresence();
         }
 
-        // Stop network message processing
-        m_networkTimer.stop();
+        // Run callbacks one final time to process any pending operations
+        SteamAPI_RunCallbacks();
 
+        // Now we can safely shut down
         SteamAPI_Shutdown();
         m_initialized = false;
     }
@@ -85,27 +105,23 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
 {
     qDebug() << "SteamIntegration: Cleaning up multiplayer session, shutdown:" << isShuttingDown;
 
-    // Stop all timers to prevent callbacks during cleanup
+    // Stop all timers to prevent new callbacks during cleanup
     m_networkTimer.stop();
     m_p2pInitTimer.stop();
     m_pingTimer.stop();
 
-    // Close any open P2P sessions - this is essential
+    // Close P2P sessions first - this is essential
     if (m_initialized && m_connectedPlayerId.IsValid()) {
         qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
         SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
-
-        // Run callbacks once to initiate the close request
-        SteamAPI_RunCallbacks();
+        SteamAPI_RunCallbacks(); // Process the close request
     }
 
-    // Leave the lobby if we're in one - also essential
+    // Leave the lobby if we're in one
     if (m_initialized && m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
         qDebug() << "SteamIntegration: Leaving lobby:" << m_currentLobbyId.ConvertToUint64();
         SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
-
-        // Run callbacks once to initiate the leave request
-        SteamAPI_RunCallbacks();
+        SteamAPI_RunCallbacks(); // Process the leave request
     }
 
     // Reset multiplayer state variables
@@ -123,6 +139,7 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
     // Update rich presence if not shutting down
     if (m_initialized && !isShuttingDown) {
         updateRichPresence();
+        SteamAPI_RunCallbacks(); // Process the rich presence update
     }
 
     // Emit signals if not shutting down

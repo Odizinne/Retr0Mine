@@ -17,9 +17,9 @@ ApplicationWindow {
             return
         }
 
-        var bypassSaving
         if (SteamIntegration.isInMultiplayerGame) {
             GameState.bypassAutoSave = true
+            // Ensure proper cleanup - no arbitrary delays
             SteamIntegration.cleanupMultiplayerSession(true)
         }
 
