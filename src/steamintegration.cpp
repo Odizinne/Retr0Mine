@@ -292,12 +292,10 @@ void SteamIntegration::updateRichPresence()
         // Once P2P is connected, both host and client show "Playing with friend"
         steamFriends->SetRichPresence("status", "Playing with friend");
         steamFriends->SetRichPresence("steam_display", "#PlayingCoopGame");
-        qDebug() << "Rich presence set to coop";
     } else {
         // Regular rich presence or before P2P is established
         steamFriends->SetRichPresence("difficulty", getDifficultyString().toUtf8().constData());
         steamFriends->SetRichPresence("steam_display", "#PlayingDifficulty");
-        qDebug() << "Rich presence set to solo";
     }
 }
 
