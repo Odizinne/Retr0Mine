@@ -8,6 +8,8 @@
 #include <QBuffer>
 #include <QImage>
 #include <QThread>
+#include <QPainter>
+#include <QPainterPath>
 #include <steam_api.h>
 
 SteamIntegration::SteamIntegration(QObject *parent)
@@ -393,10 +395,7 @@ QStringList SteamIntegration::getOnlineFriends()
             QString name = QString::fromUtf8(steamFriends->GetFriendPersonaName(friendId));
             QString id = QString::number(friendId.ConvertToUint64());
 
-            // Get avatar image handle
-            int avatarHandle = steamFriends->GetSmallFriendAvatar(friendId);
-
-            // Format: "FriendName:SteamID:AvatarHandle"
+            int avatarHandle = steamFriends->GetMediumFriendAvatar(friendId);
             friendList.append(name + ":" + id + ":" + QString::number(avatarHandle));
         }
     }
@@ -408,15 +407,12 @@ QString SteamIntegration::getAvatarImageForHandle(int handle)
 {
     if (!m_initialized || handle == 0)
         return QString();
-
     ISteamUtils* steamUtils = SteamUtils();
     if (!steamUtils)
         return QString();
-
     uint32 width, height;
     if (!steamUtils->GetImageSize(handle, &width, &height) || width == 0 || height == 0)
         return QString();
-
     QByteArray imageData(width * height * 4, 0);
     if (!steamUtils->GetImageRGBA(handle, reinterpret_cast<uint8*>(imageData.data()), imageData.size()))
         return QString();
@@ -424,11 +420,32 @@ QString SteamIntegration::getAvatarImageForHandle(int handle)
     // Convert the RGBA data to a QImage
     QImage image(reinterpret_cast<const uchar*>(imageData.data()), width, height, QImage::Format_RGBA8888);
 
+    // Resize the image to 24x24
+    QImage resizedImage = image.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    // Create a rounded version of the resized image
+    QImage rounded(24, 24, QImage::Format_ARGB32_Premultiplied);
+    rounded.fill(Qt::transparent);
+
+    QPainter painter(&rounded);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+    // Center the image if aspect ratio was preserved
+    int x = (24 - resizedImage.width()) / 2;
+    int y = (24 - resizedImage.height()) / 2;
+
+    QPainterPath path;
+    path.addRoundedRect(0, 0, 24, 24, 4, 4);
+    painter.setClipPath(path);
+    painter.drawImage(x, y, resizedImage);
+    painter.end();
+
     // Convert to PNG and then to base64
     QByteArray pngData;
     QBuffer buffer(&pngData);
     buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "PNG");
+    rounded.save(&buffer, "PNG");
     buffer.close();
 
     // Create data URL
@@ -993,7 +1010,7 @@ int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
         QString friendName = QString::fromUtf8(steamFriends->GetFriendPersonaName(friendId));
 
         if (friendName == playerName) {
-            return steamFriends->GetSmallFriendAvatar(friendId);
+            return steamFriends->GetMediumFriendAvatar(friendId);
         }
     }
 

@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import net.odizinne.retr0mine 1.0
-import QtQuick.Layouts
 
 Item {
     id: control
@@ -31,60 +30,6 @@ Item {
     }
 
     Item {
-        height: pingLayout.implicitHeight
-        width: pingLayout.implicitWidth
-        visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
-        anchors.left: menuButton.right
-        anchors.leftMargin: 8
-        anchors.verticalCenter: parent.verticalCenter
-        MouseArea {
-            id: pingMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-        }
-
-        ToolTip {
-            visible: pingMouseArea.containsMouse
-            delay: 1000
-            text: SteamIntegration.currentPing + " ms"
-        }
-
-        RowLayout {
-            id: pingLayout
-            anchors.fill: parent
-            spacing: 2
-            Rectangle {
-                radius: 2
-                border.width: 1
-                Layout.alignment: Qt.AlignBottom
-                color: GameConstants.connectionColor
-                Layout.preferredHeight: 7
-                Layout.preferredWidth: 7
-            }
-
-            Rectangle {
-                radius: 2
-                border.width: 1
-                opacity: GameConstants.connectionQuality >= 1 ? 1 : 0.3
-                Layout.alignment: Qt.AlignBottom
-                color: GameConstants.connectionColor
-                Layout.preferredHeight: 14
-                Layout.preferredWidth: 7
-            }
-
-            Rectangle {
-                radius: 2
-                border.width: 1
-                opacity: GameConstants.connectionQuality === 2 ? 1 : 0.3
-                Layout.alignment: Qt.AlignBottom
-                color: GameConstants.connectionColor
-                Layout.preferredHeight: 21
-                Layout.preferredWidth: 7
-            }
-        }
-    }
-
-    Item {
         visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -97,6 +42,7 @@ Item {
             height: 24
             sourceSize.width: 24
             sourceSize.height: 24
+            mipmap: true
             source: {
                 if (SteamIntegration.initialized && SteamIntegration.connectedPlayerName !== "") {
                     var avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(SteamIntegration.connectedPlayerName)
@@ -109,11 +55,23 @@ Item {
             Rectangle {
                 width: 26
                 height: 26
+                radius: 5
                 anchors.centerIn: parent
                 color: "transparent"
-                border.color: GameConstants.foregroundColor
-                border.width: 1
-                opacity: 0.3
+                border.color: GameConstants.connectionQualityColor
+                border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
+            }
+
+            MouseArea {
+                id: pingMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                visible: pingMouseArea.containsMouse
+                delay: 1000
+                text: SteamIntegration.currentPing + " ms"
             }
         }
 
