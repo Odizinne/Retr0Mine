@@ -423,29 +423,59 @@ QString SteamIntegration::getAvatarImageForHandle(int handle)
     // Resize the image to 24x24
     QImage resizedImage = image.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    // Create a rounded version of the resized image
-    QImage rounded(24, 24, QImage::Format_ARGB32_Premultiplied);
-    rounded.fill(Qt::transparent);
+    // Check settings for style index
+    QSettings settings("Odizinne", "Retr0Mine");
+    bool shouldRound = (settings.value("themeIndex").toInt() == 0);
 
-    QPainter painter(&rounded);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    QImage result;
 
-    // Center the image if aspect ratio was preserved
-    int x = (24 - resizedImage.width()) / 2;
-    int y = (24 - resizedImage.height()) / 2;
+    if (shouldRound) {
+        // Create a rounded version of the resized image
+        QImage rounded(24, 24, QImage::Format_ARGB32_Premultiplied);
+        rounded.fill(Qt::transparent);
 
-    QPainterPath path;
-    path.addRoundedRect(0, 0, 24, 24, 4, 4);
-    painter.setClipPath(path);
-    painter.drawImage(x, y, resizedImage);
-    painter.end();
+        QPainter painter(&rounded);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+        // Center the image if aspect ratio was preserved
+        int x = (24 - resizedImage.width()) / 2;
+        int y = (24 - resizedImage.height()) / 2;
+
+        QPainterPath path;
+        path.addRoundedRect(0, 0, 24, 24, 4, 4);
+        painter.setClipPath(path);
+        painter.drawImage(x, y, resizedImage);
+        painter.end();
+
+        result = rounded;
+    } else {
+        // Just use the resized image without rounding
+        if (resizedImage.width() != 24 || resizedImage.height() != 24) {
+            // Create a background for centering if needed
+            QImage centered(24, 24, QImage::Format_ARGB32_Premultiplied);
+            centered.fill(Qt::transparent);
+
+            QPainter painter(&centered);
+
+            // Center the image if aspect ratio was preserved
+            int x = (24 - resizedImage.width()) / 2;
+            int y = (24 - resizedImage.height()) / 2;
+
+            painter.drawImage(x, y, resizedImage);
+            painter.end();
+
+            result = centered;
+        } else {
+            result = resizedImage;
+        }
+    }
 
     // Convert to PNG and then to base64
     QByteArray pngData;
     QBuffer buffer(&pngData);
     buffer.open(QIODevice::WriteOnly);
-    rounded.save(&buffer, "PNG");
+    result.save(&buffer, "PNG");
     buffer.close();
 
     // Create data URL

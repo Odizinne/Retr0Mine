@@ -55,7 +55,7 @@ Item {
             Rectangle {
                 width: 26
                 height: 26
-                radius: 5
+                radius: GameSettings.themeIndex === 0 ? 5 : 0
                 anchors.centerIn: parent
                 color: "transparent"
                 border.color: GameConstants.connectionQualityColor

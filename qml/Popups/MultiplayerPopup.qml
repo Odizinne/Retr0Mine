@@ -213,11 +213,23 @@ Popup {
                             Image {
                                 Layout.preferredHeight: 24
                                 Layout.preferredWidth: 24
+                                mipmap: true
                                 source: delegate.avatarHandle > 0 ?
                                         SteamIntegration.getAvatarImageForHandle(delegate.avatarHandle) :
                                         "qrc:/icons/steam.png"
                                 asynchronous: true
                                 fillMode: Image.PreserveAspectFit
+
+                                Rectangle {
+                                    width: 26
+                                    height: 26
+                                    radius: GameSettings.themeIndex === 0 ? 5 : 0
+                                    anchors.centerIn: parent
+                                    color: "transparent"
+                                    opacity: 0.3
+                                    border.color: GameConstants.foregroundColor
+                                    border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
+                                }
                             }
 
                             Label {
