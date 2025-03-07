@@ -1068,7 +1068,6 @@ QtObject {
         case "resetMultiplayerGrid":
             console.log("Client received grid reset command");
             ComponentsContext.multiplayerPopupVisible = true
-            // Reset important state variables but maintain connection
             minesInitialized = false;
             clientReadyForActions = false;
             clientGridReady = false;
@@ -1076,34 +1075,23 @@ QtObject {
             pendingActions = [];
             isProcessingNetworkAction = false;
 
-            // Reset the game
             GameState.difficultyChanged = true;
-            //GridBridge.cellsCreated = 0;  // Ensure cellsCreated is reset
             GridBridge.initGame();
-
-            // Send acknowledgment back to host
             SteamIntegration.sendGameAction("gridResetAck", 0);
-
-            // The new grid settings will come as a separate gridSync message
             break;
 
         case "prepareDifficultyChange":
             console.log("Client preparing for difficulty change, new difficulty:", cellIndex);
 
-            // Update difficulty setting to match host's change
             GameSettings.difficulty = cellIndex;
 
-            // Immediately update grid dimensions based on the new difficulty
             const difficultySet = GameState.difficultySettings[cellIndex];
             GameState.gridSizeX = difficultySet.x;
             GameState.gridSizeY = difficultySet.y;
             GameState.mineCount = difficultySet.mines;
-
-            // Force grid recreation immediately
             GameState.difficultyChanged = true;
-            GridBridge.cellsCreated = 0;  // Reset cell counter to force recreation
+            GridBridge.cellsCreated = 0;
 
-            // Reset multiplayer state
             minesInitialized = false;
             clientReadyForActions = false;
             clientGridReady = false;
@@ -1111,7 +1099,6 @@ QtObject {
             pendingActions = [];
             isProcessingNetworkAction = false;
 
-            // Immediately initialize a new game with the new settings
             GridBridge.initGame();
 
             break;
