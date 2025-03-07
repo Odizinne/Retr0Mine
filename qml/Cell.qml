@@ -363,7 +363,7 @@ Item {
         Shortcut {
             sequence: "G"
             autoRepeat: false
-            enabled: cellMouseArea.isHovered && GameState.gameStarted && !pingCooldown.running
+            enabled: cellMouseArea.isHovered && !pingCooldown.running
             onActivated: {
                 NetworkManager.sendPing(cellItem.index)
                 pingCooldown.start()
