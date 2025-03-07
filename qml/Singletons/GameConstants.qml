@@ -172,11 +172,11 @@ Item {
 
     property string connectionQualityColor: {
         if (SteamIntegration.currentPing <= 150 && SteamIntegration.currentPing !== -1) {
-            return "#28d13c"
+            return Application.styleHints.colorScheme == Qt.Dark ? "#28d13c" : "#2adb0f"
         } else if (SteamIntegration.currentPing > 150 && SteamIntegration.currentPing < 250 && SteamIntegration.currentPing !== -1) {
-            return "orange"
+            return Application.styleHints.colorScheme == Qt.Dark ? "#f57842" : "#db4d0f"
         } else {
-            return "#d12844"
+            return Application.styleHints.colorScheme == Qt.Dark ? "#d12844" : "#db0f31"
         }
     }
 }
