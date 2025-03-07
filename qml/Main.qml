@@ -19,7 +19,6 @@ ApplicationWindow {
 
         if (SteamIntegration.isInMultiplayerGame) {
             GameState.bypassAutoSave = true
-            // Ensure proper cleanup - no arbitrary delays
             SteamIntegration.cleanupMultiplayerSession(true)
         }
 
@@ -327,10 +326,6 @@ ApplicationWindow {
 
     PostgamePopup { }
 
-    SettingsWindow {
-        id: settingsWindow
-    }
-
     LoadPopup { }
 
     SavePopup { }
@@ -338,6 +333,7 @@ ApplicationWindow {
     PausePopup { }
 
     MultiplayerPopup { }
+
     LeaderboardPopup {
         id: leaderboardWindow
         Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
@@ -346,6 +342,10 @@ ApplicationWindow {
     BusyIndicator {
         opacity: 0
         // continous window update (steam overlay)
+    }
+
+    SettingsWindow {
+        id: settingsWindow
     }
 
     TopBar {

@@ -359,7 +359,6 @@ Item {
             onClicked: (mouse) => handleCellClick(mouse)
         }
 
-        // Add this right after the MouseArea:
         Shortcut {
             sequence: "G"
             autoRepeat: false
@@ -372,7 +371,7 @@ Item {
 
         Timer {
             id: pingCooldown
-            interval: 500 // 0.5 seconds
+            interval: 500
             repeat: false
         }
     }
@@ -416,19 +415,19 @@ Item {
         }
 
         switch (GameSettings.gridResetAnimationIndex) {
-        case 0: // Original diagonal animation
+        case 0:
             GridBridge.initialAnimationPlayed = false
             opacity = 0
             fadeTimer.restart()
             break
 
-        case 1: // New fade out -> fade in animation
+        case 1:
             GridBridge.initialAnimationPlayed = false
             opacity = 0
             resetFadeOutAnimation.start()
             break
 
-        case 2: // Spin animation
+        case 2:
             GridBridge.initialAnimationPlayed = false
             opacity = 1
             resetSpinAnimation.start()
@@ -439,7 +438,6 @@ Item {
     ParallelAnimation {
         id: resetSpinAnimation
 
-        // Spin animation (full duration)
         NumberAnimation {
             target: cellItem
             property: "rotation"
@@ -449,9 +447,7 @@ Item {
             easing.type: Easing.InOutQuad
         }
 
-        // Scale animations in sequence
         SequentialAnimation {
-            // Scale down for first 1/3
             NumberAnimation {
                 target: cellItem
                 property: "scale"
@@ -460,11 +456,9 @@ Item {
                 duration: 300  // ~1/3 of 2000
                 easing.type: Easing.InOutQuad
             }
-            // Stay at 0.5 for middle 1/3
             PauseAnimation {
                 duration: 300
             }
-            // Scale up for last 1/3
             NumberAnimation {
                 target: cellItem
                 property: "scale"
@@ -476,7 +470,6 @@ Item {
         }
     }
 
-    // First fade out
     NumberAnimation {
         id: resetFadeOutAnimation
         target: cellItem
@@ -488,7 +481,6 @@ Item {
         onFinished: resetFadeInAnimation.start()
     }
 
-    // Then fade in
     NumberAnimation {
         id: resetFadeInAnimation
         target: cellItem

@@ -18,11 +18,6 @@ Popup {
     property int buttonWidth: Math.max(hostButton.width, cancelButton.width, startButton.width)
     property bool refreshing: false
 
-    // Close function
-    function close() {
-        ComponentsContext.multiplayerPopupVisible = false
-    }
-
     onVisibleChanged: {
         if (visible) {
             refreshFriendsList()
@@ -154,7 +149,6 @@ Popup {
         }
     }
 
-    // Main content
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
@@ -264,7 +258,6 @@ Popup {
             }
         }
 
-        // Action buttons
         RowLayout {
             Layout.fillWidth: true
             spacing: 10
@@ -333,7 +326,6 @@ Popup {
         id: inviteDisableTimer
         interval: 5000
         onTriggered: {
-            // Re-enable all invite buttons
             for (var i = 0; i < friendsList.count; i++) {
                 friendsListView.itemAtIndex(i).inviteDisabled = false;
             }
