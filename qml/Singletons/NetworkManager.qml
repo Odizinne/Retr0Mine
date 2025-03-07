@@ -816,16 +816,15 @@ QtObject {
             console.log("Host validating client reveal for cell:", cellIndex);
 
             // Process the reveal on the host side
-            const revealResult = GridBridge.performReveal(cellIndex);
+            GridBridge.performReveal(cellIndex);
 
-            // If the client's action resulted in a game over or major state change,
-            // send an authoritative update to ensure consistency
-            if (GameState.gameOver || revealResult.cascadeReveal) {
-                // Send a compact state update focusing only on changed cells
+            // If game over, send a simpler update without trying to access revealedCells
+            if (GameState.gameOver) {
+                // Send a compact state update with just the game state
                 const stateUpdate = {
                     gameOver: GameState.gameOver,
-                    gameWon: GameState.gameWon,
-                    revealedCells: revealResult.revealedCells
+                    gameWon: GameState.gameWon
+                    // No revealedCells here since we don't have that information
                 };
                 SteamIntegration.sendGameState(stateUpdate);
             }
