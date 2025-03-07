@@ -40,12 +40,18 @@ Popup {
         friendsList.clear()
         var friends = SteamIntegration.getOnlineFriends()
 
+        // Sort friends array alphabetically by name
+        friends.sort(function(a, b) {
+            var nameA = a.split(":")[0].toLowerCase()
+            var nameB = b.split(":")[0].toLowerCase()
+            return nameA.localeCompare(nameB)
+        })
+
         for (var i = 0; i < friends.length; i++) {
             var parts = friends[i].split(":")
             var name = parts[0]
             var steamId = parts[1]
             var avatarHandle = parseInt(parts[2])
-
             friendsList.append({
                 name: name,
                 steamId: steamId,
