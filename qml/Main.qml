@@ -352,7 +352,7 @@ ApplicationWindow {
         id: topBar
     }
 
-    GameView {
+    Flickable {
         id: gameView
         anchors {
             left: parent.left
@@ -369,6 +369,8 @@ ApplicationWindow {
         clip: true
         enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)
         opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) && !GameState.paused) ? 1 : 0
+        ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
+        ScrollBar.horizontal: GameCore.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
 
         Behavior on opacity {
             enabled: GameSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
@@ -383,7 +385,6 @@ ApplicationWindow {
             anchors.centerIn: parent
             width: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, gameView.width)
             height: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, gameView.height)
-
             GameGrid {
                 id: grid
                 Component.onCompleted: {
@@ -400,6 +401,66 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+    ScrollBar {
+        id: defaultVerticalScrollBar
+        enabled: gameView.enabled
+        opacity: gameView.opacity
+        orientation: Qt.Vertical
+        anchors.right: gameView.right
+        anchors.rightMargin: -12
+        anchors.top: gameView.top
+        anchors.bottom: gameView.bottom
+        visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
+        active: !GameCore.isFluent
+        policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameView.height ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    }
+
+    ScrollBar {
+        id: defaultHorizontalScrollBar
+        enabled: gameView.enabled
+        opacity: gameView.opacity
+        orientation: Qt.Horizontal
+        anchors.left: gameView.left
+        anchors.right: gameView.right
+        anchors.bottom: gameView.bottom
+        anchors.bottomMargin: -12
+        visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
+        active: !GameCore.isFluent
+        policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameView.width ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    }
+
+    TempScrollBar {
+        id: fluentVerticalScrollBar
+        enabled: gameView.enabled
+        opacity: gameView.opacity
+        orientation: Qt.Vertical
+        anchors.right: gameView.right
+        anchors.rightMargin: -12
+        anchors.top: gameView.top
+        anchors.bottom: gameView.bottom
+        visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
+        active: GameCore.isFluent
+        policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameView.height ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    }
+
+    TempScrollBar {
+        id: fluentHorizontalScrollBar
+        enabled: gameView.enabled
+        opacity: gameView.opacity
+        orientation: Qt.Horizontal
+        anchors.left: gameView.left
+        anchors.right: gameView.right
+        anchors.bottom: gameView.bottom
+        anchors.bottomMargin: -12
+        visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
+        active: GameCore.isFluent
+        policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameView.width ?
+                    ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
     }
 
     function checkInitialGameState() {
