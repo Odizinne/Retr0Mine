@@ -1034,6 +1034,16 @@ int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
     if (!steamFriends)
         return 0;
 
+    // Get local player name to check if the requested avatar is for the local player
+    CSteamID localUserID = SteamUser()->GetSteamID();
+    QString localPlayerName = QString::fromUtf8(steamFriends->GetPersonaName());
+
+    // If the requested name matches the local player, return their avatar
+    if (playerName == localPlayerName) {
+        return steamFriends->GetMediumFriendAvatar(localUserID);
+    }
+
+    // Otherwise, search through friends as before
     int friendCount = steamFriends->GetFriendCount(k_EFriendFlagImmediate);
     for (int i = 0; i < friendCount; i++) {
         CSteamID friendId = steamFriends->GetFriendByIndex(i, k_EFriendFlagImmediate);

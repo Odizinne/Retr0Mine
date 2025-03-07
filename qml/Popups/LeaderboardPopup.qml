@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
@@ -45,13 +44,30 @@ Popup {
             visible: SteamIntegration.initialized
             Layout.alignment: Qt.AlignCenter
 
-            IconImage {
-                source: "qrc:/icons/steam.png"
-                color: GameConstants.foregroundColor
-                sourceSize.height: 20
-                sourceSize.width: 20
-                Layout.preferredHeight: 30
+            Image {
+                source: {
+                    if (SteamIntegration.initialized) {
+                        var avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(SteamIntegration.playerName)
+                        return avatarHandle > 0 ? SteamIntegration.getAvatarImageForHandle(avatarHandle) : "qrc:/icons/steam.png"
+                    }
+                }
+                mipmap: true
+                sourceSize.height: 24
+                sourceSize.width: 24
+                Layout.preferredHeight: 24
+                Layout.preferredWidth: 24
                 Layout.alignment: Qt.AlignCenter
+                fillMode: Image.PreserveAspectFit
+                Rectangle {
+                    width: 26
+                    height: 26
+                    radius: GameSettings.themeIndex === 0 ? 5 : 0
+                    anchors.centerIn: parent
+                    color: "transparent"
+                    opacity: 0.5
+                    border.color: GameConstants.foregroundColor
+                    border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
+                }
             }
 
             Label {
