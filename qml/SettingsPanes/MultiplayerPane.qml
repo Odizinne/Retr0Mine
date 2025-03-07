@@ -29,6 +29,56 @@ Pane {
         }
 
         RowLayout {
+            enabled: GameSettings.mpPlayerColoredFlags
+            Layout.fillWidth: true
+
+            Label {
+                text: qsTr("Local player")
+                Layout.fillWidth: true
+            }
+
+            ComboBox {
+                model: [
+                    qsTr("Contrasted"),
+                    qsTr("Orange"),
+                    qsTr("Magenta"),
+                    qsTr("Green"),
+                    qsTr("Blue"),
+                    qsTr("Purple"),
+                    qsTr("Red"),
+                    qsTr("Yellow"),
+                    ]
+                currentIndex: GameSettings.localFlagColorIndex
+                onActivated: GameSettings.localFlagColorIndex = currentIndex
+            }
+        }
+
+        RowLayout {
+            enabled: GameSettings.mpPlayerColoredFlags
+            Layout.fillWidth: true
+
+            Label {
+                text: qsTr("Remote player")
+                Layout.fillWidth: true
+            }
+
+            ComboBox {
+                model: [
+                    qsTr("Contrasted"),
+                    qsTr("Orange"),
+                    qsTr("Magenta"),
+                    qsTr("Green"),
+                    qsTr("Blue"),
+                    qsTr("Purple"),
+                    qsTr("Red"),
+                    qsTr("Yellow"),
+                    ]
+                currentIndex: GameSettings.remoteFlagColorIndex
+                onActivated: GameSettings.remoteFlagColorIndex = currentIndex
+            }
+        }
+
+        RowLayout {
             Layout.fillWidth: true
 
             Label {
@@ -45,36 +95,10 @@ Pane {
                     qsTr("Blue"),
                     qsTr("Purple"),
                     qsTr("Red"),
-                    qsTr("Yellow"),
-                    qsTr("Custom")
+                    qsTr("Yellow")
                     ]
                 currentIndex: GameSettings.pingColorIndex
                 onActivated: GameSettings.pingColorIndex = currentIndex
-            }
-        }
-
-        RowLayout {
-            enabled: GameSettings.pingColorIndex === 8
-            Label {
-                text: qsTr("Custom color")
-                Layout.fillWidth: true
-            }
-
-            Label {
-                text: "#"
-            }
-
-            TextField {
-                maximumLength: 6
-                Layout.preferredWidth: 80
-                validator: RegularExpressionValidator { regularExpression: /[0-9A-Fa-f]{0,6}/ }
-                inputMethodHints: Qt.ImhNoPredictiveText
-                text: GameSettings.pingCustomColor
-                onTextChanged: {
-                    if (text.length === 6) {
-                        GameSettings.pingCustomColor = text
-                    }
-                }
             }
         }
     }

@@ -100,22 +100,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="72"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="75"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="91"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="94"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="109"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="112"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="126"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="129"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -446,130 +446,146 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Couleur des drapeaux par joueur</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="35"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="59"/>
+        <source>Remote player</source>
+        <translation>Joueur distant</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="83"/>
         <source>Ping color</source>
         <translation>Couleur du signal</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="41"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="65"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="89"/>
         <source>Contrasted</source>
         <translation>Contrasté</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="35"/>
+        <source>Local player</source>
+        <translation>Joueur local</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="42"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="66"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="90"/>
         <source>Orange</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="43"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="67"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="91"/>
         <source>Magenta</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="44"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="68"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="92"/>
         <source>Green</source>
         <translation>Vert</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="45"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="69"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="93"/>
         <source>Blue</source>
         <translation>Bleu</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="46"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="70"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="94"/>
         <source>Purple</source>
         <translation>Violet</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="47"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="71"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="95"/>
         <source>Red</source>
         <translation>Rouge</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="72"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="96"/>
         <source>Yellow</source>
         <translation>Jaune</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="49"/>
-        <source>Custom</source>
-        <translation>Perso</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="59"/>
-        <source>Custom color</source>
-        <translation>Couleur personnalisée</translation>
     </message>
 </context>
 <context>
     <name>MultiplayerPopup</name>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="84"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="86"/>
         <source> is generating grid...</source>
         <translation> génère la grille...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="85"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="87"/>
         <source>Establishing connection with </source>
         <translation>Connexion en cours avec </translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="96"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="98"/>
         <source>Ready</source>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="96"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="98"/>
         <source>Waiting for host</source>
         <translation>En attente de l&apos;hôte</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="96"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="98"/>
         <source>Session in progress</source>
         <translation>Session en cours</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="96"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="98"/>
         <source>Creating cells...</source>
         <translation>Création des cellules...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="116"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="118"/>
         <source>Press G while hovering a cell to signal it</source>
         <translation>Appuyez sur G en surlovant une cellule pour la signaler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="134"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="136"/>
         <source>Invite sent</source>
         <translation>Invitation envoyée</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="167"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="169"/>
         <source>Friends</source>
         <translation>Contacts</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="173"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="175"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="274"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="276"/>
         <source>Host</source>
         <translation>Héberger</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="309"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="310"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="317"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="318"/>
         <source>Quit session</source>
         <translation>Quitter la session</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="286"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="288"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>

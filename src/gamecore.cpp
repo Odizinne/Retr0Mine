@@ -115,9 +115,10 @@ void GameCore::resetSettings()
     settings.setValue("satisfiedOpacity", 0.5);
     settings.setValue("displayTimer", true);
     settings.setValue("safeFirstClick", true);
-    settings.setValue("pingColorIndex", 1);
-    settings.setValue("pingCustomColor", "E95420");
+    settings.setValue("pingColorIndex", 0);
     settings.setValue("mpPlayerColoredFlags", true);
+    settings.setValue("localFlagColorIndex", 4);
+    settings.setValue("remoteFlagColorIndex", 1);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;

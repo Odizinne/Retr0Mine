@@ -266,14 +266,12 @@ Item {
             source: GameState.flagPath
             color: {
                 if (SteamIntegration.isInMultiplayerGame && GameSettings.mpPlayerColoredFlags) {
-                    // Different colors for different players
                     if (cellItem.localPlayerOwns) {
-                        return SteamIntegration.isHost ? "#47ceff" : "#ff7747" // Blue for host, orange for client
+                        return SteamIntegration.isHost ? GameConstants.localFlagColor : GameConstants.remoteFlagColor
                     } else {
-                        return SteamIntegration.isHost ? "#ff7747" : "#47ceff" // Opposite colors
+                        return SteamIntegration.isHost ? GameConstants.remoteFlagColor : GameConstants.localFlagColor
                     }
                 } else {
-                    // Original color logic for single player
                     if (GameSettings.contrastFlag) return GameConstants.foregroundColor
                     else return GameConstants.accentColor
                 }

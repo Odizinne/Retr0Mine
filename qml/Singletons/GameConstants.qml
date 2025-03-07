@@ -83,6 +83,64 @@ Item {
         }
     }
 
+    property string localFlagColor: {
+        switch(GameSettings.localFlagColorIndex) {
+            case 0:
+                GameConstants.foregroundColor
+            break;
+            case 1:
+                "#ff7747"
+            break;
+            case 2:
+                "#ff7dbe"
+            break;
+            case 3:
+                "#7ddb7d"
+            break;
+            case 4:
+                "#47ceff"
+            break;
+            case 5:
+                "#ae7dff"
+            break;
+            case 6:
+                "#ff6b6b"
+            break;
+            case 7:
+                "#ffe066"
+            break;
+        }
+    }
+
+    property string remoteFlagColor: {
+        switch(GameSettings.remoteFlagColorIndex) {
+            case 0:
+                GameConstants.foregroundColor
+            break;
+            case 1:
+                "#ff7747"
+            break;
+            case 2:
+                "#ff7dbe"
+            break;
+            case 3:
+                "#7ddb7d"
+            break;
+            case 4:
+                "#47ceff"
+            break;
+            case 5:
+                "#ae7dff"
+            break;
+            case 6:
+                "#ff6b6b"
+            break;
+            case 7:
+                "#ffe066"
+            break;
+        }
+    }
+
     property string pingColor: {
         switch(GameSettings.pingColorIndex) {
             case 0:
@@ -108,9 +166,6 @@ Item {
             break;
             case 7:
                 "#E5A50A"
-            break;
-            case 8:
-                "#" + GameSettings.pingCustomColor
             break;
         }
     }
