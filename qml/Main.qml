@@ -21,6 +21,7 @@ ApplicationWindow {
             GameState.bypassAutoSave = true
             SteamIntegration.cleanupMultiplayerSession(true)
         }
+        SteamIntegration.shutdown()
 
         if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver && !GameState.bypassAutoSave) {
             close.accepted = false

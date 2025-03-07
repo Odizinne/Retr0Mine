@@ -48,6 +48,7 @@ SteamIntegration::~SteamIntegration()
 
         // Then shut down Steam API cleanly
         shutdown();
+        dumpNetworkState();
     }
 }
 
@@ -73,14 +74,27 @@ void SteamIntegration::shutdown()
         m_networkTimer.stop();
         m_p2pInitTimer.stop();
 
-        // First, properly close P2P sessions
-        if (m_connectedPlayerId.IsValid()) {
-            SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
-            SteamAPI_RunCallbacks(); // Process the close request
+        // First, properly close P2P sessions - even if we think we're not connected
+        ISteamNetworking* steamNet = SteamNetworking();
+        if (steamNet) {
+            // Get number of connections by checking session state
+            P2PSessionState_t sessionState;
+            bool hasSession = steamNet->GetP2PSessionState(m_connectedPlayerId, &sessionState);
+
+            qDebug() << "Has active P2P session:" << hasSession;
+
+            // Close specific connection if we have one
+            if (m_connectedPlayerId.IsValid()) {
+                qDebug() << "Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
+                steamNet->CloseP2PSessionWithUser(m_connectedPlayerId);
+            }
+
+            // Run callbacks to process the close request
+            SteamAPI_RunCallbacks();
         }
 
         // Then leave any lobbies
-        if (m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
+        if (m_currentLobbyId.IsValid()) {
             SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
             SteamAPI_RunCallbacks(); // Process the leave request
         }
@@ -1007,6 +1021,7 @@ void SteamIntegration::checkForPendingInvites()
         }
     }
 
+    SteamAPI_RunCallbacks();
     qDebug() << "SteamIntegration: No pending invites found through automatic methods";
 }
 
@@ -1041,4 +1056,27 @@ int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
     return 0;
 }
 
+void SteamIntegration::dumpNetworkState() {
+    if (!m_initialized) return;
 
+    ISteamNetworking* steamNet = SteamNetworking();
+    if (!steamNet) return;
+
+    P2PSessionState_t sessionState;
+    bool hasSession = false;
+
+    // Check if we have a specific connection
+    if (m_connectedPlayerId.IsValid()) {
+        hasSession = steamNet->GetP2PSessionState(m_connectedPlayerId, &sessionState);
+    }
+
+    qDebug() << "Steam network state:";
+    qDebug() << "- Has active P2P session:" << hasSession;
+    qDebug() << "- m_connectedPlayerId valid:" << m_connectedPlayerId.IsValid();
+    qDebug() << "- m_currentLobbyId valid:" << m_currentLobbyId.IsValid();
+
+    // Also try to check for any P2P sessions with the local user
+    CSteamID localId = SteamUser()->GetSteamID();
+    bool hasLocalSession = steamNet->GetP2PSessionState(localId, &sessionState);
+    qDebug() << "- Has session with local user:" << hasLocalSession;
+}

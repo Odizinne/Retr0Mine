@@ -38,7 +38,7 @@ public:
 
     // Existing methods
     bool initialize();
-    void shutdown();
+    Q_INVOKABLE void shutdown();
     Q_INVOKABLE void unlockAchievement(const QString &achievementId);
     Q_INVOKABLE bool isAchievementUnlocked(const QString &achievementId) const;
     Q_INVOKABLE bool isRunningOnDeck() const;
@@ -129,6 +129,7 @@ private:
 
     // For invite handling
     FriendGameInfo_t m_friendGameInfo;
+    void dumpNetworkState();
 
 signals:
     // Existing signals
