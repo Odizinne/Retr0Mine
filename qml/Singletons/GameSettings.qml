@@ -34,7 +34,6 @@ Settings {
     property bool displayTimer: true
     property bool safeFirstClick: true
     property int pingColorIndex: 0
-    property string pingCustomColor: "E95420"
     property bool mpPlayerColoredFlags: true
     property int localFlagColorIndex: 4
     property int remoteFlagColorIndex: 1
