@@ -20,8 +20,8 @@ Popup {
 
     onVisibleChanged: {
         if (visible) {
+            searchField.text = ""
             refreshFriendsList()
-
             ComponentsContext.savePopupVisible = false
             ComponentsContext.loadPopupVisible = false
             ComponentsContext.leaderboardPopupVisible = false
@@ -59,6 +59,19 @@ Popup {
             })
         }
         refreshing = false
+    }
+
+    function filterFriendsList(query) {
+        for (var i = 0; i < friendsList.count; i++) {
+            var item = friendsListView.itemAtIndex(i)
+            if (item) {
+                // Get the name from the model, not from the item directly
+                var friendName = friendsList.get(i).name
+                var visible = friendName.toLowerCase().includes(query.toLowerCase())
+                item.height = visible ? 40 : 0
+                item.visible = visible
+            }
+        }
     }
 
     ListModel {
@@ -125,8 +138,6 @@ Popup {
         }
     }
 
-
-
     ToolTip {
         id: inviteSentToolTip
         visible: true
@@ -161,22 +172,30 @@ Popup {
         spacing: 10
 
         RowLayout {
+            spacing: 10
             opacity: ((!SteamIntegration.isInMultiplayerGame || SteamIntegration.canInviteFriend) &&
                       SteamIntegration.connectedPlayerName === "") ? 1 : 0
             enabled: opacity === 1
 
-            Label {
-                text: qsTr("Friends")
+            TextField {
+                id: searchField
                 Layout.fillWidth: true
+                placeholderText: qsTr("Filter...")
+                selectByMouse: true
                 font.pixelSize: 14
-                font.bold: true
+                onTextChanged: {
+                    multiplayerPopup.filterFriendsList(text)
+                }
             }
             Button {
                 text: qsTr("Refresh")
                 focusPolicy: Qt.NoFocus
                 Layout.alignment: Qt.AlignHCenter
                 enabled: !multiplayerPopup.refreshing
-                onClicked: multiplayerPopup.refreshFriendsList()
+                onClicked: {
+                    multiplayerPopup.refreshFriendsList()
+                    searchField.text = "" // Clear search when refreshing
+                }
             }
         }
 
