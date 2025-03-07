@@ -58,7 +58,8 @@ Item {
                 radius: GameSettings.themeIndex === 0 ? 5 : 0
                 anchors.centerIn: parent
                 color: "transparent"
-                border.color: GameConstants.connectionQualityColor
+                opacity: 0.5
+                border.color: GameConstants.foregroundColor
                 border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
             }
 
