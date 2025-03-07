@@ -15,7 +15,7 @@ Popup {
     closePolicy: Popup.NoAutoClose
     anchors.centerIn: parent
     visible: ComponentsContext.multiplayerPopupVisible
-    property int buttonWidth: Math.max(cancelButton.width, startButton.width, closeButton.width)
+    property int buttonWidth: Math.max(hostButton.width, cancelButton.width, startButton.width, closeButton.width)
     property bool refreshing: false
 
     onVisibleChanged: {
@@ -31,10 +31,6 @@ Popup {
             GameState.displayPostGame = false
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 ComponentsContext.settingsWindowVisible = false
-            }
-
-            if (!SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting) {
-                SteamIntegration.createLobby()
             }
         }
     }
@@ -279,9 +275,20 @@ Popup {
             spacing: 10
 
             Button {
+                id: hostButton
+                visible: !SteamIntegration.isInMultiplayerGame
+                Layout.preferredWidth: multiplayerPopup.buttonWidth
+                text: qsTr("Host")
+                Layout.fillWidth: true
+                enabled: !SteamIntegration.isInMultiplayerGame && !SteamIntegration.isConnecting
+                onClicked: SteamIntegration.createLobby()
+                focusPolicy: Qt.NoFocus
+            }
+
+            Button {
                 id: startButton
                 highlighted: enabled
-                visible: SteamIntegration.isHost && !NetworkManager.mpPopupCloseButtonVisible
+                visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.mpPopupCloseButtonVisible
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
                 focusPolicy: Qt.NoFocus

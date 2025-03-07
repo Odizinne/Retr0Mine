@@ -62,18 +62,6 @@ Item {
                 border.color: GameConstants.foregroundColor
                 border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
             }
-
-            MouseArea {
-                id: pingMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-
-            ToolTip {
-                visible: pingMouseArea.containsMouse
-                delay: 1000
-                text: SteamIntegration.currentPing + " ms"
-            }
         }
 
         Label {
