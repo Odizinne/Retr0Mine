@@ -218,7 +218,6 @@ QtObject {
         }
     }
 
-    // Multiplayer grid management
     function prepareMultiplayerGrid(gridX, gridY, mineCount) {
         console.log("Preparing multiplayer grid:", gridX, "x", gridY, "mines:", mineCount);
 
@@ -1079,7 +1078,7 @@ QtObject {
 
             // Reset the game
             GameState.difficultyChanged = true;
-            GridBridge.cellsCreated = 0;  // Ensure cellsCreated is reset
+            //GridBridge.cellsCreated = 0;  // Ensure cellsCreated is reset
             GridBridge.initGame();
 
             // Send acknowledgment back to host
