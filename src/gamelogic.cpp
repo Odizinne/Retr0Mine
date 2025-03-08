@@ -295,6 +295,8 @@ QSet<int> GameLogic::getNeighbors(int pos) const
 
 int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells)
 {
+    qDebug() << "\nStarting advanced hint solver...";
+
     // Convert to sets for faster lookup
     QSet<int> revealed;
     for (int cell : revealedCells) {
@@ -326,7 +328,8 @@ int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int
     }
 
     if (boundaryCells.isEmpty()) {
-        return -1; // No boundary cells, can't make any deductions
+        qDebug() << "No boundary cells found (all revealed cells are satisfied or have no unrevealed neighbors)";
+        return -1;
     }
 
     // Step 2: Find all frontier cells (unrevealed cells adjacent to revealed ones)
@@ -341,11 +344,12 @@ int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int
     }
 
     if (frontierCells.isEmpty()) {
-        return -1; // No frontier cells, can't make any deductions
+        qDebug() << "No frontier cells found (this shouldn't happen if boundary cells exist)";
+        return -1;
     }
 
-    qDebug() << "Found" << boundaryCells.size() << "boundary cells and"
-             << frontierCells.size() << "frontier cells";
+    qDebug() << "Found" << boundaryCells.size() << "boundary cells (revealed cells with unrevealed neighbors)";
+    qDebug() << "Found" << frontierCells.size() << "frontier cells (unrevealed cells adjacent to revealed ones)";
 
     // Step 3: Set up constraints for each boundary cell
     QVector<Constraint> constraints;
@@ -355,8 +359,10 @@ int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int
         QSet<int> unknowns;
 
         // Count flags and find unknowns
+        int flagCount = 0;
         for (int neighbor : neighbors) {
             if (flagged.contains(neighbor)) {
+                flagCount++;
                 minesRequired--; // Already flagged, so reduce required mines
             } else if (!revealed.contains(neighbor)) {
                 unknowns.insert(neighbor);
@@ -370,30 +376,45 @@ int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int
             c.minesRequired = minesRequired;
             c.unknowns = unknowns;
             constraints.append(c);
+
+            int row = cell / m_width;
+            int col = cell % m_width;
+            qDebug() << "Constraint from cell at" << col << "," << row
+                     << "showing" << m_numbers[cell] << "with" << flagCount << "flags:"
+                     << minesRequired << "mines needed among" << unknowns.size() << "unknown cells";
         }
     }
 
     if (constraints.isEmpty()) {
-        return -1; // No constraints, can't make deductions
+        qDebug() << "No viable constraints found (all boundary cells are already satisfied)";
+        return -1;
     }
 
     // Step 4: Try to find definite solutions using constraint solving
+    qDebug() << "Starting constraint satisfaction analysis...";
 
     // If the frontier is small enough, we can use a full CSP solver
     if (frontierCells.size() <= 16) { // Limit for tractable solving
+        qDebug() << "Frontier is small enough (" << frontierCells.size()
+                 << " cells) for complete CSP analysis";
         return solveFrontierCSP(constraints, QList<int>(frontierCells.begin(), frontierCells.end()));
     }
 
     // Otherwise, use constraint intersection methods for larger frontiers
+    qDebug() << "Frontier is too large (" << frontierCells.size()
+             << " cells) for complete CSP analysis, using constraint intersection";
     return solveWithConstraintIntersection(constraints, QList<int>(frontierCells.begin(), frontierCells.end()));
 }
 
 int GameLogic::solveFrontierCSP(const QVector<Constraint> &constraints, const QList<int> &frontier)
 {
+    qDebug() << "Running CSP solver for" << frontier.size() << "frontier cells...";
     QVector<int> frontierArray = frontier.toVector();
 
     // Try all possible configurations of mines in the frontier
     int numConfigs = 1 << frontier.size(); // 2^n configurations
+
+    qDebug() << "Testing" << numConfigs << "possible configurations";
 
     // For each frontier cell, track if it's always mine, always safe, or uncertain
     QVector<bool> definitelyMine(frontier.size(), true);
@@ -441,38 +462,48 @@ int GameLogic::solveFrontierCSP(const QVector<Constraint> &constraints, const QL
     }
 
     if (validConfigs == 0) {
-        qDebug() << "No valid configurations found";
+        qDebug() << "No valid configurations found - the board may be unsolvable or have a logical contradiction";
         return -1;
     }
 
-    qDebug() << "Found" << validConfigs << "valid configurations";
+    qDebug() << "Found" << validConfigs << "valid configurations out of" << numConfigs << "possibilities";
 
     // Return the first definitely safe or definitely mine cell we find
     for (int i = 0; i < frontier.size(); i++) {
         if (definitelySafe[i]) {
-            qDebug() << "Found definitely safe cell at" << frontierArray[i] % m_width
-                     << "," << frontierArray[i] / m_width;
+            int row = frontierArray[i] / m_width;
+            int col = frontierArray[i] % m_width;
+            qDebug() << "\nFound definitely safe cell at" << col << "," << row
+                     << "\nReason: This cell is safe in ALL" << validConfigs << "valid configurations"
+                     << "\nThis means no matter how the other cells are arranged, this cell cannot be a mine";
             return frontierArray[i];
         }
     }
 
     for (int i = 0; i < frontier.size(); i++) {
         if (definitelyMine[i]) {
-            qDebug() << "Found definitely mine cell at" << frontierArray[i] % m_width
-                     << "," << frontierArray[i] / m_width;
+            int row = frontierArray[i] / m_width;
+            int col = frontierArray[i] % m_width;
+            qDebug() << "\nFound definitely mine cell at" << col << "," << row
+                     << "\nReason: This cell is a mine in ALL" << validConfigs << "valid configurations"
+                     << "\nThis means no matter how the other cells are arranged, this cell must be a mine";
             return frontierArray[i];
         }
     }
 
+    qDebug() << "No cells were definitively safe or mines in all configurations";
     return -1; // No definite conclusions
 }
 
 int GameLogic::solveWithConstraintIntersection(const QVector<Constraint> &constraints, const QList<int> &frontier)
 {
+    qDebug() << "Using constraint intersection methods for large frontier";
+
     // Look for cells that satisfy special conditions across constraints
 
     // First, look for "subset" constraints
     // If one constraint's unknowns are a subset of another's, we can deduce things
+    qDebug() << "Checking for subset relationships between constraints...";
     for (int i = 0; i < constraints.size(); i++) {
         for (int j = 0; j < constraints.size(); j++) {
             if (i == j) continue;
@@ -494,19 +525,38 @@ int GameLogic::solveWithConstraintIntersection(const QVector<Constraint> &constr
                 QSet<int> diffCells = c2.unknowns - c1.unknowns;
                 int diffMines = c2.minesRequired - c1.minesRequired;
 
+                int row1 = c1.cell / m_width;
+                int col1 = c1.cell % m_width;
+                int row2 = c2.cell / m_width;
+                int col2 = c2.cell % m_width;
+
+                qDebug() << "Found subset relationship: Cell" << col1 << "," << row1
+                         << "is a subset of cell" << col2 << "," << row2
+                         << "with" << diffCells.size() << "different cells and" << diffMines << "mine difference";
+
                 // If all cells in the difference must be mines
                 if (diffMines == diffCells.size() && diffMines > 0) {
                     int mineCell = *diffCells.begin();
-                    qDebug() << "Found mine through subset constraint at"
-                             << mineCell % m_width << "," << mineCell / m_width;
+                    int mineRow = mineCell / m_width;
+                    int mineCol = mineCell % m_width;
+                    qDebug() << "\nFound mine at" << mineCol << "," << mineRow
+                             << "\nReason: Cell at" << col2 << "," << row2 << "requires" << c2.minesRequired
+                             << "mines in its unknowns. Cell at" << col1 << "," << row1 << "requires" << c1.minesRequired
+                             << "mines and is a subset. The difference of" << diffMines << "mines must be in the remaining"
+                             << diffCells.size() << "cells, forcing them all to be mines.";
                     return mineCell;
                 }
 
                 // If all cells in the difference must be safe
                 if (diffMines == 0 && !diffCells.isEmpty()) {
                     int safeCell = *diffCells.begin();
-                    qDebug() << "Found safe cell through subset constraint at"
-                             << safeCell % m_width << "," << safeCell / m_width;
+                    int safeRow = safeCell / m_width;
+                    int safeCol = safeCell % m_width;
+                    qDebug() << "\nFound safe cell at" << safeCol << "," << safeRow
+                             << "\nReason: Cell at" << col2 << "," << row2 << "requires" << c2.minesRequired
+                             << "mines in its unknowns. Cell at" << col1 << "," << row1 << "requires" << c1.minesRequired
+                             << "mines and is a subset. Since both need the same number of mines, the extra"
+                             << diffCells.size() << "cells in the second constraint must be safe.";
                     return safeCell;
                 }
             }
@@ -514,10 +564,16 @@ int GameLogic::solveWithConstraintIntersection(const QVector<Constraint> &constr
     }
 
     // Look for "most constrained" cells
+    qDebug() << "Looking for cells involved in multiple constraints...";
+
     QMap<int, int> cellConstraintCount;
-    for (const Constraint &c : constraints) {
+    QMap<int, QSet<int>> cellsToConstraints;
+
+    for (int i = 0; i < constraints.size(); i++) {
+        const Constraint &c = constraints[i];
         for (int cell : c.unknowns) {
             cellConstraintCount[cell]++;
+            cellsToConstraints[cell].insert(i);
         }
     }
 
@@ -533,20 +589,38 @@ int GameLogic::solveWithConstraintIntersection(const QVector<Constraint> &constr
 
     // If we found a highly constrained cell, try it as a hint
     if (mostConstrainedCell != -1 && maxConstraints >= 3) {
-        qDebug() << "Suggesting highly constrained cell at"
-                 << mostConstrainedCell % m_width << "," << mostConstrainedCell / m_width
-                 << "involved in" << maxConstraints << "constraints";
+        int row = mostConstrainedCell / m_width;
+        int col = mostConstrainedCell % m_width;
+
+        QStringList constraintDescriptions;
+        for (int constraintIdx : cellsToConstraints[mostConstrainedCell]) {
+            const Constraint &c = constraints[constraintIdx];
+            int cRow = c.cell / m_width;
+            int cCol = c.cell % m_width;
+            constraintDescriptions.append(QString("Cell at %1,%2 (needs %3 mines in %4 cells)")
+                                              .arg(cCol).arg(cRow)
+                                              .arg(c.minesRequired).arg(c.unknowns.size()));
+        }
+
+        qDebug() << "\nSuggesting highly constrained cell at" << col << "," << row
+                 << "\nReason: This cell is involved in" << maxConstraints << "different constraints:"
+                 << "\n" << constraintDescriptions.join("\n")
+                 << "\nResolving this cell will provide the most information about the board.";
         return mostConstrainedCell;
     }
 
-    // If all else fails, just return the first frontier cell
+    // If all else fails, just return a random frontier cell, but with explanation
     if (!frontier.isEmpty()) {
         int randomCell = frontier.first();
-        qDebug() << "No definite solution found, suggesting frontier cell at"
-                 << randomCell % m_width << "," << randomCell / m_width;
+        int row = randomCell / m_width;
+        int col = randomCell % m_width;
+        qDebug() << "\nSuggesting frontier cell at" << col << "," << row
+                 << "\nReason: No definite solution found with current information."
+                 << "\nThis cell is on the frontier (adjacent to revealed cells) and may help uncover more information.";
         return randomCell;
     }
 
+    qDebug() << "No viable hint found";
     return -1;
 }
 
