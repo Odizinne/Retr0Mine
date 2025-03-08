@@ -413,7 +413,7 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="50"/>
-        <source>Coop</source>
+        <source>Coop (Beta)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -844,7 +844,12 @@ Current game will be saved and restored</source>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="90"/>
+        <location filename="../qml/TopBar.qml" line="59"/>
+        <source>Next click will signal the cell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/TopBar.qml" line="124"/>
         <source>Click to pause</source>
         <translation type="unfinished"></translation>
     </message>
