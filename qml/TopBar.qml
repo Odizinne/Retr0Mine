@@ -145,18 +145,36 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: rightLayout.implicitWidth
+
         RowLayout {
             id: rightLayout
 
             Button {
                 Layout.preferredHeight: 35
-                icon.source: "qrc:/icons/bomb.png"
+                Layout.preferredWidth: mineCounter.implicitWidth + 20
                 icon.color: GameConstants.foregroundColor
-                text: ": " + (GameState.mineCount - GameState.flaggedCount)
                 font.pixelSize: 18
                 font.bold: true
                 highlighted: GameState.flaggedCount === GameState.mineCount
                 onClicked: GridBridge.requestHint()
+
+                RowLayout {
+                    id: mineCounter
+                    anchors.centerIn: parent
+                    IconImage {
+                        //anchors.fill: parent
+                        source: "qrc:/icons/bomb.png"
+                        color: GameConstants.foregroundColor
+                        sourceSize.height: 18
+                        sourceSize.width: 18
+                    }
+
+                    Label {
+                        text: ": " + (GameState.mineCount - GameState.flaggedCount)
+                        font.pixelSize: 18
+                        font.bold: true
+                    }
+                }
             }
 
             Button {
