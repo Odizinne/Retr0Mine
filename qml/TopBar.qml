@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Controls
-import net.odizinne.retr0mine 1.0
 import QtQuick.Layouts
+import QtQuick.Controls.impl
+import net.odizinne.retr0mine 1.0
 
 Item {
     id: control
@@ -109,24 +110,31 @@ Item {
             id: leftLyt
 
 
-    Button {
-        Layout.preferredHeight: 35
-        icon.source: "qrc:/icons/bomb.png"
-        icon.color: GameConstants.foregroundColor
-        text: ": " + (GameState.mineCount - GameState.flaggedCount)
-        font.pixelSize: 18
-        font.bold: true
-        highlighted: GameState.flaggedCount === GameState.mineCount
-        onClicked: GridBridge.requestHint()
-    }
+            Button {
+                Layout.preferredHeight: 35
+                icon.source: "qrc:/icons/bomb.png"
+                icon.color: GameConstants.foregroundColor
+                text: ": " + (GameState.mineCount - GameState.flaggedCount)
+                font.pixelSize: 18
+                font.bold: true
+                highlighted: GameState.flaggedCount === GameState.mineCount
+                onClicked: GridBridge.requestHint()
+            }
 
-    Button {
-        Layout.preferredHeight: 35
-        text: "chat"
-        onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
-
+            Button {
+                Layout.preferredHeight: 35
+                Layout.preferredWidth: 35
+                onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
+                highlighted: ComponentsContext.multiplayerChatVisible
+                IconImage {
+                    anchors.fill: parent
+                    source: "qrc:/icons/chat.png"
+                    color: GameConstants.foregroundColor
+                    sourceSize.height: 16
+                    sourceSize.width: 16
+                }
+            }
+        }
     }
-    }
-}
 
 }
