@@ -414,7 +414,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="50"/>
-        <source>Coop</source>
+        <source>Coop (Beta)</source>
         <translation></translation>
     </message>
     <message>
@@ -865,7 +865,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="90"/>
+        <location filename="../qml/TopBar.qml" line="59"/>
+        <source>Next click will signal the cell</source>
+        <translation>Le prochain clic signal la cellule</translation>
+    </message>
+    <message>
+        <location filename="../qml/TopBar.qml" line="124"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
