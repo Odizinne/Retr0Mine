@@ -10,11 +10,30 @@ Frame {
 
     Connections {
         target: SteamIntegration
-        function onP2pInitialized() {
-            // erase message history (not working yet)
+
+        // Track when the multiplayer status changes
+        function onMultiplayerStatusChanged() {
+            // If we're no longer in a multiplayer game, clear the chat history
+            if (!SteamIntegration.isInMultiplayerGame) {
+                console.log("Multiplayer session ended, clearing chat history")
+                chatPanel.chatMessages = []
+                // Force list update
+                chatListView.model = null
+                chatListView.model = chatPanel.chatMessages
+            }
+        }
+
+        // Also monitor connected player changes
+        function onConnectedPlayerChanged() {
+            // If the connected player changes (new player or disconnection), clear the chat
+            console.log("Connected player changed, clearing chat history")
             chatPanel.chatMessages = []
+            // Force list update
+            chatListView.model = null
+            chatListView.model = chatPanel.chatMessages
         }
     }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 8

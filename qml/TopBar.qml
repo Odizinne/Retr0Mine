@@ -16,6 +16,16 @@ Item {
         rightMargin: 15
     }
 
+    Connections {
+        target: SteamIntegration
+        function onGameActionReceived(actionType, parameter) {
+            if (actionType === "chat" && typeof parameter === "string" && !ComponentsContext.multiplayerChatVisible) {
+                // If we receive a chat message and the chat panel is not visible, mark as having new messages
+                chatButton.hasNewMessages = true
+            }
+        }
+    }
+
     Button {
         id: menuButton
         anchors.left: parent.left
@@ -122,19 +132,56 @@ Item {
             }
 
             Button {
+                id: chatButton
+                visible: SteamIntegration.isP2PConnected
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
                 highlighted: ComponentsContext.multiplayerChatVisible
+
+                // Add property to track if there are new messages
+                property bool hasNewMessages: false
+
+                // Animation for notification effect
+                SequentialAnimation {
+                    id: notificationAnimation
+                    running: chatButton.hasNewMessages && !ComponentsContext.multiplayerChatVisible
+                    loops: Animation.Infinite
+
+                    NumberAnimation {
+                        target: chatButton
+                        property: "opacity"
+                        from: 1.0
+                        to: 0.3
+                        duration: 800
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: chatButton
+                        property: "opacity"
+                        from: 0.3
+                        to: 1.0
+                        duration: 800
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                // Reset new messages flag when chat is opened
+                onHighlightedChanged: {
+                    if (highlighted) {
+                        hasNewMessages = false
+                        opacity = 1
+                    }
+                }
+
                 IconImage {
                     anchors.fill: parent
                     source: "qrc:/icons/chat.png"
-                    color: GameConstants.foregroundColor
+                    color: chatButton.hasNewMessages ? GameConstants.accentColor : GameConstants.foregroundColor
                     sourceSize.height: 16
                     sourceSize.width: 16
                 }
             }
         }
     }
-
 }
