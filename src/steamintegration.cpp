@@ -38,8 +38,6 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
 SteamIntegration::~SteamIntegration()
 {
-    // destructor does not seems to work when using class as QML singleton
-    // I'm not sure, so methods here need to be called manually from QML
     if (m_initialized) {
         if (m_inMultiplayerGame || m_connectedPlayerId.IsValid()) {
             cleanupMultiplayerSession(true);

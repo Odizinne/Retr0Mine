@@ -14,10 +14,10 @@ int main(int argc, char *argv[])
     app.setApplicationName("Retr0Mine");
     QGuiApplication::setWindowIcon(QIcon(":/icons/icon.png"));
 
-    SteamIntegration* steamIntegration = new SteamIntegration();
-    GameCore* gameCore = new GameCore();
-    GameTimer* gameTimer = new GameTimer();
-    GameLogic* gameLogic = new GameLogic();
+    SteamIntegration* steamIntegration = new SteamIntegration(&app);
+    GameCore* gameCore = new GameCore(&app);
+    GameTimer* gameTimer = new GameTimer(&app);
+    GameLogic* gameLogic = new GameLogic(&app);
 
     SteamIntegrationForeign::s_singletonInstance = steamIntegration;
     GameCoreForeign::s_singletonInstance = gameCore;
