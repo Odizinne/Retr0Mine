@@ -10,6 +10,7 @@ QtObject {
     property bool rulesPopupVisible: false
     property bool multiplayerPopupVisible: false
     property bool multiplayerErrorPopupVisible: false
+    property bool multiplayerChatVisible: false
     property bool settingsWindowVisible: false
 
     property string mpErrorReason: ""
