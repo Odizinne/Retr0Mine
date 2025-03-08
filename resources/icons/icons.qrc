@@ -24,5 +24,7 @@
         <file>github.png</file>
         <file>mail.png</file>
         <file>multiplayer.png</file>
+        <file>accept.png</file>
+        <file>deny.png</file>
     </qresource>
 </RCC>

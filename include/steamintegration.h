@@ -105,7 +105,7 @@ private:
     STEAM_CALLBACK(SteamIntegration, OnP2PSessionRequest, P2PSessionRequest_t);
     STEAM_CALLBACK(SteamIntegration, OnP2PSessionConnectFail, P2PSessionConnectFail_t);
     STEAM_CALLBACK(SteamIntegration, OnGameLobbyJoinRequested, GameLobbyJoinRequested_t);
-
+    STEAM_CALLBACK(SteamIntegration, OnLobbyInvite, LobbyInvite_t);
     // Callback handlers for specific API calls
     void OnLobbyCreated(LobbyCreated_t* pCallback, bool bIOFailure);
     void OnLobbyEntered(LobbyEnter_t* pCallback, bool bIOFailure);
@@ -146,6 +146,7 @@ signals:
     void connectionFailed(QString reason);
     void connectionSucceeded();
     void p2pInitialized();
+    void inviteReceived(QString friendName, QString connectString);
 };
 
 struct SteamIntegrationForeign

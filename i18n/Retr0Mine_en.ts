@@ -288,6 +288,14 @@ Current game will be saved and restored</source>
     </message>
 </context>
 <context>
+    <name>InviteReceivedPopup</name>
+    <message>
+        <location filename="../qml/Popups/InviteReceivedPopup.qml" line="24"/>
+        <source> wants to play!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LanguagePane</name>
     <message>
         <location filename="../qml/SettingsPanes/LanguagePane.qml" line="15"/>
@@ -440,78 +448,83 @@ Current game will be saved and restored</source>
 <context>
     <name>MultiplayerPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="15"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="35"/>
         <source>Player colored flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="61"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="81"/>
         <source>Remote player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="85"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="105"/>
         <source>Ping color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="42"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="67"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="91"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="62"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="87"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="111"/>
         <source>Contrasted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="36"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="15"/>
+        <source>Show notification on invite received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="56"/>
         <source>Local player</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="43"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="68"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="92"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="63"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="88"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="112"/>
         <source>Orange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="44"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="69"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="93"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="64"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="89"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="113"/>
         <source>Magenta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="45"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="70"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="94"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="65"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="90"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="114"/>
         <source>Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="46"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="71"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="95"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="66"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="91"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="115"/>
         <source>Blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="47"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="72"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="96"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="67"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="92"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="116"/>
         <source>Purple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="48"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="73"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="97"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="68"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="93"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="117"/>
         <source>Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="49"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="74"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="98"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="69"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="94"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="118"/>
         <source>Yellow</source>
         <translation type="unfinished"></translation>
     </message>
@@ -569,22 +582,22 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="306"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="309"/>
         <source>Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="340"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="343"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="348"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="351"/>
         <source>Quit session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MultiplayerPopup.qml" line="318"/>
+        <location filename="../qml/Popups/MultiplayerPopup.qml" line="321"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>

@@ -119,6 +119,7 @@ void GameCore::resetSettings()
     settings.setValue("mpPlayerColoredFlags", true);
     settings.setValue("localFlagColorIndex", 4);
     settings.setValue("remoteFlagColorIndex", 1);
+    settings.setValue("mpShowInviteNotificationInGame", true);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;

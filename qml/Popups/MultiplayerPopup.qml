@@ -274,9 +274,12 @@ Popup {
                                         friendsListView.itemAtIndex(i).inviteDisabled = true;
                                     }
                                     SteamIntegration.inviteFriend(delegate.steamId)
+                                    inviteDisableTimer.invitedIndex = delegate.index;
+                                    invitedPersonTimer.invitedIndex = delegate.index;
                                     inviteSentToolTip.opacity = 1
                                     inviteSentToolTipTimer.start()
                                     inviteDisableTimer.restart();
+                                    invitedPersonTimer.restart();
                                 }
 
                                 IconImage {
@@ -362,9 +365,25 @@ Popup {
     Timer {
         id: inviteDisableTimer
         interval: 5000
+        property int invitedIndex: -1
+
         onTriggered: {
             for (var i = 0; i < friendsList.count; i++) {
-                friendsListView.itemAtIndex(i).inviteDisabled = false;
+                if (i !== invitedIndex) {
+                    friendsListView.itemAtIndex(i).inviteDisabled = false;
+                }
+            }
+        }
+    }
+
+    Timer {
+        id: invitedPersonTimer
+        interval: 10000
+        property int invitedIndex: -1
+
+        onTriggered: {
+            if (invitedIndex >= 0 && invitedIndex < friendsList.count) {
+                friendsListView.itemAtIndex(invitedIndex).inviteDisabled = false;
             }
         }
     }

@@ -12,6 +12,26 @@ Pane {
             Layout.fillWidth: true
 
             Label {
+                text: qsTr("Show notification on invite received")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: mpShowInviteNotificationInGameSwitch.click()
+                }
+            }
+            Switch {
+                id: mpShowInviteNotificationInGame
+                checked: GameSettings.mpShowInviteNotificationInGame
+                onCheckedChanged: {
+                    GameSettings.mpShowInviteNotificationInGame = checked
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+
+            Label {
                 text: qsTr("Player colored flags")
                 Layout.fillWidth: true
                 MouseArea {

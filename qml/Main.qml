@@ -38,6 +38,14 @@ ApplicationWindow {
     Connections {
         target: SteamIntegration
 
+        function onInviteReceived(name, connectData) {
+            if (GameSettings.mpShowInviteNotificationInGame) {
+                inviteToast.friendName = name
+                inviteToast.connectData = connectData
+                inviteToast.visible = true
+            }
+        }
+
         function onGameStateReceived(gameState) {
             if (gameState.gridSync) {
                 console.log("Received grid sync game state");
@@ -338,6 +346,13 @@ ApplicationWindow {
     LeaderboardPopup {
         id: leaderboardWindow
         Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
+    }
+
+    InviteReceivedPopup {
+        id: inviteToast
+        x: 13
+        y: 35 + 23
+        z: 1000
     }
 
     BusyIndicator {

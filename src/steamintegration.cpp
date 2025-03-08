@@ -986,3 +986,17 @@ int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
 
     return 0;
 }
+
+void SteamIntegration::OnLobbyInvite(LobbyInvite_t *pCallback)
+{
+    CSteamID friendID = pCallback->m_ulSteamIDUser;
+    CSteamID lobbyID = pCallback->m_ulSteamIDLobby;
+
+    QString friendName = QString::fromUtf8(SteamFriends()->GetFriendPersonaName(friendID));
+    QString lobbyIdStr = QString::number(lobbyID.ConvertToUint64());
+
+    qDebug() << "Invite from:" << friendName << "to lobby:" << lobbyIdStr;
+
+    // Emit signal for QML
+    emit inviteReceived(friendName, lobbyIdStr);
+}
