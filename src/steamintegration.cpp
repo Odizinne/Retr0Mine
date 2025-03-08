@@ -75,10 +75,7 @@ void SteamIntegration::shutdown()
             P2PSessionState_t sessionState;
             bool hasSession = steamNet->GetP2PSessionState(m_connectedPlayerId, &sessionState);
 
-            qDebug() << "Has active P2P session:" << hasSession;
-
             if (m_connectedPlayerId.IsValid()) {
-                qDebug() << "Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
                 steamNet->CloseP2PSessionWithUser(m_connectedPlayerId);
             }
 
@@ -104,8 +101,6 @@ void SteamIntegration::shutdown()
 
 void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
 {
-    qDebug() << "SteamIntegration: Cleaning up multiplayer session, shutdown:" << isShuttingDown;
-
     m_networkTimer.stop();
     m_p2pInitTimer.stop();
 
@@ -143,8 +138,6 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
         emit canInviteFriendChanged();
         emit p2pInitialized();
     }
-
-    qDebug() << "SteamIntegration: Multiplayer session cleaned up";
 }
 
 void SteamIntegration::unlockAchievement(const QString &achievementId)

@@ -104,12 +104,7 @@ QtObject {
         return Array.isArray(array) && array !== null && index >= 0 && index < array.length ? array[index] : undefined;
     }
 
-    // Send multiplayer ping for a cell
     function sendPing(cellIndex) {
-        if (!GameState.gameStarted) {
-            return;
-        }
-
         if (SteamIntegration.isInMultiplayerGame) {
             console.log("Sending ping for cell:", cellIndex);
             SteamIntegration.sendGameAction("ping", cellIndex);
@@ -118,7 +113,6 @@ QtObject {
         showPingAtCell(cellIndex);
     }
 
-    // Create and display ping indicator on a cell
     function showPingAtCell(cellIndex) {
         if (cellIndex < 0 || cellIndex >= GameState.gridSizeX * GameState.gridSizeY) {
             console.error("Invalid cell index for ping:", cellIndex);
@@ -132,7 +126,7 @@ QtObject {
         }
 
         // Create ping indicator dynamically
-        const pingComponent = Qt.createComponent("../PingIndicator.qml");
+        const pingComponent = Qt.createComponent("../SignalIndicator.qml");
         if (pingComponent.status === Component.Ready) {
             const pingObject = pingComponent.createObject(cell, {
                                                               "anchors.centerIn": cell
