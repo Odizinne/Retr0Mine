@@ -116,6 +116,7 @@ Pane {
             Label {
                 id: densityLabel
                 font.bold: true
+                Layout.rightMargin: 5
                 text: {
                     const density = (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1);
                     return density + "%";

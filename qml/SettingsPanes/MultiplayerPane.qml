@@ -20,7 +20,7 @@ Pane {
                 }
             }
             Switch {
-                id: mpShowInviteNotificationInGame
+                id: mpShowInviteNotificationInGameSwitch
                 checked: GameSettings.mpShowInviteNotificationInGame
                 onCheckedChanged: {
                     GameSettings.mpShowInviteNotificationInGame = checked
@@ -58,6 +58,7 @@ Pane {
             }
 
             ComboBox {
+                Layout.rightMargin: 5
                 model: [
                     qsTr("Contrasted"),
                     qsTr("Orange"),
@@ -83,6 +84,7 @@ Pane {
             }
 
             ComboBox {
+                Layout.rightMargin: 5
                 model: [
                     qsTr("Contrasted"),
                     qsTr("Orange"),
@@ -107,6 +109,7 @@ Pane {
             }
 
             ComboBox {
+                Layout.rightMargin: 5
                 model: [
                     qsTr("Contrasted"),
                     qsTr("Orange"),
