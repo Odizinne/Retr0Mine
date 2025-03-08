@@ -12,7 +12,6 @@ Item {
         target: SteamIntegration
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string" && !ComponentsContext.multiplayerChatVisible) {
-                // If we receive a chat message and the chat panel is not visible, mark as having new messages
                 chatButton.hasNewMessages = true
             }
         }
@@ -162,7 +161,6 @@ Item {
                     id: mineCounter
                     anchors.centerIn: parent
                     IconImage {
-                        //anchors.fill: parent
                         source: "qrc:/icons/bomb.png"
                         color: GameConstants.foregroundColor
                         sourceSize.height: 18
@@ -184,11 +182,8 @@ Item {
                 Layout.preferredWidth: 35
                 onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
                 highlighted: ComponentsContext.multiplayerChatVisible
-
-                // Add property to track if there are new messages
                 property bool hasNewMessages: false
 
-                // Animation for notification effect
                 SequentialAnimation {
                     id: notificationAnimation
                     running: chatButton.hasNewMessages && !ComponentsContext.multiplayerChatVisible
@@ -212,7 +207,6 @@ Item {
                     }
                 }
 
-                // Reset new messages flag when chat is opened
                 onHighlightedChanged: {
                     if (highlighted) {
                         hasNewMessages = false
