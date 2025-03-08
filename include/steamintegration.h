@@ -129,7 +129,6 @@ private:
 
     // For invite handling
     FriendGameInfo_t m_friendGameInfo;
-    void dumpNetworkState();
 
 signals:
     // Existing signals

@@ -26,11 +26,9 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
     initialize();
 
-    // Setup periodic network message checking
     connect(&m_p2pInitTimer, &QTimer::timeout, this, &SteamIntegration::sendP2PInitPing);
     connect(&m_networkTimer, &QTimer::timeout, this, &SteamIntegration::processNetworkMessages);
 
-    // Create a Steam callback timer to ensure callbacks are processed regularly
     QTimer* callbackTimer = new QTimer(this);
     connect(callbackTimer, &QTimer::timeout, this, &SteamIntegration::runCallbacks);
     callbackTimer->start(100);
@@ -40,15 +38,14 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
 SteamIntegration::~SteamIntegration()
 {
+    // destructor does not seems to work when using class as QML singleton
+    // I'm not sure, so methods here need to be called manually from QML
     if (m_initialized) {
-        // Make sure we clean up multiplayer properly before shutting down
         if (m_inMultiplayerGame || m_connectedPlayerId.IsValid()) {
             cleanupMultiplayerSession(true);
         }
 
-        // Then shut down Steam API cleanly
         shutdown();
-        dumpNetworkState();
     }
 }
 
@@ -70,45 +67,36 @@ bool SteamIntegration::initialize()
 void SteamIntegration::shutdown()
 {
     if (m_initialized) {
-        // Stop all network timers first
         m_networkTimer.stop();
         m_p2pInitTimer.stop();
 
-        // First, properly close P2P sessions - even if we think we're not connected
         ISteamNetworking* steamNet = SteamNetworking();
         if (steamNet) {
-            // Get number of connections by checking session state
             P2PSessionState_t sessionState;
             bool hasSession = steamNet->GetP2PSessionState(m_connectedPlayerId, &sessionState);
 
             qDebug() << "Has active P2P session:" << hasSession;
 
-            // Close specific connection if we have one
             if (m_connectedPlayerId.IsValid()) {
                 qDebug() << "Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
                 steamNet->CloseP2PSessionWithUser(m_connectedPlayerId);
             }
 
-            // Run callbacks to process the close request
             SteamAPI_RunCallbacks();
         }
 
-        // Then leave any lobbies
         if (m_currentLobbyId.IsValid()) {
             SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
-            SteamAPI_RunCallbacks(); // Process the leave request
+            SteamAPI_RunCallbacks();
         }
 
-        // Clear rich presence
         ISteamFriends* steamFriends = SteamFriends();
         if (steamFriends) {
             steamFriends->ClearRichPresence();
         }
 
-        // Run callbacks one final time to process any pending operations
         SteamAPI_RunCallbacks();
 
-        // Now we can safely shut down
         SteamAPI_Shutdown();
         m_initialized = false;
     }
@@ -118,25 +106,21 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
 {
     qDebug() << "SteamIntegration: Cleaning up multiplayer session, shutdown:" << isShuttingDown;
 
-    // Stop all timers to prevent new callbacks during cleanup
     m_networkTimer.stop();
     m_p2pInitTimer.stop();
 
-    // Close P2P sessions first - this is essential
     if (m_initialized && m_connectedPlayerId.IsValid()) {
         qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
         SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
-        SteamAPI_RunCallbacks(); // Process the close request
+        SteamAPI_RunCallbacks();
     }
 
-    // Leave the lobby if we're in one
     if (m_initialized && m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
         qDebug() << "SteamIntegration: Leaving lobby:" << m_currentLobbyId.ConvertToUint64();
         SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
-        SteamAPI_RunCallbacks(); // Process the leave request
+        SteamAPI_RunCallbacks();
     }
 
-    // Reset multiplayer state variables
     m_inMultiplayerGame = false;
     m_isHost = false;
     m_lobbyReady = false;
@@ -146,13 +130,11 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
     m_connectedPlayerId = CSteamID();
     m_connectedPlayerName = "";
 
-    // Update rich presence if not shutting down
     if (m_initialized && !isShuttingDown) {
         updateRichPresence();
-        SteamAPI_RunCallbacks(); // Process the rich presence update
+        SteamAPI_RunCallbacks();
     }
 
-    // Emit signals if not shutting down
     if (!isShuttingDown) {
         emit multiplayerStatusChanged();
         emit hostStatusChanged();
@@ -244,16 +226,11 @@ bool SteamIntegration::incrementTotalWin()
     return steamUserStats->StoreStats();
 }
 
-// Rich presence related methods
 void SteamIntegration::setDifficulty(int difficulty)
 {
     if (m_p2pInitialized) return;
     if (m_difficulty != difficulty) {
         m_difficulty = difficulty;
-
-        // Also update the settings so it persists
-        QSettings settings("Odizinne", "Retr0Mine");
-        settings.setValue("difficulty", difficulty);
 
         updateRichPresence();
     }
@@ -297,27 +274,20 @@ void SteamIntegration::updateRichPresence()
     }
 
     if (m_inMultiplayerGame && m_p2pInitialized) {
-        // Once P2P is connected, both host and client show "Playing with friend"
         steamFriends->SetRichPresence("status", "Playing with friend");
         steamFriends->SetRichPresence("steam_display", "#PlayingCoopGame");
     } else {
-        // Regular rich presence or before P2P is established
         steamFriends->SetRichPresence("difficulty", getDifficultyString().toUtf8().constData());
         steamFriends->SetRichPresence("steam_display", "#PlayingDifficulty");
     }
 }
 
-// Run Steam callbacks - call this regularly from main loop
 void SteamIntegration::runCallbacks()
 {
     if (m_initialized) {
         SteamAPI_RunCallbacks();
     }
 }
-
-//-------------------------------------------------------------------------
-// NEW MULTIPLAYER METHODS
-//-------------------------------------------------------------------------
 
 void SteamIntegration::createLobby()
 {
@@ -375,10 +345,8 @@ void SteamIntegration::OnLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure
     SteamMatchmaking()->SetLobbyData(m_currentLobbyId, "game", "Retr0Mine");
     SteamMatchmaking()->SetLobbyData(m_currentLobbyId, "version", "1.0");
 
-    // Update rich presence to show we're hosting
     updateRichPresence();
 
-    // Start listening for P2P connections
     m_networkTimer.start();
 
     emit connectionSucceeded();
@@ -593,20 +561,15 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
         m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
         emit connectedPlayerChanged();
 
-        // Start P2P initialization
         startP2PInitialization();
     }
 
-    // Start P2P networking
     m_networkTimer.start();
 
     emit multiplayerStatusChanged();
     emit hostStatusChanged();
     emit canInviteFriendChanged();
     emit connectionSucceeded();
-
-    // Update rich presence to show multiplayer status
-    //updateRichPresence();
 
     qDebug() << "SteamIntegration: Lobby join complete";
 }
@@ -908,13 +871,6 @@ void SteamIntegration::handleGameState(const QByteArray& data)
     QVariantMap gameState = doc.object().toVariantMap();
     qDebug() << "SteamIntegration: Received game state with keys:" << gameState.keys();
     emit gameStateReceived(gameState);
-
-    qDebug() << "SteamIntegration: JSON data size:" << data.size();
-    qDebug() << "SteamIntegration: First 100 chars:" << (data.size() > 100 ? data.left(100) : data);
-    qDebug() << "SteamIntegration: Mines array in JSON:" << doc.object()["mines"].isArray()
-             << "size:" << (doc.object()["mines"].isArray() ? doc.object()["mines"].toArray().size() : -1);
-    qDebug() << "SteamIntegration: Numbers array in JSON:" << doc.object()["numbers"].isArray()
-             << "size:" << (doc.object()["numbers"].isArray() ? doc.object()["numbers"].toArray().size() : -1);
 }
 
 void SteamIntegration::sendP2PInitPing()
@@ -924,14 +880,10 @@ void SteamIntegration::sendP2PInitPing()
         return;
     }
 
-    //qDebug() << "SteamIntegration: Sending P2P initialization ping";
-
-    // Create a simple ping message
     QByteArray data;
     data.append('P'); // P for Ping
     data.append("PING");
 
-    // Send the ping - if it fails, we'll try again on next timer tick
     SteamNetworking()->SendP2PPacket(
         m_connectedPlayerId,
         data.constData(),
@@ -949,35 +901,21 @@ void SteamIntegration::startP2PInitialization()
     qDebug() << "SteamIntegration: Starting P2P initialization process";
     m_p2pInitialized = false;
 
-    // Start the ping timer - send pings until we get a response
-    m_p2pInitTimer.setInterval(500); // Try every 500ms
+    m_p2pInitTimer.setInterval(500);
     m_p2pInitTimer.start();
 
-    //if (m_p2pInitialized) {
-    //    m_pingTimer.setInterval(2000);  // Measure ping every 2 seconds
-    //    m_pingTimer.start();
-    //}
-    // Send first ping immediately
     sendP2PInitPing();
 }
 
 void SteamIntegration::checkForPendingInvites()
 {
-    if (!m_initialized) {
+    if (!m_initialized || m_inMultiplayerGame) {
         qDebug() << "SteamIntegration: Cannot check for pending invites - Steam not initialized";
         return;
     }
 
-    if (m_inMultiplayerGame) {
-        qDebug() << "SteamIntegration: Already in multiplayer game, not checking pending invites";
-        return;
-    }
-
-    qDebug() << "SteamIntegration: Checking for pending invites...";
-
     // METHOD 1: Check command line arguments for +connect_lobby parameter
     QStringList args = QCoreApplication::arguments();
-
     QString lobbyIdStr;
     for (int i = 0; i < args.size(); i++) {
         QString arg = args[i];
@@ -1011,6 +949,7 @@ void SteamIntegration::checkForPendingInvites()
         // GetLobbyByIndex returns a CSteamID directly, not a bool with output parameter
         CSteamID lobbyId = SteamMatchmaking()->GetLobbyByIndex(0);
         if (lobbyId.IsValid()) {
+
             // Verify this is a recent invite to our game
             const char* gameIdStr = SteamMatchmaking()->GetLobbyData(lobbyId, "game");
             if (gameIdStr && QString(gameIdStr) == "Retr0Mine") {
@@ -1022,7 +961,6 @@ void SteamIntegration::checkForPendingInvites()
     }
 
     SteamAPI_RunCallbacks();
-    qDebug() << "SteamIntegration: No pending invites found through automatic methods";
 }
 
 int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
@@ -1054,29 +992,4 @@ int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
     }
 
     return 0;
-}
-
-void SteamIntegration::dumpNetworkState() {
-    if (!m_initialized) return;
-
-    ISteamNetworking* steamNet = SteamNetworking();
-    if (!steamNet) return;
-
-    P2PSessionState_t sessionState;
-    bool hasSession = false;
-
-    // Check if we have a specific connection
-    if (m_connectedPlayerId.IsValid()) {
-        hasSession = steamNet->GetP2PSessionState(m_connectedPlayerId, &sessionState);
-    }
-
-    qDebug() << "Steam network state:";
-    qDebug() << "- Has active P2P session:" << hasSession;
-    qDebug() << "- m_connectedPlayerId valid:" << m_connectedPlayerId.IsValid();
-    qDebug() << "- m_currentLobbyId valid:" << m_currentLobbyId.IsValid();
-
-    // Also try to check for any P2P sessions with the local user
-    CSteamID localId = SteamUser()->GetSteamID();
-    bool hasLocalSession = steamNet->GetP2PSessionState(localId, &sessionState);
-    qDebug() << "- Has session with local user:" << hasLocalSession;
 }
