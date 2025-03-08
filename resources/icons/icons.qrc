@@ -29,5 +29,6 @@
         <file>chat.png</file>
         <file>send.png</file>
         <file>signal.png</file>
+        <file>menu.png</file>
     </qresource>
 </RCC>

@@ -84,7 +84,7 @@ ApplicationWindow {
         function onIsInMultiplayerGameChanged() {
             if (SteamIntegration.isInMultiplayerGame) {
                 console.log("Entered multiplayer mode as",
-                    SteamIntegration.isHost ? "host" : "client");
+                            SteamIntegration.isHost ? "host" : "client");
 
                 NetworkManager.allowClientReveal = false;
                 GridBridge.initGame();
@@ -150,6 +150,16 @@ ApplicationWindow {
         function onCellSizeChanged() {
             onGridSizeXChanged()
             onGridSizeYChanged()
+        }
+    }
+
+    Connections {
+        target: ComponentsContext
+        function onMultiplayerChatVisibleChanged() {
+            if (root.visibility === ApplicationWindow.Windowed) {
+                root.minimumWidth = root.getIdealWidth()
+                root.width = root.minimumWidth
+            }
         }
     }
 
@@ -390,7 +400,7 @@ ApplicationWindow {
                 bottomMargin: 12
             }
             width: 300  // Adjust width as needed
-              // For visualization
+            // For visualization
             visible: ComponentsContext.multiplayerChatVisible
             // Your right panel content here
         }
@@ -532,8 +542,14 @@ ApplicationWindow {
 
     function getIdealWidth() {
         if (root.visibility === ApplicationWindow.Windowed) {
-            return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24,
-                            Screen.desktopAvailableWidth * 0.9)
+            let baseWidth = (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24
+
+            // Add chat panel width if visible
+            if (ComponentsContext.multiplayerChatVisible) {
+                baseWidth += rightPanel.width + 12 // Adding the panel width plus margin
+            }
+
+            return Math.min(baseWidth, Screen.desktopAvailableWidth * 0.9)
         }
     }
 

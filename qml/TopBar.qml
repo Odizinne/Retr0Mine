@@ -28,14 +28,21 @@ Item {
             id: leftLayout
             Button {
                 id: menuButton
-
+                Layout.preferredWidth: 35
                 Layout.preferredHeight: 35
-                text: "Menu"
                 onClicked: {
                     mainMenu.visible = !mainMenu.visible
                 }
                 MainMenu {
                     id: mainMenu
+                }
+
+                IconImage {
+                    anchors.fill: parent
+                    source: "qrc:/icons/menu.png"
+                    color: GameConstants.foregroundColor
+                    sourceSize.height: 18
+                    sourceSize.width: 18
                 }
             }
 
