@@ -72,7 +72,7 @@ public:
     Q_INVOKABLE void checkForPendingInvites();
 
     // P2P networking
-    Q_INVOKABLE bool sendGameAction(const QString& actionType, int cellIndex);
+    Q_INVOKABLE bool sendGameAction(const QString& actionType, const QVariant& parameter);
     Q_INVOKABLE bool sendGameState(const QVariantMap& gameState);
 
     // Callback processing - call this regularly
@@ -141,7 +141,7 @@ signals:
     void connectingStatusChanged();
     void lobbyReadyChanged();
     void canInviteFriendChanged();
-    void gameActionReceived(QString actionType, int cellIndex);
+    void gameActionReceived(QString actionType, QVariant parameter);
     void gameStateReceived(QVariantMap gameState);
     void connectionFailed(QString reason);
     void connectionSucceeded();
