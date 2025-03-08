@@ -295,325 +295,258 @@ QSet<int> GameLogic::getNeighbors(int pos) const
 
 int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells)
 {
-    struct CellConstraint
-    {
-        int pos;
-        int cellsNeeded;
-        QSet<int> unknowns;
-        bool isSafety;
-    };
-
+    // Convert to sets for faster lookup
     QSet<int> revealed;
-    QSet<int> flagged;
-    for (int cell : revealedCells)
+    for (int cell : revealedCells) {
         revealed.insert(cell);
-    for (int cell : flaggedCells)
+    }
+
+    QSet<int> flagged;
+    for (int cell : flaggedCells) {
         flagged.insert(cell);
-
-    QVector<int> visibleNumbers(m_width * m_height, -2);
-    for (int pos : revealed) {
-        visibleNumbers[pos] = m_numbers[pos];
-    }
-    qDebug() << "\nTrying to find hint using only revealed numbers:";
-
-    m_information.clear();
-    m_informationsForSpace.clear();
-    m_solvedSpaces.clear();
-
-    for (int i = 0; i < m_width * m_height; i++) {
-        if (flagged.contains(i)) {
-            m_solvedSpaces[i] = true;
-            qDebug() << "Position" << i % m_width << "," << i / m_width << "is marked as flag";
-            continue;
-        }
-        if (!revealed.contains(i)) {
-            continue;
-        }
-
-        if (visibleNumbers[i] <= 0)
-            continue;
-
-        QSet<int> neighbors = getNeighbors(i);
-        int mineCount = 0;
-        for (int neighbor : neighbors) {
-            if (flagged.contains(neighbor)) {
-                mineCount++;
-            }
-        }
-
-        if (mineCount > 0) {
-            MineSolverInfo info;
-            info.spaces = neighbors;
-            info.count = mineCount;
-            m_information.insert(info);
-            m_solvedSpaces[i] = false;
-
-            qDebug() << "Cell at" << i % m_width << "," << i / m_width << "shows"
-                     << visibleNumbers[i] << "mines"
-                     << "and has" << mineCount << "flags nearby";
-
-            for (int space : info.spaces) {
-                m_informationsForSpace[space].insert(info);
-            }
-        }
     }
 
-    QVector<CellConstraint> constraints;
-
+    // Step 1: Find all boundary cells (revealed cells with unrevealed neighbors)
+    QVector<int> boundaryCells;
     for (int pos : revealed) {
-        if (m_numbers[pos] <= 0)
-            continue;
+        if (m_numbers[pos] <= 0) continue; // Skip mines and zeros
 
         QSet<int> neighbors = getNeighbors(pos);
-        int flagCount = 0;
+        bool hasBoundary = false;
+        for (int neighbor : neighbors) {
+            if (!revealed.contains(neighbor) && !flagged.contains(neighbor)) {
+                hasBoundary = true;
+                break;
+            }
+        }
+
+        if (hasBoundary) {
+            boundaryCells.append(pos);
+        }
+    }
+
+    if (boundaryCells.isEmpty()) {
+        return -1; // No boundary cells, can't make any deductions
+    }
+
+    // Step 2: Find all frontier cells (unrevealed cells adjacent to revealed ones)
+    QSet<int> frontierCells;
+    for (int cell : boundaryCells) {
+        QSet<int> neighbors = getNeighbors(cell);
+        for (int neighbor : neighbors) {
+            if (!revealed.contains(neighbor) && !flagged.contains(neighbor)) {
+                frontierCells.insert(neighbor);
+            }
+        }
+    }
+
+    if (frontierCells.isEmpty()) {
+        return -1; // No frontier cells, can't make any deductions
+    }
+
+    qDebug() << "Found" << boundaryCells.size() << "boundary cells and"
+             << frontierCells.size() << "frontier cells";
+
+    // Step 3: Set up constraints for each boundary cell
+    QVector<Constraint> constraints;
+    for (int cell : boundaryCells) {
+        QSet<int> neighbors = getNeighbors(cell);
+        int minesRequired = m_numbers[cell];
         QSet<int> unknowns;
 
+        // Count flags and find unknowns
         for (int neighbor : neighbors) {
             if (flagged.contains(neighbor)) {
-                flagCount++;
+                minesRequired--; // Already flagged, so reduce required mines
             } else if (!revealed.contains(neighbor)) {
                 unknowns.insert(neighbor);
             }
         }
 
-        int minesNeeded = m_numbers[pos] - flagCount;
-
-        if (minesNeeded > 0) {
-            constraints.append({pos, minesNeeded, unknowns, false});
-            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width << "needs" << minesNeeded
-                     << "mines among" << unknowns.size() << "unknowns";
-        }
-
-        if (minesNeeded < unknowns.size()) {
-            int safeNeeded = unknowns.size() - minesNeeded;
-            constraints.append({pos, safeNeeded, unknowns, true});
-            qDebug() << "Cell at" << pos % m_width << "," << pos / m_width << "needs" << safeNeeded
-                     << "safe cells among" << unknowns.size() << "unknowns";
+        // Only add constraints where we still need to place mines
+        if (minesRequired > 0 && !unknowns.isEmpty()) {
+            Constraint c;
+            c.cell = cell;
+            c.minesRequired = minesRequired;
+            c.unknowns = unknowns;
+            constraints.append(c);
         }
     }
 
-    // Look for cells that uniquely satisfy multiple constraints
-    QMap<int, QVector<int>> satisfiesConstraints; // cell -> constraint indices
+    if (constraints.isEmpty()) {
+        return -1; // No constraints, can't make deductions
+    }
 
+    // Step 4: Try to find definite solutions using constraint solving
+
+    // If the frontier is small enough, we can use a full CSP solver
+    if (frontierCells.size() <= 16) { // Limit for tractable solving
+        return solveFrontierCSP(constraints, QList<int>(frontierCells.begin(), frontierCells.end()));
+    }
+
+    // Otherwise, use constraint intersection methods for larger frontiers
+    return solveWithConstraintIntersection(constraints, QList<int>(frontierCells.begin(), frontierCells.end()));
+}
+
+int GameLogic::solveFrontierCSP(const QVector<Constraint> &constraints, const QList<int> &frontier)
+{
+    QVector<int> frontierArray = frontier.toVector();
+
+    // Try all possible configurations of mines in the frontier
+    int numConfigs = 1 << frontier.size(); // 2^n configurations
+
+    // For each frontier cell, track if it's always mine, always safe, or uncertain
+    QVector<bool> definitelyMine(frontier.size(), true);
+    QVector<bool> definitelySafe(frontier.size(), true);
+
+    int validConfigs = 0;
+
+    // Test every possible configuration of mines in the frontier
+    for (int config = 0; config < numConfigs; config++) {
+        // Create a bit vector representing this configuration
+        QVector<bool> mineConfig(frontier.size(), false);
+        for (int i = 0; i < frontier.size(); i++) {
+            mineConfig[i] = (config & (1 << i)) != 0;
+        }
+
+        // Check if this configuration satisfies all constraints
+        bool valid = true;
+        for (const Constraint &constraint : constraints) {
+            int minesInConfig = 0;
+
+            // Count mines in this configuration that affect this constraint
+            for (int i = 0; i < frontier.size(); i++) {
+                int cell = frontierArray[i];
+                if (mineConfig[i] && constraint.unknowns.contains(cell)) {
+                    minesInConfig++;
+                }
+            }
+
+            // If this constraint isn't satisfied, this configuration is invalid
+            if (minesInConfig != constraint.minesRequired) {
+                valid = false;
+                break;
+            }
+        }
+
+        if (valid) {
+            validConfigs++;
+
+            // Update our definitelyMine and definitelySafe trackers
+            for (int i = 0; i < frontier.size(); i++) {
+                if (!mineConfig[i]) definitelyMine[i] = false;
+                if (mineConfig[i]) definitelySafe[i] = false;
+            }
+        }
+    }
+
+    if (validConfigs == 0) {
+        qDebug() << "No valid configurations found";
+        return -1;
+    }
+
+    qDebug() << "Found" << validConfigs << "valid configurations";
+
+    // Return the first definitely safe or definitely mine cell we find
+    for (int i = 0; i < frontier.size(); i++) {
+        if (definitelySafe[i]) {
+            qDebug() << "Found definitely safe cell at" << frontierArray[i] % m_width
+                     << "," << frontierArray[i] / m_width;
+            return frontierArray[i];
+        }
+    }
+
+    for (int i = 0; i < frontier.size(); i++) {
+        if (definitelyMine[i]) {
+            qDebug() << "Found definitely mine cell at" << frontierArray[i] % m_width
+                     << "," << frontierArray[i] / m_width;
+            return frontierArray[i];
+        }
+    }
+
+    return -1; // No definite conclusions
+}
+
+int GameLogic::solveWithConstraintIntersection(const QVector<Constraint> &constraints, const QList<int> &frontier)
+{
+    // Look for cells that satisfy special conditions across constraints
+
+    // First, look for "subset" constraints
+    // If one constraint's unknowns are a subset of another's, we can deduce things
     for (int i = 0; i < constraints.size(); i++) {
-        for (int cell : constraints[i].unknowns) {
-            satisfiesConstraints[cell].append(i);
+        for (int j = 0; j < constraints.size(); j++) {
+            if (i == j) continue;
+
+            const Constraint &c1 = constraints[i];
+            const Constraint &c2 = constraints[j];
+
+            // Check if c1's unknowns are a subset of c2's
+            bool isSubset = true;
+            for (int cell : c1.unknowns) {
+                if (!c2.unknowns.contains(cell)) {
+                    isSubset = false;
+                    break;
+                }
+            }
+
+            if (isSubset && c1.unknowns.size() < c2.unknowns.size()) {
+                // Calculate the difference between the constraints
+                QSet<int> diffCells = c2.unknowns - c1.unknowns;
+                int diffMines = c2.minesRequired - c1.minesRequired;
+
+                // If all cells in the difference must be mines
+                if (diffMines == diffCells.size() && diffMines > 0) {
+                    int mineCell = *diffCells.begin();
+                    qDebug() << "Found mine through subset constraint at"
+                             << mineCell % m_width << "," << mineCell / m_width;
+                    return mineCell;
+                }
+
+                // If all cells in the difference must be safe
+                if (diffMines == 0 && !diffCells.isEmpty()) {
+                    int safeCell = *diffCells.begin();
+                    qDebug() << "Found safe cell through subset constraint at"
+                             << safeCell % m_width << "," << safeCell / m_width;
+                    return safeCell;
+                }
+            }
         }
     }
 
-    // Find cells that satisfy the most constraints
+    // Look for "most constrained" cells
+    QMap<int, int> cellConstraintCount;
+    for (const Constraint &c : constraints) {
+        for (int cell : c.unknowns) {
+            cellConstraintCount[cell]++;
+        }
+    }
+
+    // Find the cell involved in the most constraints
+    int mostConstrainedCell = -1;
     int maxConstraints = 0;
-    QVector<int> bestCells;
-
-    for (auto it = satisfiesConstraints.begin(); it != satisfiesConstraints.end(); ++it) {
-        int constraintCount = it.value().size();
-        if (constraintCount > maxConstraints) {
-            maxConstraints = constraintCount;
-            bestCells.clear();
-            bestCells.append(it.key());
-        } else if (constraintCount == maxConstraints) {
-            bestCells.append(it.key());
+    for (auto it = cellConstraintCount.begin(); it != cellConstraintCount.end(); ++it) {
+        if (it.value() > maxConstraints) {
+            mostConstrainedCell = it.key();
+            maxConstraints = it.value();
         }
     }
 
-    if (maxConstraints >= 2 && !bestCells.isEmpty()) {
-        for (int cell : bestCells) {
-            bool uniqueSolution = true;
-            bool isSafe = false;
-            bool firstConstraint = true;
-
-            for (int constraintIdx : satisfiesConstraints[cell]) {
-                const CellConstraint &constraint = constraints[constraintIdx];
-
-                if (constraint.cellsNeeded == constraint.unknowns.size()) {
-                    if (firstConstraint) {
-                        isSafe = constraint.isSafety;
-                        firstConstraint = false;
-                    } else if (constraint.isSafety != isSafe) {
-                        uniqueSolution = false;
-                        break;
-                    }
-                }
-            }
-
-            if (uniqueSolution) {
-                qDebug() << "Found cell at" << cell % m_width << "," << cell / m_width
-                         << "that uniquely satisfies" << maxConstraints << "constraints";
-                return cell;
-            }
-        }
+    // If we found a highly constrained cell, try it as a hint
+    if (mostConstrainedCell != -1 && maxConstraints >= 3) {
+        qDebug() << "Suggesting highly constrained cell at"
+                 << mostConstrainedCell % m_width << "," << mostConstrainedCell / m_width
+                 << "involved in" << maxConstraints << "constraints";
+        return mostConstrainedCell;
     }
 
-    bool changed = true;
-    while (changed) {
-        changed = false;
-
-        for (const MineSolverInfo &info : m_information) {
-            int knownMines = 0;
-            QSet<int> unknownSpaces;
-
-            for (int space : info.spaces) {
-                if (m_solvedSpaces.contains(space)) {
-                    if (m_solvedSpaces[space])
-                        knownMines++;
-                } else {
-                    unknownSpaces.insert(space);
-                }
-            }
-
-            if (info.count - knownMines == unknownSpaces.size()) {
-                for (int space : unknownSpaces) {
-                    if (!m_solvedSpaces.contains(space) && !flagged.contains(space)) {
-                        qDebug() << "\nFound definite mine at" << space % m_width << ","
-                                 << space / m_width
-                                 << "\nReason: Space connects to a number requiring exactly"
-                                 << unknownSpaces.size() << "more mines among"
-                                 << unknownSpaces.size() << "unknown spaces";
-                        return space;
-                    }
-                }
-            }
-
-            if (info.count == knownMines) {
-                for (int space : unknownSpaces) {
-                    if (!m_solvedSpaces.contains(space)) {
-                        m_solvedSpaces[space] = false;
-                        qDebug() << "Marked" << space % m_width << "," << space / m_width
-                                 << "as safe - number has all required mines flagged";
-                        changed = true;
-                    }
-                }
-            }
-        }
+    // If all else fails, just return the first frontier cell
+    if (!frontier.isEmpty()) {
+        int randomCell = frontier.first();
+        qDebug() << "No definite solution found, suggesting frontier cell at"
+                 << randomCell % m_width << "," << randomCell / m_width;
+        return randomCell;
     }
 
-    qDebug() << "\nLooking for forced mine patterns:";
-    for (int pos : revealed) {
-        if (m_numbers[pos] <= 0)
-            continue;
-
-        QSet<int> neighbors = getNeighbors(pos);
-        int flagCount = 0;
-        QSet<int> unknowns;
-
-        for (int neighbor : neighbors) {
-            if (flagged.contains(neighbor)) {
-                flagCount++;
-            } else if (!revealed.contains(neighbor)) {
-                unknowns.insert(neighbor);
-            }
-        }
-
-        int minesNeeded = m_numbers[pos] - flagCount;
-
-        if (minesNeeded == 1 && unknowns.size() == 1) {
-            int forcedMine = *unknowns.begin();
-            int mineRow = forcedMine / m_width;
-            int mineCol = forcedMine % m_width;
-            qDebug() << "Found forced mine at" << mineCol << "," << mineRow;
-
-            QSet<int> mineNeighbors = getNeighbors(forcedMine);
-            for (int adjPos : mineNeighbors) {
-                if (!revealed.contains(adjPos) || m_numbers[adjPos] <= 0)
-                    continue;
-
-                QSet<int> adjNeighbors = getNeighbors(adjPos);
-                int adjFlagCount = 0;
-                QSet<int> adjUnknowns;
-
-                for (int neighbor : adjNeighbors) {
-                    if (flagged.contains(neighbor)) {
-                        adjFlagCount++;
-                    } else if (!revealed.contains(neighbor)) {
-                        adjUnknowns.insert(neighbor);
-                    }
-                }
-
-                int adjMinesNeeded = m_numbers[adjPos] - adjFlagCount;
-
-                if (adjMinesNeeded == 1) {
-                    adjUnknowns.remove(forcedMine);
-                    if (!adjUnknowns.isEmpty()) {
-                        int safeCell = *adjUnknowns.begin();
-                        int safeRow = safeCell / m_width;
-                        int safeCol = safeCell % m_width;
-                        qDebug() << "Found safe cell at" << safeCol << "," << safeRow
-                                 << "\nBecause adjacent cell had a forced mine and needs exactly "
-                                    "one more mine";
-                        return safeCell;
-                    }
-                }
-            }
-        }
-    }
-
-    for (int pos : revealed) {
-        if (m_numbers[pos] <= 0)
-            continue;
-
-        int row = pos / m_width;
-        int col = pos % m_width;
-
-        if (m_numbers[pos] == 2) {
-            if (col > 0 && col < m_width - 1) {
-                int left = pos - 1;
-                int right = pos + 1;
-                if (revealed.contains(left) && revealed.contains(right) && m_numbers[left] == 1
-                    && m_numbers[right] == 1) {
-                    for (int offset : {-m_width, m_width}) {
-                        int checkPos = pos + offset;
-                        if (checkPos >= 0 && checkPos < m_width * m_height
-                            && !revealed.contains(checkPos) && !flagged.contains(checkPos)) {
-                            return checkPos;
-                        }
-                    }
-                }
-            }
-
-            if (row > 0 && row < m_height - 1) {
-                int up = pos - m_width;
-                int down = pos + m_width;
-                if (revealed.contains(up) && revealed.contains(down) && m_numbers[up] == 1
-                    && m_numbers[down] == 1) {
-                    for (int offset : {-1, 1}) {
-                        int checkPos = pos + offset;
-                        if ((checkPos / m_width) == row && !revealed.contains(checkPos)
-                            && !flagged.contains(checkPos)) {
-                            return checkPos;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (m_numbers[pos] == 1 && row < m_height - 1 && col < m_width - 1) {
-            int right = pos + 1;
-            int down = pos + m_width;
-            int diagonal = pos + m_width + 1;
-
-            if (revealed.contains(right) && revealed.contains(down) && revealed.contains(diagonal)
-                && m_numbers[right] == 1 && m_numbers[down] == 1 && m_numbers[diagonal] == 1) {
-                for (int offset : {-m_width - 1, -m_width + 1, m_width - 1, m_width + 1}) {
-                    int checkPos = pos + offset;
-                    if (checkPos >= 0 && checkPos < m_width * m_height
-                        && abs((checkPos % m_width) - col) == 1 && !revealed.contains(checkPos)
-                        && !flagged.contains(checkPos)) {
-                        return checkPos;
-                    }
-                }
-            }
-        }
-    }
-
-    for (auto it = m_solvedSpaces.begin(); it != m_solvedSpaces.end(); ++it) {
-        if (!it.value() && !revealed.contains(it.key()) && !flagged.contains(it.key())) {
-            qDebug() << "\nFalling back to previously marked safe cell at" << it.key() % m_width
-                     << "," << it.key() / m_width;
-            return it.key();
-        }
-    }
-
-    qDebug() << "No hint found!";
     return -1;
 }
 

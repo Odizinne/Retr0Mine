@@ -95,9 +95,16 @@ private:
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
-
-    // Helper method to update progress and emit signals via queued connection
     void updateProgress(int attempt, int totalAttempts, int minesPlaced);
+
+    struct Constraint {
+        int cell;              // The boundary cell
+        int minesRequired;     // Number of mines required around this cell
+        QSet<int> unknowns;    // Unknown cells around this cell
+    };
+
+    int solveFrontierCSP(const QVector<Constraint> &constraints, const QList<int> &frontier);
+    int solveWithConstraintIntersection(const QVector<Constraint> &constraints, const QList<int> &frontier);
 };
 
 struct GameLogicForeign
