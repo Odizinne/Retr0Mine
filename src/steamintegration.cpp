@@ -779,22 +779,38 @@ void SteamIntegration::processNetworkMessages()
     }
 }
 
-bool SteamIntegration::sendGameAction(const QString& actionType, int cellIndex)
+bool SteamIntegration::sendGameAction(const QString& actionType, const QVariant& parameter)
 {
     if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid()) {
         qDebug() << "SteamIntegration: Cannot send game action - not initialized, not in game, or no connected player";
         return false;
     }
 
-    // Format: A|actionType|cellIndex
+    // Format depends on parameter type
     QByteArray data;
-    data.append('A');
-    data.append(actionType.toUtf8());
-    data.append('|');
-    data.append(QByteArray::number(cellIndex));
+    data.append('A'); // Action header
 
-    qDebug() << "SteamIntegration: Sending game action:" << actionType
-             << "for cell:" << cellIndex << "to:" << m_connectedPlayerId.ConvertToUint64();
+    if (parameter.type() == QVariant::String) {
+        // Handle string parameters (like chat messages)
+        // Format: A|actionType|stringData
+        QString stringParameter = parameter.toString();
+        data.append(actionType.toUtf8());
+        data.append('|');
+        data.append(stringParameter.toUtf8());
+
+        qDebug() << "SteamIntegration: Sending string action:" << actionType
+                 << "with text:" << stringParameter << "to:" << m_connectedPlayerId.ConvertToUint64();
+    } else {
+        // Original behavior for number parameters
+        // Format: A|actionType|cellIndex
+        int cellIndex = parameter.toInt();
+        data.append(actionType.toUtf8());
+        data.append('|');
+        data.append(QByteArray::number(cellIndex));
+
+        qDebug() << "SteamIntegration: Sending game action:" << actionType
+                 << "for cell:" << cellIndex << "to:" << m_connectedPlayerId.ConvertToUint64();
+    }
 
     return SteamNetworking()->SendP2PPacket(
         m_connectedPlayerId,
@@ -833,22 +849,29 @@ bool SteamIntegration::sendGameState(const QVariantMap& gameState)
 
 void SteamIntegration::handleGameAction(const QByteArray& data)
 {
-    // Parse action: actionType|cellIndex
-    QList<QByteArray> parts = data.split('|');
-    if (parts.size() != 2) {
+    // Parse action data
+    int separatorPos = data.indexOf('|');
+    if (separatorPos == -1) {
         qDebug() << "SteamIntegration: Invalid game action format";
         return;
     }
 
-    QString actionType = QString::fromUtf8(parts[0]);
-    bool ok;
-    int cellIndex = parts[1].toInt(&ok);
+    QString actionType = QString::fromUtf8(data.left(separatorPos));
+    QByteArray parameterData = data.mid(separatorPos + 1);
 
-    if (ok) {
+    // Try to convert to integer first
+    bool isInt = false;
+    int cellIndex = parameterData.toInt(&isInt);
+
+    if (isInt) {
+        // Handle numeric parameter
         qDebug() << "SteamIntegration: Received game action:" << actionType << "for cell:" << cellIndex;
         emit gameActionReceived(actionType, cellIndex);
     } else {
-        qDebug() << "SteamIntegration: Invalid cell index in game action";
+        // Handle string parameter (for chat messages)
+        QString stringParam = QString::fromUtf8(parameterData);
+        qDebug() << "SteamIntegration: Received string action:" << actionType << "with text:" << stringParam;
+        emit gameActionReceived(actionType, stringParam);
     }
 }
 

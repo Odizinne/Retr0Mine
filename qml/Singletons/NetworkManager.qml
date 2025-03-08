@@ -783,14 +783,21 @@ QtObject {
         SteamIntegration.sendGameAction("requestSync", 0);
     }
 
-    // Handling network actions
-    function handleNetworkAction(actionType, cellIndex) {
-        console.log("Received action:", actionType, "for cell:", cellIndex);
+    function handleNetworkAction(actionType, parameter) {
+        console.log("Received action:", actionType, "parameter:", parameter);
 
+        // Special handling for chat messages
+        if (actionType === "chat") {
+            // Don't pass chat messages through the standard processing
+            // They are handled directly in MultiplayerChat.qml via connections
+            return;
+        }
+
+        // Continue with existing code for game actions
         if (SteamIntegration.isHost) {
-            handleHostAction(actionType, cellIndex);
+            handleHostAction(actionType, parameter);
         } else {
-            handleClientAction(actionType, cellIndex);
+            handleClientAction(actionType, parameter);
         }
     }
 
