@@ -26,18 +26,53 @@ Item {
         }
     }
 
-    Button {
-        id: menuButton
+    Item {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        height: 35
-        text: "Menu"
-        onClicked: {
-            mainMenu.visible = !mainMenu.visible
-        }
-        MainMenu {
-            id: mainMenu
+        width: leftLayout.implicitWidth
+
+        RowLayout {
+            id: leftLayout
+            Button {
+                id: menuButton
+
+                Layout.preferredHeight: 35
+                text: "Menu"
+                onClicked: {
+                    mainMenu.visible = !mainMenu.visible
+                }
+                MainMenu {
+                    id: mainMenu
+                }
+            }
+
+            Button {
+                id: signalButton
+                visible: SteamIntegration.isP2PConnected
+                Layout.preferredHeight: 35
+                Layout.preferredWidth: 35
+                onClicked: GameState.nextClickIsSignal = !GameState.nextClickIsSignal
+
+                IconImage {
+                    anchors.fill: parent
+                    source: "qrc:/icons/signal.png"
+                    color: GameState.nextClickIsSignal ? GameConstants.accentColor : GameConstants.foregroundColor
+                    sourceSize.height: 16
+                    sourceSize.width: 16
+                }
+
+                ToolTip {
+                    visible: mouseArea.containsMouse
+                    text: qsTr("Next click will signal the cell")
+                    delay: 1000
+                }
+                MouseArea {
+                    id: mouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
+            }
         }
     }
 
@@ -115,10 +150,9 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        width: leftLyt.implicitWidth
+        width: rightLayout.implicitWidth
         RowLayout {
-            id: leftLyt
-
+            id: rightLayout
 
             Button {
                 Layout.preferredHeight: 35

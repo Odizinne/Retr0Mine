@@ -318,6 +318,13 @@ Item {
 
             function handleCellClick(mouse) {
                 // Return early if cell is in cooldown but ONLY if a flag action was attempted
+                if (GameState.nextClickIsSignal) {
+                    GameState.nextClickIsSignal = false
+                    NetworkManager.sendPing(cellItem.index)
+                    pingCooldown.start()
+                    return;
+                }
+
                 const isRevealClick = GameSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
                 const isFlagClick = !isRevealClick;
 
