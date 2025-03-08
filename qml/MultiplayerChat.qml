@@ -20,6 +20,7 @@ Frame {
                 // Force list update
                 chatListView.model = null
                 chatListView.model = chatPanel.chatMessages
+                ComponentsContext.multiplayerChatVisible = false
             }
         }
 
