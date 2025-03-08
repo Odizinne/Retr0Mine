@@ -112,6 +112,36 @@ Pane {
                 text: qsTr("Mines:")
                 Layout.fillWidth: true
             }
+
+            Label {
+                id: densityLabel
+                font.bold: true
+                text: {
+                    const density = (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1);
+                    return density + "%";
+                }
+                color: {
+                    const density = minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100;
+                    if (density <= 15) return "green";
+                    else if (density <= 18) return "yellow";
+                    else if (density <= 22) return "orange";
+                    else return "red";
+                }
+
+                Connections {
+                    target: minesSpinBox
+                    function onValueChanged() { densityLabel.text = Qt.binding(function() { return (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1) + "%"; }); }
+                }
+                Connections {
+                    target: widthSpinBox
+                    function onValueChanged() { densityLabel.text = Qt.binding(function() { return (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1) + "%"; }); }
+                }
+                Connections {
+                    target: heightSpinBox
+                    function onValueChanged() { densityLabel.text = Qt.binding(function() { return (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1) + "%"; }); }
+                }
+            }
+
             SpinBox {
                 id: minesSpinBox
                 Layout.rightMargin: 5
