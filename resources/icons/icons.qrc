@@ -26,5 +26,7 @@
         <file>multiplayer.png</file>
         <file>accept.png</file>
         <file>deny.png</file>
+        <file>chat.png</file>
+        <file>send.png</file>
     </qresource>
 </RCC>

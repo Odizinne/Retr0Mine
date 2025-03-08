@@ -1,22 +1,20 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Controls.impl
 import net.odizinne.retr0mine 1.0
 
-Item {
+Frame {
     id: chatPanel
-
-    // Chat model to store messages
     property var chatMessages: []
 
-    Rectangle {
-        anchors.fill: parent
-        color: Qt.rgba(0, 0, 0, 0.05)
-        border.color: Qt.rgba(0, 0, 0, 0.1)
-        border.width: 1
-        radius: GameSettings.themeIndex === 0 ? 5 : 0
+    Connections {
+        target: SteamIntegration
+        function onP2pInitialized() {
+            // erase message history (not working yet)
+            chatPanel.chatMessages = []
+        }
     }
-
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 8
@@ -32,8 +30,8 @@ Item {
 
             ListView {
                 id: chatListView
-                model: chatMessages
-                spacing: 8
+                model: chatPanel.chatMessages
+                spacing: 12
                 width: parent.width
 
                 // Auto-scroll to bottom when new messages arrive
@@ -49,6 +47,9 @@ Item {
 
                     // Avatar image
                     Image {
+                        Layout.alignment: Qt.AlignTop
+                        Layout.leftMargin: 2
+                        Layout.topMargin: 2
                         Layout.preferredWidth: 24
                         Layout.preferredHeight: 24
                         source: {
@@ -72,32 +73,29 @@ Item {
                     }
 
                     // Message bubble
-                    Rectangle {
+                    Item {
                         Layout.fillWidth: true
                         Layout.preferredHeight: messageText.height + 12
-                        color: modelData.isLocalPlayer ? Qt.rgba(0.9, 0.9, 0.95, 0.8) : Qt.rgba(0.85, 0.85, 0.9, 0.8)
-                        radius: GameSettings.themeIndex === 0 ? 8 : 0
-
                         ColumnLayout {
                             anchors.fill: parent
-                            anchors.margins: 6
+                            anchors.margins: 1
                             spacing: 2
 
                             Label {
                                 text: modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName
-                                font.pixelSize: 11
+                                font.pixelSize: 13
                                 font.bold: true
                                 color: GameConstants.foregroundColor
-                                opacity: 0.7
+                                //opacity: modelData.isLocalPlayer ? 0.7 : 1
                             }
 
                             Label {
                                 id: messageText
                                 text: modelData.message
-                                font.pixelSize: 13
                                 wrapMode: Text.WordWrap
                                 Layout.fillWidth: true
                                 color: GameConstants.foregroundColor
+                                opacity: modelData.isLocalPlayer ? 0.5 : 0.8
                             }
                         }
                     }
@@ -122,13 +120,22 @@ Item {
             }
 
             Button {
+                Layout.preferredHeight: 30
+                Layout.preferredWidth: 30
                 id: sendButton
-                text: "Send"
+                IconImage {
+                    anchors.fill: parent
+                    source: "qrc:/icons/send.png"
+                    color: GameConstants.foregroundColor
+                    sourceSize.height: 15
+                    sourceSize.width: 15
+                }
+
                 enabled: messageInput.text.trim() !== ""
 
                 onClicked: {
                     if (messageInput.text.trim() !== "") {
-                        sendChatMessage(messageInput.text);
+                        chatPanel.sendChatMessage(messageInput.text);
                         messageInput.text = "";
                     }
                 }
@@ -163,7 +170,7 @@ Item {
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string") {
                 // Process incoming chat message
-                addMessage(parameter, false);
+                chatPanel.addMessage(parameter, false);
             }
         }
     }

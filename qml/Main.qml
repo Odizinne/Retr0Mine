@@ -386,7 +386,7 @@ ApplicationWindow {
                 rightMargin: 12
                 bottomMargin: 12
             }
-            width: 200  // Adjust width as needed
+            width: 300  // Adjust width as needed
               // For visualization
             visible: ComponentsContext.multiplayerChatVisible
             // Your right panel content here
