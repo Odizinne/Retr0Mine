@@ -799,6 +799,11 @@ QtObject {
     }
 
     function handleHostAction(actionType, cellIndex) {
+        // For actions initiated by the client, set the isRemoteAction flag
+        if (actionType === "reveal" || actionType === "flag" || actionType === "revealConnected") {
+            GridBridge.isRemoteAction = true;
+        }
+
         switch(actionType) {
         case "gridReady":
             console.log("Host received grid ready notification from client");
@@ -902,6 +907,11 @@ QtObject {
         default:
             console.log("Host received unknown action type:", actionType);
         }
+
+        // Reset the remote action flag
+        if (actionType === "reveal" || actionType === "flag" || actionType === "revealConnected") {
+            GridBridge.isRemoteAction = false;
+        }
     }
 
     function handleClientAction(actionType, cellIndex) {
@@ -925,6 +935,9 @@ QtObject {
             isProcessingNetworkAction = false;
             return;
         }
+
+        // Set flag to indicate this is a remote action
+        GridBridge.isRemoteAction = true;
 
         switch(actionType) {
         case "finalReveal":
@@ -1101,11 +1114,12 @@ QtObject {
             console.log("Client received unknown action type:", actionType);
         }
 
+        // Reset remote action flag
+        GridBridge.isRemoteAction = false;
+
         // Action finished processing
         isProcessingNetworkAction = false;
     }
-
-    // Functions for coordinating multiplayer game actions
 
     function handleMultiplayerReveal(index) {
         if (!SteamIntegration.isInMultiplayerGame) {
@@ -1113,6 +1127,7 @@ QtObject {
         }
 
         // Both host and client process the reveal locally first
+        GridBridge.isRemoteAction = false; // This is our own reveal
         const result = GridBridge.performReveal(index);
 
         if (SteamIntegration.isHost) {
@@ -1134,6 +1149,8 @@ QtObject {
             return false; // Not a multiplayer game
         }
 
+        GridBridge.isRemoteAction = false; // This is our own reveal
+
         if (SteamIntegration.isHost) {
             // Host: process locally and send to client
             GridBridge.performRevealConnectedCells(index);
@@ -1143,7 +1160,7 @@ QtObject {
             isProcessingNetworkAction = true;
             SteamIntegration.sendGameAction("revealConnected", index);
         }
-        
+
         return true; // Action handled by multiplayer
     }
 

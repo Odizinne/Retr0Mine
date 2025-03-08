@@ -10,6 +10,7 @@ QtObject {
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
     property bool generationCancelled: false
+    property bool isRemoteAction: false
 
     // Helper function to safely get a cell
     function getCell(index) {
@@ -128,6 +129,7 @@ QtObject {
         let flaggedCount = 0;
         let adjacentCells = [];
         let hasQuestionMark = false;
+        let cellsRevealed = false;
 
         outerLoop: for (let r = -1; r <= 1; r++) {
             for (let c = -1; c <= 1; c++) {
@@ -158,8 +160,25 @@ QtObject {
         }
 
         if (!hasQuestionMark && flaggedCount === GameState.numbers[index] && adjacentCells.length > 0) {
+            // Since we're going to reveal cells, save the fact we're making changes
+            cellsRevealed = true;
+
+            // Make sure isRemoteAction is not set when we're performing our own action
+            let wasRemoteAction = isRemoteAction;
+            isRemoteAction = false;
+
             for (let adjacentPos of adjacentCells) {
                 reveal(adjacentPos);
+            }
+
+            // Restore the previous remote action state
+            isRemoteAction = wasRemoteAction;
+
+            // If we actually revealed cells and it's our own action, play the click sound
+            if (cellsRevealed && audioEngine && (!SteamIntegration.isInMultiplayerGame ||
+                                  !isRemoteAction ||
+                                  !GameSettings.mpDisableOtherPlayerSound)) {
+                audioEngine.playClick();
             }
         }
     }
@@ -337,7 +356,14 @@ QtObject {
                 GameState.gameWon = false;
                 GameTimer.stop();
                 revealAllMines();
-                if (audioEngine) audioEngine.playLoose();
+
+                // Only play sound if it's our action or sounds aren't disabled
+                if (audioEngine && (!SteamIntegration.isInMultiplayerGame ||
+                                   !isRemoteAction ||
+                                   !GameSettings.mpDisableOtherPlayerSound)) {
+                    audioEngine.playLoose();
+                }
+
                 GameState.displayPostGame = true;
 
                 // In multiplayer, if we're the host, send game over notification to client
@@ -560,7 +586,12 @@ QtObject {
             GameState.displayPostGame = true;
             if (audioEngine) audioEngine.playWin();
         } else {
-            if (audioEngine) audioEngine.playClick();
+            // Only play click sound if it's our own action or sounds aren't disabled
+            if (audioEngine && (!SteamIntegration.isInMultiplayerGame ||
+                               !isRemoteAction ||
+                               !GameSettings.mpDisableOtherPlayerSound)) {
+                audioEngine.playClick();
+            }
         }
     }
 
