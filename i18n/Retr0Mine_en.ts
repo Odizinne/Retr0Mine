@@ -413,7 +413,7 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="50"/>
-        <source>Coop (beta)</source>
+        <source>Coop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

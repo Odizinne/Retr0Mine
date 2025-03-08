@@ -414,8 +414,8 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="50"/>
-        <source>Coop (beta)</source>
-        <translation>Coop (beta)</translation>
+        <source>Coop</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="55"/>

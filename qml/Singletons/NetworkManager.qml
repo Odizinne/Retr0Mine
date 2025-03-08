@@ -3,7 +3,6 @@ import QtQuick
 import net.odizinne.retr0mine 1.0
 
 QtObject {
-    // Multiplayer properties
     property bool isProcessingNetworkAction: false
     property var pendingActions: []
     property bool minesInitialized: false
@@ -18,15 +17,12 @@ QtObject {
     property int receivedChunks: 0
     property int expectedTotalChunks: 0
     property var flagCooldowns: ({})
-    property int flagCooldownDuration: 1000 // 1 second cooldown
+    property int flagCooldownDuration: 1000
     property var flagOwners: ({})
 
     Component.onCompleted: {
-        // Connect to SteamIntegration signals for multiplayer
         SteamIntegration.gameActionReceived.connect(handleNetworkAction);
         SteamIntegration.gameStateReceived.connect(applyGameState);
-
-        // Reset clientGridReady when player leaves multiplayer
         SteamIntegration.multiplayerStatusChanged.connect(function() {
             if (!SteamIntegration.isInMultiplayerGame) {
                 clientGridReady = false;
