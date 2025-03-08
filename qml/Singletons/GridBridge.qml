@@ -335,6 +335,7 @@ QtObject {
                 cell.isBombClicked = true;
                 GameState.gameOver = true;
                 GameState.gameWon = false;
+                GameState.localPlayerTriggeredMine = true; // Add this line
                 GameTimer.stop();
                 revealAllMines();
                 if (audioEngine) audioEngine.playLoose();

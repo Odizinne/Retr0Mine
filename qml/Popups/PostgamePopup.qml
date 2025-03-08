@@ -11,6 +11,23 @@ Popup {
     closePolicy: Popup.NoAutoClose
     width: 300
     property int buttonWidth: Math.max(retryButton.implicitWidth, closeButton.implicitWidth)
+    property string lostPlayerName: {
+        if (GameState.gameWon) return "";  // No player to blame for a win
+
+        if (SteamIntegration.isInMultiplayerGame) {
+            // In multiplayer mode
+            if (SteamIntegration.isHost) {
+                // If host
+                return GameState.localPlayerTriggeredMine ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName;
+            } else {
+                // If client
+                return GameState.localPlayerTriggeredMine ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName;
+            }
+        } else {
+            // In singleplayer mode
+            return "";
+        }
+    }
 
     Shortcut {
         sequence: "Return"
@@ -36,6 +53,17 @@ Popup {
             Layout.columnSpan: 2
             font.family: GameConstants.numberFont.name
             font.pixelSize: 16
+        }
+
+        Label {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            text: !GameState.gameWon && SteamIntegration.isInMultiplayerGame
+                  ? qsTr("%1 triggered a mine").arg(control.lostPlayerName)
+                  : ""
+            visible: SteamIntegration.isInMultiplayerGame && !GameState.gameWon
+            font.pixelSize: 13
+            font.italic: true
+            Layout.columnSpan: 2
         }
 
         Label {

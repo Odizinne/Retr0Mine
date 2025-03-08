@@ -765,6 +765,14 @@ QtObject {
             }
         }
 
+        // Check if we have information about who triggered the mine
+        if (gameState.lostByHost !== undefined) {
+            // If lostByHost is true, the host triggered the mine
+            // If lostByHost is false, the client triggered the mine
+            // Since we're the client, our localPlayerTriggeredMine should be !lostByHost
+            GameState.localPlayerTriggeredMine = !gameState.lostByHost;
+        }
+
         // Finish processing
         isProcessingNetworkAction = false;
 
@@ -972,6 +980,8 @@ QtObject {
             // Handle game over state
             GameState.gameOver = true;
             GameState.gameWon = cellIndex === 1; // 1 for win, 0 for loss
+            // Set localPlayerTriggeredMine to false since we're receiving this from the host
+            GameState.localPlayerTriggeredMine = false;
             GameTimer.stop();
 
             if (GameState.gameWon) {
@@ -1278,16 +1288,20 @@ QtObject {
         if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
             return false;
         }
-        
+
         // Make sure we send the final cell state before game over
         sendCellUpdateToClient(lastClickedIndex, "finalReveal");
 
         // Wait a moment to ensure cell updates are processed before game over
         Qt.callLater(function() {
-            // Send game over message with loss status (0 = loss)
+            // Send game over message with loss status (0 = loss) and who triggered it
             SteamIntegration.sendGameAction("gameOver", 0);
+            // Send additional info about who triggered the mine
+            SteamIntegration.sendGameState({
+                lostByHost: GameState.localPlayerTriggeredMine
+            });
         });
-        
+
         return true;
     }
 
