@@ -122,7 +122,6 @@ Frame {
             }
         }
 
-        // Message input area
         RowLayout {
             Layout.fillWidth: true
             spacing: 6

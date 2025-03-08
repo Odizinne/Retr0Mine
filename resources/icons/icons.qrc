@@ -28,5 +28,6 @@
         <file>deny.png</file>
         <file>chat.png</file>
         <file>send.png</file>
+        <file>signal.png</file>
     </qresource>
 </RCC>

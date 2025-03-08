@@ -74,6 +74,7 @@ QtObject {
     property bool displayPostGame: false
     property bool difficultyChanged: false
     property bool paused: false
+    property bool nextClickIsSignal: false
 
     onPausedChanged: {
         if (paused) GameTimer.pause()
