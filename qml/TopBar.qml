@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import net.odizinne.retr0mine 1.0
+import QtQuick.Layouts
 
 Item {
     id: control
@@ -99,11 +100,17 @@ Item {
         }
     }
 
-    Button {
+    Item {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        height: 35
+        width: leftLyt.implicitWidth
+        RowLayout {
+            id: leftLyt
+
+
+    Button {
+        Layout.preferredHeight: 35
         icon.source: "qrc:/icons/bomb.png"
         icon.color: GameConstants.foregroundColor
         text: ": " + (GameState.mineCount - GameState.flaggedCount)
@@ -112,5 +119,14 @@ Item {
         highlighted: GameState.flaggedCount === GameState.mineCount
         onClicked: GridBridge.requestHint()
     }
+
+    Button {
+        Layout.preferredHeight: 35
+        text: "chat"
+        onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
+
+    }
+    }
 }
 
+}

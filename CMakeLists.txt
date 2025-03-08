@@ -45,6 +45,8 @@ set(QML_FILES
     qml/MainMenu.qml
     qml/GridLoadingIndicator.qml
     qml/SignalIndicator.qml
+    qml/MultiplayerChat.qml
+    qml/Debug/DebugFrame.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml
     qml/SettingsPanes/DifficultyPane.qml
