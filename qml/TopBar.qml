@@ -7,14 +7,6 @@ import net.odizinne.retr0mine 1.0
 Item {
     id: control
     height: 35
-    anchors {
-        left: parent.left
-        right: parent.right
-        top: parent.top
-        topMargin: 12
-        leftMargin: 13
-        rightMargin: 15
-    }
 
     Connections {
         target: SteamIntegration
@@ -63,14 +55,9 @@ Item {
                 }
 
                 ToolTip {
-                    visible: mouseArea.containsMouse
+                    visible: signalButton.hovered
                     text: qsTr("Next click will signal the cell")
                     delay: 1000
-                }
-                MouseArea {
-                    id: mouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
                 }
             }
         }

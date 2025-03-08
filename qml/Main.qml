@@ -372,6 +372,9 @@ ApplicationWindow {
                 left: parent.left
                 right: rightPanel.visible ? rightPanel.left : parent.right
                 top: parent.top
+                topMargin: 12
+                leftMargin: 13
+                rightMargin: 15
             }
         }
 
