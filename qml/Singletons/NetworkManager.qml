@@ -527,89 +527,89 @@ QtObject {
     function applyGameState(gameState) {
         console.log("Applying received game state");
 
-        // First check if we received valid data
+        // Validate received data
         if (!gameState) {
             console.error("Received invalid game state");
             isProcessingNetworkAction = false;
             return;
         }
 
+        // Check if this is a grid sync packet
+        if (gameState.gridSync) {
+            handleMultiplayerGridSync(gameState);
+            return;
+        }
+
         // Check if this is a chunked mines data packet
         if (gameState.isChunked) {
-            console.log("Received chunked mines data - chunk " + (gameState.chunkIndex + 1) + " of " + gameState.totalChunks);
-
-            // If this is the first chunk, reset our arrays and counters
-            if (gameState.chunkIndex === 0) {
-                chunkedMines = [];
-                receivedChunks = 0;
-                expectedTotalChunks = gameState.totalChunks;
-            }
-
-            // Add this chunk's mines to our array
-            if (Array.isArray(gameState.mines)) {
-                chunkedMines = chunkedMines.concat(gameState.mines.map(Number));
-            } else if (typeof gameState.mines === 'object' && gameState.mines !== null) {
-                // Handle object-style array if needed
-                for (let prop in gameState.mines) {
-                    if (!isNaN(parseInt(prop))) {
-                        chunkedMines.push(Number(gameState.mines[prop]));
-                    }
-                }
-            }
-
-            receivedChunks++;
-            console.log("Chunk received, now have " + receivedChunks + " of " + expectedTotalChunks + " chunks");
-
-            // If we've received all expected chunks, process the complete mines data
-            if (receivedChunks === expectedTotalChunks) {
-                console.log("All chunks received, processing " + chunkedMines.length + " mines");
-
-                // Create a complete mines data object
-                const completeData = {
-                    gridSizeX: Number(gameState.gridSizeX),
-                    gridSizeY: Number(gameState.gridSizeY),
-                    mineCount: Number(gameState.mineCount),
-                    mines: chunkedMines
-                };
-
-                // Process the complete mines data
-                const success = applyMinesAndCalculateNumbers(completeData);
-
-                if (success) {
-                    // Mark that we have initialized mines
-                    minesInitialized = true;
-
-                    // Send acknowledgment to host that we're ready for actions
-                    console.log("Client sending readyForActions acknowledgment to host");
-                    SteamIntegration.sendGameAction("readyForActions", 0);
-
-                    // Process any pending actions
-                    if (pendingActions.length > 0) {
-                        console.log("Processing", pendingActions.length, "buffered actions");
-                        Qt.callLater(function() {
-                            pendingActions.forEach(function(action) {
-                                console.log("Processing buffered action:", action.type, action.index);
-                                handleNetworkAction(action.type, action.index);
-                            });
-                            pendingActions = [];
-                        });
-                    }
-                }
-            }
+            handleChunkedMinesData(gameState);
             return;
         }
 
         // Check if this is a mines-only packet (initial board setup)
         if (gameState.mines && !gameState.revealedCells && !gameState.numbers) {
             console.log("Received mines-only data - initializing board");
+            processMinesData(gameState);
+            return;
+        }
 
-            // Process mines and calculate numbers locally
-            const success = applyMinesAndCalculateNumbers(gameState);
+        console.log("Received unexpected game state format");
+        isProcessingNetworkAction = false;
+    }
 
-            if (success) {
-                // Mark that we have initialized mines
-                minesInitialized = true;
+    // Helper function to handle chunked mines data
+    function handleChunkedMinesData(gameState) {
+        console.log("Received chunked mines data - chunk " + (gameState.chunkIndex + 1) + " of " + gameState.totalChunks);
 
+        // If this is the first chunk, reset our arrays and counters
+        if (gameState.chunkIndex === 0) {
+            chunkedMines = [];
+            receivedChunks = 0;
+            expectedTotalChunks = gameState.totalChunks;
+        }
+
+        // Add this chunk's mines to our array
+        if (Array.isArray(gameState.mines)) {
+            chunkedMines = chunkedMines.concat(gameState.mines.map(Number));
+        } else if (typeof gameState.mines === 'object' && gameState.mines !== null) {
+            // Handle object-style array if needed
+            for (let prop in gameState.mines) {
+                if (!isNaN(parseInt(prop))) {
+                    chunkedMines.push(Number(gameState.mines[prop]));
+                }
+            }
+        }
+
+        receivedChunks++;
+        console.log("Chunk received, now have " + receivedChunks + " of " + expectedTotalChunks + " chunks");
+
+        // If we've received all expected chunks, process the complete mines data
+        if (receivedChunks === expectedTotalChunks) {
+            console.log("All chunks received, processing " + chunkedMines.length + " mines");
+
+            // Create a complete mines data object
+            const completeData = {
+                gridSizeX: Number(gameState.gridSizeX),
+                gridSizeY: Number(gameState.gridSizeY),
+                mineCount: Number(gameState.mineCount),
+                mines: chunkedMines
+            };
+
+            // Process the complete mines data
+            processMinesData(completeData);
+        }
+    }
+
+    // Helper function to process mines data and notify readiness
+    function processMinesData(minesData) {
+        const success = applyMinesAndCalculateNumbers(minesData);
+
+        if (success) {
+            // Mark that we have initialized mines
+            minesInitialized = true;
+
+            // Only send acknowledgment if we're a client
+            if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 // Acknowledge to host that we're ready for actions
                 console.log("Client sending readyForActions acknowledgment to host");
                 SteamIntegration.sendGameAction("readyForActions", 0);
@@ -617,7 +617,6 @@ QtObject {
                 // Process any pending actions
                 if (pendingActions.length > 0) {
                     console.log("Processing", pendingActions.length, "buffered actions");
-                    // Use setTimeout to process after current function finishes
                     Qt.callLater(function() {
                         pendingActions.forEach(function(action) {
                             console.log("Processing buffered action:", action.type, action.index);
@@ -627,153 +626,7 @@ QtObject {
                     });
                 }
             }
-            return;
         }
-
-        // If it's a full game state (for backward compatibility or initial sync)
-        if (gameState.mines && gameState.numbers) {
-            console.log("Received full game state");
-
-            // Check if grid dimensions match
-            if (GameState.gridSizeX !== gameState.gridSizeX ||
-                    GameState.gridSizeY !== gameState.gridSizeY) {
-                console.log("Grid size changed:", gameState.gridSizeX, "x", gameState.gridSizeY);
-
-                // Update grid dimensions
-                GameState.gridSizeX = gameState.gridSizeX;
-                GameState.gridSizeY = gameState.gridSizeY;
-                GameState.mineCount = gameState.mineCount || 0;
-
-                // Update difficulty setting to match the new dimensions
-                let matchedDifficulty = -1;
-
-                // Check against standard difficulty settings
-                for (let i = 0; i < 4; i++) {
-                    const diffSet = GameState.difficultySettings[i];
-                    if (diffSet.x === GameState.gridSizeX &&
-                            diffSet.y === GameState.gridSizeY &&
-                            diffSet.mines === GameState.mineCount) {
-                        matchedDifficulty = i;
-                        break;
-                    }
-                }
-
-                if (matchedDifficulty >= 0) {
-                    // Standard difficulty found
-                    console.log("Setting difficulty to match received dimensions:", matchedDifficulty);
-                    GameSettings.difficulty = matchedDifficulty;
-                } else {
-                    // No match, update custom settings
-                    console.log("Setting custom difficulty for received dimensions");
-                    GameSettings.customWidth = GameState.gridSizeX;
-                    GameSettings.customHeight = GameState.gridSizeY;
-                    GameSettings.customMines = GameState.mineCount;
-                    GameSettings.difficulty = 4; // Custom difficulty index
-                }
-
-                // We need to wait for the grid to be recreated
-                // This is handled in Main.qml via the grid size change signals
-                return;
-            }
-
-            // Process mines array
-            let minesArray = convertObjectToArray(gameState.mines, "mines");
-            GameState.mines = minesArray;
-            console.log("Mines array length:", GameState.mines.length);
-
-            // Process numbers array
-            let numbersArray = convertObjectToArray(gameState.numbers, "numbers");
-            GameState.numbers = numbersArray;
-            console.log("Numbers array length:", GameState.numbers.length);
-
-            // Update other game state
-            GameState.mineCount = gameState.mineCount || 0;
-            GameState.gameStarted = gameState.gameStarted || false;
-
-            // Reset all cells first
-            for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                GridBridge.withCell(i, function(cell) {
-                    cell.revealed = false;
-                    cell.flagged = false;
-                    cell.questioned = false;
-                    cell.safeQuestioned = false;
-                });
-            }
-
-            // Process cell states
-            let revealedCellsArray = convertObjectToArray(gameState.revealedCells, "revealedCells");
-            let flaggedCellsArray = convertObjectToArray(gameState.flaggedCells, "flaggedCells");
-            let questionedCellsArray = convertObjectToArray(gameState.questionedCells, "questionedCells");
-            let safeQuestionedCellsArray = convertObjectToArray(gameState.safeQuestionedCells, "safeQuestionedCells");
-
-            // Apply revealed cells
-            console.log("Applying", revealedCellsArray.length, "revealed cells");
-            revealedCellsArray.forEach(index => {
-                                           GridBridge.withCell(index, function(cell) {
-                                               // Skip animation for client
-                                               if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
-                                                   // For client, we need to set both the revealed flag and directly update the button
-                                                   cell.revealed = true;
-                                                   cell.shouldBeFlat = true;
-
-                                                   // Force buttons to be flat without animation
-                                                   try {
-                                                       cell.button.flat = true;
-                                                       cell.button.opacity = 1;
-                                                   } catch (e) {
-                                                       console.error("Error setting button flat:", e);
-                                                   }
-                                               } else {
-                                                   cell.revealed = true;
-                                               }
-                                           });
-                                       });
-
-            // Apply flagged cells
-            flaggedCellsArray.forEach(index => {
-                                          GridBridge.withCell(index, function(cell) {
-                                              cell.flagged = true;
-                                          });
-                                      });
-
-            // Apply questioned cells
-            questionedCellsArray.forEach(index => {
-                                             GridBridge.withCell(index, function(cell) {
-                                                 cell.questioned = true;
-                                             });
-                                         });
-
-            // Apply safe questioned cells
-            safeQuestionedCellsArray.forEach(index => {
-                                                 GridBridge.withCell(index, function(cell) {
-                                                     cell.safeQuestioned = true;
-                                                 });
-                                             });
-
-            // Update game state
-            GameState.gameOver = gameState.gameOver || false;
-            GameState.gameWon = gameState.gameWon || false;
-            GameState.revealedCount = gameState.revealedCount || 0;
-            GameState.flaggedCount = gameState.flaggedCount || 0;
-
-            // Update display for game over
-            //if (GameState.gameOver) {
-            //    GameState.displayPostGame = true;
-            //    if (GameState.gameWon) {
-            //        if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
-            //    } else {
-            //        if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
-            //    }
-            //}
-        }
-
-        // Finish processing
-        isProcessingNetworkAction = false;
-
-        //if (!SteamIntegration.isHost) {
-        //    reconcileState(gameState);
-        //}
-        console.log("Game state applied successfully");
     }
 
     function requestFullSync() {
