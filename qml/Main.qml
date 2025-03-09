@@ -356,7 +356,7 @@ ApplicationWindow {
         id: connectionLostPopup
     }
 
-    CoopModeChooser { }
+    CoopModeChooserPopup { }
 
     LeaderboardPopup {
         id: leaderboardWindow

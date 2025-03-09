@@ -46,7 +46,6 @@ set(QML_FILES
     qml/GridLoadingIndicator.qml
     qml/SignalIndicator.qml
     qml/MultiplayerChat.qml
-    qml/CoopModeChooser.qml
     qml/Debug/DebugFrame.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml
@@ -71,6 +70,7 @@ set(QML_FILES
     qml/Popups/MultiplayerErrorPopup.qml
     qml/Popups/InviteReceivedPopup.qml
     qml/Popups/ConnectionLostPopup.qml
+    qml/Popups/CoopModeChooserPopup.qml
 )
 set(QML_SINGLETONS
     qml/Singletons/GameSettings.qml

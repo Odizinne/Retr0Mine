@@ -7,7 +7,9 @@ Popup {
     anchors.centerIn: parent
     height: lyt.implicitHeight + 30
     width: lyt.implicitWidth + 30
-    visible: ComponentsContext.coopModeChooserVisible
+    modal: true
+    closePolicy: Popup.NoAutoClose
+    visible: ComponentsContext.coopModeChooserPopupVisible
     property int buttonWidth: Math.max(privButton.implicitWidth + 20, matchButton.implicitWidth + 20, closeButton.implicitWidth + 20, quitButton.implicitWidth + 20)
     ColumnLayout {
         anchors.fill: parent
@@ -36,7 +38,7 @@ Popup {
                 Layout.preferredWidth: control.buttonWidth
                 Layout.fillWidth: true
                 onClicked: {
-                    ComponentsContext.coopModeChooserVisible = false
+                    ComponentsContext.coopModeChooserPopupVisible = false
                     ComponentsContext.multiplayerPopupVisible = true
                 }
             }
@@ -48,7 +50,7 @@ Popup {
                 Layout.preferredWidth: control.buttonWidth
                 Layout.fillWidth: true
                 enabled: false
-                onClicked: ComponentsContext.coopModeChooserVisible = false
+                onClicked: ComponentsContext.coopModeChooserPopupVisible = false
             }
 
             Button {
@@ -56,7 +58,7 @@ Popup {
                 visible: SteamIntegration.isInMultiplayerGame
                 text: qsTr("Close")
                 Layout.preferredWidth: control.buttonWidth
-                onClicked: ComponentsContext.coopModeChooserVisible = false
+                onClicked: ComponentsContext.coopModeChooserPopupVisible = false
             }
 
             Button {
@@ -69,7 +71,7 @@ Popup {
                         SteamIntegration.leaveLobby()
                     }
                     NetworkManager.sessionRunning = false
-                    ComponentsContext.coopModeChooserVisible = false
+                    ComponentsContext.coopModeChooserPopupVisible = false
                 }
             }
         }
