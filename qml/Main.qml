@@ -111,6 +111,12 @@ ApplicationWindow {
             ComponentsContext.mpErrorReason = reason;
             ComponentsContext.multiplayerErrorPopupVisible = true;
         }
+
+        function onNotifyConnectionLost(message) {
+            connectionLostPopup.playerName = message
+            connectionLostPopup.visible = true
+            GameState.finishedAfterDisconnect = true
+        }
     }
 
     Connections {
@@ -166,14 +172,6 @@ ApplicationWindow {
         function onSaveCompleted(success) {
             root.isSaving = false
             Qt.quit()
-        }
-    }
-
-    Connections {
-        target: SteamIntegration
-        function onNotifyConnectionLost(message) {
-            connectionLostPopup.playerName = message
-            connectionLostPopup.visible = true
         }
     }
 

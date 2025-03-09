@@ -5,6 +5,8 @@ Popup {
     id: control
     property string playerName: ""
     anchors.centerIn: parent
+    modal: true
+    closePolicy: Popup.NoAutoClose
 
     ColumnLayout {
         anchors.fill: parent
