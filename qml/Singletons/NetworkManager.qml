@@ -760,7 +760,7 @@ QtObject {
             if (GameState.gameOver) {
                 GameState.displayPostGame = true;
                 if (GameState.gameWon) {
-                    if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
+                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
                 } else {
                     //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
                 }
@@ -984,7 +984,7 @@ QtObject {
             GameTimer.stop();
 
             if (GameState.gameWon) {
-                if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
+                //if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
             } else {
                 //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
                 GridBridge.revealAllMines();
@@ -1333,7 +1333,7 @@ QtObject {
                 GameTimer.stop();
                 // Play appropriate sound
                 if (GameState.gameWon) {
-                    if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
+                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
                 } else {
                     //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
                     GridBridge.revealAllMines();
