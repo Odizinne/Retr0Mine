@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.impl
 import net.odizinne.retr0mine 1.0
+import QtMultimedia
 
 Item {
     id: control
@@ -12,9 +13,18 @@ Item {
         target: SteamIntegration
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string" && !ComponentsContext.multiplayerChatVisible) {
+                if (!chatButton.hasNewMessages && GameSettings.mpAudioNotificationOnNewMessage) {
+                    messageSound.play()
+                }
                 chatButton.hasNewMessages = true
             }
         }
+    }
+
+    SoundEffect {
+        id: messageSound
+        volume: 1
+        source: "qrc:/sounds/message_received.wav"
     }
 
     Item {

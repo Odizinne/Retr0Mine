@@ -12,5 +12,6 @@
         <file>floraphonic/floraphonic_bomb.wav</file>
         <file>floraphonic/floraphonic_click.wav</file>
         <file>floraphonic/floraphonic_win.wav</file>
+        <file>message_received.wav</file>
     </qresource>
 </RCC>

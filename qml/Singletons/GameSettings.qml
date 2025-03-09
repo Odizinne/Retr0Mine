@@ -38,5 +38,6 @@ Settings {
     property int localFlagColorIndex: 4
     property int remoteFlagColorIndex: 1
     property bool mpShowInviteNotificationInGame: true
+    property bool mpAudioNotificationOnNewMessage: true
 }
 
