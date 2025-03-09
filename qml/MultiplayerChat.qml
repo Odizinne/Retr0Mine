@@ -8,6 +8,12 @@ Frame {
     id: chatPanel
     property var chatMessages: []
 
+    onVisibleChanged: {
+        if (visible) {
+            messageInput.forceActiveFocus();
+        }
+    }
+
     Connections {
         target: SteamIntegration
 
