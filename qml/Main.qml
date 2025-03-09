@@ -346,6 +346,8 @@ ApplicationWindow {
 
     MultiplayerPopup { }
 
+    CoopModeChooser { }
+
     LeaderboardPopup {
         id: leaderboardWindow
         Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)

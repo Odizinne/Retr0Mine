@@ -46,6 +46,7 @@ set(QML_FILES
     qml/GridLoadingIndicator.qml
     qml/SignalIndicator.qml
     qml/MultiplayerChat.qml
+    qml/CoopModeChooser.qml
     qml/Debug/DebugFrame.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml

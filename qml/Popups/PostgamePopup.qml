@@ -58,7 +58,6 @@ Popup {
             font.pixelSize: 13
         }
 
-        // If multiplayer client, show waiting message
         Label {
             id: clientWaitingLabel
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -74,7 +73,6 @@ Popup {
             text: qsTr("Retry")
             Layout.fillWidth: true
             Layout.preferredWidth: control.buttonWidth
-            // Hide the retry button for multiplayer clients
             visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost
             onClicked: {
                 GameState.difficultyChanged = false
@@ -89,7 +87,6 @@ Popup {
             id: closeButton
             text: qsTr("Close")
             Layout.fillWidth: true
-            // If no retry button (client), expand this button to full width
             Layout.columnSpan: retryButton.visible ? 1 : 2
             Layout.preferredWidth: control.buttonWidth
             onClicked: {

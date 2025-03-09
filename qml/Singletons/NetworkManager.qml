@@ -1308,6 +1308,7 @@ QtObject {
         // If we're the host, we don't need to reconcile
         if (SteamIntegration.isHost) return;
 
+        console.log("triggered reconcile")
         // For each cell in the correction data, update our local state
         if (correctState.revealedCells) {
             correctState.revealedCells.forEach(cellIndex => {
