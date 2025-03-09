@@ -19,6 +19,8 @@ QtObject {
     property var flagCooldowns: ({})
     property int flagCooldownDuration: 1000
     property var flagOwners: ({})
+    property string hostName: SteamIntegration.isHost ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName
+    property string clientName: !SteamIntegration.isHost ? SteamIntegration.connectedPlayerName : SteamIntegration.playerName
 
     Component.onCompleted: {
         SteamIntegration.gameActionReceived.connect(handleNetworkAction);
