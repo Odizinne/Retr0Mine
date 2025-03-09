@@ -13,7 +13,6 @@ class GameCore : public QObject
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
     Q_PROPERTY(bool isFluent READ getIsFluent NOTIFY fluentChanged)
     Q_PROPERTY(bool isUniversal READ getIsUniversal NOTIFY universalChanged)
-    Q_PROPERTY(bool isFusion READ getIsFusion NOTIFY fusionChanged)
 
 public:
     explicit GameCore(QObject *parent = nullptr);
@@ -45,13 +44,11 @@ public:
     int getLanguageIndex() const { return m_languageIndex; }
     bool getIsFluent() const { return m_isFluent; }
     bool getIsUniversal() const { return m_isUniversal; }
-    bool getIsFusion() const { return m_isFusion; }
 
     QSettings settings;
 private:
     QTranslator *translator;
 
-    int currentTheme;
     bool isRunningOnGamescope;
     bool shouldShowWelcomeMessage;
     bool loadLanguage(QString languageCode);
@@ -59,13 +56,11 @@ private:
     int m_languageIndex;
     bool m_isFluent = true;
     bool m_isUniversal = false;
-    bool m_isFusion = false;
 
 signals:
     void languageIndexChanged();
     void fluentChanged();
     void universalChanged();
-    void fusionChanged();
     void saveCompleted(bool success);
 };
 

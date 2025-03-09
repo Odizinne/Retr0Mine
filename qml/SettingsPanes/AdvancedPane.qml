@@ -24,7 +24,7 @@ Pane {
 
             ComboBox {
                 id: styleComboBox
-                model: ["Fluent", "Universal", "Fusion"]
+                model: ["Fluent", "Universal"]
                 Layout.rightMargin: 5
                 currentIndex: GameSettings.themeIndex
                 onActivated: {

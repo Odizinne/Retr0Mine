@@ -9,19 +9,19 @@ Item {
     }
 
     function getForegroundColor() {
-        if (GameCore.gamescope && (GameSettings.themeIndex === 0 || GameSettings.themeIndex === 1)) {
+        if (GameCore.gamescope) {
             return "white"
         }
         return Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
     }
 
     function getFrameColor() {
-        if (GameCore.gamescope && GameSettings.themeIndex === 0) {
+        if (GameCore.gamescope && GameCore.isFluent) {
             return Qt.rgba(1, 1, 1, 0.075)
-        } else if (GameCore.gamescope && GameSettings.themeIndex === 1) {
+        } else if (GameCore.gamescope && GameCore.isUniversal) {
             return Qt.rgba(1, 1, 1, 0.15)
         } else {
-            if (GameSettings.themeIndex === 0) {
+            if (GameCore.isFluent) {
                 return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.075) : Qt.rgba(0, 0, 0, 0.15)
             }
             return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)

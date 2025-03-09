@@ -132,7 +132,6 @@ void GameCore::setQMLStyle(int index)
     QString style;
     m_isFluent = false;
     m_isUniversal = false;
-    m_isFusion = false;
 
     switch(index) {
     case 0:
@@ -143,22 +142,16 @@ void GameCore::setQMLStyle(int index)
         style = "Universal";
         m_isUniversal = true;
         break;
-    case 2:
-        style = "Fusion";
-        m_isFusion = true;
-        break;
     default:
         style = "FluentWinUI3";
         m_isFluent = true;
         break;
     }
 
-    currentTheme = index;
     QQuickStyle::setStyle(style);
 
     emit fluentChanged();
     emit universalChanged();
-    emit fusionChanged();
 }
 
 void GameCore::setLanguage(int index)

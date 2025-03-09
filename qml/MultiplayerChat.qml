@@ -92,7 +92,7 @@ Frame {
                         Rectangle {
                             width: 26
                             height: 26
-                            radius: GameSettings.themeIndex === 0 ? 5 : 0
+                            radius: GameCore.isFluent ? 5 : 0
                             anchors.centerIn: parent
                             color: "transparent"
                             opacity: 0.5
