@@ -33,15 +33,12 @@ Popup {
             color: "#28d13c"
         }
 
-        GameView {
+        ScrollingArea {
             id: scrollArea
             Layout.fillWidth: true
             Layout.fillHeight: true
-            clip: true
-            contentWidth: scrollArea.width - 12
+            contentWidth: width - 12
             contentHeight: textContainer.height
-            boundsBehavior: Flickable.StopAtBounds
-            horizontalScrollbarEnabled: false
 
             Item {
                 id: textContainer

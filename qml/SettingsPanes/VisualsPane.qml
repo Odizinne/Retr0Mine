@@ -7,11 +7,13 @@ import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
 Pane {
-    ScrollView {
+    ScrollingArea {
         anchors.fill: parent
-        ScrollBar.vertical.policy: (contentHeight > height) ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         contentWidth: width - 12
+        contentHeight: lyt.implicitHeight
+
         ColumnLayout {
+            id: lyt
             spacing: GameConstants.settingsColumnSpacing
             anchors.fill: parent
             RowLayout {

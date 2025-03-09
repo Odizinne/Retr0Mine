@@ -41,7 +41,7 @@ set(QML_FILES
     qml/InfoIcon.qml
     qml/GameGrid.qml
     qml/GameAudio.qml
-    qml/GameView.qml
+    qml/ScrollingArea.qml
     qml/MainMenu.qml
     qml/GridLoadingIndicator.qml
     qml/SignalIndicator.qml

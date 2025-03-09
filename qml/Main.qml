@@ -368,11 +368,7 @@ ApplicationWindow {
     }
 
     Item {
-
-        // Main layout container (adjust width/height as needed)
         anchors.fill: parent
-
-        // Top bar spanning full width
         TopBar {
             id: topBar
             anchors {
@@ -385,8 +381,7 @@ ApplicationWindow {
             }
         }
 
-        // Right side panel (new)
-        MultiplayerChat {  // Or your custom Item component
+        MultiplayerChat {
             id: rightPanel
             anchors {
                 top: parent.top
@@ -396,13 +391,10 @@ ApplicationWindow {
                 rightMargin: 12
                 bottomMargin: 12
             }
-            width: 300  // Adjust width as needed
-            // For visualization
+            width: 300
             visible: ComponentsContext.multiplayerChatVisible
-            // Your right panel content here
         }
 
-        // Game view - now anchored to rightPanel instead of parent.right
         Flickable {
             id: gameView
             anchors {
@@ -516,8 +508,6 @@ ApplicationWindow {
             anchors.fill: gameView
         }
     }
-
-
 
     function checkInitialGameState() {
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
