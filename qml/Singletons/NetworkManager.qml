@@ -527,26 +527,22 @@ QtObject {
     function applyGameState(gameState) {
         console.log("Applying received game state");
 
-        // Validate received data
         if (!gameState) {
             console.error("Received invalid game state");
             isProcessingNetworkAction = false;
             return;
         }
 
-        // Check if this is a grid sync packet
         if (gameState.gridSync) {
             handleMultiplayerGridSync(gameState);
             return;
         }
 
-        // Check if this is a chunked mines data packet
         if (gameState.isChunked) {
             handleChunkedMinesData(gameState);
             return;
         }
 
-        // Check if this is a mines-only packet (initial board setup)
         if (gameState.mines && !gameState.revealedCells && !gameState.numbers) {
             console.log("Received mines-only data - initializing board");
             processMinesData(gameState);
@@ -557,22 +553,18 @@ QtObject {
         isProcessingNetworkAction = false;
     }
 
-    // Helper function to handle chunked mines data
     function handleChunkedMinesData(gameState) {
         console.log("Received chunked mines data - chunk " + (gameState.chunkIndex + 1) + " of " + gameState.totalChunks);
 
-        // If this is the first chunk, reset our arrays and counters
         if (gameState.chunkIndex === 0) {
             chunkedMines = [];
             receivedChunks = 0;
             expectedTotalChunks = gameState.totalChunks;
         }
 
-        // Add this chunk's mines to our array
         if (Array.isArray(gameState.mines)) {
             chunkedMines = chunkedMines.concat(gameState.mines.map(Number));
         } else if (typeof gameState.mines === 'object' && gameState.mines !== null) {
-            // Handle object-style array if needed
             for (let prop in gameState.mines) {
                 if (!isNaN(parseInt(prop))) {
                     chunkedMines.push(Number(gameState.mines[prop]));
@@ -583,11 +575,9 @@ QtObject {
         receivedChunks++;
         console.log("Chunk received, now have " + receivedChunks + " of " + expectedTotalChunks + " chunks");
 
-        // If we've received all expected chunks, process the complete mines data
         if (receivedChunks === expectedTotalChunks) {
             console.log("All chunks received, processing " + chunkedMines.length + " mines");
 
-            // Create a complete mines data object
             const completeData = {
                 gridSizeX: Number(gameState.gridSizeX),
                 gridSizeY: Number(gameState.gridSizeY),
@@ -595,26 +585,20 @@ QtObject {
                 mines: chunkedMines
             };
 
-            // Process the complete mines data
             processMinesData(completeData);
         }
     }
 
-    // Helper function to process mines data and notify readiness
     function processMinesData(minesData) {
         const success = applyMinesAndCalculateNumbers(minesData);
 
         if (success) {
-            // Mark that we have initialized mines
             minesInitialized = true;
 
-            // Only send acknowledgment if we're a client
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
-                // Acknowledge to host that we're ready for actions
                 console.log("Client sending readyForActions acknowledgment to host");
                 SteamIntegration.sendGameAction("readyForActions", 0);
 
-                // Process any pending actions
                 if (pendingActions.length > 0) {
                     console.log("Processing", pendingActions.length, "buffered actions");
                     Qt.callLater(function() {
@@ -631,7 +615,7 @@ QtObject {
 
     function requestFullSync() {
         if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
-            return; // Only clients should request sync
+            return;
         }
 
         console.log("Client requesting full sync from host");
@@ -641,14 +625,10 @@ QtObject {
     function handleNetworkAction(actionType, parameter) {
         console.log("Received action:", actionType, "parameter:", parameter);
 
-        // Special handling for chat messages
         if (actionType === "chat") {
-            // Don't pass chat messages through the standard processing
-            // They are handled directly in MultiplayerChat.qml via connections
             return;
         }
 
-        // Continue with existing code for game actions
         if (SteamIntegration.isHost) {
             handleHostAction(actionType, parameter);
         } else {
@@ -665,26 +645,13 @@ QtObject {
 
         case "reveal":
             console.log("Host validating client reveal for cell:", cellIndex);
-
-            // Process the reveal on the host side
             GridBridge.performReveal(cellIndex);
 
-            // If game over, send a simpler update without trying to access revealedCells
-            //if (GameState.gameOver) {
-            //    // Send a compact state update with just the game state
-            //    const stateUpdate = {
-            //        gameOver: GameState.gameOver,
-            //        gameWon: GameState.gameWon
-            //        // No revealedCells here since we don't have that information
-            //    };
-            //    SteamIntegration.sendGameState(stateUpdate);
-            //}
             break;
 
         case "flag":
             console.log("Host processing flag action for cell:", cellIndex);
 
-            // Add cooldown check
             if (flagCooldowns[cellIndex] !== undefined && flagOwners[cellIndex] === true) {
                 console.log("Cell " + cellIndex + " is in cooldown for client, ignoring flag action");
                 SteamIntegration.sendGameAction("flagRejected", cellIndex);
@@ -694,12 +661,9 @@ QtObject {
             const flagRemoved = GridBridge.performToggleFlag(cellIndex);
             sendCellUpdateToClient(cellIndex, "flag");
 
-            // Only start cooldown if the flag wasn't completely removed
             if (!flagRemoved) {
-                // Start cooldown - this flag is now owned by the client
-                startFlagCooldown(cellIndex, false); // false = client owns it
+                startFlagCooldown(cellIndex, false);
             } else {
-                // Clear any existing cooldown data if the flag was completely removed
                 clearFlagCooldown(cellIndex);
             }
             break;
@@ -719,7 +683,6 @@ QtObject {
             console.log("Host received client readiness confirmation");
             clientReadyForActions = true;
 
-            // Now we can send any pending initial actions
             if (pendingInitialActions.length > 0) {
                 console.log("Sending", pendingInitialActions.length, "pending initial actions");
                 pendingInitialActions.forEach(function(action) {
@@ -733,7 +696,6 @@ QtObject {
             console.log("Client requested mines data, sending immediately");
             sendMinesListToClient();
 
-            // After a moment, check if client has processed mines
             Qt.callLater(function() {
                 console.log("Checking if client has processed mines");
                 SteamIntegration.sendGameAction("minesReady", 0);
@@ -743,18 +705,15 @@ QtObject {
         case "requestHint":
             console.log("Host processing hint request from client");
             GridBridge.processHintRequest();
-            // The actual hint cell is sent back in processHintRequest
             break;
 
         case "ping":
             console.log("Host received ping at cell:", cellIndex);
-            // Just show the ping locally and relay back to other clients if needed
             showPingAtCell(cellIndex);
             break;
 
         case "gridResetAck":
             console.log("Host received grid reset acknowledgment from client");
-            // After client acknowledges reset, we know they're ready for new grid settings
             break;
 
         default:
@@ -1153,67 +1112,16 @@ QtObject {
         return true;
     }
 
-    // In NetworkManager.qml, add a reconciliation function:
-    function reconcileState(correctState) {
-        // This function is called when the host sends an authoritative update
-        // that might differ from what the client has locally
-
-        // If we're the host, we don't need to reconcile
-        if (SteamIntegration.isHost) return;
-
-        console.log("triggered reconcile")
-        // For each cell in the correction data, update our local state
-        if (correctState.revealedCells) {
-            correctState.revealedCells.forEach(cellIndex => {
-                const cell = GridBridge.getCell(cellIndex);
-                if (cell && !cell.revealed) {
-                    // This cell should be revealed but isn't in our local state
-                    cell.revealed = true;
-                    GameState.revealedCount++;
-                }
-            });
-        }
-
-        // Similarly for flags, game state, etc.
-        // ...
-
-        // Update game state if needed
-        if (correctState.gameOver !== undefined) {
-            GameState.gameOver = correctState.gameOver;
-            GameState.gameWon = correctState.gameWon || false;
-
-            if (GameState.gameOver) {
-                GameState.displayPostGame = true;
-                GameTimer.stop();
-                // Play appropriate sound
-                if (GameState.gameWon) {
-                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
-                } else {
-                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
-                    GridBridge.revealAllMines();
-                }
-            }
-        }
-    }
-
     function changeDifficulty(difficultyIndex) {
-        // Only host can change difficulty
         if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
             return false;
         }
-
         console.log("Host initiating difficulty change to:", difficultyIndex);
-
-        // Update host's difficulty setting
         GameSettings.difficulty = difficultyIndex;
         const difficultySet = GameState.difficultySettings[difficultyIndex];
-
-        // Send difficulty change action to client
         SteamIntegration.sendGameAction("prepareDifficultyChange", difficultyIndex);
 
-        // Allow client some time to prepare
         Qt.callLater(function() {
-            // Reset multiplayer state
             sessionRunning = false;
             minesInitialized = false;
             clientReadyForActions = false;
@@ -1221,15 +1129,11 @@ QtObject {
             pendingInitialActions = [];
             pendingActions = [];
 
-            // Update grid dimensions
             GameState.gridSizeX = difficultySet.x;
             GameState.gridSizeY = difficultySet.y;
             GameState.mineCount = difficultySet.mines;
-
-            // Initialize a new game with the new settings
             GridBridge.initGame();
 
-            // Sync grid settings to client
             syncGridSettingsToClient();
         });
 
@@ -1237,14 +1141,12 @@ QtObject {
     }
 
     function resetMultiplayerGrid() {
-        // Only host can initiate a grid reset
         if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
             return;
         }
 
         console.log("Host initiating multiplayer grid reset");
         ComponentsContext.multiplayerPopupVisible = true
-        // Reset important state variables but maintain connection
         minesInitialized = false;
         clientReadyForActions = false;
         clientGridReady = false;
@@ -1252,14 +1154,11 @@ QtObject {
         pendingActions = [];
         isProcessingNetworkAction = false;
 
-        // First reset the game state on host
         GameState.difficultyChanged = true;
         GridBridge.initGame();
 
-        // Send a grid reset command to the client
         SteamIntegration.sendGameAction("resetMultiplayerGrid", 0);
 
-        // Wait a bit before sending the new grid settings to ensure client has processed the reset
         Qt.callLater(function() {
             syncGridSettingsToClient();
         });
