@@ -762,7 +762,7 @@ QtObject {
                 if (GameState.gameWon) {
                     if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
                 } else {
-                    if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
+                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
                 }
             }
         }
@@ -986,7 +986,7 @@ QtObject {
             if (GameState.gameWon) {
                 if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
             } else {
-                if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
+                //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
                 GridBridge.revealAllMines();
             }
 
@@ -1335,7 +1335,7 @@ QtObject {
                 if (GameState.gameWon) {
                     if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
                 } else {
-                    if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
+                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
                     GridBridge.revealAllMines();
                 }
             }
