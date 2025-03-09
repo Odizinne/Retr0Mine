@@ -25,9 +25,98 @@ Item {
     property int diagonalSum
     property bool inCooldown: false
     property bool localPlayerOwns: false
+    property bool shouldShake: false
+    property bool shakeConditionsMet: false
+
+    // Timer to delay the start of the shake animation
+    Timer {
+        id: shakeDelayTimer
+        interval: 3000
+        repeat: false
+        onTriggered: {
+            if (cellItem.shakeConditionsMet) {
+                cellItem.shouldShake = true
+            }
+        }
+    }
+
+    // Timer to enforce cooldown between shake animations
+    Timer {
+        id: shakeCooldownTimer
+        interval: 3000
+        repeat: false
+        onTriggered: {
+            if (cellItem.shakeConditionsMet) {
+                shakeDelayTimer.restart()
+            }
+        }
+    }
 
     function highlightHint() {
         hintAnimation.start();
+    }
+
+    function updateShakeState() {
+        if (!GameSettings.shakeUnifinishedNumbers) {
+            shakeConditionsMet = false;
+            shouldShake = false;
+            shakeCooldownTimer.stop();
+            shakeDelayTimer.stop();
+            return;
+        }
+
+        let shouldShakeNew = false;
+
+        if (cellItem.revealed && !GameState.mines.includes(cellItem.index)) {
+            const numValue = GameState.numbers && GameState.numbers[cellItem.index];
+            if (numValue > 0) {
+                // Get neighbor flag count
+                const flaggedNeighbors = GridBridge.getNeighborFlagCount(cellItem.index);
+
+                // Check if flags match the number AND there are still unrevealed cells
+                let hasUnrevealed = false;
+                let row = Math.floor(cellItem.index / GameState.gridSizeX);
+                let col = cellItem.index % GameState.gridSizeX;
+
+                for (let r = -1; r <= 1; r++) {
+                    for (let c = -1; c <= 1; c++) {
+                        if (r === 0 && c === 0) continue;
+
+                        let newRow = row + r;
+                        let newCol = col + c;
+
+                        if (newRow < 0 || newRow >= GameState.gridSizeY ||
+                            newCol < 0 || newCol >= GameState.gridSizeX) continue;
+
+                        const adjacentIndex = newRow * GameState.gridSizeX + newCol;
+                        const adjacentCell = GridBridge.getCell(adjacentIndex);
+
+                        if (adjacentCell && !adjacentCell.revealed && !adjacentCell.flagged) {
+                            hasUnrevealed = true;
+                            break;
+                        }
+                    }
+                    if (hasUnrevealed) break;
+                }
+
+                // Only shake if flags match number AND there are still unrevealed cells
+                shouldShakeNew = (flaggedNeighbors === numValue && hasUnrevealed);
+            }
+        }
+
+        // Update the conditions state
+        shakeConditionsMet = shouldShakeNew;
+
+        // If conditions are no longer met, stop shaking immediately and reset timers
+        if (!shakeConditionsMet) {
+            shouldShake = false;
+            shakeCooldownTimer.stop();
+            shakeDelayTimer.stop();
+        }
+        // If conditions are newly met and not already shaking or in cooldown/delay
+        else if (shakeConditionsMet && !shouldShake && !shakeCooldownTimer.running && !shakeDelayTimer.running) {
+            shakeDelayTimer.restart();
+        }
     }
 
     onFlaggedChanged: {
@@ -40,6 +129,8 @@ Item {
                 localPlayerOwns = false;
             }
         }
+        // Update shake state when flags change
+        Qt.callLater(updateShakeState);
     }
 
     Timer {
@@ -48,6 +139,19 @@ Item {
         repeat: false
         onTriggered: {
             cellItem.localPlayerOwns = false;
+        }
+    }
+
+    Connections {
+        target: GameState
+        function onFlaggedCountChanged() {
+            cellItem.updateShakeState();
+        }
+        function onGameStartedChanged() {
+            cellItem.updateShakeState();
+        }
+        function onRevealedCountChanged() {
+            cellItem.updateShakeState();
         }
     }
 
@@ -66,6 +170,8 @@ Item {
         if (GameSettings.animations && !GridBridge.initialAnimationPlayed && !GameState.blockAnim && !GameState.difficultyChanged) {
             startGridResetAnimation()
         }
+
+        Qt.callLater(updateShakeState);
     }
 
     NumberAnimation {
@@ -192,6 +298,8 @@ Item {
                     } else {
                         cellButton.flat = true
                     }
+                    // Update shake state when revealed
+                    cellItem.updateShakeState()
                 } else {
                     cellItem.shouldBeFlat = false
                     cellButton.opacity = 1
@@ -384,6 +492,7 @@ Item {
     }
 
     Text {
+        id: cellText
         anchors.centerIn: parent
         text: {
             if (!cellItem.revealed || cellItem.flagged) return ""
@@ -413,6 +522,53 @@ Item {
                    cellItem.index,
                    GameState.numbers && GameState.numbers[cellItem.index]
                    )
+
+        // Add shake animation for the text
+        SequentialAnimation {
+            id: shakeAnimation
+                running: cellItem.shouldShake && GameSettings.shakeUnifinishedNumbers
+            loops: 3
+            alwaysRunToEnd: true
+
+            NumberAnimation {
+                target: cellText
+                property: "anchors.horizontalCenterOffset"
+                from: 0
+                to: -2
+                duration: 50
+                easing.type: Easing.InOutQuad
+            }
+            NumberAnimation {
+                target: cellText
+                property: "anchors.horizontalCenterOffset"
+                from: -2
+                to: 2
+                duration: 100
+                easing.type: Easing.InOutQuad
+            }
+            NumberAnimation {
+                target: cellText
+                property: "anchors.horizontalCenterOffset"
+                from: 2
+                to: -2
+                duration: 100
+                easing.type: Easing.InOutQuad
+            }
+            NumberAnimation {
+                target: cellText
+                property: "anchors.horizontalCenterOffset"
+                from: -2
+                to: 0
+                duration: 50
+                easing.type: Easing.InOutQuad
+            }
+
+            // No pause here since we want just 3 loops of the shake
+            onFinished: {
+                cellItem.shouldShake = false;
+                shakeCooldownTimer.restart();
+            }
+        }
     }
 
     function startGridResetAnimation() {

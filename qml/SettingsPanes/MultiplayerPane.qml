@@ -32,26 +32,6 @@ Pane {
             Layout.fillWidth: true
 
             Label {
-                text: qsTr("Audio notification on new message")
-                Layout.fillWidth: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: mpAudioNotificationOnNewMessageSwitch.click()
-                }
-            }
-            Switch {
-                id: mpAudioNotificationOnNewMessageSwitch
-                checked: GameSettings.mpAudioNotificationOnNewMessage
-                onCheckedChanged: {
-                    GameSettings.mpAudioNotificationOnNewMessage = checked
-                }
-            }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-
-            Label {
                 text: qsTr("Player colored flags")
                 Layout.fillWidth: true
                 MouseArea {

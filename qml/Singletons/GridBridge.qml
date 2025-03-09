@@ -704,4 +704,37 @@ QtObject {
 
         return unrevealedCount > 0 || flagCount !== GameState.numbers[index];
     }
+
+    function getNeighborFlagCount(index) {
+        // If the cell has no number, return 0
+        if (GameState.numbers[index] === 0) {
+            return 0;
+        }
+
+        let row = Math.floor(index / GameState.gridSizeX);
+        let col = index % GameState.gridSizeX;
+        let flagCount = 0;
+
+        // Count flagged neighbors
+        for (let r = -1; r <= 1; r++) {
+            for (let c = -1; c <= 1; c++) {
+                if (r === 0 && c === 0) continue;
+
+                let newRow = row + r;
+                let newCol = col + c;
+
+                if (newRow < 0 || newRow >= GameState.gridSizeY ||
+                    newCol < 0 || newCol >= GameState.gridSizeX) continue;
+
+                const adjacentCell = getCell(newRow * GameState.gridSizeX + newCol);
+                if (!adjacentCell) continue;
+
+                if (adjacentCell.flagged) {
+                    flagCount++;
+                }
+            }
+        }
+
+        return flagCount;
+    }
 }

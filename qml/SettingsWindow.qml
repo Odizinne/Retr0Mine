@@ -8,7 +8,7 @@ import net.odizinne.retr0mine 1.0
 ApplicationWindow {
     id: control
     title: qsTr("Settings")
-    readonly property int baseWidth: 600
+    readonly property int baseWidth: 700
     readonly property int baseHeight: 480
 
     width: GameCore.gamescope ? 1280 : baseWidth

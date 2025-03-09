@@ -29,7 +29,7 @@ Item {
 
     SoundEffect {
         id: messageSound
-        volume: 1
+        volume: GameSettings.volume
         source: "qrc:/sounds/message_received.wav"
     }
 

@@ -115,7 +115,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="129"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="160"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -454,19 +454,19 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Couleur des drapeaux par joueur</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="82"/>
         <source>Remote player</source>
         <translation>Joueur distant</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="105"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="107"/>
         <source>Ping color</source>
         <translation>Couleur du signal</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="62"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="87"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="111"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="63"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="89"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="114"/>
         <source>Contrasted</source>
         <translation>Contrasté</translation>
     </message>
@@ -481,51 +481,51 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Joueur local</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="63"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="88"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="112"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="64"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="90"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="115"/>
         <source>Orange</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="64"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="89"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="113"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="65"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="91"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="116"/>
         <source>Magenta</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="65"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="90"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="114"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="66"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="92"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="117"/>
         <source>Green</source>
         <translation>Vert</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="66"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="91"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="115"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="67"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="93"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="118"/>
         <source>Blue</source>
         <translation>Bleu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="67"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="92"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="116"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="68"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="94"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="119"/>
         <source>Purple</source>
         <translation>Violet</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="68"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="93"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="117"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="69"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="95"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="120"/>
         <source>Red</source>
         <translation>Rouge</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="69"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="94"/>
-        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="118"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="70"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="96"/>
+        <location filename="../qml/SettingsPanes/MultiplayerPane.qml" line="121"/>
         <source>Yellow</source>
         <translation>Jaune</translation>
     </message>
@@ -852,12 +852,17 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Effets sonores</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="34"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="35"/>
+        <source>Audio notification on new message</source>
+        <translation>Notification sonore pour les nouveaux messages</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="54"/>
         <source>Volume</source>
         <translation>Volume</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="71"/>
         <source>Soundpack</source>
         <translation>Pack de sons</translation>
     </message>
@@ -865,12 +870,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="59"/>
+        <location filename="../qml/TopBar.qml" line="81"/>
         <source>Next click will signal the cell</source>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="124"/>
+        <location filename="../qml/TopBar.qml" line="146"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
@@ -878,82 +883,87 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>VisualsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="17"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="20"/>
         <source>Animations</source>
         <translation>Animations</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="43"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="46"/>
         <source>Display timer</source>
         <translation>Afficher le chrono</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="61"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="64"/>
         <source>Start in full screen</source>
         <translation>Plein écran au lancement</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="82"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="85"/>
         <source>Revealed cells frame</source>
         <translation>Cadre des cellules</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="101"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="104"/>
+        <source>Shake partially satisfied cells</source>
+        <translation>Secouer les cellules partiellement satisfaites</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="123"/>
         <source>Dim satisfied cells</source>
         <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="121"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="143"/>
         <source>Dim level</source>
         <translation>Niveau d&apos;atténuation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="136"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="158"/>
         <source>Numbers font</source>
         <translation>Police d&apos;affichage des chiffres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="155"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="177"/>
         <source>Grid reset animation</source>
         <translation>Animation de réinitialisation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="163"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="185"/>
         <source>Wave</source>
         <translation>Vague</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="164"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="186"/>
         <source>Fade</source>
         <translation>Fondu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="165"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="187"/>
         <source>Spin</source>
         <translation>Rotation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="193"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="215"/>
         <source>Unlocked with a secret achievement</source>
         <translation>Se débloque avec un succès caché</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="214"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="236"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="245"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="267"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation>Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="263"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="285"/>
         <source>Unlock Master Tactician achievement</source>
         <translation>Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="281"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="303"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation>Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
     </message>
