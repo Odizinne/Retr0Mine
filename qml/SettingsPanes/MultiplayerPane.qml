@@ -4,6 +4,18 @@ import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
 Pane {
+    id: mpPane
+    property var colorModel: [
+        qsTr("Contrasted"),
+        qsTr("Orange"),
+        qsTr("Magenta"),
+        qsTr("Green"),
+        qsTr("Blue"),
+        qsTr("Purple"),
+        qsTr("Red"),
+        qsTr("Yellow")
+    ]
+
     ColumnLayout {
         spacing: GameConstants.settingsColumnSpacing
         width: parent.width
@@ -62,16 +74,7 @@ Pane {
 
             ComboBox {
                 Layout.rightMargin: 5
-                model: [
-                    qsTr("Contrasted"),
-                    qsTr("Orange"),
-                    qsTr("Magenta"),
-                    qsTr("Green"),
-                    qsTr("Blue"),
-                    qsTr("Purple"),
-                    qsTr("Red"),
-                    qsTr("Yellow"),
-                    ]
+                model: mpPane.colorModel
                 currentIndex: GameSettings.localFlagColorIndex
                 onActivated: GameSettings.localFlagColorIndex = currentIndex
             }
@@ -89,16 +92,7 @@ Pane {
 
             ComboBox {
                 Layout.rightMargin: 5
-                model: [
-                    qsTr("Contrasted"),
-                    qsTr("Orange"),
-                    qsTr("Magenta"),
-                    qsTr("Green"),
-                    qsTr("Blue"),
-                    qsTr("Purple"),
-                    qsTr("Red"),
-                    qsTr("Yellow"),
-                    ]
+                model: mpPane.colorModel
                 currentIndex: GameSettings.remoteFlagColorIndex
                 onActivated: GameSettings.remoteFlagColorIndex = currentIndex
             }
@@ -115,16 +109,7 @@ Pane {
 
             ComboBox {
                 Layout.rightMargin: 5
-                model: [
-                    qsTr("Contrasted"),
-                    qsTr("Orange"),
-                    qsTr("Magenta"),
-                    qsTr("Green"),
-                    qsTr("Blue"),
-                    qsTr("Purple"),
-                    qsTr("Red"),
-                    qsTr("Yellow")
-                    ]
+                model: mpPane.colorModel
                 currentIndex: GameSettings.pingColorIndex
                 onActivated: GameSettings.pingColorIndex = currentIndex
             }
