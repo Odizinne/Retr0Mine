@@ -129,6 +129,10 @@ private:
 
     // For invite handling
     FriendGameInfo_t m_friendGameInfo;
+    QTimer m_connectionHealthTimer;
+    int m_connectionCheckFailCount;
+    static const int MAX_CONNECTION_FAILURES = 2; // How many checks can fail before disconnection is determined
+    void checkConnectionHealth();
 
 signals:
     // Existing signals
@@ -147,6 +151,7 @@ signals:
     void connectionSucceeded();
     void p2pInitialized();
     void inviteReceived(QString friendName, QString connectString);
+    void notifyConnectionLost(QString message);
 };
 
 struct SteamIntegrationForeign

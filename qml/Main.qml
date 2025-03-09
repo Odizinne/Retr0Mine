@@ -93,7 +93,7 @@ ApplicationWindow {
                 }
                 NetworkManager.sessionRunning = false;
                 NetworkManager.mpPopupCloseButtonVisible = false;
-                GridBridge.initGame();
+                //GridBridge.initGame();
             }
         }
 
@@ -166,6 +166,14 @@ ApplicationWindow {
         function onSaveCompleted(success) {
             root.isSaving = false
             Qt.quit()
+        }
+    }
+
+    Connections {
+        target: SteamIntegration
+        function onNotifyConnectionLost(message) {
+            connectionLostPopup.playerName = message
+            connectionLostPopup.visible = true
         }
     }
 
@@ -345,6 +353,10 @@ ApplicationWindow {
     PausePopup { }
 
     MultiplayerPopup { }
+
+    ConnectionLostPopup {
+        id: connectionLostPopup
+    }
 
     CoopModeChooser { }
 

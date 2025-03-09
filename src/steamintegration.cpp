@@ -20,6 +20,7 @@ SteamIntegration::SteamIntegration(QObject *parent)
     , m_isConnecting(false)
     , m_lobbyReady(false)
     , m_p2pInitialized(false)
+    , m_connectionCheckFailCount(0)
 {
     QSettings settings("Odizinne", "Retr0Mine");
     m_difficulty = settings.value("difficulty", 0).toInt();
@@ -28,7 +29,7 @@ SteamIntegration::SteamIntegration(QObject *parent)
 
     connect(&m_p2pInitTimer, &QTimer::timeout, this, &SteamIntegration::sendP2PInitPing);
     connect(&m_networkTimer, &QTimer::timeout, this, &SteamIntegration::processNetworkMessages);
-
+    connect(&m_connectionHealthTimer, &QTimer::timeout, this, &SteamIntegration::checkConnectionHealth);
     QTimer* callbackTimer = new QTimer(this);
     connect(callbackTimer, &QTimer::timeout, this, &SteamIntegration::runCallbacks);
     callbackTimer->start(100);
@@ -101,6 +102,7 @@ void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
 {
     m_networkTimer.stop();
     m_p2pInitTimer.stop();
+    m_connectionHealthTimer.stop();
 
     if (m_initialized && m_connectedPlayerId.IsValid()) {
         qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
@@ -906,8 +908,7 @@ void SteamIntegration::sendP2PInitPing()
         );
 }
 
-void SteamIntegration::startP2PInitialization()
-{
+void SteamIntegration::startP2PInitialization() {
     if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid() || m_p2pInitialized) {
         return;
     }
@@ -917,6 +918,9 @@ void SteamIntegration::startP2PInitialization()
 
     m_p2pInitTimer.setInterval(500);
     m_p2pInitTimer.start();
+
+    m_connectionHealthTimer.setInterval(5000);
+    m_connectionHealthTimer.start();
 
     sendP2PInitPing();
 }
@@ -1020,4 +1024,41 @@ void SteamIntegration::OnLobbyInvite(LobbyInvite_t *pCallback)
 
     // Emit signal for QML
     emit inviteReceived(friendName, lobbyIdStr);
+}
+
+void SteamIntegration::checkConnectionHealth() {
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid()) {
+        // No need to check if we're not in a multiplayer game
+        m_connectionHealthTimer.stop();
+        return;
+    }
+
+    // Check P2P session state
+    P2PSessionState_t sessionState;
+    bool hasSession = SteamNetworking()->GetP2PSessionState(m_connectedPlayerId, &sessionState);
+
+    if (!hasSession || sessionState.m_bConnectionActive == 0) {
+        m_connectionCheckFailCount++;
+        qDebug() << "SteamIntegration: Connection check failed" << m_connectionCheckFailCount << "times";
+
+        if (m_connectionCheckFailCount >= MAX_CONNECTION_FAILURES) {
+            qDebug() << "SteamIntegration: Connection lost to player, cleaning up multiplayer session";
+
+            // Emit a signal to notify about the disconnection
+            //emit connectionFailed("Connection to player lost");
+
+            emit notifyConnectionLost(m_connectedPlayerName);
+
+            // Clean up just the multiplayer session without affecting the game state
+            cleanupMultiplayerSession();
+            m_connectionCheckFailCount = 0;
+
+        }
+    } else {
+        // Reset failure counter if check is successful
+        if (m_connectionCheckFailCount > 0) {
+            qDebug() << "SteamIntegration: Connection healthy again";
+            m_connectionCheckFailCount = 0;
+        }
+    }
 }
