@@ -5,11 +5,12 @@ import net.odizinne.retr0mine 1.0
 
 Pane {
     ColumnLayout {
-        spacing: 20
+        spacing: GameConstants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Language")

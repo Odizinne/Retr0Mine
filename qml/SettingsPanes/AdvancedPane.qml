@@ -5,12 +5,13 @@ import net.odizinne.retr0mine 1.0
 
 Pane {
     ColumnLayout {
-        spacing: 20
+        spacing: GameConstants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Style")
                 Layout.fillWidth: true
@@ -39,6 +40,7 @@ Pane {
         RowLayout {
             enabled: Qt.platform.os === "windows"
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Color scheme")
                 Layout.fillWidth: true

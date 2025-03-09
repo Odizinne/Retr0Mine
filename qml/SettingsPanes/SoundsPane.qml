@@ -5,12 +5,12 @@ import net.odizinne.retr0mine 1.0
 
 Pane {
     ColumnLayout {
-        spacing: 20
+        spacing: GameConstants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
-
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Sound effects")
                 Layout.fillWidth: true
@@ -30,9 +30,9 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
-                text: qsTr("Audio notification on new message")
+                text: qsTr("Notification for new messages")
                 Layout.fillWidth: true
                 MouseArea {
                     anchors.fill: parent
@@ -50,6 +50,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Volume")
                 Layout.fillWidth: true
@@ -67,6 +68,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Soundpack")
                 Layout.fillWidth: true

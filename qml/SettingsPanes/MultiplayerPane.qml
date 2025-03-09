@@ -5,11 +5,12 @@ import net.odizinne.retr0mine 1.0
 
 Pane {
     ColumnLayout {
-        spacing: 20
+        spacing: GameConstants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Show notification on invite received")
@@ -30,6 +31,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Player colored flags")
@@ -51,6 +53,7 @@ Pane {
         RowLayout {
             enabled: GameSettings.mpPlayerColoredFlags
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Local player")
@@ -77,6 +80,7 @@ Pane {
         RowLayout {
             enabled: GameSettings.mpPlayerColoredFlags
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Remote player")
@@ -102,6 +106,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Ping color")

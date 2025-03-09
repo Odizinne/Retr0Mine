@@ -9,7 +9,7 @@ Pane {
 
         ListView {
             anchors.fill: parent
-            spacing: 16
+            spacing: GameConstants.settingsColumnSpacing
             clip: true
             boundsBehavior: Flickable.StopAtBounds
 
@@ -50,6 +50,7 @@ Pane {
                 width: ListView.view.width -5
 
                 RowLayout {
+                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     anchors.fill: parent
                     Label {
                         text: shortcutLine.model.title

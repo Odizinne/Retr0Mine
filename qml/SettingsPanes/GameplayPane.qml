@@ -5,11 +5,12 @@ import net.odizinne.retr0mine 1.0
 
 Pane {
     ColumnLayout {
-        spacing: 20
+        spacing: GameConstants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("First click protection")
                 Layout.fillWidth: true
@@ -34,6 +35,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Invert left and right click")
                 Layout.fillWidth: true
@@ -53,6 +55,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Quick reveal connected cells")
                 Layout.fillWidth: true
@@ -73,6 +76,7 @@ Pane {
         RowLayout {
             enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Enable question marks")
                 Layout.fillWidth: true
@@ -101,6 +105,7 @@ Pane {
         RowLayout {
             enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Enable green question marks")
                 Layout.fillWidth: true
@@ -128,6 +133,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Load last game on start")

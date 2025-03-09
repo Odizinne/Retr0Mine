@@ -170,15 +170,9 @@ Item {
         }
     }
 
-    property string connectionQualityColor: {
-        if (SteamIntegration.currentPing <= 150 && SteamIntegration.currentPing !== -1) {
-            return Application.styleHints.colorScheme == Qt.Dark ? "#28d13c" : "#2adb0f"
-        } else if (SteamIntegration.currentPing > 150 && SteamIntegration.currentPing < 250 && SteamIntegration.currentPing !== -1) {
-            return Application.styleHints.colorScheme == Qt.Dark ? "#f57842" : "#db4d0f"
-        } else {
-            return Application.styleHints.colorScheme == Qt.Dark ? "#d12844" : "#db0f31"
-        }
-    }
+    property int settingsRowSpacing: 10
+    property int settingsColumnSpacing: GameSettings.themeIndex === 0 ? 15 : 20
+    property int settingsComponentsHeight: GameSettings.themeIndex === 0 ? 35 : 32
 }
 
 

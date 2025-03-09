@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.impl
 import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
@@ -11,10 +12,11 @@ Pane {
         ScrollBar.vertical.policy: (contentHeight > height) ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         contentWidth: width - 12
         ColumnLayout {
-            spacing: 20
+            spacing: GameConstants.settingsColumnSpacing
             anchors.fill: parent
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
                 Label {
                     text: qsTr("Animations")
@@ -41,6 +43,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
                 Label {
                     text: qsTr("Display timer")
@@ -59,6 +62,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
                     enabled: !GameCore.gamescope
                     text: qsTr("Start in full screen")
@@ -81,6 +85,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
                     text: qsTr("Revealed cells frame")
                     Layout.fillWidth: true
@@ -100,6 +105,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
                     text: qsTr("Shake partially satisfied cells")
                     Layout.fillWidth: true
@@ -119,6 +125,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
                     text: qsTr("Dim satisfied cells")
                     Layout.fillWidth: true
@@ -138,6 +145,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 enabled: GameSettings.dimSatisfied
                 Label {
                     text: qsTr("Dim level")
@@ -154,6 +162,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
                     text: qsTr("Numbers font")
                     Layout.fillWidth: true
@@ -173,6 +182,7 @@ Pane {
             RowLayout {
                 visible: SteamIntegration.initialized
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
                     text: qsTr("Grid reset animation")
                     Layout.fillWidth: true
@@ -224,6 +234,7 @@ Pane {
 
             RowLayout {
                 visible: SteamIntegration.initialized
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 spacing: 10
                 Layout.rightMargin: 5
 
@@ -238,13 +249,13 @@ Pane {
                 }
 
                 Button {
-                    Layout.preferredWidth: 40
-                    Layout.preferredHeight: 40
+                    Layout.preferredWidth: 35
+                    Layout.preferredHeight: 35
                     checkable: true
                     icon.source: "qrc:/icons/flag.png"
                     checked: GameSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
-                    icon.width: 35
-                    icon.height: 35
+                    icon.width: 30
+                    icon.height: 30
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
@@ -253,14 +264,11 @@ Pane {
                 }
 
                 Button {
-                    Layout.preferredWidth: 40
-                    Layout.preferredHeight: 40
+                    Layout.preferredWidth: 35
+                    Layout.preferredHeight: 35
                     enabled: GameState.flag1Unlocked
                     checkable: true
                     checked: GameState.flag1Unlocked && GameSettings.flagSkinIndex === 1
-                    icon.source: GameState.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
-                    icon.width: 35
-                    icon.height: 35
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     ToolTip.visible: hovered && !enabled
@@ -268,17 +276,21 @@ Pane {
                     onCheckedChanged: {
                         if (checked) GameSettings.flagSkinIndex = 1
                     }
+
+                    IconImage {
+                        source: GameState.flag1Unlocked ? "qrc:/icons/flag1.png" : "qrc:/icons/locked.png"
+                        sourceSize.width: 20
+                        sourceSize.height: 20
+                        anchors.fill: parent
+                    }
                 }
 
                 Button {
-                    Layout.preferredWidth: 40
-                    Layout.preferredHeight: 40
+                    Layout.preferredWidth: 35
+                    Layout.preferredHeight: 35
                     enabled: GameState.flag2Unlocked
                     checkable: true
                     checked: GameState.flag2Unlocked && GameSettings.flagSkinIndex === 2
-                    icon.source: GameState.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
-                    icon.width: 35
-                    icon.height: 35
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     ToolTip.visible: hovered && !enabled
@@ -286,23 +298,34 @@ Pane {
                     onCheckedChanged: {
                         if (checked) GameSettings.flagSkinIndex = 2
                     }
+
+                    IconImage {
+                        source: GameState.flag2Unlocked ? "qrc:/icons/flag2.png" : "qrc:/icons/locked.png"
+                        sourceSize.width: 20
+                        sourceSize.height: 20
+                        anchors.fill: parent
+                    }
                 }
 
                 Button {
-                    Layout.preferredWidth: 40
-                    Layout.preferredHeight: 40
+                    Layout.preferredWidth: 35
+                    Layout.preferredHeight: 35
                     enabled: GameState.flag3Unlocked
                     checkable: true
                     checked: GameState.flag3Unlocked && GameSettings.flagSkinIndex === 3
-                    icon.source: GameState.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
-                    icon.width: 35
-                    icon.height: 35
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     ToolTip.visible: hovered && !enabled
                     ToolTip.text: qsTr("Unlock Minefield Legend achievement")
                     onCheckedChanged: {
                         if (checked) GameSettings.flagSkinIndex = 3
+                    }
+
+                    IconImage {
+                        source: GameState.flag3Unlocked ? "qrc:/icons/flag3.png" : "qrc:/icons/locked.png"
+                        sourceSize.width: 20
+                        sourceSize.height: 20
+                        anchors.fill: parent
                     }
                 }
             }

@@ -9,7 +9,7 @@ Pane {
     ColumnLayout {
         enabled: !(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)
         width: parent.width
-        spacing: GameCore.isFluent ? 10 : 20
+        spacing: GameConstants.settingsColumnSpacing
 
         ButtonGroup {
             id: difficultyGroup
@@ -21,6 +21,7 @@ Pane {
             RowLayout {
                 id: difficultyRow
                 Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 required property var modelData
                 required property int index
 
@@ -44,7 +45,8 @@ Pane {
 
                 RadioButton {
                     id: radioButton
-                    Layout.preferredWidth: height
+                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
                     Layout.alignment: Qt.AlignRight
                     ButtonGroup.group: difficultyGroup
                     checked: GameSettings.difficulty === parent.index
@@ -71,6 +73,7 @@ Pane {
         RowLayout {
             enabled: GameSettings.difficulty === 4
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Width:")
                 Layout.fillWidth: true
@@ -90,6 +93,7 @@ Pane {
         RowLayout {
             enabled: GameSettings.difficulty === 4
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Height:")
                 Layout.fillWidth: true
@@ -108,6 +112,7 @@ Pane {
         RowLayout {
             enabled: GameSettings.difficulty === 4
             Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Mines:")
                 Layout.fillWidth: true
