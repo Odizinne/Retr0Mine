@@ -19,6 +19,12 @@ Item {
                 chatButton.hasNewMessages = true
             }
         }
+
+        function onMultiplayerStatusChanged() {
+            if (!SteamIntegration.isInMultiplayerGame) {
+                chatButton.hasNewMessages = false
+            }
+        }
     }
 
     SoundEffect {

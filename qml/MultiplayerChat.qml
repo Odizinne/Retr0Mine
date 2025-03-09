@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -60,7 +62,6 @@ Frame {
                 spacing: 12
                 width: parent.width
 
-                // Auto-scroll to bottom when new messages arrive
                 onCountChanged: {
                     if (count > 0) {
                         positionViewAtEnd();
@@ -68,8 +69,10 @@ Frame {
                 }
 
                 delegate: RowLayout {
+                    id: msgContainer
                     width: chatListView.width
                     spacing: 8
+                    required property var modelData
 
                     // Avatar image
                     Image {
@@ -79,7 +82,7 @@ Frame {
                         Layout.preferredWidth: 24
                         Layout.preferredHeight: 24
                         source: {
-                            const isFromLocalPlayer = modelData.isLocalPlayer;
+                            const isFromLocalPlayer = msgContainer.modelData.isLocalPlayer;
                             const name = isFromLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName;
                             const avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(name);
                             return avatarHandle > 0 ? SteamIntegration.getAvatarImageForHandle(avatarHandle) : "qrc:/icons/steam.png";
@@ -98,7 +101,6 @@ Frame {
                         }
                     }
 
-                    // Message bubble
                     Item {
                         Layout.fillWidth: true
                         Layout.preferredHeight: messageText.height + 12
@@ -108,20 +110,19 @@ Frame {
                             spacing: 2
 
                             Label {
-                                text: modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName
+                                text: msgContainer.modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName
                                 font.pixelSize: 13
                                 font.bold: true
                                 color: GameConstants.foregroundColor
-                                //opacity: modelData.isLocalPlayer ? 0.7 : 1
                             }
 
                             Label {
                                 id: messageText
-                                text: modelData.message
+                                text: msgContainer.modelData.message
                                 wrapMode: Text.WordWrap
                                 Layout.fillWidth: true
                                 color: GameConstants.foregroundColor
-                                opacity: modelData.isLocalPlayer ? 0.5 : 0.8
+                                opacity: msgContainer.modelData.isLocalPlayer ? 0.5 : 0.8
                             }
                         }
                     }
