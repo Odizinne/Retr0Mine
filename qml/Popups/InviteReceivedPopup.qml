@@ -35,6 +35,11 @@ Popup {
             Layout.preferredHeight: 35
             focusPolicy: Qt.NoFocus
             onClicked: {
+                if (SteamIntegration.isInMultiplayerGame) {
+                    SteamIntegration.leaveLobby()
+                }
+                NetworkManager.sessionRunning = false
+
                 SteamIntegration.acceptInvite(invitePopup.connectData)
                 invitePopup.visible = false
             }
