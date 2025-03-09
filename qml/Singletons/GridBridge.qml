@@ -2,7 +2,7 @@ pragma Singleton
 import QtQuick
 import net.odizinne.retr0mine 1.0
 
-QtObject {
+Item {
     property var grid: null
     property var audioEngine: null
     property var leaderboardWindow: null
@@ -10,6 +10,8 @@ QtObject {
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
     property bool generationCancelled: false
+    property bool idleShakeScheduled: false
+    property bool globalShakeActive: false
 
     // Helper function to safely get a cell
     function getCell(index) {
@@ -297,6 +299,7 @@ QtObject {
 
     function reveal(index) {
         // Check if we're in multiplayer
+        registerPlayerAction()
         if (NetworkManager.handleMultiplayerReveal(index)) {
             return; // Action handled by multiplayer
         }
@@ -566,6 +569,7 @@ QtObject {
 
     function toggleFlag(index) {
         // Check if we're in multiplayer
+        registerPlayerAction()
         if (NetworkManager.handleMultiplayerToggleFlag(index)) {
             return; // Action handled by multiplayer
         }
@@ -736,5 +740,60 @@ QtObject {
         }
 
         return flagCount;
+    }
+
+    Timer {
+        id: idleTimer
+        interval: 3000
+        repeat: false
+        onTriggered: {
+            // Start shaking if appropriate
+            GridBridge.playShakeAnimationIfNeeded()
+        }
+    }
+
+    function registerPlayerAction() {
+        // Reset the idle timer
+        idleTimer.restart()
+        // Cancel any active shake
+        globalShakeActive = false
+    }
+
+    // Check if any cells need shaking and start the animation
+    function playShakeAnimationIfNeeded() {
+        // Check if any cells meet shake conditions
+        let anyCellNeedsShake = false
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+            const cell = getCell(i)
+            if (cell && cell.shakeConditionsMet) {
+                anyCellNeedsShake = true
+                break
+            }
+        }
+
+        if (anyCellNeedsShake && GameSettings.shakeUnifinishedNumbers) {
+            // Start shake animation
+            globalShakeActive = true
+
+            // Set timer to end animation
+            shakeTimer.restart()
+        } else {
+            // No cells need shaking, so check again after 3 seconds
+            idleTimer.restart()
+        }
+    }
+
+    // Timer to control shake animation duration
+    Timer {
+        id: shakeTimer
+        interval: 1500 // Animation duration (matches 3 loops of your animation)
+        repeat: false
+        onTriggered: {
+            // End shake animation
+            GridBridge.globalShakeActive = false
+
+            // Schedule next idle check
+            idleTimer.restart()
+        }
     }
 }

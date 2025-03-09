@@ -25,32 +25,7 @@ Item {
     property int diagonalSum
     property bool inCooldown: false
     property bool localPlayerOwns: false
-    property bool shouldShake: false
     property bool shakeConditionsMet: false
-
-    // Timer to delay the start of the shake animation
-    Timer {
-        id: shakeDelayTimer
-        interval: 3000
-        repeat: false
-        onTriggered: {
-            if (cellItem.shakeConditionsMet) {
-                cellItem.shouldShake = true
-            }
-        }
-    }
-
-    // Timer to enforce cooldown between shake animations
-    Timer {
-        id: shakeCooldownTimer
-        interval: 3000
-        repeat: false
-        onTriggered: {
-            if (cellItem.shakeConditionsMet) {
-                shakeDelayTimer.restart()
-            }
-        }
-    }
 
     function highlightHint() {
         hintAnimation.start();
@@ -59,9 +34,6 @@ Item {
     function updateShakeState() {
         if (!GameSettings.shakeUnifinishedNumbers) {
             shakeConditionsMet = false;
-            shouldShake = false;
-            shakeCooldownTimer.stop();
-            shakeDelayTimer.stop();
             return;
         }
 
@@ -106,17 +78,6 @@ Item {
 
         // Update the conditions state
         shakeConditionsMet = shouldShakeNew;
-
-        // If conditions are no longer met, stop shaking immediately and reset timers
-        if (!shakeConditionsMet) {
-            shouldShake = false;
-            shakeCooldownTimer.stop();
-            shakeDelayTimer.stop();
-        }
-        // If conditions are newly met and not already shaking or in cooldown/delay
-        else if (shakeConditionsMet && !shouldShake && !shakeCooldownTimer.running && !shakeDelayTimer.running) {
-            shakeDelayTimer.restart();
-        }
     }
 
     onFlaggedChanged: {
@@ -425,6 +386,9 @@ Item {
             property bool isHovered: false
 
             function handleCellClick(mouse) {
+                // Register player action to reset idle timer
+                GridBridge.registerPlayerAction()
+
                 // Return early if cell is in cooldown but ONLY if a flag action was attempted
                 if (GameState.nextClickIsSignal) {
                     GameState.nextClickIsSignal = false
@@ -523,10 +487,10 @@ Item {
                    GameState.numbers && GameState.numbers[cellItem.index]
                    )
 
-        // Add shake animation for the text
+        // Modified shake animation to use global state
         SequentialAnimation {
             id: shakeAnimation
-                running: cellItem.shouldShake && GameSettings.shakeUnifinishedNumbers
+            running: cellItem.shakeConditionsMet && GridBridge.globalShakeActive && GameSettings.shakeUnifinishedNumbers
             loops: 3
             alwaysRunToEnd: true
 
@@ -561,12 +525,6 @@ Item {
                 to: 0
                 duration: 50
                 easing.type: Easing.InOutQuad
-            }
-
-            // No pause here since we want just 3 loops of the shake
-            onFinished: {
-                cellItem.shouldShake = false;
-                shakeCooldownTimer.restart();
             }
         }
     }
