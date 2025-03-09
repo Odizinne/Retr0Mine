@@ -757,22 +757,22 @@ QtObject {
             GameState.flaggedCount = gameState.flaggedCount || 0;
 
             // Update display for game over
-            if (GameState.gameOver) {
-                GameState.displayPostGame = true;
-                if (GameState.gameWon) {
-                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
-                } else {
-                    //if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
-                }
-            }
+            //if (GameState.gameOver) {
+            //    GameState.displayPostGame = true;
+            //    if (GameState.gameWon) {
+            //        if (GridBridge.audioEngine) GridBridge.audioEngine.playWin();
+            //    } else {
+            //        if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose();
+            //    }
+            //}
         }
 
         // Finish processing
         isProcessingNetworkAction = false;
 
-        if (!SteamIntegration.isHost) {
-            reconcileState(gameState);
-        }
+        //if (!SteamIntegration.isHost) {
+        //    reconcileState(gameState);
+        //}
         console.log("Game state applied successfully");
     }
 
@@ -817,15 +817,15 @@ QtObject {
             GridBridge.performReveal(cellIndex);
 
             // If game over, send a simpler update without trying to access revealedCells
-            if (GameState.gameOver) {
-                // Send a compact state update with just the game state
-                const stateUpdate = {
-                    gameOver: GameState.gameOver,
-                    gameWon: GameState.gameWon
-                    // No revealedCells here since we don't have that information
-                };
-                SteamIntegration.sendGameState(stateUpdate);
-            }
+            //if (GameState.gameOver) {
+            //    // Send a compact state update with just the game state
+            //    const stateUpdate = {
+            //        gameOver: GameState.gameOver,
+            //        gameWon: GameState.gameWon
+            //        // No revealedCells here since we don't have that information
+            //    };
+            //    SteamIntegration.sendGameState(stateUpdate);
+            //}
             break;
 
         case "flag":
