@@ -9,7 +9,6 @@ Popup {
     id: control
     modal: true
     closePolicy: Popup.NoAutoClose
-    //width: lyt.implicitWidth + 20
     visible: ComponentsContext.matchmakingPopupVisible
 
     onVisibleChanged: {
@@ -31,6 +30,7 @@ Popup {
 
         Label {
             text: qsTr("Select a difficulty:")
+            visible: !SteamIntegration.isInMatchmaking
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 15
         }
@@ -41,13 +41,13 @@ Popup {
         }
 
         Frame {
+            visible: !SteamIntegration.isInMatchmaking
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             ColumnLayout {
                 anchors.fill: parent
 
-                // Define difficulty data model
                 property var difficultyData: [
                     { name: "Easy", queueCount: SteamIntegration.easyQueueCount, index: 0 },
                     { name: "Medium", queueCount: SteamIntegration.mediumQueueCount, index: 1 },
@@ -103,6 +103,17 @@ Popup {
                     }
                 }
             }
+        }
+
+        BusyIndicator {
+            visible: SteamIntegration.isInMatchmaking
+            Layout.fillWidth: true
+        }
+
+        Label {
+            visible: SteamIntegration.isInMatchmaking
+            text: qsTr("Searching for players...")
+            Layout.fillWidth: true
         }
 
         RowLayout {
