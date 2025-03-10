@@ -180,7 +180,7 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="165"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="166"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>

@@ -99,22 +99,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="67"/>
         <source>Custom seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Seed perso.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="76"/>
         <source>Empty for random</source>
-        <translation type="unfinished"></translation>
+        <translation>Vide pour aléatoire</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="98"/>
         <source>Last used seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Derniere seed utilisée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="117"/>
         <source>First click coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Coordonnées du premier click</translation>
     </message>
 </context>
 <context>
@@ -181,7 +181,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="165"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="166"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
