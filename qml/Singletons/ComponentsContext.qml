@@ -20,4 +20,6 @@ QtObject {
     property string lastFirstClickX: ""
     property string lastFirstClickY: ""
     signal allCellsReady()
+
+    property bool testingMatchmaking: false
 }

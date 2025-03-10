@@ -79,7 +79,7 @@ ApplicationWindow {
         }
 
         function onMultiplayerStatusChanged() {
-            if (SteamIntegration.isInMultiplayerGame) {
+            if (!SteamIntegration.isInMultiplayerGame) {
                 ComponentsContext.privateSessionPopupVisible = false
             }
         }

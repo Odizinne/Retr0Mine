@@ -139,5 +139,24 @@ Pane {
                 Layout.rightMargin: 5
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Label {
+                Layout.fillWidth: true
+                text: "Test code"
+                Layout.preferredWidth: colorSchemeComboBox.width
+            }
+
+            TextField {
+                Layout.rightMargin: 5
+                onAccepted: {
+                    if (text === "matchmaking") {
+                        ComponentsContext.testingMatchmaking = true
+                        text = ""
+                    }
+                }
+            }
+        }
     }
 }

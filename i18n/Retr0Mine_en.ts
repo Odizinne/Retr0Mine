@@ -153,7 +153,7 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="57"/>
-        <source>Not implemented yet</source>
+        <source>Not enough players :(</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -501,32 +501,32 @@ Current game will be saved and restored</source>
 <context>
     <name>MatchmakingPopup</name>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="32"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="36"/>
         <source>Select a difficulty:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="80"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="84"/>
         <source> players</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="115"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="119"/>
         <source>Searching for players...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="125"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="129"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="137"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="141"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="143"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="147"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
