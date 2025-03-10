@@ -99,7 +99,7 @@ Popup {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 14
-                text: (SteamIntegration.isP2PConnected || SteamIntegration.connectionState === SteamIntegration.Connected)
+                text: (SteamIntegration.isP2PConnected && SteamIntegration.connectionState === SteamIntegration.Connected)
                       ? SteamIntegration.connectedPlayerName + qsTr(" is generating grid...")
                       : qsTr("Establishing connection with ") + SteamIntegration.connectedPlayerName + "..."
             }
