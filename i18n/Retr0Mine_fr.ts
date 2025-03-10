@@ -378,52 +378,52 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>LeaderboardPopup</name>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="96"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="98"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="102"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="104"/>
         <source>Easy</source>
         <translation>Facile</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="107"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="109"/>
         <source>Medium</source>
         <translation>intermédiaire</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="112"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="114"/>
         <source>Hard</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="117"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="119"/>
         <source>Retr0</source>
         <translation>Retr0</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="128"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="130"/>
         <source>Time</source>
         <translation>Temps</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="160"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="162"/>
         <source>Wins</source>
         <translation>Victoires</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="193"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="195"/>
         <source>Clear</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="193"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="195"/>
         <source>Confirm?</source>
         <translation>Confirmer?</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="230"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="232"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

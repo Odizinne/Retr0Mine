@@ -48,6 +48,8 @@ Popup {
                     if (SteamIntegration.initialized) {
                         var avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(SteamIntegration.playerName)
                         return avatarHandle > 0 ? SteamIntegration.getAvatarImageForHandle(avatarHandle) : "qrc:/icons/steam.png"
+                    } else {
+                        return ""
                     }
                 }
                 mipmap: true
