@@ -10,6 +10,8 @@
 #include <QThread>
 #include <QPainter>
 #include <QPainterPath>
+#include <QElapsedTimer>
+#include <QDateTime>
 #include <steam_api.h>
 
 SteamIntegration::SteamIntegration(QObject *parent)
@@ -20,21 +22,37 @@ SteamIntegration::SteamIntegration(QObject *parent)
     , m_isConnecting(false)
     , m_lobbyReady(false)
     , m_p2pInitialized(false)
+    , m_connectionState(Disconnected)
+    , m_lastMessageTime(0)
+    , m_pingTime(0)
+    , m_lastPingSent(0)
+    , m_missedHeartbeats(0)
     , m_connectionCheckFailCount(0)
+    , m_attemptingReconnection(false)
+    , m_reconnectionAttempts(0)
 {
     QSettings settings("Odizinne", "Retr0Mine");
     m_difficulty = settings.value("difficulty", 0).toInt();
 
     initialize();
 
+    // Set up network timers
     connect(&m_p2pInitTimer, &QTimer::timeout, this, &SteamIntegration::sendP2PInitPing);
     connect(&m_networkTimer, &QTimer::timeout, this, &SteamIntegration::processNetworkMessages);
     connect(&m_connectionHealthTimer, &QTimer::timeout, this, &SteamIntegration::checkConnectionHealth);
+    connect(&m_heartbeatTimer, &QTimer::timeout, this, &SteamIntegration::sendHeartbeat);
+    connect(&m_reconnectionTimer, &QTimer::timeout, this, &SteamIntegration::tryReconnect);
+
+    // Create a regular callback timer
     QTimer* callbackTimer = new QTimer(this);
     connect(callbackTimer, &QTimer::timeout, this, &SteamIntegration::runCallbacks);
     callbackTimer->start(100);
 
-    m_networkTimer.setInterval(50);
+    // Configure timers
+    m_networkTimer.setInterval(50);     // Process network messages frequently
+    m_heartbeatTimer.setInterval(HEARTBEAT_INTERVAL);
+    m_connectionHealthTimer.setInterval(5000);  // Check connection every 5 seconds
+    m_reconnectionTimer.setInterval(3000);      // Try reconnection every 3 seconds
 }
 
 SteamIntegration::~SteamIntegration()
@@ -66,33 +84,33 @@ bool SteamIntegration::initialize()
 void SteamIntegration::shutdown()
 {
     if (m_initialized) {
+        // Stop all network-related timers
         m_networkTimer.stop();
         m_p2pInitTimer.stop();
+        m_heartbeatTimer.stop();
+        m_connectionHealthTimer.stop();
+        m_reconnectionTimer.stop();
 
+        // Close P2P sessions
         ISteamNetworking* steamNet = SteamNetworking();
-        if (steamNet) {
-            P2PSessionState_t sessionState;
-            bool hasSession = steamNet->GetP2PSessionState(m_connectedPlayerId, &sessionState);
-
-            if (m_connectedPlayerId.IsValid()) {
-                steamNet->CloseP2PSessionWithUser(m_connectedPlayerId);
-            }
-
+        if (steamNet && m_connectedPlayerId.IsValid()) {
+            steamNet->CloseP2PSessionWithUser(m_connectedPlayerId);
             SteamAPI_RunCallbacks();
         }
 
+        // Leave lobbies
         if (m_currentLobbyId.IsValid()) {
             SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
             SteamAPI_RunCallbacks();
         }
 
+        // Clear rich presence
         ISteamFriends* steamFriends = SteamFriends();
         if (steamFriends) {
             steamFriends->ClearRichPresence();
         }
 
         SteamAPI_RunCallbacks();
-
         SteamAPI_Shutdown();
         m_initialized = false;
     }
@@ -100,36 +118,50 @@ void SteamIntegration::shutdown()
 
 void SteamIntegration::cleanupMultiplayerSession(bool isShuttingDown)
 {
+    // Stop network-related timers
     m_networkTimer.stop();
     m_p2pInitTimer.stop();
+    m_heartbeatTimer.stop();
     m_connectionHealthTimer.stop();
+    m_reconnectionTimer.stop();
 
+    // If still initialized, close P2P sessions
     if (m_initialized && m_connectedPlayerId.IsValid()) {
         qDebug() << "SteamIntegration: Closing P2P session with:" << m_connectedPlayerId.ConvertToUint64();
         SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
         SteamAPI_RunCallbacks();
     }
 
+    // If still in a multiplayer game, leave the lobby
     if (m_initialized && m_inMultiplayerGame && m_currentLobbyId.IsValid()) {
         qDebug() << "SteamIntegration: Leaving lobby:" << m_currentLobbyId.ConvertToUint64();
         SteamMatchmaking()->LeaveLobby(m_currentLobbyId);
         SteamAPI_RunCallbacks();
     }
 
+    // Reset all multiplayer state
     m_inMultiplayerGame = false;
     m_isHost = false;
     m_lobbyReady = false;
     m_p2pInitialized = false;
     m_isConnecting = false;
+    m_attemptingReconnection = false;
+    m_reconnectionAttempts = 0;
     m_currentLobbyId = CSteamID();
     m_connectedPlayerId = CSteamID();
     m_connectedPlayerName = "";
+    m_missedHeartbeats = 0;
 
+    // Update connection state
+    updateConnectionState(Disconnected);
+
+    // Update rich presence and run callbacks if not shutting down
     if (m_initialized && !isShuttingDown) {
         updateRichPresence();
         SteamAPI_RunCallbacks();
     }
 
+    // Emit signals to notify QML if not shutting down
     if (!isShuttingDown) {
         emit multiplayerStatusChanged();
         emit hostStatusChanged();
@@ -224,7 +256,6 @@ void SteamIntegration::setDifficulty(int difficulty)
     if (m_p2pInitialized) return;
     if (m_difficulty != difficulty) {
         m_difficulty = difficulty;
-
         updateRichPresence();
     }
 }
@@ -282,16 +313,48 @@ void SteamIntegration::runCallbacks()
     }
 }
 
+// Connection state management
+void SteamIntegration::updateConnectionState(ConnectionState newState)
+{
+    if (m_connectionState != newState) {
+        ConnectionState oldState = m_connectionState;
+        m_connectionState = newState;
+
+        qDebug() << "SteamIntegration: Connection state changed from"
+                 << oldState << "to" << newState;
+
+        // Start or stop heartbeat based on connection state
+        if (newState == Connected) {
+            // Reset heartbeat tracking
+            m_missedHeartbeats = 0;
+            m_lastMessageTime = QDateTime::currentMSecsSinceEpoch();
+
+            // Ensure heartbeat is running
+            if (!m_heartbeatTimer.isActive()) {
+                m_heartbeatTimer.start();
+            }
+        }
+        else if (newState == Disconnected) {
+            // Stop heartbeat when disconnected
+            m_heartbeatTimer.stop();
+        }
+
+        emit connectionStateChanged(newState);
+    }
+}
+
 void SteamIntegration::createLobby()
 {
     qDebug() << "SteamIntegration: Creating lobby...";
     if (!m_initialized) {
         qDebug() << "SteamIntegration: Cannot create lobby - Steam not initialized";
+        emit connectionFailed("Steam not initialized");
         return;
     }
 
     if (m_inMultiplayerGame) {
         qDebug() << "SteamIntegration: Cannot create lobby - Already in multiplayer game";
+        emit connectionFailed("Already in multiplayer game");
         return;
     }
 
@@ -307,42 +370,56 @@ void SteamIntegration::createLobby()
     // Register the callback for this specific API call
     m_lobbyCreatedCallback.Set(apiCall, this, &SteamIntegration::OnLobbyCreated);
 
+    // Update state and notify UI
     m_isConnecting = true;
+    updateConnectionState(Connecting);
     emit connectingStatusChanged();
 }
 
 void SteamIntegration::OnLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure)
 {
+    // Reset connecting flag
     m_isConnecting = false;
     emit connectingStatusChanged();
 
     if (bIOFailure || pCallback->m_eResult != k_EResultOK) {
-        qDebug() << "SteamIntegration: Lobby creation failed with error:"
-                 << (bIOFailure ? "I/O Failure" : QString::number(pCallback->m_eResult));
-        emit connectionFailed("Failed to create lobby (error " +
-                              QString(bIOFailure ? "I/O Failure" : QString::number(pCallback->m_eResult)) + ")");
+        // Handle lobby creation failure
+        QString errorMessage = bIOFailure ?
+                                   "I/O Failure" :
+                                   QString("Error %1").arg(pCallback->m_eResult);
+
+        qDebug() << "SteamIntegration: Lobby creation failed with error:" << errorMessage;
+        updateConnectionState(Disconnected);
+        emit connectionFailed("Failed to create lobby (" + errorMessage + ")");
         return;
     }
 
+    // Lobby created successfully
     m_currentLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
     qDebug() << "SteamIntegration: Lobby created with ID:" << m_currentLobbyId.ConvertToUint64();
 
+    // Update state for host mode
     m_isHost = true;
     m_inMultiplayerGame = true;
-
-    emit hostStatusChanged();
-    emit multiplayerStatusChanged();
-    emit canInviteFriendChanged();
 
     // Set lobby data (game name, version, etc.)
     SteamMatchmaking()->SetLobbyData(m_currentLobbyId, "game", "Retr0Mine");
     SteamMatchmaking()->SetLobbyData(m_currentLobbyId, "version", "1.0");
 
-    updateRichPresence();
-
+    // Start network processing
     m_networkTimer.start();
 
+    // Update connection state
+    updateConnectionState(Connected);
+
+    // Notify UI
+    emit hostStatusChanged();
+    emit multiplayerStatusChanged();
+    emit canInviteFriendChanged();
     emit connectionSucceeded();
+
+    // Update rich presence
+    updateRichPresence();
 }
 
 QStringList SteamIntegration::getOnlineFriends()
@@ -467,19 +544,32 @@ void SteamIntegration::inviteFriend(const QString& friendId)
 void SteamIntegration::acceptInvite(const QString& lobbyId)
 {
     qDebug() << "SteamIntegration: Accepting invite to lobby:" << lobbyId;
-    if (!m_initialized || m_inMultiplayerGame) {
-        qDebug() << "SteamIntegration: Cannot accept invite - not initialized or already in game";
+    if (!m_initialized) {
+        qDebug() << "SteamIntegration: Cannot accept invite - Steam not initialized";
+        emit connectionFailed("Steam not initialized");
+        return;
+    }
+
+    if (m_inMultiplayerGame) {
+        qDebug() << "SteamIntegration: Cannot accept invite - Already in a game";
+        emit connectionFailed("Already in a multiplayer game");
         return;
     }
 
     CSteamID steamLobbyId(lobbyId.toULongLong());
     if (steamLobbyId.IsValid()) {
+        // Update state
         m_isConnecting = true;
+        updateConnectionState(Connecting);
         emit connectingStatusChanged();
 
+        // Join the lobby
         SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(steamLobbyId);
         m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
         qDebug() << "SteamIntegration: Join lobby call made, waiting for callback";
+    } else {
+        qDebug() << "SteamIntegration: Invalid lobby ID:" << lobbyId;
+        emit connectionFailed("Invalid lobby ID");
     }
 }
 
@@ -488,6 +578,11 @@ void SteamIntegration::leaveLobby()
     qDebug() << "SteamIntegration: Leaving lobby";
     if (!m_initialized)
         return;
+
+    // Send a disconnection message to the other player if connected
+    if (m_p2pInitialized && m_connectedPlayerId.IsValid()) {
+        sendSystemMessage("disconnect", {{"reason", "User left the game"}});
+    }
 
     // Even if we think we're not in a multiplayer game, try to clean up
     // This helps with edge cases where the state got out of sync
@@ -506,6 +601,7 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
 {
     qDebug() << "SteamIntegration: OnLobbyEntered callback received";
 
+    // Reset connecting flag
     m_isConnecting = false;
     emit connectingStatusChanged();
 
@@ -535,51 +631,178 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
         }
 
         qDebug() << "SteamIntegration: Failed to enter lobby, error:" << errorMessage;
+        updateConnectionState(Disconnected);
         emit connectionFailed(errorMessage);
         return;
     }
 
     m_currentLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
-    m_inMultiplayerGame = true;
 
-    // Determine if we're the host
-    CSteamID lobbyOwner = SteamMatchmaking()->GetLobbyOwner(m_currentLobbyId);
-    m_isHost = (lobbyOwner == SteamUser()->GetSteamID());
+    // Check what type of lobby this is
+    const char* lobbyType = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "lobby_type");
+    const char* matchmade = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "matchmade");
 
-    qDebug() << "SteamIntegration: Joined lobby, host status:" << m_isHost;
+    if (lobbyType && strcmp(lobbyType, "matchmaking") == 0) {
+        // This is a matchmaking lobby
+        qDebug() << "SteamIntegration: Joined matchmaking lobby";
 
-    // If we're not the host, the lobby owner is our connected player
-    if (!m_isHost) {
-        m_connectedPlayerId = lobbyOwner;
-        m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
-        emit connectedPlayerChanged();
+        m_matchmakingLobbyId = m_currentLobbyId;
+        m_inMatchmaking = true;
+        m_inMultiplayerGame = false;
+        updateConnectionState(Connected);
 
-        startP2PInitialization();
+        // Set player metadata for matching
+        char difficultyStr[2];
+        snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+        SteamMatchmaking()->SetLobbyMemberData(m_matchmakingLobbyId, "difficulty", difficultyStr);
+
+        // Start checking for matches
+        m_matchmakingTimer.setInterval(2000);
+        m_matchmakingTimer.setSingleShot(false);
+        m_matchmakingTimer.start();
+        connect(&m_matchmakingTimer, &QTimer::timeout, this, &SteamIntegration::checkForMatches);
+
+        // Update queue counts
+        refreshQueueCounts();
+
+        emit matchmakingStatusChanged();
+        emit connectionSucceeded();
+
+    } else if (matchmade && strcmp(matchmade, "1") == 0) {
+        // This is a matchmade game lobby
+        qDebug() << "SteamIntegration: Joined matchmade game lobby";
+
+        m_inMatchmaking = false;
+        m_inMultiplayerGame = true;
+
+        // Determine if we're the host
+        CSteamID lobbyOwner = SteamMatchmaking()->GetLobbyOwner(m_currentLobbyId);
+        m_isHost = (lobbyOwner == SteamUser()->GetSteamID());
+
+        qDebug() << "SteamIntegration: Matchmade game lobby, host status:" << m_isHost;
+
+        // If we're not the host, the lobby owner is our connected player
+        if (!m_isHost) {
+            m_connectedPlayerId = lobbyOwner;
+            m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
+            emit connectedPlayerChanged();
+
+            startP2PInitialization();
+        }
+
+        // Start the network timer
+        m_networkTimer.start();
+
+        // Update connection state
+        updateConnectionState(Connected);
+
+        // Get the difficulty from the lobby
+        const char* difficultyStr = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "difficulty");
+        if (difficultyStr) {
+            int difficulty = atoi(difficultyStr);
+            m_selectedMatchmakingDifficulty = difficulty;
+            emit selectedDifficultyChanged();
+
+            // Update game settings to match the difficulty
+            m_difficulty = difficulty;
+            updateRichPresence();
+        }
+
+        emit matchmakingStatusChanged();
+        emit hostStatusChanged();
+        emit multiplayerStatusChanged();
+        emit canInviteFriendChanged();
+        emit connectionSucceeded();
+
+    } else {
+        // This is a regular game lobby
+        qDebug() << "SteamIntegration: Joined regular game lobby";
+
+        m_inMultiplayerGame = true;
+
+        // Determine if we're the host
+        CSteamID lobbyOwner = SteamMatchmaking()->GetLobbyOwner(m_currentLobbyId);
+        m_isHost = (lobbyOwner == SteamUser()->GetSteamID());
+
+        qDebug() << "SteamIntegration: Joined lobby, host status:" << m_isHost;
+
+        // If we're not the host, the lobby owner is our connected player
+        if (!m_isHost) {
+            m_connectedPlayerId = lobbyOwner;
+            m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
+            emit connectedPlayerChanged();
+
+            startP2PInitialization();
+        }
+
+        // Start network message processing
+        m_networkTimer.start();
+
+        // Update connection state
+        updateConnectionState(Connected);
+
+        // Notify UI
+        emit multiplayerStatusChanged();
+        emit hostStatusChanged();
+        emit canInviteFriendChanged();
+        emit connectionSucceeded();
+
+        // Update rich presence
+        updateRichPresence();
     }
-
-    m_networkTimer.start();
-
-    emit multiplayerStatusChanged();
-    emit hostStatusChanged();
-    emit canInviteFriendChanged();
-    emit connectionSucceeded();
 
     qDebug() << "SteamIntegration: Lobby join complete";
 }
 
 void SteamIntegration::OnLobbyDataUpdate(LobbyDataUpdate_t *pCallback)
 {
-    // Check if this is our lobby
-    if (m_currentLobbyId.ConvertToUint64() != pCallback->m_ulSteamIDLobby)
-        return;
+    // If this update is for our matchmaking lobby
+    if (m_inMatchmaking && m_matchmakingLobbyId.IsValid() &&
+        m_matchmakingLobbyId.ConvertToUint64() == pCallback->m_ulSteamIDLobby) {
 
-    // Example: Check if the game is ready to start
-    const char* gameReadyValue = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "game_ready");
-    if (gameReadyValue && QString(gameReadyValue) == "1") {
-        if (!m_lobbyReady) {
-            m_lobbyReady = true;
-            emit lobbyReadyChanged();
-            qDebug() << "SteamIntegration: Lobby marked as ready";
+        // Check if there's a game lobby to join
+        const char* gameLobbyIdStr = SteamMatchmaking()->GetLobbyData(m_matchmakingLobbyId, "game_lobby_id");
+        const char* targetPlayerIdStr = SteamMatchmaking()->GetLobbyData(m_matchmakingLobbyId, "target_player_id");
+
+        if (gameLobbyIdStr && targetPlayerIdStr && strlen(gameLobbyIdStr) > 0) {
+            CSteamID targetPlayerId(strtoull(targetPlayerIdStr, nullptr, 10));
+
+            // Check if we're the targeted player
+            if (targetPlayerId == SteamUser()->GetSteamID()) {
+                CSteamID gameLobbyId(strtoull(gameLobbyIdStr, nullptr, 10));
+                qDebug() << "Auto-joining game lobby:" << gameLobbyId.ConvertToUint64();
+
+                // Stop matchmaking
+                m_matchmakingTimer.stop();
+                m_inMatchmaking = false;
+                emit matchmakingStatusChanged();
+
+                // Join the game lobby directly
+                m_isConnecting = true;
+                emit connectingStatusChanged();
+
+                SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(gameLobbyId);
+                m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
+
+                // Leave the matchmaking lobby
+                SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+                m_matchmakingLobbyId = CSteamID();
+
+                return; // We're joining a game lobby, no need to check further
+            }
+        }
+    }
+
+    // Regular lobby data handling for game lobbies
+    if (m_currentLobbyId.IsValid() && m_currentLobbyId.ConvertToUint64() == pCallback->m_ulSteamIDLobby) {
+        // Check if the game is ready to start
+        const char* gameReadyValue = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "game_ready");
+        if (gameReadyValue && QString(gameReadyValue) == "1") {
+            if (!m_lobbyReady) {
+                m_lobbyReady = true;
+                emit lobbyReadyChanged();
+                qDebug() << "SteamIntegration: Lobby marked as ready";
+            }
         }
     }
 }
@@ -589,18 +812,33 @@ void SteamIntegration::OnLobbyChatUpdate(LobbyChatUpdate_t *pCallback)
     // Handle player join/leave events
     qDebug() << "SteamIntegration: Lobby chat update received";
 
-    if (pCallback->m_ulSteamIDLobby != m_currentLobbyId.ConvertToUint64())
-        return;
+    // Check if this update is for one of our lobbies
+    bool isCurrentLobby = (pCallback->m_ulSteamIDLobby == m_currentLobbyId.ConvertToUint64());
+    bool isMatchmakingLobby = (pCallback->m_ulSteamIDLobby == m_matchmakingLobbyId.ConvertToUint64());
 
-    qDebug() << "SteamIntegration: Lobby chat update for our lobby, change flags:"
-             << pCallback->m_rgfChatMemberStateChange;
+    if (!isCurrentLobby && !isMatchmakingLobby) {
+        return; // Not for any of our lobbies
+    }
+
+    qDebug() << "SteamIntegration: Lobby chat update for "
+             << (isMatchmakingLobby ? "matchmaking" : "game")
+             << " lobby, change flags:" << pCallback->m_rgfChatMemberStateChange;
 
     // Check the chat member change flags
     if (pCallback->m_rgfChatMemberStateChange & k_EChatMemberStateChangeEntered) {
         // A player joined the lobby
         CSteamID playerId(pCallback->m_ulSteamIDUserChanged);
-        if (m_isHost && playerId != SteamUser()->GetSteamID()) {
-            // If we're the host and someone else joined, that's our connected player
+
+        if (isMatchmakingLobby) {
+            // For matchmaking lobby, just update queue counts
+            qDebug() << "SteamIntegration: Player" << playerId.ConvertToUint64()
+                     << "joined matchmaking lobby, updating queue counts";
+            refreshQueueCounts();
+
+        } else if (m_isHost && playerId != SteamUser()->GetSteamID()) {
+            // If we're the host and someone else joined our game lobby, that's our connected player
+            qDebug() << "SteamIntegration: Player joined our hosted game lobby";
+
             m_connectedPlayerId = playerId;
             m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(playerId);
             emit connectedPlayerChanged();
@@ -621,19 +859,28 @@ void SteamIntegration::OnLobbyChatUpdate(LobbyChatUpdate_t *pCallback)
     else if (pCallback->m_rgfChatMemberStateChange & (k_EChatMemberStateChangeLeft | k_EChatMemberStateChangeDisconnected)) {
         // A player left the lobby
         CSteamID playerId(pCallback->m_ulSteamIDUserChanged);
-        if (playerId == m_connectedPlayerId) {
-            // Our connected player left
-            m_connectedPlayerId = CSteamID();
-            m_connectedPlayerName = "";
-            m_lobbyReady = false;
 
-            emit connectedPlayerChanged();
-            emit lobbyReadyChanged();
+        if (isMatchmakingLobby) {
+            // For matchmaking lobby, just update queue counts
+            qDebug() << "SteamIntegration: Player" << playerId.ConvertToUint64()
+                     << "left matchmaking lobby, updating queue counts";
+            refreshQueueCounts();
 
-            qDebug() << "SteamIntegration: Connected player left lobby";
+        } else if (playerId == m_connectedPlayerId) {
+            // Our connected player left the game lobby
+            qDebug() << "SteamIntegration: Connected player left game lobby";
 
-            // You might want to end the multiplayer session
-            leaveLobby();
+            // Save the player name for notification
+            QString playerName = m_connectedPlayerName;
+
+            // Reset connection state
+            updateConnectionState(Disconnected);
+
+            // Clean up multiplayer session
+            cleanupMultiplayerSession();
+
+            // Notify the UI about the disconnection
+            emit notifyConnectionLost(playerName);
         }
     }
 }
@@ -645,14 +892,29 @@ void SteamIntegration::OnP2PSessionRequest(P2PSessionRequest_t *pCallback)
     qDebug() << "SteamIntegration: P2P session request from:" << requestorId.ConvertToUint64();
 
     // Only accept connections from players in our lobby
-    int memberCount = SteamMatchmaking()->GetNumLobbyMembers(m_currentLobbyId);
-    for (int i = 0; i < memberCount; i++) {
-        CSteamID memberId = SteamMatchmaking()->GetLobbyMemberByIndex(m_currentLobbyId, i);
-        if (memberId == requestorId) {
-            SteamNetworking()->AcceptP2PSessionWithUser(requestorId);
-            qDebug() << "SteamIntegration: P2P session accepted";
-            return;
+    if (m_currentLobbyId.IsValid()) {
+        int memberCount = SteamMatchmaking()->GetNumLobbyMembers(m_currentLobbyId);
+        for (int i = 0; i < memberCount; i++) {
+            CSteamID memberId = SteamMatchmaking()->GetLobbyMemberByIndex(m_currentLobbyId, i);
+            if (memberId == requestorId) {
+                SteamNetworking()->AcceptP2PSessionWithUser(requestorId);
+                qDebug() << "SteamIntegration: P2P session accepted";
+
+                // If we're in the middle of a reconnection attempt and this is our player, update state
+                if (m_attemptingReconnection && requestorId == m_connectedPlayerId) {
+                    qDebug() << "SteamIntegration: Reconnection request accepted";
+                }
+
+                return;
+            }
         }
+    }
+
+    // For reconnection attempts, check if this is the connected player ID
+    if (m_attemptingReconnection && requestorId == m_connectedPlayerId) {
+        SteamNetworking()->AcceptP2PSessionWithUser(requestorId);
+        qDebug() << "SteamIntegration: Reconnection P2P session accepted";
+        return;
     }
 
     qDebug() << "SteamIntegration: P2P session rejected - user not in lobby";
@@ -665,12 +927,31 @@ void SteamIntegration::OnP2PSessionConnectFail(P2PSessionConnectFail_t *pCallbac
     qDebug() << "SteamIntegration: P2P session connect failed with:" << failedId.ConvertToUint64();
 
     if (failedId == m_connectedPlayerId) {
-        QString errorReason;
-        errorReason = "Connection failed (error " + QString::number(pCallback->m_eP2PSessionError) + ")";
-
+        QString errorReason = "Connection failed (error " + QString::number(pCallback->m_eP2PSessionError) + ")";
         qDebug() << "SteamIntegration: Connection failed with connected player:" << errorReason;
-        emit connectionFailed(errorReason);
-        leaveLobby();
+
+        // If we're actively trying to reconnect, handle retry logic
+        if (m_attemptingReconnection) {
+            m_reconnectionAttempts++;
+
+            if (m_reconnectionAttempts >= MAX_RECONNECTION_ATTEMPTS) {
+                qDebug() << "SteamIntegration: Maximum reconnection attempts reached";
+                updateConnectionState(Disconnected);
+                m_attemptingReconnection = false;
+                emit reconnectionFailed();
+                cleanupMultiplayerSession();
+                emit notifyConnectionLost(m_connectedPlayerName);
+            } else {
+                qDebug() << "SteamIntegration: Reconnection attempt" << m_reconnectionAttempts
+                         << "failed, retrying...";
+                // Next attempt will happen automatically via the reconnection timer
+            }
+        } else {
+            // Normal connection failure
+            updateConnectionState(Disconnected);
+            emit connectionFailed(errorReason);
+            cleanupMultiplayerSession();
+        }
     }
 }
 
@@ -689,6 +970,7 @@ void SteamIntegration::OnGameLobbyJoinRequested(GameLobbyJoinRequested_t *pCallb
         QTimer::singleShot(500, [this, lobbyID]() {
             // Join the requested lobby after cleanup
             m_isConnecting = true;
+            updateConnectionState(Connecting);
             emit connectingStatusChanged();
 
             SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(CSteamID(lobbyID));
@@ -699,6 +981,7 @@ void SteamIntegration::OnGameLobbyJoinRequested(GameLobbyJoinRequested_t *pCallb
     } else {
         // Join the requested lobby immediately
         m_isConnecting = true;
+        updateConnectionState(Connecting);
         emit connectingStatusChanged();
 
         SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(pCallback->m_steamIDLobby);
@@ -710,46 +993,82 @@ void SteamIntegration::OnGameLobbyJoinRequested(GameLobbyJoinRequested_t *pCallb
 
 void SteamIntegration::processNetworkMessages()
 {
-    if (!m_initialized || !m_inMultiplayerGame)
+    if (!m_initialized || (!m_inMultiplayerGame && !m_attemptingReconnection))
         return;
 
     uint32 msgSize;
+    // Process all available packets in the queue
     while (SteamNetworking()->IsP2PPacketAvailable(&msgSize)) {
-        if (msgSize > 8192) {
+        // Only skip truly oversized packets (16KB is a reasonable limit)
+        if (msgSize > 16384) {
             qDebug() << "SteamIntegration: Skipping oversized packet:" << msgSize;
-            continue; // Skip oversized packets
+
+            // Read and discard the packet instead of leaving it in the queue
+            QByteArray discardBuffer(msgSize, 0);
+            CSteamID senderId;
+            SteamNetworking()->ReadP2PPacket(discardBuffer.data(), msgSize, nullptr, &senderId);
+            continue;
         }
 
         QByteArray buffer(msgSize, 0);
         CSteamID senderId;
 
         if (SteamNetworking()->ReadP2PPacket(buffer.data(), msgSize, &msgSize, &senderId)) {
-            // Process the message based on a simple header
-            if (msgSize < 2) {
-                qDebug() << "SteamIntegration: Skipping too small packet:" << msgSize;
-                continue; // Need at least message type
+            // Accept all packets with at least 1 byte (the message type)
+            if (msgSize < 1) {
+                qDebug() << "SteamIntegration: Empty packet received, skipping";
+                continue;
             }
 
+            // Update timestamp for last received message
+            m_lastMessageTime = QDateTime::currentMSecsSinceEpoch();
+
+            // Process message based on type
             char messageType = buffer[0];
-            QByteArray messageData = buffer.mid(1);
+            QByteArray messageData;
 
-            //qDebug() << "SteamIntegration: Received message type:" << messageType
-            //         << "size:" << messageData.size() << "from:" << senderId.ConvertToUint64();
-
-            // Mark P2P as initialized on first message from either side
-            if (!m_p2pInitialized) {
-                qDebug() << "SteamIntegration: P2P connection fully established!";
-                m_p2pInitialized = true;
-                emit p2pInitialized();
-                updateRichPresence();
-
-                // Stop the ping timer if it's running
-                m_p2pInitTimer.stop();
+            // Only extract message data if there's data beyond the header
+            if (msgSize > 1) {
+                messageData = buffer.mid(1);
             }
 
+            // *** CRITICAL FIX: Always mark P2P as initialized when receiving any valid message ***
+            if (!m_p2pInitialized) {
+                qDebug() << "SteamIntegration: P2P connection established on message receipt!";
+                m_p2pInitialized = true;
+                updateConnectionState(Connected);
+                emit p2pInitialized();
+
+                // If we were reconnecting, stop that process
+                if (m_attemptingReconnection) {
+                    m_attemptingReconnection = false;
+                    m_reconnectionAttempts = 0;
+                    m_reconnectionTimer.stop();
+                    emit reconnectionSucceeded();
+                }
+
+                // Start the heartbeat
+                m_missedHeartbeats = 0;
+                m_heartbeatTimer.start();
+                m_connectionHealthTimer.start();
+
+                // Update rich presence
+                updateRichPresence();
+            }
+
+            // Reset heartbeat counters on any message
+            m_missedHeartbeats = 0;
+
+            // If connection was unstable but messages are flowing again,
+            // mark as connected
+            if (m_connectionState == Unstable) {
+                updateConnectionState(Connected);
+            }
+
+            // Process different message types
             switch (messageType) {
-            case 'P':
-                if (messageData == "PING") {
+            case 'P': // Ping/Pong messages (can be very small)
+                if (messageData.startsWith("PING")) {
                     // Respond with PONG
                     QByteArray response;
                     response.append('P');
@@ -760,21 +1079,83 @@ void SteamIntegration::processNetworkMessages()
                         response.size(),
                         k_EP2PSendReliable
                         );
+                } else if (messageData.startsWith("PONG")) {
+                    // Calculate ping time if we sent a ping
+                    if (m_lastPingSent > 0) {
+                        int now = QDateTime::currentMSecsSinceEpoch();
+                        m_pingTime = now - m_lastPingSent;
+                        m_lastPingSent = 0;
+
+                        // If ping is too high, emit a warning signal
+                        if (m_pingTime > 500 && m_p2pInitialized && m_connectionState == Connected) {
+                            updateConnectionState(Unstable);
+                            emit connectionUnstable();
+                        }
+
+                        emit pingTimeChanged(m_pingTime);
+                    }
                 }
-                // If we received a PONG, we don't need to do anything special
-                // The connection is already marked as initialized above
                 break;
-            case 'A': // Action (reveal/flag)
-                handleGameAction(messageData);
+
+            case 'H': // Heartbeat (should be just 1 byte)
+                // Heartbeat receipt already reset the missed heartbeats counter above
+                // Nothing more to do for a heartbeat message
                 break;
-            case 'S': // State update
-                handleGameState(messageData);
+
+            case 'S': // System message
+                if (messageData.size() > 0) {
+                    try {
+                        handleSystemMessage(messageData);
+                    } catch (const std::exception& e) {
+                        qDebug() << "Error handling system message:" << e.what();
+                    }
+                }
                 break;
-            // Add other message types as needed
+
+            case 'A': // Game action
+                if (messageData.size() > 0) {
+                    try {
+                        handleGameAction(messageData);
+                    } catch (const std::exception& e) {
+                        qDebug() << "Error handling game action:" << e.what();
+                    }
+                }
+                break;
+
+            case 'D': // Game state data
+                if (messageData.size() > 0) {
+                    try {
+                        handleGameState(messageData);
+                    } catch (const std::exception& e) {
+                        qDebug() << "Error handling game state:" << e.what();
+                    }
+                }
+                break;
+
             default:
-                qDebug() << "SteamIntegration: Unknown message type:" << messageType;
+                qDebug() << "SteamIntegration: Unknown message type:" << messageType
+                         << "size:" << messageData.size();
                 break;
             }
+        } else {
+            qDebug() << "SteamIntegration: Failed to read P2P packet";
+        }
+    }
+
+    // Check if connection is healthy while processing messages
+    static int messageLoopCounter = 0;
+    messageLoopCounter++;
+
+    // Every 10 message processing loops, perform a connection health check
+    if (messageLoopCounter >= 10) {
+        messageLoopCounter = 0;
+
+        // If we're supposedly p2p connected but the connection state doesn't match,
+        // fix the inconsistency
+        if (m_p2pInitialized && m_connectionState != Connected && m_connectionState != Unstable) {
+            qDebug() << "Fixing inconsistent connection state: p2pInitialized but state is"
+                     << m_connectionState;
+            updateConnectionState(Connected);
         }
     }
 }
@@ -786,11 +1167,17 @@ bool SteamIntegration::sendGameAction(const QString& actionType, const QVariant&
         return false;
     }
 
+    // Check connection state
+    if (m_connectionState != Connected && m_connectionState != Unstable) {
+        qDebug() << "SteamIntegration: Cannot send game action - connection not established";
+        return false;
+    }
+
     // Format depends on parameter type
     QByteArray data;
     data.append('A'); // Action header
 
-    if (parameter.type() == QVariant::String) {
+    if (parameter.typeId() == QMetaType::QString) {
         // Handle string parameters (like chat messages)
         // Format: A|actionType|stringData
         QString stringParameter = parameter.toString();
@@ -799,7 +1186,8 @@ bool SteamIntegration::sendGameAction(const QString& actionType, const QVariant&
         data.append(stringParameter.toUtf8());
 
         qDebug() << "SteamIntegration: Sending string action:" << actionType
-                 << "with text:" << stringParameter << "to:" << m_connectedPlayerId.ConvertToUint64();
+                 << "with text:" << stringParameter.left(20) + (stringParameter.length() > 20 ? "..." : "")
+                 << "to:" << m_connectedPlayerId.ConvertToUint64();
     } else {
         // Original behavior for number parameters
         // Format: A|actionType|cellIndex
@@ -827,16 +1215,27 @@ bool SteamIntegration::sendGameState(const QVariantMap& gameState)
         return false;
     }
 
+    // Check connection state
+    if (m_connectionState != Connected && m_connectionState != Unstable) {
+        qDebug() << "SteamIntegration: Cannot send game state - connection not established";
+        return false;
+    }
+
     // Serialize the game state to JSON
     QJsonDocument doc = QJsonDocument::fromVariant(gameState);
     QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
 
-    // Prepare packet: S + JSON data
+    // Prepare packet: D + JSON data (changed from S to D for clarity with system messages)
     QByteArray packet;
-    packet.append('S');
+    packet.append('D');
     packet.append(jsonData);
 
-    qDebug() << "SteamIntegration: Sending game state, size:" << jsonData.size()
+    // Only log the beginning of large packets to avoid spamming the console
+    QString logData = jsonData.size() > 100 ?
+                          QString(jsonData.left(100)) + "... (total size: " + QString::number(jsonData.size()) + ")" :
+                          QString(jsonData);
+
+    qDebug() << "SteamIntegration: Sending game state:" << logData
              << "to:" << m_connectedPlayerId.ConvertToUint64();
 
     return SteamNetworking()->SendP2PPacket(
@@ -870,7 +1269,8 @@ void SteamIntegration::handleGameAction(const QByteArray& data)
     } else {
         // Handle string parameter (for chat messages)
         QString stringParam = QString::fromUtf8(parameterData);
-        qDebug() << "SteamIntegration: Received string action:" << actionType << "with text:" << stringParam;
+        qDebug() << "SteamIntegration: Received string action:" << actionType
+                 << "with text:" << stringParam.left(20) + (stringParam.length() > 20 ? "..." : "");
         emit gameActionReceived(actionType, stringParam);
     }
 }
@@ -878,15 +1278,124 @@ void SteamIntegration::handleGameAction(const QByteArray& data)
 void SteamIntegration::handleGameState(const QByteArray& data)
 {
     // Parse JSON game state
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    if (doc.isNull() || !doc.isObject()) {
-        qDebug() << "SteamIntegration: Invalid game state JSON";
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+
+    if (parseError.error != QJsonParseError::NoError) {
+        qDebug() << "SteamIntegration: Invalid game state JSON:" << parseError.errorString();
+        qDebug() << "Data snippet:" << data.left(100);
+        return;
+    }
+
+    if (!doc.isObject()) {
+        qDebug() << "SteamIntegration: Game state is not a JSON object";
         return;
     }
 
     QVariantMap gameState = doc.object().toVariantMap();
-    qDebug() << "SteamIntegration: Received game state with keys:" << gameState.keys();
+
+    // Log a summary of what was received
+    QStringList keys = gameState.keys();
+    qDebug() << "SteamIntegration: Received game state with keys:" << keys;
+
     emit gameStateReceived(gameState);
+}
+
+void SteamIntegration::handleSystemMessage(const QByteArray& data)
+{
+    // Parse system message JSON
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+
+    if (parseError.error != QJsonParseError::NoError) {
+        qDebug() << "SteamIntegration: Invalid system message JSON:" << parseError.errorString();
+        return;
+    }
+
+    if (!doc.isObject()) {
+        qDebug() << "SteamIntegration: System message is not a JSON object";
+        return;
+    }
+
+    QVariantMap message = doc.object().toVariantMap();
+    QString type = message["type"].toString();
+
+    qDebug() << "SteamIntegration: Received system message type:" << type;
+
+    if (type == "disconnect") {
+        // Other player is disconnecting gracefully
+        QString reason = message["reason"].toString();
+        qDebug() << "SteamIntegration: Received disconnect message, reason:" << reason;
+
+        // Handle disconnection
+        updateConnectionState(Disconnected);
+
+        // Clean up multiplayer session
+        cleanupMultiplayerSession();
+
+        // Notify the UI
+        emit notifyConnectionLost(m_connectedPlayerName);
+    }
+    else if (type == "reconnect_request") {
+        // Other player is attempting to reconnect
+        qDebug() << "SteamIntegration: Received reconnection request";
+
+        // Send acknowledgment
+        sendSystemMessage("reconnect_ack");
+
+        // Mark as reconnecting
+        updateConnectionState(Reconnecting);
+    }
+    else if (type == "reconnect_ack") {
+        // Our reconnection request was acknowledged
+        qDebug() << "SteamIntegration: Reconnection request acknowledged";
+
+        // Start the heartbeat
+        m_heartbeatTimer.start();
+        m_connectionHealthTimer.start();
+
+        // Update connection state
+        updateConnectionState(Connected);
+
+        // Mark reconnection as successful
+        m_attemptingReconnection = false;
+        m_reconnectionAttempts = 0;
+        m_reconnectionTimer.stop();
+
+        // Notify success
+        emit reconnectionSucceeded();
+    }
+}
+
+void SteamIntegration::sendSystemMessage(const QString& type, const QVariantMap& data)
+{
+    if (!m_initialized || !m_connectedPlayerId.IsValid()) {
+        qDebug() << "SteamIntegration: Cannot send system message - not initialized or no connected player";
+        return;
+    }
+
+    // Prepare system message
+    QVariantMap message = data;
+    message["type"] = type;
+
+    // Serialize to JSON
+    QJsonDocument doc = QJsonDocument::fromVariant(message);
+    QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
+
+    // Prepare packet: S + JSON data
+    QByteArray packet;
+    packet.append('S');
+    packet.append(jsonData);
+
+    qDebug() << "SteamIntegration: Sending system message type:" << type
+             << "to:" << m_connectedPlayerId.ConvertToUint64();
+
+    SteamNetworking()->SendP2PPacket(
+        m_connectedPlayerId,
+        packet.constData(),
+        packet.size(),
+        k_EP2PSendReliable
+        );
 }
 
 void SteamIntegration::sendP2PInitPing()
@@ -908,77 +1417,595 @@ void SteamIntegration::sendP2PInitPing()
         );
 }
 
+
+void SteamIntegration::sendHeartbeat()
+{
+    // Only check if we're in a multiplayer game and have a valid player ID
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid()) {
+        m_heartbeatTimer.stop();
+        return;
+    }
+
+    // Always send heartbeat if connected, regardless of p2pInitialized state
+    // This ensures heartbeats continue even during reconnection attempts
+
+    // Send a minimal heartbeat message - just a single byte
+    char heartbeat = 'H';
+
+    SteamNetworking()->SendP2PPacket(
+        m_connectedPlayerId,
+        &heartbeat,
+        1,  // Just send one byte for heartbeats
+        k_EP2PSendUnreliable // Use unreliable for heartbeats
+        );
+
+    // Every 5th heartbeat, also send a ping to measure latency
+    static int heartbeatCounter = 0;
+    heartbeatCounter = (heartbeatCounter + 1) % 5;
+
+    if (heartbeatCounter == 0 && m_p2pInitialized) {
+        forcePing();
+    }
+}
+
+bool SteamIntegration::forcePing()
+{
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid() || !m_p2pInitialized) {
+        return false;
+    }
+
+    // Record the time we sent the ping
+    m_lastPingSent = QDateTime::currentMSecsSinceEpoch();
+
+    // Send a ping message
+    QByteArray data;
+    data.append('P'); // P for Ping
+    data.append("PING");
+
+    return SteamNetworking()->SendP2PPacket(
+        m_connectedPlayerId,
+        data.constData(),
+        data.size(),
+        k_EP2PSendReliable
+        );
+}
+
+void SteamIntegration::checkConnectionHealth() {
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid()) {
+        // No need to check if we're not in a multiplayer game
+        m_connectionHealthTimer.stop();
+        return;
+    }
+
+    // First, check if the Steam P2P session is active
+    P2PSessionState_t sessionState;
+    bool hasSession = SteamNetworking()->GetP2PSessionState(m_connectedPlayerId, &sessionState);
+
+    if (!hasSession || sessionState.m_bConnectionActive == 0) {
+        m_connectionCheckFailCount++;
+        qDebug() << "SteamIntegration: Steam session check failed" << m_connectionCheckFailCount << "times";
+
+        if (m_connectionCheckFailCount >= MAX_CONNECTION_FAILURES) {
+            qDebug() << "SteamIntegration: Connection lost according to Steam, attempting reconnection";
+            if (m_connectionState == Connected) {
+                updateConnectionState(Unstable);
+                emit connectionUnstable();
+            } else if (m_connectionState == Unstable) {
+                requestReconnection();
+            }
+        }
+        return;
+    }
+
+    // If we get here, the Steam session is active, so reset that failure counter
+    m_connectionCheckFailCount = 0;
+
+    // Now check if heartbeats are coming through
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    qint64 timeSinceLastMessage = now - m_lastMessageTime;
+
+    // If it's been too long since any message was received
+    if (m_p2pInitialized && timeSinceLastMessage > 15000) { // 15 seconds without any message
+        qDebug() << "SteamIntegration: No messages received for" << timeSinceLastMessage << "ms";
+
+        // If this happens repeatedly, mark the connection as unstable
+        m_missedHeartbeats++;
+        qDebug() << "SteamIntegration: Heartbeat timeout:" << m_missedHeartbeats;
+
+        if (m_missedHeartbeats >= MAX_MISSED_HEARTBEATS) {
+            if (m_connectionState == Connected) {
+                qDebug() << "SteamIntegration: Too many missed heartbeats, connection unstable";
+                updateConnectionState(Unstable);
+                emit connectionUnstable();
+
+                // Try to ping actively to test connection
+                forcePing();
+            } else if (m_connectionState == Unstable && timeSinceLastMessage > 30000) {
+                // If we've been unstable for a while with no messages, try reconnecting
+                qDebug() << "SteamIntegration: Connection stalled, attempting reconnection";
+                requestReconnection();
+            }
+        }
+    } else {
+        // Messages are being received, reset missed heartbeats counter
+        if (m_missedHeartbeats > 0) {
+            m_missedHeartbeats = 0;
+
+            // If we were in unstable state but communication is working again, go back to connected
+            if (m_connectionState == Unstable) {
+                qDebug() << "SteamIntegration: Connection recovered";
+                updateConnectionState(Connected);
+            }
+        }
+    }
+}
+
+void SteamIntegration::resetConnectionHealth()
+{
+    m_connectionCheckFailCount = 0;
+    m_missedHeartbeats = 0;
+    m_lastMessageTime = QDateTime::currentMSecsSinceEpoch();
+}
+
+void SteamIntegration::requestReconnection()
+{
+    if (!m_initialized || !m_connectedPlayerId.IsValid()) {
+        qDebug() << "SteamIntegration: Cannot request reconnection - not initialized or no connected player";
+        return;
+    }
+
+    // Don't attempt reconnection if we're already disconnected
+    if (m_connectionState == Disconnected) {
+        qDebug() << "SteamIntegration: Already disconnected, cannot reconnect";
+        return;
+    }
+
+    // Don't start a new reconnection if one is already in progress
+    if (m_attemptingReconnection) {
+        qDebug() << "SteamIntegration: Reconnection already in progress";
+        return;
+    }
+
+    qDebug() << "SteamIntegration: Initiating reconnection process";
+
+    // Update connection state
+    updateConnectionState(Reconnecting);
+
+    // Start reconnection attempt
+    m_attemptingReconnection = true;
+    m_reconnectionAttempts = 0;
+
+    // First attempt immediately
+    tryReconnect();
+
+    // Start timer for subsequent attempts
+    m_reconnectionTimer.start();
+}
+
+void SteamIntegration::tryReconnect()
+{
+    if (!m_initialized || !m_connectedPlayerId.IsValid() || !m_attemptingReconnection) {
+        m_reconnectionTimer.stop();
+        return;
+    }
+
+    m_reconnectionAttempts++;
+    qDebug() << "SteamIntegration: Reconnection attempt" << m_reconnectionAttempts;
+
+    if (m_reconnectionAttempts > MAX_RECONNECTION_ATTEMPTS) {
+        qDebug() << "SteamIntegration: Maximum reconnection attempts reached";
+        m_attemptingReconnection = false;
+        m_reconnectionTimer.stop();
+        updateConnectionState(Disconnected);
+        emit reconnectionFailed();
+
+        // Clean up and notify about disconnection
+        cleanupMultiplayerSession();
+        emit notifyConnectionLost(m_connectedPlayerName);
+        return;
+    }
+
+    // Send a reconnection request
+    sendSystemMessage("reconnect_request");
+
+    // Also try to reinitialize the P2P connection
+    SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
+    SteamAPI_RunCallbacks();
+
+    // Wait a moment before attempting to reconnect
+    QTimer::singleShot(500, [this]() {
+        if (m_attemptingReconnection) {
+            m_p2pInitialized = false;
+            startP2PInitialization();
+        }
+    });
+}
+
 void SteamIntegration::startP2PInitialization() {
-    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid() || m_p2pInitialized) {
+    if (!m_initialized || !m_connectedPlayerId.IsValid() || m_p2pInitialized) {
         return;
     }
 
     qDebug() << "SteamIntegration: Starting P2P initialization process";
-    m_p2pInitialized = false;
 
+    // Reset flags
+    m_p2pInitialized = false;
+    updateConnectionState(Connecting);
+    m_missedHeartbeats = 0;
+
+    // Start sending initialization pings
     m_p2pInitTimer.setInterval(500);
     m_p2pInitTimer.start();
 
+    // Start health monitoring
     m_connectionHealthTimer.setInterval(5000);
     m_connectionHealthTimer.start();
 
+    // Send initial ping
     sendP2PInitPing();
 }
 
-void SteamIntegration::checkForPendingInvites()
+bool SteamIntegration::testConnection()
 {
-    if (!m_initialized || m_inMultiplayerGame) {
-        qDebug() << "SteamIntegration: Cannot check for pending invites - Steam not initialized";
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid()) {
+        return false;
+    }
+
+    // Check P2P session state
+    P2PSessionState_t sessionState;
+    bool hasSession = SteamNetworking()->GetP2PSessionState(m_connectedPlayerId, &sessionState);
+
+    if (!hasSession || sessionState.m_bConnectionActive == 0) {
+        qDebug() << "SteamIntegration: Connection test failed - no active session";
+        return false;
+    }
+
+    // Send a test ping
+    return forcePing();
+}
+
+// Matchmaking implementation
+void SteamIntegration::enterMatchmaking(int difficulty)
+{
+    if (!m_initialized) {
+        emit matchmakingError("Steam is not initialized");
         return;
     }
 
-    // METHOD 1: Check command line arguments for +connect_lobby parameter
-    QStringList args = QCoreApplication::arguments();
-    QString lobbyIdStr;
-    for (int i = 0; i < args.size(); i++) {
-        QString arg = args[i];
-        if (arg.startsWith("+connect_lobby")) {
-            // Handle both "+connect_lobby 12345" and "+connect_lobby=12345" formats
-            if (arg == "+connect_lobby" && i + 1 < args.size()) {
-                lobbyIdStr = args[i + 1];
-            } else if (arg.startsWith("+connect_lobby=")) {
-                lobbyIdStr = arg.mid(15); // Extract ID after '='
-            }
+    if (m_inMatchmaking || m_inMultiplayerGame) {
+        emit matchmakingError("Already in matchmaking or a multiplayer game");
+        return;
+    }
 
+    // Validate difficulty (0=Easy, 1=Medium, 2=Hard, 3=Retr0)
+    if (difficulty < 0 || difficulty > 3) {
+        emit matchmakingError("Invalid difficulty selected");
+        return;
+    }
+
+    m_selectedMatchmakingDifficulty = difficulty;
+    emit selectedDifficultyChanged();
+
+    // Try to find existing matchmaking lobby
+    SteamMatchmaking()->RequestLobbyList();
+
+    // Set a filter to find matchmaking lobbies
+    SteamMatchmaking()->AddRequestLobbyListStringFilter(
+        "lobby_type", "matchmaking", k_ELobbyComparisonEqual);
+
+    // Request the lobby list
+    SteamAPICall_t hSteamAPICall = SteamMatchmaking()->RequestLobbyList();
+    m_lobbyMatchListCallback.Set(hSteamAPICall, this, &SteamIntegration::OnLobbyMatchList);
+
+    m_isConnecting = true;
+    emit connectingStatusChanged();
+}
+
+void SteamIntegration::OnLobbyMatchList(LobbyMatchList_t *pCallback, bool bIOFailure) {
+    if (bIOFailure) {
+        m_isConnecting = false;
+        emit connectingStatusChanged();
+        emit matchmakingError("Error retrieving matchmaking lobbies");
+        return;
+    }
+
+    // Check if we found any matchmaking lobbies
+    int lobbyCount = pCallback->m_nLobbiesMatching;
+    CSteamID matchmakingLobbyId;
+    bool foundMatchmakingLobby = false;
+
+    qDebug() << "Found" << lobbyCount << "matchmaking lobbies";
+
+    // Look for a matchmaking lobby
+    for (int i = 0; i < lobbyCount; i++) {
+        CSteamID lobbyId = SteamMatchmaking()->GetLobbyByIndex(i);
+        const char* lobbyType = SteamMatchmaking()->GetLobbyData(lobbyId, "lobby_type");
+
+        if (lobbyType && strcmp(lobbyType, "matchmaking") == 0) {
+            matchmakingLobbyId = lobbyId;
+            foundMatchmakingLobby = true;
             break;
         }
     }
 
-    if (!lobbyIdStr.isEmpty()) {
-        bool ok;
-        uint64 lobbyId = lobbyIdStr.toULongLong(&ok);
-        if (ok && lobbyId != 0) {
-            acceptInvite(QString::number(lobbyId));
-            return;
+    if (foundMatchmakingLobby) {
+        // Join the existing matchmaking lobby
+        SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(matchmakingLobbyId);
+        m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
+    } else {
+        // Create a new matchmaking lobby
+        SteamAPICall_t apiCall = SteamMatchmaking()->CreateLobby(k_ELobbyTypePublic, 50); // Allow up to 50 players for matchmaking
+        m_matchLobbyCreatedCallback.Set(apiCall, this, &SteamIntegration::OnMatchmakingLobbyCreated);
+    }
+}
+
+void SteamIntegration::OnMatchmakingLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure) {
+    m_isConnecting = false;
+    emit connectingStatusChanged();
+
+    if (bIOFailure || pCallback->m_eResult != k_EResultOK) {
+        emit matchmakingError("Failed to create matchmaking lobby");
+        return;
+    }
+
+    m_matchmakingLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
+    qDebug() << "Created matchmaking lobby with ID:" << m_matchmakingLobbyId.ConvertToUint64();
+
+    // Set lobby data
+    SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "lobby_type", "matchmaking");
+    SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "game", "Retr0Mine");
+    SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "version", "1.0");
+
+    // Set player metadata for matching
+    char difficultyStr[2];
+    snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+    SteamMatchmaking()->SetLobbyMemberData(m_matchmakingLobbyId, "difficulty", difficultyStr);
+
+    m_inMatchmaking = true;
+    emit matchmakingStatusChanged();
+
+    // Start checking for matches
+    m_matchmakingTimer.setInterval(2000); // Check every 2 seconds
+    m_matchmakingTimer.setSingleShot(false);
+    m_matchmakingTimer.start();
+    connect(&m_matchmakingTimer, &QTimer::timeout, this, &SteamIntegration::checkForMatches);
+
+    // Update queue counts
+    refreshQueueCounts();
+}
+
+void SteamIntegration::leaveMatchmaking() {
+    if (!m_initialized || !m_inMatchmaking) {
+        return;
+    }
+
+    // Stop the matchmaking timer
+    m_matchmakingTimer.stop();
+
+    // Leave the matchmaking lobby
+    if (m_matchmakingLobbyId.IsValid()) {
+        SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+        m_matchmakingLobbyId = CSteamID();
+    }
+
+    // Update state
+    m_inMatchmaking = false;
+    emit matchmakingStatusChanged();
+
+    qDebug() << "Left matchmaking";
+}
+
+void SteamIntegration::refreshQueueCounts() {
+    if (!m_initialized || !m_matchmakingLobbyId.IsValid()) {
+        return;
+    }
+
+    // Reset counts
+    int easyCount = 0;
+    int mediumCount = 0;
+    int hardCount = 0;
+    int retr0Count = 0;
+
+    // Count players by difficulty
+    int memberCount = SteamMatchmaking()->GetNumLobbyMembers(m_matchmakingLobbyId);
+
+    for (int i = 0; i < memberCount; i++) {
+        CSteamID memberId = SteamMatchmaking()->GetLobbyMemberByIndex(m_matchmakingLobbyId, i);
+        const char* difficultyStr = SteamMatchmaking()->GetLobbyMemberData(
+            m_matchmakingLobbyId, memberId, "difficulty");
+
+        if (!difficultyStr) {
+            continue; // Skip players without difficulty set
+        }
+
+        int memberDifficulty = atoi(difficultyStr);
+
+        switch (memberDifficulty) {
+        case 0: easyCount++; break;
+        case 1: mediumCount++; break;
+        case 2: hardCount++; break;
+        case 3: retr0Count++; break;
         }
     }
 
-    // METHOD 2: Check if we have a valid lobby from SteamGameCoordinator
-    if (SteamUtils()) {
-        // Check for pending invites through the Steam API
-        uint32 appID = SteamUtils()->GetAppID();
+    // Update counts if changed
+    bool changed = false;
 
-        // METHOD 3: Check for any lobby the user has recently been invited to
-        // GetLobbyByIndex returns a CSteamID directly, not a bool with output parameter
-        CSteamID lobbyId = SteamMatchmaking()->GetLobbyByIndex(0);
-        if (lobbyId.IsValid()) {
-
-            // Verify this is a recent invite to our game
-            const char* gameIdStr = SteamMatchmaking()->GetLobbyData(lobbyId, "game");
-            if (gameIdStr && QString(gameIdStr) == "Retr0Mine") {
-                qDebug() << "SteamIntegration: Found pending Retr0Mine lobby invite:" << lobbyId.ConvertToUint64();
-                acceptInvite(QString::number(lobbyId.ConvertToUint64()));
-                return;
-            }
-        }
+    if (m_easyQueueCount != easyCount) {
+        m_easyQueueCount = easyCount;
+        changed = true;
     }
 
-    SteamAPI_RunCallbacks();
+    if (m_mediumQueueCount != mediumCount) {
+        m_mediumQueueCount = mediumCount;
+        changed = true;
+    }
+
+    if (m_hardQueueCount != hardCount) {
+        m_hardQueueCount = hardCount;
+        changed = true;
+    }
+
+    if (m_retr0QueueCount != retr0Count) {
+        m_retr0QueueCount = retr0Count;
+        changed = true;
+    }
+
+    if (changed) {
+        emit queueCountsChanged();
+    }
+}
+
+void SteamIntegration::checkForMatches() {
+    if (!m_initialized || !m_inMatchmaking || !m_matchmakingLobbyId.IsValid()) {
+        m_matchmakingTimer.stop();
+        return;
+    }
+
+    // Update queue counts first
+    refreshQueueCounts();
+
+    // Get the number of players in the lobby
+    int memberCount = SteamMatchmaking()->GetNumLobbyMembers(m_matchmakingLobbyId);
+
+    // Our own Steam ID
+    CSteamID mySteamId = SteamUser()->GetSteamID();
+
+    // Look for potential matches (players with the same difficulty)
+    for (int i = 0; i < memberCount; i++) {
+        CSteamID memberId = SteamMatchmaking()->GetLobbyMemberByIndex(m_matchmakingLobbyId, i);
+
+        // Skip ourselves
+        if (memberId == mySteamId) {
+            continue;
+        }
+
+        // Get the player's difficulty
+        const char* difficultyStr = SteamMatchmaking()->GetLobbyMemberData(
+            m_matchmakingLobbyId, memberId, "difficulty");
+
+        if (!difficultyStr) {
+            continue; // Skip players without difficulty set
+        }
+
+        int memberDifficulty = atoi(difficultyStr);
+
+        // Check if difficulty matches
+        if (memberDifficulty == m_selectedMatchmakingDifficulty) {
+            qDebug() << "Found match with player:" << memberId.ConvertToUint64()
+            << "for difficulty:" << m_selectedMatchmakingDifficulty;
+
+            // Create a game lobby
+            createGameLobbyWithMatch(memberId);
+            return; // Exit after finding one match
+        }
+    }
+}
+
+void SteamIntegration::createGameLobbyWithMatch(CSteamID matchedPlayerId) {
+    // Stop matchmaking timer
+    m_matchmakingTimer.stop();
+
+    // Create a new private game lobby
+    SteamAPICall_t apiCall = SteamMatchmaking()->CreateLobby(k_ELobbyTypePrivate, 2);
+
+    // Store the matched player ID for later
+    m_pendingMatchedPlayerId = matchedPlayerId;
+
+    // Use lobbyCreatedCallback with a different handler
+    m_lobbyCreatedCallback.Set(apiCall, this, &SteamIntegration::OnGameLobbyCreated);
+
+    // Flag that we're setting up a match
+    m_isSettingUpMatch = true;
+
+    qDebug() << "Creating game lobby for matched player:" << matchedPlayerId.ConvertToUint64();
+}
+
+void SteamIntegration::OnGameLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure) {
+    if (bIOFailure || pCallback->m_eResult != k_EResultOK) {
+        qDebug() << "Failed to create game lobby for matchmaking";
+
+        // Return to matchmaking
+        m_isSettingUpMatch = false;
+        if (m_inMatchmaking) {
+            m_matchmakingTimer.start();
+        }
+
+        return;
+    }
+
+    CSteamID gameLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
+    qDebug() << "Created game lobby with ID:" << gameLobbyId.ConvertToUint64();
+
+    // Set lobby data
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "game", "Retr0Mine");
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "version", "1.0");
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "matchmade", "1");
+
+    // Set difficulty data
+    char difficultyStr[2];
+    snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "difficulty", difficultyStr);
+
+    // Instead of inviting, set the game lobby ID in the matchmaking lobby
+    // so the matched player can auto-join
+    if (m_matchmakingLobbyId.IsValid()) {
+        char gameLobbyIdStr[64];
+        snprintf(gameLobbyIdStr, sizeof(gameLobbyIdStr), "%llu", gameLobbyId.ConvertToUint64());
+        SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "game_lobby_id", gameLobbyIdStr);
+
+        // Set target player ID so only the right player joins
+        char targetPlayerIdStr[64];
+        snprintf(targetPlayerIdStr, sizeof(targetPlayerIdStr), "%llu", m_pendingMatchedPlayerId.ConvertToUint64());
+        SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "target_player_id", targetPlayerIdStr);
+    }
+
+    // Update state
+    m_inMatchmaking = false;
+    m_isSettingUpMatch = false;
+    m_currentLobbyId = gameLobbyId;
+    m_isHost = true;
+    m_inMultiplayerGame = true;
+
+    // Emit signals
+    emit matchmakingStatusChanged();
+    emit hostStatusChanged();
+    emit multiplayerStatusChanged();
+
+    QString matchedPlayerName = SteamFriends()->GetFriendPersonaName(m_pendingMatchedPlayerId);
+    emit matchFound(matchedPlayerName);
+
+    // Start the network timer
+    m_networkTimer.start();
+
+    // Clear pending matched player
+    m_pendingMatchedPlayerId = CSteamID();
+
+    // Leave matchmaking lobby after a delay to ensure data propagates
+    QTimer::singleShot(1000, [this]() {
+        if (m_matchmakingLobbyId.IsValid()) {
+            SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+            m_matchmakingLobbyId = CSteamID();
+        }
+    });
+}
+
+void SteamIntegration::setSelectedMatchmakingDifficulty(int difficulty) {
+    if (m_selectedMatchmakingDifficulty != difficulty) {
+        m_selectedMatchmakingDifficulty = difficulty;
+
+        // If we're in matchmaking, update our metadata
+        if (m_inMatchmaking && m_matchmakingLobbyId.IsValid()) {
+            char difficultyStr[2];
+            snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+            SteamMatchmaking()->SetLobbyMemberData(m_matchmakingLobbyId, "difficulty", difficultyStr);
+
+            // Refresh queue counts
+            refreshQueueCounts();
+        }
+
+        emit selectedDifficultyChanged();
+    }
 }
 
 int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
@@ -1026,39 +2053,83 @@ void SteamIntegration::OnLobbyInvite(LobbyInvite_t *pCallback)
     emit inviteReceived(friendName, lobbyIdStr);
 }
 
-void SteamIntegration::checkConnectionHealth() {
-    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid()) {
-        // No need to check if we're not in a multiplayer game
-        m_connectionHealthTimer.stop();
+void SteamIntegration::checkForPendingInvites()
+{
+    if (!m_initialized || m_inMultiplayerGame) {
+        qDebug() << "SteamIntegration: Cannot check for pending invites - not initialized or already in game";
         return;
     }
 
-    // Check P2P session state
-    P2PSessionState_t sessionState;
-    bool hasSession = SteamNetworking()->GetP2PSessionState(m_connectedPlayerId, &sessionState);
-
-    if (!hasSession || sessionState.m_bConnectionActive == 0) {
-        m_connectionCheckFailCount++;
-        qDebug() << "SteamIntegration: Connection check failed" << m_connectionCheckFailCount << "times";
-
-        if (m_connectionCheckFailCount >= MAX_CONNECTION_FAILURES) {
-            qDebug() << "SteamIntegration: Connection lost to player, cleaning up multiplayer session";
-
-            // Emit a signal to notify about the disconnection
-            //emit connectionFailed("Connection to player lost");
-
-            emit notifyConnectionLost(m_connectedPlayerName);
-
-            // Clean up just the multiplayer session without affecting the game state
-            cleanupMultiplayerSession();
-            m_connectionCheckFailCount = 0;
-
+    // Check command line arguments for +connect_lobby parameter
+    QStringList args = QCoreApplication::arguments();
+    QString lobbyIdStr;
+    for (int i = 0; i < args.size(); i++) {
+        QString arg = args[i];
+        if (arg.startsWith("+connect_lobby")) {
+            // Handle both "+connect_lobby 12345" and "+connect_lobby=12345" formats
+            if (arg == "+connect_lobby" && i + 1 < args.size()) {
+                lobbyIdStr = args[i + 1];
+            } else if (arg.startsWith("+connect_lobby=")) {
+                lobbyIdStr = arg.mid(15); // Extract ID after '='
+            }
+            break;
         }
-    } else {
-        // Reset failure counter if check is successful
-        if (m_connectionCheckFailCount > 0) {
-            qDebug() << "SteamIntegration: Connection healthy again";
-            m_connectionCheckFailCount = 0;
+    }
+
+    if (!lobbyIdStr.isEmpty()) {
+        bool ok;
+        uint64 lobbyId = lobbyIdStr.toULongLong(&ok);
+        if (ok && lobbyId != 0) {
+            acceptInvite(QString::number(lobbyId));
+            return;
+        }
+    }
+
+    // Check for any lobby the user has recently been invited to
+    if (SteamUtils()) {
+        CSteamID lobbyId = SteamMatchmaking()->GetLobbyByIndex(0);
+        if (lobbyId.IsValid()) {
+            // Verify this is a recent invite to our game
+            const char* gameIdStr = SteamMatchmaking()->GetLobbyData(lobbyId, "game");
+            if (gameIdStr && QString(gameIdStr) == "Retr0Mine") {
+                qDebug() << "SteamIntegration: Found pending Retr0Mine lobby invite:" << lobbyId.ConvertToUint64();
+                acceptInvite(QString::number(lobbyId.ConvertToUint64()));
+                return;
+            }
+        }
+    }
+
+    SteamAPI_RunCallbacks();
+}
+
+void SteamIntegration::handlePingPongMessage(const QByteArray& messageData, const CSteamID& senderId)
+{
+    // Ping messages can be very short
+    if (messageData.startsWith("PING")) {
+        // Respond with PONG
+        QByteArray response;
+        response.append('P');
+        response.append("PONG");
+        SteamNetworking()->SendP2PPacket(
+            senderId,
+            response.constData(),
+            response.size(),
+            k_EP2PSendReliable
+            );
+    } else if (messageData.startsWith("PONG")) {
+        // Calculate ping time if we sent a ping
+        if (m_lastPingSent > 0) {
+            int now = QDateTime::currentMSecsSinceEpoch();
+            m_pingTime = now - m_lastPingSent;
+            m_lastPingSent = 0;
+
+            // If ping is too high, emit a warning signal
+            if (m_pingTime > 500 && m_p2pInitialized && m_connectionState == Connected) {
+                updateConnectionState(Unstable);
+                emit connectionUnstable();
+            }
+
+            emit pingTimeChanged(m_pingTime);
         }
     }
 }
