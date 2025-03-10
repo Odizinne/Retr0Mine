@@ -111,7 +111,7 @@ Popup {
         }
 
         Label {
-            visible: SteamIntegration.isInMatchmaking && !SteamIntegration.p2pInitialized
+            visible: SteamIntegration.isInMatchmaking
             text: qsTr("Searching for players...")
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
