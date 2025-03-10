@@ -7,6 +7,7 @@
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
+#include <QPalette>
 #include "steamintegration.h"
 
 namespace {
@@ -66,6 +67,7 @@ void GameCore::init()
     setThemeColorScheme(colorSchemeIndex);
     setQMLStyle(styleIndex);
     setLanguage(languageIndex);
+    checkAndCorrectPalette();
 }
 
 void GameCore::setThemeColorScheme(int colorSchemeIndex)
@@ -88,6 +90,17 @@ void GameCore::setThemeColorScheme(int colorSchemeIndex)
 #endif
 }
 
+void GameCore::checkAndCorrectPalette()
+{
+#ifdef __linux__
+    if (isRunningOnGamescope) return;
+
+    QPalette palette = QGuiApplication::palette();
+    QColor accentColor = palette.color(QPalette::Highlight);
+    palette.setColor(QPalette::ColorRole::Accent, accentColor);
+    QGuiApplication::setPalette(palette);
+#endif
+}
 void GameCore::resetSettings()
 {
     settings.setValue("themeIndex", 0);
