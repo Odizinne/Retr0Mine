@@ -18,7 +18,7 @@ Item {
 
         Image {
             id: logo
-            source: "qrc:/images/retr0mine_logo.png"
+            source: Application.styleHints.colorScheme == Qt.Dark ? "qrc:/images/retr0mine_logo.png" : "qrc:/images/retr0mine_logo_dark.png"
             sourceSize.width: 756 * 0.35
             sourceSize.height: 110 * 0.35
             Layout.alignment: Qt.AlignCenter
