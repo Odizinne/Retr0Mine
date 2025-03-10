@@ -13,7 +13,11 @@ Popup {
 
     onVisibleChanged: {
         if (visible) {
-            //SteamIntegration.refreshQueueCounts()
+            SteamIntegration.refreshQueueCounts()
+        }
+
+        if (difficultyGroup.checkedButton) {
+            difficultyGroup.checkedButton.checked = false
         }
     }
 
