@@ -124,7 +124,7 @@ Popup {
 
             Button {
                 text: qsTr("Search")
-                enabled: (GameState.gridSizeX * GameState.gridSizeX) === GridBridge.cellsCreated
+                enabled: (GameState.gridSizeX * GameState.gridSizeX) === GridBridge.cellsCreated && difficultyGroup.checkedButton !== null
                 visible: !SteamIntegration.isInMatchmaking && !SteamIntegration.isInMultiplayerGame
                 onClicked: {
                     SteamIntegration.enterMatchmaking(SteamIntegration.selectedMatchmakingDifficulty)
