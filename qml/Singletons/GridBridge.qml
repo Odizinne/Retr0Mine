@@ -772,7 +772,7 @@ Item {
             }
         }
 
-        if (anyCellNeedsShake && GameSettings.shakeUnifinishedNumbers) {
+        if (anyCellNeedsShake && !GameState.gameOver && GameSettings.shakeUnifinishedNumbers) {
             // Start shake animation
             globalShakeActive = true
 
