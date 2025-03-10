@@ -93,7 +93,7 @@ ApplicationWindow {
                 }
                 NetworkManager.sessionRunning = false;
                 NetworkManager.mpPopupCloseButtonVisible = false;
-                ComponentsContext.privateSessionPopupVisible;
+                ComponentsContext.privateSessionPopupVisible = false;
             }
         }
 
