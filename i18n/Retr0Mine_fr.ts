@@ -153,12 +153,17 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="58"/>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="54"/>
+        <source>Not implemented yet</source>
+        <translation>Pas encore implémenté</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="60"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="66"/>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="68"/>
         <source>Quit session</source>
         <translation>Quitter la session</translation>
     </message>

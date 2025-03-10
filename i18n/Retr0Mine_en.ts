@@ -152,12 +152,17 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="58"/>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="54"/>
+        <source>Not implemented yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="60"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="66"/>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="68"/>
         <source>Quit session</source>
         <translation type="unfinished"></translation>
     </message>
