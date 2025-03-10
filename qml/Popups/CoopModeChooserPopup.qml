@@ -48,8 +48,11 @@ Popup {
                 text: qsTr("Matchmaking")
                 Layout.preferredWidth: control.buttonWidth
                 Layout.fillWidth: true
-                enabled: false
-                onClicked: ComponentsContext.coopModeChooserPopupVisible = false
+                //enabled: false
+                onClicked: {
+                    ComponentsContext.matchmakingPopupVisible = true
+                    ComponentsContext.coopModeChooserPopupVisible = false
+                }
                 ToolTip.visible: hovered && !enabled
                 ToolTip.text: qsTr("Not implemented yet")
             }

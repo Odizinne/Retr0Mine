@@ -153,17 +153,17 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="54"/>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="57"/>
         <source>Not implemented yet</source>
         <translation>Pas encore implémenté</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="60"/>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="63"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="68"/>
+        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="71"/>
         <source>Quit session</source>
         <translation>Quitter la session</translation>
     </message>
@@ -497,6 +497,29 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <location filename="../qml/MainMenu.qml" line="64"/>
         <source>Exit</source>
         <translation>Quitter</translation>
+    </message>
+</context>
+<context>
+    <name>MatchmakingPopup</name>
+    <message>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="33"/>
+        <source>Select a difficulty:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="80"/>
+        <source> players</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="114"/>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="122"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>

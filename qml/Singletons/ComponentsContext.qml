@@ -10,6 +10,7 @@ QtObject {
     property bool rulesPopupVisible: false
     property bool coopModeChooserPopupVisible: false
     property bool privateSessionPopupVisible: false
+    property bool matchmakingPopupVisible: false
     property bool multiplayerErrorPopupVisible: false
     property bool multiplayerChatVisible: false
     property bool settingsWindowVisible: false

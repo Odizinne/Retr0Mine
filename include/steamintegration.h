@@ -32,6 +32,14 @@ class SteamIntegration : public QObject
     Q_PROPERTY(bool canInviteFriend READ canInviteFriend NOTIFY canInviteFriendChanged)
     Q_PROPERTY(bool isP2PConnected READ isP2PConnected NOTIFY p2pInitialized)
 
+    // Matchmaking
+    Q_PROPERTY(bool isInMatchmaking READ isInMatchmaking NOTIFY matchmakingStatusChanged)
+    Q_PROPERTY(int easyQueueCount READ getEasyQueueCount NOTIFY queueCountsChanged)
+    Q_PROPERTY(int mediumQueueCount READ getMediumQueueCount NOTIFY queueCountsChanged)
+    Q_PROPERTY(int hardQueueCount READ getHardQueueCount NOTIFY queueCountsChanged)
+    Q_PROPERTY(int retr0QueueCount READ getRetr0QueueCount NOTIFY queueCountsChanged)
+    Q_PROPERTY(int selectedMatchmakingDifficulty READ getSelectedMatchmakingDifficulty WRITE setSelectedMatchmakingDifficulty NOTIFY selectedDifficultyChanged)
+
 public:
     explicit SteamIntegration(QObject *parent = nullptr);
     ~SteamIntegration();
@@ -75,8 +83,13 @@ public:
     Q_INVOKABLE bool sendGameAction(const QString& actionType, const QVariant& parameter);
     Q_INVOKABLE bool sendGameState(const QVariantMap& gameState);
 
-    // Callback processing - call this regularly
+    // Callback processing
     Q_INVOKABLE void runCallbacks();
+
+    // New matchmaking methods
+    Q_INVOKABLE void enterMatchmaking(int difficulty);
+    Q_INVOKABLE void leaveMatchmaking();
+    Q_INVOKABLE void refreshQueueCounts();
 
     // Multiplayer status getters
     bool isInMultiplayerGame() const { return m_inMultiplayerGame; }
@@ -87,6 +100,15 @@ public:
     bool canInviteFriend() const { return m_initialized && m_inMultiplayerGame && m_isHost; }
     bool isP2PConnected() const { return m_p2pInitialized; }
     void startP2PInitialization();
+
+    bool isInMatchmaking() const { return m_inMatchmaking; }
+    int getEasyQueueCount() const { return m_easyQueueCount; }
+    int getMediumQueueCount() const { return m_mediumQueueCount; }
+    int getHardQueueCount() const { return m_hardQueueCount; }
+    int getRetr0QueueCount() const { return m_retr0QueueCount; }
+    int getSelectedMatchmakingDifficulty() const { return m_selectedMatchmakingDifficulty; }
+    void setSelectedMatchmakingDifficulty(int difficulty);
+
 
 private:
     // Existing members
@@ -134,6 +156,30 @@ private:
     static const int MAX_CONNECTION_FAILURES = 2; // How many checks can fail before disconnection is determined
     void checkConnectionHealth();
 
+    // Matchmaking state
+    bool m_inMatchmaking = false;
+    int m_easyQueueCount = 0;
+    int m_mediumQueueCount = 0;
+    int m_hardQueueCount = 0;
+    int m_retr0QueueCount = 0;
+    int m_selectedMatchmakingDifficulty = 0;
+    QTimer m_matchmakingTimer;
+    CSteamID m_matchmakingLobbyId;
+    CSteamID m_pendingMatchedPlayerId;
+    bool m_isSettingUpMatch = false;
+
+    // Callback for matchmaking
+    CCallResult<SteamIntegration, LobbyMatchList_t> m_lobbyMatchListCallback;
+    CCallResult<SteamIntegration, LobbyCreated_t> m_matchLobbyCreatedCallback;
+
+    // Callback handlers
+    void OnLobbyMatchList(LobbyMatchList_t* pCallback, bool bIOFailure);
+    void OnMatchmakingLobbyCreated(LobbyCreated_t* pCallback, bool bIOFailure);
+    void OnMatchmakingLobbyEntered(LobbyEnter_t* pCallback, bool bIOFailure);
+    void OnGameLobbyCreated(LobbyCreated_t* pCallback, bool bIOFailure);
+    void checkForMatches();
+    void createGameLobbyWithMatch(CSteamID matchedPlayerId);
+
 signals:
     // Existing signals
     void playerNameChanged();
@@ -152,6 +198,13 @@ signals:
     void p2pInitialized();
     void inviteReceived(QString friendName, QString connectString);
     void notifyConnectionLost(QString message);
+
+    // New matchmaking signals
+    void matchmakingStatusChanged();
+    void queueCountsChanged();
+    void selectedDifficultyChanged();
+    void matchFound(QString playerName);
+    void matchmakingError(QString message);
 };
 
 struct SteamIntegrationForeign

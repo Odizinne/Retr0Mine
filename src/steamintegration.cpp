@@ -502,8 +502,7 @@ void SteamIntegration::leaveLobby()
     cleanupMultiplayerSession();
 }
 
-void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
-{
+void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure) {
     qDebug() << "SteamIntegration: OnLobbyEntered callback received";
 
     m_isConnecting = false;
@@ -540,29 +539,107 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure)
     }
 
     m_currentLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
-    m_inMultiplayerGame = true;
 
-    // Determine if we're the host
-    CSteamID lobbyOwner = SteamMatchmaking()->GetLobbyOwner(m_currentLobbyId);
-    m_isHost = (lobbyOwner == SteamUser()->GetSteamID());
+    // Check what type of lobby this is
+    const char* lobbyType = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "lobby_type");
+    const char* matchmade = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "matchmade");
 
-    qDebug() << "SteamIntegration: Joined lobby, host status:" << m_isHost;
+    if (lobbyType && strcmp(lobbyType, "matchmaking") == 0) {
+        // This is a matchmaking lobby
+        qDebug() << "SteamIntegration: Joined matchmaking lobby";
 
-    // If we're not the host, the lobby owner is our connected player
-    if (!m_isHost) {
-        m_connectedPlayerId = lobbyOwner;
-        m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
-        emit connectedPlayerChanged();
+        m_matchmakingLobbyId = m_currentLobbyId;
+        m_inMatchmaking = true;
+        m_inMultiplayerGame = false;
 
-        startP2PInitialization();
+        // Set player metadata for matching
+        char difficultyStr[2];
+        snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+        SteamMatchmaking()->SetLobbyMemberData(m_matchmakingLobbyId, "difficulty", difficultyStr);
+
+        // Start checking for matches
+        m_matchmakingTimer.setInterval(2000);
+        m_matchmakingTimer.setSingleShot(false);
+        m_matchmakingTimer.start();
+        connect(&m_matchmakingTimer, &QTimer::timeout, this, &SteamIntegration::checkForMatches);
+
+        // Update queue counts
+        refreshQueueCounts();
+
+        emit matchmakingStatusChanged();
+        emit connectionSucceeded();
+
+    } else if (matchmade && strcmp(matchmade, "1") == 0) {
+        // This is a matchmade game lobby
+        qDebug() << "SteamIntegration: Joined matchmade game lobby";
+
+        m_inMatchmaking = false;
+        m_inMultiplayerGame = true;
+
+        // Determine if we're the host
+        CSteamID lobbyOwner = SteamMatchmaking()->GetLobbyOwner(m_currentLobbyId);
+        m_isHost = (lobbyOwner == SteamUser()->GetSteamID());
+
+        qDebug() << "SteamIntegration: Matchmade game lobby, host status:" << m_isHost;
+
+        // If we're not the host, the lobby owner is our connected player
+        if (!m_isHost) {
+            m_connectedPlayerId = lobbyOwner;
+            m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
+            emit connectedPlayerChanged();
+
+            startP2PInitialization();
+        }
+
+        // Start the network timer
+        m_networkTimer.start();
+
+        // Get the difficulty from the lobby
+        const char* difficultyStr = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "difficulty");
+        if (difficultyStr) {
+            int difficulty = atoi(difficultyStr);
+            m_selectedMatchmakingDifficulty = difficulty;
+            emit selectedDifficultyChanged();
+
+            // Update game settings to match the difficulty
+            m_difficulty = difficulty;
+            updateRichPresence();
+        }
+
+        emit matchmakingStatusChanged();
+        emit hostStatusChanged();
+        emit multiplayerStatusChanged();
+        emit canInviteFriendChanged();
+        emit connectionSucceeded();
+
+    } else {
+        // This is a regular game lobby (existing code)
+        qDebug() << "SteamIntegration: Joined regular game lobby";
+
+        m_inMultiplayerGame = true;
+
+        // Determine if we're the host
+        CSteamID lobbyOwner = SteamMatchmaking()->GetLobbyOwner(m_currentLobbyId);
+        m_isHost = (lobbyOwner == SteamUser()->GetSteamID());
+
+        qDebug() << "SteamIntegration: Joined lobby, host status:" << m_isHost;
+
+        // If we're not the host, the lobby owner is our connected player
+        if (!m_isHost) {
+            m_connectedPlayerId = lobbyOwner;
+            m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(lobbyOwner);
+            emit connectedPlayerChanged();
+
+            startP2PInitialization();
+        }
+
+        m_networkTimer.start();
+
+        emit multiplayerStatusChanged();
+        emit hostStatusChanged();
+        emit canInviteFriendChanged();
+        emit connectionSucceeded();
     }
-
-    m_networkTimer.start();
-
-    emit multiplayerStatusChanged();
-    emit hostStatusChanged();
-    emit canInviteFriendChanged();
-    emit connectionSucceeded();
 
     qDebug() << "SteamIntegration: Lobby join complete";
 }
@@ -584,23 +661,37 @@ void SteamIntegration::OnLobbyDataUpdate(LobbyDataUpdate_t *pCallback)
     }
 }
 
-void SteamIntegration::OnLobbyChatUpdate(LobbyChatUpdate_t *pCallback)
-{
+void SteamIntegration::OnLobbyChatUpdate(LobbyChatUpdate_t *pCallback) {
     // Handle player join/leave events
     qDebug() << "SteamIntegration: Lobby chat update received";
 
-    if (pCallback->m_ulSteamIDLobby != m_currentLobbyId.ConvertToUint64())
-        return;
+    // Check if this update is for one of our lobbies
+    bool isCurrentLobby = (pCallback->m_ulSteamIDLobby == m_currentLobbyId.ConvertToUint64());
+    bool isMatchmakingLobby = (pCallback->m_ulSteamIDLobby == m_matchmakingLobbyId.ConvertToUint64());
 
-    qDebug() << "SteamIntegration: Lobby chat update for our lobby, change flags:"
-             << pCallback->m_rgfChatMemberStateChange;
+    if (!isCurrentLobby && !isMatchmakingLobby) {
+        return; // Not for any of our lobbies
+    }
+
+    qDebug() << "SteamIntegration: Lobby chat update for "
+             << (isMatchmakingLobby ? "matchmaking" : "game")
+             << " lobby, change flags:" << pCallback->m_rgfChatMemberStateChange;
 
     // Check the chat member change flags
     if (pCallback->m_rgfChatMemberStateChange & k_EChatMemberStateChangeEntered) {
         // A player joined the lobby
         CSteamID playerId(pCallback->m_ulSteamIDUserChanged);
-        if (m_isHost && playerId != SteamUser()->GetSteamID()) {
-            // If we're the host and someone else joined, that's our connected player
+
+        if (isMatchmakingLobby) {
+            // For matchmaking lobby, just update queue counts
+            qDebug() << "SteamIntegration: Player" << playerId.ConvertToUint64()
+                     << "joined matchmaking lobby, updating queue counts";
+            refreshQueueCounts();
+
+        } else if (m_isHost && playerId != SteamUser()->GetSteamID()) {
+            // If we're the host and someone else joined our game lobby, that's our connected player
+            qDebug() << "SteamIntegration: Player joined our hosted game lobby";
+
             m_connectedPlayerId = playerId;
             m_connectedPlayerName = SteamFriends()->GetFriendPersonaName(playerId);
             emit connectedPlayerChanged();
@@ -621,8 +712,17 @@ void SteamIntegration::OnLobbyChatUpdate(LobbyChatUpdate_t *pCallback)
     else if (pCallback->m_rgfChatMemberStateChange & (k_EChatMemberStateChangeLeft | k_EChatMemberStateChangeDisconnected)) {
         // A player left the lobby
         CSteamID playerId(pCallback->m_ulSteamIDUserChanged);
-        if (playerId == m_connectedPlayerId) {
-            // Our connected player left
+
+        if (isMatchmakingLobby) {
+            // For matchmaking lobby, just update queue counts
+            qDebug() << "SteamIntegration: Player" << playerId.ConvertToUint64()
+                     << "left matchmaking lobby, updating queue counts";
+            refreshQueueCounts();
+
+        } else if (playerId == m_connectedPlayerId) {
+            // Our connected player left the game lobby
+            qDebug() << "SteamIntegration: Connected player left game lobby";
+
             m_connectedPlayerId = CSteamID();
             m_connectedPlayerName = "";
             m_lobbyReady = false;
@@ -785,19 +885,16 @@ bool SteamIntegration::sendGameAction(const QString& actionType, const QVariant&
         qDebug() << "SteamIntegration: Cannot send game action - not initialized, not in game, or no connected player";
         return false;
     }
-
     // Format depends on parameter type
     QByteArray data;
     data.append('A'); // Action header
-
-    if (parameter.type() == QVariant::String) {
+    if (parameter.typeId() == QMetaType::QString) {
         // Handle string parameters (like chat messages)
         // Format: A|actionType|stringData
         QString stringParameter = parameter.toString();
         data.append(actionType.toUtf8());
         data.append('|');
         data.append(stringParameter.toUtf8());
-
         qDebug() << "SteamIntegration: Sending string action:" << actionType
                  << "with text:" << stringParameter << "to:" << m_connectedPlayerId.ConvertToUint64();
     } else {
@@ -807,11 +904,9 @@ bool SteamIntegration::sendGameAction(const QString& actionType, const QVariant&
         data.append(actionType.toUtf8());
         data.append('|');
         data.append(QByteArray::number(cellIndex));
-
         qDebug() << "SteamIntegration: Sending game action:" << actionType
                  << "for cell:" << cellIndex << "to:" << m_connectedPlayerId.ConvertToUint64();
     }
-
     return SteamNetworking()->SendP2PPacket(
         m_connectedPlayerId,
         data.constData(),
@@ -1060,5 +1155,395 @@ void SteamIntegration::checkConnectionHealth() {
             qDebug() << "SteamIntegration: Connection healthy again";
             m_connectionCheckFailCount = 0;
         }
+    }
+}
+
+void SteamIntegration::enterMatchmaking(int difficulty) {
+    if (!m_initialized) {
+        emit matchmakingError("Steam is not initialized");
+        return;
+    }
+
+    if (m_inMatchmaking || m_inMultiplayerGame) {
+        emit matchmakingError("Already in matchmaking or a multiplayer game");
+        return;
+    }
+
+    // Validate difficulty (0=Easy, 1=Medium, 2=Hard, 3=Retr0)
+    if (difficulty < 0 || difficulty > 3) {
+        emit matchmakingError("Invalid difficulty selected");
+        return;
+    }
+
+    m_selectedMatchmakingDifficulty = difficulty;
+    emit selectedDifficultyChanged();
+
+    // Try to find existing matchmaking lobby
+    SteamMatchmaking()->RequestLobbyList();
+
+    // Set a filter to find matchmaking lobbies
+    SteamMatchmaking()->AddRequestLobbyListStringFilter(
+        "lobby_type", "matchmaking", k_ELobbyComparisonEqual);
+
+    // Request the lobby list
+    SteamAPICall_t hSteamAPICall = SteamMatchmaking()->RequestLobbyList();
+    m_lobbyMatchListCallback.Set(hSteamAPICall, this, &SteamIntegration::OnLobbyMatchList);
+
+    m_isConnecting = true;
+    emit connectingStatusChanged();
+}
+
+void SteamIntegration::OnLobbyMatchList(LobbyMatchList_t *pCallback, bool bIOFailure) {
+    if (bIOFailure) {
+        m_isConnecting = false;
+        emit connectingStatusChanged();
+        emit matchmakingError("Error retrieving matchmaking lobbies");
+        return;
+    }
+
+    // Check if we found any matchmaking lobbies
+    int lobbyCount = pCallback->m_nLobbiesMatching;
+    CSteamID matchmakingLobbyId;
+    bool foundMatchmakingLobby = false;
+
+    qDebug() << "Found" << lobbyCount << "matchmaking lobbies";
+
+    // Look for a matchmaking lobby
+    for (int i = 0; i < lobbyCount; i++) {
+        CSteamID lobbyId = SteamMatchmaking()->GetLobbyByIndex(i);
+        const char* lobbyType = SteamMatchmaking()->GetLobbyData(lobbyId, "lobby_type");
+
+        if (lobbyType && strcmp(lobbyType, "matchmaking") == 0) {
+            matchmakingLobbyId = lobbyId;
+            foundMatchmakingLobby = true;
+            break;
+        }
+    }
+
+    if (foundMatchmakingLobby) {
+        // Join the existing matchmaking lobby
+        SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(matchmakingLobbyId);
+        m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnMatchmakingLobbyEntered);
+    } else {
+        // Create a new matchmaking lobby
+        SteamAPICall_t apiCall = SteamMatchmaking()->CreateLobby(k_ELobbyTypePublic, 50); // Allow up to 50 players for matchmaking
+        m_matchLobbyCreatedCallback.Set(apiCall, this, &SteamIntegration::OnMatchmakingLobbyCreated);
+    }
+}
+
+void SteamIntegration::OnMatchmakingLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure) {
+    m_isConnecting = false;
+    emit connectingStatusChanged();
+
+    if (bIOFailure || pCallback->m_eResult != k_EResultOK) {
+        emit matchmakingError("Failed to create matchmaking lobby");
+        return;
+    }
+
+    m_matchmakingLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
+    qDebug() << "Created matchmaking lobby with ID:" << m_matchmakingLobbyId.ConvertToUint64();
+
+    // Set lobby data
+    SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "lobby_type", "matchmaking");
+    SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "game", "Retr0Mine");
+    SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "version", "1.0");
+
+    // Set player metadata for matching
+    char difficultyStr[2];
+    snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+    SteamMatchmaking()->SetLobbyMemberData(m_matchmakingLobbyId, "difficulty", difficultyStr);
+
+    m_inMatchmaking = true;
+    emit matchmakingStatusChanged();
+
+    // Start checking for matches
+    m_matchmakingTimer.setInterval(2000); // Check every 2 seconds
+    m_matchmakingTimer.setSingleShot(false);
+    m_matchmakingTimer.start();
+    connect(&m_matchmakingTimer, &QTimer::timeout, this, &SteamIntegration::checkForMatches);
+
+    // Update queue counts
+    refreshQueueCounts();
+}
+
+void SteamIntegration::OnMatchmakingLobbyEntered(LobbyEnter_t* pCallback, bool bIOFailure) {
+    m_isConnecting = false;
+    emit connectingStatusChanged();
+
+    if (bIOFailure || pCallback->m_EChatRoomEnterResponse != k_EChatRoomEnterResponseSuccess) {
+        QString errorMessage;
+
+        if (bIOFailure) {
+            errorMessage = "I/O Failure";
+        } else {
+            switch (pCallback->m_EChatRoomEnterResponse) {
+            case k_EChatRoomEnterResponseDoesntExist:
+                errorMessage = "Matchmaking lobby no longer exists";
+                break;
+            case k_EChatRoomEnterResponseNotAllowed:
+            case k_EChatRoomEnterResponseBanned:
+            case k_EChatRoomEnterResponseLimited:
+                errorMessage = "You don't have permission to join this matchmaking lobby";
+                break;
+            case k_EChatRoomEnterResponseFull:
+                errorMessage = "Matchmaking lobby is already full";
+                break;
+            case k_EChatRoomEnterResponseError:
+            default:
+                errorMessage = "Unknown error joining matchmaking (" +
+                               QString::number(pCallback->m_EChatRoomEnterResponse) + ")";
+                break;
+            }
+        }
+
+        qDebug() << "SteamIntegration: Failed to enter matchmaking lobby, error:" << errorMessage;
+        emit matchmakingError(errorMessage);
+        return;
+    }
+
+    // Set matchmaking lobby ID
+    m_matchmakingLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
+    qDebug() << "SteamIntegration: Joined matchmaking lobby with ID:" << m_matchmakingLobbyId.ConvertToUint64();
+
+    // Set player metadata for matchmaking
+    char difficultyStr[2];
+    snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+    SteamMatchmaking()->SetLobbyMemberData(m_matchmakingLobbyId, "difficulty", difficultyStr);
+
+    // Update state
+    m_inMatchmaking = true;
+    emit matchmakingStatusChanged();
+
+    // Start checking for matches
+    m_matchmakingTimer.setInterval(2000); // Check every 2 seconds
+    m_matchmakingTimer.setSingleShot(false);
+    m_matchmakingTimer.start();
+    connect(&m_matchmakingTimer, &QTimer::timeout, this, &SteamIntegration::checkForMatches);
+
+    // Update queue counts
+    refreshQueueCounts();
+
+    qDebug() << "SteamIntegration: Successfully joined matchmaking system";
+}
+
+void SteamIntegration::checkForMatches() {
+    if (!m_initialized || !m_inMatchmaking || !m_matchmakingLobbyId.IsValid()) {
+        m_matchmakingTimer.stop();
+        return;
+    }
+
+    // Update queue counts first
+    refreshQueueCounts();
+
+    // Get the number of players in the lobby
+    int memberCount = SteamMatchmaking()->GetNumLobbyMembers(m_matchmakingLobbyId);
+
+    // Our own Steam ID
+    CSteamID mySteamId = SteamUser()->GetSteamID();
+
+    // Look for potential matches (players with the same difficulty)
+    for (int i = 0; i < memberCount; i++) {
+        CSteamID memberId = SteamMatchmaking()->GetLobbyMemberByIndex(m_matchmakingLobbyId, i);
+
+        // Skip ourselves
+        if (memberId == mySteamId) {
+            continue;
+        }
+
+        // Get the player's difficulty
+        const char* difficultyStr = SteamMatchmaking()->GetLobbyMemberData(
+            m_matchmakingLobbyId, memberId, "difficulty");
+
+        if (!difficultyStr) {
+            continue; // Skip players without difficulty set
+        }
+
+        int memberDifficulty = atoi(difficultyStr);
+
+        // Check if difficulty matches
+        if (memberDifficulty == m_selectedMatchmakingDifficulty) {
+            qDebug() << "Found match with player:" << memberId.ConvertToUint64()
+            << "for difficulty:" << m_selectedMatchmakingDifficulty;
+
+            // Create a game lobby
+            createGameLobbyWithMatch(memberId);
+            return; // Exit after finding one match
+        }
+    }
+}
+
+void SteamIntegration::createGameLobbyWithMatch(CSteamID matchedPlayerId) {
+    // Stop matchmaking timer
+    m_matchmakingTimer.stop();
+
+    // Create a new private game lobby
+    SteamAPICall_t apiCall = SteamMatchmaking()->CreateLobby(k_ELobbyTypePrivate, 2);
+
+    // Store the matched player ID for later
+    m_pendingMatchedPlayerId = matchedPlayerId;
+
+    // Use lobbyCreatedCallback with a different handler
+    m_lobbyCreatedCallback.Set(apiCall, this, &SteamIntegration::OnGameLobbyCreated);
+
+    // Flag that we're setting up a match
+    m_isSettingUpMatch = true;
+
+    qDebug() << "Creating game lobby for matched player:" << matchedPlayerId.ConvertToUint64();
+}
+
+void SteamIntegration::OnGameLobbyCreated(LobbyCreated_t *pCallback, bool bIOFailure) {
+    if (bIOFailure || pCallback->m_eResult != k_EResultOK) {
+        qDebug() << "Failed to create game lobby for matchmaking";
+
+        // Return to matchmaking
+        m_isSettingUpMatch = false;
+        if (m_inMatchmaking) {
+            m_matchmakingTimer.start();
+        }
+
+        return;
+    }
+
+    CSteamID gameLobbyId = CSteamID(pCallback->m_ulSteamIDLobby);
+    qDebug() << "Created game lobby with ID:" << gameLobbyId.ConvertToUint64();
+
+    // Set lobby data
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "game", "Retr0Mine");
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "version", "1.0");
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "matchmade", "1");
+
+    // Set difficulty data
+    char difficultyStr[2];
+    snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+    SteamMatchmaking()->SetLobbyData(gameLobbyId, "difficulty", difficultyStr);
+
+    // Invite the matched player
+    SteamMatchmaking()->InviteUserToLobby(gameLobbyId, m_pendingMatchedPlayerId);
+
+    // Leave the matchmaking lobby
+    if (m_matchmakingLobbyId.IsValid()) {
+        SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+        m_matchmakingLobbyId = CSteamID();
+    }
+
+    // Update state
+    m_inMatchmaking = false;
+    m_isSettingUpMatch = false;
+    m_currentLobbyId = gameLobbyId;
+    m_isHost = true;
+    m_inMultiplayerGame = true;
+
+    // Emit signals
+    emit matchmakingStatusChanged();
+    emit hostStatusChanged();
+    emit multiplayerStatusChanged();
+
+    QString matchedPlayerName = SteamFriends()->GetFriendPersonaName(m_pendingMatchedPlayerId);
+    emit matchFound(matchedPlayerName);
+
+    // Start the network timer
+    m_networkTimer.start();
+
+    // Clear pending matched player
+    m_pendingMatchedPlayerId = CSteamID();
+}
+
+void SteamIntegration::leaveMatchmaking() {
+    if (!m_initialized || !m_inMatchmaking) {
+        return;
+    }
+
+    // Stop the matchmaking timer
+    m_matchmakingTimer.stop();
+
+    // Leave the matchmaking lobby
+    if (m_matchmakingLobbyId.IsValid()) {
+        SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+        m_matchmakingLobbyId = CSteamID();
+    }
+
+    // Update state
+    m_inMatchmaking = false;
+    emit matchmakingStatusChanged();
+
+    qDebug() << "Left matchmaking";
+}
+
+void SteamIntegration::refreshQueueCounts() {
+    if (!m_initialized || !m_matchmakingLobbyId.IsValid()) {
+        return;
+    }
+
+    // Reset counts
+    int easyCount = 0;
+    int mediumCount = 0;
+    int hardCount = 0;
+    int retr0Count = 0;
+
+    // Count players by difficulty
+    int memberCount = SteamMatchmaking()->GetNumLobbyMembers(m_matchmakingLobbyId);
+
+    for (int i = 0; i < memberCount; i++) {
+        CSteamID memberId = SteamMatchmaking()->GetLobbyMemberByIndex(m_matchmakingLobbyId, i);
+        const char* difficultyStr = SteamMatchmaking()->GetLobbyMemberData(
+            m_matchmakingLobbyId, memberId, "difficulty");
+
+        if (!difficultyStr) {
+            continue; // Skip players without difficulty set
+        }
+
+        int memberDifficulty = atoi(difficultyStr);
+
+        switch (memberDifficulty) {
+        case 0: easyCount++; break;
+        case 1: mediumCount++; break;
+        case 2: hardCount++; break;
+        case 3: retr0Count++; break;
+        }
+    }
+
+    // Update counts if changed
+    bool changed = false;
+
+    if (m_easyQueueCount != easyCount) {
+        m_easyQueueCount = easyCount;
+        changed = true;
+    }
+
+    if (m_mediumQueueCount != mediumCount) {
+        m_mediumQueueCount = mediumCount;
+        changed = true;
+    }
+
+    if (m_hardQueueCount != hardCount) {
+        m_hardQueueCount = hardCount;
+        changed = true;
+    }
+
+    if (m_retr0QueueCount != retr0Count) {
+        m_retr0QueueCount = retr0Count;
+        changed = true;
+    }
+
+    if (changed) {
+        emit queueCountsChanged();
+    }
+}
+
+void SteamIntegration::setSelectedMatchmakingDifficulty(int difficulty) {
+    if (m_selectedMatchmakingDifficulty != difficulty) {
+        m_selectedMatchmakingDifficulty = difficulty;
+
+        // If we're in matchmaking, update our metadata
+        if (m_inMatchmaking && m_matchmakingLobbyId.IsValid()) {
+            char difficultyStr[2];
+            snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
+            SteamMatchmaking()->SetLobbyMemberData(m_matchmakingLobbyId, "difficulty", difficultyStr);
+
+            // Refresh queue counts
+            refreshQueueCounts();
+        }
+
+        emit selectedDifficultyChanged();
     }
 }

@@ -357,7 +357,6 @@ ApplicationWindow {
         anchors.centerIn: parent
     }
 
-
     LoadPopup {
         anchors.centerIn: parent
     }
@@ -371,6 +370,10 @@ ApplicationWindow {
     }
 
     PrivateSessionPopup {
+        anchors.centerIn: parent
+    }
+
+    MatchmakingPopup {
         anchors.centerIn: parent
     }
 
