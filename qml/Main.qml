@@ -89,16 +89,11 @@ ApplicationWindow {
                 ComponentsContext.privateSessionPopupVisible = true
                 ComponentsContext.matchmakingPopupVisible = false
             }
-
-            console.log(SteamIntegration.isInMatchmaking)
-            console.log(SteamIntegration.isInMultiplayerGame)
-            //console.log(SteamIntegration.isInMatchmaking)
         }
 
         function onConnectionSucceeded() {
             if (SteamIntegration.isInMultiplayerGame) {
                 ComponentsContext.privateSessionPopupVisible = true
-                //ComponentsContext.matchmakingPopupVisible = false
             }
         }
 
