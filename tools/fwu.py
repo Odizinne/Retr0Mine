@@ -60,7 +60,7 @@ def download_github_artifacts(github_token):
     commit_info = None
     
     for run in workflow_runs:
-        if run["conclusion"] == "success":
+        if run["conclusion"] == "success" and run["head_branch"] == "main":
             latest_successful_run = run
             
             commit_sha = run["head_sha"]
