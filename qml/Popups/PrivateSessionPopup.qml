@@ -81,7 +81,9 @@ Popup {
 
     Item {
         anchors.fill: parent
-        visible: (SteamIntegration.connectedPlayerName !== "" && !SteamIntegration.isP2PConnected) ||
+        // Add connectionState in the visibility condition
+        visible: (SteamIntegration.connectedPlayerName !== "" &&
+                  (!SteamIntegration.isP2PConnected || SteamIntegration.connectionState === SteamIntegration.Connecting)) ||
                  (SteamIntegration.isHost && SteamIntegration.isP2PConnected && !NetworkManager.clientGridReady)
 
         ColumnLayout {
@@ -97,7 +99,7 @@ Popup {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 14
-                text: SteamIntegration.isP2PConnected
+                text: (SteamIntegration.isP2PConnected && SteamIntegration.connectionState === SteamIntegration.Connected)
                       ? SteamIntegration.connectedPlayerName + qsTr(" is generating grid...")
                       : qsTr("Establishing connection with ") + SteamIntegration.connectedPlayerName + "..."
             }

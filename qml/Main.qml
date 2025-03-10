@@ -93,7 +93,7 @@ ApplicationWindow {
                 }
                 NetworkManager.sessionRunning = false;
                 NetworkManager.mpPopupCloseButtonVisible = false;
-                //GridBridge.initGame();
+                ComponentsContext.privateSessionPopupVisible = false;
             }
         }
 
@@ -172,6 +172,18 @@ ApplicationWindow {
         function onSaveCompleted(success) {
             root.isSaving = false
             Qt.quit()
+        }
+    }
+
+    Connections {
+        target: NetworkManager
+
+        function onClientGridReadyChanged() {
+            if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
+                if (!NetworkManager.clientGridReady) {
+                    ComponentsContext.privateSessionPopupVisible = true;
+                }
+            }
         }
     }
 
@@ -357,7 +369,6 @@ ApplicationWindow {
         anchors.centerIn: parent
     }
 
-
     LoadPopup {
         anchors.centerIn: parent
     }
@@ -444,7 +455,8 @@ ApplicationWindow {
             contentWidth: gridContainer.width
             contentHeight: gridContainer.height
             clip: true
-            enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)
+            enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
+                     !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
             opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) && !GameState.paused) ? 1 : 0
             ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
             ScrollBar.horizontal: GameCore.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar

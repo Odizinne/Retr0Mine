@@ -590,67 +590,67 @@ Current game will be saved and restored</source>
 <context>
     <name>PrivateSessionPopup</name>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="101"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="103"/>
         <source> is generating grid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="102"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="104"/>
         <source>Establishing connection with </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="115"/>
         <source>Session in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="115"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="115"/>
         <source>Creating cells...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="115"/>
         <source>Waiting for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="133"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="135"/>
         <source>Press G while hovering a cell to signal it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="149"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="151"/>
         <source>Invite sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="184"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="186"/>
         <source>Filter...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="192"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="194"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="311"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="313"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="333"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="335"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="341"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="343"/>
         <source>Quit session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -871,7 +871,7 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="146"/>
+        <location filename="../qml/TopBar.qml" line="168"/>
         <source>Click to pause</source>
         <translation type="unfinished"></translation>
     </message>
