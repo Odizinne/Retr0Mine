@@ -30,7 +30,7 @@ Popup {
 
         Label {
             text: qsTr("Select a difficulty:")
-            visible: !SteamIntegration.isInMatchmaking
+            visible: !SteamIntegration.isInMatchmaking && !SteamIntegration.isInMultiplayerGame
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 15
         }
@@ -41,7 +41,7 @@ Popup {
         }
 
         Frame {
-            visible: !SteamIntegration.isInMatchmaking
+            visible: !SteamIntegration.isInMatchmaking && !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
             Layout.fillHeight: true
 
@@ -111,9 +111,14 @@ Popup {
         }
 
         Label {
-            visible: SteamIntegration.isInMatchmaking
+            visible: SteamIntegration.isInMatchmaking && !SteamIntegration.p2pInitialized
             text: qsTr("Searching for players...")
             Layout.fillWidth: true
+        }
+
+        Label {
+            text: qsTr("Connecting to ") + SteamIntegration.connectedPlayerName
+            visible: SteamIntegration.isInMultiplayerGame && !SteamIntegration.p2pInitialized
         }
 
         RowLayout {
@@ -127,6 +132,12 @@ Popup {
                 onClicked: {
                     SteamIntegration.enterMatchmaking(SteamIntegration.selectedMatchmakingDifficulty)
                 }
+            }
+
+            Button {
+                text: qsTr("Close")
+                visible: !SteamIntegration.isInMatchmaking && SteamIntegration.isInMultiplayerGame
+                onClicked: ComponentsContext.matchmakingPopupVisible = false
             }
 
             Button {
