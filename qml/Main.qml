@@ -73,6 +73,11 @@ ApplicationWindow {
         }
 
         function onMatchFound() {
+            if (SteamIntegration.isHost) {
+                ComponentsContext.privateSessionPopupVisible = true
+                ComponentsContext.matchmakingPopupVisible = false
+            }
+
             console.log(SteamIntegration.isInMatchmaking)
             console.log(SteamIntegration.isInMultiplayerGame)
             //console.log(SteamIntegration.isInMatchmaking)
@@ -81,6 +86,7 @@ ApplicationWindow {
         function onConnectionSucceeded() {
             if (SteamIntegration.isInMultiplayerGame) {
                 ComponentsContext.privateSessionPopupVisible = true
+                ComponentsContext.matchmakingPopupVisible = false
             }
         }
 

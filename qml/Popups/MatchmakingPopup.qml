@@ -113,18 +113,8 @@ Popup {
         Label {
             visible: SteamIntegration.isInMatchmaking && !SteamIntegration.p2pInitialized
             text: qsTr("Searching for players...")
+            Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
-        }
-
-        Label {
-            text: qsTr("Connecting to ") + SteamIntegration.connectedPlayerName
-            visible: SteamIntegration.isInMultiplayerGame && !SteamIntegration.p2pInitialized
-        }
-
-        Label {
-            text: qsTr("Connecting to ") + SteamIntegration.connectedPlayerName
-            visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.p2pInitialized
-
         }
 
         RowLayout {
@@ -152,6 +142,9 @@ Popup {
                     ComponentsContext.matchmakingPopupVisible = false
                     if (SteamIntegration.isInMatchmaking) {
                         SteamIntegration.leaveMatchmaking()
+                    }
+                    if (SteamIntegration.isInMultiplayerGame) {
+                        SteamIntegration.leaveLobby()
                     }
                 }
             }
