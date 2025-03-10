@@ -121,6 +121,12 @@ Popup {
             visible: SteamIntegration.isInMultiplayerGame && !SteamIntegration.p2pInitialized
         }
 
+        Label {
+            text: qsTr("Connecting to ") + SteamIntegration.connectedPlayerName
+            visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.p2pInitialized
+
+        }
+
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignCenter
@@ -128,7 +134,7 @@ Popup {
 
             Button {
                 text: qsTr("Search")
-                visible: !SteamIntegration.isInMatchmaking
+                visible: !SteamIntegration.isInMatchmaking && !SteamIntegration.isInMultiplayerGame
                 onClicked: {
                     SteamIntegration.enterMatchmaking(SteamIntegration.selectedMatchmakingDifficulty)
                 }

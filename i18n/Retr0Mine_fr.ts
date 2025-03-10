@@ -517,12 +517,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="125"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="120"/>
+        <source>Connecting to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="130"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="133"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="138"/>
+        <source>Close</source>
+        <translation type="unfinished">Fermer</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="144"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuler</translation>
     </message>
