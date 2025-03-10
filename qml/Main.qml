@@ -78,6 +78,12 @@ ApplicationWindow {
             }
         }
 
+        function onMultiplayerStatusChanged() {
+            if (SteamIntegration.isInMultiplayerGame) {
+                ComponentsContext.privateSessionPopupVisible = false
+            }
+        }
+
         function onMatchFound() {
             if (SteamIntegration.isHost) {
                 ComponentsContext.privateSessionPopupVisible = true

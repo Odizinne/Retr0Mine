@@ -516,17 +516,17 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="126"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="125"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="138"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="137"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="144"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="143"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
