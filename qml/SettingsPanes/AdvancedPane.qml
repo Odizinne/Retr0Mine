@@ -58,5 +58,66 @@ Pane {
                 }
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("Custom seed")
+                Layout.fillWidth: true
+            }
+
+            TextField {
+                id: digitField
+                Layout.preferredWidth: colorSchemeComboBox.width * 2
+                Layout.rightMargin: 5
+                maximumLength: 10
+                placeholderText: qsTr("Empty for random")
+                inputMethodHints: Qt.ImhDigitsOnly
+                text: GameSettings.customSeed === -1 ? "" : GameSettings.customSeed.toString()
+
+                validator: RegularExpressionValidator {
+                    regularExpression: /^\d{0,10}$/
+                }
+
+                onTextChanged: {
+                    if (text === "") {
+                        GameSettings.customSeed = -1
+                    } else if (text.length > 0) {
+                        GameSettings.customSeed = parseInt(text)
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("Last used seed")
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: ComponentsContext.lastUsedSeed
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("First click coordinates")
+                Layout.fillWidth: true
+            }
+
+            Label {
+                visible: ComponentsContext.lastFirstClickX !== "" && ComponentsContext.lastFirstClickY !== ""
+                text: "X: " + ComponentsContext.lastFirstClickX + " Y: " + ComponentsContext.lastFirstClickY
+            }
+        }
     }
 }

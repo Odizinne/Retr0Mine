@@ -96,6 +96,26 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <source>Light</source>
         <translation>Clair</translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="67"/>
+        <source>Custom seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="76"/>
+        <source>Empty for random</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="101"/>
+        <source>Last used seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="115"/>
+        <source>First click coordinates</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConnectionLostPopup</name>
@@ -776,57 +796,57 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="72"/>
+        <location filename="../qml/SettingsWindow.qml" line="74"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="76"/>
+        <location filename="../qml/SettingsWindow.qml" line="78"/>
         <source>Gameplay</source>
         <translation>Gameplay</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="80"/>
+        <location filename="../qml/SettingsWindow.qml" line="82"/>
         <source>Visuals</source>
         <translation>Visuels</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="84"/>
+        <location filename="../qml/SettingsWindow.qml" line="86"/>
         <source>Sound</source>
         <translation>Sons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="88"/>
+        <location filename="../qml/SettingsWindow.qml" line="90"/>
         <source>Shortcuts</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="92"/>
+        <location filename="../qml/SettingsWindow.qml" line="94"/>
         <source>Accessibility</source>
         <translation>Accessibilité</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="96"/>
+        <location filename="../qml/SettingsWindow.qml" line="98"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="100"/>
+        <location filename="../qml/SettingsWindow.qml" line="102"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="104"/>
+        <location filename="../qml/SettingsWindow.qml" line="106"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="138"/>
+        <location filename="../qml/SettingsWindow.qml" line="140"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="154"/>
+        <location filename="../qml/SettingsWindow.qml" line="156"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>
