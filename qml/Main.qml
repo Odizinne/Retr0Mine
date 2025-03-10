@@ -11,6 +11,33 @@ ApplicationWindow {
     property bool isSaving: false
     property bool isClosing: false
 
+    Item {
+        id: pingMonitor
+        visible: SteamIntegration.isInMultiplayerGame// && SteamIntegration.isP2PConnected
+        height: 20
+        width: pingText.width
+
+        z: 999
+
+            Label {
+                id: pingText
+                text: SteamIntegration.pingTime + " ms"
+                color: pingMonitor.getPingColor(SteamIntegration.pingTime)
+                font.pixelSize: 12
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+
+        // Color coding for different ping ranges
+        function getPingColor(ping) {
+            if (ping <= 50) return "#28d13c"  // Green - excellent
+            if (ping <= 100) return "#a0d128" // Light green - good
+            if (ping <= 200) return "#d1a128" // Yellow - acceptable
+            if (ping <= 300) return "#d16c28" // Orange - mediocre
+            return "#d12844"                  // Red - poor
+        }
+    }
+
     onClosing: function(close) {
         if (isClosing) {
             close.accepted = true
@@ -172,6 +199,18 @@ ApplicationWindow {
         function onSaveCompleted(success) {
             root.isSaving = false
             Qt.quit()
+        }
+    }
+
+    Connections {
+        target: NetworkManager
+
+        function onClientGridReadyChanged() {
+            if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
+                if (!NetworkManager.clientGridReady) {
+                    ComponentsContext.privateSessionPopupVisible = true;
+                }
+            }
         }
     }
 
@@ -444,7 +483,8 @@ ApplicationWindow {
             contentWidth: gridContainer.width
             contentHeight: gridContainer.height
             clip: true
-            enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)
+            enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
+                     !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
             opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) && !GameState.paused) ? 1 : 0
             ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
             ScrollBar.horizontal: GameCore.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar

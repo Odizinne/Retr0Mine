@@ -110,6 +110,7 @@ public:
     Q_INVOKABLE void enterMatchmaking(int difficulty);
     Q_INVOKABLE void leaveMatchmaking();
     Q_INVOKABLE void refreshQueueCounts();
+    Q_INVOKABLE void measurePing();
 
     // Status getters
     bool isInMultiplayerGame() const { return m_inMultiplayerGame; }

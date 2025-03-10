@@ -313,7 +313,7 @@ void SteamIntegration::runCallbacks()
     }
 }
 
-// Connection state management
+// In the updateConnectionState method:
 void SteamIntegration::updateConnectionState(ConnectionState newState)
 {
     if (m_connectionState != newState) {
@@ -333,10 +333,17 @@ void SteamIntegration::updateConnectionState(ConnectionState newState)
             if (!m_heartbeatTimer.isActive()) {
                 m_heartbeatTimer.start();
             }
+
+            // Take an initial ping measurement
+            measurePing();
         }
         else if (newState == Disconnected) {
             // Stop heartbeat when disconnected
             m_heartbeatTimer.stop();
+
+            // Reset ping time
+            m_pingTime = 0;
+            emit pingTimeChanged(m_pingTime);
         }
 
         emit connectionStateChanged(newState);
@@ -1365,6 +1372,39 @@ void SteamIntegration::handleSystemMessage(const QByteArray& data)
         // Notify success
         emit reconnectionSucceeded();
     }
+    else if (type == "ping_test") {
+        // A ping test message - respond immediately with same timestamp
+        QVariant timestamp = message["timestamp"];
+        qDebug() << "SteamIntegration: Received ping test, echoing timestamp:" << timestamp.toLongLong();
+
+        // Echo back the exact same timestamp
+        QVariantMap responseData;
+        responseData["timestamp"] = timestamp;
+        sendSystemMessage("ping_response", responseData);
+    }
+    else if (type == "ping_response") {
+        // Response to our ping test
+        QVariant timestamp = message["timestamp"];
+        if (timestamp.isValid()) {
+            bool ok;
+            qint64 sentTime = timestamp.toLongLong(&ok);
+            if (ok) {
+                qint64 now = QDateTime::currentMSecsSinceEpoch();
+                m_pingTime = now - sentTime;
+
+                qDebug() << "SteamIntegration: Ping time calculated:" << m_pingTime << "ms";
+
+                // Emit signal to update UI
+                emit pingTimeChanged(m_pingTime);
+
+                // Update connection state if ping is high
+                if (m_pingTime > 500 && m_connectionState == Connected) {
+                    updateConnectionState(Unstable);
+                    emit connectionUnstable();
+                }
+            }
+        }
+    }
 }
 
 void SteamIntegration::sendSystemMessage(const QString& type, const QVariantMap& data)
@@ -1420,14 +1460,10 @@ void SteamIntegration::sendP2PInitPing()
 
 void SteamIntegration::sendHeartbeat()
 {
-    // Only check if we're in a multiplayer game and have a valid player ID
     if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid()) {
         m_heartbeatTimer.stop();
         return;
     }
-
-    // Always send heartbeat if connected, regardless of p2pInitialized state
-    // This ensures heartbeats continue even during reconnection attempts
 
     // Send a minimal heartbeat message - just a single byte
     char heartbeat = 'H';
@@ -1439,12 +1475,12 @@ void SteamIntegration::sendHeartbeat()
         k_EP2PSendUnreliable // Use unreliable for heartbeats
         );
 
-    // Every 5th heartbeat, also send a ping to measure latency
+    // Every 5th heartbeat, measure ping
     static int heartbeatCounter = 0;
     heartbeatCounter = (heartbeatCounter + 1) % 5;
 
     if (heartbeatCounter == 0 && m_p2pInitialized) {
-        forcePing();
+        measurePing();
     }
 }
 
@@ -2132,4 +2168,21 @@ void SteamIntegration::handlePingPongMessage(const QByteArray& messageData, cons
             emit pingTimeChanged(m_pingTime);
         }
     }
+}
+
+void SteamIntegration::measurePing()
+{
+    if (!m_initialized || !m_inMultiplayerGame || !m_connectedPlayerId.IsValid() || !m_p2pInitialized) {
+        return;
+    }
+
+    qDebug() << "SteamIntegration: Explicitly measuring ping";
+
+    // Use system message for reliable ping measurement
+    QVariantMap pingData;
+    pingData["timestamp"] = QDateTime::currentMSecsSinceEpoch();
+    sendSystemMessage("ping_test", pingData);
+
+    // Log the ping request
+    m_lastPingSent = QDateTime::currentMSecsSinceEpoch();
 }
