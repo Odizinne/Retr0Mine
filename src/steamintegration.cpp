@@ -646,17 +646,53 @@ void SteamIntegration::OnLobbyEntered(LobbyEnter_t *pCallback, bool bIOFailure) 
 
 void SteamIntegration::OnLobbyDataUpdate(LobbyDataUpdate_t *pCallback)
 {
-    // Check if this is our lobby
-    if (m_currentLobbyId.ConvertToUint64() != pCallback->m_ulSteamIDLobby)
-        return;
+    // If this update is for our matchmaking lobby
+    if (m_inMatchmaking && m_matchmakingLobbyId.IsValid() &&
+        m_matchmakingLobbyId.ConvertToUint64() == pCallback->m_ulSteamIDLobby) {
 
-    // Example: Check if the game is ready to start
-    const char* gameReadyValue = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "game_ready");
-    if (gameReadyValue && QString(gameReadyValue) == "1") {
-        if (!m_lobbyReady) {
-            m_lobbyReady = true;
-            emit lobbyReadyChanged();
-            qDebug() << "SteamIntegration: Lobby marked as ready";
+        // Check if there's a game lobby to join
+        const char* gameLobbyIdStr = SteamMatchmaking()->GetLobbyData(m_matchmakingLobbyId, "game_lobby_id");
+        const char* targetPlayerIdStr = SteamMatchmaking()->GetLobbyData(m_matchmakingLobbyId, "target_player_id");
+
+        if (gameLobbyIdStr && targetPlayerIdStr && strlen(gameLobbyIdStr) > 0) {
+            CSteamID targetPlayerId(strtoull(targetPlayerIdStr, nullptr, 10));
+
+            // Check if we're the targeted player
+            if (targetPlayerId == SteamUser()->GetSteamID()) {
+                CSteamID gameLobbyId(strtoull(gameLobbyIdStr, nullptr, 10));
+                qDebug() << "Auto-joining game lobby:" << gameLobbyId.ConvertToUint64();
+
+                // Stop matchmaking
+                m_matchmakingTimer.stop();
+                m_inMatchmaking = false;
+                emit matchmakingStatusChanged();
+
+                // Join the game lobby directly
+                m_isConnecting = true;
+                emit connectingStatusChanged();
+
+                SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(gameLobbyId);
+                m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
+
+                // Leave the matchmaking lobby
+                SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+                m_matchmakingLobbyId = CSteamID();
+
+                return; // We're joining a game lobby, no need to check further
+            }
+        }
+    }
+
+    // Regular lobby data handling for game lobbies
+    if (m_currentLobbyId.IsValid() && m_currentLobbyId.ConvertToUint64() == pCallback->m_ulSteamIDLobby) {
+        // Check if the game is ready to start
+        const char* gameReadyValue = SteamMatchmaking()->GetLobbyData(m_currentLobbyId, "game_ready");
+        if (gameReadyValue && QString(gameReadyValue) == "1") {
+            if (!m_lobbyReady) {
+                m_lobbyReady = true;
+                emit lobbyReadyChanged();
+                qDebug() << "SteamIntegration: Lobby marked as ready";
+            }
         }
     }
 }
@@ -1335,6 +1371,37 @@ void SteamIntegration::checkForMatches() {
     // Update queue counts first
     refreshQueueCounts();
 
+    // Check if there's a game lobby we should join
+    const char* gameLobbyIdStr = SteamMatchmaking()->GetLobbyData(m_matchmakingLobbyId, "game_lobby_id");
+    const char* targetPlayerIdStr = SteamMatchmaking()->GetLobbyData(m_matchmakingLobbyId, "target_player_id");
+
+    if (gameLobbyIdStr && targetPlayerIdStr && strlen(gameLobbyIdStr) > 0) {
+        CSteamID targetPlayerId(strtoull(targetPlayerIdStr, nullptr, 10));
+
+        // Check if we're the targeted player
+        if (targetPlayerId == SteamUser()->GetSteamID()) {
+            CSteamID gameLobbyId(strtoull(gameLobbyIdStr, nullptr, 10));
+            qDebug() << "Found game lobby to join:" << gameLobbyId.ConvertToUint64();
+
+            // Stop matchmaking and join the game
+            m_matchmakingTimer.stop();
+            m_inMatchmaking = false;
+            emit matchmakingStatusChanged();
+
+            m_isConnecting = true;
+            emit connectingStatusChanged();
+
+            SteamAPICall_t apiCall = SteamMatchmaking()->JoinLobby(gameLobbyId);
+            m_lobbyEnteredCallback.Set(apiCall, this, &SteamIntegration::OnLobbyEntered);
+
+            // Leave the matchmaking lobby
+            SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+            m_matchmakingLobbyId = CSteamID();
+
+            return; // Don't continue with regular matching
+        }
+    }
+
     // Get the number of players in the lobby
     int memberCount = SteamMatchmaking()->GetNumLobbyMembers(m_matchmakingLobbyId);
 
@@ -1417,13 +1484,17 @@ void SteamIntegration::OnGameLobbyCreated(LobbyCreated_t *pCallback, bool bIOFai
     snprintf(difficultyStr, sizeof(difficultyStr), "%d", m_selectedMatchmakingDifficulty);
     SteamMatchmaking()->SetLobbyData(gameLobbyId, "difficulty", difficultyStr);
 
-    // Invite the matched player
-    SteamMatchmaking()->InviteUserToLobby(gameLobbyId, m_pendingMatchedPlayerId);
-
-    // Leave the matchmaking lobby
+    // Instead of inviting, set the game lobby ID in the matchmaking lobby
+    // so the matched player can auto-join
     if (m_matchmakingLobbyId.IsValid()) {
-        SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
-        m_matchmakingLobbyId = CSteamID();
+        char gameLobbyIdStr[64];
+        snprintf(gameLobbyIdStr, sizeof(gameLobbyIdStr), "%llu", gameLobbyId.ConvertToUint64());
+        SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "game_lobby_id", gameLobbyIdStr);
+
+        // Set target player ID so only the right player joins
+        char targetPlayerIdStr[64];
+        snprintf(targetPlayerIdStr, sizeof(targetPlayerIdStr), "%llu", m_pendingMatchedPlayerId.ConvertToUint64());
+        SteamMatchmaking()->SetLobbyData(m_matchmakingLobbyId, "target_player_id", targetPlayerIdStr);
     }
 
     // Update state
@@ -1446,6 +1517,14 @@ void SteamIntegration::OnGameLobbyCreated(LobbyCreated_t *pCallback, bool bIOFai
 
     // Clear pending matched player
     m_pendingMatchedPlayerId = CSteamID();
+
+    // Leave matchmaking lobby after a delay to ensure data propagates
+    QTimer::singleShot(1000, [this]() {
+        if (m_matchmakingLobbyId.IsValid()) {
+            SteamMatchmaking()->LeaveLobby(m_matchmakingLobbyId);
+            m_matchmakingLobbyId = CSteamID();
+        }
+    });
 }
 
 void SteamIntegration::leaveMatchmaking() {

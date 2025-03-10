@@ -501,7 +501,7 @@ Current game will be saved and restored</source>
 <context>
     <name>MatchmakingPopup</name>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="33"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="32"/>
         <source>Select a difficulty:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -511,12 +511,17 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="114"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="115"/>
+        <source>Searching for players...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="125"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="122"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="133"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
