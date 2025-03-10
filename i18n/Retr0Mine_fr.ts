@@ -136,39 +136,6 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
 </context>
 <context>
-    <name>CoopModeChooserPopup</name>
-    <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="26"/>
-        <source>Session in progress</source>
-        <translation>Session en cours</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="36"/>
-        <source>Private game</source>
-        <translation>Partie privée</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="48"/>
-        <source>Matchmaking</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="54"/>
-        <source>Not implemented yet</source>
-        <translation>Pas encore implémenté</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="60"/>
-        <source>Close</source>
-        <translation>Fermer</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/CoopModeChooserPopup.qml" line="68"/>
-        <source>Quit session</source>
-        <translation>Quitter la session</translation>
-    </message>
-</context>
-<context>
     <name>DifficultyPane</name>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="78"/>

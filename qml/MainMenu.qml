@@ -49,7 +49,7 @@ Menu {
     MenuItem {
         text: SteamIntegration.initialized ? qsTr("Coop (Beta)") : qsTr("About")
         onTriggered: {
-            SteamIntegration.initialized ? ComponentsContext.coopModeChooserPopupVisible = true : ComponentsContext.aboutPopupVisible = true
+            SteamIntegration.initialized ? ComponentsContext.privateSessionPopupVisible = true : ComponentsContext.aboutPopupVisible = true
         }
     }
 

@@ -328,7 +328,7 @@ ApplicationWindow {
 
         Component {
             id: multiplayerPopupComponent
-            CoopModeChooserPopup {
+            PrivateSessionPopup {
                 anchors.centerIn: parent
             }
         }

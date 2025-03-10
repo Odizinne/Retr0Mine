@@ -70,7 +70,6 @@ set(QML_FILES
     qml/Popups/MultiplayerErrorPopup.qml
     qml/Popups/InviteReceivedPopup.qml
     qml/Popups/ConnectionLostPopup.qml
-    qml/Popups/CoopModeChooserPopup.qml
 )
 set(QML_SINGLETONS
     qml/Singletons/GameSettings.qml

@@ -8,7 +8,6 @@ QtObject {
     property bool restorePopupVisible: false
     property bool aboutPopupVisible: false
     property bool rulesPopupVisible: false
-    property bool coopModeChooserPopupVisible: false
     property bool privateSessionPopupVisible: false
     property bool multiplayerErrorPopupVisible: false
     property bool multiplayerChatVisible: false
