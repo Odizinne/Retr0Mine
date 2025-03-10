@@ -13,7 +13,7 @@ Popup {
 
     onVisibleChanged: {
         if (visible) {
-            SteamIntegration.refreshQueueCounts()
+            //SteamIntegration.refreshQueueCounts()
         }
     }
 
@@ -124,9 +124,13 @@ Popup {
 
             Button {
                 text: qsTr("Search")
+                enabled: (GameState.gridSizeX * GameState.gridSizeX) === GridBridge.cellsCreated
                 visible: !SteamIntegration.isInMatchmaking && !SteamIntegration.isInMultiplayerGame
                 onClicked: {
                     SteamIntegration.enterMatchmaking(SteamIntegration.selectedMatchmakingDifficulty)
+                    Qt.callLater(function() {
+                        SteamIntegration.refreshQueueCounts()
+                    })
                 }
             }
 

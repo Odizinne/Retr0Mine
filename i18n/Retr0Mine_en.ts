@@ -521,12 +521,12 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="134"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="138"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/MatchmakingPopup.qml" line="140"/>
+        <location filename="../qml/Popups/MatchmakingPopup.qml" line="144"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
