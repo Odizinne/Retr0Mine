@@ -11,13 +11,14 @@ GameLogic::GameLogic(QObject *parent)
     , m_currentAttempt(0)
     , m_totalAttempts(0)
     , m_minesPlaced(0)
+    , m_lastUsedSeed(0)  // Add a new member to store the last used seed
 {
     connect(m_generationWatcher, &QFutureWatcher<void>::finished, this, [this]() {
         // Only emit if not cancelled
         if (!m_cancelGeneration.load()) {
             // The future is already finished so we can check if it was successful
-            // by testing if mines were generated
-            emit boardGenerationCompleted(!m_mines.isEmpty());
+            // by testing if mines were generated, and include the seed value
+            emit boardGenerationCompleted(!m_mines.isEmpty(), m_lastUsedSeed);
         }
     });
 }
@@ -624,10 +625,21 @@ int GameLogic::solveWithConstraintIntersection(const QVector<Constraint> &constr
     return -1;
 }
 
-bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
+int GameLogic::generateBoard(int firstClickX, int firstClickY, int seed) {
+    // Use provided seed or generate a random one (always positive)
+    int usedSeed = seed;
+    if (seed == -1) {
+        std::random_device rd;
+        std::uniform_int_distribution<int> dist(1, std::numeric_limits<int>::max());
+        usedSeed = dist(rd);
+    }
+
+    // Set the RNG seed
+    m_rng.seed(usedSeed);
+
     // Check for cancellation at the beginning
     if (m_cancelGeneration.load()) {
-        return false;
+        return usedSeed;
     }
 
     // Valid first click coordinates
@@ -646,7 +658,8 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             QSet<int> neighbors;
         };
 
-        BoardState(int width, int height) : m_width(width), m_height(height) {
+        BoardState(int width, int height, std::mt19937& rng)
+            : m_width(width), m_height(height), m_rng(rng) {
             m_cells.resize(width * height);
 
             // Initialize neighbor information
@@ -679,7 +692,9 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
                 m_cells[neighbor].safe = true;
 
                 // 50% chance for second-level neighbors to be safe too
-                if (QRandomGenerator::global()->bounded(100) < 50) {
+                // Use our seeded RNG instead of global
+                std::uniform_int_distribution<int> dist(0, 99);
+                if (dist(m_rng) < 50) {
                     for (int secondNeighbor : m_cells[neighbor].neighbors) {
                         m_cells[secondNeighbor].safe = true;
                     }
@@ -774,6 +789,7 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
         QVector<int> m_mines;
         int m_width;
         int m_height;
+        std::mt19937& m_rng; // Reference to the seeded RNG
 
         // Use a constraint solver approach to determine if the board is solvable
         bool solveCompletely(const std::atomic<bool>& cancelFlag) {
@@ -1141,11 +1157,11 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
     for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
         // Check for cancellation at the start of each attempt
         if (m_cancelGeneration.load()) {
-            return false;
+            return usedSeed;
         }
 
-        // Initialize a new board state
-        BoardState board(m_width, m_height);
+        // Initialize a new board state with our seeded RNG
+        BoardState board(m_width, m_height, m_rng);
 
         // Start with first click area being safe
         int startIndex = safeFirstClick ? firstClickIndex : (m_width * m_height / 2);
@@ -1156,10 +1172,10 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
 
         // Check for cancellation before shuffling and mine placement
         if (m_cancelGeneration.load()) {
-            return false;
+            return usedSeed;
         }
 
-        // Shuffle candidates
+        // Shuffle candidates using our seeded RNG
         for (int i = candidates.size() - 1; i > 0; --i) {
             std::uniform_int_distribution<int> dist(0, i);
             int j = dist(m_rng);
@@ -1174,7 +1190,7 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
         for (int i = 0; i < candidates.size() && placedMines < m_mineCount; ++i) {
             // Check for cancellation inside the mine placement loop
             if (m_cancelGeneration.load()) {
-                return false;
+                return usedSeed;
             }
 
             // Create a temporary board to test this mine placement
@@ -1196,7 +1212,7 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
 
         // Check for cancellation before finalizing
         if (m_cancelGeneration.load()) {
-            return false;
+            return usedSeed;
         }
 
         // Check if we placed all mines
@@ -1207,49 +1223,42 @@ bool GameLogic::generateBoard(int firstClickX, int firstClickY) {
             // Transfer the generated board to the game state
             m_mines = board.getMines();
             m_numbers = board.calculateNumbers();
-            return true;
+            return usedSeed;
         }
     }
 
     // If we couldn't generate a valid board in any attempt
-    return false;
+    return usedSeed;
 }
 
-void GameLogic::generateBoardAsync(int firstClickX, int firstClickY) {
-    // Cancel any ongoing generation
-    cancelGeneration();
+void GameLogic::generateBoardAsync(int firstClickX, int firstClickY, int seed) {
+    // Reset the cancellation flag
+    m_cancelGeneration = false;
 
-    // Set initial progress values
-    const int MAX_ATTEMPTS = 100; // Maximum number of attempts
-    updateProgress(1, MAX_ATTEMPTS, 0);
+    // Set up the asynchronous task
+    auto generateFunc = [this, firstClickX, firstClickY, seed]() {
+        // Call the actual implementation function which does the work
+        int usedSeed = generateBoard(firstClickX, firstClickY, seed);
 
-    // Create a new future
-    QFuture<void> future = QtConcurrent::run([this, firstClickX, firstClickY, MAX_ATTEMPTS]() {
-        // Run the board generation in a separate thread
-        bool success = false;
-        int attempt = 1;
-
-        // Try repeatedly until success or cancellation
-        while (!success && attempt <= MAX_ATTEMPTS && !m_cancelGeneration.load()) {
-            // Update attempt counter
-            updateProgress(attempt, MAX_ATTEMPTS, 0);
-
-            // Try to generate board
-            success = this->generateBoard(firstClickX, firstClickY);
-
-            if (!success && !m_cancelGeneration.load()) {
-                attempt++;
-            }
+        // If cancelled, signal failure
+        if (m_cancelGeneration.load()) {
+            emit boardGenerationCompleted(false, usedSeed);
+            return;
         }
 
-        // Clear data if cancelled or failed
-        if (m_cancelGeneration.load() || !success) {
-            m_mines.clear();
-            m_numbers.clear();
-        }
-    });
+        // Success is based on whether all mines were placed
+        bool success = (m_minesPlaced == m_mineCount);
+        emit boardGenerationCompleted(success, usedSeed);
+    };
 
-    // Set the future to be watched
+    // Set up and start the future watcher
+    if (m_generationWatcher) {
+        disconnect(m_generationWatcher, nullptr, this, nullptr);
+        delete m_generationWatcher;
+    }
+
+    m_generationWatcher = new QFutureWatcher<void>(this);
+    QFuture<void> future = QtConcurrent::run(generateFunc);
     m_generationWatcher->setFuture(future);
 }
 

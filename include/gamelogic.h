@@ -55,10 +55,9 @@ public:
     Q_INVOKABLE QVector<int> calculateNumbersFromMines(int width, int height, const QVector<int> &mines);
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
-    Q_INVOKABLE bool generateBoard(int firstClickX, int firstClickY);
     Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
+    Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY, int seed = -1);
 
-    Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY);
     Q_INVOKABLE void cancelGeneration();
 
     // Progress information accessors
@@ -68,7 +67,7 @@ public:
     int totalMines() const { return m_mineCount; }
 
 signals:
-    void boardGenerationCompleted(bool success);
+    void boardGenerationCompleted(bool success, int usedSeed);
     void currentAttemptChanged();
     void totalAttemptsChanged();
     void minesPlacedChanged();
@@ -86,6 +85,7 @@ private:
     QMap<int, bool> m_solvedSpaces;
     std::atomic<bool> m_cancelGeneration;
     QFutureWatcher<void>* m_generationWatcher;
+    int m_lastUsedSeed;
 
     // Progress tracking
     std::atomic<int> m_currentAttempt;
@@ -96,6 +96,7 @@ private:
     void calculateNumbers();
     int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     void updateProgress(int attempt, int totalAttempts, int minesPlaced);
+    int generateBoard(int firstClickX, int firstClickY, int seed = -1);
 
     struct Constraint {
         int cell;              // The boundary cell

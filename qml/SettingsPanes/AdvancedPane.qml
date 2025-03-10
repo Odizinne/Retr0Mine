@@ -76,11 +76,9 @@ Pane {
                 placeholderText: qsTr("Empty for random")
                 inputMethodHints: Qt.ImhDigitsOnly
                 text: GameSettings.customSeed === -1 ? "" : GameSettings.customSeed.toString()
-
                 validator: RegularExpressionValidator {
                     regularExpression: /^\d{0,10}$/
                 }
-
                 onTextChanged: {
                     if (text === "") {
                         GameSettings.customSeed = -1
@@ -96,12 +94,18 @@ Pane {
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
+                id: seedLabel
                 text: qsTr("Last used seed")
                 Layout.fillWidth: true
             }
 
-            Label {
+            TextEdit {
                 text: ComponentsContext.lastUsedSeed
+                color: "#f6ae57"
+                font: seedLabel.font
+                readOnly: true
+                selectByMouse: true
+                Layout.rightMargin: 5
             }
         }
 
@@ -116,7 +120,23 @@ Pane {
 
             Label {
                 visible: ComponentsContext.lastFirstClickX !== "" && ComponentsContext.lastFirstClickY !== ""
-                text: "X: " + ComponentsContext.lastFirstClickX + " Y: " + ComponentsContext.lastFirstClickY
+                text: "X:"
+            }
+
+            Label {
+                text: ComponentsContext.lastFirstClickX
+                color: "#f6ae57"
+            }
+
+            Label {
+                visible: ComponentsContext.lastFirstClickX !== "" && ComponentsContext.lastFirstClickY !== ""
+                text: "Y:"
+            }
+
+            Label {
+                text: ComponentsContext.lastFirstClickY
+                color: "#f6ae57"
+                Layout.rightMargin: 5
             }
         }
     }

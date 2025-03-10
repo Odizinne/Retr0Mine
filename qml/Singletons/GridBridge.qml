@@ -166,11 +166,10 @@ Item {
         }
     }
 
-    function onBoardGenerated(success) {
+    function onBoardGenerated(success, usedSeed) {
         // Check if generation was cancelled
         if (generationCancelled) {
             generationCancelled = false
-            // Disconnect the signal if still connected
             try {
                 GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
             } catch (e) {
@@ -180,6 +179,9 @@ Item {
         }
 
         if (success) {
+            // Store the used seed for display
+            ComponentsContext.lastUsedSeed = usedSeed.toString();
+
             GameState.mines = GameLogic.getMines()
             GameState.numbers = GameLogic.getNumbers()
             GameState.gameStarted = true
@@ -251,8 +253,8 @@ Item {
                         col = GameState.firstClickIndex % GameState.gridSizeX;
                     }
 
-                    // Try again asynchronously
-                    GameLogic.generateBoardAsync(col, row);
+                    // Try again asynchronously with the same seed
+                    GameLogic.generateBoardAsync(col, row, GameSettings.customSeed);
                 }
             } else {
                 console.warn("Maximum attempts reached or generation cancelled");
@@ -279,6 +281,10 @@ Item {
             col = -1;
         }
 
+        // Store first click coordinates for display
+        ComponentsContext.lastFirstClickX = col >= 0 ? col.toString() : "";
+        ComponentsContext.lastFirstClickY = row >= 0 ? row.toString() : "";
+
         if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
             console.error("Failed to initialize game");
             return false;
@@ -290,8 +296,8 @@ Item {
         // Connect to the signal for this generation attempt
         GameLogic.boardGenerationCompleted.connect(onBoardGenerated);
 
-        // Start the async generation
-        GameLogic.generateBoardAsync(col, row);
+        // Start the async generation with the seed from settings
+        GameLogic.generateBoardAsync(col, row, GameSettings.customSeed);
 
         // Return true to indicate that generation has started, not completed
         return true;

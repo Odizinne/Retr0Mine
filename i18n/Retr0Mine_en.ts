@@ -106,12 +106,12 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="101"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="98"/>
         <source>Last used seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="115"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="117"/>
         <source>First click coordinates</source>
         <translation type="unfinished"></translation>
     </message>
@@ -340,15 +340,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="523"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="530"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="537"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="529"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="536"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="543"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="547"/>
         <location filename="../qml/Singletons/GridBridge.qml" line="553"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="559"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
