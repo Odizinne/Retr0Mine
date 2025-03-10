@@ -73,8 +73,9 @@ ApplicationWindow {
         }
 
         function onConnectionSucceeded() {
-            if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
+            if (SteamIntegration.isInMultiplayerGame) {
                 ComponentsContext.privateSessionPopupVisible = true
+                ComponentsContext.matchmakingPopupVisible = false
             }
         }
 
