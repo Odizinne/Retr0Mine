@@ -12,7 +12,7 @@ Item {
         if (GameCore.gamescope) {
             return "white"
         }
-        return Application.styleHints.colorScheme == Qt.Dark ? "white" : "dark"
+        return Application.styleHints.colorScheme === Qt.Dark ? "white" : "black"
     }
 
     function getFrameColor() {
@@ -22,9 +22,9 @@ Item {
             return Qt.rgba(1, 1, 1, 0.15)
         } else {
             if (GameCore.isFluent) {
-                return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.075) : Qt.rgba(0, 0, 0, 0.15)
+                return Application.styleHints.colorScheme === Qt.Dark ? Qt.rgba(1, 1, 1, 0.075) : Qt.rgba(0, 0, 0, 0.15)
             }
-            return Application.styleHints.colorScheme == Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+            return Application.styleHints.colorScheme === Qt.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
         }
     }
 
@@ -173,6 +173,7 @@ Item {
     property int settingsRowSpacing: 10
     property int settingsColumnSpacing: GameSettings.themeIndex === 0 ? 15 : 20
     property int settingsComponentsHeight: GameSettings.themeIndex === 0 ? 35 : 32
+    property string retr0mineLogo: getForegroundColor() === "white" ? "qrc:/images/retr0mine_logo.png" : "qrc:/images/retr0mine_logo_dark.png"
 }
 
 
