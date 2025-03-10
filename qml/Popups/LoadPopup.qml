@@ -11,7 +11,6 @@ Popup {
     width: 300
     height: 320
     modal: true
-    anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     visible: ComponentsContext.loadPopupVisible
     ErrorWindow {

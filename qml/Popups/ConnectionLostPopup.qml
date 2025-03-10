@@ -4,7 +4,6 @@ import QtQuick.Layouts
 Popup {
     id: control
     property string playerName: ""
-    anchors.centerIn: parent
     modal: true
     closePolicy: Popup.NoAutoClose
 
@@ -12,7 +11,7 @@ Popup {
         anchors.fill: parent
         spacing: 15
         Label {
-            text: qsTr("Connection with ") + control.playerName + " lost"
+            text: qsTr("Connection with ") + control.playerName + qsTr(" lost")
             Layout.alignment: Qt.AlignCenter
             color: "#d12844"
             font.bold: true

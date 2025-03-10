@@ -13,8 +13,7 @@ Popup {
     modal: true
     focus: true
     closePolicy: Popup.NoAutoClose
-    anchors.centerIn: parent
-    visible: ComponentsContext.multiplayerPopupVisible
+    visible: ComponentsContext.privateSessionPopupVisible
     property int buttonWidth: Math.max(cancelButton.width, startButton.width, closeButton.width)
     property bool refreshing: false
 
@@ -321,7 +320,7 @@ Popup {
                     if (SteamIntegration.isHost) {
                         SteamIntegration.sendGameAction("startGame", 0)
                     }
-                    ComponentsContext.multiplayerPopupVisible = false
+                    ComponentsContext.privateSessionPopupVisible = false
                     NetworkManager.sessionRunning = true
                     NetworkManager.mpPopupCloseButtonVisible = true
                 }
@@ -333,7 +332,7 @@ Popup {
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Close")
                 Layout.fillWidth: true
-                onClicked: ComponentsContext.multiplayerPopupVisible = false
+                onClicked: ComponentsContext.privateSessionPopupVisible = false
             }
 
             Button {
@@ -347,7 +346,7 @@ Popup {
                         SteamIntegration.leaveLobby()
                     }
                     NetworkManager.sessionRunning = false
-                    ComponentsContext.multiplayerPopupVisible = false
+                    ComponentsContext.privateSessionPopupVisible = false
                 }
             }
         }

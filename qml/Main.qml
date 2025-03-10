@@ -74,7 +74,7 @@ ApplicationWindow {
 
         function onConnectionSucceeded() {
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
-                ComponentsContext.multiplayerPopupVisible = true
+                ComponentsContext.privateSessionPopupVisible = true
             }
         }
 
@@ -316,6 +316,7 @@ ApplicationWindow {
         active: GameCore.showWelcome
         sourceComponent: Component {
             WelcomePopup {
+                anchors.centerIn: parent
             }
         }
     }
@@ -327,39 +328,60 @@ ApplicationWindow {
 
         Component {
             id: multiplayerPopupComponent
-            MultiplayerPopup { }
+            CoopModeChooserPopup {
+                anchors.centerIn: parent
+            }
         }
 
         Component {
             id: aboutPopupComponent
-            AboutPopup { }
+            AboutPopup {
+                anchors.centerIn: parent
+            }
         }
     }
 
-    MultiplayerErrorPopup { }
+    MultiplayerErrorPopup {
+        anchors.centerIn: parent
+    }
 
-    RulesPopup { }
+    RulesPopup {
+        anchors.centerIn: parent
+    }
 
-    GenerationPopup { }
+    GenerationPopup {
+        anchors.centerIn: parent
+    }
 
-    PostgamePopup { }
+    PostgamePopup {
+        anchors.centerIn: parent
+    }
 
-    LoadPopup { }
 
-    SavePopup { }
+    LoadPopup {
+        anchors.centerIn: parent
+    }
 
-    PausePopup { }
+    SavePopup {
+        anchors.centerIn: parent
+    }
 
-    MultiplayerPopup { }
+    PausePopup {
+        anchors.centerIn: parent
+    }
+
+    PrivateSessionPopup {
+        anchors.centerIn: parent
+    }
 
     ConnectionLostPopup {
         id: connectionLostPopup
+        anchors.centerIn: parent
     }
-
-    CoopModeChooserPopup { }
 
     LeaderboardPopup {
         id: leaderboardWindow
+        anchors.centerIn: parent
         Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
     }
 

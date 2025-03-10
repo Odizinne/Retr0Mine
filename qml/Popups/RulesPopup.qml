@@ -9,7 +9,6 @@ Popup {
     width: 400
     height: 450
     modal: true
-    anchors.centerIn: parent
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     visible: ComponentsContext.rulesPopupVisible
 

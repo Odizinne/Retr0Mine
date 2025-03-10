@@ -7,7 +7,6 @@ import net.odizinne.retr0mine 1.0
 
 Popup {
     id: control
-    anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     visible: ComponentsContext.leaderboardPopupVisible
     modal: true

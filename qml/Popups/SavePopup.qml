@@ -8,7 +8,6 @@ Popup {
     width: 300
     height: 140
     modal: true
-    anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     visible: ComponentsContext.savePopupVisible
     property int buttonWidth: Math.max(saveButton.implicitWidth, cancelButton.implicitWidth)

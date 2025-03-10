@@ -4,7 +4,6 @@ import net.odizinne.retr0mine
 
 Popup {
     id: control
-    anchors.centerIn: parent
     height: lyt.implicitHeight + 30
     width: lyt.implicitWidth + 30
     modal: true
@@ -24,7 +23,7 @@ Popup {
         }
 
         Label {
-            text: qsTr("You're already in a coop game")
+            text: qsTr("Session in progress")
             Layout.alignment: Qt.AlignCenter
             visible: SteamIntegration.isInMultiplayerGame
         }
@@ -39,7 +38,7 @@ Popup {
                 Layout.fillWidth: true
                 onClicked: {
                     ComponentsContext.coopModeChooserPopupVisible = false
-                    ComponentsContext.multiplayerPopupVisible = true
+                    ComponentsContext.privateSessionPopupVisible = true
                 }
             }
 

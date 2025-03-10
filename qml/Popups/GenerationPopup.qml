@@ -10,7 +10,6 @@ Popup {
     height: implicitHeight + 20
     width: 300
     visible: false
-    anchors.centerIn: parent
 
     property bool generating: GameState.isGeneratingGrid
     property var generationMessages: [

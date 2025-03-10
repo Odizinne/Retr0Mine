@@ -44,7 +44,9 @@ ApplicationWindow {
         }
     }
 
-    RestorePopup { }
+    RestorePopup {
+        anchors.centerIn: parent
+    }
 
     RowLayout {
         anchors.fill: parent

@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
 Popup {
-    anchors.centerIn: parent
     id: control
     visible: GameState.displayPostGame
     modal: true

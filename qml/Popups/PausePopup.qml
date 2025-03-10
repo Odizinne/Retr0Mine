@@ -7,7 +7,6 @@ Popup {
     modal: true
     width: Math.max(pauseLabel.width, resumeButton.width) + 40
     closePolicy: Popup.NoAutoClose
-    anchors.centerIn: parent
     visible: GameState.paused
 
     ColumnLayout {

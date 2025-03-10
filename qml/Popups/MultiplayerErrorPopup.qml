@@ -5,7 +5,6 @@ import net.odizinne.retr0mine
 
 Popup {
     modal: true
-    anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     visible: ComponentsContext.multiplayerErrorPopupVisible
     ColumnLayout {

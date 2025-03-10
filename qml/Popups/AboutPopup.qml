@@ -5,7 +5,6 @@ import QtQuick.Layouts
 Popup {
     id: control
     width: height + 12
-    anchors.centerIn: parent
     modal: true
     visible: ComponentsContext.aboutPopupVisible
 
