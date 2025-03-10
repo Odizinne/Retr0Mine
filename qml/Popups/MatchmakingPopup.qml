@@ -114,7 +114,6 @@ Popup {
             visible: SteamIntegration.isInMatchmaking
             text: qsTr("Searching for players...")
             Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
         }
 
         RowLayout {

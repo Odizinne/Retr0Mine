@@ -72,6 +72,12 @@ ApplicationWindow {
             }
         }
 
+        function onMatchmakingStatusChanged() {
+            if (!SteamIntegration.isInMatchmaking) {
+                ComponentsContext.matchmakingPopupVisible = false
+            }
+        }
+
         function onMatchFound() {
             if (SteamIntegration.isHost) {
                 ComponentsContext.privateSessionPopupVisible = true
@@ -86,7 +92,7 @@ ApplicationWindow {
         function onConnectionSucceeded() {
             if (SteamIntegration.isInMultiplayerGame) {
                 ComponentsContext.privateSessionPopupVisible = true
-                ComponentsContext.matchmakingPopupVisible = false
+                //ComponentsContext.matchmakingPopupVisible = false
             }
         }
 
