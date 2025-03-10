@@ -114,9 +114,31 @@ Item {
                 radius: GameCore.isFluent ? 5 : 0
                 anchors.centerIn: parent
                 color: "transparent"
-                opacity: 0.5
-                border.color: GameConstants.foregroundColor
+                opacity: 1
+                border.color: getPingColor(SteamIntegration.pingTime)
                 border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
+
+                function getPingColor(ping) {
+                    if (ping === 0) return GameConstants.foregroundColor
+                    if (ping <= 100) return "#28d13c"  // Green - excellent
+                    if (ping <= 150) return "#a0d128" // Light green - good
+                    if (ping <= 200) return "#d1a128" // Yellow - acceptable
+                    if (ping <= 250) return "#d16c28" // Orange - mediocre
+                    return "#d12844"                  // Red - poor
+                }
+
+                MouseArea {
+                    id: mouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
+
+                ToolTip {
+                    anchors.centerIn: parent
+                    text: SteamIntegration.pingTime + " ms"
+                    visible: mouseArea.containsMouse
+                    delay: 1000
+                }
             }
         }
 

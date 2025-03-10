@@ -892,7 +892,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="146"/>
+        <location filename="../qml/TopBar.qml" line="168"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
