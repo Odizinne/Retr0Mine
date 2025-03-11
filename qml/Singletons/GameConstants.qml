@@ -28,7 +28,7 @@ Item {
         }
     }
 
-    readonly property color accentColor: sysPalette.accent
+    readonly property color accentColor: GameSettings.themeIndex === 0 ? sysPalette.accent : sysPalette.highlight
     readonly property color foregroundColor: getForegroundColor()
     readonly property color frameColor: getFrameColor()
     readonly property var numberPalettes: ({
