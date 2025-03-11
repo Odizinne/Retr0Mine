@@ -670,9 +670,7 @@ QtObject {
             break;
 
         case "flag":
-            GridBridge.performToggleFlag(cellIndex);
-            // Send the result back to client to confirm the action
-            sendCellUpdateToClient(cellIndex, "flag");
+            handleMultiplayerToggleFlag(cellIndex, true); // true means client request
             break;
 
         case "revealConnected":
@@ -779,6 +777,12 @@ QtObject {
 
         // Process the action based on type
         switch(actionType) {
+            case "flagDenied":
+                // Host rejected our flag toggle because the cell is currently owned by the host
+                console.log("Flag toggle denied on cell " + cellIndex);
+                isProcessingNetworkAction = false;
+                break;
+
             case "finalReveal":
                 // For final reveals, we need to force reveal the cell
                 GridBridge.withCell(cellIndex, function(cell) {
@@ -978,15 +982,20 @@ QtObject {
         return true; // Action handled by multiplayer
     }
 
-    function handleMultiplayerToggleFlag(index) {
+    function handleMultiplayerToggleFlag(index, isClientRequest = false) {
         if (!SteamIntegration.isInMultiplayerGame) {
             return false; // Not a multiplayer game
         }
 
         if (SteamIntegration.isHost) {
-            // Host: process locally and send to client
-            GridBridge.performToggleFlag(index);
-            sendCellUpdateToClient(index, "flag");
+            // Check ownership for both host and client requests
+            if (checkCellOwnership(index, isClientRequest)) {
+                GridBridge.performToggleFlag(index);
+                sendCellUpdateToClient(index, "flag");
+            } else if (isClientRequest) {
+                // If it's a client request and was denied, we could send a denial
+                SteamIntegration.sendGameAction("flagDenied", index);
+            }
         } else {
             // Client: ONLY send request to host and wait for response
             SteamIntegration.sendGameAction("flag", index);
@@ -1177,5 +1186,41 @@ QtObject {
         Qt.callLater(function() {
             syncGridSettingsToClient();
         });
+    }
+
+    property var cellOwnership: ({})
+    function checkCellOwnership(cellIndex, isClientRequest) {
+        const player = isClientRequest ? "client" : "host";
+        const currentTime = new Date().getTime();
+        const ownershipData = cellOwnership[cellIndex];
+
+        // If cell is not owned, allow the action and set ownership
+        if (!ownershipData) {
+            setCellOwnership(cellIndex, player);
+            return true;
+        }
+
+        // If ownership has expired (more than 1 second), allow the action and set new ownership
+        if (currentTime - ownershipData.timestamp > 1000) {
+            setCellOwnership(cellIndex, player);
+            return true;
+        }
+
+        // If cell is owned by the requesting player, allow the action and reset timer
+        if (ownershipData.owner === player) {
+            setCellOwnership(cellIndex, player); // Reset the timer
+            return true;
+        }
+
+        // Otherwise, the cell is owned by the other player and within the time limit
+        console.log("Cell " + cellIndex + " is owned by " + ownershipData.owner + ", denying access to " + player);
+        return false;
+    }
+
+    function setCellOwnership(cellIndex, player) {
+        cellOwnership[cellIndex] = {
+            owner: player,
+            timestamp: new Date().getTime()
+        };
     }
 }
