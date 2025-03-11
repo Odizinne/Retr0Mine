@@ -100,10 +100,9 @@ QtObject {
 
     // Grid synchronization - Send grid settings from host to client
     function syncGridSettingsToClient() {
-        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost || !connectionIsHealthy) {
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
             return;
         }
-
 
         // Get current host's difficulty settings
         const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
@@ -160,7 +159,7 @@ QtObject {
 
     // Cell signaling (pinging) system
     function sendPing(cellIndex) {
-        if (SteamIntegration.isInMultiplayerGame && connectionIsHealthy) {
+        if (SteamIntegration.isInMultiplayerGame) {
             SteamIntegration.sendGameAction("ping", cellIndex);
         }
 
@@ -202,7 +201,6 @@ QtObject {
 
     // Grid preparation for multiplayer
     function prepareMultiplayerGrid(gridX, gridY, mineCount) {
-
         // Only reset cellsCreated if grid dimensions have changed
         if (GameState.gridSizeX !== gridX || GameState.gridSizeY !== gridY) {
             GridBridge.cellsCreated = 0;
@@ -255,7 +253,7 @@ QtObject {
         }
 
         // Send acknowledgment back to host
-        if (!SteamIntegration.isHost && connectionIsHealthy) {
+        if (!SteamIntegration.isHost) {
             SteamIntegration.sendGameAction("gridSyncAck", data.syncTimestamp || 0);
 
             // If grid dimensions are the same and cells are already created,
@@ -267,13 +265,13 @@ QtObject {
     }
 
     function notifyGridReady() {
-        if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && connectionIsHealthy) {
+        if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
             SteamIntegration.sendGameAction("gridReady", 0);
         }
     }
 
     function sendCellUpdateToClient(index, action) {
-        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost || !connectionIsHealthy) {
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
             return;
         }
 
@@ -306,7 +304,7 @@ QtObject {
 
     // Network message handling - Mines list
     function sendMinesListToClient() {
-        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost || !connectionIsHealthy) {
+        if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
             return;
         }
 
@@ -320,7 +318,6 @@ QtObject {
 
         // If mines array is small enough, send it as one packet
         if (cleanMinesArray.length <= 100) {  // Adjust this threshold as needed
-
             const minesData = {
                 gridSizeX: Number(GameState.gridSizeX),
                 gridSizeY: Number(GameState.gridSizeY),
@@ -363,7 +360,6 @@ QtObject {
     }
 
     function applyMinesAndCalculateNumbers(minesData) {
-
         // First check if we received valid data
         if (!minesData || !minesData.mines) {
             console.error("Received invalid mines data");
@@ -393,7 +389,6 @@ QtObject {
                     cleanMinesArray = parsed.map(Number);
                 }
             } else if (typeof minesData.mines === 'object' && minesData.mines !== null) {
-
                 // Check if it's an array-like object with numeric keys and a 'length' property
                 if (minesData.mines.hasOwnProperty('length') && typeof minesData.mines.length === 'number') {
                     // Convert array-like object to array
@@ -443,7 +438,6 @@ QtObject {
         if (cleanMinesArray.length !== Number(minesData.mineCount)) {
             console.warn("Extracted mine count", cleanMinesArray.length,
                         "doesn't match expected mine count", minesData.mineCount);
-
             // But continue anyway, using the mines we found
         }
 
@@ -489,7 +483,7 @@ QtObject {
         const success = true;
 
         // If successful, and we're a client, send acknowledgment to host
-        if (success && SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && connectionIsHealthy) {
+        if (success && SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
             // Mark that we have initialized mines
             minesInitialized = true;
 
@@ -512,7 +506,6 @@ QtObject {
     }
 
     function applyGameState(gameState) {
-
         if (!gameState) {
             console.error("Received invalid game state");
             lastSyncError = "Received invalid game state";
@@ -575,7 +568,6 @@ QtObject {
 
         // Process complete chunk set
         if (receivedChunks === expectedTotalChunks) {
-
             // Cancel any pending resend timer
             if (networkManager.chunkResendTimer) {
                 networkManager.chunkResendTimer.stop();
@@ -621,7 +613,7 @@ QtObject {
         if (success) {
             minesInitialized = true;
 
-            if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && connectionIsHealthy) {
+            if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 SteamIntegration.sendGameAction("readyForActions", minesData.syncTimestamp || 0);
 
                 if (pendingActions.length > 0) {
@@ -640,8 +632,7 @@ QtObject {
     }
 
     function requestFullSync() {
-        if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost ||
-            !connectionIsHealthy) {
+        if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
             return;
         }
 
@@ -680,6 +671,7 @@ QtObject {
 
         case "flag":
             GridBridge.performToggleFlag(cellIndex);
+            // Send the result back to client to confirm the action
             sendCellUpdateToClient(cellIndex, "flag");
             break;
 
@@ -739,16 +731,12 @@ QtObject {
         if (actionType === "minesReady") {
             if (minesInitialized) {
                 // Send acknowledgment to host that we're ready for actions
-                if (connectionIsHealthy) {
-                    SteamIntegration.sendGameAction("readyForActions", 0);
-                }
+                SteamIntegration.sendGameAction("readyForActions", 0);
             } else {
                 // Request mines data directly with a slight delay to avoid request flooding
-                if (connectionIsHealthy) {
-                    Qt.callLater(function() {
-                        SteamIntegration.sendGameAction("requestMines", 0);
-                    });
-                }
+                Qt.callLater(function() {
+                    SteamIntegration.sendGameAction("requestMines", 0);
+                });
             }
             return;
         }
@@ -774,7 +762,7 @@ QtObject {
                 pendingActions.push({type: actionType, index: cellIndex, timestamp: Date.now()});
 
                 // If we have too many pending actions, request mines data again
-                if (pendingActions.length > 10 && connectionIsHealthy) {
+                if (pendingActions.length > 10) {
                     console.error("Too many pending actions, requesting mines data again");
                     SteamIntegration.sendGameAction("requestMines", 0);
 
@@ -915,9 +903,7 @@ QtObject {
                 GameState.difficultyChanged = true;
                 GridBridge.initGame();
 
-                if (connectionIsHealthy) {
-                    SteamIntegration.sendGameAction("gridResetAck", 0);
-                }
+                SteamIntegration.sendGameAction("gridResetAck", 0);
                 break;
 
             case "prepareDifficultyChange":
@@ -963,19 +949,13 @@ QtObject {
             return false; // Not a multiplayer game
         }
 
-        // Both host and client process the reveal locally first
-        const result = GridBridge.performReveal(index);
-
         if (SteamIntegration.isHost) {
-            // Host: just send the result to client
+            // Host: process locally and send result to client
+            GridBridge.performReveal(index);
             sendCellUpdateToClient(index, "reveal");
         } else {
-            // Client: inform the host about the action (not waiting for permission)
-            if (connectionIsHealthy) {
-                SteamIntegration.sendGameAction("reveal", index);
-            }
-            // Important: we're no longer setting isProcessingNetworkAction to true
-            // This allows the client to continue playing without waiting
+            // Client: ONLY send request to host and wait for response
+            SteamIntegration.sendGameAction("reveal", index);
         }
 
         return true; // Action handled by multiplayer
@@ -991,14 +971,8 @@ QtObject {
             GridBridge.performRevealConnectedCells(index);
             sendCellUpdateToClient(index, "revealConnected");
         } else {
-            // Client: send request to host and wait
-            isProcessingNetworkAction = connectionIsHealthy;
-            if (connectionIsHealthy) {
-                SteamIntegration.sendGameAction("revealConnected", index);
-            } else {
-                // If connection is not healthy, just process locally
-                GridBridge.performRevealConnectedCells(index);
-            }
+            // Client: ONLY send request to host and wait for response
+            SteamIntegration.sendGameAction("revealConnected", index);
         }
 
         return true; // Action handled by multiplayer
@@ -1011,19 +985,11 @@ QtObject {
 
         if (SteamIntegration.isHost) {
             // Host: process locally and send to client
-            const flagRemoved = GridBridge.performToggleFlag(index);
-            if (connectionIsHealthy) {
-                sendCellUpdateToClient(index, "flag");
-            }
-
+            GridBridge.performToggleFlag(index);
+            sendCellUpdateToClient(index, "flag");
         } else {
-            isProcessingNetworkAction = connectionIsHealthy;
-            if (connectionIsHealthy) {
-                SteamIntegration.sendGameAction("flag", index);
-            } else {
-                // If connection is not healthy, just process locally
-                GridBridge.performToggleFlag(index);
-            }
+            // Client: ONLY send request to host and wait for response
+            SteamIntegration.sendGameAction("flag", index);
         }
 
         return true; // Action handled by multiplayer
@@ -1039,13 +1005,7 @@ QtObject {
             GridBridge.processHintRequest();
         } else {
             // Client: send request to host
-            isProcessingNetworkAction = connectionIsHealthy;
-            if (connectionIsHealthy) {
-                SteamIntegration.sendGameAction("requestHint", 0);
-            } else {
-                // If connection is not healthy, just process locally
-                GridBridge.processHintRequest();
-            }
+            SteamIntegration.sendGameAction("requestHint", 0);
         }
 
         return true; // Action handled by multiplayer
@@ -1135,9 +1095,7 @@ QtObject {
             // Wait a moment to ensure cell updates are processed before game over
             Qt.callLater(function() {
                 // Send game over message with win status (1 = win)
-                if (connectionIsHealthy) {
-                    SteamIntegration.sendGameAction("gameOver", 1);
-                }
+                SteamIntegration.sendGameAction("gameOver", 1);
             });
         }
 
@@ -1145,7 +1103,7 @@ QtObject {
         const difficulty = GameState.getDifficultyLevel();
         if (difficulty === "medium" || difficulty === "hard" || difficulty === "retr0") {
             SteamIntegration.unlockAchievement("ACH_WIN_COOP");
-            if (SteamIntegration.isHost && connectionIsHealthy) {
+            if (SteamIntegration.isHost) {
                 SteamIntegration.sendGameAction("unlockCoopAchievement", 0);
             }
         }
@@ -1164,9 +1122,7 @@ QtObject {
         // Wait a moment to ensure cell updates are processed before game over
         Qt.callLater(function() {
             // Send game over message with loss status (0 = loss)
-            if (connectionIsHealthy) {
-                SteamIntegration.sendGameAction("gameOver", 0);
-            }
+            SteamIntegration.sendGameAction("gameOver", 0);
         });
 
         return true;
@@ -1174,12 +1130,6 @@ QtObject {
 
     function changeDifficulty(difficultyIndex) {
         if (!SteamIntegration.isInMultiplayerGame || !SteamIntegration.isHost) {
-            return false;
-        }
-
-        // Check connection health before initializing
-        if (!connectionIsHealthy) {
-            SteamIntegration.testConnection();
             return false;
         }
 
@@ -1222,9 +1172,7 @@ QtObject {
         GameState.difficultyChanged = true;
         GridBridge.initGame();
 
-        if (connectionIsHealthy) {
-            SteamIntegration.sendGameAction("resetMultiplayerGrid", 0);
-        }
+        SteamIntegration.sendGameAction("resetMultiplayerGrid", 0);
 
         Qt.callLater(function() {
             syncGridSettingsToClient();
