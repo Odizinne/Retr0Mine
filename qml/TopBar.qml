@@ -45,6 +45,7 @@ Item {
                 id: menuButton
                 Layout.preferredWidth: 35
                 Layout.preferredHeight: 35
+                focusPolicy: Qt.NoFocus
                 onClicked: {
                     mainMenu.visible = !mainMenu.visible
                 }

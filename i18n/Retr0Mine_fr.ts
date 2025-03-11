@@ -118,24 +118,6 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
 </context>
 <context>
-    <name>ConnectionLostPopup</name>
-    <message>
-        <location filename="../qml/Popups/ConnectionLostPopup.qml" line="14"/>
-        <source>Connection with </source>
-        <translation>Connexion avec </translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/ConnectionLostPopup.qml" line="14"/>
-        <source> lost</source>
-        <translation> perdue</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/ConnectionLostPopup.qml" line="21"/>
-        <source>Close</source>
-        <translation>Fermer</translation>
-    </message>
-</context>
-<context>
     <name>DifficultyPane</name>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="78"/>
@@ -563,6 +545,19 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <location filename="../qml/Popups/PausePopup.qml" line="23"/>
         <source>Resume</source>
         <translation>Reprendre</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerLeftPopup</name>
+    <message>
+        <location filename="../qml/Popups/PlayerLeftPopup.qml" line="14"/>
+        <source> left the game</source>
+        <translation type="unfinished"> a quitté la partie</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PlayerLeftPopup.qml" line="20"/>
+        <source>Close</source>
+        <translation type="unfinished">Fermer</translation>
     </message>
 </context>
 <context>

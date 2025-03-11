@@ -11,9 +11,8 @@ Popup {
         anchors.fill: parent
         spacing: 15
         Label {
-            text: qsTr("Connection with ") + control.playerName + qsTr(" lost")
+            text: control.playerName + qsTr(" left the game")
             Layout.alignment: Qt.AlignCenter
-            color: "#d12844"
             font.bold: true
         }
 

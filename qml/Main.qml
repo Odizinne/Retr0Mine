@@ -113,8 +113,8 @@ ApplicationWindow {
         }
 
         function onNotifyConnectionLost(message) {
-            connectionLostPopup.playerName = message
-            connectionLostPopup.visible = true
+            playerLeftPopup.playerName = message
+            playerLeftPopup.visible = true
             GameState.finishedAfterDisconnect = true
         }
     }
@@ -385,8 +385,8 @@ ApplicationWindow {
         anchors.centerIn: parent
     }
 
-    ConnectionLostPopup {
-        id: connectionLostPopup
+    PlayerLeftPopup {
+        id: playerLeftPopup
         anchors.centerIn: parent
     }
 

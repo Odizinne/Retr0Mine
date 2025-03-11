@@ -69,7 +69,7 @@ set(QML_FILES
     qml/Popups/PrivateSessionPopup.qml
     qml/Popups/MultiplayerErrorPopup.qml
     qml/Popups/InviteReceivedPopup.qml
-    qml/Popups/ConnectionLostPopup.qml
+    qml/Popups/PlayerLeftPopup.qml
 )
 set(QML_SINGLETONS
     qml/Singletons/GameSettings.qml
