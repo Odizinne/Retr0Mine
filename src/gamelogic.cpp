@@ -82,17 +82,9 @@ QVector<int> GameLogic::calculateNumbersFromMines(int width, int height, const Q
     // Create a temporary numbers vector with correct size
     QVector<int> numbers(width * height, 0);
 
-    // Debug output
-    qDebug() << "calculateNumbersFromMines called with grid:" << width << "x" << height;
-    qDebug() << "Total mines:" << mines.size();
-    if (!mines.isEmpty()) {
-        qDebug() << "First few mine positions:" << mines.mid(0, qMin(5, mines.size()));
-    }
-
     // Calculate adjacent mine counts (similar to calculateNumbers())
     for (int mine : mines) {
         if (mine < 0 || mine >= width * height) {
-            qDebug() << "Skipping invalid mine position:" << mine;
             continue; // Skip invalid mine positions
         }
 
@@ -102,7 +94,6 @@ QVector<int> GameLogic::calculateNumbersFromMines(int width, int height, const Q
         QSet<int> neighbors = getNeighbors(mine);
         for (int neighbor : neighbors) {
             if (neighbor < 0 || neighbor >= width * height) {
-                qDebug() << "Invalid neighbor position:" << neighbor << "for mine at" << mine;
                 continue;
             }
 
@@ -117,7 +108,6 @@ QVector<int> GameLogic::calculateNumbersFromMines(int width, int height, const Q
     for (int i = 0; i < numbers.size() && nonZeroCount < 10; i++) {
         if (numbers[i] != 0) {
             nonZeroCount++;
-            qDebug() << "Sample number at" << i << ":" << numbers[i];
         }
     }
 
