@@ -64,10 +64,8 @@ QtObject {
                 connectionIsHealthy = true;
             } else if (state === SteamIntegration.Unstable) {
                 connectionIsHealthy = false;
-                console.log("NetworkManager: Connection is unstable");
             } else if (state === SteamIntegration.Disconnected) {
                 connectionIsHealthy = false;
-                console.log("NetworkManager: Connection is disconnected");
 
                 // Handle disconnection (specific game logic)
                 if (preserveGameStateOnDisconnect && GameState.gameStarted && !GameState.gameOver) {
@@ -78,7 +76,6 @@ QtObject {
             } else if (state === SteamIntegration.Reconnecting) {
                 connectionIsHealthy = false;
                 isReconnecting = true;
-                console.log("NetworkManager: Attempting to reconnect");
             }
         });
 
@@ -86,7 +83,6 @@ QtObject {
         SteamIntegration.reconnectionSucceeded.connect(function() {
             isReconnecting = false;
             connectionIsHealthy = true;
-            console.log("NetworkManager: Reconnection succeeded");
 
             // If we're the host, send updated game state to the client
             if (SteamIntegration.isHost && GameState.gameStarted) {
@@ -97,13 +93,11 @@ QtObject {
         SteamIntegration.reconnectionFailed.connect(function() {
             isReconnecting = false;
             connectionIsHealthy = false;
-            console.log("NetworkManager: Reconnection failed");
         });
 
         // Monitor lobby readiness
         SteamIntegration.lobbyReadyChanged.connect(function() {
             if (SteamIntegration.isLobbyReady && SteamIntegration.isHost) {
-                console.log("NetworkManager: Lobby ready, sending grid sync");
                 syncGridSettingsToClient();
             }
         });
@@ -115,7 +109,6 @@ QtObject {
             return;
         }
 
-        console.log("NetworkManager: Syncing grid settings to client");
 
         // Get current host's difficulty settings
         const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
@@ -129,7 +122,6 @@ QtObject {
             syncTimestamp: new Date().getTime() // Add timestamp for sync tracking
         };
 
-        console.log("Sending grid sync:", JSON.stringify(gridSyncData));
         SteamIntegration.sendGameState(gridSyncData);
     }
 
@@ -138,18 +130,15 @@ QtObject {
         let resultArray = [];
         if (Array.isArray(obj)) {
             resultArray = Array.from(obj);
-            console.log("Processing " + name + " as array, length:", resultArray.length);
         } else if (typeof obj === 'object' && obj !== null) {
             // Convert object to array
-            console.log("Processing " + name + " as object");
             for (let prop in obj) {
                 if (!isNaN(parseInt(prop))) {
                     resultArray.push(parseInt(obj[prop]));
                 }
             }
-            console.log("Converted " + name + " to array, length:", resultArray.length);
         } else {
-            console.log(name + " is empty or invalid");
+            console.error(name + " is empty or invalid");
         }
         return resultArray;
     }
@@ -177,7 +166,6 @@ QtObject {
     // Cell signaling (pinging) system
     function sendPing(cellIndex) {
         if (SteamIntegration.isInMultiplayerGame && connectionIsHealthy) {
-            console.log("Sending ping for cell:", cellIndex);
             SteamIntegration.sendGameAction("ping", cellIndex);
         }
 
@@ -285,14 +273,10 @@ QtObject {
 
     // Grid preparation for multiplayer
     function prepareMultiplayerGrid(gridX, gridY, mineCount) {
-        console.log("Preparing multiplayer grid:", gridX, "x", gridY, "mines:", mineCount);
 
         // Only reset cellsCreated if grid dimensions have changed
         if (GameState.gridSizeX !== gridX || GameState.gridSizeY !== gridY) {
-            console.log("Grid dimensions changed - resetting cellsCreated counter");
             GridBridge.cellsCreated = 0;
-        } else {
-            console.log("Grid dimensions unchanged - keeping existing cells");
         }
 
         // Update grid dimensions and mine count
@@ -305,8 +289,6 @@ QtObject {
     }
 
     function handleMultiplayerGridSync(data) {
-        console.log("Received multiplayer grid sync data:", JSON.stringify(data));
-
         // Check if we need to resize the grid
         let gridNeedsRecreation = (GameState.gridSizeX !== data.gridSizeX ||
                                    GameState.gridSizeY !== data.gridSizeY);
@@ -334,11 +316,9 @@ QtObject {
 
         if (matchedDifficulty >= 0) {
             // Standard difficulty found
-            console.log("Setting difficulty to match received dimensions:", matchedDifficulty);
             GameSettings.difficulty = matchedDifficulty;
         } else {
             // No match, update custom settings
-            console.log("Setting custom difficulty for received dimensions");
             GameSettings.customWidth = data.gridSizeX;
             GameSettings.customHeight = data.gridSizeY;
             GameSettings.customMines = data.mineCount;
@@ -352,7 +332,6 @@ QtObject {
             // If grid dimensions are the same and cells are already created,
             // we can immediately notify that we're ready
             if (!gridNeedsRecreation && GridBridge.cellsCreated === (data.gridSizeX * data.gridSizeY)) {
-                console.log("Grid already matches expected size, sending ready immediately");
                 Qt.callLater(notifyGridReady);
             }
         }
@@ -360,7 +339,6 @@ QtObject {
 
     function notifyGridReady() {
         if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && connectionIsHealthy) {
-            console.log("Client notifying host that grid is ready");
             SteamIntegration.sendGameAction("gridReady", 0);
         }
     }
@@ -372,12 +350,10 @@ QtObject {
 
         // If client isn't ready yet, queue initial actions
         if (!clientReadyForActions && action === "reveal") {
-            console.log("Client not ready, queuing action:", action, index);
             pendingInitialActions.push({type: action, index: index});
             return;
         }
 
-        console.log("Sending cell update:", index, action);
         SteamIntegration.sendGameAction(action, index);
     }
 
@@ -395,7 +371,6 @@ QtObject {
         // If we're the host and connected, notify clients about the reset
         if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost &&
             SteamIntegration.connectionState === SteamIntegration.Connected) {
-            console.log("Host notifying client about game reset");
             SteamIntegration.sendGameAction("resetGame", 0);
         }
     }
@@ -416,7 +391,6 @@ QtObject {
 
         // If mines array is small enough, send it as one packet
         if (cleanMinesArray.length <= 100) {  // Adjust this threshold as needed
-            console.log("Sending mines list as single packet, count:", cleanMinesArray.length);
 
             const minesData = {
                 gridSizeX: Number(GameState.gridSizeX),
@@ -435,8 +409,6 @@ QtObject {
             const totalChunks = Math.ceil(cleanMinesArray.length / chunkSize);
             const syncTimestamp = new Date().getTime();
 
-            console.log("Sending mines list in", totalChunks, "chunks, total mines:", cleanMinesArray.length);
-
             for (let i = 0; i < totalChunks; i++) {
                 const startIndex = i * chunkSize;
                 const endIndex = Math.min(startIndex + chunkSize, cleanMinesArray.length);
@@ -453,7 +425,6 @@ QtObject {
                     syncTimestamp: syncTimestamp
                 };
 
-                console.log("Sending chunk", i+1, "of", totalChunks, "size:", chunkArray.length);
                 SteamIntegration.sendGameState(chunkData);
 
                 // Small delay between chunks to prevent network congestion
@@ -463,7 +434,6 @@ QtObject {
     }
 
     function applyMinesAndCalculateNumbers(minesData) {
-        console.log("Applying mines data and calculating numbers");
 
         // First check if we received valid data
         if (!minesData || !minesData.mines) {
@@ -476,7 +446,6 @@ QtObject {
         // Update grid dimensions if needed
         if (GameState.gridSizeX !== minesData.gridSizeX ||
                 GameState.gridSizeY !== minesData.gridSizeY) {
-            console.log("Grid size changed:", minesData.gridSizeX, "x", minesData.gridSizeY);
             GameState.gridSizeX = Number(minesData.gridSizeX);
             GameState.gridSizeY = Number(minesData.gridSizeY);
         }
@@ -484,27 +453,20 @@ QtObject {
         // IMPORTANT: Extract mines with more robust methods
         let cleanMinesArray = [];
 
-        console.log("Raw mines data:", JSON.stringify(minesData.mines));
-        console.log("mines data type:", typeof minesData.mines);
-
         // More robust extraction method
         try {
             if (Array.isArray(minesData.mines)) {
-                console.log("mines is a proper Array with length:", minesData.mines.length);
                 cleanMinesArray = minesData.mines.map(Number);
             } else if (typeof minesData.mines === 'string') {
                 // Try to parse if it's a JSON string
-                console.log("mines is a string, trying to parse");
                 const parsed = JSON.parse(minesData.mines);
                 if (Array.isArray(parsed)) {
                     cleanMinesArray = parsed.map(Number);
                 }
             } else if (typeof minesData.mines === 'object' && minesData.mines !== null) {
-                console.log("mines is an object with keys:", Object.keys(minesData.mines));
 
                 // Check if it's an array-like object with numeric keys and a 'length' property
                 if (minesData.mines.hasOwnProperty('length') && typeof minesData.mines.length === 'number') {
-                    console.log("mines has length property:", minesData.mines.length);
                     // Convert array-like object to array
                     for (let i = 0; i < minesData.mines.length; i++) {
                         if (minesData.mines[i] !== undefined) {
@@ -529,7 +491,6 @@ QtObject {
 
         // One last attempt - try direct property access if we have nothing yet
         if (cleanMinesArray.length === 0 && minesData.mines) {
-            console.log("Trying direct property access");
             try {
                 // Check if mines has a property "0", "1", etc. (array-like object)
                 for (let i = 0; i < 1000; i++) { // Try up to 1000 potential mines
@@ -557,9 +518,6 @@ QtObject {
             // But continue anyway, using the mines we found
         }
 
-        console.log("Extracted clean mines array, length:", cleanMinesArray.length);
-        console.log("Mine positions:", cleanMinesArray);
-
         // CRITICAL: Update the game state with our clean array
         GameState.mineCount = Number(minesData.mineCount) || cleanMinesArray.length;
         GameState.mines = cleanMinesArray;
@@ -576,7 +534,6 @@ QtObject {
             // Verify the numbers
             if (calculatedNumbers && calculatedNumbers.length === GameState.gridSizeX * GameState.gridSizeY) {
                 GameState.numbers = calculatedNumbers;
-                console.log("Numbers calculated successfully, length:", calculatedNumbers.length);
             } else {
                 console.error("Invalid numbers calculated, expected length:",
                               GameState.gridSizeX * GameState.gridSizeY,
@@ -608,16 +565,13 @@ QtObject {
             minesInitialized = true;
 
             // Acknowledge to host that we're ready for actions
-            console.log("Client sending readyForActions acknowledgment to host");
             SteamIntegration.sendGameAction("readyForActions", minesData.syncTimestamp || 0);
 
             // Process any pending actions
             if (pendingActions.length > 0) {
-                console.log("Processing", pendingActions.length, "buffered actions");
                 // Use setTimeout to process after current function finishes
                 Qt.callLater(function() {
                     pendingActions.forEach(function(action) {
-                        console.log("Processing buffered action:", action.type, action.index);
                         handleNetworkAction(action.type, action.index);
                     });
                     pendingActions = [];
@@ -629,7 +583,6 @@ QtObject {
     }
 
     function applyGameState(gameState) {
-        console.log("Applying received game state");
 
         if (!gameState) {
             console.error("Received invalid game state");
@@ -650,20 +603,16 @@ QtObject {
         }
 
         if (gameState.mines && !gameState.revealedCells && !gameState.numbers) {
-            console.log("Received mines-only data - initializing board");
             processMinesData(gameState);
             return;
         }
 
-        console.log("Received unexpected game state format");
         lastSyncError = "Unexpected game state format";
         syncErrorCount++;
         isProcessingNetworkAction = false;
     }
 
     function handleChunkedMinesData(gameState) {
-        console.log("Received chunked mines data - chunk " + (gameState.chunkIndex + 1) + " of " + gameState.totalChunks);
-
         // Reset the chunk processing state if this is the first chunk
         if (gameState.chunkIndex === 0) {
             chunkedMines = [];
@@ -694,11 +643,9 @@ QtObject {
         }
 
         receivedChunks++;
-        console.log("Chunk received, now have " + receivedChunks + " of " + expectedTotalChunks + " chunks");
 
         // Process complete chunk set
         if (receivedChunks === expectedTotalChunks) {
-            console.log("All chunks received, processing " + chunkedMines.length + " mines");
 
             // Cancel any pending resend timer
             if (networkManager.chunkResendTimer) {
@@ -733,7 +680,6 @@ QtObject {
 
             networkManager.chunkResendTimer.triggered.connect(function() {
                 if (receivedChunks < expectedTotalChunks) {
-                    console.log("Not all chunks received after timeout, requesting sync");
                     requestFullSync();
                 }
             });
@@ -747,14 +693,11 @@ QtObject {
             minesInitialized = true;
 
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && connectionIsHealthy) {
-                console.log("Client sending readyForActions acknowledgment to host");
                 SteamIntegration.sendGameAction("readyForActions", minesData.syncTimestamp || 0);
 
                 if (pendingActions.length > 0) {
-                    console.log("Processing", pendingActions.length, "buffered actions");
                     Qt.callLater(function() {
                         pendingActions.forEach(function(action) {
-                            console.log("Processing buffered action:", action.type, action.index);
                             handleNetworkAction(action.type, action.index);
                         });
                         pendingActions = [];
@@ -773,16 +716,12 @@ QtObject {
             return;
         }
 
-        console.log("Client requesting full sync from host");
         SteamIntegration.sendGameAction("requestSync", 0);
-
         // Reset sync error count after requesting a full sync
         syncErrorCount = 0;
     }
 
     function handleNetworkAction(actionType, parameter) {
-        console.log("Received action:", actionType, "parameter:", parameter);
-
         // Don't process network actions if we're not in multiplayer
         if (!SteamIntegration.isInMultiplayerGame) {
             return;
@@ -803,20 +742,16 @@ QtObject {
     function handleHostAction(actionType, cellIndex) {
         switch(actionType) {
         case "gridReady":
-            console.log("Host received grid ready notification from client");
             clientGridReady = true;
             break;
 
         case "reveal":
-            console.log("Host validating client reveal for cell:", cellIndex);
             GridBridge.performReveal(cellIndex);
             break;
 
         case "flag":
-            console.log("Host processing flag action for cell:", cellIndex);
 
             if (flagCooldowns[cellIndex] !== undefined && flagOwners[cellIndex] === true) {
-                console.log("Cell " + cellIndex + " is in cooldown for client, ignoring flag action");
                 SteamIntegration.sendGameAction("flagRejected", cellIndex);
                 return;
             }
@@ -832,22 +767,18 @@ QtObject {
             break;
 
         case "revealConnected":
-            console.log("Host processing revealConnected action for cell:", cellIndex);
             GridBridge.performRevealConnectedCells(cellIndex);
             sendCellUpdateToClient(cellIndex, "revealConnected");
             break;
 
         case "requestSync":
-            console.log("Client requested full sync, sending mines list");
             sendMinesListToClient();
             break;
 
         case "readyForActions":
-            console.log("Host received client readiness confirmation");
             clientReadyForActions = true;
 
             if (pendingInitialActions.length > 0) {
-                console.log("Sending", pendingInitialActions.length, "pending initial actions");
                 pendingInitialActions.forEach(function(action) {
                     sendCellUpdateToClient(action.index, action.type);
                 });
@@ -856,40 +787,33 @@ QtObject {
             break;
 
         case "requestMines":
-            console.log("Client requested mines data, sending immediately");
             sendMinesListToClient();
 
             Qt.callLater(function() {
-                console.log("Checking if client has processed mines");
                 SteamIntegration.sendGameAction("minesReady", 0);
             });
             break;
 
         case "requestHint":
-            console.log("Host processing hint request from client");
             GridBridge.processHintRequest();
             break;
 
         case "ping":
-            console.log("Host received ping at cell:", cellIndex);
             showPingAtCell(cellIndex);
             break;
 
         case "gridResetAck":
-            console.log("Host received grid reset acknowledgment from client");
             break;
 
         case "gridSyncAck":
-            console.log("Host received grid sync acknowledgment from client");
             break;
 
         case "testConnection":
-            console.log("Host received connection test request");
             SteamIntegration.sendGameAction("connectionTestResponse", cellIndex);
             break;
 
         default:
-            console.log("Host received unknown action type:", actionType);
+            console.error("Host received unknown action type:", actionType);
         }
     }
 
@@ -897,13 +821,11 @@ QtObject {
         // Special handling for mines readiness check
         if (actionType === "minesReady") {
             if (minesInitialized) {
-                console.log("Client confirms mines data is ready");
                 // Send acknowledgment to host that we're ready for actions
                 if (connectionIsHealthy) {
                     SteamIntegration.sendGameAction("readyForActions", 0);
                 }
             } else {
-                console.log("Client received mines readiness check but mines not initialized");
                 // Request mines data directly with a slight delay to avoid request flooding
                 if (connectionIsHealthy) {
                     Qt.callLater(function() {
@@ -922,9 +844,6 @@ QtObject {
 
         // When mines aren't initialized yet, buffer most actions
         if (!minesInitialized && !criticalActions.includes(actionType)) {
-            // Buffer actions until mines data is received
-            console.log("Buffering action until mines data is received:", actionType, cellIndex);
-
             // Check if we already have this action buffered (avoid duplicates)
             let isDuplicate = false;
             for (let i = 0; i < pendingActions.length; i++) {
@@ -939,12 +858,11 @@ QtObject {
 
                 // If we have too many pending actions, request mines data again
                 if (pendingActions.length > 10 && connectionIsHealthy) {
-                    console.log("Too many pending actions, requesting mines data again");
+                    console.error("Too many pending actions, requesting mines data again");
                     SteamIntegration.sendGameAction("requestMines", 0);
 
                     // Limit the buffer size to prevent memory issues
                     if (pendingActions.length > 50) {
-                        console.log("Trimming pending actions buffer");
                         pendingActions = pendingActions.slice(-50);
                     }
                 }
@@ -957,7 +875,6 @@ QtObject {
         // Process the action based on type
         switch(actionType) {
             case "finalReveal":
-                console.log("Client processing final reveal action for cell:", cellIndex);
                 // For final reveals, we need to force reveal the cell
                 GridBridge.withCell(cellIndex, function(cell) {
                     if (!cell.revealed) {
@@ -980,7 +897,6 @@ QtObject {
                 break;
 
             case "reveal":
-                console.log("Client processing reveal action for cell:", cellIndex);
                 try {
                     GridBridge.performReveal(cellIndex);
                     allowClientReveal = true;
@@ -990,7 +906,6 @@ QtObject {
                 break;
 
             case "flag":
-                console.log("Client processing flag action for cell:", cellIndex);
                 try {
                     GridBridge.performToggleFlag(cellIndex);
                 } catch (e) {
@@ -999,7 +914,6 @@ QtObject {
                 break;
 
             case "revealConnected":
-                console.log("Client processing revealConnected action for cell:", cellIndex);
                 try {
                     GridBridge.performRevealConnectedCells(cellIndex);
                 } catch (e) {
@@ -1008,12 +922,10 @@ QtObject {
                 break;
 
             case "startGame":
-                console.log("Client received start game command from host");
                 ComponentsContext.multiplayerPopupVisible = false;
                 break;
 
             case "gameOver":
-                console.log("Client processing gameOver action, win status:", cellIndex);
                 // Handle game over state
                 GameState.gameOver = true;
                 GameState.gameWon = cellIndex === 1; // 1 for win, 0 for loss
@@ -1030,7 +942,6 @@ QtObject {
                 break;
 
             case "resetGame":
-                console.log("Client received game reset notification");
                 GameState.displayPostGame = false;
                 GameState.difficultyChanged = false;
 
@@ -1050,7 +961,6 @@ QtObject {
                 break;
 
             case "unlockCoopAchievement":
-                console.log("Client received coop achievement unlock notification");
                 if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                     const difficulty = GameState.getDifficultyLevel();
                     if (difficulty === "medium" || difficulty === "hard" || difficulty === "retr0") {
@@ -1060,7 +970,6 @@ QtObject {
                 break;
 
             case "sendHint":
-                console.log("Client received hint for cell:", cellIndex);
                 GridBridge.withCell(cellIndex, function(cell) {
                     if (cell && typeof cell.highlightHint === 'function') {
                         cell.highlightHint();
@@ -1073,13 +982,11 @@ QtObject {
                 break;
 
             case "ping":
-                console.log("Client received ping at cell:", cellIndex);
                 showPingAtCell(cellIndex);
                 isProcessingNetworkAction = false;
                 break;
 
             case "hostFlagCooldown":
-                console.log("Client received cooldown notification for host-owned flag:", cellIndex);
                 // Host placed the flag, so client should see cooldown
                 startFlagCooldown(cellIndex, true); // true = host owns it
                 // Client should see the cooldown indicator
@@ -1092,7 +999,6 @@ QtObject {
                 break;
 
             case "clientFlagCooldown":
-                console.log("Client received cooldown notification for client-owned flag:", cellIndex);
                 // Client placed the flag, so client should NOT see cooldown
                 startFlagCooldown(cellIndex, false); // false = client owns it
                 // No visual indicator needed since client owns this flag
@@ -1100,7 +1006,6 @@ QtObject {
                 break;
 
             case "flagRejected":
-                console.log("Flag action rejected for cell:", cellIndex);
                 // The cell was in cooldown, action was rejected
                 isProcessingNetworkAction = false;
                 // Show cooldown feedback on the cell
@@ -1112,7 +1017,6 @@ QtObject {
                 break;
 
             case "resetMultiplayerGrid":
-                console.log("Client received grid reset command");
                 ComponentsContext.multiplayerPopupVisible = true;
                 minesInitialized = false;
                 clientReadyForActions = false;
@@ -1130,8 +1034,6 @@ QtObject {
                 break;
 
             case "prepareDifficultyChange":
-                console.log("Client preparing for difficulty change, new difficulty:", cellIndex);
-
                 // Validate difficulty index
                 if (cellIndex >= 0 && cellIndex < GameState.difficultySettings.length) {
                     GameSettings.difficulty = cellIndex;
@@ -1157,12 +1059,11 @@ QtObject {
                 break;
 
             case "connectionTestResponse":
-                console.log("Client received connection test response");
                 // This is just a ping-pong to test if the connection is alive
                 break;
 
             default:
-                console.log("Client received unknown action type:", actionType);
+                console.error("Client received unknown action type:", actionType);
         }
 
         // Action finished processing
@@ -1223,9 +1124,6 @@ QtObject {
 
         // Check if the cell is in cooldown for this player
         if (isCellInCooldown(index)) {
-            console.log("Cell " + index + " is in cooldown for this player, ignoring flag action");
-
-            // Show cooldown feedback on the cell
             GridBridge.withCell(index, function(cell) {
                 if (cell.cooldownAnimation) {
                     cell.cooldownAnimation.start();
@@ -1274,7 +1172,6 @@ QtObject {
             GridBridge.processHintRequest();
         } else {
             // Client: send request to host
-            console.log("Client requesting hint from host");
             isProcessingNetworkAction = connectionIsHealthy;
             if (connectionIsHealthy) {
                 SteamIntegration.sendGameAction("requestHint", 0);
@@ -1295,7 +1192,6 @@ QtObject {
 
             // Check connection health before initializing
             if (!connectionIsHealthy) {
-                console.log("Connection not healthy, attempting to reconnect");
                 SteamIntegration.testConnection();
 
                 // Use a timer to wait for potential reconnection
@@ -1334,7 +1230,6 @@ QtObject {
 
             // Start checking if client has processed mines
             Qt.callLater(function() {
-                console.log("Checking if client has processed mines");
                 SteamIntegration.sendGameAction("minesReady", 0);
             });
 
@@ -1417,12 +1312,10 @@ QtObject {
 
         // Check connection health before initializing
         if (!connectionIsHealthy) {
-            console.log("Connection not healthy, attempting to reconnect");
             SteamIntegration.testConnection();
             return false;
         }
 
-        console.log("Host initiating difficulty change to:", difficultyIndex);
         GameSettings.difficulty = difficultyIndex;
         const difficultySet = GameState.difficultySettings[difficultyIndex];
         SteamIntegration.sendGameAction("prepareDifficultyChange", difficultyIndex);
@@ -1451,7 +1344,6 @@ QtObject {
             return;
         }
 
-        console.log("Host initiating multiplayer grid reset");
         ComponentsContext.multiplayerPopupVisible = true
         minesInitialized = false;
         clientReadyForActions = false;
