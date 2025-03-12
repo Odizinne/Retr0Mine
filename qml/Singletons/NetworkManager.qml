@@ -675,7 +675,7 @@ QtObject {
 
         case "revealConnected":
             GridBridge.performRevealConnectedCells(cellIndex);
-            sendCellUpdateToClient(cellIndex, "revealConnected");
+            //sendCellUpdateToClient(cellIndex, "revealConnected");
             break;
 
         case "requestSync":
@@ -991,6 +991,7 @@ QtObject {
         } else {
             // Client: ONLY send request to host and wait for response
             SteamIntegration.sendGameAction("revealConnected", index);
+            GridBridge.performRevealConnectedCells(index);
         }
 
         return true; // Action handled by multiplayer
