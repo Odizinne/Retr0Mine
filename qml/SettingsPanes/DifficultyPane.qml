@@ -45,6 +45,7 @@ Pane {
 
                 RadioButton {
                     id: radioButton
+                    focusPolicy: Qt.NoFocus
                     Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     Layout.preferredWidth: GameConstants.settingsComponentsHeight
                     Layout.alignment: Qt.AlignRight

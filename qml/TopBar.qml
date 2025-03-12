@@ -193,6 +193,7 @@ Item {
                 icon.color: GameConstants.foregroundColor
                 font.pixelSize: 18
                 font.bold: true
+                focusPolicy: Qt.NoFocus
                 highlighted: GameState.flaggedCount === GameState.mineCount
                 onClicked: GridBridge.requestHint()
 
