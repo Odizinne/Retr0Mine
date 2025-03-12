@@ -76,6 +76,7 @@ QtObject {
     property bool paused: false
     property bool nextClickIsSignal: false
     property bool ignoreInternalGameState: false
+    signal botMessageSent()
 
     onPausedChanged: {
         if (paused) GameTimer.pause()

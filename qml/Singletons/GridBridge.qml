@@ -6,12 +6,17 @@ Item {
     property var grid: null
     property var audioEngine: null
     property var leaderboardWindow: null
+    property var chatReference: null
     property int generationAttempt
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
     property bool generationCancelled: false
     property bool idleShakeScheduled: false
     property bool globalShakeActive: false
+
+    function setChatReference(chatPanel) {
+        chatReference = chatPanel;
+    }
 
     // Helper function to safely get a cell
     function getCell(index) {
@@ -93,7 +98,15 @@ Item {
             if (cell.flagged) flagged.push(i);
         }
 
-        let mineCell = GameLogic.findMineHint(revealed, flagged);
+        // Get the hint result using the new method
+        const hintResult = GameLogic.findMineHintWithReasoning(revealed, flagged);
+
+        // Extract values from the map
+        const mineCell = hintResult.cell;
+        const explanation = hintResult.explanation;
+
+        console.log("Mine cell:", mineCell, "Explanation:", explanation);
+
         if (mineCell !== -1) {
             // In multiplayer host mode, we need to send this cell index to the client
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
@@ -104,6 +117,11 @@ Item {
             withCell(mineCell, function(cell) {
                 cell.highlightHint();
             });
+
+            // Add a bot message with the explanation
+            if (chatReference && explanation && typeof explanation === "string" && explanation.length > 0) {
+                chatReference.addBotMessage(explanation);
+            }
         }
 
         GameState.currentHintCount++;
@@ -180,7 +198,7 @@ Item {
 
         if (success) {
             // Store the used seed for display
-            ComponentsContext.lastUsedSeed = usedSeed.toString();
+            ComponentsContext.lastUsedSeed = usedSeed;
 
             GameState.mines = GameLogic.getMines()
             GameState.numbers = GameLogic.getNumbers()
@@ -799,6 +817,12 @@ Item {
 
             // Schedule next idle check
             idleTimer.restart()
+        }
+    }
+
+    function addBotHint(message) {
+        if (chatReference && typeof chatReference.addBotMessage === "function") {
+            chatReference.addBotMessage(message);
         }
     }
 }

@@ -27,6 +27,18 @@ Item {
         }
     }
 
+    Connections {
+        target: GameState
+        function onBotMessageSent() {
+            if (!ComponentsContext.multiplayerChatVisible) {
+                if (!chatButton.hasNewMessages && GameSettings.mpAudioNotificationOnNewMessage) {
+                    messageSound.play()
+                }
+                chatButton.hasNewMessages = true
+            }
+        }
+    }
+
     SoundEffect {
         id: messageSound
         volume: GameSettings.volume
@@ -217,7 +229,6 @@ Item {
 
             NfButton {
                 id: chatButton
-                visible: SteamIntegration.isP2PConnected
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible

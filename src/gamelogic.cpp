@@ -18,7 +18,7 @@ GameLogic::GameLogic(QObject *parent)
         if (!m_cancelGeneration.load()) {
             // The future is already finished so we can check if it was successful
             // by testing if mines were generated, and include the seed value
-            emit boardGenerationCompleted(!m_mines.isEmpty(), m_lastUsedSeed);
+            emit boardGenerationCompleted(!m_mines.isEmpty(), QString::number(m_lastUsedSeed));
         }
     });
 }
@@ -1510,13 +1510,13 @@ void GameLogic::generateBoardAsync(int firstClickX, int firstClickY, int seed) {
 
         // If cancelled, signal failure
         if (m_cancelGeneration.load()) {
-            emit boardGenerationCompleted(false, usedSeed);
+            emit boardGenerationCompleted(false, QString::number(usedSeed));
             return;
         }
 
         // Success is based on whether all mines were placed
         bool success = (m_minesPlaced == m_mineCount);
-        emit boardGenerationCompleted(success, usedSeed);
+        emit boardGenerationCompleted(success, QString::number(usedSeed));
     };
 
     // Set up and start the future watcher
@@ -1559,4 +1559,123 @@ void GameLogic::cancelGeneration()
     // Reset the flag and progress
     m_cancelGeneration.store(false);
     updateProgress(0, 0, 0);
+}
+
+QVariantMap GameLogic::findMineHintWithReasoning(const QVector<int> &revealedCells, const QVector<int> &flaggedCells)
+{
+    QVariantMap result;
+    QString explanation;
+
+    // First check for basic deductions
+    QSet<int> revealed;
+    QSet<int> flagged;
+    for (int cell : revealedCells)
+        revealed.insert(cell);
+    for (int cell : flaggedCells)
+        flagged.insert(cell);
+
+    // Check basic scenarios first with explanations
+    for (int pos : revealed) {
+        if (m_numbers[pos] <= 0)
+            continue;
+
+        QSet<int> neighbors = getNeighbors(pos);
+        int flagCount = 0;
+        QSet<int> unrevealedCells;
+
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            } else if (!revealed.contains(neighbor)) {
+                unrevealedCells.insert(neighbor);
+            }
+        }
+
+        // If remaining mines equals remaining unrevealed cells, they must all be mines
+        int remainingMines = m_numbers[pos] - flagCount;
+        if (remainingMines > 0 && remainingMines == unrevealedCells.size()) {
+            // Return first unflagged mine
+            for (int minePos : unrevealedCells) {
+                if (!flagged.contains(minePos)) {
+                    int row = pos / m_width;
+                    int col = pos % m_width;
+                    int mineRow = minePos / m_width;
+                    int mineCol = minePos % m_width;
+
+                    explanation = tr("I think there's a mine at position (%1,%2). The cell at (%3,%4) shows %5 mines and already has %6 flags nearby. With %7 unrevealed cells remaining, they must all be mines.")
+                                      .arg(mineCol+1).arg(mineRow+1).arg(col+1).arg(row+1)
+                                      .arg(m_numbers[pos]).arg(flagCount).arg(unrevealedCells.size());
+
+                    result["cell"] = minePos;
+                    result["explanation"] = explanation;
+                    return result;
+                }
+            }
+        }
+    }
+
+    // Check for safe cells
+    for (int pos : revealed) {
+        if (m_numbers[pos] <= 0)
+            continue;
+
+        QSet<int> neighbors = getNeighbors(pos);
+        int flagCount = 0;
+        QSet<int> unknowns;
+
+        for (int neighbor : neighbors) {
+            if (flagged.contains(neighbor)) {
+                flagCount++;
+            } else if (!revealed.contains(neighbor)) {
+                unknowns.insert(neighbor);
+            }
+        }
+
+        // If number matches flag count, all other unknowns are safe
+        if (m_numbers[pos] == flagCount && !unknowns.isEmpty()) {
+            int safePos = *unknowns.begin();
+            int row = pos / m_width;
+            int col = pos % m_width;
+            int safeRow = safePos / m_width;
+            int safeCol = safePos % m_width;
+
+            explanation = tr("The cell at position (%1,%2) should be safe. I see that position (%3,%4) has %5 mines around it and already has exactly %5 flags placed nearby. This means all other adjacent cells must be safe.")
+                              .arg(safeCol+1).arg(safeRow+1).arg(col+1).arg(row+1)
+                              .arg(m_numbers[pos]);
+
+            result["cell"] = safePos;
+            result["explanation"] = explanation;
+            return result;
+        }
+    }
+
+    // Call the original solver logic without capturing logs
+    int solverResult = solveForHint(revealedCells, flaggedCells);
+
+    // If we found a result but don't have an explanation yet, provide a generic one
+    if (solverResult != -1 && explanation.isEmpty()) {
+        int row = solverResult / m_width;
+        int col = solverResult % m_width;
+
+        // Try to determine if it's a mine or safe cell by checking against mines list
+        bool isMine = false;
+        for (int mine : m_mines) {
+            if (mine == solverResult) {
+                isMine = true;
+                break;
+            }
+        }
+
+        if (isMine) {
+            explanation = tr("Based on the pattern of numbers, I believe there's a mine at position (%1,%2).")
+            .arg(col+1).arg(row+1);
+        } else {
+            explanation = tr("Looking at the surrounding numbers, the cell at position (%1,%2) appears to be safe.")
+            .arg(col+1).arg(row+1);
+        }
+    }
+
+    result["cell"] = solverResult;
+    result["explanation"] = explanation;
+    return result;
 }

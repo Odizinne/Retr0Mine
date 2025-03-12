@@ -4,5 +4,6 @@
         <file>classic.gif</file>
         <file>retr0mine_logo.png</file>
         <file>retr0mine_logo_dark.png</file>
+        <file>bot_avatar.png</file>
     </qresource>
 </RCC>

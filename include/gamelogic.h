@@ -57,7 +57,7 @@ public:
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
     Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY, int seed = -1);
-
+    Q_INVOKABLE QVariantMap findMineHintWithReasoning(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     Q_INVOKABLE void cancelGeneration();
 
     // Progress information accessors
@@ -67,7 +67,7 @@ public:
     int totalMines() const { return m_mineCount; }
 
 signals:
-    void boardGenerationCompleted(bool success, int usedSeed);
+    void boardGenerationCompleted(bool success, QString usedSeed);
     void currentAttemptChanged();
     void totalAttemptsChanged();
     void minesPlacedChanged();

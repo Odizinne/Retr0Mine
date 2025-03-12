@@ -82,6 +82,9 @@ Frame {
                         Layout.preferredWidth: 24
                         Layout.preferredHeight: 24
                         source: {
+                            if (msgContainer.modelData.isBot) {
+                                return "qrc:/images/bot_avatar.png"; // Bot icon
+                            }
                             const isFromLocalPlayer = msgContainer.modelData.isLocalPlayer;
                             const name = isFromLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName;
                             const avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(name);
@@ -94,8 +97,8 @@ Frame {
                             height: 26
                             radius: GameCore.isFluent ? 5 : 0
                             anchors.centerIn: parent
-                            color: "transparent"
                             opacity: 0.5
+                            color: "transparent"
                             border.color: GameConstants.foregroundColor
                             border.width: 1
                         }
@@ -110,10 +113,11 @@ Frame {
                             spacing: 2
 
                             Label {
-                                text: msgContainer.modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName
+                                text: msgContainer.modelData.isBot ? msgContainer.modelData.botName :
+                                      (msgContainer.modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName)
                                 font.pixelSize: 13
                                 font.bold: true
-                                color: GameConstants.foregroundColor
+                                color: msgContainer.modelData.isBot ? GameConstants.accentColor : GameConstants.foregroundColor
                             }
 
                             Label {
@@ -122,7 +126,8 @@ Frame {
                                 wrapMode: Text.WordWrap
                                 Layout.fillWidth: true
                                 color: GameConstants.foregroundColor
-                                opacity: msgContainer.modelData.isLocalPlayer ? 0.5 : 0.8
+                                opacity: msgContainer.modelData.isBot ? 0.85 :
+                                         (msgContainer.modelData.isLocalPlayer ? 0.5 : 0.8)
                             }
                         }
                     }
@@ -137,10 +142,10 @@ Frame {
             TextField {
                 id: messageInput
                 Layout.fillWidth: true
-                placeholderText: "Type a message..."
+                placeholderText: qsTr("Type a message...")
                 selectByMouse: true
                 font.pixelSize: 13
-
+                enabled: SteamIntegration.isP2PConnected
                 Keys.onReturnPressed: sendButton.clicked()
                 Keys.onEnterPressed: sendButton.clicked()
             }
@@ -156,9 +161,7 @@ Frame {
                     sourceSize.height: 15
                     sourceSize.width: 15
                 }
-
-                enabled: messageInput.text.trim() !== ""
-
+                enabled: messageInput.text.trim() !== "" && SteamIntegration.isP2PConnected
                 onClicked: {
                     if (messageInput.text.trim() !== "") {
                         chatPanel.sendChatMessage(messageInput.text);
@@ -188,6 +191,20 @@ Frame {
 
         // Send message to remote player via SteamIntegration
         SteamIntegration.sendGameAction("chat", message);
+    }
+
+    function addBotMessage(message) {
+        chatMessages.push({
+            message: message,
+            isLocalPlayer: false,
+            isBot: true,
+            botName: "Retr0Mine_Bot",
+            timestamp: new Date()
+        });
+        // Force list update
+        chatListView.model = null;
+        chatListView.model = chatMessages;
+        GameState.botMessageSent()
     }
 
     Connections {
