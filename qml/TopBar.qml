@@ -230,6 +230,7 @@ Item {
             NfButton {
                 id: chatButton
                 Layout.preferredHeight: 35
+                visible: SteamIntegration.isP2PConnected || GameSettings.hintReasoningInChat
                 Layout.preferredWidth: 35
                 onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
                 highlighted: ComponentsContext.multiplayerChatVisible

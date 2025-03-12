@@ -66,90 +66,56 @@
     <name>AdvancedPane</name>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="16"/>
-        <source>Multithreaded grid generation</source>
-        <translation>Génération de grille multithread</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="25"/>
-        <source>Use available CPU threads to speed up
- grid solvability checks
-Could lower performance on weaker hardware</source>
-        <translation>Utiliser les threads CPU disponibles pour accélérer
-les vérifications de résolution de grille
-Peut réduire les performances sur les machines moins puissantes</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="40"/>
         <source>Style</source>
         <translation>Style</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="45"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="21"/>
         <source>Application will restart on change
 Current game will be saved and restored</source>
         <translation>L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="69"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="45"/>
         <source>Color scheme</source>
         <translation>Thème</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="75"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="75"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
         <source>Dark</source>
         <translation>Sombre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="75"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
         <source>Light</source>
         <translation>Clair</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="91"/>
-        <source>Custom seed</source>
-        <translation>Seed perso.</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="100"/>
-        <source>Empty for random</source>
-        <translation>Vide pour aléatoire</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="122"/>
-        <source>Last used seed</source>
-        <translation>Derniere seed utilisée</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="141"/>
-        <source>First click coordinates</source>
-        <translation>Coordonnées du premier click</translation>
     </message>
 </context>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="83"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="86"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="103"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="106"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="122"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="125"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="171"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="174"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -175,22 +141,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GameLogic</name>
     <message>
-        <location filename="../src/gamelogic.cpp" line="1605"/>
+        <location filename="../src/gamelogic.cpp" line="1679"/>
         <source>I think there&apos;s a mine at position (%1,%2). The cell at (%3,%4) shows %5 mines and already has %6 flags nearby. With %7 unrevealed cells remaining, they must all be mines.</source>
         <translation>Je pense qu&apos;il y a une mine à la position (%1,%2). La cellule à la position (%3,%4) indique %5 mines et a déjà %6 drapeaux à proximité. Avec %7 cellules non révélées restantes, elles doivent toutes être des mines.</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="1642"/>
+        <location filename="../src/gamelogic.cpp" line="1716"/>
         <source>The cell at position (%1,%2) should be safe. I see that position (%3,%4) has %5 mines around it and already has exactly %5 flags placed nearby. This means all other adjacent cells must be safe.</source>
         <translation>La cellule à la position (%1,%2) devrait être sûre. Je vois que la position (%3,%4) a %5 mines autour d&apos;elle et a déjà exactement %5 drapeaux placés à proximité. Cela signifie que toutes les autres cellules adjacentes doivent être sûres.</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="1670"/>
+        <location filename="../src/gamelogic.cpp" line="1744"/>
         <source>Based on the pattern of numbers, I believe there&apos;s a mine at position (%1,%2).</source>
         <translation>D&apos;après le motif des nombres, je crois qu&apos;il y a une mine à la position (%1,%2).</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="1673"/>
+        <location filename="../src/gamelogic.cpp" line="1747"/>
         <source>Looking at the surrounding numbers, the cell at position (%1,%2) appears to be safe.</source>
         <translation>En examinant les nombres environnants, la cellule à la position (%1,%2) semble être sûre.</translation>
     </message>
@@ -337,15 +303,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="545"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="552"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="559"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="526"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="533"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="540"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="569"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="575"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="550"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="556"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -493,7 +459,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>MultiplayerChat</name>
     <message>
-        <location filename="../qml/MultiplayerChat.qml" line="145"/>
+        <location filename="../qml/MultiplayerChat.qml" line="135"/>
         <source>Type a message...</source>
         <translation>Écrire un message...</translation>
     </message>
