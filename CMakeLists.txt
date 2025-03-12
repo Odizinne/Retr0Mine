@@ -82,8 +82,6 @@ set(QML_SINGLETONS
     qml/Singletons/GridBridge.qml
     qml/Singletons/ComponentsContext.qml
     qml/Singletons/NetworkManager.qml
-    qml/Singletons/AutoplayManager.qml
-
 )
 set_source_files_properties(${QML_SINGLETONS}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
@@ -122,7 +120,7 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
     RESOURCE_PREFIX "/i18n"
     LUPDATE_OPTIONS "-no-obsolete"
 )
-#add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
+add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 if(WIN32)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
         *CRT*SECURE_NO_WARNINGS
