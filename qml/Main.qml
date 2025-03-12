@@ -142,7 +142,6 @@ ApplicationWindow {
         function onNotifyConnectionLost(message) {
             playerLeftPopup.playerName = message
             playerLeftPopup.visible = true
-            GameState.finishedAfterDisconnect = true
         }
     }
 

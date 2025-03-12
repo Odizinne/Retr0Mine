@@ -419,7 +419,6 @@ Item {
         GameState.currentHintCount = 0;
         GameTimer.reset();
         GameState.isManuallyLoaded = false;
-        GameState.finishedAfterDisconnect = false;
         GameState.noAnimReset = true;
 
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
@@ -468,11 +467,10 @@ Item {
             GameTimer.stop();
 
             // Handle multiplayer win
-            if (NetworkManager.onGameWon() || GameState.finishedAfterDisconnect) {
+            if (NetworkManager.onGameWon()) {
                 // Game win handled by multiplayer
                 GameState.displayPostGame = true;
                 if (audioEngine) audioEngine.playWin();
-                GameState.finishedAfterDisconnect = false
                 return;
             }
 
