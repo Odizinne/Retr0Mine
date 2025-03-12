@@ -810,6 +810,9 @@ QtObject {
                 try {
                     GridBridge.performReveal(cellIndex);
                     allowClientReveal = true;
+                    if (!GameTimer.isRunning) {
+                        GameTimer.start()
+                    }
                 } catch (e) {
                     console.error("Error processing reveal action:", e);
                 }
