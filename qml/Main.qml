@@ -46,15 +46,12 @@ ApplicationWindow {
 
         function onGameStateReceived(gameState) {
             if (gameState.gridSync) {
-                console.log("Received grid sync game state");
                 NetworkManager.handleMultiplayerGridSync(gameState);
             }
         }
 
         function onLobbyReadyChanged() {
             if (SteamIntegration.isLobbyReady) {
-                console.log("Lobby ready, initializing multiplayer game");
-
                 if (SteamIntegration.isHost) {
                     const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
 
@@ -81,9 +78,6 @@ ApplicationWindow {
 
         function onIsInMultiplayerGameChanged() {
             if (SteamIntegration.isInMultiplayerGame) {
-                console.log("Entered multiplayer mode as",
-                            SteamIntegration.isHost ? "host" : "client");
-
                 NetworkManager.allowClientReveal = false;
                 GridBridge.initGame();
             } else {
