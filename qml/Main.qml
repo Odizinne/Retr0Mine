@@ -243,7 +243,9 @@ ApplicationWindow {
     }
 
     MouseArea {
-        // Normalize cursor shape in gamescope
+        /*==========================================
+         | Normalize cursor shape in gamescope     |
+         ==========================================*/
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.ArrowCursor
@@ -290,7 +292,10 @@ ApplicationWindow {
         autoRepeat: false
         onActivated: {
             if (ComponentsContext.settingsWindowVisible) {
-                // close is needed for proper DWM next opening animation
+                /*==========================================
+                 | close is needed for proper DWM          |
+                 | next opening animation                  |
+                 ==========================================*/
                 settingsWindow.close()
                 ComponentsContext.settingsWindowVisible = false
             } else {
@@ -405,7 +410,10 @@ ApplicationWindow {
 
     BusyIndicator {
         opacity: 0
-        // continous window update (steam overlay)
+        /*==========================================
+         | continous window update                 |
+         | needed for steam overlay                |
+         ==========================================*/
     }
 
     SettingsWindow {
@@ -564,8 +572,11 @@ ApplicationWindow {
     function checkInitialGameState() {
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (GameState.ignoreInternalGameState) {
-            // bypass internalGameState loading if user manually change
-            // difficulty before initial game state check
+            /*==========================================
+             | bypass internalGameState loading        |
+             | f user manually change difficulty       |
+             | before initial game state check         |
+             ==========================================*/
             GameCore.deleteSaveFile("internalGameState.json")
             internalSaveData = null
         }
@@ -589,8 +600,6 @@ ApplicationWindow {
     function getIdealWidth() {
         if (root.visibility === ApplicationWindow.Windowed) {
             let baseWidth = (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24
-
-            // Add chat panel width if visible
             if (ComponentsContext.multiplayerChatVisible) {
                 baseWidth += rightPanel.width + 12 // Adding the panel width plus margin
             }

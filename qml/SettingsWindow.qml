@@ -22,7 +22,9 @@ ApplicationWindow {
     onClosing: ComponentsContext.settingsWindowVisible = false
 
     MouseArea {
-        // Normalize cursor shape in gamescope
+        /*==========================================
+         | Normalize cursor shape in gamescope     |
+         ==========================================*/
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.ArrowCursor
@@ -38,7 +40,10 @@ ApplicationWindow {
         sequence: "Esc"
         enabled: control.visible
         onActivated: {
-            // close is needed for proper DWM next opening animation
+            /*==========================================
+             | close is needed for proper DWM          |
+             | next opening animation                  |
+             ==========================================*/
             control.close()
             ComponentsContext.settingsWindowVisible = false
         }
