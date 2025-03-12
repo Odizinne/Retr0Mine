@@ -590,6 +590,13 @@ ApplicationWindow {
 
     function checkInitialGameState() {
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
+        if (GameState.ignoreInternalGameState) {
+            // bypass internalGameState loading if user manually change
+            // difficulty before initial game state check
+            GameCore.deleteSaveFile("internalGameState.json")
+            internalSaveData = null
+        }
+
         if (internalSaveData) {
             if (SaveManager.loadGame(internalSaveData)) {
                 GameCore.deleteSaveFile("internalGameState.json")

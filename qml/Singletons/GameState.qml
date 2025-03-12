@@ -76,6 +76,7 @@ QtObject {
     property bool paused: false
     property bool nextClickIsSignal: false
     property bool finishedAfterDisconnect: false
+    property bool ignoreInternalGameState: false
 
     onPausedChanged: {
         if (paused) GameTimer.pause()

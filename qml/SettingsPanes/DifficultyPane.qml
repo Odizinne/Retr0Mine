@@ -62,6 +62,10 @@ Pane {
                         GridBridge.initGame()
                         GameSettings.difficulty = idx
                         SteamIntegration.difficulty = idx
+                        // bypass internalGameState loading if user manually change
+                        // difficulty before initial game state check
+                        GameState.ignoreInternalGameState = true
+
                         if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
                             NetworkManager.resetMultiplayerGrid()
                         }
@@ -178,6 +182,11 @@ Pane {
 
                 previousCustomWidth = GameSettings.customWidth
                 previousCustomHeight = GameSettings.customHeight
+
+                // bypass internalGameState loading if user manually change
+                // difficulty before initial game state check
+                GameState.ignoreInternalGameState = true
+
                 GridBridge.initGame()
 
                 if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
