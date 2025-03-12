@@ -832,8 +832,6 @@ QtObject {
                 break;
 
             case "approveReveal":
-                // Client processes the reveal and cascade locally
-                allowClientReveal = true;
                 GridBridge.performReveal(cellIndex);
                 break;
 
