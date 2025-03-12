@@ -262,6 +262,11 @@ Current game will be saved and restored</source>
         <source>Load last game on start</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
+        <source>Show hint reasoning in chat</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GenerationPopup</name>

@@ -194,6 +194,10 @@ Frame {
     }
 
     function addBotMessage(message) {
+        // First, filter out any existing bot messages
+        chatMessages = chatMessages.filter(msg => !msg.isBot);
+
+        // Then add the new bot message
         chatMessages.push({
             message: message,
             isLocalPlayer: false,
@@ -201,6 +205,7 @@ Frame {
             botName: "Retr0Mine_Bot",
             timestamp: new Date()
         });
+
         // Force list update
         chatListView.model = null;
         chatListView.model = chatMessages;

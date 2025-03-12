@@ -265,6 +265,11 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <source>Load last game on start</source>
         <translation>Charger la dernière partie au démarrage</translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
+        <source>Show hint reasoning in chat</source>
+        <translation>Expliquer la logique des indices dans le chat</translation>
+    </message>
 </context>
 <context>
     <name>GenerationPopup</name>

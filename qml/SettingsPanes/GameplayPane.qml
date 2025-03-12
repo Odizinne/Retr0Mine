@@ -151,5 +151,26 @@ Pane {
                 }
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("Show hint reasoning in chat")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: hintReasoningInChatSwitch.click()
+                }
+            }
+            NfSwitch {
+                id: hintReasoningInChatSwitch
+                checked: GameSettings.hintReasoningInChat
+                onCheckedChanged: {
+                    GameSettings.hintReasoningInChat = checked
+                }
+            }
+        }
     }
 }

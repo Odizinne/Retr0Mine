@@ -119,7 +119,7 @@ Item {
             });
 
             // Add a bot message with the explanation
-            if (chatReference && explanation && typeof explanation === "string" && explanation.length > 0) {
+            if (GameSettings.hintReasoningInChat && chatReference && explanation && typeof explanation === "string" && explanation.length > 0) {
                 chatReference.addBotMessage(explanation);
             }
         }
