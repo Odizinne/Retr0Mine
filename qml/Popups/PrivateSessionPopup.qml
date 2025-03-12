@@ -190,9 +190,9 @@ Popup {
                     multiplayerPopup.filterFriendsList(text)
                 }
             }
-            Button {
+            NfButton {
                 text: qsTr("Refresh")
-                focusPolicy: Qt.NoFocus
+                
                 Layout.alignment: Qt.AlignHCenter
                 enabled: !multiplayerPopup.refreshing
                 onClicked: {
@@ -266,9 +266,9 @@ Popup {
                                 Layout.fillWidth: true
                             }
 
-                            Button {
+                            NfButton {
                                 Layout.preferredWidth: height
-                                focusPolicy: Qt.NoFocus
+                                
                                 enabled: SteamIntegration.canInviteFriend &&
                                          !SteamIntegration.isLobbyReady &&
                                          !delegate.inviteDisabled
@@ -305,13 +305,13 @@ Popup {
             Layout.fillWidth: true
             spacing: 10
 
-            Button {
+            NfButton {
                 id: startButton
                 highlighted: enabled
                 visible: !NetworkManager.mpPopupCloseButtonVisible && SteamIntegration.isHost
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Start")
-                focusPolicy: Qt.NoFocus
+                
                 Layout.fillWidth: true
                 enabled: SteamIntegration.isInMultiplayerGame &&
                          !SteamIntegration.isConnecting &&
@@ -328,7 +328,7 @@ Popup {
                 }
             }
 
-            Button {
+            NfButton {
                 id: closeButton
                 visible: NetworkManager.mpPopupCloseButtonVisible || (!SteamIntegration.isHost && SteamIntegration.isP2PConnected && GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY))
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
@@ -337,11 +337,11 @@ Popup {
                 onClicked: ComponentsContext.privateSessionPopupVisible = false
             }
 
-            Button {
+            NfButton {
                 id: cancelButton
                 Layout.preferredWidth: multiplayerPopup.buttonWidth
                 text: qsTr("Quit session")
-                focusPolicy: Qt.NoFocus
+                
                 Layout.fillWidth: true
                 onClicked: {
                     if (SteamIntegration.isInMultiplayerGame) {

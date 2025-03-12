@@ -41,11 +41,11 @@ Item {
 
         RowLayout {
             id: leftLayout
-            Button {
+            NfButton {
                 id: menuButton
                 Layout.preferredWidth: 35
                 Layout.preferredHeight: 35
-                focusPolicy: Qt.NoFocus
+                
                 onClicked: {
                     mainMenu.visible = !mainMenu.visible
                 }
@@ -62,7 +62,7 @@ Item {
                 }
             }
 
-            Button {
+            NfButton {
                 id: signalButton
                 visible: SteamIntegration.isP2PConnected
                 Layout.preferredHeight: 35
@@ -187,13 +187,13 @@ Item {
         RowLayout {
             id: rightLayout
 
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: mineCounter.implicitWidth + 20
                 icon.color: GameConstants.foregroundColor
                 font.pixelSize: 18
                 font.bold: true
-                focusPolicy: Qt.NoFocus
+                
                 highlighted: GameState.flaggedCount === GameState.mineCount
                 onClicked: GridBridge.requestHint()
 
@@ -215,7 +215,7 @@ Item {
                 }
             }
 
-            Button {
+            NfButton {
                 id: chatButton
                 visible: SteamIntegration.isP2PConnected
                 Layout.preferredHeight: 35

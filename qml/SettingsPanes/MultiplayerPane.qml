@@ -32,7 +32,7 @@ Pane {
                     onClicked: mpShowInviteNotificationInGameSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: mpShowInviteNotificationInGameSwitch
                 checked: GameSettings.mpShowInviteNotificationInGame
                 onCheckedChanged: {
@@ -53,7 +53,7 @@ Pane {
                     onClicked: mpPlayerColoredFlagsSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: mpPlayerColoredFlagsSwitch
                 checked: GameSettings.mpPlayerColoredFlags
                 onCheckedChanged: {

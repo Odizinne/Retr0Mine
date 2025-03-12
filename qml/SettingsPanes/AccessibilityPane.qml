@@ -69,7 +69,7 @@ Pane {
                     onClicked: highContrastFlagSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: highContrastFlagSwitch
                 checked: GameSettings.contrastFlag
                 onCheckedChanged: {

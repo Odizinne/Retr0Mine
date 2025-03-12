@@ -37,7 +37,7 @@ Popup {
                 Layout.fillWidth: true
             }
 
-            Button {
+            NfButton {
                 text: qsTr("Later")
                 onClicked: {
                     control.visible = false
@@ -45,7 +45,7 @@ Popup {
                 }
             }
 
-            Button {
+            NfButton {
                 text: qsTr("Yes")
                 highlighted: true
                 onClicked: {
@@ -119,7 +119,7 @@ Popup {
                 Layout.fillWidth: true
             }
 
-            Switch {
+            NfSwitch {
                 id: gameplaySwitch
                 onCheckedChanged: {
                     chordLabel.visible = checked
@@ -137,7 +137,7 @@ Popup {
                 Layout.fillWidth: true
             }
 
-            Button {
+            NfButton {
                 text: "Next"
                 onClicked: {
                     control.visible = false
@@ -163,7 +163,7 @@ Popup {
             rows: 4
             columns: 3
 
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 flat: true
@@ -188,7 +188,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
 
@@ -204,7 +204,7 @@ Popup {
                     sourceSize.height: 35 / 1.8
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 flat: true
@@ -228,7 +228,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 flat: true
@@ -253,7 +253,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 flat: true
@@ -278,7 +278,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 flat: true
@@ -303,7 +303,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 flat: true
@@ -328,7 +328,7 @@ Popup {
                     verticalAlignment: Text.AlignVCenter
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 IconImage {
@@ -343,7 +343,7 @@ Popup {
                     sourceSize.height: 35 / 1.8
                 }
             }
-            Button {
+            NfButton {
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: 35
                 flat: true
@@ -379,7 +379,7 @@ Popup {
                 Layout.fillWidth: true
             }
 
-            Switch {
+            NfSwitch {
                 id: visualsSwitch
                 onCheckedChanged: {
                     GameSettings.cellFrame = !checked
@@ -402,7 +402,7 @@ Popup {
                 Layout.fillWidth: true
             }
 
-            Switch {
+            NfSwitch {
                 id: accentFlagSwitch
                 onCheckedChanged: {
                     GameSettings.contrastFlag = !checked
@@ -413,7 +413,7 @@ Popup {
             }
         }
 
-        Button {
+        NfButton {
             Layout.alignment: Qt.AlignRight
             text: qsTr("Next")
             onClicked: {
@@ -449,7 +449,7 @@ Popup {
                 rows: 4
                 columns: 3
 
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -472,7 +472,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -495,7 +495,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -518,7 +518,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -541,7 +541,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
 
@@ -554,7 +554,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -577,7 +577,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -600,7 +600,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -623,7 +623,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -647,7 +647,7 @@ Popup {
                     }
                 }
 
-                Button {
+                NfButton {
                     text: qsTr("None")
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
@@ -667,7 +667,7 @@ Popup {
                 rows: 4
                 columns: 3
 
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -690,7 +690,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -713,7 +713,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -736,7 +736,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -759,7 +759,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
 
@@ -772,7 +772,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -795,7 +795,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -818,7 +818,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -841,7 +841,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -865,7 +865,7 @@ Popup {
                     }
                 }
 
-                Button {
+                NfButton {
                     text: qsTr("Tritanopia")
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
@@ -889,7 +889,7 @@ Popup {
                 rows: 4
                 columns: 3
 
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -912,7 +912,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -935,7 +935,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -958,7 +958,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -981,7 +981,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
 
@@ -994,7 +994,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1017,7 +1017,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1040,7 +1040,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1063,7 +1063,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1087,7 +1087,7 @@ Popup {
                     }
                 }
 
-                Button {
+                NfButton {
                     text: qsTr("Protanopia")
                     Layout.fillWidth: true
                     Layout.columnSpan: 3
@@ -1107,7 +1107,7 @@ Popup {
                 rows: 4
                 columns: 3
 
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1130,7 +1130,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1153,7 +1153,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1176,7 +1176,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1199,7 +1199,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
 
@@ -1212,7 +1212,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1235,7 +1235,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1258,7 +1258,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1281,7 +1281,7 @@ Popup {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Button {
+                NfButton {
                     Layout.preferredHeight: 35
                     Layout.preferredWidth: 35
                     flat: true
@@ -1305,7 +1305,7 @@ Popup {
                     }
                 }
 
-                Button {
+                NfButton {
                     text: qsTr("Deuteranopia")
                     Layout.columnSpan: 3
                     Layout.fillWidth: true
@@ -1344,7 +1344,7 @@ Popup {
                 Layout.fillWidth: true
             }
 
-            Button {
+            NfButton {
                 text: qsTr("Close")
                 onClicked: {
                     control.visible = false

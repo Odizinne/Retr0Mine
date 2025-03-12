@@ -145,7 +145,7 @@ Frame {
                 Keys.onEnterPressed: sendButton.clicked()
             }
 
-            Button {
+            NfButton {
                 Layout.preferredHeight: 30
                 Layout.preferredWidth: 30
                 id: sendButton

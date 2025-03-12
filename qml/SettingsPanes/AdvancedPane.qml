@@ -25,7 +25,7 @@ Pane {
                 tooltipText: qsTr("Use available CPU threads to speed up\n grid solvability checks\nCould lower performance on weaker hardware")
             }
 
-            Switch {
+            NfSwitch {
                 id: multiThreadedBoardGenerationSwitch
                 checked: GameSettings.multiThreadedBoardGeneration
                 onCheckedChanged: GameSettings.multiThreadedBoardGeneration = checked

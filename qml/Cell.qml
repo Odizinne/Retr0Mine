@@ -244,11 +244,11 @@ Item {
         }
     }
 
-    Button {
+    NfButton {
         id: cellButton
         anchors.fill: parent
         anchors.margins: GameState.cellSpacing / 2
-        focusPolicy: Qt.NoFocus
+
         Connections {
             target: cellItem
             function onRevealedChanged() {

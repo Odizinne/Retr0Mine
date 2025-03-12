@@ -19,7 +19,7 @@ Pane {
                     onClicked: soundEffectSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: soundEffectSwitch
                 checked: GameSettings.soundEffects
                 onCheckedChanged: {
@@ -39,7 +39,7 @@ Pane {
                     onClicked: mpAudioNotificationOnNewMessageSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: mpAudioNotificationOnNewMessageSwitch
                 checked: GameSettings.mpAudioNotificationOnNewMessage
                 onCheckedChanged: {

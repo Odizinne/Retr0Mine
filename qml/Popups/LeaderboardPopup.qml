@@ -190,7 +190,7 @@ Popup {
 
         RowLayout {
             spacing: 10
-            Button {
+            NfButton {
                 id: clearButton
                 text: control.confirmErase ? qsTr("Confirm?") : qsTr("Clear")
                 Layout.fillWidth: true
@@ -227,7 +227,7 @@ Popup {
                 }
             }
 
-            Button {
+            NfButton {
                 id: closeButton
                 text: qsTr("Close")
                 Layout.fillWidth: true

@@ -46,6 +46,9 @@ set(QML_FILES
     qml/GridLoadingIndicator.qml
     qml/SignalIndicator.qml
     qml/MultiplayerChat.qml
+    qml/Common/NfButton.qml
+    qml/Common/NfRadioButton.qml
+    qml/Common/NfSwitch.qml
     qml/Debug/DebugFrame.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml

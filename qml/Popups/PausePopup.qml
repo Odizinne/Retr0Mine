@@ -18,7 +18,7 @@ Popup {
             Layout.alignment: Qt.AlignCenter
         }
 
-        Button {
+        NfButton {
             id: resumeButton
             text: qsTr("Resume")
             onClicked: GameState.paused = false

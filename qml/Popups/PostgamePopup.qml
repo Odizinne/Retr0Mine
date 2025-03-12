@@ -67,7 +67,7 @@ Popup {
             font.italic: true
         }
 
-        Button {
+        NfButton {
             id: retryButton
             text: qsTr("Retry")
             Layout.fillWidth: true
@@ -82,7 +82,7 @@ Popup {
             }
         }
 
-        Button {
+        NfButton {
             id: closeButton
             text: qsTr("Close")
             Layout.fillWidth: true

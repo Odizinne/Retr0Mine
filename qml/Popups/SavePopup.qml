@@ -69,7 +69,7 @@ Popup {
             Layout.alignment: Qt.AlignRight
             spacing: 10
 
-            Button {
+            NfButton {
                 id: cancelButton
                 text: qsTr("Cancel")
                 Layout.preferredWidth: control.buttonWidth
@@ -77,7 +77,7 @@ Popup {
                 onClicked: ComponentsContext.savePopupVisible = false
             }
 
-            Button {
+            NfButton {
                 id: saveButton
                 text: qsTr("Save")
                 Layout.preferredWidth: control.buttonWidth

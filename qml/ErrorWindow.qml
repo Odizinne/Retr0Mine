@@ -22,7 +22,7 @@ ApplicationWindow {
             Layout.fillWidth: true
         }
 
-        Button {
+        NfButton {
             text: qsTr("OK")
             Layout.alignment: Qt.AlignRight
             onClicked: control.close()

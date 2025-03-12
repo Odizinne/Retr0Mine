@@ -136,7 +136,7 @@ ApplicationWindow {
                     }
                 }
 
-                Button {
+                NfButton {
                     text: qsTr("Close")
                     visible: GameCore.gamescope || false
                     onClicked: control.close()
@@ -146,7 +146,7 @@ ApplicationWindow {
                     Layout.preferredHeight: 30
                 }
 
-                Button {
+                NfButton {
                     id: resetDefaultSettingsButton
                     Layout.fillWidth: true
                     Layout.bottomMargin: 15

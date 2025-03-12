@@ -16,7 +16,7 @@ Popup {
             font.bold: true
         }
 
-        Button {
+        NfButton {
             text: qsTr("Close")
             Layout.preferredWidth: implicitWidth + 20
             Layout.alignment: Qt.AlignCenter

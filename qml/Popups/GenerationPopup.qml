@@ -87,7 +87,7 @@ Popup {
             Layout.alignment: Qt.AlignHCenter
         }
 
-        Button {
+        NfButton {
             text: qsTr("Cancel")
             Layout.alignment: Qt.AlignHCenter
             Layout.topMargin: 10

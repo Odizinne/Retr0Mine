@@ -28,7 +28,7 @@ Popup {
         RowLayout {
             spacing: 10
 
-            Button {
+            NfButton {
                 id: restoreButton
                 text: qsTr("Restore")
                 Layout.preferredWidth: control.buttonWidth
@@ -39,7 +39,7 @@ Popup {
                 }
             }
 
-            Button {
+            NfButton {
                 id: cancelButton
                 text: qsTr("Cancel")
                 Layout.preferredWidth: control.buttonWidth

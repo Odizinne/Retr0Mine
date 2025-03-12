@@ -135,7 +135,7 @@ Popup {
             }
         }
 
-        Button {
+        NfButton {
             text: qsTr("Cancel")
             Layout.fillWidth: true
             onClicked: ComponentsContext.loadPopupVisible = false

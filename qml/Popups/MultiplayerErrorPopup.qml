@@ -23,7 +23,7 @@ Popup {
             Layout.alignment: Qt.AlignCenter
         }
 
-        Button {
+        NfButton {
             text: qsTr("Close")
             onClicked: ComponentsContext.multiplayerErrorPopupVisible = false
             Layout.alignment: Qt.AlignCenter

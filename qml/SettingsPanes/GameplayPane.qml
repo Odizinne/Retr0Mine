@@ -24,7 +24,7 @@ Pane {
                 tooltipText: qsTr("First click always lands on a safe tile")
             }
 
-            Switch {
+            NfSwitch {
                 id: safeFirstClickSwitch
                 checked: GameSettings.safeFirstClick
                 onCheckedChanged: {
@@ -44,7 +44,7 @@ Pane {
                     onClicked: invertLRSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: invertLRSwitch
                 checked: GameSettings.invertLRClick
                 onCheckedChanged: {
@@ -64,7 +64,7 @@ Pane {
                     onClicked: autorevealSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: autorevealSwitch
                 checked: GameSettings.autoreveal
                 onCheckedChanged: {
@@ -85,7 +85,7 @@ Pane {
                     onClicked: questionMarksSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: questionMarksSwitch
                 checked: GameSettings.enableQuestionMarks
                 onCheckedChanged: {
@@ -114,7 +114,7 @@ Pane {
                     onClicked: safeQuestionMarksSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: safeQuestionMarksSwitch
                 checked: GameSettings.enableSafeQuestionMarks
                 onCheckedChanged: {
@@ -143,7 +143,7 @@ Pane {
                     onClicked: loadLastGameSwitch.click()
                 }
             }
-            Switch {
+            NfSwitch {
                 id: loadLastGameSwitch
                 checked: GameSettings.loadLastGame
                 onCheckedChanged: {

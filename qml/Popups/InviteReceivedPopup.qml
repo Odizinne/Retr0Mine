@@ -30,10 +30,10 @@ Popup {
             textFormat: Text.RichText
         }
 
-        Button {
+        NfButton {
             Layout.preferredWidth: 35
             Layout.preferredHeight: 35
-            focusPolicy: Qt.NoFocus
+            
             onClicked: {
                 if (SteamIntegration.isInMultiplayerGame) {
                     SteamIntegration.leaveLobby()
@@ -52,10 +52,10 @@ Popup {
             }
         }
 
-        Button {
+        NfButton {
             Layout.preferredWidth: 35
             Layout.preferredHeight: 35
-            focusPolicy: Qt.NoFocus
+            
             onClicked: invitePopup.visible = false
             IconImage {
                 source: "qrc:/icons/deny.png"

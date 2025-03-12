@@ -79,7 +79,7 @@ Popup {
             }
         }
 
-        Button {
+        NfButton {
             text: qsTr("Close")
             Layout.alignment: Qt.AlignRight
             Layout.bottomMargin: 10

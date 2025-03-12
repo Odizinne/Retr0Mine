@@ -41,14 +41,14 @@ Popup {
 
         RowLayout {
             spacing: 10
-            Button {
+            NfButton {
                 text: "Steam"
                 icon.source: "qrc:/icons/steam.png"
                 highlighted: true
                 onClicked: Qt.openUrlExternally("https://store.steampowered.com/app/3478030/Retr0Mine")
             }
 
-            Button {
+            NfButton {
                 text: "Github"
                 icon.source: "qrc:/icons/github.png"
                 onClicked: Qt.openUrlExternally("https://github.com/odizinne/Retr0Mine")

@@ -28,7 +28,7 @@ Pane {
                         onClicked: animationsSwitch.click()
                     }
                 }
-                Switch {
+                NfSwitch {
                     id: animationsSwitch
                     checked: GameSettings.animations
                     onCheckedChanged: {
@@ -55,7 +55,7 @@ Pane {
                         onClicked: displayTimerSwitch.click()
                     }
                 }
-                Switch {
+                NfSwitch {
                     id: displayTimerSwitch
                     checked: GameSettings.displayTimer
                     onCheckedChanged: GameSettings.displayTimer = checked
@@ -75,7 +75,7 @@ Pane {
                         onClicked: startFullScreenSwitch.click()
                     }
                 }
-                Switch {
+                NfSwitch {
                     id: startFullScreenSwitch
                     enabled: !GameCore.gamescope
                     checked: GameSettings.startFullScreen || GameCore.gamescope
@@ -96,7 +96,7 @@ Pane {
                         onClicked: cellFrameSwitch.click()
                     }
                 }
-                Switch {
+                NfSwitch {
                     id: cellFrameSwitch
                     checked: GameSettings.cellFrame
                     onCheckedChanged: {
@@ -116,7 +116,7 @@ Pane {
                         onClicked: shakeUnifinishedNumbersSwitch.click()
                     }
                 }
-                Switch {
+                NfSwitch {
                     id: shakeUnifinishedNumbersSwitch
                     checked: GameSettings.shakeUnifinishedNumbers
                     onCheckedChanged: {
@@ -136,7 +136,7 @@ Pane {
                         onClicked: dimSatisfiedSwitch.click()
                     }
                 }
-                Switch {
+                NfSwitch {
                     id: dimSatisfiedSwitch
                     checked: GameSettings.dimSatisfied
                     onCheckedChanged: {
@@ -250,7 +250,7 @@ Pane {
                     Layout.fillWidth: true
                 }
 
-                Button {
+                NfButton {
                     Layout.preferredWidth: 35
                     Layout.preferredHeight: 35
                     checkable: true
@@ -265,7 +265,7 @@ Pane {
                     }
                 }
 
-                Button {
+                NfButton {
                     Layout.preferredWidth: 35
                     Layout.preferredHeight: 35
                     enabled: GameState.flag1Unlocked
@@ -287,7 +287,7 @@ Pane {
                     }
                 }
 
-                Button {
+                NfButton {
                     Layout.preferredWidth: 35
                     Layout.preferredHeight: 35
                     enabled: GameState.flag2Unlocked
@@ -309,7 +309,7 @@ Pane {
                     }
                 }
 
-                Button {
+                NfButton {
                     Layout.preferredWidth: 35
                     Layout.preferredHeight: 35
                     enabled: GameState.flag3Unlocked

@@ -43,9 +43,9 @@ Pane {
                     tooltipText: `${difficultyRow.modelData.x}×${difficultyRow.modelData.y}, ${difficultyRow.modelData.mines} mines`
                 }
 
-                RadioButton {
+                NfRadioButton {
                     id: radioButton
-                    focusPolicy: Qt.NoFocus
+                    
                     Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     Layout.preferredWidth: GameConstants.settingsComponentsHeight
                     Layout.alignment: Qt.AlignRight
@@ -165,7 +165,7 @@ Pane {
             }
         }
 
-        Button {
+        NfButton {
             enabled: GameSettings.difficulty === 4
             Layout.rightMargin: 5
             text: qsTr("Apply")
