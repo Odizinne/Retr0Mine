@@ -830,6 +830,12 @@ QtObject {
                 }
                 break;
 
+            case "approveReveal":
+                // Client processes the reveal and cascade locally
+                allowClientReveal = true;
+                GridBridge.performReveal(cellIndex);
+                break;
+
             case "startGame":
                 ComponentsContext.multiplayerPopupVisible = false;
                 break;
@@ -947,22 +953,30 @@ QtObject {
         isProcessingNetworkAction = false;
     }
 
-    // Functions for coordinating multiplayer game actions
     function handleMultiplayerReveal(index) {
         if (!SteamIntegration.isInMultiplayerGame) {
             return false; // Not a multiplayer game
         }
 
         if (SteamIntegration.isHost) {
-            // Host: process locally and send result to client
+            // Host: check if valid reveal
+            const cell = GridBridge.getCell(index);
+            if (!cell || cell.revealed || cell.flagged) {
+                // Invalid reveal
+                return true;
+            }
+
+            // Process reveal locally
             GridBridge.performReveal(index);
-            sendCellUpdateToClient(index, "reveal");
+
+            // Send approval to client (instead of reveal)
+            SteamIntegration.sendGameAction("approveReveal", index);
         } else {
-            // Client: ONLY send request to host and wait for response
+            // Client: send request to host
             SteamIntegration.sendGameAction("reveal", index);
         }
 
-        return true; // Action handled by multiplayer
+        return true;
     }
 
     function handleMultiplayerRevealConnected(index) {
