@@ -41,5 +41,6 @@ Settings {
     property bool mpAudioNotificationOnNewMessage: true
     property bool shakeUnifinishedNumbers: true
     property int customSeed: -1
+    property bool multiThreadedBoardGeneration: true
 }
 

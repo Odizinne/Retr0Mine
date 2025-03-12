@@ -13,6 +13,30 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
+                text: qsTr("Multithreaded grid generation")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: multiThreadedBoardGenerationSwitch.click()
+                }
+            }
+
+            InfoIcon {
+                tooltipText: qsTr("Use available CPU threads to speed up\n grid solvability checks\nCould lower performance on weaker hardware")
+            }
+
+            Switch {
+                id: multiThreadedBoardGenerationSwitch
+                checked: GameSettings.multiThreadedBoardGeneration
+                onCheckedChanged: GameSettings.multiThreadedBoardGeneration = checked
+            }
+        }
+
+        RowLayout {
+            enabled: !SteamIntegration.isInMultiplayerGame
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Label {
                 text: qsTr("Style")
                 Layout.fillWidth: true
             }

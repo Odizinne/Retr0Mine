@@ -66,53 +66,67 @@
     <name>AdvancedPane</name>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="16"/>
+        <source>Multithreaded grid generation</source>
+        <translation>Génération de grille multithread</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="25"/>
+        <source>Use available CPU threads to speed up
+ grid solvability checks
+Could lower performance on weaker hardware</source>
+        <translation>Utiliser les threads CPU disponibles pour accélérer
+les vérifications de résolution de grille
+Peut réduire les performances sur les machines moins puissantes</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="39"/>
         <source>Style</source>
         <translation>Style</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="21"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="44"/>
         <source>Application will restart on change
 Current game will be saved and restored</source>
         <translation>L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="45"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="68"/>
         <source>Color scheme</source>
         <translation>Thème</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
         <source>Dark</source>
         <translation>Sombre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
         <source>Light</source>
         <translation>Clair</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="67"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="90"/>
         <source>Custom seed</source>
         <translation>Seed perso.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="76"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="99"/>
         <source>Empty for random</source>
         <translation>Vide pour aléatoire</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="98"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="121"/>
         <source>Last used seed</source>
         <translation>Derniere seed utilisée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="117"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="140"/>
         <source>First click coordinates</source>
         <translation>Coordonnées du premier click</translation>
     </message>
@@ -120,22 +134,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="78"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="82"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="98"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="102"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="117"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="121"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="166"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="170"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -552,12 +566,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/Popups/PlayerLeftPopup.qml" line="14"/>
         <source> left the game</source>
-        <translation type="unfinished"> a quitté la partie</translation>
+        <translation> a quitté la partie</translation>
     </message>
     <message>
         <location filename="../qml/Popups/PlayerLeftPopup.qml" line="20"/>
         <source>Close</source>
-        <translation type="unfinished">Fermer</translation>
+        <translation>Fermer</translation>
     </message>
 </context>
 <context>
@@ -882,12 +896,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="81"/>
+        <location filename="../qml/TopBar.qml" line="82"/>
         <source>Next click will signal the cell</source>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="168"/>
+        <location filename="../qml/TopBar.qml" line="169"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>

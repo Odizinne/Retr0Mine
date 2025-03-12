@@ -136,6 +136,7 @@ void GameCore::resetSettings()
     settings.setValue("mpAudioNotificationOnNewMessage", true);
     settings.setValue("shakeUnifinishedNumbers", true);
     settings.setValue("customSeed", -1);
+    settings.setValue("multiThreadedBoardGeneration", true);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;

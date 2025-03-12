@@ -635,6 +635,10 @@ int GameLogic::generateBoard(int firstClickX, int firstClickY, int seed) {
         return usedSeed;
     }
 
+    // Check if multi-threaded generation is enabled
+    QSettings settings("Odizinne", "Retr0Mine");
+    bool useMultiThreaded = settings.value("multiThreadedBoardGeneration", true).toBool();
+
     // Valid first click coordinates
     bool safeFirstClick = (firstClickX != -1 && firstClickY != -1);
     int firstClickIndex = safeFirstClick ? (firstClickY * m_width + firstClickX) : -1;
@@ -986,90 +990,123 @@ int GameLogic::generateBoard(int firstClickX, int firstClickY, int seed) {
     // Reset mines placed counter for this attempt
     updateProgress(m_currentAttempt.load(), m_totalAttempts.load(), 0);
 
-    // Determine number of threads to use
-    int threadCount = std::min(QThread::idealThreadCount(), 8);
-    if (threadCount <= 0) threadCount = 1;
+    // BRANCH HERE BASED ON SETTING
+    if (useMultiThreaded) {
+        // MULTI-THREADED IMPLEMENTATION
 
-    // Create a thread pool
-    QThreadPool threadPool;
-    threadPool.setMaxThreadCount(threadCount);
+        // Determine number of threads to use
+        int threadCount = std::min(QThread::idealThreadCount(), 8);
+        if (threadCount <= 0) threadCount = 1;
 
-    // Place mines one by one, ensuring the board remains solvable
-    int placedMines = 0;
-    int i = 0;
+        // Create a thread pool
+        QThreadPool threadPool;
+        threadPool.setMaxThreadCount(threadCount);
 
-    // Global mutex to protect results
-    QMutex resultsMutex;
+        // Place mines one by one, ensuring the board remains solvable
+        int placedMines = 0;
+        int i = 0;
 
-    while (i < candidates.size() && placedMines < m_mineCount) {
-        if (m_cancelGeneration.load()) {
-            return usedSeed;
-        }
-
-        // Process mines in batches to leverage parallelism
-        int batchSize = std::min(threadCount * 2, m_mineCount - placedMines);
-        if (i + batchSize > candidates.size()) {
-            batchSize = candidates.size() - i;
-        }
-
-        if (batchSize <= 0) break;
-
-        // Using a shared array with atomic flags instead of individual mutexes
-        struct BatchResult {
-            int candidateIndex;
-            std::atomic<bool> isSolvable;
-            std::atomic<bool> isProcessed;
-        };
-
-        // Create dynamic array of results that can be safely shared between threads
-        BatchResult* batchResults = new BatchResult[batchSize];
-
-        // Initialize each result
-        for (int b = 0; b < batchSize; b++) {
-            int candidateIndex = i + b;
-            if (candidateIndex >= candidates.size()) break;
-
-            batchResults[b].candidateIndex = candidateIndex;
-            batchResults[b].isSolvable.store(false);
-            batchResults[b].isProcessed.store(false);
-        }
-
-        // Start threads to process the batch
-        for (int b = 0; b < batchSize; b++) {
-            int candidateIndex = i + b;
-            if (candidateIndex >= candidates.size()) break;
-
-            // Capture necessary variables by value, batch results by pointer
-            std::atomic<bool>& cancelFlag = m_cancelGeneration;
-            BatchResult* resultPtr = &batchResults[b];
-
-            threadPool.start([&board, resultPtr, &candidates, &cancelFlag]() {
-                if (cancelFlag.load()) return;
-
-                // Create test board with this mine placement
-                BoardState testBoard = board;
-                testBoard.placeMine(candidates[resultPtr->candidateIndex]);
-
-                // Check solvability
-                bool solvable = testBoard.isFullySolvable(cancelFlag);
-
-                // Store result (atomic, no mutex needed)
-                resultPtr->isSolvable.store(solvable);
-                resultPtr->isProcessed.store(true);
-            });
-        }
-
-        // Wait for all batch jobs to complete
-        threadPool.waitForDone();
-
-        // Process the results
-        for (int b = 0; b < batchSize; b++) {
-            if (m_cancelGeneration.load() || placedMines >= m_mineCount) {
-                break;
+        while (i < candidates.size() && placedMines < m_mineCount) {
+            if (m_cancelGeneration.load()) {
+                return usedSeed;
             }
 
-            if (batchResults[b].isProcessed.load() && batchResults[b].isSolvable.load()) {
-                board.placeMine(candidates[batchResults[b].candidateIndex]);
+            // Process mines in batches to leverage parallelism
+            int batchSize = std::min(threadCount * 2, m_mineCount - placedMines);
+            if (i + batchSize > candidates.size()) {
+                batchSize = candidates.size() - i;
+            }
+
+            if (batchSize <= 0) break;
+
+            // Using a shared array with atomic flags instead of individual mutexes
+            struct BatchResult {
+                int candidateIndex;
+                std::atomic<bool> isSolvable;
+                std::atomic<bool> isProcessed;
+            };
+
+            // Create dynamic array of results that can be safely shared between threads
+            BatchResult* batchResults = new BatchResult[batchSize];
+
+            // Initialize each result
+            for (int b = 0; b < batchSize; b++) {
+                int candidateIndex = i + b;
+                if (candidateIndex >= candidates.size()) break;
+
+                batchResults[b].candidateIndex = candidateIndex;
+                batchResults[b].isSolvable.store(false);
+                batchResults[b].isProcessed.store(false);
+            }
+
+            // Start threads to process the batch
+            for (int b = 0; b < batchSize; b++) {
+                int candidateIndex = i + b;
+                if (candidateIndex >= candidates.size()) break;
+
+                // Capture necessary variables by value, batch results by pointer
+                std::atomic<bool>& cancelFlag = m_cancelGeneration;
+                BatchResult* resultPtr = &batchResults[b];
+
+                threadPool.start([&board, resultPtr, &candidates, &cancelFlag]() {
+                    if (cancelFlag.load()) return;
+
+                    // Create test board with this mine placement
+                    BoardState testBoard = board;
+                    testBoard.placeMine(candidates[resultPtr->candidateIndex]);
+
+                    // Check solvability
+                    bool solvable = testBoard.isFullySolvable(cancelFlag);
+
+                    // Store result (atomic, no mutex needed)
+                    resultPtr->isSolvable.store(solvable);
+                    resultPtr->isProcessed.store(true);
+                });
+            }
+
+            // Wait for all batch jobs to complete
+            threadPool.waitForDone();
+
+            // Process the results
+            for (int b = 0; b < batchSize; b++) {
+                if (m_cancelGeneration.load() || placedMines >= m_mineCount) {
+                    break;
+                }
+
+                if (batchResults[b].isProcessed.load() && batchResults[b].isSolvable.load()) {
+                    board.placeMine(candidates[batchResults[b].candidateIndex]);
+                    placedMines++;
+
+                    // Update progress periodically
+                    if (placedMines % 5 == 0 || placedMines == 1 || placedMines == m_mineCount) {
+                        updateProgress(m_currentAttempt.load(), m_totalAttempts.load(), placedMines);
+                    }
+                }
+            }
+
+            // Clean up
+            delete[] batchResults;
+
+            // Move to next batch of candidates
+            i += batchSize;
+        }
+    } else {
+        // ORIGINAL SINGLE-THREADED IMPLEMENTATION
+
+        // Place mines one by one, ensuring the board remains solvable
+        int placedMines = 0;
+        for (int i = 0; i < candidates.size() && placedMines < m_mineCount; ++i) {
+            if (m_cancelGeneration.load()) {
+                return usedSeed;
+            }
+
+            // Create a test board with this mine placement
+            BoardState testBoard = board;
+            testBoard.placeMine(candidates[i]);
+
+            // Only keep this mine if the board is still solvable
+            if (testBoard.isFullySolvable(m_cancelGeneration)) {
+                board.placeMine(candidates[i]);
                 placedMines++;
 
                 // Update progress periodically
@@ -1078,12 +1115,6 @@ int GameLogic::generateBoard(int firstClickX, int firstClickY, int seed) {
                 }
             }
         }
-
-        // Clean up
-        delete[] batchResults;
-
-        // Move to next batch of candidates
-        i += batchSize;
     }
 
     // Check for cancellation before finalizing
@@ -1092,6 +1123,7 @@ int GameLogic::generateBoard(int firstClickX, int firstClickY, int seed) {
     }
 
     // Check if we placed all mines
+    int placedMines = board.getMines().size();
     if (placedMines == m_mineCount) {
         // Make sure we show all mines are placed
         updateProgress(m_currentAttempt.load(), m_totalAttempts.load(), m_mineCount);
