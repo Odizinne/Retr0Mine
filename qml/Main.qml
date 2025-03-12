@@ -12,32 +12,6 @@ ApplicationWindow {
     property bool isSaving: false
     property bool isClosing: false
 
-//    Rectangle {
-//        id: acrylicEffect
-//        width: 400
-//        height: 300
-//        z:1000
-//        anchors. centerIn: parent
-//
-//        // Semi-transparent white background
-//        color: "#CCCCCCCC" // Adjust transparency as needed
-//
-//        // Apply blur and other effects
-//        layer.enabled: true
-//        layer.effect: blurComponent
-//        Component {
-//            id: blurComponent
-//            MultiEffect {
-//                source: acrylicEffect
-//                anchors.fill: acrylicEffect
-//                blurEnabled: true
-//                blur: 1
-//                blurMax: 32
-//                blurMultiplier: 4
-//            }
-//        }
-//    }
-
     onClosing: function(close) {
         if (isClosing) {
             close.accepted = true
