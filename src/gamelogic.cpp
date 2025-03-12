@@ -225,41 +225,8 @@ int GameLogic::findMineHint(const QVector<int> &revealedCells, const QVector<int
         qDebug() << "solver failed";
     }
 
-    qDebug() << "\nGrid state when falling back to actual mine positions:";
-    QString gridStr;
-    for (int row = 0; row < m_height; row++) {
-        QString rowStr;
-        for (int col = 0; col < m_width; col++) {
-            int pos = row * m_width + col;
-            if (revealed.contains(pos)) {
-                if (m_numbers[pos] == -1) {
-                    rowStr += "M "; // Mine
-                } else {
-                    rowStr += QString::number(m_numbers[pos]) + " "; // Number
-                }
-            } else if (flagged.contains(pos)) {
-                rowStr += "F "; // Flag
-            } else {
-                rowStr += ". "; // Hidden
-            }
-        }
-        gridStr += rowStr.trimmed() + "\n";
-    }
-    qDebug().noquote() << gridStr;
-
-    // Last resort: use actual mine positions
-    qDebug() << "WARNING: Using actual mine positions for hint";
-    for (int pos : m_mines) {
-        if (!flagged.contains(pos)) {
-            qDebug() << "Found mine hint from actual positions at:" << pos;
-            return pos;
-        }
-    }
-
     return -1;
 }
-
-
 
 QSet<int> GameLogic::getNeighbors(int pos) const
 {
@@ -783,15 +750,6 @@ int GameLogic::solveForHint(const QVector<int> &revealedCells, const QVector<int
                     }
                 }
             }
-
-            // As a fallback, return the most constrained cell itself
-            int row = mostConstrained / m_width;
-            int col = mostConstrained % m_width;
-            qDebug() << "\nSuggesting highly constrained cell at" << col << "," << row
-                     << "\nReason: This cell is involved in" << maxConstraints
-                     << "different constraints and will provide the most information";
-
-            return mostConstrained;
         }
     }
 
