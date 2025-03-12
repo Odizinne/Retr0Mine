@@ -15,6 +15,7 @@ QtObject {
     property bool sessionRunning: false
     property bool mpPopupCloseButtonVisible: false
     property bool allowClientReveal: false
+    property var chunkResendTimer: null
 
     // Grid synchronization properties
     property var chunkedMines: []
