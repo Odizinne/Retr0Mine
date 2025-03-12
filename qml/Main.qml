@@ -4,12 +4,39 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
 import net.odizinne.retr0mine 1.0
+import QtQuick.Effects
 
 ApplicationWindow {
     id: root
     visibility: ApplicationWindow.Hidden
     property bool isSaving: false
     property bool isClosing: false
+
+//    Rectangle {
+//        id: acrylicEffect
+//        width: 400
+//        height: 300
+//        z:1000
+//        anchors. centerIn: parent
+//
+//        // Semi-transparent white background
+//        color: "#CCCCCCCC" // Adjust transparency as needed
+//
+//        // Apply blur and other effects
+//        layer.enabled: true
+//        layer.effect: blurComponent
+//        Component {
+//            id: blurComponent
+//            MultiEffect {
+//                source: acrylicEffect
+//                anchors.fill: acrylicEffect
+//                blurEnabled: true
+//                blur: 1
+//                blurMax: 32
+//                blurMultiplier: 4
+//            }
+//        }
+//    }
 
     onClosing: function(close) {
         if (isClosing) {
@@ -452,12 +479,18 @@ ApplicationWindow {
                 rightMargin: 12
                 bottomMargin: 12
             }
+            layer.enabled: GameState.paused
+            layer.effect: MultiEffect {
+                blurEnabled: true
+                blur: GameState.paused ? 1 : 0
+                blurMultiplier: 0.3
+            }
             contentWidth: gridContainer.width
             contentHeight: gridContainer.height
             clip: true
             enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
                      !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
-            opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) && !GameState.paused) ? 1 : 0
+            opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) ? 1 : 0
             ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
             ScrollBar.horizontal: GameCore.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
             Behavior on opacity {
