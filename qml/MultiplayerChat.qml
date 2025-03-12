@@ -19,25 +19,17 @@ Frame {
     Connections {
         target: SteamIntegration
 
-        // Track when the multiplayer status changes
         function onMultiplayerStatusChanged() {
-            // If we're no longer in a multiplayer game, clear the chat history
             if (!SteamIntegration.isInMultiplayerGame) {
-                console.log("Multiplayer session ended, clearing chat history")
                 chatPanel.chatMessages = []
-                // Force list update
                 chatListView.model = null
                 chatListView.model = chatPanel.chatMessages
                 ComponentsContext.multiplayerChatVisible = false
             }
         }
 
-        // Also monitor connected player changes
         function onConnectedPlayerChanged() {
-            // If the connected player changes (new player or disconnection), clear the chat
-            console.log("Connected player changed, clearing chat history")
             chatPanel.chatMessages = []
-            // Force list update
             chatListView.model = null
             chatListView.model = chatPanel.chatMessages
         }
@@ -48,7 +40,6 @@ Frame {
         anchors.margins: 8
         spacing: 8
 
-        // Chat messages area
         ScrollView {
             id: chatScrollView
             Layout.fillWidth: true
@@ -74,7 +65,6 @@ Frame {
                     spacing: 8
                     required property var modelData
 
-                    // Avatar image
                     Image {
                         Layout.alignment: Qt.AlignTop
                         Layout.leftMargin: 2
@@ -178,7 +168,6 @@ Frame {
             isLocalPlayer: isLocalPlayer,
             timestamp: new Date()
         });
-        // Force list update
         chatListView.model = null;
         chatListView.model = chatMessages;
     }
@@ -186,18 +175,13 @@ Frame {
     function sendChatMessage(message) {
         if (!SteamIntegration.isInMultiplayerGame || !message) return;
 
-        // Add message to local display
         addMessage(message, true);
-
-        // Send message to remote player via SteamIntegration
         SteamIntegration.sendGameAction("chat", message);
     }
 
     function addBotMessage(message) {
-        // First, filter out any existing bot messages
         chatMessages = chatMessages.filter(msg => !msg.isBot);
 
-        // Then add the new bot message
         chatMessages.push({
             message: message,
             isLocalPlayer: false,
@@ -206,7 +190,6 @@ Frame {
             timestamp: new Date()
         });
 
-        // Force list update
         chatListView.model = null;
         chatListView.model = chatMessages;
         GameState.botMessageSent()
@@ -217,7 +200,6 @@ Frame {
 
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string") {
-                // Process incoming chat message
                 chatPanel.addMessage(parameter, false);
             }
         }

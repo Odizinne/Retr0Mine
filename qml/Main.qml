@@ -62,10 +62,7 @@ ApplicationWindow {
                         mineCount: difficultySet.mines
                     };
 
-                    console.log("Sending grid sync:", JSON.stringify(gridSyncData));
                     SteamIntegration.sendGameState(gridSyncData);
-                } else {
-                    console.log("Client waiting for grid sync");
                 }
             }
         }
@@ -81,8 +78,6 @@ ApplicationWindow {
                 NetworkManager.allowClientReveal = false;
                 GridBridge.initGame();
             } else {
-                console.log("Left multiplayer mode");
-
                 if (NetworkManager.isProcessingNetworkAction) {
                     NetworkManager.isProcessingNetworkAction = false;
                 }
@@ -332,69 +327,6 @@ ApplicationWindow {
         }
     }
 
-    Loader {
-        anchors.fill: parent
-        active: true
-        sourceComponent: SteamIntegration.initialized ? multiplayerPopupComponent : aboutPopupComponent
-
-        Component {
-            id: multiplayerPopupComponent
-            PrivateSessionPopup {
-                anchors.centerIn: parent
-            }
-        }
-
-        Component {
-            id: aboutPopupComponent
-            AboutPopup {
-                anchors.centerIn: parent
-            }
-        }
-    }
-
-    MultiplayerErrorPopup {
-        anchors.centerIn: parent
-    }
-
-    RulesPopup {
-        anchors.centerIn: parent
-    }
-
-    GenerationPopup {
-        anchors.centerIn: parent
-    }
-
-    PostgamePopup {
-        anchors.centerIn: parent
-    }
-
-    LoadPopup {
-        anchors.centerIn: parent
-    }
-
-    SavePopup {
-        anchors.centerIn: parent
-    }
-
-    PausePopup {
-        anchors.centerIn: parent
-    }
-
-    PrivateSessionPopup {
-        anchors.centerIn: parent
-    }
-
-    PlayerLeftPopup {
-        id: playerLeftPopup
-        anchors.centerIn: parent
-    }
-
-    LeaderboardPopup {
-        id: leaderboardWindow
-        anchors.centerIn: parent
-        Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
-    }
-
     InviteReceivedPopup {
         id: inviteToast
         x: 13
@@ -416,6 +348,7 @@ ApplicationWindow {
 
     Item {
         anchors.fill: parent
+
         TopBar {
             id: topBar
             anchors {
@@ -496,6 +429,69 @@ ApplicationWindow {
                         sourceComponent: Cell {
                             index: cellLoader.index
                         }
+                    }
+                }
+            }
+
+            MultiplayerErrorPopup {
+                anchors.centerIn: gameView
+            }
+
+            RulesPopup {
+                anchors.centerIn: gameView
+            }
+
+            GenerationPopup {
+                anchors.centerIn: gameView
+            }
+
+            PostgamePopup {
+                anchors.centerIn: gameView
+            }
+
+            LoadPopup {
+                anchors.centerIn: gameView
+            }
+
+            SavePopup {
+                anchors.centerIn: gameView
+            }
+
+            PausePopup {
+                anchors.centerIn: gameView
+            }
+
+            PrivateSessionPopup {
+                anchors.centerIn: gameView
+            }
+
+            PlayerLeftPopup {
+                id: playerLeftPopup
+                anchors.centerIn: gameView
+            }
+
+            LeaderboardPopup {
+                id: leaderboardWindow
+                anchors.centerIn: gameView
+                Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
+            }
+
+            Loader {
+                anchors.fill: parent
+                active: true
+                sourceComponent: SteamIntegration.initialized ? multiplayerPopupComponent : aboutPopupComponent
+
+                Component {
+                    id: multiplayerPopupComponent
+                    PrivateSessionPopup {
+                        anchors.centerIn: parent
+                    }
+                }
+
+                Component {
+                    id: aboutPopupComponent
+                    AboutPopup {
+                        anchors.centerIn: parent
                     }
                 }
             }
