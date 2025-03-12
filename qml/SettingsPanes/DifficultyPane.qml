@@ -63,8 +63,11 @@ Pane {
                         GridBridge.initGame()
                         GameSettings.difficulty = idx
                         SteamIntegration.difficulty = idx
-                        // bypass internalGameState loading if user manually change
-                        // difficulty before initial game state check
+                        /*==========================================
+                         | bypass internalGameState loading        |
+                         | if user manually change difficulty      |
+                         | before initial game state check         |
+                         ==========================================*/
                         GameState.ignoreInternalGameState = true
 
                         if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
@@ -184,8 +187,11 @@ Pane {
                 previousCustomWidth = GameSettings.customWidth
                 previousCustomHeight = GameSettings.customHeight
 
-                // bypass internalGameState loading if user manually change
-                // difficulty before initial game state check
+                /*==========================================
+                 | bypass internalGameState loading        |
+                 | if user manually change difficulty      |
+                 | before initial game state check         |
+                 ==========================================*/
                 GameState.ignoreInternalGameState = true
 
                 GridBridge.initGame()
