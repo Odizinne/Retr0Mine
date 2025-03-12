@@ -14,8 +14,6 @@ QtObject {
     property bool settingsWindowVisible: false
 
     property string mpErrorReason: ""
-    property string lastUsedSeed: ""
-    property string lastFirstClickX: ""
-    property string lastFirstClickY: ""
+
     signal allCellsReady()
 }

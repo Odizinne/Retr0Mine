@@ -135,8 +135,6 @@ void GameCore::resetSettings()
     settings.setValue("mpShowInviteNotificationInGame", true);
     settings.setValue("mpAudioNotificationOnNewMessage", true);
     settings.setValue("shakeUnifinishedNumbers", true);
-    settings.setValue("customSeed", -1);
-    settings.setValue("multiThreadedBoardGeneration", false);
     settings.setValue("hintReasoningInChat", true);
 
     settings.setValue("welcomeMessageShown", true);

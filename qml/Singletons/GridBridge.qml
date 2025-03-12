@@ -184,7 +184,7 @@ Item {
         }
     }
 
-    function onBoardGenerated(success, usedSeed) {
+    function onBoardGenerated(success) {
         // Check if generation was cancelled
         if (generationCancelled) {
             generationCancelled = false
@@ -197,16 +197,12 @@ Item {
         }
 
         if (success) {
-            // Store the used seed for display
-            ComponentsContext.lastUsedSeed = usedSeed;
-
             GameState.mines = GameLogic.getMines()
             GameState.numbers = GameLogic.getNumbers()
             GameState.gameStarted = true
             GameState.isGeneratingGrid = false
             GameTimer.start()
 
-            // Continue with the reveal operation
             let currentIndex = GameState.firstClickIndex;
             withCell(currentIndex, function(cell) {
                 if (!cell.revealed) {
@@ -251,18 +247,15 @@ Item {
                 NetworkManager.initializeMultiplayerGame(currentIndex);
             }
 
-            // Disconnect the signal
             GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated);
         } else {
             console.error("Failed to place mines, trying again...");
             if (generationAttempt < 100 && !generationCancelled) {
                 generationAttempt++;
 
-                // Disconnect before retrying to prevent multiple callbacks
                 GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated);
 
                 if (!generationCancelled) {
-                    // Reconnect and try again
                     GameLogic.boardGenerationCompleted.connect(onBoardGenerated);
 
                     let row = -1, col = -1;
@@ -271,15 +264,13 @@ Item {
                         col = GameState.firstClickIndex % GameState.gridSizeX;
                     }
 
-                    // Try again asynchronously with the same seed
-                    GameLogic.generateBoardAsync(col, row, GameSettings.customSeed);
+                    GameLogic.generateBoardAsync(col, row);
                 }
             } else {
                 console.warn("Maximum attempts reached or generation cancelled");
                 if (!generationCancelled) {
                     GameState.isGeneratingGrid = false;
                 }
-                // Disconnect the signal
                 GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated);
             }
         }
@@ -299,25 +290,15 @@ Item {
             col = -1;
         }
 
-        // Store first click coordinates for display
-        ComponentsContext.lastFirstClickX = col >= 0 ? col.toString() : "";
-        ComponentsContext.lastFirstClickY = row >= 0 ? row.toString() : "";
-
         if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
             console.error("Failed to initialize game");
             return false;
         }
 
-        // Use our new async method instead of the synchronous one
         generationAttempt = 0;
-
-        // Connect to the signal for this generation attempt
         GameLogic.boardGenerationCompleted.connect(onBoardGenerated);
+        GameLogic.generateBoardAsync(col, row);
 
-        // Start the async generation with the seed from settings
-        GameLogic.generateBoardAsync(col, row, GameSettings.customSeed);
-
-        // Return true to indicate that generation has started, not completed
         return true;
     }
 

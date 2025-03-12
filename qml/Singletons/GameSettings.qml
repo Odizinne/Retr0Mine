@@ -40,8 +40,6 @@ Settings {
     property bool mpShowInviteNotificationInGame: true
     property bool mpAudioNotificationOnNewMessage: true
     property bool shakeUnifinishedNumbers: true
-    property int customSeed: -1
-    property bool multiThreadedBoardGeneration: false
     property bool hintReasoningInChat: true
 }
 
