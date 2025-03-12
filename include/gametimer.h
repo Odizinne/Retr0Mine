@@ -9,6 +9,8 @@ class GameTimer : public QObject {
     Q_PROPERTY(QString displayTime READ displayTime NOTIFY displayTimeChanged)
     Q_PROPERTY(qint64 centiseconds READ centiseconds WRITE setCentiseconds NOTIFY centisecondsChanged)
     Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
+    Q_PROPERTY(bool isRunning READ isRunning NOTIFY isRunningChanged)
+
 public:
     explicit GameTimer(QObject *parent = nullptr);
     Q_INVOKABLE QString getDetailedTime() const;
@@ -17,17 +19,22 @@ public:
     QString displayTime() const { return m_displayTime; }
     qint64 centiseconds() const;
     bool isPaused() const { return m_isPaused; }
+    bool isRunning() const { return timer.isValid() && !m_isPaused; }
+
 public slots:
     void setCentiseconds(qint64 value);
     void start();
     void stop();
     void reset();
     void resumeFrom(qint64 centiseconds);
+
 signals:
     void displayTimeChanged();
     void secondChanged();
     void centisecondsChanged();
     void isPausedChanged();
+    void isRunningChanged();
+
 private:
     void updateDisplayTime();
     QTimer updateTimer;
@@ -39,6 +46,7 @@ private:
     QString m_displayTime;
     bool m_isPaused;
 };
+
 struct GameTimerForeign
 {
     Q_GADGET

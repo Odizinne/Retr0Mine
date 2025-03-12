@@ -1,5 +1,6 @@
 #include "gametimer.h"
 #include <QDebug>
+
 GameTimer::GameTimer(QObject *parent)
     : QObject(parent)
     , m_centiseconds(0)
@@ -23,6 +24,7 @@ GameTimer::GameTimer(QObject *parent)
     });
     updateTimer.setInterval(10);
 }
+
 void GameTimer::updateDisplayTime()
 {
     int totalSeconds = m_centiseconds / 100;
@@ -33,6 +35,7 @@ void GameTimer::updateDisplayTime()
                         .arg(seconds, 2, 10, QChar('0'));
     emit displayTimeChanged();
 }
+
 QString GameTimer::getDetailedTime() const
 {
     int totalSeconds = m_centiseconds / 100;
@@ -44,10 +47,12 @@ QString GameTimer::getDetailedTime() const
         .arg(seconds, 2, 10, QChar('0'))
         .arg(centis, 2, 10, QChar('0'));
 }
+
 qint64 GameTimer::centiseconds() const
 {
     return m_centiseconds;
 }
+
 void GameTimer::setCentiseconds(qint64 value)
 {
     if (m_centiseconds != value) {
@@ -59,16 +64,21 @@ void GameTimer::setCentiseconds(qint64 value)
         }
     }
 }
+
 void GameTimer::start()
 {
     m_isPaused = false;
     timer.start();
     updateTimer.start();
+    emit isRunningChanged();
 }
+
 void GameTimer::stop()
 {
     updateTimer.stop();
+    emit isRunningChanged();
 }
+
 void GameTimer::reset()
 {
     stop();
@@ -80,7 +90,9 @@ void GameTimer::reset()
     updateDisplayTime();
     emit secondChanged();
     emit isPausedChanged();
+    emit isRunningChanged();
 }
+
 void GameTimer::resumeFrom(qint64 centiseconds)
 {
     stop();
@@ -94,6 +106,7 @@ void GameTimer::resumeFrom(qint64 centiseconds)
     emit secondChanged();
     emit displayTimeChanged();
     emit isPausedChanged();
+    emit isRunningChanged();
 }
 
 void GameTimer::pause()
@@ -103,17 +116,18 @@ void GameTimer::pause()
         updateTimer.stop();
         m_isPaused = true;
         emit isPausedChanged();
+        emit isRunningChanged();
     }
 }
 
 void GameTimer::resume()
 {
     if (m_isPaused) {
-        // Update the base time to include the elapsed time before pause
         m_baseTime = m_centiseconds;
         timer.restart();
         updateTimer.start();
         m_isPaused = false;
         emit isPausedChanged();
+        emit isRunningChanged();
     }
 }
