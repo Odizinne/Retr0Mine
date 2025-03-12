@@ -637,7 +637,7 @@ int GameLogic::generateBoard(int firstClickX, int firstClickY, int seed) {
 
     // Check if multi-threaded generation is enabled
     QSettings settings("Odizinne", "Retr0Mine");
-    bool useMultiThreaded = settings.value("multiThreadedBoardGeneration", true).toBool();
+    bool useMultiThreaded = settings.value("multiThreadedBoardGeneration", false).toBool();
 
     // Valid first click coordinates
     bool safeFirstClick = (firstClickX != -1 && firstClickY != -1);
