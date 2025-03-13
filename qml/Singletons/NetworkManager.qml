@@ -664,7 +664,7 @@ QtObject {
 
         let criticalActions = [
             "gameOver", "startGame", "resetMultiplayerGrid",
-            "prepareDifficultyChange", "connectionTestResponse"
+            "prepareDifficultyChange", "connectionTestResponse", "ping"
         ];
 
         if (!minesInitialized && !criticalActions.includes(actionType)) {
