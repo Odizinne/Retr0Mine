@@ -1074,10 +1074,12 @@ QtObject {
 
         sendCellUpdateToClient(lastClickedIndex, "finalReveal");
 
-        // Send game over with information about who clicked the bomb
         Qt.callLater(function() {
-            SteamIntegration.sendGameAction("gameOver", 0);
             SteamIntegration.sendGameAction("bombClickedBy", GameState.bombClickedBy || "unknown");
+
+            Qt.callLater(function() {
+                SteamIntegration.sendGameAction("gameOver", 0);
+            });
         });
 
         return true;
