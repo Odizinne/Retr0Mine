@@ -87,7 +87,7 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            SpinBox {
+            NfSpinBox {
                 id: widthSpinBox
                 Layout.rightMargin: 5
                 from: 8
@@ -106,7 +106,7 @@ Pane {
                 text: qsTr("Height:")
                 Layout.fillWidth: true
             }
-            SpinBox {
+            NfSpinBox {
                 id: heightSpinBox
                 Layout.rightMargin: 5
                 from: 8
@@ -157,7 +157,7 @@ Pane {
                 }
             }
 
-            SpinBox {
+            NfSpinBox {
                 id: minesSpinBox
                 Layout.rightMargin: 5
                 from: 1

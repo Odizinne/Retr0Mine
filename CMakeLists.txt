@@ -49,6 +49,9 @@ set(QML_FILES
     qml/Common/NfButton.qml
     qml/Common/NfRadioButton.qml
     qml/Common/NfSwitch.qml
+    qml/Common/NfComboBox.qml
+    qml/Common/NfSlider.qml
+    qml/Common/NfSpinBox.qml
     qml/Debug/DebugFrame.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml

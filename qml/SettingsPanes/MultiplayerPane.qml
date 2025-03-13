@@ -72,7 +72,7 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            ComboBox {
+            NfComboBox {
                 Layout.rightMargin: 5
                 model: mpPane.colorModel
                 currentIndex: GameSettings.localFlagColorIndex
@@ -90,7 +90,7 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            ComboBox {
+            NfComboBox {
                 Layout.rightMargin: 5
                 model: mpPane.colorModel
                 currentIndex: GameSettings.remoteFlagColorIndex
@@ -107,7 +107,7 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            ComboBox {
+            NfComboBox {
                 Layout.rightMargin: 5
                 model: mpPane.colorModel
                 currentIndex: GameSettings.pingColorIndex

@@ -17,7 +17,7 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            ComboBox {
+            NfComboBox {
                 id: colorComboBox
                 model: [qsTr("None"),
                     qsTr("Deuteranopia"),
@@ -39,7 +39,7 @@ Pane {
                 text: qsTr("Cell size")
                 Layout.fillWidth: true
             }
-            ComboBox {
+            NfComboBox {
                 id: cellSizeComboBox
                 model: [qsTr("Small"), qsTr("Normal"), qsTr("Large")]
                 Layout.rightMargin: 5

@@ -22,7 +22,7 @@ Pane {
                 Layout.rightMargin: 5
             }
 
-            ComboBox {
+            NfComboBox {
                 id: styleComboBox
                 model: ["Fluent", "Universal"]
                 Layout.rightMargin: 5
@@ -46,7 +46,7 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            ComboBox {
+            NfComboBox {
                 id: colorSchemeComboBox
                 model: [qsTr("System"), qsTr("Dark"), qsTr("Light")]
                 Layout.rightMargin: 5

@@ -55,7 +55,7 @@ Pane {
                 text: qsTr("Volume")
                 Layout.fillWidth: true
             }
-            Slider {
+            NfSlider {
                 id: soundVolumeSlider
                 from: 0
                 to: 1
@@ -73,7 +73,7 @@ Pane {
                 text: qsTr("Soundpack")
                 Layout.fillWidth: true
             }
-            ComboBox {
+            NfComboBox {
                 id: soundpackComboBox
                 Layout.rightMargin: 5
                 model: ["Pop", "Windows", "KDE", "Floraphonic"]

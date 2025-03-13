@@ -153,7 +153,7 @@ Pane {
                     text: qsTr("Dim level")
                     Layout.fillWidth: true
                 }
-                Slider {
+                NfSlider {
                     id: dimmedOpacitySlider
                     from: 0.3
                     to: 0.8
@@ -170,7 +170,7 @@ Pane {
                     Layout.fillWidth: true
                 }
 
-                ComboBox {
+                NfComboBox {
                     id: colorSchemeComboBox
                     model: ["Fira Sans", "Noto Serif", "Space Mono", "Orbitron", "Pixelify"]
                     Layout.rightMargin: 5
@@ -189,7 +189,7 @@ Pane {
                     text: qsTr("Grid reset animation")
                     Layout.fillWidth: true
                 }
-                ComboBox {
+                NfComboBox {
                     id: gridResetAnimationComboBox
                     Layout.rightMargin: 5
                     model: ListModel {

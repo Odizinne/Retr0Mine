@@ -17,7 +17,7 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            ComboBox {
+            NfComboBox {
                 id: languageComboBox
                 model: [qsTr("System"),
                     "English",
