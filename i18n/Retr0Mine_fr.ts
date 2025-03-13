@@ -599,32 +599,32 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Une mine a pris %1 par surprise</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="83"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="88"/>
         <source>Revealed cells:</source>
         <translation>Cellules révélées:</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="100"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="95"/>
         <source>First click excluded</source>
         <translation>Premier clic exclu</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="142"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="146"/>
         <source>New record saved</source>
         <translation>Nouveau record sauvegardé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="151"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="155"/>
         <source>Waiting for host to start new game...</source>
         <translation>En attente de l&apos;hôte...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="160"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="164"/>
         <source>Retry</source>
         <translation>Rejouer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="175"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="179"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

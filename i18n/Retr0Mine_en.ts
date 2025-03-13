@@ -598,32 +598,32 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="83"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="88"/>
         <source>Revealed cells:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="100"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="95"/>
         <source>First click excluded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="142"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="146"/>
         <source>New record saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="151"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="155"/>
         <source>Waiting for host to start new game...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="160"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="164"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="175"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="179"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
