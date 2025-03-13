@@ -12,10 +12,6 @@ ApplicationWindow {
     property bool isSaving: false
     property bool isClosing: false
 
-    Label {
-        text: "Bomb triggered by: " + GameState.bombClickedBy
-    }
-
     onClosing: function(close) {
         if (isClosing) {
             close.accepted = true

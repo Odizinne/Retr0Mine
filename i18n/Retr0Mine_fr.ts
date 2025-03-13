@@ -303,15 +303,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="530"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="537"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="544"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="533"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="540"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="547"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="554"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="560"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="557"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="563"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -579,22 +579,42 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>PostgamePopup</name>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="54"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="16"/>
+        <source>%1 triggered a mine</source>
+        <translation>%1  a déclenché une mine</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="17"/>
+        <source>%1 found a mine the hard way</source>
+        <translation>%1 a trouvé une mine, mais pas de la bonne façon</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="18"/>
+        <source>It was certainly not %1&apos;s fault...</source>
+        <translation>Ce n&apos;était vraiment pas de la faute de %1...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="19"/>
+        <source>A mine caught %1 by surprise</source>
+        <translation>Une mine a pris %1 par surprise</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="73"/>
         <source>New record saved</source>
         <translation>Nouveau record sauvegardé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="63"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="82"/>
         <source>Waiting for host to start new game...</source>
         <translation>En attente de l&apos;hôte...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="72"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="91"/>
         <source>Retry</source>
         <translation>Rejouer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="87"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="106"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

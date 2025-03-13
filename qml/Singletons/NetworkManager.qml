@@ -870,7 +870,7 @@ QtObject {
             // Client tracks that it initiated the reveal
             if (!NetworkManager.allowClientReveal) {
                 // Only if direct reveal from client
-                performReveal(index, NetworkManager.clientName);
+                GridBridge.performReveal(index, NetworkManager.clientName);
             }
         }
 

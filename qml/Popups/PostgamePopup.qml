@@ -11,6 +11,16 @@ Popup {
     width: 300
     property int buttonWidth: Math.max(retryButton.implicitWidth, closeButton.implicitWidth)
 
+    function getRandomMineTriggeredPhrase(playerName) {
+        const phrases = [
+            qsTr("%1 triggered a mine").arg(playerName),
+            qsTr("%1 found a mine the hard way").arg(playerName),
+            qsTr("It was certainly not %1's fault...").arg(playerName),
+            qsTr("A mine caught %1 by surprise").arg(playerName)
+        ];
+        return phrases[Math.floor(Math.random() * phrases.length)];
+    }
+
     Shortcut {
         sequence: "Return"
         enabled: control.visible && retryButton.visible
@@ -46,6 +56,15 @@ Popup {
             font.bold: true
             Layout.columnSpan: 2
             color: "#28d13c"
+        }
+
+        Label {
+            id: whoTriggeredLabel
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            text: control.getRandomMineTriggeredPhrase(GameState.bombClickedBy)
+            visible: SteamIntegration.isInMultiplayerGame && !GameState.gameWon
+            Layout.columnSpan: 2
+            font.pixelSize: 13
         }
 
         Label {
