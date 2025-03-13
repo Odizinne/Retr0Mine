@@ -108,10 +108,18 @@ Item {
         console.log("Mine cell:", mineCell, "Explanation:", explanation);
 
         if (mineCell !== -1) {
-            // In multiplayer host mode, we need to send this cell index to the client
+            // In multiplayer host mode, we need to send this cell index AND explanation to the client
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
                 console.log("Host sending hint to client for cell:", mineCell);
-                SteamIntegration.sendGameAction("sendHint", mineCell);
+
+                // Create a structured message containing both cell and explanation
+                const hintData = {
+                    cell: mineCell,
+                    explanation: explanation
+                };
+
+                // Send as JSON string since we need to pass both values
+                SteamIntegration.sendGameAction("sendHint", JSON.stringify(hintData));
             }
 
             withCell(mineCell, function(cell) {

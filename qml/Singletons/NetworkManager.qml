@@ -664,7 +664,7 @@ QtObject {
 
         let criticalActions = [
             "gameOver", "startGame", "resetMultiplayerGrid",
-            "prepareDifficultyChange", "connectionTestResponse"
+            "prepareDifficultyChange", "connectionTestResponse", "ping"
         ];
 
         if (!minesInitialized && !criticalActions.includes(actionType)) {
@@ -796,13 +796,36 @@ QtObject {
                 break;
 
             case "sendHint":
-                GridBridge.withCell(cellIndex, function(cell) {
-                    if (cell && typeof cell.highlightHint === 'function') {
-                        cell.highlightHint();
-                    } else {
-                        console.warn("Cannot highlight hint for cell", cellIndex);
+                try {
+                    // Try to parse the parameter as JSON
+                    const hintData = JSON.parse(cellIndex);
+
+                    // If successful, we have both cell index and explanation
+                    if (hintData && hintData.cell !== undefined) {
+                        // Highlight the cell
+                        GridBridge.withCell(hintData.cell, function(cell) {
+                            if (cell && typeof cell.highlightHint === 'function') {
+                                cell.highlightHint();
+                            } else {
+                                console.warn("Cannot highlight hint for cell", hintData.cell);
+                            }
+                        });
+
+                        // Display the explanation if available
+                        if (hintData.explanation && GridBridge.chatReference) {
+                            GridBridge.chatReference.addBotMessage(hintData.explanation);
+                        }
                     }
-                });
+                } catch (e) {
+                    // Fallback to the old approach for backward compatibility
+                    GridBridge.withCell(cellIndex, function(cell) {
+                        if (cell && typeof cell.highlightHint === 'function') {
+                            cell.highlightHint();
+                        } else {
+                            console.warn("Cannot highlight hint for cell", cellIndex);
+                        }
+                    });
+                }
                 GameState.currentHintCount++;
                 isProcessingNetworkAction = false;
                 break;

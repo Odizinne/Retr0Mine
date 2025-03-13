@@ -421,7 +421,6 @@ ApplicationWindow {
                     Component.onCompleted: {
                         GridBridge.setGrid(grid)
                     }
-                    enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !NetworkManager.allowClientReveal ? false : true
                     delegate: Loader {
                         id: cellLoader
                         asynchronous: true

@@ -248,7 +248,7 @@ Item {
         id: cellButton
         anchors.fill: parent
         anchors.margins: GameState.cellSpacing / 2
-
+        enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !NetworkManager.allowClientReveal ? false : true
         Connections {
             target: cellItem
             function onRevealedChanged() {
@@ -386,8 +386,8 @@ Item {
             property bool isHovered: false
 
             function handleCellClick(mouse) {
+                console.log("pass")
                 // Register player action to reset idle timer
-                GridBridge.registerPlayerAction()
 
                 // Return early if cell is in cooldown but ONLY if a flag action was attempted
                 if (GameState.nextClickIsSignal) {
@@ -396,6 +396,8 @@ Item {
                     pingCooldown.start()
                     return;
                 }
+
+                GridBridge.registerPlayerAction()
 
                 const isRevealClick = GameSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
                 const isFlagClick = !isRevealClick;
