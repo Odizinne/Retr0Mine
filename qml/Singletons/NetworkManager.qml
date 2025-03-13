@@ -909,10 +909,10 @@ QtObject {
         } else {
             SteamIntegration.sendGameAction("reveal", index);
             // Client tracks that it initiated the reveal
-            if (!NetworkManager.allowClientReveal) {
-                // Only if direct reveal from client
-                GridBridge.performReveal(index, NetworkManager.clientName);
-            }
+            //if (!NetworkManager.allowClientReveal) {
+            //    // Only if direct reveal from client
+            //    GridBridge.performReveal(index, NetworkManager.clientName);
+            //}
         }
 
         return true;
