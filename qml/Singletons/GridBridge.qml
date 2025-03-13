@@ -313,7 +313,6 @@ Item {
             cellsRevealed++; // Count each newly revealed cell
 
             if (GameState.mines.includes(currentIndex)) {
-                // Existing bomb handling code...
                 cell.isBombClicked = true;
                 GameState.gameOver = true;
                 GameState.gameWon = false;
@@ -322,7 +321,17 @@ Item {
                 // Update the appropriate counter
                 attributeRevealedCells(cellsRevealed, playerIdentifier);
 
-                // Rest of game over handling...
+                // This is what was missing! The actual game over handling:
+                GameTimer.stop();
+                revealAllMines();
+                if (audioEngine) audioEngine.playLoose();
+                GameState.displayPostGame = true;
+
+                // In multiplayer, if we're the host, send game over notification to client
+                if (NetworkManager.onGameLost(currentIndex)) {
+                    // Handled by multiplayer
+                }
+
                 return;
             }
 

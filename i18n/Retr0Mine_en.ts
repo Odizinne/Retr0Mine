@@ -302,15 +302,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="511"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="518"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="525"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="513"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="520"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="527"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="535"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="541"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="537"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="543"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -603,27 +603,27 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="96"/>
-        <source>First reveal excluded</source>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="100"/>
+        <source>First click excluded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="135"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="142"/>
         <source>New record saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="144"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="151"/>
         <source>Waiting for host to start new game...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="153"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="160"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="168"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="175"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

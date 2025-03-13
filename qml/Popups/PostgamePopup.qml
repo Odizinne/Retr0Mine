@@ -83,47 +83,54 @@ Popup {
             text: qsTr("Revealed cells:")
             font.bold: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            font.pixelSize: 13
+            font.pixelSize: 14
             Layout.columnSpan: 2
             visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
         }
 
-        ColumnLayout {
-            spacing: 10
+        Frame {
+            visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
             Layout.columnSpan: 2
+            Layout.fillWidth: true
+            ColumnLayout {
+                spacing: 10
+                anchors.fill: parent
 
-            Label {
-                text: qsTr("First reveal excluded")
-                font.italic: true
-            }
-
-            RowLayout {
-                Layout.preferredWidth: 200
                 Label {
-                    Layout.fillWidth: true
-                    font.bold: true
-                    text: NetworkManager.hostName
+                    text: qsTr("First click excluded")
+                    //font.italic: true
+                    font.pixelSize: 11
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
-                Label {
-                    text: {
-                        const total = GameState.hostRevealed + GameState.clientRevealed;
-                        const percentage = total > 0 ? Math.round((GameState.hostRevealed / total) * 100) : 0;
-                        return GameState.hostRevealed + " (" + percentage + "%)";
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Label {
+                        Layout.fillWidth: true
+                        font.bold: true
+                        text: NetworkManager.hostName
+                    }
+                    Label {
+                        text: {
+                            const total = GameState.hostRevealed + GameState.clientRevealed;
+                            const percentage = total > 0 ? Math.round((GameState.hostRevealed / total) * 100) : 0;
+                            return GameState.hostRevealed + " (" + percentage + "%)";
+                        }
                     }
                 }
-            }
-            RowLayout {
-                Layout.preferredWidth: 200
-                Label {
+                RowLayout {
                     Layout.fillWidth: true
-                    font.bold: true
-                    text: NetworkManager.clientName
-                }
-                Label {
-                    text: {
-                        const total = GameState.hostRevealed + GameState.clientRevealed;
-                        const percentage = total > 0 ? Math.round((GameState.clientRevealed / total) * 100) : 0;
-                        return GameState.clientRevealed + " (" + percentage + "%)";
+                    Label {
+                        Layout.fillWidth: true
+                        font.bold: true
+                        text: NetworkManager.clientName
+                    }
+                    Label {
+                        text: {
+                            const total = GameState.hostRevealed + GameState.clientRevealed;
+                            const percentage = total > 0 ? Math.round((GameState.clientRevealed / total) * 100) : 0;
+                            return GameState.clientRevealed + " (" + percentage + "%)";
+                        }
                     }
                 }
             }
