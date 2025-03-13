@@ -174,6 +174,34 @@ Item {
     property int settingsColumnSpacing: GameSettings.themeIndex === 0 ? 15 : 20
     property int settingsComponentsHeight: GameSettings.themeIndex === 0 ? 35 : 32
     property string retr0mineLogo: getForegroundColor() === "white" ? "qrc:/images/retr0mine_logo.png" : "qrc:/images/retr0mine_logo_dark.png"
+
+    function getRightClickExplanation() {
+        if (!GameSettings.invertLRClick) {
+            return qsTr("Flag")
+        } else {
+            return qsTr("Reveal")
+        }
+    }
+
+    function getLeftClickExplanation() {
+        if (!GameSettings.invertLRClick) {
+            return qsTr("Reveal")
+        } else {
+            return qsTr("Flag")
+        }
+    }
+
+    function getMouseImage() {
+        if (GameSettings.invertLRClick) {
+            return getForegroundColor() === "white" ? "qrc:/images/mouse_right_light.png" : "qrc:/images/mouse_right_dark.png"
+        } else {
+            return getForegroundColor() === "white" ? "qrc:/images/mouse_left_light.png" : "qrc:/images/mouse_left_dark.png"
+        }
+    }
+
+    property string leftClickExplanation: getLeftClickExplanation()
+    property string rightClickExplanation: getRightClickExplanation()
+    property string mouseImage: getMouseImage()
 }
 
 

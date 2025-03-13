@@ -139,6 +139,21 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
 </context>
 <context>
+    <name>GameConstants</name>
+    <message>
+        <location filename="../qml/Singletons/GameConstants.qml" line="180"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="190"/>
+        <source>Flag</source>
+        <translation>Drapeau</translation>
+    </message>
+    <message>
+        <location filename="../qml/Singletons/GameConstants.qml" line="182"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="188"/>
+        <source>Reveal</source>
+        <translation>Révéler</translation>
+    </message>
+</context>
+<context>
     <name>GameLogic</name>
     <message>
         <location filename="../src/gamelogic.cpp" line="1679"/>
@@ -303,15 +318,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="520"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="527"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="534"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="528"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="535"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="542"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="544"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="550"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="552"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="558"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -319,7 +334,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>InviteReceivedPopup</name>
     <message>
-        <location filename="../qml/Popups/InviteReceivedPopup.qml" line="24"/>
+        <location filename="../qml/Popups/InviteReceivedPopup.qml" line="34"/>
         <source> wants to play!</source>
         <translation> veut jouer!</translation>
     </message>
@@ -599,32 +614,32 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Une mine a pris %1 par surprise</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="88"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="90"/>
         <source>Revealed cells:</source>
         <translation>Cellules révélées:</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="95"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="98"/>
         <source>First click excluded</source>
         <translation>Premier clic exclu</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="146"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="150"/>
         <source>New record saved</source>
         <translation>Nouveau record sauvegardé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="155"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="159"/>
         <source>Waiting for host to start new game...</source>
         <translation>En attente de l&apos;hôte...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="164"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="168"/>
         <source>Retry</source>
         <translation>Rejouer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="179"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="183"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -1049,83 +1064,77 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="87"/>
-        <source>- Left click on cell to reveal
-- Right click on cell to flag</source>
-        <translation>- Clique gauche sur une cellule pour révéler
-- Clique droit sur une cellule pour poser un drapeau</translation>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="78"/>
+        <source>Mouse settings</source>
+        <translation>Paramètres de souris</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="106"/>
-        <source>- Any click on satisfied number to reveal
-- Left click on cell to flag
-- Right click on cell to reveal</source>
-        <translation>- Clique sur un chiffre satisfait pour révéler
-- Clique gauche sur une cellule pour poser un drapeau
-- Clique droit sur une cellule pour révéler</translation>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="120"/>
+        <source>Any click on satisfied number to reveal surroundings</source>
+        <translation>N&apos;importe quel clic sur un chiffre satisfait pour réveler ses alentours</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="115"/>
-        <source>Chord</source>
-        <translation>Accord</translation>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="128"/>
+        <source>Inverted</source>
+        <translation>Inversé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="115"/>
-        <source>Classic</source>
-        <translation>Classique</translation>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="128"/>
+        <source>Normal</source>
+        <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="375"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="383"/>
         <source>Enable enhanced visuals</source>
         <translation>Activer les améliorations visuelles</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="398"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="406"/>
         <source>System color for flags</source>
         <translation>Couleur système pour les drapeaux</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="418"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="426"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="438"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="446"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="651"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="659"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="869"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="877"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1091"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1099"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1309"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1317"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1331"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1339"/>
         <source>You&apos;re all set!</source>
         <translation>Tout est prêt!</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1337"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1345"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1348"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1356"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

@@ -138,6 +138,21 @@ Current game will be saved and restored</source>
     </message>
 </context>
 <context>
+    <name>GameConstants</name>
+    <message>
+        <location filename="../qml/Singletons/GameConstants.qml" line="180"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="190"/>
+        <source>Flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Singletons/GameConstants.qml" line="182"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="188"/>
+        <source>Reveal</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GameLogic</name>
     <message>
         <location filename="../src/gamelogic.cpp" line="1679"/>
@@ -302,15 +317,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="520"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="527"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="534"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="528"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="535"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="542"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="544"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="550"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="552"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="558"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -318,7 +333,7 @@ Current game will be saved and restored</source>
 <context>
     <name>InviteReceivedPopup</name>
     <message>
-        <location filename="../qml/Popups/InviteReceivedPopup.qml" line="24"/>
+        <location filename="../qml/Popups/InviteReceivedPopup.qml" line="34"/>
         <source> wants to play!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -598,32 +613,32 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="88"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="90"/>
         <source>Revealed cells:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="95"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="98"/>
         <source>First click excluded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="146"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="150"/>
         <source>New record saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="155"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="159"/>
         <source>Waiting for host to start new game...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="164"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="168"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="179"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="183"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1028,80 +1043,77 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="87"/>
-        <source>- Left click on cell to reveal
-- Right click on cell to flag</source>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="78"/>
+        <source>Mouse settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="106"/>
-        <source>- Any click on satisfied number to reveal
-- Left click on cell to flag
-- Right click on cell to reveal</source>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="120"/>
+        <source>Any click on satisfied number to reveal surroundings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="115"/>
-        <source>Chord</source>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="128"/>
+        <source>Inverted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="115"/>
-        <source>Classic</source>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="128"/>
+        <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="375"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="383"/>
         <source>Enable enhanced visuals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="398"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="406"/>
         <source>System color for flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="418"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="426"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="438"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="446"/>
         <source>Color correction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="651"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="659"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="869"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="877"/>
         <source>Tritanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1091"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1099"/>
         <source>Protanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1309"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1317"/>
         <source>Deuteranopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1331"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1339"/>
         <source>You&apos;re all set!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1337"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1345"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1348"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1356"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

@@ -107,7 +107,7 @@ void GameCore::resetSettings()
     settings.setValue("languageIndex", 0);
     settings.setValue("difficulty", 0);
     settings.setValue("invertLRClick", false);
-    settings.setValue("autoreveal", false);
+    settings.setValue("autoreveal", true);
     settings.setValue("enableQuestionMarks", true);
     settings.setValue("loadLastGame", false);
     settings.setValue("soundEffects", true);

@@ -392,10 +392,6 @@ Item {
             property bool isHovered: false
 
             function handleCellClick(mouse) {
-                console.log("pass")
-                // Register player action to reset idle timer
-
-                // Return early if cell is in cooldown but ONLY if a flag action was attempted
                 if (GameState.nextClickIsSignal) {
                     GameState.nextClickIsSignal = false
                     NetworkManager.sendPing(cellItem.index)

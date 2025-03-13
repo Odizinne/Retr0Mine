@@ -52,7 +52,7 @@ Popup {
                     control.visible = false
                     initialConfig.visible = false
                     controlsConfig.visible = true
-                    control.height = 350
+                    control.height = 400
                     control.visible = true
                 }
             }
@@ -71,48 +71,61 @@ Popup {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
 
-            AnimatedImage {
-                id: classicImage
+            Label {
                 Layout.alignment: Qt.AlignHCenter
-                source: "qrc:/images/classic.gif"
-                sourceSize.height: 116
-                sourceSize.width: 116
+                horizontalAlignment:  Text.AlignHCenter
+                Layout.fillWidth: true
+                text: qsTr("Mouse settings")
+                font.pixelSize: 18
+                font.bold: true
+            }
+
+            RowLayout {
+                property int labelSize: Math.max(leftCLabel.implicitWidth, rightCLabel.implicitWidth)
+                Label {
+                    id: leftCLabel
+                    Layout.alignment: Qt.AlignTop
+                    horizontalAlignment:  Text.AlignRight
+                    text: GameConstants.leftClickExplanation
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: parent.labelSize
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 16
+                }
+
+                Image {
+                    id: mouseImage
+                    Layout.alignment: Qt.AlignHCenter
+                    source: GameConstants.mouseImage
+                    sourceSize.height: 164
+                    sourceSize.width: 164
+                }
+
+                Label {
+                    id: rightCLabel
+                    Layout.alignment: Qt.AlignTop
+                    horizontalAlignment:  Text.AlignLeft
+                    text: GameConstants.rightClickExplanation
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 16
+                    Layout.preferredWidth: parent.labelSize
+                }
             }
 
             Label {
-                id: classicLabel
-                Layout.preferredHeight: chordLabel.height
                 Layout.alignment: Qt.AlignHCenter
-                horizontalAlignment:  Qt.AlignHCenter
-                text: qsTr("- Left click on cell to reveal\n- Right click on cell to flag")
+                horizontalAlignment:  Text.AlignHCenter
+                color: "#f6ae57"
+                text: qsTr("Any click on satisfied number to reveal surroundings")
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
-            }
-
-            AnimatedImage {
-                id: chordImage
-                visible: false
-                Layout.alignment: Qt.AlignHCenter
-                source: "qrc:/images/chord.gif"
-                sourceSize.height: 116
-                sourceSize.width: 116
-            }
-
-            Label {
-                id: chordLabel
-                visible: false
-                Layout.alignment: Qt.AlignHCenter
-                horizontalAlignment:  Qt.AlignHCenter
-                text: qsTr("- Any click on satisfied number to reveal\n- Left click on cell to flag\n- Right click on cell to reveal")
-                Layout.fillWidth: true
-                wrapMode: Text.Wrap
-
             }
         }
 
         RowLayout {
             Label {
-                text: gameplaySwitch.checked ? qsTr("Chord") : qsTr("Classic")
+                text: gameplaySwitch.checked ? qsTr("Inverted") : qsTr("Normal")
             }
 
             Item {
@@ -122,11 +135,6 @@ Popup {
             NfSwitch {
                 id: gameplaySwitch
                 onCheckedChanged: {
-                    chordLabel.visible = checked
-                    chordImage.visible = checked
-                    classicLabel.visible = !checked
-                    classicImage.visible = !checked
-                    GameSettings.autoreveal = checked
                     GameSettings.invertLRClick = checked
                 }
             }

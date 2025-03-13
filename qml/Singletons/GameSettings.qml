@@ -9,7 +9,7 @@ Settings {
     property int languageIndex: 0
     property int difficulty: 0
     property bool invertLRClick: false
-    property bool autoreveal: false
+    property bool autoreveal: true
     property bool enableQuestionMarks: true
     property bool enableSafeQuestionMarks: true
     property bool loadLastGame: false
