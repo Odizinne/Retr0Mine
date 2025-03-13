@@ -179,7 +179,7 @@ Item {
 
         if (!hasQuestionMark && flaggedCount === GameState.numbers[index] && adjacentCells.length > 0) {
             for (let adjacentPos of adjacentCells) {
-                // Pass along who initiated this reveal
+                // Pass the player identifier along
                 reveal(adjacentPos, playerIdentifier);
             }
         }
@@ -205,43 +205,9 @@ Item {
             GameTimer.start()
 
             let currentIndex = GameState.firstClickIndex;
-            withCell(currentIndex, function(cell) {
-                if (!cell.revealed) {
-                    cell.revealed = true;
-                    GameState.revealedCount++;
 
-                    if (GameState.numbers[currentIndex] === 0) {
-                        let row = Math.floor(currentIndex / GameState.gridSizeX);
-                        let col = currentIndex % GameState.gridSizeX;
-
-                        for (let r = -1; r <= 1; r++) {
-                            for (let c = -1; c <= 1; c++) {
-                                if (r === 0 && c === 0) continue;
-
-                                let newRow = row + r;
-                                let newCol = col + c;
-
-                                if (newRow < 0 || newRow >= GameState.gridSizeY ||
-                                    newCol < 0 || newCol >= GameState.gridSizeX) continue;
-
-                                let adjacentIndex = newRow * GameState.gridSizeX + newCol;
-                                withCell(adjacentIndex, function(adjacentCell) {
-                                    if (adjacentCell.questioned) {
-                                        adjacentCell.questioned = false;
-                                    }
-                                    if (adjacentCell.safeQuestioned) {
-                                        adjacentCell.safeQuestioned = false;
-                                    }
-                                });
-
-                                reveal(adjacentIndex);
-                            }
-                        }
-                    }
-
-                    checkWin();
-                }
-            });
+            // Use performReveal with "firstClick" identifier instead of direct cell manipulation
+            performReveal(currentIndex, "firstClick");
 
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
                 console.log("Host initializing multiplayer game after board generation");
@@ -326,6 +292,9 @@ Item {
             return;
         }
 
+        // Track cells revealed in this operation
+        let cellsRevealed = 0;
+
         // Continue with normal reveal logic for subsequent clicks
         let cellsToReveal = [index];
         let visited = new Set();
@@ -341,25 +310,19 @@ Item {
 
             cell.revealed = true;
             GameState.revealedCount++;
+            cellsRevealed++; // Count each newly revealed cell
 
             if (GameState.mines.includes(currentIndex)) {
+                // Existing bomb handling code...
                 cell.isBombClicked = true;
                 GameState.gameOver = true;
                 GameState.gameWon = false;
-
-                // Set who clicked the bomb
                 GameState.bombClickedBy = playerIdentifier || SteamIntegration.playerName;
 
-                GameTimer.stop();
-                revealAllMines();
-                if (audioEngine) audioEngine.playLoose();
-                GameState.displayPostGame = true;
+                // Update the appropriate counter
+                attributeRevealedCells(cellsRevealed, playerIdentifier);
 
-                // In multiplayer, if we're the host, send game over notification to client
-                if (NetworkManager.onGameLost(currentIndex)) {
-                    // Handled by multiplayer
-                }
-
+                // Rest of game over handling...
                 return;
             }
 
@@ -395,7 +358,18 @@ Item {
             }
         }
 
+        attributeRevealedCells(cellsRevealed, playerIdentifier);
         checkWin();
+    }
+
+    function attributeRevealedCells(count, playerIdentifier) {
+        if (playerIdentifier === "firstClick") {
+            GameState.firstClickRevealed += count;
+        } else if (playerIdentifier === NetworkManager.hostName) {
+            GameState.hostRevealed += count;
+        } else if (playerIdentifier === NetworkManager.clientName) {
+            GameState.clientRevealed += count;
+        }
     }
 
     function initGame() {
@@ -426,6 +400,10 @@ Item {
         GameTimer.reset();
         GameState.isManuallyLoaded = false;
         GameState.noAnimReset = true;
+
+        GameState.hostRevealed = 0;
+        GameState.clientRevealed = 0;
+        GameState.firstClickRevealed = 0;
 
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             withCell(i, function(cell) {

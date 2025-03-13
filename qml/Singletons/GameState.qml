@@ -77,7 +77,9 @@ QtObject {
     property bool nextClickIsSignal: false
     property bool ignoreInternalGameState: false
     property string bombClickedBy: ""
-
+    property int hostRevealed: 0
+    property int clientRevealed: 0
+    property int firstClickRevealed: 0
     signal botMessageSent()
 
     onPausedChanged: {

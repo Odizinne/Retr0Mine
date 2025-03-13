@@ -438,6 +438,20 @@ QtObject {
             return;
         }
 
+        if (gameState.action === "gameStats" && gameState.stats) {
+            if (!SteamIntegration.isHost) {
+                // Set the client's game stats to match what the host sent
+                GameState.hostRevealed = gameState.stats.hostRevealed || 0;
+                GameState.clientRevealed = gameState.stats.clientRevealed || 0;
+                GameState.firstClickRevealed = gameState.stats.firstClickRevealed || 0;
+
+                if (gameState.stats.bombClickedBy) {
+                    GameState.bombClickedBy = gameState.stats.bombClickedBy;
+                }
+            }
+            return;
+        }
+
         if (gameState.gridSync) {
             handleMultiplayerGridSync(gameState);
             return;
@@ -883,11 +897,9 @@ QtObject {
         }
 
         if (SteamIntegration.isHost) {
-            // Host uses its own name when self-initiating
             GridBridge.performRevealConnectedCells(index, NetworkManager.hostName);
             sendCellUpdateToClient(index, "revealConnected");
         } else {
-            // Client sends action to host but tracks that client initiated it
             SteamIntegration.sendGameAction("revealConnected", index);
             GridBridge.performRevealConnectedCells(index, NetworkManager.clientName);
         }
@@ -997,8 +1009,23 @@ QtObject {
                 }
             }
 
+            // Create a stats object to send to the client
+            const gameStats = {
+                hostRevealed: GameState.hostRevealed,
+                clientRevealed: GameState.clientRevealed,
+                firstClickRevealed: GameState.firstClickRevealed
+            };
+
+            // Send the stats along with the gameOver signal
             Qt.callLater(function() {
+                // Send game over with win status (1)
                 SteamIntegration.sendGameAction("gameOver", 1);
+
+                // Send the stats as a separate action
+                SteamIntegration.sendGameState({
+                    action: "gameStats",
+                    stats: gameStats
+                });
             });
         }
 

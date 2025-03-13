@@ -5,12 +5,27 @@ import QtQuick.Controls
 import QtQuick.Window
 import net.odizinne.retr0mine 1.0
 import QtQuick.Effects
+import QtQuick.Layouts
 
 ApplicationWindow {
     id: root
     visibility: ApplicationWindow.Hidden
     property bool isSaving: false
     property bool isClosing: false
+
+    RowLayout {
+        Label {
+            text: "host " + GameState.hostRevealed
+        }
+
+        Label {
+            text: "Client " + GameState.clientRevealed
+        }
+
+        Label {
+            text: "firstclick " + GameState.firstClickRevealed
+        }
+    }
 
     onClosing: function(close) {
         if (isClosing) {

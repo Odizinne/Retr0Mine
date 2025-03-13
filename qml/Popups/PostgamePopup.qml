@@ -20,11 +20,11 @@ Popup {
     function getRandomMineTriggeredPhrase(playerName) {
         const boldPlayerName = "<b>" + playerName + "</b>";
         const phrases = [
-            qsTr("%1 triggered a mine").arg(boldPlayerName),
-            qsTr("%1 found a mine the hard way").arg(boldPlayerName),
-            qsTr("It was certainly not %1's fault...").arg(boldPlayerName),
-            qsTr("A mine caught %1 by surprise").arg(boldPlayerName)
-        ];
+                          qsTr("%1 triggered a mine").arg(boldPlayerName),
+                          qsTr("%1 found a mine the hard way").arg(boldPlayerName),
+                          qsTr("It was certainly not %1's fault...").arg(boldPlayerName),
+                          qsTr("A mine caught %1 by surprise").arg(boldPlayerName)
+                      ];
         return phrases[Math.floor(Math.random() * phrases.length)];
     }
 
@@ -77,6 +77,56 @@ Popup {
             wrapMode: Text.WordWrap
             textFormat: Text.RichText
             horizontalAlignment: Text.AlignHCenter
+        }
+
+        Label {
+            text: qsTr("Revealed cells:")
+            font.bold: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            font.pixelSize: 13
+            Layout.columnSpan: 2
+            visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
+        }
+
+        ColumnLayout {
+            spacing: 10
+            Layout.columnSpan: 2
+
+            Label {
+                text: qsTr("First reveal excluded")
+                font.italic: true
+            }
+
+            RowLayout {
+                Layout.preferredWidth: 200
+                Label {
+                    Layout.fillWidth: true
+                    font.bold: true
+                    text: NetworkManager.hostName
+                }
+                Label {
+                    text: {
+                        const total = GameState.hostRevealed + GameState.clientRevealed;
+                        const percentage = total > 0 ? Math.round((GameState.hostRevealed / total) * 100) : 0;
+                        return GameState.hostRevealed + " (" + percentage + "%)";
+                    }
+                }
+            }
+            RowLayout {
+                Layout.preferredWidth: 200
+                Label {
+                    Layout.fillWidth: true
+                    font.bold: true
+                    text: NetworkManager.clientName
+                }
+                Label {
+                    text: {
+                        const total = GameState.hostRevealed + GameState.clientRevealed;
+                        const percentage = total > 0 ? Math.round((GameState.clientRevealed / total) * 100) : 0;
+                        return GameState.clientRevealed + " (" + percentage + "%)";
+                    }
+                }
+            }
         }
 
         Label {
