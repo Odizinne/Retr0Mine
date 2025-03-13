@@ -248,6 +248,7 @@ QtObject {
         isReconnecting = false;
         syncErrorCount = 0;
         lastSyncError = null;
+        cellOwnership = ([])
 
         if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost &&
             SteamIntegration.connectionState === SteamIntegration.Connected) {
@@ -777,6 +778,7 @@ QtObject {
                 allowClientReveal = false;
                 pendingActions = [];
                 isProcessingNetworkAction = false;
+                cellOwnership = ([])
 
                 try {
                     GridBridge.performInitGame();
@@ -843,6 +845,7 @@ QtObject {
                 allowClientReveal = false;
                 pendingActions = [];
                 isProcessingNetworkAction = false;
+                cellOwnership = ([])
 
                 GameState.difficultyChanged = true;
                 GridBridge.initGame();
@@ -867,6 +870,7 @@ QtObject {
                     sessionRunning = false;
                     pendingActions = [];
                     isProcessingNetworkAction = false;
+                    cellOwnership = ([])
 
                     GridBridge.initGame();
                 } else {
@@ -1119,6 +1123,7 @@ QtObject {
         pendingInitialActions = [];
         pendingActions = [];
         isProcessingNetworkAction = false;
+        cellOwnership = ([])
 
         GameState.difficultyChanged = true;
         GridBridge.initGame();
