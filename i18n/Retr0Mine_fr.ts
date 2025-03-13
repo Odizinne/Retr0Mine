@@ -303,15 +303,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="513"/>
         <location filename="../qml/Singletons/GridBridge.qml" line="520"/>
         <location filename="../qml/Singletons/GridBridge.qml" line="527"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="534"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="537"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="543"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="544"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="550"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -601,12 +601,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="83"/>
         <source>Revealed cells:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cellules révélées:</translation>
     </message>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="100"/>
         <source>First click excluded</source>
-        <translation type="unfinished"></translation>
+        <translation>Premier clic exclu</translation>
     </message>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="142"/>

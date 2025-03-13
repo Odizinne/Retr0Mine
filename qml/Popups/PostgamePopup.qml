@@ -98,7 +98,7 @@ Popup {
 
                 Label {
                     text: qsTr("First click excluded")
-                    //font.italic: true
+                    color: "#f6ae57"
                     font.pixelSize: 11
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
