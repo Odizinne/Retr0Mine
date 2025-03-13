@@ -27,6 +27,7 @@ Popup {
             ComponentsContext.restorePopupVisible = false
             ComponentsContext.aboutPopupVisible = false
             ComponentsContext.rulesPopupVisible = false
+            ComponentsContext.playerLeftPopupVisible = false
             GameState.displayPostGame = false
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 ComponentsContext.settingsWindowVisible = false

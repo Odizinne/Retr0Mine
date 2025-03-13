@@ -1,11 +1,14 @@
+import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import net.odizinne.retr0mine
 
 Popup {
     id: control
     property string playerName: ""
     modal: true
     closePolicy: Popup.NoAutoClose
+    visible: ComponentsContext.playerLeftPopupVisible
 
     ColumnLayout {
         anchors.fill: parent
@@ -21,7 +24,7 @@ Popup {
             Layout.preferredWidth: implicitWidth + 20
             Layout.alignment: Qt.AlignCenter
             onClicked: {
-                control.visible = false
+                ComponentsContext.playerLeftPopupVisible = false
             }
         }
     }

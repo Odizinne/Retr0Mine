@@ -104,7 +104,7 @@ ApplicationWindow {
 
         function onNotifyConnectionLost(message) {
             playerLeftPopup.playerName = message
-            playerLeftPopup.visible = true
+            ComponentsContext.playerLeftPopupVisible = true
         }
     }
 
