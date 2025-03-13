@@ -579,7 +579,7 @@ QtObject {
             break;
 
         case "reveal":
-            GridBridge.performReveal(cellIndex);
+            GridBridge.performReveal(cellIndex, NetworkManager.clientName);
             break;
 
         case "flag":
@@ -587,7 +587,7 @@ QtObject {
             break;
 
         case "revealConnected":
-            GridBridge.performRevealConnectedCells(cellIndex);
+            GridBridge.performRevealConnectedCells(cellIndex, NetworkManager.clientName);
             break;
 
         case "requestSync":
@@ -840,6 +840,11 @@ QtObject {
             case "connectionTestResponse":
                 break;
 
+            case "bombClickedBy":
+                GameState.bombClickedBy = cellIndex;
+                isProcessingNetworkAction = false;
+                break;
+
             default:
                 console.error("Client received unknown action type:", actionType);
         }
@@ -847,7 +852,7 @@ QtObject {
         isProcessingNetworkAction = false;
     }
 
-    function handleMultiplayerReveal(index) {
+    function handleMultiplayerReveal(index, playerIdentifier) {
         if (!SteamIntegration.isInMultiplayerGame) {
             return false;
         }
@@ -858,10 +863,15 @@ QtObject {
                 return true;
             }
 
-            GridBridge.performReveal(index);
+            GridBridge.performReveal(index, playerIdentifier || NetworkManager.hostName);
             SteamIntegration.sendGameAction("approveReveal", index);
         } else {
             SteamIntegration.sendGameAction("reveal", index);
+            // Client tracks that it initiated the reveal
+            if (!NetworkManager.allowClientReveal) {
+                // Only if direct reveal from client
+                performReveal(index, NetworkManager.clientName);
+            }
         }
 
         return true;
@@ -873,11 +883,13 @@ QtObject {
         }
 
         if (SteamIntegration.isHost) {
-            GridBridge.performRevealConnectedCells(index);
+            // Host uses its own name when self-initiating
+            GridBridge.performRevealConnectedCells(index, NetworkManager.hostName);
             sendCellUpdateToClient(index, "revealConnected");
         } else {
+            // Client sends action to host but tracks that client initiated it
             SteamIntegration.sendGameAction("revealConnected", index);
-            GridBridge.performRevealConnectedCells(index);
+            GridBridge.performRevealConnectedCells(index, NetworkManager.clientName);
         }
 
         return true;
@@ -1008,8 +1020,10 @@ QtObject {
 
         sendCellUpdateToClient(lastClickedIndex, "finalReveal");
 
+        // Send game over with information about who clicked the bomb
         Qt.callLater(function() {
             SteamIntegration.sendGameAction("gameOver", 0);
+            SteamIntegration.sendGameAction("bombClickedBy", GameState.bombClickedBy || "unknown");
         });
 
         return true;

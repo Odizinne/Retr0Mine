@@ -137,7 +137,7 @@ Item {
         performRevealConnectedCells(index);
     }
 
-    function performRevealConnectedCells(index) {
+    function performRevealConnectedCells(index, playerIdentifier) {
         if (!GameSettings.autoreveal || !GameState.gameStarted || GameState.gameOver) return;
 
         const cell = getCell(index);
@@ -179,7 +179,8 @@ Item {
 
         if (!hasQuestionMark && flaggedCount === GameState.numbers[index] && adjacentCells.length > 0) {
             for (let adjacentPos of adjacentCells) {
-                reveal(adjacentPos);
+                // Pass along who initiated this reveal
+                reveal(adjacentPos, playerIdentifier);
             }
         }
     }
@@ -302,18 +303,20 @@ Item {
         return true;
     }
 
-    function reveal(index) {
-        // Check if we're in multiplayer
+    function reveal(index, playerIdentifier) {
+        // Register player action to reset idle timer
         registerPlayerAction()
-        if (NetworkManager.handleMultiplayerReveal(index)) {
+
+        // Check if we're in multiplayer
+        if (NetworkManager.handleMultiplayerReveal(index, playerIdentifier)) {
             return; // Action handled by multiplayer
         }
 
         // Regular single-player reveal
-        performReveal(index);
+        performReveal(index, playerIdentifier);
     }
 
-    function performReveal(index) {
+    function performReveal(index, playerIdentifier) {
         const initialCell = getCell(index);
         if (!initialCell || GameState.gameOver || initialCell.revealed || initialCell.flagged) return;
 
@@ -343,6 +346,10 @@ Item {
                 cell.isBombClicked = true;
                 GameState.gameOver = true;
                 GameState.gameWon = false;
+
+                // Set who clicked the bomb
+                GameState.bombClickedBy = playerIdentifier || SteamIntegration.playerName;
+
                 GameTimer.stop();
                 revealAllMines();
                 if (audioEngine) audioEngine.playLoose();
