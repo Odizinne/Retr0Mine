@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.impl
-import QtQuick.Controls
 import net.odizinne.retr0mine 1.0
 
 Item {
@@ -26,6 +25,13 @@ Item {
     property bool inCooldown: false
     property bool localPlayerOwns: false
     property bool shakeConditionsMet: false
+
+    Connections {
+        target: GameState
+        function onGameOverChanged() {
+            pingCooldown.stop()
+        }
+    }
 
     function highlightHint() {
         hintAnimation.start();
