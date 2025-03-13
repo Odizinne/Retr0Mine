@@ -579,42 +579,42 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>PostgamePopup</name>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="16"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="23"/>
         <source>%1 triggered a mine</source>
         <translation>%1  a déclenché une mine</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="17"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="24"/>
         <source>%1 found a mine the hard way</source>
         <translation>%1 a trouvé une mine, mais pas de la bonne façon</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="18"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="25"/>
         <source>It was certainly not %1&apos;s fault...</source>
         <translation>Ce n&apos;était vraiment pas de la faute de %1...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="19"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="26"/>
         <source>A mine caught %1 by surprise</source>
         <translation>Une mine a pris %1 par surprise</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="73"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="85"/>
         <source>New record saved</source>
         <translation>Nouveau record sauvegardé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="82"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="94"/>
         <source>Waiting for host to start new game...</source>
         <translation>En attente de l&apos;hôte...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="91"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="103"/>
         <source>Retry</source>
         <translation>Rejouer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="106"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="118"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

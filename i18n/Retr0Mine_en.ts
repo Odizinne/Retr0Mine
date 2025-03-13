@@ -578,42 +578,42 @@ Current game will be saved and restored</source>
 <context>
     <name>PostgamePopup</name>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="16"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="23"/>
         <source>%1 triggered a mine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="17"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="24"/>
         <source>%1 found a mine the hard way</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="18"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="25"/>
         <source>It was certainly not %1&apos;s fault...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="19"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="26"/>
         <source>A mine caught %1 by surprise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="73"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="85"/>
         <source>New record saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="82"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="94"/>
         <source>Waiting for host to start new game...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="91"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="103"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="106"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="118"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

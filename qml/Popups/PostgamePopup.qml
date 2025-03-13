@@ -9,14 +9,21 @@ Popup {
     modal: true
     closePolicy: Popup.NoAutoClose
     width: 300
-    property int buttonWidth: Math.max(retryButton.implicitWidth, closeButton.implicitWidth)
+    property int buttonWidth: Math.max(retryButton.implicitWidth, closeButton.implicitWidth) + 20
+
+    onVisibleChanged: {
+        if (visible) {
+            whoTriggeredLabel.text = getRandomMineTriggeredPhrase(GameState.bombClickedBy)
+        }
+    }
 
     function getRandomMineTriggeredPhrase(playerName) {
+        const boldPlayerName = "<b>" + playerName + "</b>";
         const phrases = [
-            qsTr("%1 triggered a mine").arg(playerName),
-            qsTr("%1 found a mine the hard way").arg(playerName),
-            qsTr("It was certainly not %1's fault...").arg(playerName),
-            qsTr("A mine caught %1 by surprise").arg(playerName)
+            qsTr("%1 triggered a mine").arg(boldPlayerName),
+            qsTr("%1 found a mine the hard way").arg(boldPlayerName),
+            qsTr("It was certainly not %1's fault...").arg(boldPlayerName),
+            qsTr("A mine caught %1 by surprise").arg(boldPlayerName)
         ];
         return phrases[Math.floor(Math.random() * phrases.length)];
     }
@@ -34,6 +41,7 @@ Popup {
     }
 
     GridLayout {
+        id: lyt
         anchors.fill: parent
         columns: 2
         rowSpacing: 15
@@ -61,10 +69,14 @@ Popup {
         Label {
             id: whoTriggeredLabel
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.preferredWidth: 200
             text: control.getRandomMineTriggeredPhrase(GameState.bombClickedBy)
             visible: SteamIntegration.isInMultiplayerGame && !GameState.gameWon
             Layout.columnSpan: 2
             font.pixelSize: 13
+            wrapMode: Text.WordWrap
+            textFormat: Text.RichText
+            horizontalAlignment: Text.AlignHCenter
         }
 
         Label {
