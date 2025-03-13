@@ -591,7 +591,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="25"/>
         <source>It was certainly not %1&apos;s fault...</source>
-        <translation>Ce n&apos;était vraiment pas de la faute de %1...</translation>
+        <translation>Ce n&apos;était certainement pas de la faute de %1...</translation>
     </message>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="26"/>

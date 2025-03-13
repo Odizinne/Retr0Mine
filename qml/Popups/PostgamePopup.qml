@@ -45,6 +45,7 @@ Popup {
         anchors.fill: parent
         columns: 2
         rowSpacing: 15
+        columnSpacing: 15
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -82,20 +83,23 @@ Popup {
         ColumnLayout {
             visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
             Layout.columnSpan: 2
-            spacing: 4
+            Layout.fillWidth: true
+            spacing: 0
 
             Label {
                 text: qsTr("Revealed cells:")
                 font.bold: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillWidth: true
                 font.pixelSize: 14
+                horizontalAlignment: Text.AlignHCenter
             }
 
             Label {
                 text: qsTr("First click excluded")
                 color: "#f6ae57"
                 font.pixelSize: 11
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
             }
         }
 
