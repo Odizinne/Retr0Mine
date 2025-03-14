@@ -351,7 +351,7 @@ Popup {
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
-                            visible: noneCell.modelData.type === "number"
+                            visible: noneCell.modelData.type === "number" && GameSettings.cellFrame
                         }
 
                         Text {
@@ -413,7 +413,7 @@ Popup {
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
-                            visible: tritCell.modelData.type === "number"
+                            visible: tritCell.modelData.type === "number" && GameSettings.cellFrame
                         }
 
                         Text {
@@ -479,7 +479,7 @@ Popup {
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
-                            visible: protCell.modelData.type === "number"
+                            visible: protCell.modelData.type === "number" && GameSettings.cellFrame
                         }
 
                         Text {
@@ -540,7 +540,7 @@ Popup {
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
-                            visible: deutCell.modelData.type === "number"
+                            visible: deutCell.modelData.type === "number" && GameSettings.cellFrame
                         }
 
                         Text {
