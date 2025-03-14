@@ -594,7 +594,7 @@ QtObject {
             break;
 
         case "reveal":
-            GridBridge.performReveal(cellIndex, NetworkManager.clientName);
+            handleMultiplayerReveal(cellIndex, NetworkManager.clientName);
             break;
 
         case "flag":
@@ -905,6 +905,7 @@ QtObject {
             }
 
             GridBridge.performReveal(index, playerIdentifier || NetworkManager.hostName);
+            console.log("approved reveal fucking sent")
             SteamIntegration.sendGameAction("approveReveal", index);
         } else {
             SteamIntegration.sendGameAction("reveal", index);
