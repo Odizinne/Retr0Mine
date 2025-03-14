@@ -270,15 +270,37 @@ Item {
     }
 
     function performReveal(index, playerIdentifier) {
+        console.log(`DEBUG: performReveal called with index ${index}, player: ${playerIdentifier}`);
+
         const initialCell = getCell(index);
-        if (!initialCell || GameState.gameOver || initialCell.revealed || initialCell.flagged) return;
+        if (!initialCell) {
+            console.log(`DEBUG: No cell found at index ${index}`);
+            return;
+        }
+
+        if (GameState.gameOver) {
+            console.log("DEBUG: Game is already over, ignoring reveal");
+            return;
+        }
+
+        if (initialCell.revealed) {
+            console.log(`DEBUG: Cell ${index} is already revealed`);
+            return;
+        }
+
+        if (initialCell.flagged) {
+            console.log(`DEBUG: Cell ${index} is flagged, can't reveal`);
+            return;
+        }
 
         if (!GameState.gameStarted) {
+            console.log(`DEBUG: First move at index ${index}, generating field`);
             // Start the async generation - the actual reveal happens after board is generated
             generateField(index);
             return;
         }
 
+        console.log(`DEBUG: Requesting flood fill reveal from C++ helper for index ${index}`);
         // Use C++ helper to get cells to reveal
         var cellsToReveal = helper.performFloodFillReveal(
             index,
@@ -289,6 +311,8 @@ Item {
             getCellForCallback
         );
 
+        console.log(`DEBUG: Got ${cellsToReveal.length} cells to reveal from helper`);
+
         // Track cells revealed in this operation
         let cellsRevealed = 0;
 
@@ -297,13 +321,27 @@ Item {
             let currentIndex = cellsToReveal[i];
             const cell = getCell(currentIndex);
 
-            if (!cell || cell.revealed || cell.flagged) continue;
+            if (!cell) {
+                console.log(`DEBUG: Invalid cell at index ${currentIndex}`);
+                continue;
+            }
+
+            if (cell.revealed) {
+                console.log(`DEBUG: Cell ${currentIndex} already revealed, skipping`);
+                continue;
+            }
+
+            if (cell.flagged) {
+                console.log(`DEBUG: Cell ${currentIndex} is flagged, skipping`);
+                continue;
+            }
 
             cell.revealed = true;
             GameState.revealedCount++;
             cellsRevealed++;
 
             if (GameState.mines.includes(currentIndex)) {
+                console.log(`DEBUG: Mine found at cell ${currentIndex}, game over!`);
                 cell.isBombClicked = true;
                 GameState.gameOver = true;
                 GameState.gameWon = false;
@@ -311,31 +349,47 @@ Item {
 
                 // Update the appropriate counter
                 attributeRevealedCells(cellsRevealed, playerIdentifier);
+                console.log(`DEBUG: Attributed ${cellsRevealed} cells to ${playerIdentifier || "local player"}`);
 
                 // This is what was missing! The actual game over handling:
                 GameTimer.stop();
+                console.log("DEBUG: Game timer stopped");
+
                 revealAllMines();
-                if (audioEngine) audioEngine.playLoose();
+                console.log("DEBUG: All mines revealed");
+
+                if (audioEngine) {
+                    console.log("DEBUG: Playing lose sound");
+                    audioEngine.playLoose();
+                }
+
                 GameState.displayPostGame = true;
+                console.log("DEBUG: Post-game display enabled");
 
                 // In multiplayer, if we're the host, send game over notification to client
                 if (NetworkManager.onGameLost(currentIndex)) {
+                    console.log("DEBUG: Multiplayer game loss notification sent");
                     // Handled by multiplayer
                 }
-
                 return;
             }
 
             if (cell.questioned) {
+                console.log(`DEBUG: Cell ${currentIndex} was questioned, clearing question mark`);
                 cell.questioned = false;
             }
+
             if (cell.safeQuestioned) {
+                console.log(`DEBUG: Cell ${currentIndex} was safe-questioned, clearing`);
                 cell.safeQuestioned = false;
             }
         }
 
         attributeRevealedCells(cellsRevealed, playerIdentifier);
+        console.log(`DEBUG: Attributed ${cellsRevealed} cells to ${playerIdentifier || "local player"}`);
+
         checkWin();
+        console.log("DEBUG: Win condition checked");
     }
 
     function attributeRevealedCells(count, playerIdentifier) {
