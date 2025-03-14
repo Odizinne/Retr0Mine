@@ -171,212 +171,59 @@ Popup {
             rows: 4
             columns: 3
 
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                flat: true
+            Repeater {
+                model: [
+                    { type: "number", value: "1", color: "#069ecc", dimWhenSatisfied: true },
+                    { type: "flag" },
+                    { type: "number", value: "3", color: "#d12844", dimWhenSatisfied: false },
+                    { type: "number", value: "4", color: "#9328d1", dimWhenSatisfied: false },
+                    { type: "number", value: "2", color: "#28d13c", dimWhenSatisfied: true },
+                    { type: "number", value: "2", color: "#28d13c", dimWhenSatisfied: true },
+                    { type: "number", value: "1", color: "#069ecc", dimWhenSatisfied: true },
+                    { type: "flag" },
+                    { type: "number", value: "3", color: "#d12844", dimWhenSatisfied: false }
+                ]
 
-                Rectangle {
-                    anchors.fill: parent
-                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                    border.width: 2
-                    visible: GameSettings.cellFrame
-                    color: "transparent"
-                    border.color:  GameConstants.frameColor
-                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
-                }
+                delegate: NfButton {
+                    id: cell
+                    Layout.preferredHeight: 35
+                    Layout.preferredWidth: 35
+                    flat: modelData.type === "number"
+                    required property var modelData
 
-                Text {
-                    anchors.centerIn: parent
-                    color: "#069ecc"
-                    text: "1"
-                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
-                    font.pixelSize: 35 * 0.60
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-
-                IconImage {
-                    anchors.centerIn: parent
-                    source: "qrc:/icons/flag.png"
-                    color: {
-                        if (  GameSettings.contrastFlag) return  GameConstants.foregroundColor
-                        else return GameConstants.accentColor
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                        border.width: 2
+                        visible: cell.modelData.type === "number" && GameSettings.cellFrame
+                        color: "transparent"
+                        border.color: GameConstants.frameColor
+                        opacity: cell.modelData.dimWhenSatisfied && GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
                     }
-                    visible: true
-                    sourceSize.width: 35 / 1.8
-                    sourceSize.height: 35 / 1.8
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                flat: true
 
-                Rectangle {
-                    anchors.fill: parent
-                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                    border.width: 2
-                    visible: GameSettings.cellFrame
-                    color: "transparent"
-                    border.color:  GameConstants.frameColor
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "3"
-                    color: "#d12844"
-                    font.pixelSize: 35 * 0.60
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                flat: true
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                    border.width: 2
-                    visible: GameSettings.cellFrame
-                    color: "transparent"
-                    border.color:  GameConstants.frameColor
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "4"
-                    color: "#9328d1"
-                    font.pixelSize: 35 * 0.60
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                flat: true
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                    border.width: 2
-                    visible: GameSettings.cellFrame
-                    color: "transparent"
-                    border.color:  GameConstants.frameColor
-                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "2"
-                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
-                    color: "#28d13c"
-                    font.pixelSize: 35 * 0.60
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                flat: true
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                    border.width: 2
-                    visible: GameSettings.cellFrame
-                    color: "transparent"
-                    border.color:  GameConstants.frameColor
-                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "2"
-                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
-                    color: "#28d13c"
-                    font.pixelSize: 35 * 0.60
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                flat: true
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                    border.width: 2
-                    visible: GameSettings.cellFrame
-                    color: "transparent"
-                    border.color:  GameConstants.frameColor
-                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "1"
-                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
-                    color: "#069ecc"
-                    font.pixelSize: 35 * 0.60
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                IconImage {
-                    anchors.centerIn: parent
-                    source: "qrc:/icons/flag.png"
-                    color: {
-                        if (  GameSettings.contrastFlag) return  GameConstants.foregroundColor
-                        else return GameConstants.accentColor
+                    Text {
+                        anchors.centerIn: parent
+                        text: cell.modelData.value || ""
+                        color: cell.modelData.color || ""
+                        opacity: cell.modelData.dimWhenSatisfied && GameSettings.dimSatisfied ? 0.25 : 1
+                        font.pixelSize: 35 * 0.60
+                        font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        visible: cell.modelData.type === "number"
                     }
-                    visible: true
-                    sourceSize.width: 35 / 1.8
-                    sourceSize.height: 35 / 1.8
-                }
-            }
-            NfButton {
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
-                flat: true
 
-                Rectangle {
-                    anchors.fill: parent
-                    radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                    border.width: 2
-                    color: "transparent"
-                    visible: GameSettings.cellFrame
-                    //opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
-                    border.color:  GameConstants.frameColor
-                }
-
-                Text {
-                    anchors.centerIn: parent
-                    text: "3"
-                    color: "#d12844"
-                    font.pixelSize: 35 * 0.60
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
+                    IconImage {
+                        anchors.centerIn: parent
+                        source: "qrc:/icons/flag.png"
+                        color: {
+                            if (GameSettings.contrastFlag) return GameConstants.foregroundColor
+                            else return GameConstants.accentColor
+                        }
+                        visible: cell.modelData.type === "flag"
+                        sourceSize.width: 35 / 1.8
+                        sourceSize.height: 35 / 1.8
+                    }
                 }
             }
         }
@@ -478,201 +325,45 @@ Popup {
                 rows: 4
                 columns: 3
 
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                Repeater {
+                    model: [
+                        { type: "number", value: "1", color: "#069ecc" },
+                        { type: "number", value: "2", color: "#28d13c" },
+                        { type: "number", value: "3", color: "#d12844" },
+                        { type: "number", value: "4", color: "#9328d1" },
+                        { type: "empty" },
+                        { type: "number", value: "5", color: "#ebc034" },
+                        { type: "number", value: "6", color: "#34ebb1" },
+                        { type: "number", value: "7", color: "#eb8634" },
+                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                    ]
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
+                    delegate: NfButton {
+                        id: noneCell
+                        required property var modelData
+                        Layout.preferredHeight: 35
+                        Layout.preferredWidth: 35
+                        flat: noneCell.modelData.type === "number"
 
-                    Text {
-                        anchors.centerIn: parent
-                        color: "#069ecc"
-                        text: "1"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            border.width: 2
+                            color: "transparent"
+                            border.color: GameConstants.frameColor
+                            visible: noneCell.modelData.type === "number"
+                        }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "2"
-                        color: "#28d13c"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "3"
-                        color: "#d12844"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "4"
-                        color: "#9328d1"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: ""
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "5"
-                        color: "#ebc034"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "6"
-                        color: "#34ebb1"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "7"
-                        color: "#eb8634"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "8"
-                        color:  GameConstants.foregroundColor
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                        Text {
+                            anchors.centerIn: parent
+                            text: noneCell.modelData.value || ""
+                            color: noneCell.modelData.color || ""
+                            font.pixelSize: 35 * 0.60
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            visible: noneCell.modelData.type !== "empty"
+                        }
                     }
                 }
 
@@ -696,201 +387,45 @@ Popup {
                 rows: 4
                 columns: 3
 
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                Repeater {
+                    model: [
+                        { type: "number", value: "1", color: "#e41a1c" },
+                        { type: "number", value: "2", color: "#377eb8" },
+                        { type: "number", value: "3", color: "#4daf4a" },
+                        { type: "number", value: "4", color: "#984ea3" },
+                        { type: "empty" },
+                        { type: "number", value: "5", color: "#ff7f00" },
+                        { type: "number", value: "6", color: "#f781bf" },
+                        { type: "number", value: "7", color: "#a65628" },
+                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                    ]
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
+                    delegate: NfButton {
+                        id: tritCell
+                        required property var modelData
+                        Layout.preferredHeight: 35
+                        Layout.preferredWidth: 35
+                        flat: tritCell.modelData.type === "number"
 
-                    Text {
-                        anchors.centerIn: parent
-                        text: "1"
-                        color: "#e41a1c"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            border.width: 2
+                            color: "transparent"
+                            border.color: GameConstants.frameColor
+                            visible: tritCell.modelData.type === "number"
+                        }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "2"
-                        color: "#377eb8"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "3"
-                        color: "#4daf4a"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "4"
-                        color: "#984ea3"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: ""
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "5"
-                        color: "#ff7f00"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "6"
-                        color: "#f781bf"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "7"
-                        color: "#a65628"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "8"
-                        color:  GameConstants.foregroundColor
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                        Text {
+                            anchors.centerIn: parent
+                            text: tritCell.modelData.value || ""
+                            color: tritCell.modelData.color || ""
+                            font.pixelSize: 35 * 0.60
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            visible: tritCell.modelData.type !== "empty"
+                        }
                     }
                 }
 
@@ -910,209 +445,53 @@ Popup {
             }
         }
 
-
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
             spacing: 30
+
             GridLayout {
                 rows: 4
                 columns: 3
 
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                Repeater {
+                    model: [
+                        { type: "number", value: "1", color: "#66c2a5" },
+                        { type: "number", value: "2", color: "#fc8d62" },
+                        { type: "number", value: "3", color: "#8da0cb" },
+                        { type: "number", value: "4", color: "#e78ac3" },
+                        { type: "empty" },
+                        { type: "number", value: "5", color: "#a6d854" },
+                        { type: "number", value: "6", color: "#ffd92f" },
+                        { type: "number", value: "7", color: "#e5c494" },
+                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                    ]
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
+                    delegate: NfButton {
+                        id: protCell
+                        required property var modelData
+                        Layout.preferredHeight: 35
+                        Layout.preferredWidth: 35
+                        flat: protCell.modelData.type === "number"
 
-                    Text {
-                        anchors.centerIn: parent
-                        text: "1"
-                        color: "#66c2a5"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            border.width: 2
+                            color: "transparent"
+                            border.color: GameConstants.frameColor
+                            visible: protCell.modelData.type === "number"
+                        }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "2"
-                        color: "#fc8d62"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "3"
-                        color: "#8da0cb"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "4"
-                        color: "#e78ac3"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: ""
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "5"
-                        color: "#a6d854"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "6"
-                        color: "#ffd92f"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "7"
-                        color: "#e5c494"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "8"
-                        color:  GameConstants.foregroundColor
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                        Text {
+                            anchors.centerIn: parent
+                            text: protCell.modelData.value || ""
+                            color: protCell.modelData.color || ""
+                            font.pixelSize: 35 * 0.60
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            visible: protCell.modelData.type !== "empty"
+                        }
                     }
                 }
 
@@ -1131,206 +510,49 @@ Popup {
                 }
             }
 
-
             GridLayout {
                 rows: 4
                 columns: 3
 
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                Repeater {
+                    model: [
+                        { type: "number", value: "1", color: "#377eb8" },
+                        { type: "number", value: "2", color: "#4daf4a" },
+                        { type: "number", value: "3", color: "#e41a1c" },
+                        { type: "number", value: "4", color: "#984ea3" },
+                        { type: "empty" },
+                        { type: "number", value: "5", color: "#ff7f00" },
+                        { type: "number", value: "6", color: "#a65628" },
+                        { type: "number", value: "7", color: "#f781bf" },
+                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                    ]
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
+                    delegate: NfButton {
+                        id: deutCell
+                        required property var modelData
+                        Layout.preferredHeight: 35
+                        Layout.preferredWidth: 35
+                        flat: modelData.type === "number"
 
-                    Text {
-                        anchors.centerIn: parent
-                        text: "1"
-                        color: "#377eb8"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            border.width: 2
+                            color: "transparent"
+                            border.color: GameConstants.frameColor
+                            visible: deutCell.modelData.type === "number"
+                        }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "2"
-                        color: "#4daf4a"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "3"
-                        color: "#e41a1c"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "4"
-                        color: "#984ea3"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: ""
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "5"
-                        color: "#ff7f00"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "6"
-                        color: "#a65628"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "7"
-                        color: "#f781bf"
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-                NfButton {
-                    Layout.preferredHeight: 35
-                    Layout.preferredWidth: 35
-                    flat: true
-
-                    Rectangle {
-                        anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
-                        border.width: 2
-                        color: "transparent"
-                        border.color:  GameConstants.frameColor
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "8"
-                        color:  GameConstants.foregroundColor
-                        font.pixelSize: 35 * 0.60
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                        Text {
+                            anchors.centerIn: parent
+                            text: deutCell.modelData.value || ""
+                            color: deutCell.modelData.color || ""
+                            font.pixelSize: 35 * 0.60
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            visible: deutCell.modelData.type !== "empty"
+                        }
                     }
                 }
 
@@ -1350,6 +572,7 @@ Popup {
             }
         }
     }
+
     ColumnLayout {
         opacity: 1
         visible: false
