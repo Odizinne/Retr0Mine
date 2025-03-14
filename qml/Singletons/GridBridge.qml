@@ -14,6 +14,12 @@ Item {
     property bool idleShakeScheduled: false
     property bool globalShakeActive: false
 
+    property GridBridgeHelper helper: GridBridgeHelper
+
+    function getCellForCallback(index) {
+        return getCell(index);
+    }
+
     function setChatReference(chatPanel) {
         chatReference = chatPanel;
     }
@@ -151,45 +157,18 @@ Item {
         const cell = getCell(index);
         if (!cell || !cell.revealed || GameState.numbers[index] <= 0) return;
 
-        let row = Math.floor(index / GameState.gridSizeX);
-        let col = index % GameState.gridSizeX;
-        let flaggedCount = 0;
-        let adjacentCells = [];
-        let hasQuestionMark = false;
+        // Use C++ helper to get cells to reveal
+        var cellsToReveal = helper.getAdjacentCellsToReveal(
+            index,
+            GameState.gridSizeX,
+            GameState.gridSizeY,
+            GameState.numbers,
+            getCellForCallback
+        );
 
-        outerLoop: for (let r = -1; r <= 1; r++) {
-            for (let c = -1; c <= 1; c++) {
-                if (r === 0 && c === 0) continue;
-
-                let newRow = row + r;
-                let newCol = col + c;
-
-                if (newRow < 0 || newRow >= GameState.gridSizeY ||
-                    newCol < 0 || newCol >= GameState.gridSizeX) continue;
-
-                let currentPos = newRow * GameState.gridSizeX + newCol;
-                const adjacentCell = getCell(currentPos);
-
-                if (!adjacentCell) continue;
-
-                if (adjacentCell.questioned || adjacentCell.safeQuestioned) {
-                    hasQuestionMark = true;
-                    break outerLoop;
-                }
-
-                if (adjacentCell.flagged) {
-                    flaggedCount++;
-                } else if (!adjacentCell.revealed) {
-                    adjacentCells.push(currentPos);
-                }
-            }
-        }
-
-        if (!hasQuestionMark && flaggedCount === GameState.numbers[index] && adjacentCells.length > 0) {
-            for (let adjacentPos of adjacentCells) {
-                // Pass the player identifier along
-                reveal(adjacentPos, playerIdentifier);
-            }
+        // Reveal each adjacent cell
+        for (let i = 0; i < cellsToReveal.length; i++) {
+            reveal(cellsToReveal[i], playerIdentifier);
         }
     }
 
@@ -300,25 +279,29 @@ Item {
             return;
         }
 
+        // Use C++ helper to get cells to reveal
+        var cellsToReveal = helper.performFloodFillReveal(
+            index,
+            GameState.gridSizeX,
+            GameState.gridSizeY,
+            GameState.mines,
+            GameState.numbers,
+            getCellForCallback
+        );
+
         // Track cells revealed in this operation
         let cellsRevealed = 0;
 
-        // Continue with normal reveal logic for subsequent clicks
-        let cellsToReveal = [index];
-        let visited = new Set();
-
-        while (cellsToReveal.length > 0) {
-            let currentIndex = cellsToReveal.pop();
-            if (visited.has(currentIndex)) continue;
-
-            visited.add(currentIndex);
+        // Process the revealed cells
+        for (let i = 0; i < cellsToReveal.length; i++) {
+            let currentIndex = cellsToReveal[i];
             const cell = getCell(currentIndex);
 
             if (!cell || cell.revealed || cell.flagged) continue;
 
             cell.revealed = true;
             GameState.revealedCount++;
-            cellsRevealed++; // Count each newly revealed cell
+            cellsRevealed++;
 
             if (GameState.mines.includes(currentIndex)) {
                 cell.isBombClicked = true;
@@ -343,35 +326,11 @@ Item {
                 return;
             }
 
-            const cellNumber = GameState.numbers[currentIndex];
-            if (cellNumber === 0) {
-                let row = Math.floor(currentIndex / GameState.gridSizeX);
-                let col = currentIndex % GameState.gridSizeX;
-
-                for (let r = -1; r <= 1; r++) {
-                    for (let c = -1; c <= 1; c++) {
-                        if (r === 0 && c === 0) continue;
-
-                        let newRow = row + r;
-                        let newCol = col + c;
-
-                        if (newRow < 0 || newRow >= GameState.gridSizeY ||
-                            newCol < 0 || newCol >= GameState.gridSizeX) continue;
-
-                        let adjacentIndex = newRow * GameState.gridSizeX + newCol;
-
-                        withCell(adjacentIndex, function(adjacentCell) {
-                            if (adjacentCell.questioned) {
-                                adjacentCell.questioned = false;
-                            }
-                            if (adjacentCell.safeQuestioned) {
-                                adjacentCell.safeQuestioned = false;
-                            }
-                        });
-
-                        cellsToReveal.push(adjacentIndex);
-                    }
-                }
+            if (cell.questioned) {
+                cell.questioned = false;
+            }
+            if (cell.safeQuestioned) {
+                cell.safeQuestioned = false;
             }
         }
 
@@ -684,35 +643,13 @@ Item {
             return false;
         }
 
-        let row = Math.floor(index / GameState.gridSizeX);
-        let col = index % GameState.gridSizeX;
-        let flagCount = 0;
-        let unrevealedCount = 0;
-
-        // Count flagged and unrevealed neighbors
-        for (let r = -1; r <= 1; r++) {
-            for (let c = -1; c <= 1; c++) {
-                if (r === 0 && c === 0) continue;
-
-                let newRow = row + r;
-                let newCol = col + c;
-
-                if (newRow < 0 || newRow >= GameState.gridSizeY ||
-                    newCol < 0 || newCol >= GameState.gridSizeX) continue;
-
-                const adjacentCell = getCell(newRow * GameState.gridSizeX + newCol);
-                if (!adjacentCell) continue;
-
-                if (adjacentCell.flagged) {
-                    flagCount++;
-                }
-                if (!adjacentCell.revealed && !adjacentCell.flagged) {
-                    unrevealedCount++;
-                }
-            }
-        }
-
-        return unrevealedCount > 0 || flagCount !== GameState.numbers[index];
+        return helper.hasUnrevealedNeighbors(
+            index,
+            GameState.gridSizeX,
+            GameState.gridSizeY,
+            GameState.numbers,
+            getCellForCallback
+        );
     }
 
     function getNeighborFlagCount(index) {
@@ -721,31 +658,12 @@ Item {
             return 0;
         }
 
-        let row = Math.floor(index / GameState.gridSizeX);
-        let col = index % GameState.gridSizeX;
-        let flagCount = 0;
-
-        // Count flagged neighbors
-        for (let r = -1; r <= 1; r++) {
-            for (let c = -1; c <= 1; c++) {
-                if (r === 0 && c === 0) continue;
-
-                let newRow = row + r;
-                let newCol = col + c;
-
-                if (newRow < 0 || newRow >= GameState.gridSizeY ||
-                    newCol < 0 || newCol >= GameState.gridSizeX) continue;
-
-                const adjacentCell = getCell(newRow * GameState.gridSizeX + newCol);
-                if (!adjacentCell) continue;
-
-                if (adjacentCell.flagged) {
-                    flagCount++;
-                }
-            }
-        }
-
-        return flagCount;
+        return helper.getNeighborFlagCount(
+            index,
+            GameState.gridSizeX,
+            GameState.gridSizeY,
+            getCellForCallback
+        );
     }
 
     Timer {

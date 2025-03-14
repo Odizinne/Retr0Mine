@@ -24,12 +24,14 @@ set(SOURCES
     src/gamecore.cpp
     src/gamelogic.cpp
     src/steamintegration.cpp
+    src/gridbridgehelper.cpp
 )
 set(HEADERS
     include/gametimer.h
     include/gamecore.h
     include/gamelogic.h
     include/steamintegration.h
+    include/gridbridgehelper.h
 )
 set(QML_FILES
     qml/Main.qml
