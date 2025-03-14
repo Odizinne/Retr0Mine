@@ -135,7 +135,7 @@ Frame {
                 placeholderText: qsTr("Type a message...")
                 selectByMouse: true
                 font.pixelSize: 13
-                enabled: SteamIntegration.isP2PConnected
+                enabled: SteamIntegration.isP2PConnected && ComponentsContext.multiplayerChatVisible
                 Keys.onReturnPressed: sendButton.clicked()
                 Keys.onEnterPressed: sendButton.clicked()
             }
