@@ -318,15 +318,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="528"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="535"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="542"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="487"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="494"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="501"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="552"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="558"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="511"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="517"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -739,51 +739,45 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/Popups/RulesPopup.qml" line="57"/>
-        <source>&lt;h2&gt;Objective&lt;/h2&gt;&lt;p&gt;Find all the mines on the board without detonating any of them.&lt;/p&gt;
-&lt;h3&gt;Basic Controls&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Classic Mode:&lt;/b&gt;
-&lt;br&gt;   - Left click: Reveal a cell
-&lt;br&gt;   - Right click: Flag a suspected mine&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;• Chord Mode:&lt;/b&gt;
-&lt;br&gt;   - Left click: Flag a suspected mine
-&lt;br&gt;   - Right click: Reveal a cell
-&lt;br&gt;   - Click on a revealed number: Reveal adjacent cells if enough flags placed&lt;/p&gt;
-&lt;h3&gt;Game Elements&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Numbers:&lt;/b&gt; When you reveal a cell, a number may appear. This indicates how many mines are adjacent to that cell (in the 8 surrounding cells).
+        <source>&lt;h2&gt;Objective&lt;/h2&gt;
+&lt;p&gt;Find all the mines on the board without detonating any of them.&lt;/p&gt;
+&lt;h3&gt;Game Elements&lt;/h3&gt;
+&lt;p&gt;&lt;b&gt;• Numbers:&lt;/b&gt; When you reveal a cell, a number may appear. This indicates how many mines are adjacent to that cell (in the 8 surrounding cells).
 &lt;br&gt;&lt;b&gt;• Blank Cell:&lt;/b&gt; If you reveal a cell with no adjacent mines, it will be blank and automatically reveal adjacent cells.
 &lt;br&gt;&lt;b&gt;• Flags:&lt;/b&gt; Use flags to mark where you think mines are located.
 &lt;br&gt;&lt;b&gt;• Question Marks:&lt;/b&gt; Use question marks (if enabled) to mark cells you&apos;re uncertain about.&lt;/p&gt;
-&lt;h3&gt;Game Strategies&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Start in a corner or edge:&lt;/b&gt; This gives you fewer adjacent cells to worry about initially.
-&lt;br&gt;&lt;b&gt;• Use the numbers:&lt;/b&gt; If a &apos;1&apos; cell has only one unrevealed adjacent cell, that cell must contain a mine.
-&lt;br&gt;&lt;b&gt;• Use flagged mines:&lt;/b&gt; Once a numbered cell has all its adjacent mines flagged, the remaining adjacent cells are safe.
-&lt;br&gt;&lt;b&gt;• Chord technique:&lt;/b&gt; Click on a number when you&apos;ve flagged all its adjacent mines to reveal all other adjacent cells at once.&lt;/p&gt;
-&lt;h3&gt;When You&apos;re Stuck&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Try a different area:&lt;/b&gt; If you&apos;re stuck in one area of the grid, move to another section where you might find new clues.
+&lt;h3&gt;Game Strategies&lt;/h3&gt;
+&lt;p&gt;&lt;b&gt;• Use the numbers:&lt;/b&gt; If a &apos;1&apos; cell has only one unrevealed adjacent cell, that cell must contain a mine.
+&lt;br&gt;&lt;b&gt;• Use flagged mines:&lt;/b&gt; Once a numbered cell has all its adjacent mines flagged, the remaining adjacent cells are safe.&lt;/p&gt;
+&lt;h3&gt;When You&apos;re Stuck&lt;/h3&gt;
+&lt;p&gt;&lt;b&gt;• Try a different area:&lt;/b&gt; If you&apos;re stuck in one area of the grid, move to another section where you might find new clues.
 &lt;br&gt;&lt;b&gt;• Look for new patterns:&lt;/b&gt; Sometimes taking a fresh look at the board can reveal patterns you didn&apos;t notice before.
 &lt;br&gt;&lt;b&gt;• Use probability:&lt;/b&gt; In some cases, you may need to make an educated guess based on the information available.&lt;/p&gt;
-&lt;h3&gt;Winning the Game&lt;/h3&gt;&lt;p&gt;You win when all non-mine cells have been revealed. You don&apos;t have to flag all mines to win, just reveal all safe cells.&lt;/p&gt;
+&lt;h3&gt;Winning the Game&lt;/h3&gt;
+&lt;p&gt;You win when all non-mine cells have been revealed. You don&apos;t have to flag all mines to win, just reveal all safe cells.&lt;/p&gt;
 &lt;p&gt;Have fun and good luck finding those mines!&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Objectif&lt;/h2&gt;&lt;p&gt;Trouvez toutes les mines sur le plateau sans en déclencher aucune.&lt;/p&gt;
-&lt;h3&gt;Contrôles de base&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Mode Classique :&lt;/b&gt;
-&lt;br&gt; - Clic gauche : Révéler une case
-&lt;br&gt; - Clic droit : Marquer une mine suspectée&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;• Mode Accord :&lt;/b&gt;
-&lt;br&gt; - Clic gauche : Marquer une mine suspectée
-&lt;br&gt; - Clic droit : Révéler une case
-&lt;br&gt; - Clic sur un nombre révélé : Révéler les cases adjacentes si suffisamment de drapeaux sont placés&lt;/p&gt;
-&lt;h3&gt;Éléments du jeu&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Nombres :&lt;/b&gt; Quand vous révélez une case, un nombre peut apparaître. Cela indique combien de mines sont adjacentes à cette case (dans les 8 cases environnantes).
+        <translation>&lt;h2&gt;Objectif&lt;/h2&gt;
+&lt;p&gt;Trouvez toutes les mines sur le plateau sans en déclencher aucune.&lt;/p&gt;
+&lt;h3&gt;Éléments du jeu&lt;/h3&gt;
+&lt;p&gt;&lt;b&gt;• Nombres :&lt;/b&gt; Quand vous révélez une case, un nombre peut apparaître. Cela indique combien de mines sont adjacentes à cette case (dans les 8 cases environnantes).
 &lt;br&gt;&lt;b&gt;• Case vide :&lt;/b&gt; Si vous révélez une case sans mines adjacentes, elle sera vide et révélera automatiquement les cases adjacentes.
 &lt;br&gt;&lt;b&gt;• Drapeaux :&lt;/b&gt; Utilisez les drapeaux pour marquer où vous pensez que les mines sont situées.
 &lt;br&gt;&lt;b&gt;• Points d&apos;interrogation :&lt;/b&gt; Utilisez les points d&apos;interrogation (si activés) pour marquer les cases dont vous n&apos;êtes pas certain.&lt;/p&gt;
-&lt;h3&gt;Stratégies de jeu&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Commencez par un coin ou un bord :&lt;/b&gt; Cela vous donne moins de cases adjacentes à gérer au début.
+&lt;h3&gt;Stratégies de jeu&lt;/h3&gt;
+&lt;p&gt;&lt;b&gt;• Commencez par un coin ou un bord :&lt;/b&gt; Cela vous donne moins de cases adjacentes à gérer au début.
 &lt;br&gt;&lt;b&gt;• Utilisez les nombres :&lt;/b&gt; Si une case marquée &apos;1&apos; n&apos;a qu&apos;une seule case adjacente non révélée, cette case doit contenir une mine.
 &lt;br&gt;&lt;b&gt;• Utilisez les mines marquées :&lt;/b&gt; Une fois que toutes les mines adjacentes à une case numérotée sont marquées, les autres cases adjacentes sont sûres.
 &lt;br&gt;&lt;b&gt;• Technique Accord :&lt;/b&gt; Cliquez sur un nombre lorsque vous avez marqué toutes ses mines adjacentes pour révéler toutes les autres cases adjacentes en une fois.&lt;/p&gt;
-&lt;h3&gt;Quand vous êtes bloqué&lt;/h3&gt;&lt;p&gt;&lt;b&gt;• Essayez une zone différente :&lt;/b&gt; Si vous êtes bloqué dans une zone de la grille, déplacez-vous vers une autre section où vous pourriez trouver de nouveaux indices.
+&lt;h3&gt;Quand vous êtes bloqué&lt;/h3&gt;
+&lt;p&gt;&lt;b&gt;• Essayez une zone différente :&lt;/b&gt; Si vous êtes bloqué dans une zone de la grille, déplacez-vous vers une autre section où vous pourriez trouver de nouveaux indices.
 &lt;br&gt;&lt;b&gt;• Cherchez de nouveaux motifs :&lt;/b&gt; Parfois, un regard neuf sur le plateau peut révéler des motifs que vous n&apos;aviez pas remarqués auparavant.
 &lt;br&gt;&lt;b&gt;• Utilisez les probabilités :&lt;/b&gt; Dans certains cas, vous devrez peut-être faire une supposition éclairée basée sur les informations disponibles.&lt;/p&gt;
-&lt;h3&gt;Gagner la partie&lt;/h3&gt;&lt;p&gt;Vous gagnez lorsque toutes les cases sans mines ont été révélées. Vous n&apos;avez pas besoin de marquer toutes les mines pour gagner, juste de révéler toutes les cases sûres.&lt;/p&gt;
+&lt;h3&gt;Gagner la partie&lt;/h3&gt;
+&lt;p&gt;Vous gagnez lorsque toutes les cases sans mines ont été révélées. Vous n&apos;avez pas besoin de marquer toutes les mines pour gagner, juste de révéler toutes les cases sûres.&lt;/p&gt;
 &lt;p&gt;Amusez-vous bien et bonne chance pour trouver ces mines !&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/RulesPopup.qml" line="83"/>
+        <location filename="../qml/Popups/RulesPopup.qml" line="79"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -1084,62 +1078,62 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="383"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="235"/>
         <source>Dimm satisfied numbers</source>
         <translation>Assombrir les chiffres satisfaits</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="401"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="256"/>
         <source>Show cell frame</source>
         <translation>Afficher le cadre des cellules</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="420"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="277"/>
         <source>System color for flags</source>
         <translation>Couleur système pour les drapeaux</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="437"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="294"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="457"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="314"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="670"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="372"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="888"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="434"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1110"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="500"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1328"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="561"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1350"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="584"/>
         <source>You&apos;re all set!</source>
         <translation>Tout est prêt!</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1356"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="590"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1367"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="601"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

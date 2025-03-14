@@ -45,7 +45,7 @@ Popup {
         anchors.fill: parent
         columns: 2
         rowSpacing: 15
-        columnSpacing: 15
+        columnSpacing: 10
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

@@ -313,6 +313,7 @@ Popup {
         Label {
             text: qsTr("Color correction")
             font.pixelSize: 18
+            font.bold: true
             Layout.alignment: Qt.AlignHCenter
         }
 
