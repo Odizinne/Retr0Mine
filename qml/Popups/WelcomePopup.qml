@@ -151,7 +151,7 @@ Popup {
                     control.visible = false
                     controlsConfig.visible = false
                     visualsConfig.visible = true
-                    control.height = 300
+                    control.height = 350
                     control.width = 350
                     control.visible = true
                 }
@@ -180,16 +180,17 @@ Popup {
                     anchors.fill: parent
                     radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
-                    visible: visualsSwitch.checked ? false : true
+                    visible: GameSettings.cellFrame
                     color: "transparent"
                     border.color:  GameConstants.frameColor
+                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
                 }
 
                 Text {
                     anchors.centerIn: parent
                     color: "#069ecc"
                     text: "1"
-                    opacity: visualsSwitch.checked ? 0.25 : 1
+                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
                     font.pixelSize: 35 * 0.60
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
@@ -221,7 +222,7 @@ Popup {
                     anchors.fill: parent
                     radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
-                    visible: visualsSwitch.checked ? false : true
+                    visible: GameSettings.cellFrame
                     color: "transparent"
                     border.color:  GameConstants.frameColor
                 }
@@ -245,7 +246,7 @@ Popup {
                     anchors.fill: parent
                     radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
-                    visible: visualsSwitch.checked ? false : true
+                    visible: GameSettings.cellFrame
                     color: "transparent"
                     border.color:  GameConstants.frameColor
                 }
@@ -253,7 +254,6 @@ Popup {
                 Text {
                     anchors.centerIn: parent
                     text: "4"
-                    //opacity: visualsSwitch.checked ? 0.25 : 1
                     color: "#9328d1"
                     font.pixelSize: 35 * 0.60
                     font.bold: true
@@ -270,15 +270,16 @@ Popup {
                     anchors.fill: parent
                     radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
-                    visible: visualsSwitch.checked ? false : true
+                    visible: GameSettings.cellFrame
                     color: "transparent"
                     border.color:  GameConstants.frameColor
+                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
                 }
 
                 Text {
                     anchors.centerIn: parent
                     text: "2"
-                    opacity: visualsSwitch.checked ? 0.25 : 1
+                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
                     color: "#28d13c"
                     font.pixelSize: 35 * 0.60
                     font.bold: true
@@ -295,15 +296,16 @@ Popup {
                     anchors.fill: parent
                     radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
-                    visible: visualsSwitch.checked ? false : true
+                    visible: GameSettings.cellFrame
                     color: "transparent"
                     border.color:  GameConstants.frameColor
+                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
                 }
 
                 Text {
                     anchors.centerIn: parent
                     text: "2"
-                    opacity: visualsSwitch.checked ? 0.25 : 1
+                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
                     color: "#28d13c"
                     font.pixelSize: 35 * 0.60
                     font.bold: true
@@ -320,15 +322,16 @@ Popup {
                     anchors.fill: parent
                     radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
-                    visible: visualsSwitch.checked ? false : true
+                    visible: GameSettings.cellFrame
                     color: "transparent"
                     border.color:  GameConstants.frameColor
+                    opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
                 }
 
                 Text {
                     anchors.centerIn: parent
                     text: "1"
-                    opacity: visualsSwitch.checked ? 0.25 : 1
+                    opacity: GameSettings.dimSatisfied ? 0.25 : 1
                     color: "#069ecc"
                     font.pixelSize: 35 * 0.60
                     font.bold: true
@@ -361,7 +364,8 @@ Popup {
                     radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
                     border.width: 2
                     color: "transparent"
-                    visible: visualsSwitch.checked ? false : true
+                    visible: GameSettings.cellFrame
+                    //opacity: GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
                     border.color:  GameConstants.frameColor
                 }
 
@@ -376,25 +380,45 @@ Popup {
                 }
             }
         }
+
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
 
             Label {
-                text: qsTr("Enable enhanced visuals")
-            }
-
-            Item {
+                text: qsTr("Dimm satisfied numbers")
                 Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: dimSwitch.click()
+                }
             }
 
             NfSwitch {
-                id: visualsSwitch
+                id: dimSwitch
+                checked: GameSettings.dimSatisfied
                 onCheckedChanged: {
-                    GameSettings.cellFrame = !checked
                     GameSettings.dimSatisfied = checked
                 }
-                Component.onCompleted: {
-                    checked = !GameSettings.cellFrame && GameSettings.dimSatisfied
+            }
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+
+            Label {
+                text: qsTr("Show cell frame")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: frameSwitch.click()
+                }
+            }
+
+            NfSwitch {
+                id: frameSwitch
+                checked: GameSettings.cellFrame
+                onCheckedChanged: {
+                    GameSettings.cellFrame = checked
                 }
             }
         }
@@ -404,9 +428,6 @@ Popup {
 
             Label {
                 text: qsTr("System color for flags")
-            }
-
-            Item {
                 Layout.fillWidth: true
             }
 

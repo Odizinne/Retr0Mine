@@ -1064,56 +1064,61 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/Popups/WelcomePopup.qml" line="383"/>
-        <source>Enable enhanced visuals</source>
+        <source>Dimm satisfied numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="406"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="401"/>
+        <source>Show cell frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="420"/>
         <source>System color for flags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="426"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="437"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="446"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="457"/>
         <source>Color correction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="659"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="670"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="877"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="888"/>
         <source>Tritanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1099"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1110"/>
         <source>Protanopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1317"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1328"/>
         <source>Deuteranopia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1339"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1350"/>
         <source>You&apos;re all set!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1345"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1356"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1356"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1367"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

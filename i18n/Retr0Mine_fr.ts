@@ -1085,56 +1085,61 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/Popups/WelcomePopup.qml" line="383"/>
-        <source>Enable enhanced visuals</source>
-        <translation>Activer les améliorations visuelles</translation>
+        <source>Dimm satisfied numbers</source>
+        <translation>Assombrir les chiffres satisfaits</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="406"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="401"/>
+        <source>Show cell frame</source>
+        <translation>Afficher le cadre des cellules</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="420"/>
         <source>System color for flags</source>
         <translation>Couleur système pour les drapeaux</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="426"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="437"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="446"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="457"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="659"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="670"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="877"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="888"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1099"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1110"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1317"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1328"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1339"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1350"/>
         <source>You&apos;re all set!</source>
         <translation>Tout est prêt!</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1345"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1356"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="1356"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="1367"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
