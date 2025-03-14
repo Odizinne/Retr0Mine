@@ -180,6 +180,41 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             initialItem: difficultyPaneComponent
+            property string direction: GameSettings.themeIndex === 0 ? "y" : "x"
+            property int animationDuration: GameSettings.themeIndex === 0 ? 150 : 200
+
+            popEnter: Transition {
+                ParallelAnimation {
+                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: stackView.animationDuration; easing.type: Easing.InQuint }
+                    NumberAnimation { property: stackView.direction; from: (stackView.mirrored ? -0.3 : 0.3) * -stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                }
+            }
+
+            popExit: Transition {
+                NumberAnimation { property: "opacity"; from: 1; to: 0; duration: stackView.animationDuration; easing.type: Easing.OutQuint }
+            }
+
+            pushEnter: Transition {
+                ParallelAnimation {
+                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: stackView.animationDuration; easing.type: Easing.InQuint }
+                    NumberAnimation { property: stackView.direction; from: (stackView.mirrored ? -0.3 : 0.3) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                }
+            }
+
+            pushExit: Transition {
+                NumberAnimation { property: "opacity"; from: 1; to: 0; duration: stackView.animationDuration; easing.type: Easing.OutQuint }
+            }
+
+            replaceEnter: Transition {
+                ParallelAnimation {
+                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: stackView.animationDuration; easing.type: Easing.InQuint }
+                    NumberAnimation { property: stackView.direction; from: (stackView.mirrored ? -0.3 : 0.3) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
+                }
+            }
+
+            replaceExit: Transition {
+                NumberAnimation { property: "opacity"; from: 1; to: 0; duration: stackView.animationDuration; easing.type: Easing.OutQuint }
+            }
 
             Component {
                 id: difficultyPaneComponent
