@@ -38,9 +38,7 @@ ApplicationWindow {
 
         function onInviteReceived(name, connectData) {
             if (GameSettings.mpShowInviteNotificationInGame) {
-                inviteToast.friendName = name
-                inviteToast.connectData = connectData
-                inviteToast.visible = true
+                inviteToast.showInvite(name, connectData);
             }
         }
 
