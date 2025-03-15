@@ -24,13 +24,17 @@ Pane {
                     "Français"
                 ]
                 property int previousLanguageIndex: currentIndex
+                property int previousSettingsIndex: 0
                 Layout.rightMargin: 5
                 currentIndex: GameSettings.languageIndex
                 onActivated: {
+                    previousSettingsIndex = ComponentsContext.settingsIndex
+                    ComponentsContext.settingsIndex = 0
                     previousLanguageIndex = currentIndex
                     GameSettings.languageIndex = currentIndex
                     GameCore.setLanguage(currentIndex)
                     currentIndex = previousLanguageIndex
+                    ComponentsContext.settingsIndex = previousSettingsIndex
                 }
             }
         }

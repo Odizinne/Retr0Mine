@@ -112,7 +112,7 @@ ApplicationWindow {
                             icon: "qrc:/icons/debug.png",
                         }
                     ]
-                    currentIndex: 0
+                    currentIndex: ComponentsContext.settingsIndex
                     delegate: ItemDelegate {
                         width: parent.width
                         height: 40
@@ -123,8 +123,8 @@ ApplicationWindow {
                         text: GameCore.isFluent ? "  " + modelData.text : modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {
-                            if (sidebarList.currentIndex !== index) {
-                                sidebarList.currentIndex = index
+                            if (ComponentsContext.settingsIndex !== index) {
+                                ComponentsContext.settingsIndex = index
                                 switch(index) {
                                     case 0: stackView.push(difficultyPaneComponent); break;
                                     case 1: stackView.push(gameplayPaneComponent); break;
