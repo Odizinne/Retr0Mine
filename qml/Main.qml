@@ -87,11 +87,9 @@ ApplicationWindow {
 
         function onConnectedPlayerChanged() {
             if (SteamIntegration.connectedPlayerName) {
-                console.log("Player connected:", SteamIntegration.connectedPlayerName);
             } else if (SteamIntegration.isInMultiplayerGame) {
                 NetworkManager.sessionRunning = false;
                 NetworkManager.mpPopupCloseButtonVisible = false;
-                console.log("Player disconnected");
             }
         }
 

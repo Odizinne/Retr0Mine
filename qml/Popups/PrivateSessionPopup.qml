@@ -133,7 +133,7 @@ Popup {
         }
 
         Label {
-            text: qsTr("Press G while hovering a cell to signal it")
+            text: qsTr("Press G or middle-click mouse while hovering a cell to signal it")
             Layout.preferredWidth: 300
             wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignCenter

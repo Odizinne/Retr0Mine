@@ -647,67 +647,67 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>PrivateSessionPopup</name>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="105"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="104"/>
         <source> is generating grid...</source>
         <translation> génère la grille...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="106"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="105"/>
         <source>Establishing connection with </source>
         <translation>Connexion en cours avec </translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="117"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
         <source>Session in progress</source>
         <translation>Session en cours</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="117"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
         <source>Ready</source>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="117"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
         <source>Creating cells...</source>
         <translation>Création des cellules...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="117"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
         <source>Waiting for host</source>
         <translation>En attente de l&apos;hôte</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="137"/>
-        <source>Press G while hovering a cell to signal it</source>
-        <translation>Appuyez sur G en surlovant une cellule pour la signaler</translation>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="136"/>
+        <source>Press G or middle-click mouse while hovering a cell to signal it</source>
+        <translation>Appuyez sur G ou sur le bouton central de la souris en survolant une cellule pour la signaler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="153"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="152"/>
         <source>Invite sent</source>
         <translation>Invitation envoyée</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="188"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="187"/>
         <source>Filter...</source>
         <translation>Filtrer...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="196"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="195"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="315"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="314"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="337"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="336"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="345"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="344"/>
         <source>Quit session</source>
         <translation>Quitter la session</translation>
     </message>

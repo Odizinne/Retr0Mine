@@ -386,12 +386,18 @@ Item {
         MouseArea {
             id: cellMouseArea
             anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
             enabled: !GameState.isGeneratingGrid
             hoverEnabled: true
             property bool isHovered: false
 
             function handleCellClick(mouse) {
+                if (mouse.button === Qt.MiddleButton && !pingCooldown.running) {
+                    NetworkManager.sendPing(cellItem.index)
+                    pingCooldown.start()
+                    return
+                }
+
                 if (GameState.nextClickIsSignal) {
                     GameState.nextClickIsSignal = false
                     NetworkManager.sendPing(cellItem.index)

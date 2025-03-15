@@ -175,7 +175,6 @@ Item {
             performReveal(currentIndex, "firstClick");
 
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                console.log("Host initializing multiplayer game after board generation");
                 NetworkManager.initializeMultiplayerGame(currentIndex);
             }
 
