@@ -46,7 +46,7 @@ class SteamIntegration : public QObject
     Q_PROPERTY(int selectedMatchmakingDifficulty READ getSelectedMatchmakingDifficulty WRITE setSelectedMatchmakingDifficulty NOTIFY selectedDifficultyChanged)
 
 public:
-    // Connection state enum - exposed to QML
+    static bool debugLoggingEnabled;
     enum ConnectionState {
         Disconnected,
         Connecting,
