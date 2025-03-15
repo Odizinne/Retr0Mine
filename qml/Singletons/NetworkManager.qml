@@ -208,7 +208,7 @@ QtObject {
             GameSettings.customWidth = data.gridSizeX;
             GameSettings.customHeight = data.gridSizeY;
             GameSettings.customMines = data.mineCount;
-            GameSettings.difficulty = 4; // Custom difficulty index
+            GameSettings.difficulty = 4;
         }
 
         if (!SteamIntegration.isHost) {
@@ -441,7 +441,6 @@ QtObject {
 
         if (gameState.action === "gameStats" && gameState.stats) {
             if (!SteamIntegration.isHost) {
-                // Set the client's game stats to match what the host sent
                 GameState.hostRevealed = gameState.stats.hostRevealed || 0;
                 GameState.clientRevealed = gameState.stats.clientRevealed || 0;
                 GameState.firstClickRevealed = gameState.stats.firstClickRevealed || 0;
@@ -799,12 +798,9 @@ QtObject {
 
             case "sendHint":
                 try {
-                    // Try to parse the parameter as JSON
                     const hintData = JSON.parse(cellIndex);
 
-                    // If successful, we have both cell index and explanation
                     if (hintData && hintData.cell !== undefined) {
-                        // Highlight the cell
                         GridBridge.withCell(hintData.cell, function(cell) {
                             if (cell && typeof cell.highlightHint === 'function') {
                                 cell.highlightHint();
@@ -813,7 +809,6 @@ QtObject {
                             }
                         });
 
-                        // Display the explanation if available
                         if (hintData.explanation && GridBridge.chatReference) {
                             GridBridge.chatReference.addBotMessage(hintData.explanation);
                         }
@@ -905,15 +900,9 @@ QtObject {
             }
 
             GridBridge.performReveal(index, playerIdentifier || NetworkManager.hostName);
-            console.log("approved reveal fucking sent")
             SteamIntegration.sendGameAction("approveReveal", index);
         } else {
             SteamIntegration.sendGameAction("reveal", index);
-            // Client tracks that it initiated the reveal
-            //if (!NetworkManager.allowClientReveal) {
-            //    // Only if direct reveal from client
-            //    GridBridge.performReveal(index, NetworkManager.clientName);
-            //}
         }
 
         return true;
@@ -1037,19 +1026,15 @@ QtObject {
                 }
             }
 
-            // Create a stats object to send to the client
             const gameStats = {
                 hostRevealed: GameState.hostRevealed,
                 clientRevealed: GameState.clientRevealed,
                 firstClickRevealed: GameState.firstClickRevealed
             };
 
-            // Send the stats along with the gameOver signal
             Qt.callLater(function() {
-                // Send game over with win status (1)
                 SteamIntegration.sendGameAction("gameOver", 1);
 
-                // Send the stats as a separate action
                 SteamIntegration.sendGameState({
                     action: "gameStats",
                     stats: gameStats

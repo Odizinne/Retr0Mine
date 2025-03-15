@@ -24,7 +24,6 @@ Item {
         chatReference = chatPanel;
     }
 
-    // Helper function to safely get a cell
     function getCell(index) {
         if (!grid) return null;
 
@@ -34,7 +33,6 @@ Item {
         return loader.item;
     }
 
-    // Helper function to safely perform an operation on a cell
     function withCell(index, operation) {
         const cell = getCell(index);
         if (cell) {
@@ -61,17 +59,14 @@ Item {
         generationCancelled = true
         GameState.isGeneratingGrid = false
 
-        // Call the C++ method to cancel the generation thread
         GameLogic.cancelGeneration()
 
-        // Disconnect all generation signals to prevent any late callbacks from affecting the game
         try {
             GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
         } catch (e) {
             // Signal may not be connected, ignore
         }
 
-        // Reset game state
         GameState.gameStarted = false
         GameState.firstClickIndex = -1
         GameState.mines = []
@@ -83,12 +78,10 @@ Item {
             return;
         }
 
-        // Check if we're in multiplayer
         if (NetworkManager.handleMultiplayerHintRequest()) {
-            return; // Action handled by multiplayer
+            return;
         }
 
-        // Regular single-player hint processing
         processHintRequest();
     }
 
@@ -104,27 +97,19 @@ Item {
             if (cell.flagged) flagged.push(i);
         }
 
-        // Get the hint result using the new method
         const hintResult = GameLogic.findMineHintWithReasoning(revealed, flagged);
-
-        // Extract values from the map
         const mineCell = hintResult.cell;
         const explanation = hintResult.explanation;
 
-        console.log("Mine cell:", mineCell, "Explanation:", explanation);
 
         if (mineCell !== -1) {
-            // In multiplayer host mode, we need to send this cell index AND explanation to the client
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-                console.log("Host sending hint to client for cell:", mineCell);
 
-                // Create a structured message containing both cell and explanation
                 const hintData = {
                     cell: mineCell,
                     explanation: explanation
                 };
 
-                // Send as JSON string since we need to pass both values
                 SteamIntegration.sendGameAction("sendHint", JSON.stringify(hintData));
             }
 
@@ -132,7 +117,6 @@ Item {
                 cell.highlightHint();
             });
 
-            // Add a bot message with the explanation
             if (GameSettings.hintReasoningInChat && chatReference && explanation && typeof explanation === "string" && explanation.length > 0) {
                 chatReference.addBotMessage(explanation);
             }
@@ -142,12 +126,10 @@ Item {
     }
 
     function revealConnectedCells(index) {
-        // Check if we're in multiplayer
         if (NetworkManager.handleMultiplayerRevealConnected(index)) {
-            return; // Action handled by multiplayer
+            return;
         }
 
-        // Regular single-player reveal connected cells
         performRevealConnectedCells(index);
     }
 
@@ -157,7 +139,6 @@ Item {
         const cell = getCell(index);
         if (!cell || !cell.revealed || GameState.numbers[index] <= 0) return;
 
-        // Use C++ helper to get cells to reveal
         var cellsToReveal = helper.getAdjacentCellsToReveal(
             index,
             GameState.gridSizeX,
@@ -166,14 +147,12 @@ Item {
             getCellForCallback
         );
 
-        // Reveal each adjacent cell
         for (let i = 0; i < cellsToReveal.length; i++) {
             reveal(cellsToReveal[i], playerIdentifier);
         }
     }
 
     function onBoardGenerated(success) {
-        // Check if generation was cancelled
         if (generationCancelled) {
             generationCancelled = false
             try {
@@ -193,7 +172,6 @@ Item {
 
             let currentIndex = GameState.firstClickIndex;
 
-            // Use performReveal with "firstClick" identifier instead of direct cell manipulation
             performReveal(currentIndex, "firstClick");
 
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
@@ -233,7 +211,7 @@ Item {
     function generateField(index) {
         GameState.isGeneratingGrid = true;
         GameState.firstClickIndex = index;
-        generationCancelled = false;  // Reset cancellation flag
+        generationCancelled = false;
 
         var row, col;
         if (GameSettings.safeFirstClick) {
@@ -257,15 +235,12 @@ Item {
     }
 
     function reveal(index, playerIdentifier) {
-        // Register player action to reset idle timer
         registerPlayerAction()
 
-        // Check if we're in multiplayer
         if (NetworkManager.handleMultiplayerReveal(index, playerIdentifier)) {
-            return; // Action handled by multiplayer
+            return;
         }
 
-        // Regular single-player reveal
         performReveal(index, playerIdentifier);
     }
 
@@ -274,12 +249,10 @@ Item {
         if (!initialCell || GameState.gameOver || initialCell.revealed || initialCell.flagged) return;
 
         if (!GameState.gameStarted) {
-            // Start the async generation - the actual reveal happens after board is generated
             generateField(index);
             return;
         }
 
-        // Use C++ helper to get cells to reveal
         var cellsToReveal = helper.performFloodFillReveal(
             index,
             GameState.gridSizeX,
@@ -289,10 +262,8 @@ Item {
             getCellForCallback
         );
 
-        // Track cells revealed in this operation
         let cellsRevealed = 0;
 
-        // Process the revealed cells
         for (let i = 0; i < cellsToReveal.length; i++) {
             let currentIndex = cellsToReveal[i];
             const cell = getCell(currentIndex);
@@ -309,16 +280,13 @@ Item {
                 GameState.gameWon = false;
                 GameState.bombClickedBy = playerIdentifier || SteamIntegration.playerName;
 
-                // Update the appropriate counter
                 attributeRevealedCells(cellsRevealed, playerIdentifier);
 
-                // This is what was missing! The actual game over handling:
                 GameTimer.stop();
                 revealAllMines();
                 if (audioEngine) audioEngine.playLoose();
                 GameState.displayPostGame = true;
 
-                // In multiplayer, if we're the host, send game over notification to client
                 if (NetworkManager.onGameLost(currentIndex)) {
                     // Handled by multiplayer
                 }
@@ -350,16 +318,13 @@ Item {
 
     function initGame() {
         if (GameState.isGeneratingGrid) {
-            // Cancel any ongoing generation
             cancelGeneration();
         }
 
-        // Handle multiplayer networking logic
         if (SteamIntegration.isInMultiplayerGame) {
             NetworkManager.resetMultiplayerState();
         }
 
-        // Call the shared implementation
         performInitGame();
     }
 
@@ -426,15 +391,12 @@ Item {
             GameState.gameWon = true;
             GameTimer.stop();
 
-            // Handle multiplayer win
             if (NetworkManager.onGameWon()) {
-                // Game win handled by multiplayer
                 GameState.displayPostGame = true;
                 if (audioEngine) audioEngine.playWin();
                 return;
             }
 
-            // Leaderboard updates for single player only
             let leaderboardData = GameCore.loadGameState("leaderboard.json");
             let leaderboard = {};
 
@@ -475,7 +437,6 @@ Item {
 
             GameCore.saveLeaderboard(JSON.stringify(leaderboard));
 
-            // Achievement updates for single player only
             if (!GameState.isManuallyLoaded) {
                 if (SteamIntegration.initialized) {
                     const difficulty = GameState.getDifficultyLevel();
@@ -524,7 +485,6 @@ Item {
                 }
             }
 
-            // Always display post-game UI for both single player and multiplayer
             GameState.displayPostGame = true;
             if (audioEngine) audioEngine.playWin();
         } else {
@@ -533,13 +493,11 @@ Item {
     }
 
     function toggleFlag(index) {
-        // Check if we're in multiplayer
         registerPlayerAction()
         if (NetworkManager.handleMultiplayerToggleFlag(index)) {
-            return; // Action handled by multiplayer
+            return;
         }
 
-        // Regular single-player flag toggle (no cooldown needed)
         performToggleFlag(index);
     }
 
@@ -551,72 +509,62 @@ Item {
         withCell(index, function(cell) {
             if (!cell.revealed) {
                 if (SteamIntegration.isInMultiplayerGame) {
-                    // Modified multiplayer flagging with question marks enabled
                     if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
-                        // Only place flag if we haven't reached max flags yet
                         if (GameState.flaggedCount < GameState.mineCount) {
                             cell.flagged = true;
                             cell.questioned = false;
                             cell.safeQuestioned = false;
                             GameState.flaggedCount++;
                         } else {
-                            // If max flags reached, go directly to question mark
                             cell.flagged = false;
                             cell.questioned = true;
                             cell.safeQuestioned = false;
                         }
                     } else if (cell.flagged) {
-                        // Always enable question marks in multiplayer
                         cell.flagged = false;
                         cell.questioned = true;
                         cell.safeQuestioned = false;
-                        GameState.flaggedCount--; // Decrement only when removing a flag
+                        GameState.flaggedCount--;
                     } else if (cell.questioned) {
                         cell.questioned = false;
-                        flagCompletelyRemoved = true; // Flag cycle is complete
+                        flagCompletelyRemoved = true;
                     } else if (cell.safeQuestioned) {
-                        // In multiplayer, always go from question mark back to empty (no safe question marks)
                         cell.safeQuestioned = false;
-                        flagCompletelyRemoved = true; // Flag cycle is complete
+                        flagCompletelyRemoved = true;
                     }
                 } else {
-                    // Original single-player flagging logic
                     if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
-                        // Only place flag if we haven't reached max flags yet
                         if (GameState.flaggedCount < GameState.mineCount) {
                             cell.flagged = true;
                             cell.questioned = false;
                             cell.safeQuestioned = false;
                             GameState.flaggedCount++;
                         } else if (GameSettings.enableQuestionMarks) {
-                            // If max flags reached, go directly to question mark
                             cell.flagged = false;
                             cell.questioned = true;
                             cell.safeQuestioned = false;
                         } else if (GameSettings.enableSafeQuestionMarks) {
-                            // If max flags reached, go directly to safe question mark
                             cell.flagged = false;
                             cell.questioned = false;
                             cell.safeQuestioned = true;
                         }
-                        // If no question marks enabled and max flags reached, do nothing
                     } else if (cell.flagged) {
                         if (GameSettings.enableQuestionMarks) {
                             cell.flagged = false;
                             cell.questioned = true;
                             cell.safeQuestioned = false;
-                            GameState.flaggedCount--; // Decrement only when removing a flag
+                            GameState.flaggedCount--;
                         } else if (GameSettings.enableSafeQuestionMarks) {
                             cell.flagged = false;
                             cell.questioned = false;
                             cell.safeQuestioned = true;
-                            GameState.flaggedCount--; // Decrement only when removing a flag
+                            GameState.flaggedCount--;
                         } else {
                             cell.flagged = false;
                             cell.questioned = false;
                             cell.safeQuestioned = false;
-                            GameState.flaggedCount--; // Decrement only when removing a flag
-                            flagCompletelyRemoved = true; // Flag cycle is complete
+                            GameState.flaggedCount--;
+                            flagCompletelyRemoved = true;
                         }
                     } else if (cell.questioned) {
                         if (GameSettings.enableSafeQuestionMarks) {
@@ -624,11 +572,11 @@ Item {
                             cell.safeQuestioned = true;
                         } else {
                             cell.questioned = false;
-                            flagCompletelyRemoved = true; // Flag cycle is complete
+                            flagCompletelyRemoved = true;
                         }
                     } else if (cell.safeQuestioned) {
                         cell.safeQuestioned = false;
-                        flagCompletelyRemoved = true; // Flag cycle is complete
+                        flagCompletelyRemoved = true;
                     }
                 }
             }
@@ -638,7 +586,6 @@ Item {
     }
 
     function hasUnrevealedNeighbors(index) {
-        // If the cell has no number (0), no need for satisfaction check
         if (GameState.numbers[index] === 0) {
             return false;
         }
@@ -653,7 +600,6 @@ Item {
     }
 
     function getNeighborFlagCount(index) {
-        // If the cell has no number, return 0
         if (GameState.numbers[index] === 0) {
             return 0;
         }
@@ -671,21 +617,16 @@ Item {
         interval: 3000
         repeat: false
         onTriggered: {
-            // Start shaking if appropriate
             GridBridge.playShakeAnimationIfNeeded()
         }
     }
 
     function registerPlayerAction() {
-        // Reset the idle timer
         idleTimer.restart()
-        // Cancel any active shake
         globalShakeActive = false
     }
 
-    // Check if any cells need shaking and start the animation
     function playShakeAnimationIfNeeded() {
-        // Check if any cells meet shake conditions
         let anyCellNeedsShake = false
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             const cell = getCell(i)
@@ -696,27 +637,20 @@ Item {
         }
 
         if (anyCellNeedsShake && !GameState.gameOver && GameSettings.shakeUnifinishedNumbers) {
-            // Start shake animation
             globalShakeActive = true
 
-            // Set timer to end animation
             shakeTimer.restart()
         } else {
-            // No cells need shaking, so check again after 3 seconds
             idleTimer.restart()
         }
     }
 
-    // Timer to control shake animation duration
     Timer {
         id: shakeTimer
-        interval: 1500 // Animation duration (matches 3 loops of your animation)
-        repeat: false
+        interval: 1500
         onTriggered: {
-            // End shake animation
             GridBridge.globalShakeActive = false
 
-            // Schedule next idle check
             idleTimer.restart()
         }
     }
