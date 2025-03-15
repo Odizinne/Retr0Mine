@@ -28,11 +28,13 @@ Pane {
                 Layout.rightMargin: 5
                 currentIndex: GameSettings.themeIndex
                 onActivated: {
-                    if (GameState.gameStarted && !GameState.gameOver) {
-                        SaveManager.saveGame("internalGameState.json")
+                    if (currentIndex !== GameSettings.themeIndex) {
+                        if (GameState.gameStarted && !GameState.gameOver) {
+                            SaveManager.saveGame("internalGameState.json")
+                        }
+                        GameState.bypassAutoSave = true
+                        GameCore.restartRetr0Mine(currentIndex)
                     }
-                    GameState.bypassAutoSave = true
-                    GameCore.restartRetr0Mine(currentIndex)
                 }
             }
         }
@@ -50,7 +52,6 @@ Pane {
                 id: colorSchemeComboBox
                 model: [qsTr("System"), qsTr("Dark"), qsTr("Light")]
                 Layout.rightMargin: 5
-
                 currentIndex: GameSettings.colorSchemeIndex
                 onActivated: {
                     GameSettings.colorSchemeIndex = currentIndex
