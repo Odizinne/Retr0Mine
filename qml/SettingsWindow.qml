@@ -123,7 +123,7 @@ ApplicationWindow {
                         text: GameCore.isFluent ? "  " + modelData.text : modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {
-                            if (ComponentsContext.settingsIndex !== index) {
+                            if (sidebarList.currentIndex !== index) {
                                 ComponentsContext.settingsIndex = index
                                 switch(index) {
                                     case 0: stackView.push(difficultyPaneComponent); break;
@@ -180,8 +180,8 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             initialItem: difficultyPaneComponent
-            property string direction: GameSettings.themeIndex === 0 ? "y" : "x"
-            property int animationDuration: GameSettings.themeIndex === 0 ? 150 : 200
+            property string direction: GameCore.isFluent ? "y" : "x"
+            property int animationDuration: GameCore.isFluent ? 150 : 200
 
             popEnter: Transition {
                 ParallelAnimation {

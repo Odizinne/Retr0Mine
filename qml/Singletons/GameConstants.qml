@@ -28,7 +28,7 @@ Item {
         }
     }
 
-    readonly property color accentColor: GameSettings.themeIndex === 0 ? sysPalette.accent : sysPalette.highlight
+    readonly property color accentColor: GameCore.isFluent ? sysPalette.accent : sysPalette.highlight
     readonly property color foregroundColor: getForegroundColor()
     readonly property color frameColor: getFrameColor()
     readonly property var numberPalettes: ({
@@ -171,8 +171,8 @@ Item {
     }
 
     property int settingsRowSpacing: 10
-    property int settingsColumnSpacing: GameSettings.themeIndex === 0 ? 15 : 20
-    property int settingsComponentsHeight: GameSettings.themeIndex === 0 ? 35 : 32
+    property int settingsColumnSpacing: GameCore.isFluent ? 15 : 20
+    property int settingsComponentsHeight: GameCore.isFluent ? 35 : 32
     property string retr0mineLogo: getForegroundColor() === "white" ? "qrc:/images/retr0mine_logo.png" : "qrc:/images/retr0mine_logo_dark.png"
 
     function getRightClickExplanation() {

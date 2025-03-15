@@ -193,7 +193,7 @@ Popup {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                        radius: GameCore.isFluent ? 4 : 0
                         border.width: 2
                         visible: cell.modelData.type === "number" && GameSettings.cellFrame
                         color: "transparent"
@@ -348,7 +348,7 @@ Popup {
 
                         Rectangle {
                             anchors.fill: parent
-                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            radius: GameCore.isFluent ? 4 : 0
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
@@ -410,7 +410,7 @@ Popup {
 
                         Rectangle {
                             anchors.fill: parent
-                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            radius: GameCore.isFluent ? 4 : 0
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
@@ -476,7 +476,7 @@ Popup {
 
                         Rectangle {
                             anchors.fill: parent
-                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            radius: GameCore.isFluent ? 4 : 0
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
@@ -537,7 +537,7 @@ Popup {
 
                         Rectangle {
                             anchors.fill: parent
-                            radius: GameCore.isFluent ? 4 : (GameCore.isUniversal ? 0 : 3)
+                            radius: GameCore.isFluent ? 4 : 0
                             border.width: 2
                             color: "transparent"
                             border.color: GameConstants.frameColor
