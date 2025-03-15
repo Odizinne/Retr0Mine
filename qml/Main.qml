@@ -462,6 +462,10 @@ ApplicationWindow {
                 anchors.centerIn: gameView
             }
 
+            AboutPopup {
+                anchors.centerIn: gameView
+            }
+
             PlayerLeftPopup {
                 id: playerLeftPopup
                 anchors.centerIn: gameView
@@ -471,26 +475,6 @@ ApplicationWindow {
                 id: leaderboardWindow
                 anchors.centerIn: gameView
                 Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
-            }
-
-            Loader {
-                anchors.fill: parent
-                active: true
-                sourceComponent: SteamIntegration.initialized ? multiplayerPopupComponent : aboutPopupComponent
-
-                Component {
-                    id: multiplayerPopupComponent
-                    PrivateSessionPopup {
-                        anchors.centerIn: parent
-                    }
-                }
-
-                Component {
-                    id: aboutPopupComponent
-                    AboutPopup {
-                        anchors.centerIn: parent
-                    }
-                }
             }
         }
 
