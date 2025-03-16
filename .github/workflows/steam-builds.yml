@@ -35,40 +35,12 @@ jobs:
           cmake ..
           cmake --build . --config Release 
           cmake --install . --config Release
-          ls release
-          #ls install
-          
-      - name: Clean build directory
-        shell: pwsh
-        run: |
-          cd build/release
-          Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
-
-      - name: Copy Steam API DLL
-        shell: pwsh
-        run: |
-          Copy-Item "lib\steam\win64\steam_api64.dll" -Destination "build\release"
-
-      - name: Deploy Qt
-        shell: pwsh
-        run: |
-          cd build/release
-          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\build\net\odizinne\retr0mine\qml"
-          windeployqt6 `
-              --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
-              --no-opengl-sw `
-              --no-system-dxc-compiler `
-              --no-compiler-runtime `
-              --no-translations `
-              --no-system-d3d-compiler `
-              --qmldir $qmlDir `
-              Retr0Mine.exe
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_Windows
-          path: build/release
+          path: build/install
 
   linux-build:
     runs-on: ubuntu-latest
@@ -101,59 +73,13 @@ jobs:
           mkdir -p build
           cd build
           cmake ..
-          cmake --build . --config Release --parallel
+          cmake --build . --config Release
+          cmake --install . --config Release
           ls
-
-      - name: Create AppDir structure
-        run: |
-          mkdir -p AppDir/usr/bin
-          mkdir -p AppDir/usr/lib
-          mkdir -p AppDir/usr/share/applications
-          mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
-          mv build/Retr0Mine AppDir/usr/bin/Retr0Mine
-          
-          #cp lib/steam/linux64/libsteam_api.so AppDir/usr/lib/
-
-          # Create .desktop file
-          cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
-          [Desktop Entry]
-          Name=Retr0Mine
-          Exec=Retr0Mine
-          Icon=Retr0Mine
-          Type=Application
-          Categories=Game;
-          Comment=Minesweeper game
-          EOF
-          
-          # Copy application icon
-          cp resources/icons/icon.png AppDir/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
-
-      - name: Download linuxdeploy and plugins
-        run: |
-          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-          chmod +x linuxdeploy*.AppImage
-
-      - name: Deploy with linuxdeploy
-        run: |
-          export QMAKE=$(which qmake6)
-          export QML_SOURCES_PATHS=${{ github.workspace }}/qml
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/lib/steam/linux64
-          export EXTRA_QT_MODULES="multimedia"
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt
-
-      - name: Remove unnecessary files in AppDir
-        run: |
-          shopt -s extglob
-          rm -rf AppDir/!(usr)
-  
-      - name: Clean unnecessary files
-        run: |
-          rm -rf AppDir/usr/translations
-          rm -rf AppDir/usr/plugins/tls
+          ls install
 
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_Linux
-          path: AppDir/*
+          path: build/install
