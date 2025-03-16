@@ -213,7 +213,7 @@ Item {
                 icon.color: GameConstants.foregroundColor
                 font.pixelSize: 18
                 font.bold: true
-                
+                enabled: GameState.gameStarted && !GameState.gameOver
                 highlighted: GameState.flaggedCount === GameState.mineCount
                 onClicked: GridBridge.requestHint()
 
@@ -222,7 +222,7 @@ Item {
                     anchors.centerIn: parent
                     IconImage {
                         source: "qrc:/icons/bomb.png"
-                        color: GameConstants.foregroundColor
+                        color: enabled ? GameConstants.foregroundColor : "grey"
                         sourceSize.height: 18
                         sourceSize.width: 18
                     }
