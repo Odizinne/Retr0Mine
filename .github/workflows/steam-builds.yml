@@ -35,40 +35,40 @@ jobs:
           cmake ..
           cmake --build . --config Release 
           cmake --install . --config Release
-          ls net/odizinne/retr0mine
-          ls install
+          ls release
+          #ls install
           
-#      - name: Clean build directory
-#        shell: pwsh
-#        run: |
-#          cd build/release
-#          Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
-#
-#      - name: Copy Steam API DLL
-#        shell: pwsh
-#        run: |
-#          Copy-Item "lib\steam\win64\steam_api64.dll" -Destination "build\release"
-#
-#      - name: Deploy Qt
-#        shell: pwsh
-#        run: |
-#          cd build/release
-#          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\qml"
-#          windeployqt6 `
-#              --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
-#              --no-opengl-sw `
-#              --no-system-dxc-compiler `
-#              --no-compiler-runtime `
-#              --no-translations `
-#              --no-system-d3d-compiler `
-#              --qmldir $qmlDir `
-#              Retr0Mine.exe
+      - name: Clean build directory
+        shell: pwsh
+        run: |
+          cd build/release
+          Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
+
+      - name: Copy Steam API DLL
+        shell: pwsh
+        run: |
+          Copy-Item "lib\steam\win64\steam_api64.dll" -Destination "build\release"
+
+      - name: Deploy Qt
+        shell: pwsh
+        run: |
+          cd build/release
+          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\build\net\odizinne\retr0mine\qml"
+          windeployqt6 `
+              --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
+              --no-opengl-sw `
+              --no-system-dxc-compiler `
+              --no-compiler-runtime `
+              --no-translations `
+              --no-system-d3d-compiler `
+              --qmldir $qmlDir `
+              Retr0Mine.exe
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_Windows
-          path: build/install
+          path: build/release
 
   linux-build:
     runs-on: ubuntu-latest
