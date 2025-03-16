@@ -923,7 +923,7 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="181"/>
+        <location filename="../qml/TopBar.qml" line="189"/>
         <source>Click to pause</source>
         <translation type="unfinished"></translation>
     </message>

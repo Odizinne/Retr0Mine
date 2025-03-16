@@ -166,14 +166,22 @@ Item {
         }
     }
 
-    Label {
+    NfButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        id: elapsedTimeLabel
-        text: GameTimer.displayTime
+        width: timeLabel.implicitWidth + 20
         visible: GameSettings.displayTimer && !SteamIntegration.isInMultiplayerGame
-        font.pixelSize: 18
-        font.family: GameConstants.numberFont.name
+        enabled: GameState.gameStarted && !GameState.gameOver
+        flat: true
+
+        Label {
+            id: timeLabel
+            anchors.centerIn: parent
+            font.family: GameConstants.numberFont.name
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: 18
+            text: GameTimer.displayTime
+        }
 
         ToolTip {
             visible: timeMouseArea.containsMouse
