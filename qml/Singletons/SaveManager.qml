@@ -8,6 +8,14 @@ Item {
     property var savedData
     property int savedCentiseconds
 
+    function extractAndApplyGridSize(saveData) {
+        let data = JSON.parse(saveData)
+
+        GameState.gridSizeX = data.gameState.gridSizeX
+        GameState.gridSizeY = data.gameState.gridSizeY
+        GameState.mineCount = data.gameState.mineCount
+    }
+
     function loadGame(saveData) {
         try {
             let data = JSON.parse(saveData)

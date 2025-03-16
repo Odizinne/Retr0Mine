@@ -188,10 +188,15 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        const difficultySet = GameState.difficultySettings[GameSettings.difficulty]
-        GameState.gridSizeX = difficultySet.x
-        GameState.gridSizeY = difficultySet.y
-        GameState.mineCount = difficultySet.mines
+        let internalSaveData = GameCore.loadGameState("internalGameState.json")
+        if (internalSaveData) {
+            SaveManager.extractAndApplyGridSize(internalSaveData)
+        } else {
+            const difficultySet = GameState.difficultySettings[GameSettings.difficulty]
+            GameState.gridSizeX = difficultySet.x
+            GameState.gridSizeY = difficultySet.y
+            GameState.mineCount = difficultySet.mines
+        }
 
         let leaderboardData = GameCore.loadLeaderboard()
         if (leaderboardData) {
@@ -558,7 +563,7 @@ ApplicationWindow {
                 GameCore.deleteSaveFile("internalGameState.json")
                 GameState.isManuallyLoaded = false
             } else {
-                console.error("Failed to load internal game state")
+                GameCore.deleteSaveFile("internalGameState.json")
                 GridBridge.initGame()
             }
         } else {
