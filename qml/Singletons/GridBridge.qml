@@ -283,7 +283,7 @@ Item {
 
                 GameTimer.stop();
                 revealAllMines();
-                if (audioEngine) audioEngine.playLoose();
+                audioEngine.playLoose();
                 GameState.displayPostGame = true;
 
                 if (NetworkManager.onGameLost(currentIndex)) {
@@ -303,6 +303,9 @@ Item {
 
         attributeRevealedCells(cellsRevealed, playerIdentifier);
         checkWin();
+        if (!GameState.gameOver) {
+            audioEngine.playClick()
+        }
     }
 
     function attributeRevealedCells(count, playerIdentifier) {
@@ -392,7 +395,7 @@ Item {
 
             if (NetworkManager.onGameWon()) {
                 GameState.displayPostGame = true;
-                if (audioEngine) audioEngine.playWin();
+                audioEngine.playWin();
                 return;
             }
 
@@ -485,9 +488,7 @@ Item {
             }
 
             GameState.displayPostGame = true;
-            if (audioEngine) audioEngine.playWin();
-        } else {
-            if (audioEngine) audioEngine.playClick();
+            audioEngine.playWin();
         }
     }
 
