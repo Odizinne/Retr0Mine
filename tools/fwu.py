@@ -144,7 +144,7 @@ def download_github_artifacts(github_token):
                     z.extract(file, target_dir)
                     show_progress_bar(i + 1, total_files, "Extracting Windows files")
                     
-            windows_artifact_path = os.path.join(target_dir, "Retr0Mine.exe")
+            windows_artifact_path = os.path.join(target_dir, "bin", "Retr0Mine.exe")
             
         elif artifact_name == "Retr0Mine_Linux":
             target_dir = linux_dir
@@ -157,7 +157,7 @@ def download_github_artifacts(github_token):
                     z.extract(file, target_dir)
                     show_progress_bar(i + 1, total_files, "Extracting Linux files")
                     
-            linux_artifact_path = os.path.join(target_dir, "usr", "bin", "Retr0Mine")
+            linux_artifact_path = os.path.join(target_dir, "bin", "Retr0Mine")
     
     return windows_artifact_path, linux_artifact_path, commit_info
 
