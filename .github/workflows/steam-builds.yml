@@ -78,6 +78,22 @@ jobs:
           ls
           ls install
           
+      - name: Replace symlinks with real files
+        shell: bash
+        run: |
+          # Why? im uploading steam builds from windows, and handling symlink is a pain
+          
+          echo "Replacing symlinks with real files..."
+          cd build/install/lib
+          for f in $(find . -type l); do
+            target=$(readlink -f "$f")
+            if [ -f "$target" ]; then
+              echo "Replacing symlink $f -> $target"
+              rm "$f"
+              cp "$target" "$f"
+            fi
+          done
+
       - name: Cleanup Libraries and Plugins
         shell: bash
         run: |
