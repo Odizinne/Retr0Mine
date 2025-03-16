@@ -41,22 +41,22 @@ Menu {
 
     MenuItem {
         height: GameCore.isFluent ? implicitHeight - 2 : implicitHeight - 6
-        text: qsTr("Settings")
-        onTriggered: ComponentsContext.settingsWindowVisible = true
-    }
-
-    MenuItem {
-        height: GameCore.isFluent ? implicitHeight - 2 : implicitHeight - 6
         text: qsTr("Leaderboard")
         onTriggered: ComponentsContext.leaderboardPopupVisible = true
     }
 
     MenuItem {
         height: GameCore.isFluent ? implicitHeight - 2 : implicitHeight - 6
-        text: SteamIntegration.initialized ? qsTr("Coop (Beta)") : qsTr("About")
+        text: SteamIntegration.initialized ? qsTr("Multiplayer") : qsTr("About")
         onTriggered: {
             SteamIntegration.initialized ? ComponentsContext.privateSessionPopupVisible = true : ComponentsContext.aboutPopupVisible = true
         }
+    }
+
+    MenuItem {
+        height: GameCore.isFluent ? implicitHeight - 2 : implicitHeight - 6
+        text: qsTr("Settings")
+        onTriggered: ComponentsContext.settingsWindowVisible = true
     }
 
     MenuSeparator { }

@@ -77,22 +77,22 @@ Current game will be saved and restored</source>
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="45"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="47"/>
         <source>Color scheme</source>
         <translation>Thème</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
         <source>Dark</source>
         <translation>Sombre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
         <source>Light</source>
         <translation>Clair</translation>
     </message>
@@ -318,15 +318,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="448"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="455"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="462"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="447"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="454"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="461"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="472"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="478"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="471"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -421,32 +421,32 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="10"/>
+        <location filename="../qml/MainMenu.qml" line="11"/>
         <source>New game</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="19"/>
+        <location filename="../qml/MainMenu.qml" line="21"/>
         <source>Save game</source>
         <translation>Sauver</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="26"/>
+        <location filename="../qml/MainMenu.qml" line="28"/>
         <source>Load game</source>
         <translation>Charger</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="32"/>
+        <location filename="../qml/MainMenu.qml" line="35"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="40"/>
+        <location filename="../qml/MainMenu.qml" line="58"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="45"/>
+        <location filename="../qml/MainMenu.qml" line="44"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
@@ -457,16 +457,16 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/MainMenu.qml" line="50"/>
-        <source>Coop (Beta)</source>
-        <translation></translation>
+        <source>Multiplayer</source>
+        <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="57"/>
+        <location filename="../qml/MainMenu.qml" line="66"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="64"/>
+        <location filename="../qml/MainMenu.qml" line="72"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
