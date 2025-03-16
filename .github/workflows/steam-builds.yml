@@ -61,11 +61,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgl1-mesa-dev fuse libfuse2 libwayland-dev qt6-wayland
-          # Configure FUSE for the current user
-          sudo modprobe fuse
-          sudo groupadd fuse || true
-          sudo usermod -a -G fuse $USER
+          sudo apt-get install -y build-essential libgl1-mesa-dev libwayland-dev 
 
       - name: Generate and Build with CMake
         shell: pwsh
@@ -81,16 +77,22 @@ jobs:
       - name: Replace symlinks with real files
         shell: bash
         run: |
-          # Why? im uploading steam builds from windows, and handling symlink is a pain
-          
           echo "Replacing symlinks with real files..."
           cd build/install/lib
           for f in $(find . -type l); do
             target=$(readlink -f "$f")
             if [ -f "$target" ]; then
               echo "Replacing symlink $f -> $target"
+              # Get the filename only
+              target_name=$(basename "$target")
+              # Remove the symlink
               rm "$f"
+              # Copy the real file to the symlink name
               cp "$target" "$f"
+              # Remove the original file if it's not the same as the new file
+              if [ "$target" != "$(pwd)/$f" ]; then
+                rm "$target"
+              fi
             fi
           done
 
