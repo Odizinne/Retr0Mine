@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.19) # Increased minimum version
 project(Retr0Mine VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation directory" FORCE)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(QT_QML_GENERATE_QMLLS_INI ON)
 set(CMAKE_DISABLE_FIND_PACKAGE_WrapVulkanHeaders TRUE)
+
 find_package(Qt6 REQUIRED COMPONENTS
     Core
     Gui
@@ -16,8 +19,10 @@ find_package(Qt6 REQUIRED COMPONENTS
     LinguistTools
     Concurrent
 )
+
 qt_standard_project_setup(REQUIRES 6.5)
 qt_policy(SET QTP0004 NEW)
+
 set(SOURCES
     src/main.cpp
     src/gametimer.cpp
@@ -26,6 +31,7 @@ set(SOURCES
     src/steamintegration.cpp
     src/gridbridgehelper.cpp
 )
+
 set(HEADERS
     include/gametimer.h
     include/gamecore.h
@@ -33,6 +39,7 @@ set(HEADERS
     include/steamintegration.h
     include/gridbridgehelper.h
 )
+
 set(QML_FILES
     qml/Main.qml
     qml/Cell.qml
@@ -79,6 +86,7 @@ set(QML_FILES
     qml/Popups/InviteReceivedPopup.qml
     qml/Popups/PlayerLeftPopup.qml
 )
+
 set(QML_SINGLETONS
     qml/Singletons/GameSettings.qml
     qml/Singletons/GameConstants.qml
@@ -88,9 +96,11 @@ set(QML_SINGLETONS
     qml/Singletons/ComponentsContext.qml
     qml/Singletons/NetworkManager.qml
 )
+
 set_source_files_properties(${QML_SINGLETONS}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
+
 add_executable(${CMAKE_PROJECT_NAME}
     ${SOURCES}
     ${HEADERS}
@@ -100,15 +110,19 @@ add_executable(${CMAKE_PROJECT_NAME}
     resources/fonts/fonts.qrc
     resources/appicon.rc
 )
+
+# Add QML module before linking libraries
 qt_add_qml_module(${CMAKE_PROJECT_NAME}
     URI net.odizinne.retr0mine
     VERSION 1.0
     QML_FILES ${QML_FILES} ${QML_SINGLETONS}
 )
+
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include/steam
 )
+
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     Qt6::Core
     Qt6::Gui
@@ -118,6 +132,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     Qt6::QuickControls2
     Qt6::Concurrent
 )
+
 qt_add_translations(${CMAKE_PROJECT_NAME}
     TS_FILES
         i18n/Retr0Mine_en.ts
@@ -126,6 +141,7 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
     LUPDATE_OPTIONS "-no-obsolete"
 )
 #add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
+
 if(WIN32)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
         *CRT*SECURE_NO_WARNINGS
@@ -148,3 +164,41 @@ elseif(APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/osx/libsteam_api.dylib
     )
 endif()
+
+# Explicitly finalize the target
+qt_finalize_target(${CMAKE_PROJECT_NAME})
+
+# Include GNUInstallDirs to get standard installation directories
+include(GNUInstallDirs)
+
+# Installation configuration
+install(TARGETS ${CMAKE_PROJECT_NAME}
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# Platform-specific additional files to install
+if(WIN32)
+    # Install Steam API DLL
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/win64/steam_api64.dll
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+elseif(UNIX AND NOT APPLE)
+    # Install Steam API shared library
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/linux64/libsteam_api.so
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+elseif(APPLE)
+    # For macOS, bundle the Steam library
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/osx/libsteam_api.dylib
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
+
+# Generate deployment script for QML application
+qt_generate_deploy_qml_app_script(
+    TARGET ${CMAKE_PROJECT_NAME}
+    OUTPUT_SCRIPT deploy_script
+    NO_TRANSLATIONS
+    DEPLOY_TOOL_OPTIONS --no-compiler-runtime --no-opengl-sw --no-system-dxc-compiler --no-system-d3d-compiler --skip-plugin-types imageformats,designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls
+)
+
+# Use the generated deployment script during installation
+install(SCRIPT ${deploy_script})
