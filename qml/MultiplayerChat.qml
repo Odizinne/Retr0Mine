@@ -8,7 +8,7 @@ import net.odizinne.retr0mine 1.0
 
 Frame {
     id: chatPanel
-    property var chatMessages: []
+    property ListModel chatMessages: ListModel {}
 
     onVisibleChanged: {
         if (visible) {
@@ -21,17 +21,13 @@ Frame {
 
         function onMultiplayerStatusChanged() {
             if (!SteamIntegration.isInMultiplayerGame) {
-                chatPanel.chatMessages = []
-                chatListView.model = null
-                chatListView.model = chatPanel.chatMessages
-                ComponentsContext.multiplayerChatVisible = false
+                chatPanel.chatMessages.clear();
+                ComponentsContext.multiplayerChatVisible = false;
             }
         }
 
         function onConnectedPlayerChanged() {
-            chatPanel.chatMessages = []
-            chatListView.model = null
-            chatListView.model = chatPanel.chatMessages
+            chatPanel.chatMessages.clear();
         }
     }
 
@@ -40,91 +36,125 @@ Frame {
         anchors.margins: 8
         spacing: 8
 
-        ScrollView {
-            id: chatScrollView
+        Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            clip: true
-            ScrollBar.vertical.policy: ScrollBar.AsNeeded
+            Layout.preferredHeight: chatScrollView.height
+            TempScrollBar {
+                id: fluentVerticalScrollBar
+                enabled: chatScrollView.enabled
+                opacity: chatScrollView.opacity
+                orientation: Qt.Vertical
+                anchors.right: chatScrollView.right
+                anchors.top: chatScrollView.top
+                anchors.bottom: chatScrollView.bottom
+                visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
+                active: GameCore.isFluent
+                policy: (chatScrollView.contentHeight > chatScrollView.height) ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+            }
 
-            ListView {
-                id: chatListView
-                model: chatPanel.chatMessages
-                spacing: 12
-                width: parent.width
+            ScrollBar {
+                id: defaultVerticalScrollBar
+                enabled: chatScrollView.enabled
+                opacity: chatScrollView.opacity
+                orientation: Qt.Vertical
+                anchors.right: chatScrollView.right
+                anchors.top: chatScrollView.top
+                anchors.bottom: chatScrollView.bottom
+                visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
+                active: !GameCore.isFluent
+                policy: (chatScrollView.contentHeight > chatScrollView.height) ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+            }
 
-                onCountChanged: {
-                    if (count > 0) {
-                        positionViewAtEnd();
-                    }
-                }
+            ScrollView {
+                id: chatScrollView
+                anchors.fill: parent
+                clip: true
+                ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-                delegate: RowLayout {
-                    id: msgContainer
-                    width: chatListView.width
-                    spacing: 8
-                    required property var modelData
-
-                    Image {
-                        Layout.alignment: Qt.AlignTop
-                        Layout.leftMargin: 2
-                        Layout.topMargin: 2
-                        Layout.preferredWidth: 24
-                        Layout.preferredHeight: 24
-                        source: {
-                            if (msgContainer.modelData.isBot) {
-                                return "qrc:/images/bot_avatar.png"; // Bot icon
-                            }
-                            const isFromLocalPlayer = msgContainer.modelData.isLocalPlayer;
-                            const name = isFromLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName;
-                            const avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(name);
-                            return avatarHandle > 0 ? SteamIntegration.getAvatarImageForHandle(avatarHandle) : "qrc:/icons/steam.png";
-                        }
-                        fillMode: Image.PreserveAspectCrop
-
-                        Rectangle {
-                            width: 26
-                            height: 26
-                            radius: GameCore.isFluent ? 5 : 0
-                            anchors.centerIn: parent
-                            opacity: 0.5
-                            color: "transparent"
-                            border.color: GameConstants.foregroundColor
-                            border.width: 1
+                ListView {
+                    id: chatListView
+                    model: chatPanel.chatMessages
+                    spacing: 0
+                    width: parent.contentWidth
+                    onCountChanged: {
+                        if (count > 0) {
+                            Qt.callLater(function() {
+                                chatListView.positionViewAtEnd();
+                            });
                         }
                     }
+                    delegate: RowLayout {
+                        id: msgContainer
+                        width: parent.width - 12
+                        spacing: 8
+                        required property var modelData
 
-                    Item {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: messageText.height + 12
-                        ColumnLayout {
-                            anchors.fill: parent
-                            anchors.margins: 1
-                            spacing: 2
-
-                            Label {
-                                text: msgContainer.modelData.isBot ? msgContainer.modelData.botName :
-                                      (msgContainer.modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName)
-                                font.pixelSize: 13
-                                font.bold: true
-                                color: msgContainer.modelData.isBot ? GameConstants.accentColor : GameConstants.foregroundColor
+                        Image {
+                            Layout.alignment: Qt.AlignTop
+                            Layout.leftMargin: 2
+                            Layout.topMargin: 2
+                            Layout.preferredWidth: 24
+                            Layout.preferredHeight: 24
+                            source: {
+                                if (msgContainer.modelData.isBot) {
+                                    return "qrc:/images/bot_avatar.png"; // Bot icon
+                                }
+                                const isFromLocalPlayer = msgContainer.modelData.isLocalPlayer;
+                                const name = isFromLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName;
+                                const avatarHandle = SteamIntegration.getAvatarHandleForPlayerName(name);
+                                return avatarHandle > 0 ? SteamIntegration.getAvatarImageForHandle(avatarHandle) : "qrc:/icons/steam.png";
                             }
+                            fillMode: Image.PreserveAspectCrop
 
-                            Label {
-                                id: messageText
-                                text: msgContainer.modelData.message
-                                wrapMode: Text.WordWrap
-                                Layout.fillWidth: true
-                                color: GameConstants.foregroundColor
-                                opacity: msgContainer.modelData.isBot ? 0.85 :
-                                         (msgContainer.modelData.isLocalPlayer ? 0.5 : 0.8)
+                            Rectangle {
+                                width: 26
+                                height: 26
+                                radius: GameCore.isFluent ? 5 : 0
+                                anchors.centerIn: parent
+                                opacity: 0.5
+                                color: "transparent"
+                                border.color: GameConstants.foregroundColor
+                                border.width: 1
+                            }
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: messageText.height + 36
+                            ColumnLayout {
+                                anchors.fill: parent
+                                anchors.margins: 1
+                                spacing: 2
+
+                                Label {
+                                    text: msgContainer.modelData.isBot ? msgContainer.modelData.botName :
+                                                                         (msgContainer.modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName)
+                                    font.pixelSize: 13
+                                    font.bold: true
+                                    color: msgContainer.modelData.isBot ? GameConstants.accentColor : GameConstants.foregroundColor
+                                }
+
+                                Label {
+                                    id: messageText
+                                    text: msgContainer.modelData.message
+                                    wrapMode: Text.WordWrap
+                                    Layout.fillWidth: true
+                                    color: GameConstants.foregroundColor
+                                    opacity: msgContainer.modelData.isBot ? 0.85 :
+                                                                            (msgContainer.modelData.isLocalPlayer ? 0.5 : 0.8)
+                                }
+
+                                Item {
+                                    Layout.preferredHeight: 36
+                                }
                             }
                         }
                     }
                 }
             }
         }
-
         RowLayout {
             Layout.fillWidth: true
             spacing: 6
@@ -163,13 +193,13 @@ Frame {
     }
 
     function addMessage(message, isLocalPlayer) {
-        chatMessages.push({
+        chatMessages.append({
             message: message,
             isLocalPlayer: isLocalPlayer,
-            timestamp: new Date()
+            timestamp: new Date(),
+            isBot: false
         });
-        chatListView.model = null;
-        chatListView.model = chatMessages;
+        // No need to reset the model
     }
 
     function sendChatMessage(message) {
@@ -180,9 +210,14 @@ Frame {
     }
 
     function addBotMessage(message) {
-        chatMessages = chatMessages.filter(msg => !msg.isBot);
+        // Remove existing bot messages
+        for (let i = chatMessages.count - 1; i >= 0; i--) {
+            if (chatMessages.get(i).isBot) {
+                chatMessages.remove(i);
+            }
+        }
 
-        chatMessages.push({
+        chatMessages.append({
             message: message,
             isLocalPlayer: false,
             isBot: true,
@@ -190,9 +225,7 @@ Frame {
             timestamp: new Date()
         });
 
-        chatListView.model = null;
-        chatListView.model = chatMessages;
-        GameState.botMessageSent()
+        GameState.botMessageSent();
     }
 
     Connections {
