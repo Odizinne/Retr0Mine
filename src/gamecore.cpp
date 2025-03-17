@@ -108,16 +108,9 @@ void GameCore::setColorPalette()
     palette.setColor(QPalette::ColorRole::Accent, accentColor);
     palette.setColor(QPalette::ColorRole::Highlight, highlight);
 
-QGuiApplication::setPalette(palette);
-#ifdef __linux__
-    if (isRunningOnGamescope) return;
-
-    QPalette palette = QGuiApplication::palette();
-    QColor accentColor = palette.color(QPalette::Highlight);
-    palette.setColor(QPalette::ColorRole::Accent, accentColor);
     QGuiApplication::setPalette(palette);
-#endif
 }
+
 void GameCore::resetSettings()
 {
     settings.setValue("themeIndex", 0);
