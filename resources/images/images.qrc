@@ -7,5 +7,8 @@
         <file>mouse_left_light.png</file>
         <file>mouse_right_dark.png</file>
         <file>mouse_right_light.png</file>
+        <file>mouse_right.png</file>
+        <file>mouse_left.png</file>
+        <file>mouse_base.png</file>
     </qresource>
 </RCC>

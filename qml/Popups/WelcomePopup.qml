@@ -19,10 +19,9 @@ Popup {
         anchors.fill: parent
         Label {
             text: qsTr("Welcome to Retr0Mine")
-            color: "#28d13c"
+            color: GameConstants.accentColor
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: 22
-            font.bold: true
         }
 
         Label {
@@ -93,12 +92,31 @@ Popup {
                     font.pixelSize: 16
                 }
 
-                Image {
-                    id: mouseImage
+                IconImage {
+                    id: mouseBase
                     Layout.alignment: Qt.AlignHCenter
-                    source: GameConstants.mouseImage
+                    source: "qrc:/images/mouse_base.png"
+                    color: GameConstants.foregroundColor
                     sourceSize.height: 164
                     sourceSize.width: 164
+                    IconImage {
+                        id: mouseLeft
+                        anchors.fill: parent
+                        source: "qrc:/images/mouse_left.png"
+                        color: GameSettings.invertLRClick ? GameConstants.foregroundColor : GameConstants.accentColor
+                        sourceSize.height: 164
+                        sourceSize.width: 164
+                    }
+
+                    IconImage {
+                        id: mouseRight
+                        anchors.fill: parent
+                        source: "qrc:/images/mouse_right.png"
+                        color: GameSettings.invertLRClick ? GameConstants.accentColor : GameConstants.foregroundColor
+                        sourceSize.height: 164
+                        sourceSize.width: 164
+
+                    }
                 }
 
                 Label {
@@ -274,7 +292,7 @@ Popup {
             Layout.alignment: Qt.AlignHCenter
 
             Label {
-                text: qsTr("System color for flags")
+                text: qsTr("Colored flags")
                 Layout.fillWidth: true
             }
 
@@ -582,7 +600,7 @@ Popup {
 
         Label {
             text: qsTr("You're all set!")
-            color: "#28d13c"
+            color: GameConstants.accentColor
             font.pixelSize: 20
         }
 
