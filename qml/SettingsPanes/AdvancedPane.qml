@@ -54,8 +54,36 @@ Pane {
                 Layout.rightMargin: 5
                 currentIndex: GameSettings.colorSchemeIndex
                 onActivated: {
+                    if (!GameSettings.systemAccent) {
+                        GameCore.setApplicationPalette(true)
+                    }
                     GameSettings.colorSchemeIndex = currentIndex
                     GameCore.setThemeColorScheme(currentIndex)
+                    if (!GameSettings.systemAccent) {
+                        GameCore.setApplicationPalette(false)
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            enabled: Qt.platform.os === "windows"
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Label {
+                text: qsTr("Use system accent color")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: systemAccentSwitch.click()
+                }
+            }
+            NfSwitch {
+                id: systemAccentSwitch
+                checked: GameSettings.systemAccent
+                onClicked: {
+                    GameSettings.systemAccent = checked
+                    GameCore.setApplicationPalette(checked)
                 }
             }
         }

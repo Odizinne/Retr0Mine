@@ -4,6 +4,7 @@
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QTranslator>
+#include <QPalette>
 
 class GameCore : public QObject
 {
@@ -37,6 +38,7 @@ public:
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
     Q_INVOKABLE void resetSettings();
+    Q_INVOKABLE void setApplicationPalette(bool systemAccent);
 
     // Property getters
     bool getShowWelcome() const { return shouldShowWelcomeMessage; }
@@ -56,7 +58,8 @@ private:
     int m_languageIndex;
     bool m_isFluent = true;
     bool m_isUniversal = false;
-    void setColorPalette();
+    void setCustomPalette();
+    void setSystemPalette();
 
 signals:
     void languageIndexChanged();

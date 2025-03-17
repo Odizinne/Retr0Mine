@@ -95,6 +95,11 @@ Current game will be saved and restored</source>
         <source>Light</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <source>Use system accent color</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DifficultyPane</name>
@@ -317,15 +322,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="463"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="460"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="467"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="474"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="487"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="493"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="484"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="490"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>

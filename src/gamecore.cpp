@@ -7,7 +7,6 @@
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
-#include <QPalette>
 #include "steamintegration.h"
 
 namespace {
@@ -45,8 +44,6 @@ GameCore::GameCore(QObject *parent)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
     isRunningOnGamescope = desktop.toLower() == "gamescope";
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, &GameCore::setColorPalette);
 }
 
 GameCore::~GameCore()
@@ -65,11 +62,11 @@ void GameCore::init()
     int colorSchemeIndex = settings.value("colorSchemeIndex").toInt();
     int styleIndex = settings.value("themeIndex", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
+    bool systemAccent = settings.value("systemAccent", false).toBool();
 
     setThemeColorScheme(colorSchemeIndex);
     setQMLStyle(styleIndex);
     setLanguage(languageIndex);
-    setColorPalette();
 }
 
 void GameCore::setThemeColorScheme(int colorSchemeIndex)
@@ -92,11 +89,29 @@ void GameCore::setThemeColorScheme(int colorSchemeIndex)
 #endif
 }
 
-void GameCore::setColorPalette()
+void GameCore::setApplicationPalette(bool systemAccent)
 {
-    QPalette palette = QGuiApplication::palette();
-    QColor accentColor = palette.color(QPalette::Accent);
-    QColor highlight = palette.color(QPalette::Highlight);
+    disconnect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+               this, &GameCore::setCustomPalette);
+    if (systemAccent) {
+        setSystemPalette();
+    } else {
+        setCustomPalette();
+        connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+                this, &GameCore::setCustomPalette);
+    }
+}
+
+void GameCore::setSystemPalette()
+{
+    QGuiApplication::setPalette(QPalette());
+}
+
+void GameCore::setCustomPalette()
+{
+    QPalette palette;
+    QColor accentColor;
+    QColor highlight;
     if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
         accentColor = "#76b9ed";
     } else {

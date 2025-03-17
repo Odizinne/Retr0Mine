@@ -96,6 +96,11 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <source>Light</source>
         <translation>Clair</translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <source>Use system accent color</source>
+        <translation>Couleur d&apos;accent du système</translation>
+    </message>
 </context>
 <context>
     <name>DifficultyPane</name>
@@ -318,15 +323,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="463"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="460"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="467"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="474"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="487"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="493"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="484"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="490"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>

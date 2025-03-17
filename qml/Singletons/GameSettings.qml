@@ -42,5 +42,6 @@ Settings {
     property bool shakeUnifinishedNumbers: true
     property bool hintReasoningInChat: true
     property real remoteVolume: 0.7
+    property bool systemAccent: false
 }
 
