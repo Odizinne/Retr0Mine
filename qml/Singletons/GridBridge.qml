@@ -302,8 +302,17 @@ Item {
         }
 
         attributeRevealedCells(cellsRevealed, playerIdentifier);
-        checkWin();
+
+        console.log(playerIdentifier)
+
+        if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
+            checkWin();
+        }
         if (!GameState.gameOver) {
+            if (GameSettings.blockRemoteSound && playerIdentifier !== SteamIntegration.playerName && playerIdentifier !== "firstClick") {
+                return
+            }
+
             audioEngine.playClick()
         }
     }

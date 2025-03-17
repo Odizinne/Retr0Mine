@@ -419,19 +419,19 @@ Item {
                 }
 
                 if (!GameState.gameStarted) {
-                    GridBridge.reveal(cellItem.index);
+                    GridBridge.reveal(cellItem.index, "firstClick");
                     return;
                 }
 
                 if (cellItem.revealed) {
-                    GridBridge.revealConnectedCells(cellItem.index);
+                    GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
                     return;
                 }
 
                 const canReveal = !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned;
 
                 if (isRevealClick && canReveal) {
-                    GridBridge.reveal(cellItem.index);
+                    GridBridge.reveal(cellItem.index, SteamIntegration.playerName);
                 } else if (isFlagClick) {
                     GridBridge.toggleFlag(cellItem.index);
                 }

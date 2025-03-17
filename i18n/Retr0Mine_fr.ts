@@ -318,15 +318,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="450"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="457"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="464"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="459"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="466"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="473"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="474"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="480"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="483"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="489"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>

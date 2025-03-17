@@ -722,7 +722,7 @@ QtObject {
                 console.log("Received reveal from host")
 
                 try {
-                    GridBridge.performReveal(cellIndex);
+                    GridBridge.performReveal(cellIndex, NetworkManager.hostName);
                     allowClientReveal = true;
                     if (!GameTimer.isRunning) {
                         GameTimer.start()
@@ -743,7 +743,7 @@ QtObject {
             case "revealConnected":
                 console.log("Received reveal connected from host")
                 try {
-                    GridBridge.performRevealConnectedCells(cellIndex);
+                    GridBridge.performRevealConnectedCells(cellIndex, NetworkManager.hostName);
                 } catch (e) {
                     console.error("Error processing revealConnected action:", e);
                 }
@@ -751,7 +751,7 @@ QtObject {
 
             case "approveReveal":
                 console.log("Received approve reveal")
-                GridBridge.performReveal(cellIndex);
+                GridBridge.performReveal(cellIndex, NetworkManager.clientName);
                 break;
 
             case "startGame":
@@ -904,7 +904,12 @@ QtObject {
             }
 
             GridBridge.performReveal(index, playerIdentifier || NetworkManager.hostName);
-            SteamIntegration.sendGameAction("approveReveal", index);
+            if (playerIdentifier === SteamIntegration.playerName) {
+                SteamIntegration.sendGameAction("reveal", index);
+            } else {
+                SteamIntegration.sendGameAction("approveReveal", index);
+            }
+
         } else {
             SteamIntegration.sendGameAction("reveal", index);
         }
