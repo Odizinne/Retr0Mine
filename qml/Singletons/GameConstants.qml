@@ -191,17 +191,8 @@ Item {
         }
     }
 
-    function getMouseImage() {
-        if (GameSettings.invertLRClick) {
-            return getForegroundColor() === "white" ? "qrc:/images/mouse_right_light.png" : "qrc:/images/mouse_right_dark.png"
-        } else {
-            return getForegroundColor() === "white" ? "qrc:/images/mouse_left_light.png" : "qrc:/images/mouse_left_dark.png"
-        }
-    }
-
     property string leftClickExplanation: getLeftClickExplanation()
     property string rightClickExplanation: getRightClickExplanation()
-    property string mouseImage: getMouseImage()
 }
 
 
