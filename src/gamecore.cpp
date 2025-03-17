@@ -45,6 +45,8 @@ GameCore::GameCore(QObject *parent)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
     isRunningOnGamescope = desktop.toLower() == "gamescope";
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, &GameCore::setColorPalette);
 }
 
 GameCore::~GameCore()
@@ -67,7 +69,7 @@ void GameCore::init()
     setThemeColorScheme(colorSchemeIndex);
     setQMLStyle(styleIndex);
     setLanguage(languageIndex);
-    checkAndCorrectPalette();
+    setColorPalette();
 }
 
 void GameCore::setThemeColorScheme(int colorSchemeIndex)
@@ -90,8 +92,23 @@ void GameCore::setThemeColorScheme(int colorSchemeIndex)
 #endif
 }
 
-void GameCore::checkAndCorrectPalette()
+void GameCore::setColorPalette()
 {
+    QPalette palette = QGuiApplication::palette();
+    QColor accentColor = palette.color(QPalette::Accent);
+    QColor highlight = palette.color(QPalette::Highlight);
+    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+        accentColor = "#76b9ed";
+    } else {
+        accentColor = "#005a9e";
+    }
+
+    highlight = "#0078d7";
+
+    palette.setColor(QPalette::ColorRole::Accent, accentColor);
+    palette.setColor(QPalette::ColorRole::Highlight, highlight);
+
+QGuiApplication::setPalette(palette);
 #ifdef __linux__
     if (isRunningOnGamescope) return;
 

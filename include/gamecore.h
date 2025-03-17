@@ -56,7 +56,7 @@ private:
     int m_languageIndex;
     bool m_isFluent = true;
     bool m_isUniversal = false;
-    void checkAndCorrectPalette();
+    void setColorPalette();
 
 signals:
     void languageIndexChanged();
