@@ -148,7 +148,7 @@ Item {
         );
 
         for (let i = 0; i < cellsToReveal.length; i++) {
-            reveal(cellsToReveal[i], playerIdentifier);
+            performReveal(cellsToReveal[i], playerIdentifier);
         }
     }
 

@@ -719,6 +719,8 @@ QtObject {
                 break;
 
             case "reveal":
+                console.log("Received reveal from host")
+
                 try {
                     GridBridge.performReveal(cellIndex);
                     allowClientReveal = true;
@@ -739,6 +741,7 @@ QtObject {
                 break;
 
             case "revealConnected":
+                console.log("Received reveal connected from host")
                 try {
                     GridBridge.performRevealConnectedCells(cellIndex);
                 } catch (e) {
@@ -747,6 +750,7 @@ QtObject {
                 break;
 
             case "approveReveal":
+                console.log("Received approve reveal")
                 GridBridge.performReveal(cellIndex);
                 break;
 
