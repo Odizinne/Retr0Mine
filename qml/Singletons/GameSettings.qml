@@ -41,6 +41,6 @@ Settings {
     property bool mpAudioNotificationOnNewMessage: true
     property bool shakeUnifinishedNumbers: true
     property bool hintReasoningInChat: true
-    property bool blockRemoteSound: true
+    property real remoteVolume: 0.7
 }
 

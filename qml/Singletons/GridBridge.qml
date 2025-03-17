@@ -302,18 +302,19 @@ Item {
         }
 
         attributeRevealedCells(cellsRevealed, playerIdentifier);
-
-        console.log(playerIdentifier)
-
         if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
             checkWin();
         }
         if (!GameState.gameOver) {
-            if (GameSettings.blockRemoteSound && playerIdentifier !== SteamIntegration.playerName && playerIdentifier !== "firstClick") {
-                return
+            if (SteamIntegration.isInMultiplayerGame) {
+                if (playerIdentifier !== SteamIntegration.playerName && playerIdentifier !== "firstClick") {
+                    audioEngine.playRemoteClick()
+                } else {
+                    audioEngine.playClick()
+                }
+            } else {
+                audioEngine.playClick()
             }
-
-            audioEngine.playClick()
         }
     }
 

@@ -68,6 +68,25 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            visible: SteamIntegration.initialized
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Label {
+                text: qsTr("Volume (remote player)")
+                Layout.fillWidth: true
+            }
+            NfSlider {
+                id: remoteSoundVolumeSlider
+                from: 0
+                to: 1
+                value: GameSettings.remoteVolume
+                onValueChanged: {
+                    GameSettings.remoteVolume = value
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Soundpack")

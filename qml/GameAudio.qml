@@ -6,11 +6,18 @@ Item {
     property int packIndex: GameSettings.soundPackIndex
     property bool enabled: true
     property bool clickCooldown: false
+    property bool remoteClickCooldown: false
 
     Timer {
         id: cooldownTimer
         interval: 25
         onTriggered: control.clickCooldown = false
+    }
+
+    Timer {
+        id: remoteCooldownTimer
+        interval: 25
+        onTriggered: control.remoteClickCooldown = false
     }
 
     Timer {
@@ -24,6 +31,24 @@ Item {
                         effect.play()
                         control.clickCooldown = true
                         cooldownTimer.restart()
+                        return
+                    }
+                }
+            }
+        }
+    }
+
+    Timer {
+        id: remoteClickDelayTimer
+        interval: 20
+        repeat: false
+        onTriggered: {
+            if (!GameState.gameOver) {
+                for (let effect of control.remoteClickPool) {
+                    if (!effect.playing) {
+                        effect.play()
+                        control.remoteClickCooldown = true
+                        remoteCooldownTimer.restart()
                         return
                     }
                 }
@@ -46,6 +71,21 @@ Item {
         }
     ]
 
+    property list<SoundEffect> remoteClickPool: [
+        SoundEffect {
+            source: control.getSoundPath("remoteClick")
+            volume: GameSettings.remoteVolume
+        },
+        SoundEffect {
+            source: control.getSoundPath("remoteClick")
+            volume: GameSettings.remoteVolume
+        },
+        SoundEffect {
+            source: control.getSoundPath("remoteClick")
+            volume: GameSettings.remoteVolume
+        }
+    ]
+
     SoundEffect {
         id: winEffect
         source: control.getSoundPath("win")
@@ -61,24 +101,28 @@ Item {
     function getSoundPath(type) {
         const packs = {
             0: {
-                click: "qrc:/sounds/pop/pop_click.wav",
-                win: "qrc:/sounds/pop/pop_win.wav",
-                bomb: "qrc:/sounds/pop/pop_bomb.wav"
+                click: "qrc:/sounds/pop/click.wav",
+                remoteClick: "qrc:/sounds/pop/remoteClick.wav",
+                win: "qrc:/sounds/pop/win.wav",
+                bomb: "qrc:/sounds/pop/bomb.wav"
             },
             1: {
-                click: "qrc:/sounds/w11/w11_click.wav",
-                win: "qrc:/sounds/w11/w11_win.wav",
-                bomb: "qrc:/sounds/w11/w11_bomb.wav"
+                click: "qrc:/sounds/w11/click.wav",
+                remoteClick: "qrc:/sounds/w11/remoteClick.wav",
+                win: "qrc:/sounds/w11/win.wav",
+                bomb: "qrc:/sounds/w11/bomb.wav"
             },
             2: {
-                click: "qrc:/sounds/kde-ocean/kde-ocean_click.wav",
-                win: "qrc:/sounds/kde-ocean/kde-ocean_win.wav",
-                bomb: "qrc:/sounds/kde-ocean/kde-ocean_bomb.wav"
+                click: "qrc:/sounds/kde-ocean/click.wav",
+                remoteClick: "qrc:/sounds/kde-ocean/remoteClick.wav",
+                win: "qrc:/sounds/kde-ocean/win.wav",
+                bomb: "qrc:/sounds/kde-ocean/bomb.wav"
             },
             3: {
-                click: "qrc:/sounds/floraphonic/floraphonic_click.wav",
-                win: "qrc:/sounds/floraphonic/floraphonic_win.wav",
-                bomb: "qrc:/sounds/floraphonic/floraphonic_bomb.wav"
+                click: "qrc:/sounds/floraphonic/click.wav",
+                remoteClick: "qrc:/sounds/floraphonic/remoteClick.wav",
+                win: "qrc:/sounds/floraphonic/win.wav",
+                bomb: "qrc:/sounds/floraphonic/bomb.wav"
             }
         }
         return packs[packIndex][type]
@@ -87,6 +131,11 @@ Item {
     function playClick() {
         if (!GameSettings.soundEffects || clickCooldown) return
         clickDelayTimer.start()
+    }
+
+    function playRemoteClick() {
+        if (!GameSettings.soundEffects || remoteClickCooldown) return
+        remoteClickDelayTimer.start()
     }
 
     function playWin() {

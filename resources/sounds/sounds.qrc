@@ -1,17 +1,21 @@
 <RCC>
     <qresource prefix="/sounds">
-        <file>pop/pop_bomb.wav</file>
-        <file>pop/pop_click.wav</file>
-        <file>pop/pop_win.wav</file>
-        <file>w11/w11_bomb.wav</file>
-        <file>w11/w11_click.wav</file>
-        <file>w11/w11_win.wav</file>
-        <file>kde-ocean/kde-ocean_bomb.wav</file>
-        <file>kde-ocean/kde-ocean_click.wav</file>
-        <file>kde-ocean/kde-ocean_win.wav</file>
-        <file>floraphonic/floraphonic_bomb.wav</file>
-        <file>floraphonic/floraphonic_click.wav</file>
-        <file>floraphonic/floraphonic_win.wav</file>
+        <file>pop/bomb.wav</file>
+        <file>pop/click.wav</file>
+        <file>pop/remoteClick.wav</file>
+        <file>pop/win.wav</file>
+        <file>w11/bomb.wav</file>
+        <file>w11/click.wav</file>
+        <file>w11/remoteClick.wav</file>
+        <file>w11/win.wav</file>
+        <file>kde-ocean/bomb.wav</file>
+        <file>kde-ocean/click.wav</file>
+        <file>kde-ocean/remoteClick.wav</file>
+        <file>kde-ocean/win.wav</file>
+        <file>floraphonic/bomb.wav</file>
+        <file>floraphonic/click.wav</file>
+        <file>floraphonic/remoteClick.wav</file>
+        <file>floraphonic/win.wav</file>
         <file>message_received.wav</file>
     </qresource>
 </RCC>

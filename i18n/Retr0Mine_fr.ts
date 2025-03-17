@@ -318,15 +318,15 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="459"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="466"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="473"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="463"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="483"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="489"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="487"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="493"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -929,7 +929,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Volume</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="73"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="74"/>
+        <source>Volume (remote player)</source>
+        <translation>Volume (joueur distant)</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="92"/>
         <source>Soundpack</source>
         <translation>Pack de sons</translation>
     </message>
