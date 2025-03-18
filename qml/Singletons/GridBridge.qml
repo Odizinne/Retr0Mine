@@ -365,6 +365,7 @@ Item {
                 cell.questioned = false;
                 cell.safeQuestioned = false;
                 cell.isBombClicked = false;
+                cell.localPlayerOwns = false;
             });
         }
 
