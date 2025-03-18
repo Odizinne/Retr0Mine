@@ -322,15 +322,15 @@ Current game will be saved and restored</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="460"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="467"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="474"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="461"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="468"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="475"/>
         <source>New flag unlocked!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="484"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="490"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="485"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="491"/>
         <source>New grid animation unlocked!</source>
         <translation type="unfinished"></translation>
     </message>

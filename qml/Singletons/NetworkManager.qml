@@ -695,7 +695,6 @@ QtObject {
 
         switch(actionType) {
             case "flagDenied":
-                console.log("Flag toggle denied on cell " + cellIndex);
                 isProcessingNetworkAction = false;
                 break;
 
@@ -719,8 +718,6 @@ QtObject {
                 break;
 
             case "reveal":
-                console.log("Received reveal from host")
-
                 try {
                     GridBridge.performReveal(cellIndex, NetworkManager.hostName);
                     allowClientReveal = true;
@@ -741,7 +738,6 @@ QtObject {
                 break;
 
             case "revealConnected":
-                console.log("Received reveal connected from host")
                 try {
                     GridBridge.performRevealConnectedCells(cellIndex, NetworkManager.hostName);
                 } catch (e) {
@@ -750,7 +746,6 @@ QtObject {
                 break;
 
             case "approveReveal":
-                console.log("Received approve reveal")
                 GridBridge.performReveal(cellIndex, NetworkManager.clientName);
                 break;
 
@@ -1152,7 +1147,6 @@ QtObject {
             return true;
         }
 
-        console.log("Cell " + cellIndex + " is owned by " + ownershipData.owner + ", denying access to " + player);
         return false;
     }
 
