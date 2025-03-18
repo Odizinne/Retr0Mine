@@ -87,7 +87,7 @@ Frame {
                     }
                     delegate: RowLayout {
                         id: msgContainer
-                        width: chatPanel.visible ? parent.width - 12 : 0
+                        width: chatPanel.visible ? chatListView.width - 12 : 0
                         spacing: 8
                         required property var modelData
 
