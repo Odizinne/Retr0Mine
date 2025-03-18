@@ -141,7 +141,7 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
     LUPDATE_OPTIONS "-no-obsolete"
 )
 
-add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
+#add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 
 if(WIN32)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
