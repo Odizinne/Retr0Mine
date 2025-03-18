@@ -34,39 +34,13 @@ jobs:
           cd build
           cmake ..
           cmake --build . --config Release
-          ls
-
-      - name: Clean release directory
-        shell: pwsh
-        run: |
-          cd build/release
-          Get-ChildItem -Exclude Retr0Mine.exe | Remove-Item -Recurse -Force
-
-      - name: Copy Steam API DLL
-        shell: pwsh
-        run: |
-          Copy-Item "lib\steam\win64\steam_api64.dll" -Destination "build\release\"
-
-      - name: Deploy Qt
-        shell: pwsh
-        run: |
-          cd build\release
-          $qmlDir = "D:\a\Retr0Mine\Retr0Mine\qml"
-          windeployqt6 `
-              --skip-plugin-types designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls `
-              --no-opengl-sw `
-              --no-system-dxc-compiler `
-              --no-compiler-runtime `
-              --no-translations `
-              --no-system-d3d-compiler `
-              --qmldir $qmlDir `
-              Retr0Mine.exe
+          cmake --install . --config Release
 
       - name: Zip binaries folder
         shell: pwsh
         run: |
           $zipFile = "build/Retr0Mine_msvc_64.zip"
-          $folder = "build/release"
+          $folder = "build/install"
           Compress-Archive -Path $folder -DestinationPath $zipFile
 
       - name: Upload Artifacts
@@ -106,11 +80,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libgl1-mesa-dev fuse libfuse2 libwayland-dev qt6-wayland
-          # Configure FUSE for the current user
-          sudo modprobe fuse
-          sudo groupadd fuse || true
-          sudo usermod -a -G fuse $USER
+          sudo apt-get install -y build-essential libgl1-mesa-dev libwayland-dev 
 
       - name: Generate and Build with CMake
         shell: pwsh
@@ -119,68 +89,54 @@ jobs:
           cd build
           cmake ..
           cmake --build . --config Release
-          ls
+          cmake --install . --config Release
+          cp ../resources/icons/icon.png ./install
 
-      - name: Create AppDir structure
+      - name: Replace symlinks with real files
+        shell: bash
         run: |
-          mkdir -p AppDir/usr/bin
-          mkdir -p AppDir/usr/lib
-          mkdir -p AppDir/usr/share/applications
-          mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
-          mv build/Retr0Mine AppDir/usr/bin/Retr0Mine
-          
-          #cp Dependencies/steam/lib/linux64/libsteam_api.so AppDir/usr/lib/
+          echo "Replacing symlinks with real files..."
+          cd build/install/lib
+          for f in $(find . -type l); do
+            target=$(readlink -f "$f")
+            if [ -f "$target" ]; then
+              echo "Replacing symlink $f -> $target"
+              # Get the filename only
+              target_name=$(basename "$target")
+              # Remove the symlink
+              rm "$f"
+              # Copy the real file to the symlink name
+              cp "$target" "$f"
+              # Remove the original file if it's not the same as the new file
+              if [ "$target" != "$(pwd)/$f" ]; then
+                rm "$target"
+              fi
+            fi
+          done
 
-          # Create .desktop file
-          cat > AppDir/usr/share/applications/Retr0Mine.desktop << EOF
-          [Desktop Entry]
-          Name=Retr0Mine
-          Exec=Retr0Mine
-          Icon=Retr0Mine
-          Type=Application
-          Categories=Game;
-          Comment=Minesweeper game
-          EOF
-          
-          # Copy application icon
-          cp resources/icons/icon.png AppDir/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
-
-      - name: Download linuxdeploy and plugins
+      - name: Cleanup Libraries and Plugins
+        shell: bash
         run: |
-          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
-          chmod +x linuxdeploy*.AppImage
-
-      - name: Deploy with linuxdeploy
-        run: |
-          export QMAKE=$(which qmake6)
-          export QML_SOURCES_PATHS=${{ github.workspace }}/qml
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/lib/steam/linux64
-          export EXTRA_QT_MODULES="multimedia"
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt
-
-      - name: Create startup script
-        run: |
-          echo '#!/bin/sh
-          export LD_LIBRARY_PATH="./usr/lib:$LD_LIBRARY_PATH"
-          exec ./AppRun' > AppDir/Retr0Mine.sh
-          chmod +x AppDir/Retr0Mine.sh
-
-      - name: Clean unnecessary files
-        run: |
-          rm -rf AppDir/usr/translations
-          rm -rf AppDir/usr/plugins/tls
+          # Cleanup plugins
+          echo "Cleaning up unnecessary plugin folders..."
+          cd build/install/plugins
+          if [ -d "." ]; then
+            echo "Removing specified plugin folders..."
+            rm -rf iconengines imageformats networkinformation qmltooling tls
+          else
+            echo "Plugins directory not found, skipping plugin cleanup"
+          fi
           
       - name: Zip AppDir
         run: |
-          cd AppDir
+          cd build/install
           zip -r ../Retr0Mine_Linux.zip ./*
 
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
           name: Retr0Mine_Linux
-          path: Retr0Mine_Linux.zip
+          path: build/Retr0Mine_Linux.zip
           
   release:
     runs-on: ubuntu-latest

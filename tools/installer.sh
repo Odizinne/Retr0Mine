@@ -20,8 +20,8 @@ create_desktop_entry() {
     cat > "$DESKTOP_DIR/$APP_NAME.desktop" << EOF
 [Desktop Entry]
 Name=$APP_NAME
-Exec=bash -c 'export LD_LIBRARY_PATH="./usr/lib:\$LD_LIBRARY_PATH" && $INSTALL_DIR/Retr0Mine.sh'
-Icon=$INSTALL_DIR/usr/share/icons/hicolor/256x256/apps/Retr0Mine.png
+Exec=bash -c '$INSTALL_DIR/bin/Retr0Mine'
+Icon=$INSTALL_DIR/Retr0Mine.png
 Path=$INSTALL_DIR
 Type=Application
 Categories=Game;
@@ -37,8 +37,7 @@ install_app() {
     unzip -o "$temp_zip" -d "$INSTALL_DIR" || show_error "Failed to extract files"
     rm "$temp_zip"
     
-    chmod +x "$INSTALL_DIR/usr/bin/Retr0Mine" || show_error "Failed to make binary executable"
-    chmod +x "$INSTALL_DIR/Retr0Mine.sh" || show_error "Failed to make launcher executable"
+    chmod +x "$INSTALL_DIR/bin/Retr0Mine" || show_error "Failed to make binary executable"
     create_desktop_entry || show_error "Failed to create desktop entry"
     
     show_success "$APP_NAME has been successfully installed!"
