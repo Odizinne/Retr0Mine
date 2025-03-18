@@ -652,67 +652,67 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>PrivateSessionPopup</name>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="104"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="101"/>
         <source> is generating grid...</source>
         <translation> génère la grille...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="105"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="102"/>
         <source>Establishing connection with </source>
         <translation>Connexion en cours avec </translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
         <source>Session in progress</source>
         <translation>Session en cours</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
         <source>Ready</source>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
         <source>Creating cells...</source>
         <translation>Création des cellules...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="116"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
         <source>Waiting for host</source>
         <translation>En attente de l&apos;hôte</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="136"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="133"/>
         <source>Press G or middle-click mouse while hovering a cell to signal it</source>
         <translation>Appuyez sur G ou sur le bouton central de la souris en survolant une cellule pour la signaler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="152"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="149"/>
         <source>Invite sent</source>
         <translation>Invitation envoyée</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="187"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="184"/>
         <source>Filter...</source>
         <translation>Filtrer...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="195"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="192"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="314"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="311"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="336"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="333"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="344"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="341"/>
         <source>Quit session</source>
         <translation>Quitter la session</translation>
     </message>

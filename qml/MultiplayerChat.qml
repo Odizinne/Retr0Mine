@@ -87,7 +87,7 @@ Frame {
                     }
                     delegate: RowLayout {
                         id: msgContainer
-                        width: parent.width - 12
+                        width: chatPanel.visible ? parent.width - 12 : 0
                         spacing: 8
                         required property var modelData
 
@@ -99,7 +99,7 @@ Frame {
                             Layout.preferredHeight: 24
                             source: {
                                 if (msgContainer.modelData.isBot) {
-                                    return "qrc:/images/bot_avatar.png"; // Bot icon
+                                    return "qrc:/images/bot_avatar.png";
                                 }
                                 const isFromLocalPlayer = msgContainer.modelData.isLocalPlayer;
                                 const name = isFromLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName;
@@ -199,7 +199,6 @@ Frame {
             timestamp: new Date(),
             isBot: false
         });
-        // No need to reset the model
     }
 
     function sendChatMessage(message) {
@@ -210,7 +209,6 @@ Frame {
     }
 
     function addBotMessage(message) {
-        // Remove existing bot messages
         for (let i = chatMessages.count - 1; i >= 0; i--) {
             if (chatMessages.get(i).isBot) {
                 chatMessages.remove(i);

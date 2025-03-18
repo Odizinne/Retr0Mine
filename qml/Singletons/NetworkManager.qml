@@ -813,7 +813,6 @@ QtObject {
                         }
                     }
                 } catch (e) {
-                    // Fallback to the old approach for backward compatibility
                     GridBridge.withCell(cellIndex, function(cell) {
                         if (cell && typeof cell.highlightHint === 'function') {
                             cell.highlightHint();

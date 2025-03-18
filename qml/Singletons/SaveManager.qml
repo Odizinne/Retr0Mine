@@ -46,7 +46,6 @@ Item {
 
             GameState.numbers = data.gameState.numbers
 
-            // Store data for after grid initialization and schedule finishLoading
             saveManager.savedData = data
             saveManager.savedCentiseconds = savedCentiseconds
             Qt.callLater(saveManager.finishLoading)
@@ -60,7 +59,6 @@ Item {
     }
 
     function finishLoading() {
-        // Check if all cells have been created
         if (GridBridge.cellsCreated < GameState.gridSizeX * GameState.gridSizeY) {
             Qt.callLater(function() {
                 saveManager.finishLoading()
@@ -71,7 +69,6 @@ Item {
         const data = saveManager.savedData
         const savedCentiseconds = saveManager.savedCentiseconds
 
-        // Double check numbers are still set correctly
         if (!GameState.numbers || GameState.numbers !== data.gameState.numbers) {
             console.log("Restoring numbers in finishLoading")
             GameState.numbers = data.gameState.numbers

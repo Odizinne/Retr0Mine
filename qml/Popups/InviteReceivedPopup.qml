@@ -13,7 +13,7 @@ Popup {
     closePolicy: Popup.NoAutoClose
     property string friendName: ""
     property string connectData: ""
-    property real timeRemaining: 10000 // in milliseconds
+    property real timeRemaining: 10000
 
     ColumnLayout {
         id: contentColumn

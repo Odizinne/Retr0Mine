@@ -133,11 +133,11 @@ Item {
 
                 function getPingColor(ping) {
                     if (ping === 0) return GameConstants.foregroundColor
-                    if (ping <= 100) return "#28d13c"  // Green - excellent
-                    if (ping <= 150) return "#a0d128" // Light green - good
-                    if (ping <= 200) return "#d1a128" // Yellow - acceptable
-                    if (ping <= 250) return "#d16c28" // Orange - mediocre
-                    return "#d12844"                  // Red - poor
+                    if (ping <= 100) return "#28d13c"
+                    if (ping <= 150) return "#a0d128"
+                    if (ping <= 200) return "#d1a128"
+                    if (ping <= 250) return "#d16c28"
+                    return "#d12844"
                 }
 
                 MouseArea {

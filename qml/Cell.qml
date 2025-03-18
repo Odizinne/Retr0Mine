@@ -48,10 +48,8 @@ Item {
         if (cellItem.revealed && !GameState.mines.includes(cellItem.index)) {
             const numValue = GameState.numbers && GameState.numbers[cellItem.index];
             if (numValue > 0) {
-                // Get neighbor flag count
                 const flaggedNeighbors = GridBridge.getNeighborFlagCount(cellItem.index);
 
-                // Check if flags match the number AND there are still unrevealed cells
                 let hasUnrevealed = false;
                 let row = Math.floor(cellItem.index / GameState.gridSizeX);
                 let col = cellItem.index % GameState.gridSizeX;
@@ -77,26 +75,21 @@ Item {
                     if (hasUnrevealed) break;
                 }
 
-                // Only shake if flags match number AND there are still unrevealed cells
                 shouldShakeNew = (flaggedNeighbors === numValue && hasUnrevealed);
             }
         }
 
-        // Update the conditions state
         shakeConditionsMet = shouldShakeNew;
     }
 
     onFlaggedChanged: {
         if (!flagged) {
-            // Reset ownership when flag is removed
             if (GameSettings.animations) {
-                // Wait for animation to complete before resetting
                 flagRemovalTimer.start();
             } else {
                 localPlayerOwns = false;
             }
         }
-        // Update shake state when flags change
         Qt.callLater(updateShakeState);
     }
 
@@ -265,7 +258,6 @@ Item {
                     } else {
                         cellButton.flat = true
                     }
-                    // Update shake state when revealed
                     cellItem.updateShakeState()
                 } else {
                     cellItem.shouldBeFlat = false
@@ -497,7 +489,6 @@ Item {
                    GameState.numbers && GameState.numbers[cellItem.index]
                    )
 
-        // Modified shake animation to use global state
         SequentialAnimation {
             id: shakeAnimation
             running: cellItem.shakeConditionsMet && GridBridge.globalShakeActive && GameSettings.shakeUnifinishedNumbers
@@ -584,7 +575,7 @@ Item {
                 property: "scale"
                 from: 1.0
                 to: 0.5
-                duration: 300  // ~1/3 of 2000
+                duration: 300
                 easing.type: Easing.InOutQuad
             }
             PauseAnimation {

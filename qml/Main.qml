@@ -580,7 +580,7 @@ ApplicationWindow {
         if (root.visibility === ApplicationWindow.Windowed) {
             let baseWidth = (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24
             if (ComponentsContext.multiplayerChatVisible) {
-                baseWidth += rightPanel.width + 12 // Adding the panel width plus margin
+                baseWidth += rightPanel.width + 12
             }
 
             return Math.min(baseWidth, Screen.desktopAvailableWidth * 0.9)

@@ -42,7 +42,6 @@ Popup {
         friendsList.clear()
         var friends = SteamIntegration.getOnlineFriends()
 
-        // Sort friends array alphabetically by name
         friends.sort(function(a, b) {
             var nameA = a.split(":")[0].toLowerCase()
             var nameB = b.split(":")[0].toLowerCase()
@@ -67,7 +66,6 @@ Popup {
         for (var i = 0; i < friendsList.count; i++) {
             var item = friendsListView.itemAtIndex(i)
             if (item) {
-                // Get the name from the model, not from the item directly
                 var friendName = friendsList.get(i).name
                 var visible = friendName.toLowerCase().includes(query.toLowerCase())
                 item.height = visible ? 40 : 0
@@ -82,7 +80,6 @@ Popup {
 
     Item {
         anchors.fill: parent
-        // Add connectionState in the visibility condition
         visible: (SteamIntegration.connectedPlayerName !== "" &&
                   (!SteamIntegration.isP2PConnected || SteamIntegration.connectionState === SteamIntegration.Connecting)) ||
                  (SteamIntegration.isHost && SteamIntegration.isP2PConnected && !NetworkManager.clientGridReady)
@@ -198,7 +195,7 @@ Popup {
                 enabled: !multiplayerPopup.refreshing
                 onClicked: {
                     multiplayerPopup.refreshFriendsList()
-                    searchField.text = "" // Clear search when refreshing
+                    searchField.text = ""
                 }
             }
         }
