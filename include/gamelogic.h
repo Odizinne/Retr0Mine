@@ -21,6 +21,11 @@ struct MineSolverInfo
     }
 };
 
+struct SolverResult {
+    int cell;
+    QString reason;
+};
+
 inline size_t qHash(const MineSolverInfo &info, size_t seed = 0)
 {
     size_t hashValue = qHash(info.count, seed);
@@ -55,7 +60,6 @@ public:
     Q_INVOKABLE QVector<int> calculateNumbersFromMines(int width, int height, const QVector<int> &mines);
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
-    Q_INVOKABLE int findMineHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY);
     Q_INVOKABLE QVariantMap findMineHintWithReasoning(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     Q_INVOKABLE void cancelGeneration();
@@ -93,9 +97,10 @@ private:
 
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
-    int solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
+    SolverResult solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     void updateProgress(int attempt, int totalAttempts, int minesPlaced);
     bool generateBoard(int firstClickX, int firstClickY);
+    QString formatExplanationForDisplay(const QString &rawExplanation, int col, int row, bool isMine);
 
     struct Constraint {
         int cell;              // The boundary cell

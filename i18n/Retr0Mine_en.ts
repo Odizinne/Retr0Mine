@@ -159,25 +159,132 @@ Current game will be saved and restored</source>
 </context>
 <context>
     <name>GameLogic</name>
-    <message>
-        <location filename="../src/gamelogic.cpp" line="1679"/>
-        <source>I think there&apos;s a mine at position (%1,%2). The cell at (%3,%4) shows %5 mines and already has %6 flags nearby. With %7 unrevealed cells remaining, they must all be mines.</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="198"/>
+        <source>The number %1 at %2,%3 shows there are %n mine(s) left to find. Since there are exactly %n hidden cell(s) next to it, all of these cells must contain mines.</source>
+        <translation>
+            <numerusform>The number %1 at %2,%3 shows there is %n mine left to find. Since there is exactly %n hidden cell next to it, this cell must contain a mine.</numerusform>
+            <numerusform>The number %1 at %2,%3 shows there are %n mines left to find. Since there are exactly %n hidden cells next to it, all of these cells must contain mines.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="234"/>
+        <source>The number %1 at %2,%3 already has all its %n mine(s) flagged. This means all remaining hidden cells around it must be safe.</source>
+        <translation>
+            <numerusform>The number %1 at %2,%3 already has its %n mine flagged. This means all remaining hidden cells around it must be safe.</numerusform>
+            <numerusform>The number %1 at %2,%3 already has all its %n mines flagged. This means all remaining hidden cells around it must be safe.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="315"/>
+        <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</source>
+        <translation>
+            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: The %n mine from the first number must be in a cell that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</numerusform>
+            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mines from the first number must be in cells that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="332"/>
+        <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</source>
+        <translation>
+            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: The %n mine from the first number must be in a cell that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</numerusform>
+            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mines from the first number must be in cells that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="352"/>
+        <source>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mine(s). Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</source>
+        <translation>
+            <numerusform>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mine. Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</numerusform>
+            <numerusform>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mines. Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="408"/>
+        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the second number must all contain mines.</source>
+        <translation>
+            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell around the second number must contain a mine.</numerusform>
+            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cells around the second number must all contain mines.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="1716"/>
-        <source>The cell at position (%1,%2) should be safe. I see that position (%3,%4) has %5 mines around it and already has exactly %5 flags placed nearby. This means all other adjacent cells must be safe.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/gamelogic.cpp" line="426"/>
+        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the second number only needs %8 mines total, its non-shared cells must be safe.</source>
+        <translation>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the second number only needs %8 mines total, its non-shared cells must be safe.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="449"/>
+        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the first number must all contain mines.</source>
+        <translation>
+            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell around the first number must contain a mine.</numerusform>
+            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cells around the first number must all contain mines.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="1744"/>
-        <source>Based on the pattern of numbers, I believe there&apos;s a mine at position (%1,%2).</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/gamelogic.cpp" line="466"/>
+        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the first number only needs %8 mines total, its non-shared cells must be safe.</source>
+        <translation>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the first number only needs %8 mines total, its non-shared cells must be safe.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="493"/>
+        <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the first number, so they can&apos;t all be mines.</source>
+        <translation>
+            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell around the first number, so it can&apos;t be a mine.</numerusform>
+            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cells around the first number, so they can&apos;t all be mines.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/gamelogic.cpp" line="512"/>
+        <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the second number, so they can&apos;t all be mines.</source>
+        <translation>
+            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell around the second number, so it can&apos;t be a mine.</numerusform>
+            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cells around the second number, so they can&apos;t all be mines.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="1747"/>
-        <source>Looking at the surrounding numbers, the cell at position (%1,%2) appears to be safe.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/gamelogic.cpp" line="592"/>
+        <source>If there is a mine at %1,%2, then certain cells that share multiple number constraints must be safe by process of elimination.</source>
+        <translation>If there is a mine at %1,%2, then certain cells that share multiple number constraints must be safe by process of elimination.</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="623"/>
+        <source>If the cell at %1,%2 is safe, then certain cells that share multiple number constraints must contain mines by process of elimination.</source>
+        <translation>If the cell at %1,%2 is safe, then certain cells that share multiple number constraints must contain mines by process of elimination.</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="633"/>
+        <source>I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</source>
+        <translation>I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="1532"/>
+        <source>contain mines</source>
+        <translation>contain mines</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="1533"/>
+        <source>mines must</source>
+        <translation>mines must</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="1534"/>
+        <source>must contain</source>
+        <translation>must contain</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="1535"/>
+        <source>must all contain</source>
+        <translation>must all contain</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="1541"/>
+        <source>I think there&apos;s a mine at position (%1,%2). %3</source>
+        <translation>I think there&apos;s a mine at position (%1,%2). %3</translation>
+    </message>
+    <message>
+        <location filename="../src/gamelogic.cpp" line="1544"/>
+        <source>I believe the cell at position (%1,%2) is safe. %3</source>
+        <translation>I believe the cell at position (%1,%2) is safe. %3</translation>
     </message>
 </context>
 <context>
