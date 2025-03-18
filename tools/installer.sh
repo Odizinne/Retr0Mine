@@ -21,7 +21,7 @@ create_desktop_entry() {
 [Desktop Entry]
 Name=$APP_NAME
 Exec=bash -c '$INSTALL_DIR/bin/Retr0Mine'
-Icon=$INSTALL_DIR/Retr0Mine.png
+Icon=$INSTALL_DIR/icon.png
 Path=$INSTALL_DIR
 Type=Application
 Categories=Game;
