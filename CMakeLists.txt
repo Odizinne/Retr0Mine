@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19) # Increased minimum version
+cmake_minimum_required(VERSION 3.21)
 project(Retr0Mine VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation directory" FORCE)
