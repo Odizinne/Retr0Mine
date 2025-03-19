@@ -145,11 +145,70 @@ Popup {
                         }
                     }
                 }
+
+
+                    MenuSeparator {
+                        Layout.fillWidth: true
+                    }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                Label {
+                    id: hostCatchPhrase
+                    //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
+                    font.pixelSize: 12
+                    wrapMode: Text.WordWrap
+                    textFormat: Text.RichText
+                    //horizontalAlignment: Text.AlignHCenter
+
+                    text: {
+                        const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                            ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                            : 0;
+                        const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                            ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                            : 0;
+
+                        if (hostPercentage >= clientPercentage) {
+                            return lyt.getWinnerCatchPhrase(NetworkManager.hostName);
+                        } else {
+                            return lyt.getLoserCatchPhrase(NetworkManager.hostName);
+                        }
+                    }
+                }
+}
+                RowLayout {
+                    Layout.fillWidth: true
+                Label {
+                    id: clientCatchPhrase
+                    //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
+                    font.pixelSize: 12
+                    wrapMode: Text.WordWrap
+                    textFormat: Text.RichText
+                    //horizontalAlignment: Text.AlignHCenter
+
+                    text: {
+                        const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                            ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                            : 0;
+                        const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                            ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                            : 0;
+
+                        if (clientPercentage > hostPercentage) {
+                            return lyt.getWinnerCatchPhrase(NetworkManager.clientName);
+                        } else {
+                            return lyt.getLoserCatchPhrase(NetworkManager.clientName);
+                        }
+                    }
+                }
             }
         }
-
+}
         function getWinnerCatchPhrase(playerName) {
-            const boldPlayerName = "<b>" + playerName + "</b>";
+            const boldPlayerName = "<b><font color='#28d13c'>" + playerName + "</font></b>";
             const phrases = [
                 qsTr("%1 is the true minesweeper pro").arg(boldPlayerName),
                 qsTr("%1 carried the team to victory").arg(boldPlayerName),
@@ -162,69 +221,19 @@ Popup {
         }
 
         function getLoserCatchPhrase(playerName) {
-            const boldPlayerName = "<b>" + playerName + "</b>";
+            const boldPlayerName = "<b><font color='#f6ae57'>" + playerName + "</font></b>";
             const phrases = [
                 qsTr("%1 was a bit sleepy today").arg(boldPlayerName),
-                qsTr("%1 will do better next time").arg(boldPlayerName),
-                qsTr("%1 was the cautious one").arg(boldPlayerName),
                 qsTr("%1 provided moral support").arg(boldPlayerName),
+                qsTr("%1 was the cautious one").arg(boldPlayerName),
+                qsTr("%1 will do better next time").arg(boldPlayerName),
                 qsTr("%1 was busy planning the strategy").arg(boldPlayerName),
                 qsTr("%1 was just warming up").arg(boldPlayerName)
             ];
             return phrases[Math.floor(Math.random() * phrases.length)];
         }
 
-        Label {
-            id: hostCatchPhrase
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
-            Layout.columnSpan: 2
-            font.pixelSize: 12
-            wrapMode: Text.WordWrap
-            textFormat: Text.RichText
-            horizontalAlignment: Text.AlignHCenter
 
-            text: {
-                const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                    ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                    : 0;
-                const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                    ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                    : 0;
-
-                if (hostPercentage >= clientPercentage) {
-                    return lyt.getWinnerCatchPhrase(NetworkManager.hostName);
-                } else {
-                    return lyt.getLoserCatchPhrase(NetworkManager.hostName);
-                }
-            }
-        }
-
-        Label {
-            id: clientCatchPhrase
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
-            Layout.columnSpan: 2
-            font.pixelSize: 12
-            wrapMode: Text.WordWrap
-            textFormat: Text.RichText
-            horizontalAlignment: Text.AlignHCenter
-
-            text: {
-                const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                    ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                    : 0;
-                const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                    ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                    : 0;
-
-                if (clientPercentage > hostPercentage) {
-                    return lyt.getWinnerCatchPhrase(NetworkManager.clientName);
-                } else {
-                    return lyt.getLoserCatchPhrase(NetworkManager.clientName);
-                }
-            }
-        }
 
         Label {
             id: recordLabel

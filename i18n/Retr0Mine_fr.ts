@@ -778,7 +778,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="158"/>
         <source>%1 has the fastest mouse</source>
-        <translation>%1 a l souris la plus rapide</translation>
+        <translation>%1 a la souris la plus rapide</translation>
     </message>
     <message>
         <location filename="../qml/Popups/PostgamePopup.qml" line="159"/>
