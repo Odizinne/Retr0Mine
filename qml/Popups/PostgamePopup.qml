@@ -53,7 +53,10 @@ Popup {
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: GameState.postgameText
+            text: (SteamIntegration.isInMultiplayerGame && GameState.gameWon)
+                  ? GameState.postgameText + " - " + GameTimer.displayTime
+                  : GameState.postgameText;
+
             color: GameState.postgameColor
             Layout.columnSpan: 2
             font.family: GameConstants.numberFont.name
