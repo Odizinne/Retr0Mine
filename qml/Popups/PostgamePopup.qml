@@ -23,7 +23,11 @@ Popup {
                           qsTr("%1 triggered a mine").arg(boldPlayerName),
                           qsTr("%1 found a mine the hard way").arg(boldPlayerName),
                           qsTr("It was certainly not %1's fault...").arg(boldPlayerName),
-                          qsTr("A mine caught %1 by surprise").arg(boldPlayerName)
+                          qsTr("A mine caught %1 by surprise").arg(boldPlayerName),
+                          qsTr("%1 has discoverd how to lose the game").arg(boldPlayerName),
+                          qsTr("%1 has decided to play by its own rules").arg(boldPlayerName),
+                          qsTr("A mine unfortunately slipped below %1 cursor").arg(boldPlayerName),
+                          qsTr("I saw %1 entering the vent").arg(boldPlayerName)
                       ];
         return phrases[Math.floor(Math.random() * phrases.length)];
     }
@@ -140,6 +144,84 @@ Popup {
                             return GameState.clientRevealed + " (" + percentage + "%)";
                         }
                     }
+                }
+            }
+        }
+
+        function getWinnerCatchPhrase(playerName) {
+            const boldPlayerName = "<b>" + playerName + "</b>";
+            const phrases = [
+                qsTr("%1 is the true minesweeper pro").arg(boldPlayerName),
+                qsTr("%1 carried the team to victory").arg(boldPlayerName),
+                qsTr("%1 has lightning-fast reflexes").arg(boldPlayerName),
+                qsTr("%1 deserves all the credit").arg(boldPlayerName),
+                qsTr("%1 has the fastest mouse").arg(boldPlayerName),
+                qsTr("%1 should consider going pro").arg(boldPlayerName)
+            ];
+            return phrases[Math.floor(Math.random() * phrases.length)];
+        }
+
+        function getLoserCatchPhrase(playerName) {
+            const boldPlayerName = "<b>" + playerName + "</b>";
+            const phrases = [
+                qsTr("%1 was a bit sleepy today").arg(boldPlayerName),
+                qsTr("%1 will do better next time").arg(boldPlayerName),
+                qsTr("%1 was the cautious one").arg(boldPlayerName),
+                qsTr("%1 provided moral support").arg(boldPlayerName),
+                qsTr("%1 was busy planning the strategy").arg(boldPlayerName),
+                qsTr("%1 was just warming up").arg(boldPlayerName)
+            ];
+            return phrases[Math.floor(Math.random() * phrases.length)];
+        }
+
+        Label {
+            id: hostCatchPhrase
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
+            Layout.columnSpan: 2
+            font.pixelSize: 12
+            wrapMode: Text.WordWrap
+            textFormat: Text.RichText
+            horizontalAlignment: Text.AlignHCenter
+
+            text: {
+                const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                    ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                    : 0;
+                const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                    ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                    : 0;
+
+                if (hostPercentage >= clientPercentage) {
+                    return lyt.getWinnerCatchPhrase(NetworkManager.hostName);
+                } else {
+                    return lyt.getLoserCatchPhrase(NetworkManager.hostName);
+                }
+            }
+        }
+
+        Label {
+            id: clientCatchPhrase
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
+            Layout.columnSpan: 2
+            font.pixelSize: 12
+            wrapMode: Text.WordWrap
+            textFormat: Text.RichText
+            horizontalAlignment: Text.AlignHCenter
+
+            text: {
+                const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                    ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                    : 0;
+                const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                    ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                    : 0;
+
+                if (clientPercentage > hostPercentage) {
+                    return lyt.getWinnerCatchPhrase(NetworkManager.clientName);
+                } else {
+                    return lyt.getLoserCatchPhrase(NetworkManager.clientName);
                 }
             }
         }

@@ -22,7 +22,7 @@ Popup {
         qsTr("Convincing mines not to move..."),
         qsTr("Consulting probability experts..."),
         qsTr("Hiding mines under suspicious squares..."),
-        qsTr("Calculation of multipliers based on colors"),
+        qsTr("Calculation of multipliers based on colors..."),
         qsTr("Running out of clever loading messages...")
     ]
 

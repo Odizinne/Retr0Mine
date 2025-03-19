@@ -413,8 +413,8 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
-        <source>Calculation of multipliers based on colors</source>
-        <translation>Calcul des multiplicateurs en fonction des couleurs</translation>
+        <source>Calculation of multipliers based on colors...</source>
+        <translation>Calcul des multiplicateurs en fonction des couleurs...</translation>
     </message>
     <message>
         <location filename="../qml/Popups/GenerationPopup.qml" line="26"/>
@@ -726,32 +726,112 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Une mine a pris %1 par surprise</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="90"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="27"/>
+        <source>%1 has discoverd how to lose the game</source>
+        <translation>%1 a découvert comment perdre la partie</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="28"/>
+        <source>%1 has decided to play by its own rules</source>
+        <translation>%1 a décidé de jouer avec ses propres règles</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="29"/>
+        <source>A mine unfortunately slipped below %1 cursor</source>
+        <translation>Une mine a malencontreusement glissé sous le curseur de %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="30"/>
+        <source>I saw %1 entering the vent</source>
+        <translation>J&apos;ai vu %1 entrer dans la vent</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="94"/>
         <source>Revealed cells:</source>
         <translation>Cellules révélées:</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="98"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="102"/>
         <source>First click excluded</source>
         <translation>Premier clic exclu</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="150"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="154"/>
+        <source>%1 is the true minesweeper pro</source>
+        <translation>%1 est un pro du démineur</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="155"/>
+        <source>%1 carried the team to victory</source>
+        <translation>%1 a porté l&apos;équipe à la victoire</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="156"/>
+        <source>%1 has lightning-fast reflexes</source>
+        <translation>%1 est plus rapide que l&apos;éclair</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="157"/>
+        <source>%1 deserves all the credit</source>
+        <translation>%1 mérite toute la gloire</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="158"/>
+        <source>%1 has the fastest mouse</source>
+        <translation>%1 a l souris la plus rapide</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="159"/>
+        <source>%1 should consider going pro</source>
+        <translation>%1 devrait serieusement penser à devenir pro</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="167"/>
+        <source>%1 was a bit sleepy today</source>
+        <translation>%1 était un peu fatigué</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="168"/>
+        <source>%1 will do better next time</source>
+        <translation>%1 fera mieux la prochaine fois</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="169"/>
+        <source>%1 was the cautious one</source>
+        <translation>%1 a choisis la prudence</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="170"/>
+        <source>%1 provided moral support</source>
+        <translation>%1 a fourni un soutien moral</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="171"/>
+        <source>%1 was busy planning the strategy</source>
+        <translation>%1 était occupé à préparer sa stratégie</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="172"/>
+        <source>%1 was just warming up</source>
+        <translation>%1 ne faisait que s&apos;échauffer</translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="232"/>
         <source>New record saved</source>
         <translation>Nouveau record sauvegardé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="159"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="241"/>
         <source>Waiting for host to start new game...</source>
         <translation>En attente de l&apos;hôte...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="168"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="250"/>
         <source>Retry</source>
         <translation>Rejouer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="183"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="265"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

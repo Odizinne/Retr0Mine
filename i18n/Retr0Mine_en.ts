@@ -412,8 +412,8 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
-        <source>Calculation of multipliers based on colors</source>
-        <translation></translation>
+        <source>Calculation of multipliers based on colors...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Popups/GenerationPopup.qml" line="26"/>
@@ -725,32 +725,112 @@ Current game will be saved and restored</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="90"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="27"/>
+        <source>%1 has discoverd how to lose the game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="28"/>
+        <source>%1 has decided to play by its own rules</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="29"/>
+        <source>A mine unfortunately slipped below %1 cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="30"/>
+        <source>I saw %1 entering the vent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="94"/>
         <source>Revealed cells:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="98"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="102"/>
         <source>First click excluded</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="150"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="154"/>
+        <source>%1 is the true minesweeper pro</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="155"/>
+        <source>%1 carried the team to victory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="156"/>
+        <source>%1 has lightning-fast reflexes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="157"/>
+        <source>%1 deserves all the credit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="158"/>
+        <source>%1 has the fastest mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="159"/>
+        <source>%1 should consider going pro</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="167"/>
+        <source>%1 was a bit sleepy today</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="168"/>
+        <source>%1 will do better next time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="169"/>
+        <source>%1 was the cautious one</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="170"/>
+        <source>%1 provided moral support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="171"/>
+        <source>%1 was busy planning the strategy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="172"/>
+        <source>%1 was just warming up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="232"/>
         <source>New record saved</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="159"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="241"/>
         <source>Waiting for host to start new game...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="168"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="250"/>
         <source>Retry</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="183"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="265"/>
         <source>Close</source>
         <translation></translation>
     </message>
