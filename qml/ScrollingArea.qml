@@ -12,7 +12,7 @@ ScrollView {
         opacity: parent.opacity
         orientation: Qt.Vertical
         anchors.right: parent.right
-        anchors.rightMargin: -12
+        anchors.rightMargin: -8
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
@@ -26,7 +26,7 @@ ScrollView {
         opacity: parent.opacity
         orientation: Qt.Vertical
         anchors.right: parent.right
-        anchors.rightMargin: -12
+        anchors.rightMargin: -8
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
