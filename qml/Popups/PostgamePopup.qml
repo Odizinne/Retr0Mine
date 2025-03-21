@@ -44,12 +44,10 @@ Popup {
         onActivated: closeButton.clicked()
     }
 
-    GridLayout {
+    ColumnLayout {
         id: lyt
         anchors.fill: parent
-        columns: 2
-        rowSpacing: 15
-        columnSpacing: 10
+        spacing: 15
 
         Label {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -58,7 +56,6 @@ Popup {
                   : GameState.postgameText;
 
             color: GameState.postgameColor
-            Layout.columnSpan: 2
             font.family: GameConstants.numberFont.name
             font.pixelSize: 16
         }
@@ -70,7 +67,6 @@ Popup {
             visible: GameState.displayNotification
             font.pixelSize: 13
             font.bold: true
-            Layout.columnSpan: 2
             color: "#28d13c"
         }
 
@@ -80,7 +76,6 @@ Popup {
             Layout.preferredWidth: 200
             text: control.getRandomMineTriggeredPhrase(GameState.bombClickedBy)
             visible: SteamIntegration.isInMultiplayerGame && !GameState.gameWon
-            Layout.columnSpan: 2
             font.pixelSize: 13
             wrapMode: Text.WordWrap
             textFormat: Text.RichText
@@ -89,7 +84,6 @@ Popup {
 
         ColumnLayout {
             visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
-            Layout.columnSpan: 2
             Layout.fillWidth: true
             spacing: 0
 
@@ -112,7 +106,6 @@ Popup {
 
         Frame {
             visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
-            Layout.columnSpan: 2
             Layout.fillWidth: true
             ColumnLayout {
                 spacing: 10
@@ -150,89 +143,89 @@ Popup {
                 }
 
 
-                    MenuSeparator {
-                        Layout.fillWidth: true
-                    }
+                MenuSeparator {
+                    Layout.fillWidth: true
+                }
 
                 RowLayout {
                     Layout.fillWidth: true
-                Label {
-                    id: hostCatchPhrase
-                    //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
-                    font.pixelSize: 12
-                    wrapMode: Text.WordWrap
-                    textFormat: Text.RichText
-                    //horizontalAlignment: Text.AlignHCenter
+                    Label {
+                        id: hostCatchPhrase
+                        Layout.fillWidth: true
+                        visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
+                        font.pixelSize: 12
+                        wrapMode: Text.WordWrap
+                        textFormat: Text.RichText
 
-                    text: {
-                        const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                            ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                            : 0;
-                        const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                            ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                            : 0;
+                        text: {
+                            const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                                                 ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                                                 : 0;
+                            const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                                                   ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                                                   : 0;
 
-                        if (hostPercentage >= clientPercentage) {
-                            return lyt.getWinnerCatchPhrase(NetworkManager.hostName);
-                        } else {
-                            return lyt.getLoserCatchPhrase(NetworkManager.hostName);
+                            if (hostPercentage >= clientPercentage) {
+                                return lyt.getWinnerCatchPhrase(NetworkManager.hostName);
+                            } else {
+                                return lyt.getLoserCatchPhrase(NetworkManager.hostName);
+                            }
                         }
                     }
                 }
-}
                 RowLayout {
                     Layout.fillWidth: true
-                Label {
-                    id: clientCatchPhrase
-                    //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
-                    font.pixelSize: 12
-                    wrapMode: Text.WordWrap
-                    textFormat: Text.RichText
-                    //horizontalAlignment: Text.AlignHCenter
+                    Label {
+                        id: clientCatchPhrase
+                        Layout.fillWidth: true
+                        //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        visible: SteamIntegration.isInMultiplayerGame && GameState.gameWon
+                        font.pixelSize: 12
+                        wrapMode: Text.WordWrap
+                        textFormat: Text.RichText
+                        //horizontalAlignment: Text.AlignHCenter
 
-                    text: {
-                        const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                            ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                            : 0;
-                        const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
-                            ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
-                            : 0;
+                        text: {
+                            const hostPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                                                 ? Math.round((GameState.hostRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                                                 : 0;
+                            const clientPercentage = GameState.hostRevealed + GameState.clientRevealed > 0
+                                                   ? Math.round((GameState.clientRevealed / (GameState.hostRevealed + GameState.clientRevealed)) * 100)
+                                                   : 0;
 
-                        if (clientPercentage > hostPercentage) {
-                            return lyt.getWinnerCatchPhrase(NetworkManager.clientName);
-                        } else {
-                            return lyt.getLoserCatchPhrase(NetworkManager.clientName);
+                            if (clientPercentage > hostPercentage) {
+                                return lyt.getWinnerCatchPhrase(NetworkManager.clientName);
+                            } else {
+                                return lyt.getLoserCatchPhrase(NetworkManager.clientName);
+                            }
                         }
                     }
                 }
             }
         }
-}
         function getWinnerCatchPhrase(playerName) {
             const boldPlayerName = "<b><font color='#28d13c'>" + playerName + "</font></b>";
             const phrases = [
-                qsTr("%1 is the true minesweeper pro").arg(boldPlayerName),
-                qsTr("%1 carried the team to victory").arg(boldPlayerName),
-                qsTr("%1 has lightning-fast reflexes").arg(boldPlayerName),
-                qsTr("%1 deserves all the credit").arg(boldPlayerName),
-                qsTr("%1 has the fastest mouse").arg(boldPlayerName),
-                qsTr("%1 should consider going pro").arg(boldPlayerName)
-            ];
+                              qsTr("%1 is the true minesweeper pro").arg(boldPlayerName),
+                              qsTr("%1 carried the team to victory").arg(boldPlayerName),
+                              qsTr("%1 has lightning-fast reflexes").arg(boldPlayerName),
+                              qsTr("%1 deserves all the credit").arg(boldPlayerName),
+                              qsTr("%1 has the fastest mouse").arg(boldPlayerName),
+                              qsTr("%1 should consider going pro").arg(boldPlayerName)
+                          ];
             return phrases[Math.floor(Math.random() * phrases.length)];
         }
 
         function getLoserCatchPhrase(playerName) {
             const boldPlayerName = "<b><font color='#f6ae57'>" + playerName + "</font></b>";
             const phrases = [
-                qsTr("%1 was a bit sleepy today").arg(boldPlayerName),
-                qsTr("%1 provided moral support").arg(boldPlayerName),
-                qsTr("%1 was the cautious one").arg(boldPlayerName),
-                qsTr("%1 will do better next time").arg(boldPlayerName),
-                qsTr("%1 was busy planning the strategy").arg(boldPlayerName),
-                qsTr("%1 was just warming up").arg(boldPlayerName)
-            ];
+                              qsTr("%1 was a bit sleepy today").arg(boldPlayerName),
+                              qsTr("%1 provided moral support").arg(boldPlayerName),
+                              qsTr("%1 was the cautious one").arg(boldPlayerName),
+                              qsTr("%1 will do better next time").arg(boldPlayerName),
+                              qsTr("%1 was busy planning the strategy").arg(boldPlayerName),
+                              qsTr("%1 was just warming up").arg(boldPlayerName)
+                          ];
             return phrases[Math.floor(Math.random() * phrases.length)];
         }
 
@@ -243,7 +236,6 @@ Popup {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             text: qsTr("New record saved")
             visible: GameState.displayNewRecord
-            Layout.columnSpan: 2
             font.pixelSize: 13
         }
 
@@ -252,37 +244,39 @@ Popup {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             text: qsTr("Waiting for host to start new game...")
             visible: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost
-            Layout.columnSpan: 2
             font.pixelSize: 13
             font.italic: true
         }
 
-        NfButton {
-            id: retryButton
-            text: qsTr("Retry")
+        RowLayout {
+            spacing: 10
             Layout.fillWidth: true
-            Layout.preferredWidth: control.buttonWidth
-            visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost
-            onClicked: {
-                GameState.difficultyChanged = false
-                GridBridge.initGame()
-                GameState.displayNewRecord = false
-                GameState.displayNotification = false
-                GameState.displayPostGame = false
+            NfButton {
+                id: retryButton
+                text: qsTr("Retry")
+                Layout.fillWidth: true
+                Layout.preferredWidth: control.buttonWidth
+                visible: !SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost
+                onClicked: {
+                    GameState.difficultyChanged = false
+                    GridBridge.initGame()
+                    GameState.displayNewRecord = false
+                    GameState.displayNotification = false
+                    GameState.displayPostGame = false
+                }
             }
-        }
 
-        NfButton {
-            id: closeButton
-            text: qsTr("Close")
-            Layout.fillWidth: true
-            Layout.columnSpan: retryButton.visible ? 1 : 2
-            Layout.preferredWidth: control.buttonWidth
-            onClicked: {
-                GameState.difficultyChanged = false
-                GameState.displayNewRecord = false
-                GameState.displayNotification = false
-                GameState.displayPostGame = false
+            NfButton {
+                id: closeButton
+                text: qsTr("Close")
+                Layout.fillWidth: true
+                Layout.preferredWidth: control.buttonWidth
+                onClicked: {
+                    GameState.difficultyChanged = false
+                    GameState.displayNewRecord = false
+                    GameState.displayNotification = false
+                    GameState.displayPostGame = false
+                }
             }
         }
     }
