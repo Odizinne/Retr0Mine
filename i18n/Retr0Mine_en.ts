@@ -82,6 +82,7 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
         <source>System</source>
         <translation></translation>
     </message>
@@ -97,8 +98,33 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
-        <source>Use system accent color</source>
-        <translation></translation>
+        <source>Accent color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Orange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Purple</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

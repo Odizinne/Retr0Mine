@@ -54,13 +54,13 @@ Pane {
                 Layout.rightMargin: 5
                 currentIndex: GameSettings.colorSchemeIndex
                 onActivated: {
-                    if (!GameSettings.systemAccent) {
-                        GameCore.setApplicationPalette(true)
+                    if (GameSettings.accentColorIndex !== 0) {
+                        GameCore.setApplicationPalette(GameSettings.accentColorIndex)
                     }
                     GameSettings.colorSchemeIndex = currentIndex
                     GameCore.setThemeColorScheme(currentIndex)
-                    if (!GameSettings.systemAccent) {
-                        GameCore.setApplicationPalette(false)
+                    if (GameSettings.accentColorIndex !== 0) {
+                        GameCore.setApplicationPalette(GameSettings.accentColorIndex)
                     }
                 }
             }
@@ -71,19 +71,20 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
-                text: qsTr("Use system accent color")
+                text: qsTr("Accent color")
                 Layout.fillWidth: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: systemAccentSwitch.click()
-                }
             }
-            NfSwitch {
-                id: systemAccentSwitch
-                checked: GameSettings.systemAccent
-                onClicked: {
-                    GameSettings.systemAccent = checked
-                    GameCore.setApplicationPalette(checked)
+
+            NfComboBox {
+                id: accentColorComboBox
+                model: [qsTr("System"), qsTr("Blue"), qsTr("Orange"), qsTr("Red"), qsTr("Green"), qsTr("Purple")]
+                Layout.rightMargin: 5
+                currentIndex: GameSettings.accentColorIndex
+                onActivated: {
+                    GameSettings.accentColorIndex = currentIndex
+                    Qt.callLater(function() {
+                        GameCore.setApplicationPalette(currentIndex)
+                    })
                 }
             }
         }

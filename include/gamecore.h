@@ -38,7 +38,7 @@ public:
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
     Q_INVOKABLE void resetSettings();
-    Q_INVOKABLE void setApplicationPalette(bool systemAccent);
+    Q_INVOKABLE void setApplicationPalette(int systemAccent);
 
     // Property getters
     bool getShowWelcome() const { return shouldShowWelcomeMessage; }
@@ -59,6 +59,7 @@ private:
     QString darkBlue = "#0067c0";
     QString defaultBlue = "#0078d4";
     int m_languageIndex;
+    int selectedAccentColor;
     bool m_isFluent = true;
     bool m_isUniversal = false;
     void setCustomPalette();

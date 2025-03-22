@@ -83,6 +83,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
@@ -98,8 +99,37 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <source>Accent color</source>
+        <translation>Couleur d&apos;accent</translation>
+    </message>
+    <message>
         <source>Use system accent color</source>
-        <translation>Couleur d&apos;accent du système</translation>
+        <translation type="vanished">Couleur d&apos;accent du système</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Blue</source>
+        <translation>Bleu</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Orange</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Red</source>
+        <translation>Rouge</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Green</source>
+        <translation>Vert</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <source>Purple</source>
+        <translation>Violet</translation>
     </message>
 </context>
 <context>

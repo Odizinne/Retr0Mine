@@ -89,11 +89,12 @@ void GameCore::setThemeColorScheme(int colorSchemeIndex)
 #endif
 }
 
-void GameCore::setApplicationPalette(bool systemAccent)
+void GameCore::setApplicationPalette(int systemAccent)
 {
+    selectedAccentColor = systemAccent;
     disconnect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
                this, &GameCore::setCustomPalette);
-    if (systemAccent) {
+    if (systemAccent == 0) {
         setSystemPalette();
     } else {
         setCustomPalette();
@@ -112,14 +113,65 @@ void GameCore::setCustomPalette()
     QPalette palette;
     QColor accentColor;
     QColor highlight;
-    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-        accentColor = lightBlue;
-    } else {
-        accentColor = darkBlue;
+
+    switch (selectedAccentColor) {
+    case 1:
+        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            accentColor = "#4CC2FF";
+        } else {
+            accentColor = "#003E92";
+        }
+        highlight = "#0078D4";
+        break;
+
+    case 2:
+        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            accentColor = "#FFB634";
+        } else {
+            accentColor = "#A14600";
+        }
+        highlight = "#FF8C00";
+        break;
+
+    case 3:
+        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            accentColor = "#F46762";
+        } else {
+            accentColor = "#9E0912";
+        }
+        highlight = "#E81123";
+        break;
+
+    case 4:
+        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            accentColor = "#45E532";
+        } else {
+            accentColor = "#084B08";
+        }
+        highlight = "#107C10";
+        break;
+
+    case 5:
+        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            accentColor = "#D88DE1";
+        } else {
+            accentColor = "#6F2382";
+        }
+        highlight = "#B146C2";
+        break;
+
+    default:
+        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            accentColor = "#4CC2FF";
+        } else {
+            accentColor = "#003E92";
+        }
+        highlight = "#0078D4";
+        break;
     }
 
-    if (isRunningOnGamescope) accentColor = lightBlue;
-    highlight = defaultBlue;
+    // Keep the Gamescope override
+    if (isRunningOnGamescope) accentColor = "#4CC2FF";
 
     palette.setColor(QPalette::ColorRole::Accent, accentColor);
     palette.setColor(QPalette::ColorRole::Highlight, highlight);
@@ -143,7 +195,7 @@ void GameCore::resetSettings()
     settings.setValue("soundPackIndex", 2);
     settings.setValue("animations", true);
     settings.setValue("cellFrame", true);
-    settings.setValue("contrastFlag", true);
+    settings.setValue("contrastFlag", false);
     settings.setValue("cellSize", 1);
     settings.setValue("customWidth", 8);
     settings.setValue("customHeight", 8);
@@ -166,7 +218,7 @@ void GameCore::resetSettings()
     settings.setValue("shakeUnifinishedNumbers", true);
     settings.setValue("hintReasoningInChat", true);
     settings.setValue("remoteVolume", 0.7);
-    settings.setValue("systemAccent", false);
+    settings.setValue("accentColorIndex", 2);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;

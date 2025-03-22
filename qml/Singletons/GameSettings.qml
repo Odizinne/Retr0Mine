@@ -18,7 +18,7 @@ Settings {
     property int soundPackIndex: 2
     property bool animations: true
     property bool cellFrame: true
-    property bool contrastFlag: true
+    property bool contrastFlag: false
     property int cellSize: 1
     property int customWidth: 8
     property int customHeight: 8
@@ -41,7 +41,7 @@ Settings {
     property bool shakeUnifinishedNumbers: true
     property bool hintReasoningInChat: true
     property real remoteVolume: 0.7
-    property bool systemAccent: false
+    property int accentColorIndex: 2
 
     property bool welcomeMessageShown: false
 }

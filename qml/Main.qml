@@ -215,7 +215,7 @@ ApplicationWindow {
             }
         }
 
-        GameCore.setApplicationPalette(GameSettings.systemAccent)
+        GameCore.setApplicationPalette(GameSettings.accentColorIndex)
 
         if (typeof Universal !== "undefined") {
             Universal.theme = GameCore.gamescope ? Universal.Dark : Universal.System
