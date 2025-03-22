@@ -1,4 +1,3 @@
-#include "gamecore.h"
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -7,6 +6,7 @@
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
+#include "gamecore.h"
 #include "steamintegration.h"
 
 namespace {
@@ -46,15 +46,13 @@ GameCore::GameCore(QObject *parent)
     isRunningOnGamescope = desktop.toLower() == "gamescope";
 }
 
-GameCore::~GameCore()
-{
+GameCore::~GameCore() {
     if (translator) {
         translator->deleteLater();
     }
 }
 
-void GameCore::init()
-{
+void GameCore::init() {
     if (!settings.value("welcomeMessageShown", false).toBool()) {
         resetSettings();
     }
@@ -69,8 +67,7 @@ void GameCore::init()
     setLanguage(languageIndex);
 }
 
-void GameCore::setThemeColorScheme(int colorSchemeIndex)
-{
+void GameCore::setThemeColorScheme(int colorSchemeIndex) {
 #ifdef _WIN32
     switch(colorSchemeIndex) {
     case(0):
@@ -89,8 +86,7 @@ void GameCore::setThemeColorScheme(int colorSchemeIndex)
 #endif
 }
 
-void GameCore::setApplicationPalette(int systemAccent)
-{
+void GameCore::setApplicationPalette(int systemAccent) {
     selectedAccentColor = systemAccent;
     disconnect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
                this, &GameCore::setCustomPalette);
@@ -103,13 +99,11 @@ void GameCore::setApplicationPalette(int systemAccent)
     }
 }
 
-void GameCore::setSystemPalette()
-{
+void GameCore::setSystemPalette() {
     QGuiApplication::setPalette(QPalette());
 }
 
-void GameCore::setCustomPalette()
-{
+void GameCore::setCustomPalette() {
     QPalette palette;
     QColor accentColor;
     QColor highlight;
@@ -152,8 +146,7 @@ void GameCore::setCustomPalette()
     QGuiApplication::setPalette(palette);
 }
 
-void GameCore::resetSettings()
-{
+void GameCore::resetSettings() {
     settings.setValue("startFullScreen", isRunningOnGamescope ? true : false);
     settings.setValue("themeIndex", 0);
     settings.setValue("languageIndex", 0);
@@ -197,8 +190,7 @@ void GameCore::resetSettings()
     shouldShowWelcomeMessage = true;
 }
 
-void GameCore::setQMLStyle(int index)
-{
+void GameCore::setQMLStyle(int index) {
     QString style;
     m_isFluent = false;
     m_isUniversal = false;
@@ -224,8 +216,7 @@ void GameCore::setQMLStyle(int index)
     emit universalChanged();
 }
 
-void GameCore::setLanguage(int index)
-{
+void GameCore::setLanguage(int index) {
     QString languageCode;
     if (index == 0) {
         if (SteamIntegrationForeign::s_singletonInstance->isInitialized()) {
@@ -251,8 +242,7 @@ void GameCore::setLanguage(int index)
     emit languageIndexChanged();
 }
 
-bool GameCore::loadLanguage(QString languageCode)
-{
+bool GameCore::loadLanguage(QString languageCode) {
     if (qApp) {
         qApp->removeTranslator(translator);
     }
@@ -272,11 +262,8 @@ bool GameCore::loadLanguage(QString languageCode)
     return false;
 }
 
-void GameCore::resetRetr0Mine()
-{
+void GameCore::resetRetr0Mine() {
     settings.setValue("welcomeMessageShown", false);
-
-    // Schedule the sync and restart for the next event loop iteration
     QMetaObject::invokeMethod(this, [this]() {
         settings.sync();
         QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
@@ -284,11 +271,8 @@ void GameCore::resetRetr0Mine()
     }, Qt::QueuedConnection);
 }
 
-void GameCore::restartRetr0Mine(int index)
-{
+void GameCore::restartRetr0Mine(int index) {
     settings.setValue("themeIndex", index);
-
-    // Schedule the sync and restart for the next event loop iteration
     QMetaObject::invokeMethod(this, [this]() {
         settings.sync();
         QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
@@ -296,8 +280,7 @@ void GameCore::restartRetr0Mine(int index)
     }, Qt::QueuedConnection);
 }
 
-QStringList GameCore::getSaveFiles() const
-{
+QStringList GameCore::getSaveFiles() const {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
     if (!saveDir.exists()) {
@@ -308,8 +291,7 @@ QStringList GameCore::getSaveFiles() const
     return files;
 }
 
-bool GameCore::saveGameState(const QString &data, const QString &filename)
-{
+bool GameCore::saveGameState(const QString &data, const QString &filename) {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
     if (!saveDir.exists()) {
@@ -319,7 +301,7 @@ bool GameCore::saveGameState(const QString &data, const QString &filename)
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream stream(&file);
         stream << data;
-        stream.flush();  // Make sure to flush
+        stream.flush();
         file.close();
         emit saveCompleted(true);
         return true;
@@ -328,8 +310,7 @@ bool GameCore::saveGameState(const QString &data, const QString &filename)
     return false;
 }
 
-QString GameCore::loadGameState(const QString &filename) const
-{
+QString GameCore::loadGameState(const QString &filename) const {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     QFile file(QDir(savePath).filePath(filename));
@@ -342,22 +323,19 @@ QString GameCore::loadGameState(const QString &filename) const
     return QString();
 }
 
-void GameCore::deleteSaveFile(const QString &filename)
-{
+void GameCore::deleteSaveFile(const QString &filename) {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir saveDir(savePath);
     QString fullPath = saveDir.filePath(filename);
     QFile::remove(fullPath);
 }
 
-QString GameCore::getLeaderboardPath() const
-{
+QString GameCore::getLeaderboardPath() const {
     QString savePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     return QDir(savePath).filePath("leaderboard.json");
 }
 
-bool GameCore::saveLeaderboard(const QString &data) const
-{
+bool GameCore::saveLeaderboard(const QString &data) const {
     QString filePath = getLeaderboardPath();
     QDir saveDir = QFileInfo(filePath).dir();
 
@@ -375,8 +353,7 @@ bool GameCore::saveLeaderboard(const QString &data) const
     return false;
 }
 
-QString GameCore::loadLeaderboard() const
-{
+QString GameCore::loadLeaderboard() const {
     QFile file(getLeaderboardPath());
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream stream(&file);

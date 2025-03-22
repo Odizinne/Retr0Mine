@@ -1,4 +1,3 @@
-#include "steamintegration.h"
 #include <QDebug>
 #include <QSettings>
 #include <QJsonDocument>
@@ -13,6 +12,7 @@
 #include <QElapsedTimer>
 #include <QDateTime>
 #include <steam_api.h>
+#include "steamintegration.h"
 
 #define STEAM_DEBUG(msg) if (SteamIntegration::debugLoggingEnabled) qDebug() << "SteamIntegration: " << msg
 bool SteamIntegration::debugLoggingEnabled = false;

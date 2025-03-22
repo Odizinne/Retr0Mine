@@ -1,5 +1,5 @@
-#include "gametimer.h"
 #include <QDebug>
+#include "gametimer.h"
 
 GameTimer::GameTimer(QObject *parent)
     : QObject(parent)
@@ -25,8 +25,7 @@ GameTimer::GameTimer(QObject *parent)
     updateTimer.setInterval(10);
 }
 
-void GameTimer::updateDisplayTime()
-{
+void GameTimer::updateDisplayTime() {
     int totalSeconds = m_centiseconds / 100;
     int minutes = totalSeconds / 60;
     int seconds = totalSeconds % 60;
@@ -36,8 +35,7 @@ void GameTimer::updateDisplayTime()
     emit displayTimeChanged();
 }
 
-QString GameTimer::getDetailedTime() const
-{
+QString GameTimer::getDetailedTime() const {
     int totalSeconds = m_centiseconds / 100;
     int minutes = totalSeconds / 60;
     int seconds = totalSeconds % 60;
@@ -48,13 +46,11 @@ QString GameTimer::getDetailedTime() const
         .arg(centis, 2, 10, QChar('0'));
 }
 
-qint64 GameTimer::centiseconds() const
-{
+qint64 GameTimer::centiseconds() const {
     return m_centiseconds;
 }
 
-void GameTimer::setCentiseconds(qint64 value)
-{
+void GameTimer::setCentiseconds(qint64 value) {
     if (m_centiseconds != value) {
         m_centiseconds = value;
         int currentSecond = m_centiseconds / 100;
@@ -65,22 +61,19 @@ void GameTimer::setCentiseconds(qint64 value)
     }
 }
 
-void GameTimer::start()
-{
+void GameTimer::start() {
     m_isPaused = false;
     timer.start();
     updateTimer.start();
     emit isRunningChanged();
 }
 
-void GameTimer::stop()
-{
+void GameTimer::stop() {
     updateTimer.stop();
     emit isRunningChanged();
 }
 
-void GameTimer::reset()
-{
+void GameTimer::reset() {
     stop();
     timer.invalidate();
     m_baseTime = 0;
@@ -93,8 +86,7 @@ void GameTimer::reset()
     emit isRunningChanged();
 }
 
-void GameTimer::resumeFrom(qint64 centiseconds)
-{
+void GameTimer::resumeFrom(qint64 centiseconds) {
     stop();
     m_baseTime = centiseconds;
     m_centiseconds = centiseconds;
@@ -109,8 +101,7 @@ void GameTimer::resumeFrom(qint64 centiseconds)
     emit isRunningChanged();
 }
 
-void GameTimer::pause()
-{
+void GameTimer::pause() {
     if (!m_isPaused && timer.isValid()) {
         m_pausedElapsedTime = timer.elapsed();
         updateTimer.stop();
@@ -120,8 +111,7 @@ void GameTimer::pause()
     }
 }
 
-void GameTimer::resume()
-{
+void GameTimer::resume() {
     if (m_isPaused) {
         m_baseTime = m_centiseconds;
         timer.restart();

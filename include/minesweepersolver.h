@@ -1,4 +1,3 @@
-// include/minesweepersolver.h
 #pragma once
 
 #include <QObject>

@@ -1,18 +1,14 @@
-// src/minesweepersolver.cpp
-#include "minesweepersolver.h"
 #include <QStringList>
+#include "minesweepersolver.h"
 
 MinesweeperSolver::MinesweeperSolver(QObject *parent)
-    : QObject(parent)
-{
+    : QObject(parent) {
 }
 
-MinesweeperSolver::~MinesweeperSolver()
-{
+MinesweeperSolver::~MinesweeperSolver() {
 }
 
-QSet<int> MinesweeperSolver::getNeighbors(int pos, int width, int height) const
-{
+QSet<int> MinesweeperSolver::getNeighbors(int pos, int width, int height) const {
     QSet<int> neighbors;
     int row = pos / width;
     int col = pos % width;
@@ -36,9 +32,7 @@ QSet<int> MinesweeperSolver::getNeighbors(int pos, int width, int height) const
 
 SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVector<int> &numbers,
                                              const QVector<int> &revealedCells,
-                                             const QVector<int> &flaggedCells)
-{
-    // Convert inputs to sets for faster lookup
+                                             const QVector<int> &flaggedCells) {
     QSet<int> revealed;
     QSet<int> flagged;
     for (int cell : revealedCells)
@@ -46,10 +40,9 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
     for (int cell : flaggedCells)
         flagged.insert(cell);
 
-    // STEP 1: Basic deductions - Find obvious mines first
     for (int pos : revealed) {
         if (numbers[pos] <= 0)
-            continue; // Skip mines and zeros
+            continue;
 
         QSet<int> neighbors = getNeighbors(pos, width, height);
         int flagCount = 0;
@@ -63,10 +56,8 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
             }
         }
 
-        // If remaining mines equals remaining unrevealed cells, they must all be mines
         int remainingMines = numbers[pos] - flagCount;
         if (remainingMines > 0 && remainingMines == unrevealedCells.size()) {
-            // Return first unflagged mine
             for (int minePos : unrevealedCells) {
                 if (!flagged.contains(minePos)) {
                     int row = pos / width;
@@ -85,10 +76,9 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         }
     }
 
-    // STEP 2: Basic deductions - Find obvious safe spots
     for (int pos : revealed) {
         if (numbers[pos] <= 0)
-            continue; // Skip mines and zeros
+            continue;
 
         QSet<int> neighbors = getNeighbors(pos, width, height);
         int flagCount = 0;
@@ -102,7 +92,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
             }
         }
 
-        // If number matches flag count, all other unknowns are safe
         if (numbers[pos] == flagCount && !unknowns.isEmpty()) {
             int safePos = *unknowns.begin();
             int row = pos / width;
@@ -118,11 +107,9 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         }
     }
 
-    // STEP 3: Build constraint set for more advanced analysis
     QVector<Constraint> constraints;
     QSet<int> frontier;
 
-    // Find all boundary cells (revealed cells with unrevealed neighbors)
     for (int pos : revealed) {
         if (numbers[pos] <= 0) continue;
 
@@ -132,7 +119,7 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
 
         for (int neighbor : neighbors) {
             if (flagged.contains(neighbor)) {
-                minesRequired--; // Account for already flagged mines
+                minesRequired--;
             } else if (!revealed.contains(neighbor)) {
                 unknownNeighbors.insert(neighbor);
             }
@@ -145,14 +132,12 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
             c.unknowns = unknownNeighbors;
             constraints.append(c);
 
-            // Add these unknown cells to the frontier
             for (int cell : unknownNeighbors) {
                 frontier.insert(cell);
             }
         }
     }
 
-    // STEP 4: Pattern-based deduction for overlapping areas
     for (int i = 0; i < constraints.size(); i++) {
         for (int j = 0; j < constraints.size(); j++) {
             if (i == j) continue;
@@ -160,7 +145,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
             const Constraint &c1 = constraints[i];
             const Constraint &c2 = constraints[j];
 
-            // Check if all cells in c1 are also part of c2
             bool c1ContainedInC2 = true;
             for (int cell : c1.unknowns) {
                 if (!c2.unknowns.contains(cell)) {
@@ -170,7 +154,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
             }
 
             if (c1ContainedInC2 && c1.unknowns.size() < c2.unknowns.size()) {
-                // Find cells that are in c2 but not in c1
                 QSet<int> onlyInC2;
                 for (int cell : c2.unknowns) {
                     if (!c1.unknowns.contains(cell)) {
@@ -178,12 +161,9 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                     }
                 }
 
-                // If c1 requires all its cells to be mines
                 if (c1.minesRequired == c1.unknowns.size()) {
-                    // Then c2 needs (c2.minesRequired - c1.minesRequired) mines in the non-overlapping area
                     int minesInNonOverlap = c2.minesRequired - c1.minesRequired;
 
-                    // If all cells in non-overlapping area must be mines
                     if (minesInNonOverlap == onlyInC2.size() && minesInNonOverlap > 0) {
                         int minePos = *onlyInC2.begin();
                         int row1 = c1.cell / width;
@@ -200,7 +180,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                         return {minePos, reason};
                     }
 
-                    // If no mines needed in non-overlapping area, those cells are safe
                     if (minesInNonOverlap == 0 && !onlyInC2.isEmpty()) {
                         int safePos = *onlyInC2.begin();
                         int row1 = c1.cell / width;
@@ -218,9 +197,7 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                     }
                 }
 
-                // If both numbers need the same number of mines
                 if (c2.minesRequired == c1.minesRequired) {
-                    // Then the non-overlapping cells must be safe
                     if (!onlyInC2.isEmpty()) {
                         int safePos = *onlyInC2.begin();
                         int row1 = c1.cell / width;
@@ -241,13 +218,11 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         }
     }
 
-    // STEP 5: Analyze overlapping patterns
     for (int i = 0; i < constraints.size(); i++) {
         for (int j = i + 1; j < constraints.size(); j++) {
             const Constraint &c1 = constraints[i];
             const Constraint &c2 = constraints[j];
 
-            // Find shared cells between the two constraints
             QSet<int> sharedCells;
             for (int cell : c1.unknowns) {
                 if (c2.unknowns.contains(cell)) {
@@ -257,7 +232,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
 
             if (sharedCells.isEmpty()) continue;
 
-            // Find cells unique to each constraint
             QSet<int> onlyInC1;
             for (int cell : c1.unknowns) {
                 if (!sharedCells.contains(cell)) {
@@ -272,11 +246,9 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                 }
             }
 
-            // Case 1: If the first number requires more mines than it has unique cells
             if (c1.minesRequired > onlyInC1.size()) {
                 int minSharedMines = c1.minesRequired - onlyInC1.size();
 
-                // If the second number's remaining mines exactly match its unique cells
                 if (c2.minesRequired - minSharedMines == onlyInC2.size() && !onlyInC2.isEmpty()) {
                     int minePos = *onlyInC2.begin();
                     int row1 = c1.cell / width;
@@ -294,7 +266,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                     return {minePos, reason};
                 }
 
-                // If the second number's mines can all fit in the shared area
                 if (c2.minesRequired <= minSharedMines && !onlyInC2.isEmpty()) {
                     int safePos = *onlyInC2.begin();
                     int row1 = c1.cell / width;
@@ -314,7 +285,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                 }
             }
 
-            // Case 2: If the second number requires more mines than it has unique cells
             if (c2.minesRequired > onlyInC2.size()) {
                 int minSharedMines = c2.minesRequired - onlyInC2.size();
 
@@ -354,7 +324,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                 }
             }
 
-            // Case 3: Check if limits on shared mines create safe spots
             int minSharedMines1 = c1.minesRequired - onlyInC1.size();
             int minSharedMines2 = c2.minesRequired - onlyInC2.size();
             int minSharedMines = qMax(0, qMax(minSharedMines1, minSharedMines2));
@@ -402,11 +371,8 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         }
     }
 
-    // STEP 6: Check for advanced patterns (like 1-2 diagonal patterns)
-    if (frontier.size() <= 20) {  // Limit for computational reasons
-        // For each frontier cell
+    if (frontier.size() <= 20) {
         for (int cell : frontier) {
-            // Find all constraints that include this cell
             QVector<Constraint> relevantConstraints;
             for (const Constraint& c : constraints) {
                 if (c.unknowns.contains(cell)) {
@@ -416,21 +382,18 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
 
             if (relevantConstraints.size() < 2) continue;
 
-            // Find cells that are influenced by all these constraints
             QSet<int> influencedCells;
             bool firstConstraint = true;
 
             for (const Constraint& c : relevantConstraints) {
                 if (firstConstraint) {
-                    // Initialize with all cells from first constraint
                     for (int unknown : c.unknowns) {
-                        if (unknown != cell) {  // Exclude the current cell
+                        if (unknown != cell) {
                             influencedCells.insert(unknown);
                         }
                     }
                     firstConstraint = false;
                 } else {
-                    // Keep only cells that are also in this constraint
                     QSet<int> newInfluenced;
                     for (int unknown : c.unknowns) {
                         if (unknown != cell && influencedCells.contains(unknown)) {
@@ -441,13 +404,10 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                 }
             }
 
-            // If there are cells influenced by all these constraints
             if (!influencedCells.isEmpty()) {
-                // Check if assuming a mine at 'cell' forces these influenced cells to be safe
                 bool allSafe = true;
 
                 for (const Constraint& c : relevantConstraints) {
-                    // Count cells not in the influenced set
                     int nonInfluencedCount = 0;
                     for (int unknown : c.unknowns) {
                         if (unknown != cell && !influencedCells.contains(unknown)) {
@@ -455,8 +415,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                         }
                     }
 
-                    // If mines required equals non-influenced count + 1 (for our cell),
-                    // then all influenced cells must be safe
                     if (c.minesRequired != nonInfluencedCount + 1) {
                         allSafe = false;
                         break;
@@ -474,11 +432,9 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                     return {safePos, reason};
                 }
 
-                // Check if assuming 'cell' is safe forces influenced cells to be mines
                 bool allMines = true;
 
                 for (const Constraint& c : relevantConstraints) {
-                    // Count cells not in the influenced set
                     int nonInfluencedCount = 0;
                     for (int unknown : c.unknowns) {
                         if (unknown != cell && !influencedCells.contains(unknown)) {
@@ -486,8 +442,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                         }
                     }
 
-                    // If mines required equals non-influenced count + influenced cells,
-                    // then all influenced cells must be mines
                     if (c.minesRequired != nonInfluencedCount + influencedCells.size()) {
                         allMines = false;
                         break;
@@ -508,18 +462,15 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         }
     }
 
-    // Try more sophisticated approaches for larger frontiers
     if (frontier.size() > 8 && frontier.size() <= 32) {
         int cell = solveFrontierCSP(width, height, constraints, QList<int>(frontier.begin(), frontier.end()));
         if (cell != -1) {
             int row = cell / width;
             int col = cell % width;
 
-            // Simple explanation for CSP result
             bool isMine = false;
             for (const Constraint& c : constraints) {
                 if (c.unknowns.contains(cell)) {
-                    // Count flagged neighbors
                     int flaggedCount = 0;
                     for (int neighbor : getNeighbors(c.cell, width, height)) {
                         if (flagged.contains(neighbor)) {
@@ -527,7 +478,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                         }
                     }
 
-                    // Check if adding a flag here would satisfy the constraint
                     if (flaggedCount + 1 == numbers[c.cell]) {
                         isMine = true;
                         break;
@@ -556,42 +506,34 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         }
     }
 
-    // No solution found
     return {-1, tr("I couldn't find any definite safe moves or mines through logical analysis at this time.")};
 }
 
 int MinesweeperSolver::solveFrontierCSP(int width, int height,
                                         const QVector<Constraint> &constraints,
-                                        const QList<int> &frontier)
-{
+                                        const QList<int> &frontier) {
     qDebug() << "Running CSP solver for" << frontier.size() << "frontier cells...";
     QVector<int> frontierArray = frontier.toVector();
 
-    // Try all possible configurations of mines in the frontier
-    int numConfigs = 1 << frontier.size(); // 2^n configurations
+    int numConfigs = 1 << frontier.size();
 
     qDebug() << "Testing" << numConfigs << "possible configurations";
 
-    // For each frontier cell, track if it's always mine, always safe, or uncertain
     QVector<bool> definitelyMine(frontier.size(), true);
     QVector<bool> definitelySafe(frontier.size(), true);
 
     int validConfigs = 0;
 
-    // Test every possible configuration of mines in the frontier
     for (int config = 0; config < numConfigs; config++) {
-        // Create a bit vector representing this configuration
         QVector<bool> mineConfig(frontier.size(), false);
         for (int i = 0; i < frontier.size(); i++) {
             mineConfig[i] = (config & (1 << i)) != 0;
         }
 
-        // Check if this configuration satisfies all constraints
         bool valid = true;
         for (const Constraint &constraint : constraints) {
             int minesInConfig = 0;
 
-            // Count mines in this configuration that affect this constraint
             for (int i = 0; i < frontier.size(); i++) {
                 int cell = frontierArray[i];
                 if (mineConfig[i] && constraint.unknowns.contains(cell)) {
@@ -599,7 +541,6 @@ int MinesweeperSolver::solveFrontierCSP(int width, int height,
                 }
             }
 
-            // If this constraint isn't satisfied, this configuration is invalid
             if (minesInConfig != constraint.minesRequired) {
                 valid = false;
                 break;
@@ -609,7 +550,6 @@ int MinesweeperSolver::solveFrontierCSP(int width, int height,
         if (valid) {
             validConfigs++;
 
-            // Update our definitelyMine and definitelySafe trackers
             for (int i = 0; i < frontier.size(); i++) {
                 if (!mineConfig[i]) definitelyMine[i] = false;
                 if (mineConfig[i]) definitelySafe[i] = false;
@@ -624,7 +564,6 @@ int MinesweeperSolver::solveFrontierCSP(int width, int height,
 
     qDebug() << "Found" << validConfigs << "valid configurations out of" << numConfigs << "possibilities";
 
-    // Return the first definitely safe or definitely mine cell we find
     for (int i = 0; i < frontier.size(); i++) {
         if (definitelySafe[i]) {
             int row = frontierArray[i] / width;
@@ -648,19 +587,14 @@ int MinesweeperSolver::solveFrontierCSP(int width, int height,
     }
 
     qDebug() << "No cells were definitively safe or mines in all configurations";
-    return -1; // No definite conclusions
+    return -1;
 }
 
 int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
                                                        const QVector<Constraint> &constraints,
-                                                       const QList<int> &frontier)
-{
+                                                       const QList<int> &frontier) {
     qDebug() << "Using constraint intersection methods for large frontier";
 
-    // Look for cells that satisfy special conditions across constraints
-
-    // First, look for "subset" constraints
-    // If one constraint's unknowns are a subset of another's, we can deduce things
     qDebug() << "Checking for subset relationships between constraints...";
     for (int i = 0; i < constraints.size(); i++) {
         for (int j = 0; j < constraints.size(); j++) {
@@ -669,7 +603,6 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
             const Constraint &c1 = constraints[i];
             const Constraint &c2 = constraints[j];
 
-            // Check if c1's unknowns are a subset of c2's
             bool isSubset = true;
             for (int cell : c1.unknowns) {
                 if (!c2.unknowns.contains(cell)) {
@@ -679,7 +612,6 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
             }
 
             if (isSubset && c1.unknowns.size() < c2.unknowns.size()) {
-                // Calculate the difference between the constraints
                 QSet<int> diffCells = c2.unknowns - c1.unknowns;
                 int diffMines = c2.minesRequired - c1.minesRequired;
 
@@ -692,7 +624,6 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
                          << "is a subset of cell" << col2 << "," << row2
                          << "with" << diffCells.size() << "different cells and" << diffMines << "mine difference";
 
-                // If all cells in the difference must be mines
                 if (diffMines == diffCells.size() && diffMines > 0) {
                     int mineCell = *diffCells.begin();
                     int mineRow = mineCell / width;
@@ -705,7 +636,6 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
                     return mineCell;
                 }
 
-                // If all cells in the difference must be safe
                 if (diffMines == 0 && !diffCells.isEmpty()) {
                     int safeCell = *diffCells.begin();
                     int safeRow = safeCell / width;
@@ -721,7 +651,6 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
         }
     }
 
-    // Look for "most constrained" cells
     qDebug() << "Looking for cells involved in multiple constraints...";
 
     QMap<int, int> cellConstraintCount;
@@ -735,7 +664,6 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
         }
     }
 
-    // Find the cell involved in the most constraints
     int mostConstrainedCell = -1;
     int maxConstraints = 0;
     for (auto it = cellConstraintCount.begin(); it != cellConstraintCount.end(); ++it) {
@@ -745,7 +673,6 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
         }
     }
 
-    // If we found a highly constrained cell, try it as a hint
     if (mostConstrainedCell != -1 && maxConstraints >= 3) {
         int row = mostConstrainedCell / width;
         int col = mostConstrainedCell % width;
@@ -760,14 +687,13 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
                                               .arg(c.minesRequired).arg(c.unknowns.size()));
         }
 
-        qDebug() << "\nSuggesting highly constrained cell at" << col << "," << row
-                 << "\nReason: This cell is involved in" << maxConstraints << "different constraints:"
-                 << "\n" << constraintDescriptions.join("\n")
+    qDebug() << "\nSuggesting highly constrained cell at" << col << "," << row
+             << "\nReason: This cell is involved in" << maxConstraints << "different constraints:"
+             << "\n" << constraintDescriptions.join("\n")
                  << "\nResolving this cell will provide the most information about the board.";
         return mostConstrainedCell;
     }
 
-    // If all else fails, just return a random frontier cell, but with explanation
     if (!frontier.isEmpty()) {
         int randomCell = frontier.first();
         int row = randomCell / width;

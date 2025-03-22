@@ -1,4 +1,3 @@
-// include/gamelogic.h
 #pragma once
 
 #include <QMap>

@@ -1,11 +1,10 @@
-#include "gamecore.h"
-#include "steamintegration.h"
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLoggingCategory>
+#include "gamecore.h"
+#include "steamintegration.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QLoggingCategory::setFilterRules("qt.multimedia.ffmpeg=false");
     QGuiApplication app(argc, argv);
     app.setOrganizationName("Odizinne");
