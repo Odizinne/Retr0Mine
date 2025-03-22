@@ -15,7 +15,8 @@ public:
     ~GridGenerator();
 
     bool generateBoard(int width, int height, int mineCount, int firstClickX, int firstClickY,
-                       QVector<int>& mines, QVector<int>& numbers, const std::atomic<bool>& cancelFlag);
+                       QVector<int>& mines, QVector<int>& numbers, const std::atomic<bool>& cancelFlag,
+                       std::function<void(int, int)> progressCallback = nullptr);
 
 private:
     std::mt19937 m_rng;

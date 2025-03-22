@@ -243,32 +243,32 @@ Current game will be saved and restored</source>
         <translation type="vanished">I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="250"/>
+        <location filename="../src/gamelogic.cpp" line="255"/>
         <source>contain mines</source>
         <translation>contain mines</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="251"/>
+        <location filename="../src/gamelogic.cpp" line="256"/>
         <source>mines must</source>
         <translation>mines must</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="252"/>
+        <location filename="../src/gamelogic.cpp" line="257"/>
         <source>must contain</source>
         <translation>must contain</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="253"/>
+        <location filename="../src/gamelogic.cpp" line="258"/>
         <source>must all contain</source>
         <translation>must all contain</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="259"/>
+        <location filename="../src/gamelogic.cpp" line="264"/>
         <source>I think there&apos;s a mine at position (%1,%2). %3</source>
         <translation>I think there&apos;s a mine at position (%1,%2). %3</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="262"/>
+        <location filename="../src/gamelogic.cpp" line="267"/>
         <source>I believe the cell at position (%1,%2) is safe. %3</source>
         <translation>I believe the cell at position (%1,%2) is safe. %3</translation>
     </message>

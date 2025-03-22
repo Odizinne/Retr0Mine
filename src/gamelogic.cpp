@@ -160,7 +160,6 @@ QSet<int> GameLogic::getNeighbors(int pos) const
 }
 
 void GameLogic::generateBoardAsync(int firstClickX, int firstClickY) {
-    // Cancel any ongoing generation
     cancelGeneration();
 
     // Set initial progress values
@@ -178,9 +177,15 @@ void GameLogic::generateBoardAsync(int firstClickX, int firstClickY) {
             // Update attempt counter
             updateProgress(attempt, MAX_ATTEMPTS, 0);
 
-            // Try to generate board using the GridGenerator
-            success = m_gridGenerator->generateBoard(m_width, m_height, m_mineCount, firstClickX, firstClickY,
-                                                     m_mines, m_numbers, m_cancelGeneration);
+            // Try to generate board using the GridGenerator with progress callback
+            success = m_gridGenerator->generateBoard(
+                m_width, m_height, m_mineCount, firstClickX, firstClickY,
+                m_mines, m_numbers, m_cancelGeneration,
+                [this](int minesPlaced, int totalMines) {
+                    // Update mines placed progress
+                    updateProgress(m_currentAttempt.load(), m_totalAttempts.load(), minesPlaced);
+                }
+                );
 
             if (!success && !m_cancelGeneration.load()) {
                 attempt++;

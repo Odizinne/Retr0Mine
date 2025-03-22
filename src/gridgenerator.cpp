@@ -13,7 +13,8 @@ GridGenerator::~GridGenerator()
 }
 
 bool GridGenerator::generateBoard(int width, int height, int mineCount, int firstClickX, int firstClickY,
-                                  QVector<int>& mines, QVector<int>& numbers, const std::atomic<bool>& cancelFlag)
+                                  QVector<int>& mines, QVector<int>& numbers, const std::atomic<bool>& cancelFlag,
+                                  std::function<void(int, int)> progressCallback)
 {
     // Check for cancellation at the beginning
     if (cancelFlag.load()) {
@@ -72,6 +73,11 @@ bool GridGenerator::generateBoard(int width, int height, int mineCount, int firs
                 // Accept this mine placement
                 board.placeMine(candidates[i]);
                 placedMines++;
+
+                // Report progress
+                if (progressCallback && (placedMines % 5 == 0 || placedMines == 1 || placedMines == mineCount)) {
+                    progressCallback(placedMines, mineCount);
+                }
             }
         }
 
@@ -82,7 +88,12 @@ bool GridGenerator::generateBoard(int width, int height, int mineCount, int firs
 
         // Check if we placed all mines
         if (placedMines == mineCount) {
-            // Transfer the generated board to the output parameters
+            // Make sure we show all mines are placed
+            if (progressCallback) {
+                progressCallback(mineCount, mineCount);
+            }
+
+            // Transfer the generated board to the game state
             mines = board.getMines();
             numbers = board.calculateNumbers();
             return true;
