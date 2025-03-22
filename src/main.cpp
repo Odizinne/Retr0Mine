@@ -1,7 +1,5 @@
 #include "gamecore.h"
 #include "steamintegration.h"
-#include "gametimer.h"
-#include "gamelogic.h"
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLoggingCategory>
@@ -16,21 +14,9 @@ int main(int argc, char *argv[])
 
     SteamIntegration* steamIntegration = new SteamIntegration(&app);
     GameCore* gameCore = new GameCore(&app);
-    GameTimer* gameTimer = new GameTimer(&app);
-    GameLogic* gameLogic = new GameLogic(&app);
 
     SteamIntegrationForeign::s_singletonInstance = steamIntegration;
     GameCoreForeign::s_singletonInstance = gameCore;
-    GameTimerForeign::s_singletonInstance = gameTimer;
-    GameLogicForeign::s_singletonInstance = gameLogic;
-
-    QTimer *steamCallbackTimer = new QTimer();
-    QObject::connect(steamCallbackTimer, &QTimer::timeout, []() {
-        if (SteamIntegrationForeign::s_singletonInstance) {
-            SteamIntegrationForeign::s_singletonInstance->runCallbacks();
-        }
-    });
-    steamCallbackTimer->start(100);
 
     QQmlApplicationEngine engine;
 

@@ -6,6 +6,8 @@
 
 class GameTimer : public QObject {
     Q_OBJECT
+    QML_SINGLETON
+    QML_ELEMENT
     Q_PROPERTY(QString displayTime READ displayTime NOTIFY displayTimeChanged)
     Q_PROPERTY(qint64 centiseconds READ centiseconds WRITE setCentiseconds NOTIFY centisecondsChanged)
     Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
@@ -13,6 +15,18 @@ class GameTimer : public QObject {
 
 public:
     explicit GameTimer(QObject *parent = nullptr);
+    ~GameTimer() override = default;
+
+    static GameTimer* create(QQmlEngine* engine, QJSEngine* jsEngine) {
+        Q_UNUSED(engine)
+        Q_UNUSED(jsEngine)
+
+        // QML engines are responsible for singleton deletion
+        static GameTimer* instance = new GameTimer();
+        QJSEngine::setObjectOwnership(instance, QJSEngine::CppOwnership);
+        return instance;
+    }
+
     Q_INVOKABLE QString getDetailedTime() const;
     Q_INVOKABLE void pause();
     Q_INVOKABLE void resume();
@@ -45,26 +59,4 @@ private:
     int m_lastSecond;
     QString m_displayTime;
     bool m_isPaused;
-};
-
-struct GameTimerForeign
-{
-    Q_GADGET
-    QML_FOREIGN(GameTimer)
-    QML_SINGLETON
-    QML_NAMED_ELEMENT(GameTimer)
-public:
-    inline static GameTimer* s_singletonInstance = nullptr;
-    inline static QJSEngine* s_engine = nullptr;
-    static GameTimer* create(QQmlEngine*, QJSEngine* engine)
-    {
-        Q_ASSERT(s_singletonInstance);
-        Q_ASSERT(engine->thread() == s_singletonInstance->thread());
-        if (s_engine)
-            Q_ASSERT(engine == s_engine);
-        else
-            s_engine = engine;
-        QJSEngine::setObjectOwnership(s_singletonInstance, QJSEngine::CppOwnership);
-        return s_singletonInstance;
-    }
 };

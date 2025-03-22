@@ -208,6 +208,7 @@ Item {
             id: rightLayout
 
             NfButton {
+                id: mineButton
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: mineCounter.implicitWidth + 20
                 icon.color: GameConstants.foregroundColor
@@ -221,8 +222,9 @@ Item {
                     id: mineCounter
                     anchors.centerIn: parent
                     IconImage {
+                        color: GameConstants.foregroundColor
                         source: "qrc:/icons/bomb.png"
-                        color: enabled ? GameConstants.foregroundColor : "grey"
+                        opacity: enabled ? 1 : 0.5
                         sourceSize.height: 18
                         sourceSize.width: 18
                     }

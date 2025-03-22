@@ -38,6 +38,8 @@ inline size_t qHash(const MineSolverInfo &info, size_t seed = 0)
 class GameLogic : public QObject
 {
     Q_OBJECT
+    QML_SINGLETON
+    QML_ELEMENT
     Q_PROPERTY(int currentAttempt READ currentAttempt NOTIFY currentAttemptChanged)
     Q_PROPERTY(int totalAttempts READ totalAttempts NOTIFY totalAttemptsChanged)
     Q_PROPERTY(int minesPlaced READ minesPlaced NOTIFY minesPlacedChanged)
@@ -54,6 +56,16 @@ public:
 
     explicit GameLogic(QObject *parent = nullptr);
     ~GameLogic() override;
+
+    static GameLogic* create(QQmlEngine* engine, QJSEngine* jsEngine) {
+        Q_UNUSED(engine)
+        Q_UNUSED(jsEngine)
+
+        // QML engines are responsible for singleton deletion
+        static GameLogic* instance = new GameLogic();
+        QJSEngine::setObjectOwnership(instance, QJSEngine::CppOwnership);
+        return instance;
+    }
 
     Q_INVOKABLE bool initializeGame(int width, int height, int mineCount);
     Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines);
@@ -110,27 +122,4 @@ private:
 
     int solveFrontierCSP(const QVector<Constraint> &constraints, const QList<int> &frontier);
     int solveWithConstraintIntersection(const QVector<Constraint> &constraints, const QList<int> &frontier);
-};
-
-struct GameLogicForeign
-{
-    Q_GADGET
-    QML_FOREIGN(GameLogic)
-    QML_SINGLETON
-    QML_NAMED_ELEMENT(GameLogic)
-public:
-    inline static GameLogic* s_singletonInstance = nullptr;
-    inline static QJSEngine* s_engine = nullptr;
-
-    static GameLogic* create(QQmlEngine*, QJSEngine* engine)
-    {
-        Q_ASSERT(s_singletonInstance);
-        Q_ASSERT(engine->thread() == s_singletonInstance->thread());
-        if (s_engine)
-            Q_ASSERT(engine == s_engine);
-        else
-            s_engine = engine;
-        QJSEngine::setObjectOwnership(s_singletonInstance, QJSEngine::CppOwnership);
-        return s_singletonInstance;
-    }
 };

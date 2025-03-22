@@ -286,7 +286,8 @@ Popup {
                                 IconImage {
                                     anchors.centerIn: parent
                                     source: "qrc:/icons/mail.png"
-                                    color: parent.enabled ? GameConstants.foregroundColor : "grey"
+                                    color: GameConstants.foregroundColor
+                                    opacity: parent.enabled? 1 : 0.5
                                     sourceSize.height: 16
                                     sourceSize.width: 16
                                     Layout.preferredHeight: 16
