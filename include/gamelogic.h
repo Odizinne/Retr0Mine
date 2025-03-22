@@ -11,29 +11,10 @@
 #include <random>
 #include <atomic>
 
-struct MineSolverInfo
-{
-    QSet<int> spaces;
-    int count;
-    bool operator==(const MineSolverInfo &other) const
-    {
-        return spaces == other.spaces && count == other.count;
-    }
-};
-
 struct SolverResult {
     int cell;
     QString reason;
 };
-
-inline size_t qHash(const MineSolverInfo &info, size_t seed = 0)
-{
-    size_t hashValue = qHash(info.count, seed);
-    for (int space : info.spaces) {
-        hashValue ^= qHash(space, seed);
-    }
-    return hashValue;
-}
 
 class GameLogic : public QObject
 {
@@ -44,6 +25,7 @@ class GameLogic : public QObject
     Q_PROPERTY(int totalAttempts READ totalAttempts NOTIFY totalAttemptsChanged)
     Q_PROPERTY(int minesPlaced READ minesPlaced NOTIFY minesPlacedChanged)
     Q_PROPERTY(int totalMines READ totalMines NOTIFY totalMinesChanged)
+
 public:
     struct Cell
     {
@@ -61,7 +43,6 @@ public:
         Q_UNUSED(engine)
         Q_UNUSED(jsEngine)
 
-        // QML engines are responsible for singleton deletion
         static GameLogic* instance = new GameLogic();
         QJSEngine::setObjectOwnership(instance, QJSEngine::CppOwnership);
         return instance;
@@ -76,7 +57,6 @@ public:
     Q_INVOKABLE QVariantMap findMineHintWithReasoning(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     Q_INVOKABLE void cancelGeneration();
 
-    // Progress information accessors
     int currentAttempt() const { return m_currentAttempt; }
     int totalAttempts() const { return m_totalAttempts; }
     int minesPlaced() const { return m_minesPlaced; }
@@ -96,13 +76,10 @@ private:
     QVector<int> m_mines;
     QVector<int> m_numbers;
     std::mt19937 m_rng;
-    QSet<MineSolverInfo> m_information;
-    QMap<int, QSet<MineSolverInfo>> m_informationsForSpace;
     QMap<int, bool> m_solvedSpaces;
     std::atomic<bool> m_cancelGeneration;
     QFutureWatcher<void>* m_generationWatcher;
 
-    // Progress tracking
     std::atomic<int> m_currentAttempt;
     std::atomic<int> m_totalAttempts;
     std::atomic<int> m_minesPlaced;
@@ -115,9 +92,9 @@ private:
     QString formatExplanationForDisplay(const QString &rawExplanation, int col, int row, bool isMine);
 
     struct Constraint {
-        int cell;              // The boundary cell
-        int minesRequired;     // Number of mines required around this cell
-        QSet<int> unknowns;    // Unknown cells around this cell
+        int cell;
+        int minesRequired;
+        QSet<int> unknowns;
     };
 
     int solveFrontierCSP(const QVector<Constraint> &constraints, const QList<int> &frontier);

@@ -21,7 +21,6 @@ public:
         Q_UNUSED(engine)
         Q_UNUSED(jsEngine)
 
-        // QML engines are responsible for singleton deletion
         static GameTimer* instance = new GameTimer();
         QJSEngine::setObjectOwnership(instance, QJSEngine::CppOwnership);
         return instance;
