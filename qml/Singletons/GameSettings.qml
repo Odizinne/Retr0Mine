@@ -11,7 +11,7 @@ Settings {
     property bool invertLRClick: false
     property bool autoreveal: true
     property bool enableQuestionMarks: true
-    property bool enableSafeQuestionMarks: true
+    property bool enableSafeQuestionMarks: false
     property bool loadLastGame: false
     property bool soundEffects: true
     property real volume: 1.0
@@ -25,7 +25,6 @@ Settings {
     property int customMines: 10
     property bool dimSatisfied: false
     property int colorBlindness: 0
-    property bool welcomeMessageShown: false
     property int flagSkinIndex: 0
     property int colorSchemeIndex: 0
     property int gridResetAnimationIndex: 0
@@ -43,5 +42,7 @@ Settings {
     property bool hintReasoningInChat: true
     property real remoteVolume: 0.7
     property bool systemAccent: false
+
+    property bool welcomeMessageShown: false
 }
 

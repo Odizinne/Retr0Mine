@@ -129,12 +129,14 @@ void GameCore::setCustomPalette()
 
 void GameCore::resetSettings()
 {
+    settings.setValue("startFullScreen", isRunningOnGamescope ? true : false);
     settings.setValue("themeIndex", 0);
     settings.setValue("languageIndex", 0);
     settings.setValue("difficulty", 0);
     settings.setValue("invertLRClick", false);
     settings.setValue("autoreveal", true);
     settings.setValue("enableQuestionMarks", true);
+    settings.setValue("enableSafeQuestionMarks", false);
     settings.setValue("loadLastGame", false);
     settings.setValue("soundEffects", true);
     settings.setValue("volume", 1.0);
@@ -147,9 +149,10 @@ void GameCore::resetSettings()
     settings.setValue("customHeight", 8);
     settings.setValue("customMines", 10);
     settings.setValue("dimSatisfied", false);
-    settings.setValue("startFullScreen", isRunningOnGamescope ? true : false);
     settings.setValue("colorBlindness", 0);
     settings.setValue("flagSkinIndex", 0);
+    settings.setValue("colorSchemeIndex", 0);
+    settings.setValue("gridResetAnimationIndex", 0);
     settings.setValue("fontIndex", 0);
     settings.setValue("satisfiedOpacity", 0.5);
     settings.setValue("displayTimer", true);
@@ -162,6 +165,8 @@ void GameCore::resetSettings()
     settings.setValue("mpAudioNotificationOnNewMessage", true);
     settings.setValue("shakeUnifinishedNumbers", true);
     settings.setValue("hintReasoningInChat", true);
+    settings.setValue("remoteVolume", 0.7);
+    settings.setValue("systemAccent", false);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;
