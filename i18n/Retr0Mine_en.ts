@@ -274,32 +274,32 @@ Current game will be saved and restored</source>
         <translation type="vanished">I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="255"/>
+        <location filename="../src/gamelogic.cpp" line="212"/>
         <source>contain mines</source>
         <translation>contain mines</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="256"/>
+        <location filename="../src/gamelogic.cpp" line="213"/>
         <source>mines must</source>
         <translation>mines must</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="257"/>
+        <location filename="../src/gamelogic.cpp" line="214"/>
         <source>must contain</source>
         <translation>must contain</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="258"/>
+        <location filename="../src/gamelogic.cpp" line="215"/>
         <source>must all contain</source>
         <translation>must all contain</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="264"/>
+        <location filename="../src/gamelogic.cpp" line="220"/>
         <source>I think there&apos;s a mine at position (%1,%2). %3</source>
         <translation>I think there&apos;s a mine at position (%1,%2). %3</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="267"/>
+        <location filename="../src/gamelogic.cpp" line="223"/>
         <source>I believe the cell at position (%1,%2) is safe. %3</source>
         <translation>I believe the cell at position (%1,%2) is safe. %3</translation>
     </message>
@@ -602,7 +602,7 @@ Current game will be saved and restored</source>
 <context>
     <name>MinesweeperSolver</name>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="77"/>
+        <location filename="../src/minesweepersolver.cpp" line="68"/>
         <source>The number %1 at %2,%3 shows there are %n mine(s) left to find. Since there are exactly %n hidden cell(s) next to it, all of these cells must contain mines.</source>
         <translation type="unfinished">
             <numerusform>The number %1 at %2,%3 shows there is %n mine left to find. Since there is exactly %n hidden cell next to it, this cell must contain a mine.</numerusform>
@@ -610,7 +610,7 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="113"/>
+        <location filename="../src/minesweepersolver.cpp" line="102"/>
         <source>The number %1 at %2,%3 already has all its %n mine(s) flagged. This means all remaining hidden cells around it must be safe.</source>
         <translation type="unfinished">
             <numerusform>The number %1 at %2,%3 already has its %n mine flagged. This means all remaining hidden cells around it must be safe.</numerusform>
@@ -618,7 +618,7 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="194"/>
+        <location filename="../src/minesweepersolver.cpp" line="174"/>
         <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</source>
         <translation type="unfinished">
             <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: The %n mine from the first number must be in a cell that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</numerusform>
@@ -626,7 +626,7 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="211"/>
+        <location filename="../src/minesweepersolver.cpp" line="190"/>
         <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</source>
         <translation type="unfinished">
             <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: The %n mine from the first number must be in a cell that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</numerusform>
@@ -634,7 +634,7 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="231"/>
+        <location filename="../src/minesweepersolver.cpp" line="208"/>
         <source>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mine(s). Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</source>
         <translation type="unfinished">
             <numerusform>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mine. Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</numerusform>
@@ -642,7 +642,7 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="287"/>
+        <location filename="../src/minesweepersolver.cpp" line="259"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the second number must all contain mines.</source>
         <translation type="unfinished">
             <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell around the second number must contain a mine.</numerusform>
@@ -650,12 +650,12 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="305"/>
+        <location filename="../src/minesweepersolver.cpp" line="276"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the second number only needs %8 mines total, its non-shared cells must be safe.</source>
         <translation type="unfinished">The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the second number only needs %8 mines total, its non-shared cells must be safe.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="328"/>
+        <location filename="../src/minesweepersolver.cpp" line="298"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the first number must all contain mines.</source>
         <translation type="unfinished">
             <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell around the first number must contain a mine.</numerusform>
@@ -663,12 +663,12 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="345"/>
+        <location filename="../src/minesweepersolver.cpp" line="315"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the first number only needs %8 mines total, its non-shared cells must be safe.</source>
         <translation type="unfinished">The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the first number only needs %8 mines total, its non-shared cells must be safe.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="372"/>
+        <location filename="../src/minesweepersolver.cpp" line="341"/>
         <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the first number, so they can&apos;t all be mines.</source>
         <translation type="unfinished">
             <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell around the first number, so it can&apos;t be a mine.</numerusform>
@@ -676,7 +676,7 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="391"/>
+        <location filename="../src/minesweepersolver.cpp" line="360"/>
         <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the second number, so they can&apos;t all be mines.</source>
         <translation type="unfinished">
             <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell around the second number, so it can&apos;t be a mine.</numerusform>
@@ -684,32 +684,32 @@ Current game will be saved and restored</source>
         </translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="471"/>
+        <location filename="../src/minesweepersolver.cpp" line="429"/>
         <source>If there is a mine at %1,%2, then certain cells that share multiple number constraints must be safe by process of elimination.</source>
         <translation type="unfinished">If there is a mine at %1,%2, then certain cells that share multiple number constraints must be safe by process of elimination.</translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="502"/>
+        <location filename="../src/minesweepersolver.cpp" line="456"/>
         <source>If the cell at %1,%2 is safe, then certain cells that share multiple number constraints must contain mines by process of elimination.</source>
         <translation type="unfinished">If the cell at %1,%2 is safe, then certain cells that share multiple number constraints must contain mines by process of elimination.</translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="540"/>
+        <location filename="../src/minesweepersolver.cpp" line="490"/>
         <source>Through constraint satisfaction analysis, I&apos;ve determined this cell must contain a mine.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="542"/>
+        <location filename="../src/minesweepersolver.cpp" line="492"/>
         <source>Through constraint satisfaction analysis, I&apos;ve determined this cell must be safe.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="553"/>
+        <location filename="../src/minesweepersolver.cpp" line="503"/>
         <source>Based on analyzing the pattern of revealed numbers, this is the most informative cell to click next.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="560"/>
+        <location filename="../src/minesweepersolver.cpp" line="509"/>
         <source>I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</source>
         <translation type="unfinished">I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</translation>
     </message>

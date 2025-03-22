@@ -54,15 +54,15 @@ QtObject {
 
     function getDifficultyLevel() {
         if (GameState.gridSizeX === 9 && GameState.gridSizeY === 9 && GameState.mineCount === 10) {
-            return 'easy';
+            return 'easy'
         } else if (GameState.gridSizeX === 16 && GameState.gridSizeY === 16 && GameState.mineCount === 40) {
-            return 'medium';
+            return 'medium'
         } else if (GameState.gridSizeX === 30 && GameState.gridSizeY === 16 && GameState.mineCount === 99) {
-            return 'hard';
+            return 'hard'
         } else if (GameState.gridSizeX === 50 && GameState.gridSizeY === 32 && GameState.mineCount === 320) {
-            return 'retr0';
+            return 'retr0'
         }
-        return null;
+        return null
     }
 
     property bool gameWon: false

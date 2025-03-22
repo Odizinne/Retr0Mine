@@ -87,28 +87,28 @@ Item {
         switch(GameSettings.localFlagColorIndex) {
             case 0:
                 GameConstants.foregroundColor
-            break;
+            break
             case 1:
                 "#ff7747"
-            break;
+            break
             case 2:
                 "#ff7dbe"
-            break;
+            break
             case 3:
                 "#7ddb7d"
-            break;
+            break
             case 4:
                 "#47ceff"
-            break;
+            break
             case 5:
                 "#ae7dff"
-            break;
+            break
             case 6:
                 "#ff6b6b"
-            break;
+            break
             case 7:
                 "#ffe066"
-            break;
+            break
         }
     }
 
@@ -116,28 +116,28 @@ Item {
         switch(GameSettings.remoteFlagColorIndex) {
             case 0:
                 GameConstants.foregroundColor
-            break;
+            break
             case 1:
                 "#ff7747"
-            break;
+            break
             case 2:
                 "#ff7dbe"
-            break;
+            break
             case 3:
                 "#7ddb7d"
-            break;
+            break
             case 4:
                 "#47ceff"
-            break;
+            break
             case 5:
                 "#ae7dff"
-            break;
+            break
             case 6:
                 "#ff6b6b"
-            break;
+            break
             case 7:
                 "#ffe066"
-            break;
+            break
         }
     }
 
@@ -145,28 +145,28 @@ Item {
         switch(GameSettings.pingColorIndex) {
             case 0:
                 GameConstants.foregroundColor
-            break;
+            break
             case 1:
                 "#E95420"
-            break;
+            break
             case 2:
                 "#DD0077"
-            break;
+            break
             case 3:
                 "#26A269"
-            break;
+            break
             case 4:
                 "#3584E4"
-            break;
+            break
             case 5:
                 "#5E5CBB"
-            break;
+            break
             case 6:
                 "#E01B24"
-            break;
+            break
             case 7:
                 "#E5A50A"
-            break;
+            break
         }
     }
 
@@ -194,7 +194,3 @@ Item {
     property string leftClickExplanation: getLeftClickExplanation()
     property string rightClickExplanation: getRightClickExplanation()
 }
-
-
-
-
