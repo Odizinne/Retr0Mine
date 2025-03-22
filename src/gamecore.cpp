@@ -114,68 +114,41 @@ void GameCore::setCustomPalette()
     QColor accentColor;
     QColor highlight;
 
+    bool isDarkMode = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    // If running on Gamescope, always use dark mode colors
+    if (isRunningOnGamescope) {
+        isDarkMode = true;
+    }
+
     switch (selectedAccentColor) {
     case 1:
-        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            accentColor = "#4CC2FF";
-        } else {
-            accentColor = "#003E92";
-        }
+        accentColor = isDarkMode ? "#4CC2FF" : "#003E92";
         highlight = "#0078D4";
         break;
-
     case 2:
-        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            accentColor = "#FFB634";
-        } else {
-            accentColor = "#A14600";
-        }
+        accentColor = isDarkMode ? "#FFB634" : "#A14600";
         highlight = "#FF8C00";
         break;
-
     case 3:
-        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            accentColor = "#F46762";
-        } else {
-            accentColor = "#9E0912";
-        }
+        accentColor = isDarkMode ? "#F46762" : "#9E0912";
         highlight = "#E81123";
         break;
-
     case 4:
-        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            accentColor = "#45E532";
-        } else {
-            accentColor = "#084B08";
-        }
+        accentColor = isDarkMode ? "#45E532" : "#084B08";
         highlight = "#107C10";
         break;
-
     case 5:
-        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            accentColor = "#D88DE1";
-        } else {
-            accentColor = "#6F2382";
-        }
+        accentColor = isDarkMode ? "#D88DE1" : "#6F2382";
         highlight = "#B146C2";
         break;
-
     default:
-        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            accentColor = "#4CC2FF";
-        } else {
-            accentColor = "#003E92";
-        }
+        accentColor = isDarkMode ? "#4CC2FF" : "#003E92";
         highlight = "#0078D4";
         break;
     }
 
-    // Keep the Gamescope override
-    if (isRunningOnGamescope) accentColor = "#4CC2FF";
-
     palette.setColor(QPalette::ColorRole::Accent, accentColor);
     palette.setColor(QPalette::ColorRole::Highlight, highlight);
-
     QGuiApplication::setPalette(palette);
 }
 

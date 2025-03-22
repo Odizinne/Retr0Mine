@@ -67,7 +67,6 @@ Pane {
         }
 
         RowLayout {
-            enabled: Qt.platform.os === "windows"
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
