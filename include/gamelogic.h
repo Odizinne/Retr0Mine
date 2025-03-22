@@ -1,3 +1,4 @@
+// include/gamelogic.h
 #pragma once
 
 #include <QMap>
@@ -10,11 +11,10 @@
 #include <QtConcurrent>
 #include <random>
 #include <atomic>
+#include "gridgenerator.h"
+#include "minesweepersolver.h"
 
-struct SolverResult {
-    int cell;
-    QString reason;
-};
+struct SolverResult;
 
 class GameLogic : public QObject
 {
@@ -79,6 +79,8 @@ private:
     QMap<int, bool> m_solvedSpaces;
     std::atomic<bool> m_cancelGeneration;
     QFutureWatcher<void>* m_generationWatcher;
+    GridGenerator* m_gridGenerator;
+    MinesweeperSolver* m_solver;
 
     std::atomic<int> m_currentAttempt;
     std::atomic<int> m_totalAttempts;
@@ -86,17 +88,5 @@ private:
 
     QSet<int> getNeighbors(int pos) const;
     void calculateNumbers();
-    SolverResult solveForHint(const QVector<int> &revealedCells, const QVector<int> &flaggedCells);
     void updateProgress(int attempt, int totalAttempts, int minesPlaced);
-    bool generateBoard(int firstClickX, int firstClickY);
-    QString formatExplanationForDisplay(const QString &rawExplanation, int col, int row, bool isMine);
-
-    struct Constraint {
-        int cell;
-        int minesRequired;
-        QSet<int> unknowns;
-    };
-
-    int solveFrontierCSP(const QVector<Constraint> &constraints, const QList<int> &frontier);
-    int solveWithConstraintIntersection(const QVector<Constraint> &constraints, const QList<int> &frontier);
 };
