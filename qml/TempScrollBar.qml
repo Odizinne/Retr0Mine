@@ -12,14 +12,6 @@ T.ScrollBar {
     visible: control.policy !== T.ScrollBar.AlwaysOff
     minimumSize: orientation === Qt.Horizontal ? height / width : width / height
 
-    background: Rectangle {
-        anchors.fill: parent
-        implicitWidth: control.interactive ? 6 : 0
-        implicitHeight: control.interactive ? 6 : 0
-        color: Application.styleHints.colorScheme == Qt.Dark ? "#2c2c2c" : "#f9f9f9"
-        radius: width / 2
-    }
-
     contentItem: Rectangle {
         implicitWidth: control.interactive ? 6 : 2
         implicitHeight: control.interactive ? 6 : 2
