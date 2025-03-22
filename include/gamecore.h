@@ -55,6 +55,9 @@ private:
     bool shouldShowWelcomeMessage;
     bool loadLanguage(QString languageCode);
     QString getLeaderboardPath() const;
+    QString lightBlue = "#76b9ed";
+    QString darkBlue = "#005a9e";
+    QString defaultBlue = "#0078d7";
     int m_languageIndex;
     bool m_isFluent = true;
     bool m_isUniversal = false;

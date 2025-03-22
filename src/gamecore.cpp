@@ -113,12 +113,13 @@ void GameCore::setCustomPalette()
     QColor accentColor;
     QColor highlight;
     if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-        accentColor = "#76b9ed";
+        accentColor = lightBlue;
     } else {
-        accentColor = "#005a9e";
+        accentColor = darkBlue;
     }
 
-    highlight = "#0078d7";
+    if (isRunningOnGamescope) accentColor = lightBlue;
+    highlight = defaultBlue;
 
     palette.setColor(QPalette::ColorRole::Accent, accentColor);
     palette.setColor(QPalette::ColorRole::Highlight, highlight);
