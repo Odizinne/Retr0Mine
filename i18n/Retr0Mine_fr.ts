@@ -83,7 +83,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
@@ -98,7 +98,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Clair</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="73"/>
         <source>Accent color</source>
         <translation>Couleur d&apos;accent</translation>
     </message>
@@ -108,26 +108,31 @@ La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Blue</source>
         <translation>Bleu</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Orange</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Red</source>
         <translation>Rouge</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Green</source>
         <translation>Vert</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Purple</source>
         <translation>Violet</translation>
     </message>

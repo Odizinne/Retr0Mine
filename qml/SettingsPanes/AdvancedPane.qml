@@ -76,14 +76,24 @@ Pane {
 
             NfComboBox {
                 id: accentColorComboBox
-                model: [qsTr("System"), qsTr("Blue"), qsTr("Orange"), qsTr("Red"), qsTr("Green"), qsTr("Purple")]
+                model: Qt.platform.os === "linux" ?
+                           [qsTr("Blue"), qsTr("Orange"), qsTr("Red"), qsTr("Green"), qsTr("Purple")] :
+                           [qsTr("System"), qsTr("Blue"), qsTr("Orange"), qsTr("Red"), qsTr("Green"), qsTr("Purple")]
                 Layout.rightMargin: 5
-                currentIndex: GameSettings.accentColorIndex
+                currentIndex: {
+                    if (Qt.platform.os === "linux") {
+                        return GameSettings.accentColorIndex - 1;
+                    } else {
+                        return GameSettings.accentColorIndex;
+                    }
+                }
                 onActivated: {
-                    GameSettings.accentColorIndex = currentIndex
-                    Qt.callLater(function() {
-                        GameCore.setApplicationPalette(currentIndex)
-                    })
+                    if (Qt.platform.os === "linux") {
+                        GameSettings.accentColorIndex = currentIndex + 1;
+                    } else {
+                        GameSettings.accentColorIndex = currentIndex;
+                    }
+                    GameCore.setApplicationPalette(GameSettings.accentColorIndex)
                 }
             }
         }

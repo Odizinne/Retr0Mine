@@ -82,7 +82,7 @@ Current game will be saved and restored</source>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>System</source>
         <translation></translation>
     </message>
@@ -97,32 +97,37 @@ Current game will be saved and restored</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="73"/>
         <source>Accent color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Orange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
         <source>Purple</source>
         <translation type="unfinished"></translation>
     </message>
