@@ -272,18 +272,24 @@ Item {
             source: "qrc:/icons/bomb.png"
             color: GameConstants.foregroundColor
             visible: cellItem.revealed && GameState.mines.includes(cellItem.index)
-            sourceSize.width: cellItem.width / 2.1
-            sourceSize.height: cellItem.height / 2.1
+            width: cellItem.width / 2.1
+            height: cellItem.height / 2.1
+            sourceSize.width: (cellItem.width / 2.1) * 2
+            sourceSize.height: (cellItem.height / 2.1) * 2
+            mipmap: true
         }
 
         IconImage {
             anchors.centerIn: parent
             source: "qrc:/icons/questionmark.png"
             color: GameConstants.foregroundColor
-            sourceSize.width: cellItem.width / 2.1
-            sourceSize.height: cellItem.height / 2.1
+            width: cellItem.width / 2.1
+            height: cellItem.height / 2.1
+            sourceSize.width: (cellItem.width / 2.1) * 2
+            sourceSize.height: (cellItem.height / 2.1) * 2
             opacity: cellItem.questioned ? 1 : 0
             scale: cellItem.questioned ? 1 : 1.3
+            mipmap: true
 
             Behavior on opacity {
                 enabled: GameSettings.animations && !GameState.noAnimReset
@@ -306,10 +312,13 @@ Item {
             anchors.centerIn: parent
             source: "qrc:/icons/questionmark.png"
             color: "green"
-            sourceSize.width: cellItem.width / 2.1
-            sourceSize.height: cellItem.height / 2.1
+            width: cellItem.width / 2.1
+            height: cellItem.height / 2.1
+            sourceSize.width: (cellItem.width / 2.1) * 2
+            sourceSize.height: (cellItem.height / 2.1) * 2
             opacity: cellItem.safeQuestioned ? 1 : 0
             scale: cellItem.safeQuestioned ? 1 : 1.3
+            mipmap: true
 
             Behavior on opacity {
                 enabled: GameSettings.animations && !GameState.noAnimReset
@@ -343,10 +352,13 @@ Item {
                     else return GameConstants.accentColor
                 }
             }
-            sourceSize.width: cellItem.width / 1.8
-            sourceSize.height: cellItem.height / 1.8
+            width: cellItem.width / 1.8
+            height: cellItem.height / 1.8
+            sourceSize.width: (cellItem.width / 1.8) * 2
+            sourceSize.height: (cellItem.height / 1.8) * 2
             opacity: cellItem.flagged ? 1 : 0
             scale: cellItem.flagged ? 1 : 1.3
+            mipmap: true
 
             Behavior on opacity {
                 enabled: GameSettings.animations && !GameState.noAnimReset
@@ -368,8 +380,11 @@ Item {
         Image {
             id: hintOverlay
             anchors.centerIn: parent
-            sourceSize.width: cellItem.width / 2.1
-            sourceSize.height: cellItem.height / 2.1
+            width: cellItem.width / 2.1
+            height: cellItem.height / 2.1
+            sourceSize.width: (cellItem.width / 2.1) * 2
+            sourceSize.height: (cellItem.height / 2.1) * 2
+            mipmap: true
             opacity: 0
             visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
             source: GameState.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
