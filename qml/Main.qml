@@ -505,7 +505,6 @@ ApplicationWindow {
                         }
 
                         visible: isInViewport
-                        onVisibleChanged: console.log(visible)
                         sourceComponent: Cell {
                             index: cellLoader.index
                         }
