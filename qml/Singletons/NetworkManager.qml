@@ -750,7 +750,7 @@ QtObject {
             break
 
         case "startGame":
-            ComponentsContext.multiplayerPopupVisible = false
+            ComponentsContext.privateSessionPopupVisible = false
             break
 
         case "gameOver":
@@ -831,7 +831,7 @@ QtObject {
             break
 
         case "resetMultiplayerGrid":
-            ComponentsContext.multiplayerPopupVisible = true
+            //ComponentsContext.privateSessionPopupVisible = true
             minesInitialized = false
             clientReadyForActions = false
             clientGridReady = false
@@ -1107,7 +1107,7 @@ QtObject {
             return
         }
 
-        ComponentsContext.multiplayerPopupVisible = true
+        //ComponentsContext.privateSessionPopupVisible = true
         minesInitialized = false
         clientReadyForActions = false
         clientGridReady = false
