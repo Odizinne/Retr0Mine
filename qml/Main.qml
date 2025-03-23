@@ -479,6 +479,33 @@ ApplicationWindow {
                         id: cellLoader
                         asynchronous: true
                         required property int index
+
+                        readonly property int row: Math.floor(index / GameState.gridSizeX)
+                        readonly property int col: index % GameState.gridSizeX
+                        readonly property real cellSize: GameState.cellSize + GameState.cellSpacing
+                        readonly property real xPos: col * cellSize
+                        readonly property real yPos: row * cellSize
+
+                        readonly property bool isInViewport: {
+                            let viewportLeft = gameView.contentX / gridContainer.scale
+                            let viewportTop = gameView.contentY / gridContainer.scale
+                            let viewportRight = viewportLeft + (gameView.width / gridContainer.scale)
+                            let viewportBottom = viewportTop + (gameView.height / gridContainer.scale)
+
+                            let margin = 3 * cellSize
+                            viewportLeft -= margin
+                            viewportTop -= margin
+                            viewportRight += margin
+                            viewportBottom += margin
+
+                            return (xPos + cellSize > viewportLeft &&
+                                    xPos < viewportRight &&
+                                    yPos + cellSize > viewportTop &&
+                                    yPos < viewportBottom)
+                        }
+
+                        visible: isInViewport
+                        onVisibleChanged: console.log(visible)
                         sourceComponent: Cell {
                             index: cellLoader.index
                         }
