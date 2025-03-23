@@ -394,7 +394,7 @@ ApplicationWindow {
             z: gameView.z + 1
             acceptedButtons: Qt.NoButton
             propagateComposedEvents: true
-            hoverEnabled: true
+            hoverEnabled: false
 
             onWheel: function(wheel) {
                 if (wheel.modifiers & Qt.ControlModifier) {
