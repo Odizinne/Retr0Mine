@@ -33,17 +33,17 @@ Item {
                 target: circle1
                 properties: "width,height"
                 from: 10
-                to: 150
-                duration: 750
+                to: GameState.cellSize * 3
+                duration: 500
             }
 
             SequentialAnimation {
-                PauseAnimation { duration: 375 }
+                PauseAnimation { duration: 250 }
                 PropertyAnimation {
                     target: circle1
                     property: "opacity"
                     to: 0.0
-                    duration: 375
+                    duration: 250
                 }
             }
         }
