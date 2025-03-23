@@ -156,6 +156,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Mines:</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
+        <source>Going above 25% may really slow down
+board generation on large grids</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="174"/>
         <source>Apply</source>
         <translation>Appliquer</translation>

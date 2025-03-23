@@ -135,6 +135,12 @@ Current game will be saved and restored</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
+        <source>Going above 25% may really slow down
+board generation on large grids</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="174"/>
         <source>Apply</source>
         <translation></translation>

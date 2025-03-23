@@ -131,16 +131,9 @@ Pane {
                 font.bold: true
                 visible: enabled
                 Layout.rightMargin: 5
+                property real density: (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1)
                 text: {
-                    const density = (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1);
                     return density + "%";
-                }
-                color: {
-                    const density = minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100;
-                    if (density <= 15) return "green";
-                    else if (density <= 18) return "yellow";
-                    else if (density <= 22) return "orange";
-                    else return "red";
                 }
 
                 Connections {
@@ -155,6 +148,13 @@ Pane {
                     target: heightSpinBox
                     function onValueChanged() { densityLabel.text = Qt.binding(function() { return (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1) + "%"; }); }
                 }
+            }
+
+            InfoIcon {
+                visible: densityLabel.density >= 25
+                tooltipText: qsTr("Going above 25% may really slow down\nboard generation on large grids")
+                Layout.rightMargin: 5
+                Layout.leftMargin: 5
             }
 
             NfSpinBox {
