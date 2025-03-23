@@ -1250,12 +1250,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/SoundsPane.qml" line="57"/>
         <source>Sound effects (remote player)</source>
-        <translation type="unfinished"></translation>
+        <translation>Effets sonores (joueur distant)</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/SoundsPane.qml" line="78"/>
         <source>Message received</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveaux messages</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/SoundsPane.qml" line="15"/>
