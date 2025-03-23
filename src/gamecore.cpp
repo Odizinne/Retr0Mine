@@ -184,6 +184,7 @@ void GameCore::resetSettings() {
     settings.setValue("hintReasoningInChat", true);
     settings.setValue("remoteVolume", 0.7);
     settings.setValue("accentColorIndex", 2);
+    settings.setValue("gridScale", 1);
 
     settings.setValue("welcomeMessageShown", true);
     shouldShowWelcomeMessage = true;
