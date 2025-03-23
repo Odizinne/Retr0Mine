@@ -13,20 +13,9 @@ QtObject {
     property int mineCount: 10
     property var mines: []
     property var numbers: []
-    property int cellSize: getCellSize()
+    property int cellSize: GameCore.gamescope ? 43 : 45
     property bool bypassAutoSave: false
     property bool isGeneratingGrid: false
-    function getCellSize() {
-        const size = GameSettings.cellSize
-        const isGamescope = GameCore.gamescope
-
-        switch (size) {
-            case 0: return 35
-            case 1: return isGamescope ? 43 : 45
-            case 2: return 55
-            default: return isGamescope ? 43 : 45
-        }
-    }
     property int cellSpacing: 2
     property int currentHintCount: 0
     property bool isManuallyLoaded: false
@@ -80,6 +69,7 @@ QtObject {
     property int hostRevealed: 0
     property int clientRevealed: 0
     property int firstClickRevealed: 0
+    property bool isZooming: false
     signal botMessageSent()
 
     onPausedChanged: {

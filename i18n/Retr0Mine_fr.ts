@@ -37,29 +37,30 @@
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="39"/>
         <source>Cell size</source>
-        <translation>Taille des cellules</translation>
+        <translation type="vanished">Taille des cellules</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="44"/>
         <source>Small</source>
-        <translation>Petit</translation>
+        <translation type="vanished">Petit</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="44"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="vanished">Normal</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="44"/>
         <source>Large</source>
-        <translation>Grand</translation>
+        <translation type="vanished">Grand</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="65"/>
+        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="39"/>
         <source>High contrast flags</source>
         <translation>Drapeaux contrastés</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="57"/>
+        <source>Grid scale</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -312,32 +313,32 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GameState</name>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="37"/>
+        <location filename="../qml/Singletons/GameState.qml" line="26"/>
         <source>Easy</source>
         <translation>Facile</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="38"/>
+        <location filename="../qml/Singletons/GameState.qml" line="27"/>
         <source>Medium</source>
         <translation>intermédiaire</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="39"/>
+        <location filename="../qml/Singletons/GameState.qml" line="28"/>
         <source>Hard</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="41"/>
+        <location filename="../qml/Singletons/GameState.qml" line="30"/>
         <source>Custom</source>
         <translation>Perso</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="69"/>
+        <location filename="../qml/Singletons/GameState.qml" line="58"/>
         <source>Victory</source>
         <translation>Victoire</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameState.qml" line="69"/>
+        <location filename="../qml/Singletons/GameState.qml" line="58"/>
         <source>Game over</source>
         <translation>Game over</translation>
     </message>

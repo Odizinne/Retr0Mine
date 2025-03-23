@@ -381,6 +381,43 @@ ApplicationWindow {
             }
         }
 
+        Timer {
+            id: zoomingResetTimer
+            interval: 150
+            onTriggered: GameState.isZooming = false
+        }
+
+        MouseArea {
+            id: zoomHandler
+            anchors.fill: gameView
+            z: gameView.z + 1
+            acceptedButtons: Qt.NoButton
+            propagateComposedEvents: true
+            hoverEnabled: true
+
+            onWheel: function(wheel) {
+                if (wheel.modifiers & Qt.ControlModifier) {
+                    if (wheel.angleDelta.y > 0) {
+                        if (GameSettings.gridScale < 2) {
+                            GameState.isZooming = true;
+                            GameSettings.gridScale = Math.min(2, GameSettings.gridScale + 0.1);
+                            zoomingResetTimer.restart();
+                        }
+                    }
+                    else if (wheel.angleDelta.y < 0) {
+                        if (GameSettings.gridScale > 1) {
+                            GameState.isZooming = true;
+                            GameSettings.gridScale = Math.max(1, GameSettings.gridScale - 0.1);
+                            zoomingResetTimer.restart();
+                        }
+                    }
+                    wheel.accepted = true;
+                } else {
+                    wheel.accepted = false;
+                }
+            }
+        }
+
         Flickable {
             id: gameView
             anchors {
@@ -417,8 +454,18 @@ ApplicationWindow {
             Item {
                 id: gridContainer
                 anchors.centerIn: parent
-                width: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX, gameView.width)
-                height: Math.max((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY, gameView.height)
+                scale: GameSettings.gridScale
+                width: Math.max(((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX) * scale, gameView.width)
+                height: Math.max(((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * scale, gameView.height)
+
+                Behavior on scale {
+                    enabled: GameState.isZooming
+                    NumberAnimation {
+                        duration: 100
+                        easing.type: Easing.OutQuad
+                    }
+                }
+
                 GameGrid {
                     id: grid
                     Component.onCompleted: {
@@ -494,7 +541,7 @@ ApplicationWindow {
             anchors.bottom: gameView.bottom
             visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
             active: !GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameView.height ?
+            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * gridContainer.scale > gameView.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -509,7 +556,7 @@ ApplicationWindow {
             anchors.bottomMargin: -12
             visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
             active: !GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameView.width ?
+            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX) * gridContainer.scale > gameView.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -524,7 +571,7 @@ ApplicationWindow {
             anchors.bottom: gameView.bottom
             visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
             active: GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY > gameView.height ?
+            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * gridContainer.scale > gameView.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -539,7 +586,7 @@ ApplicationWindow {
             anchors.bottomMargin: -12
             visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
             active: GameCore.isFluent
-            policy: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX > gameView.width ?
+            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX) * gridContainer.scale > gameView.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 

@@ -19,7 +19,6 @@ Settings {
     property bool animations: true
     property bool cellFrame: true
     property bool contrastFlag: false
-    property int cellSize: 1
     property int customWidth: 8
     property int customHeight: 8
     property int customMines: 10
@@ -42,6 +41,7 @@ Settings {
     property bool hintReasoningInChat: true
     property real remoteVolume: 0.7
     property int accentColorIndex: 2
+    property real gridScale: 1
 
     property bool welcomeMessageShown: false
 }

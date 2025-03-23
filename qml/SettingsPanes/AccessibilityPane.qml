@@ -33,32 +33,6 @@ Pane {
         }
 
         RowLayout {
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            Layout.fillWidth: true
-            Label {
-                text: qsTr("Cell size")
-                Layout.fillWidth: true
-            }
-            NfComboBox {
-                id: cellSizeComboBox
-                model: [qsTr("Small"), qsTr("Normal"), qsTr("Large")]
-                Layout.rightMargin: 5
-                currentIndex: {
-                    switch(GameSettings.cellSize) {
-                        case 0: return 0;
-                        case 1: return 1;
-                        case 2: return 2;
-                        default: return 0;
-                    }
-                }
-
-                onActivated: {
-                    GameSettings.cellSize = currentIndex
-                }
-            }
-        }
-
-        RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
@@ -72,9 +46,23 @@ Pane {
             NfSwitch {
                 id: highContrastFlagSwitch
                 checked: GameSettings.contrastFlag
-                onCheckedChanged: {
-                    GameSettings.contrastFlag = checked
-                }
+                onCheckedChanged: GameSettings.contrastFlag = checked
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Label {
+                text: qsTr("Grid scale")
+                Layout.fillWidth: true
+            }
+            NfSlider {
+                id: gridScaleSlider
+                from: 1
+                to: 2
+                value: GameSettings.gridScale
+                onValueChanged: GameSettings.gridScale = value
             }
         }
     }
