@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls.impl
 import net.odizinne.retr0mine 1.0
@@ -25,6 +27,11 @@ Item {
     property bool inCooldown: false
     property bool localPlayerOwns: false
     property bool shakeConditionsMet: false
+
+    // Animation state tracking
+    property bool animatingFlag: false
+    property bool animatingQuestion: false
+    property bool animatingSafeQuestion: false
 
     Connections {
         target: GameState
@@ -83,22 +90,101 @@ Item {
     }
 
     onFlaggedChanged: {
-        if (!flagged) {
+        if (flagged) {
+            animatingFlag = true;
+            flagAnimTimer.restart();
+        } else {
             if (GameSettings.animations) {
                 flagRemovalTimer.start();
             } else {
                 localPlayerOwns = false;
+                animatingFlag = false;
             }
         }
         Qt.callLater(updateShakeState);
     }
 
+    onQuestionedChanged: {
+        if (questioned) {
+            animatingQuestion = true;
+            questionAnimTimer.restart();
+        } else if (GameSettings.animations) {
+            questionFadeOutTimer.restart();
+        } else {
+            animatingQuestion = false;
+        }
+    }
+
+    onSafeQuestionedChanged: {
+        if (safeQuestioned) {
+            animatingSafeQuestion = true;
+            safeQuestionAnimTimer.restart();
+        } else if (GameSettings.animations) {
+            safeQuestionFadeOutTimer.restart();
+        } else {
+            animatingSafeQuestion = false;
+        }
+    }
+
+    // Animation timers
+    Timer {
+        id: flagAnimTimer
+        interval: 400
+        repeat: false
+        onTriggered: {
+            if (!cellItem.flagged) {
+                cellItem.animatingFlag = false;
+            }
+        }
+    }
+
     Timer {
         id: flagRemovalTimer
-        interval: 300
+        interval: 350
         repeat: false
         onTriggered: {
             cellItem.localPlayerOwns = false;
+            cellItem.animatingFlag = false;
+        }
+    }
+
+    Timer {
+        id: questionAnimTimer
+        interval: 400
+        repeat: false
+        onTriggered: {
+            if (!cellItem.questioned) {
+                cellItem.animatingQuestion = false;
+            }
+        }
+    }
+
+    Timer {
+        id: questionFadeOutTimer
+        interval: 350
+        repeat: false
+        onTriggered: {
+            cellItem.animatingQuestion = false;
+        }
+    }
+
+    Timer {
+        id: safeQuestionAnimTimer
+        interval: 400
+        repeat: false
+        onTriggered: {
+            if (!cellItem.safeQuestioned) {
+                cellItem.animatingSafeQuestion = false;
+            }
+        }
+    }
+
+    Timer {
+        id: safeQuestionFadeOutTimer
+        interval: 350
+        repeat: false
+        onTriggered: {
+            cellItem.animatingSafeQuestion = false;
         }
     }
 
@@ -134,9 +220,18 @@ Item {
         Qt.callLater(updateShakeState);
     }
 
+    // Hint animation handling
+    Timer {
+        id: hintFadeOutTimer
+        interval: 250
+        onTriggered: {
+            hintLoader.active = false;
+        }
+    }
+
     NumberAnimation {
         id: hintRevealFadeIn
-        target: hintOverlay
+        target: hintLoader.item
         property: "opacity"
         from: 0
         to: 1
@@ -145,7 +240,7 @@ Item {
 
     NumberAnimation {
         id: hintRevealFadeOut
-        target: hintOverlay
+        target: hintLoader.item
         property: "opacity"
         from: 1
         to: 0
@@ -156,8 +251,14 @@ Item {
         id: hintAnimation
         loops: 3
         running: false
-        onStarted: hintRevealFadeIn.start()
-        onFinished: hintRevealFadeOut.start()
+        onStarted: {
+            hintLoader.active = true;
+            hintRevealFadeIn.start()
+        }
+        onFinished: {
+            hintRevealFadeOut.start();
+            hintFadeOutTimer.start();
+        }
 
         SequentialAnimation {
             PropertyAnimation {
@@ -267,127 +368,161 @@ Item {
             }
         }
 
-        IconImage {
+        Loader {
+            id: bombLoader
             anchors.centerIn: parent
-            source: "qrc:/icons/bomb.png"
-            color: GameConstants.foregroundColor
-            visible: cellItem.revealed && GameState.mines.includes(cellItem.index)
-            width: cellItem.width / 2.1
-            height: cellItem.height / 2.1
-            sourceSize.width: (cellItem.width / 2.1) * 2
-            sourceSize.height: (cellItem.height / 2.1) * 2
-            mipmap: true
-        }
-
-        IconImage {
-            anchors.centerIn: parent
-            source: "qrc:/icons/questionmark.png"
-            color: GameConstants.foregroundColor
-            width: cellItem.width / 2.1
-            height: cellItem.height / 2.1
-            sourceSize.width: (cellItem.width / 2.1) * 2
-            sourceSize.height: (cellItem.height / 2.1) * 2
-            opacity: cellItem.questioned ? 1 : 0
-            scale: cellItem.questioned ? 1 : 1.3
-            mipmap: true
-
-            Behavior on opacity {
-                enabled: GameSettings.animations && !GameState.noAnimReset
-                OpacityAnimator {
-                    duration: 300
-                    easing.type: Easing.OutQuad
-                }
-            }
-
-            Behavior on scale {
-                enabled: GameSettings.animations && !GameState.noAnimReset
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.OutBack
-                }
+            active: cellItem.revealed && GameState.mines.includes(cellItem.index)
+            sourceComponent: IconImage {
+                source: "qrc:/icons/bomb.png"
+                color: GameConstants.foregroundColor
+                width: cellItem.width / 2.1
+                height: cellItem.height / 2.1
+                sourceSize.width: (cellItem.width / 2.1) * 2
+                sourceSize.height: (cellItem.height / 2.1) * 2
+                mipmap: false
             }
         }
 
-        IconImage {
+        Loader {
+            id: flagLoader
             anchors.centerIn: parent
-            source: "qrc:/icons/questionmark.png"
-            color: "green"
-            width: cellItem.width / 2.1
-            height: cellItem.height / 2.1
-            sourceSize.width: (cellItem.width / 2.1) * 2
-            sourceSize.height: (cellItem.height / 2.1) * 2
-            opacity: cellItem.safeQuestioned ? 1 : 0
-            scale: cellItem.safeQuestioned ? 1 : 1.3
-            mipmap: true
-
-            Behavior on opacity {
-                enabled: GameSettings.animations && !GameState.noAnimReset
-                OpacityAnimator {
-                    duration: 300
-                    easing.type: Easing.OutQuad
-                }
-            }
-
-            Behavior on scale {
-                enabled: GameSettings.animations && !GameState.noAnimReset
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.OutBack
-                }
-            }
-        }
-
-        IconImage {
-            anchors.centerIn: parent
-            source: GameState.flagPath
-            color: {
-                if (SteamIntegration.isInMultiplayerGame && GameSettings.mpPlayerColoredFlags) {
-                    if (cellItem.localPlayerOwns) {
-                        return SteamIntegration.isHost ? GameConstants.localFlagColor : GameConstants.remoteFlagColor
+            active: cellItem.flagged || cellItem.animatingFlag
+            sourceComponent: IconImage {
+                id: flagImage
+                source: GameState.flagPath
+                color: {
+                    if (SteamIntegration.isInMultiplayerGame && GameSettings.mpPlayerColoredFlags) {
+                        if (cellItem.localPlayerOwns) {
+                            return SteamIntegration.isHost ? GameConstants.localFlagColor : GameConstants.remoteFlagColor
+                        } else {
+                            return SteamIntegration.isHost ? GameConstants.remoteFlagColor : GameConstants.localFlagColor
+                        }
                     } else {
-                        return SteamIntegration.isHost ? GameConstants.remoteFlagColor : GameConstants.localFlagColor
+                        if (GameSettings.contrastFlag) return GameConstants.foregroundColor
+                        else return GameConstants.accentColor
                     }
-                } else {
-                    if (GameSettings.contrastFlag) return GameConstants.foregroundColor
-                    else return GameConstants.accentColor
                 }
-            }
-            width: cellItem.width / 1.8
-            height: cellItem.height / 1.8
-            sourceSize.width: (cellItem.width / 1.8) * 2
-            sourceSize.height: (cellItem.height / 1.8) * 2
-            opacity: cellItem.flagged ? 1 : 0
-            scale: cellItem.flagged ? 1 : 1.3
-            mipmap: true
-
-            Behavior on opacity {
-                enabled: GameSettings.animations && !GameState.noAnimReset
-                OpacityAnimator {
-                    duration: 300
-                    easing.type: Easing.OutQuad
+                width: cellItem.width / 1.8
+                height: cellItem.height / 1.8
+                sourceSize.width: (cellItem.width / 1.8) * 2
+                sourceSize.height: (cellItem.height / 1.8) * 2
+                opacity: 0
+                scale: 1.3
+                mipmap: false
+                Component.onCompleted: {
+                    opacity = Qt.binding(function() { return cellItem.flagged ? 1 : 0; })
+                    scale = Qt.binding(function() { return cellItem.flagged ? 1 : 1.3; })
                 }
-            }
 
-            Behavior on scale {
-                enabled: GameSettings.animations && !GameState.noAnimReset
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.OutBack
+                Behavior on opacity {
+                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    OpacityAnimator {
+                        duration: 300
+                        easing.type: Easing.OutQuad
+                    }
+                }
+
+                Behavior on scale {
+                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.OutBack
+                    }
                 }
             }
         }
 
-        Image {
-            id: hintOverlay
+        Loader {
+            id: questionLoader
             anchors.centerIn: parent
-            width: cellItem.width / 2.1
-            height: cellItem.height / 2.1
-            sourceSize.width: (cellItem.width / 2.1) * 2
-            sourceSize.height: (cellItem.height / 2.1) * 2
-            mipmap: true
-            opacity: 0
-            visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
-            source: GameState.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+            active: cellItem.questioned || cellItem.animatingQuestion
+            sourceComponent: IconImage {
+                id: questionImage
+                source: "qrc:/icons/questionmark.png"
+                color: GameConstants.foregroundColor
+                width: cellItem.width / 2.1
+                height: cellItem.height / 2.1
+                sourceSize.width: (cellItem.width / 2.1) * 2
+                sourceSize.height: (cellItem.height / 2.1) * 2
+                opacity: 0
+                scale: 1.3
+                mipmap: false
+                Component.onCompleted: {
+                    opacity = Qt.binding(function() { return cellItem.questioned ? 1 : 0; })
+                    scale = Qt.binding(function() { return cellItem.questioned ? 1 : 1.3; })
+                }
+
+                Behavior on opacity {
+                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    OpacityAnimator {
+                        duration: 300
+                        easing.type: Easing.OutQuad
+                    }
+                }
+
+                Behavior on scale {
+                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.OutBack
+                    }
+                }
+            }
+        }
+
+        Loader {
+            id: safeQuestionLoader
+            anchors.centerIn: parent
+            active: cellItem.safeQuestioned || cellItem.animatingSafeQuestion
+            sourceComponent: IconImage {
+                id: safeQuestionImage
+                source: "qrc:/icons/questionmark.png"
+                color: "green"
+                width: cellItem.width / 2.1
+                height: cellItem.height / 2.1
+                sourceSize.width: (cellItem.width / 2.1) * 2
+                sourceSize.height: (cellItem.height / 2.1) * 2
+                opacity: 0
+                scale: 1.3
+                mipmap: false
+                Component.onCompleted: {
+                    // Create new bindings that match the original ones
+                    opacity = Qt.binding(function() { return cellItem.safeQuestioned ? 1 : 0; })
+                    scale = Qt.binding(function() { return cellItem.safeQuestioned ? 1 : 1.3; })
+                }
+
+                Behavior on opacity {
+                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    OpacityAnimator {
+                        duration: 300
+                        easing.type: Easing.OutQuad
+                    }
+                }
+
+                Behavior on scale {
+                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.OutBack
+                    }
+                }
+            }
+        }
+
+        Loader {
+            id: hintLoader
+            anchors.centerIn: parent
+            active: false
+            sourceComponent: Image {
+                width: cellItem.width / 2.1
+                height: cellItem.height / 2.1
+                sourceSize.width: (cellItem.width / 2.1) * 2
+                sourceSize.height: (cellItem.height / 2.1) * 2
+                mipmap: false
+                opacity: 0
+                visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
+                source: GameState.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
+            }
         }
 
         MouseArea {
@@ -485,6 +620,7 @@ Item {
         font.pixelSize: GameState.cellSize * 0.60
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+        textFormat: Text.PlainText
         opacity: {
             if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
             const num = GameState.numbers && GameState.numbers[cellItem.index]
