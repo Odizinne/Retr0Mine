@@ -254,14 +254,18 @@ Pane {
                     Layout.preferredWidth: 35
                     Layout.preferredHeight: 35
                     checkable: true
-                    icon.source: "qrc:/icons/flag.png"
                     checked: GameSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
-                    icon.width: 30
-                    icon.height: 30
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
                         if (checked) GameSettings.flagSkinIndex = 0
+                    }
+
+                    IconImage {
+                        source: "qrc:/icons/flag.png"
+                        sourceSize.width: 20
+                        sourceSize.height: 20
+                        anchors.fill: parent
                     }
                 }
 

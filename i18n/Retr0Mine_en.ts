@@ -1321,17 +1321,17 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="277"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="281"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="299"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="303"/>
         <source>Unlock Master Tactician achievement</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="321"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="325"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation></translation>
     </message>

@@ -159,7 +159,8 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
         <source>Going above 25% may really slow down
 board generation on large grids</source>
-        <translation type="unfinished"></translation>
+        <translation>Une densité au dessus de 25% pourrait
+ralentir la génération sur les grilles larges</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="174"/>
@@ -1368,17 +1369,17 @@ board generation on large grids</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="277"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="281"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation>Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="299"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="303"/>
         <source>Unlock Master Tactician achievement</source>
         <translation>Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="321"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="325"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation>Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
     </message>
