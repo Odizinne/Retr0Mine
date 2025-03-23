@@ -98,6 +98,12 @@ Item {
         volume: GameSettings.volume
     }
 
+    SoundEffect {
+        id: messageSound
+        source: "qrc:/sounds/message_received.wav"
+        volume: GameSettings.newChatMessageVolume
+    }
+
     function getSoundPath(type) {
         const packs = {
             0: {
@@ -129,22 +135,27 @@ Item {
     }
 
     function playClick() {
-        if (!GameSettings.soundEffects || clickCooldown) return
+        if (GameSettings.volume === 0 || clickCooldown) return
         clickDelayTimer.start()
     }
 
     function playRemoteClick() {
-        if (!GameSettings.soundEffects || remoteClickCooldown) return
+        if (GameSettings.remoteVolume === 0 || remoteClickCooldown) return
         remoteClickDelayTimer.start()
     }
 
     function playWin() {
-        if (!GameSettings.soundEffects) return
+        if (GameSettings.volume === 0) return
         winEffect.play()
     }
 
     function playLoose() {
-        if (!GameSettings.soundEffects) return
+        if (GameSettings.volume === 0) return
         looseEffect.play()
+    }
+
+    function playMessage() {
+        if (GameSettings.newChatMessageVolume === 0) return
+        messageSound.play()
     }
 }

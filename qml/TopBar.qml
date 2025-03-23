@@ -31,18 +31,12 @@ Item {
         target: GameState
         function onBotMessageSent() {
             if (!ComponentsContext.multiplayerChatVisible) {
-                if (!chatButton.hasNewMessages && GameSettings.mpAudioNotificationOnNewMessage) {
-                    messageSound.play()
+                if (!chatButton.hasNewMessages) {
+                    GridBridge.audioEngine.playMessage()
                 }
                 chatButton.hasNewMessages = true
             }
         }
-    }
-
-    SoundEffect {
-        id: messageSound
-        volume: GameSettings.volume
-        source: "qrc:/sounds/message_received.wav"
     }
 
     Item {

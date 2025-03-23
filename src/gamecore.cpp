@@ -156,7 +156,6 @@ void GameCore::resetSettings() {
     settings.setValue("enableQuestionMarks", true);
     settings.setValue("enableSafeQuestionMarks", false);
     settings.setValue("loadLastGame", false);
-    settings.setValue("soundEffects", true);
     settings.setValue("volume", 1.0);
     settings.setValue("soundPackIndex", 2);
     settings.setValue("animations", true);

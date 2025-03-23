@@ -1243,27 +1243,35 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>SoundsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="15"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="35"/>
         <source>Sound effects</source>
         <translation>Effets sonores</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="35"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="57"/>
+        <source>Sound effects (remote player)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="78"/>
+        <source>Message received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="15"/>
         <source>Notification for new messages</source>
         <translation>Notification pour les nouveaux messages</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="55"/>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation type="vanished">Volume</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="74"/>
         <source>Volume (remote player)</source>
-        <translation>Volume (joueur distant)</translation>
+        <translation type="vanished">Volume (joueur distant)</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="92"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="99"/>
         <source>Soundpack</source>
         <translation>Pack de sons</translation>
     </message>
@@ -1271,12 +1279,12 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="94"/>
+        <location filename="../qml/TopBar.qml" line="88"/>
         <source>Next click will signal the cell</source>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="189"/>
+        <location filename="../qml/TopBar.qml" line="183"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>

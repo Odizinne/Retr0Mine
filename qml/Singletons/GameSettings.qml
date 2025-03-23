@@ -13,7 +13,6 @@ Settings {
     property bool enableQuestionMarks: true
     property bool enableSafeQuestionMarks: false
     property bool loadLastGame: false
-    property bool soundEffects: true
     property real volume: 1.0
     property int soundPackIndex: 2
     property bool animations: true
@@ -40,6 +39,7 @@ Settings {
     property bool shakeUnifinishedNumbers: true
     property bool hintReasoningInChat: true
     property real remoteVolume: 0.7
+    property real newChatMessageVolume: 1
     property int accentColorIndex: 2
     property real gridScale: 1
 

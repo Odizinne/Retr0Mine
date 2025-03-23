@@ -1204,27 +1204,27 @@ Current game will be saved and restored</source>
 <context>
     <name>SoundsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="15"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="35"/>
         <source>Sound effects</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="35"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="57"/>
+        <source>Sound effects (remote player)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="15"/>
         <source>Notification for new messages</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="55"/>
-        <source>Volume</source>
-        <translation></translation>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="78"/>
+        <source>Message received</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="74"/>
-        <source>Volume (remote player)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="92"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="99"/>
         <source>Soundpack</source>
         <translation></translation>
     </message>
@@ -1232,12 +1232,12 @@ Current game will be saved and restored</source>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="94"/>
+        <location filename="../qml/TopBar.qml" line="88"/>
         <source>Next click will signal the cell</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="189"/>
+        <location filename="../qml/TopBar.qml" line="183"/>
         <source>Click to pause</source>
         <translation></translation>
     </message>

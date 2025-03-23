@@ -12,26 +12,6 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
-                text: qsTr("Sound effects")
-                Layout.fillWidth: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: soundEffectSwitch.click()
-                }
-            }
-            NfSwitch {
-                id: soundEffectSwitch
-                checked: GameSettings.soundEffects
-                onCheckedChanged: {
-                    GameSettings.soundEffects = checked
-                }
-            }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            Label {
                 text: qsTr("Notification for new messages")
                 Layout.fillWidth: true
                 MouseArea {
@@ -52,7 +32,7 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
-                text: qsTr("Volume")
+                text: qsTr("Sound effects")
                 Layout.fillWidth: true
             }
             NfSlider {
@@ -60,8 +40,11 @@ Pane {
                 from: 0
                 to: 1
                 value: GameSettings.volume
-                onValueChanged: {
-                    GameSettings.volume = value
+                onValueChanged: GameSettings.volume = value
+                onPressedChanged: {
+                    if (!pressed) {
+                        GridBridge.audioEngine.playClick()
+                    }
                 }
             }
         }
@@ -71,7 +54,7 @@ Pane {
             visible: SteamIntegration.initialized
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
-                text: qsTr("Volume (remote player)")
+                text: qsTr("Sound effects (remote player)")
                 Layout.fillWidth: true
             }
             NfSlider {
@@ -79,8 +62,32 @@ Pane {
                 from: 0
                 to: 1
                 value: GameSettings.remoteVolume
-                onValueChanged: {
-                    GameSettings.remoteVolume = value
+                onValueChanged: GameSettings.remoteVolume = value
+                onPressedChanged: {
+                    if (!pressed) {
+                        GridBridge.audioEngine.playRemoteClick()
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Label {
+                text: qsTr("Message received")
+                Layout.fillWidth: true
+            }
+            NfSlider {
+                id: newChatMessageVolumeeSlider
+                from: 0
+                to: 1
+                value: GameSettings.newChatMessageVolume
+                onValueChanged: GameSettings.newChatMessageVolume = value
+                onPressedChanged: {
+                    if (!pressed) {
+                        GridBridge.audioEngine.playMessage()
+                    }
                 }
             }
         }
