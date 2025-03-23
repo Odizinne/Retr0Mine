@@ -843,30 +843,27 @@ void SteamIntegration::processNetworkMessages() {
 
             case 'S':
                 if (messageData.size() > 0) {
-                    try {
-                        handleSystemMessage(messageData);
-                    } catch (const std::exception& e) {
-                        STEAM_DEBUG("Error handling system message:" << e.what());
+                    bool success = handleSystemMessage(messageData);
+                    if (!success) {
+                        STEAM_DEBUG("Error handling system message");
                     }
                 }
                 break;
 
             case 'A':
                 if (messageData.size() > 0) {
-                    try {
-                        handleGameAction(messageData);
-                    } catch (const std::exception& e) {
-                        STEAM_DEBUG("Error handling game action:" << e.what());
+                    bool success = handleGameAction(messageData);
+                    if (!success) {
+                        STEAM_DEBUG("Error handling game action");
                     }
                 }
                 break;
 
             case 'D':
                 if (messageData.size() > 0) {
-                    try {
-                        handleGameState(messageData);
-                    } catch (const std::exception& e) {
-                        STEAM_DEBUG("Error handling game state:" << e.what());
+                    bool success = handleGameState(messageData);
+                    if (!success) {
+                        STEAM_DEBUG("Error handling game state");
                     }
                 }
                 break;
@@ -967,11 +964,11 @@ bool SteamIntegration::sendGameState(const QVariantMap& gameState) {
         );
 }
 
-void SteamIntegration::handleGameAction(const QByteArray& data) {
+bool SteamIntegration::handleGameAction(const QByteArray& data) {
     int separatorPos = data.indexOf('|');
     if (separatorPos == -1) {
         STEAM_DEBUG("Invalid game action format");
-        return;
+        return false;
     }
 
     QString actionType = QString::fromUtf8(data.left(separatorPos));
@@ -989,21 +986,23 @@ void SteamIntegration::handleGameAction(const QByteArray& data) {
                                               << "with text:" << stringParam.left(20) + (stringParam.length() > 20 ? "..." : ""));
         emit gameActionReceived(actionType, stringParam);
     }
+
+    return true;
 }
 
-void SteamIntegration::handleGameState(const QByteArray& data) {
+bool SteamIntegration::handleGameState(const QByteArray& data) {
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
 
     if (parseError.error != QJsonParseError::NoError) {
         STEAM_DEBUG("Invalid game state JSON:" << parseError.errorString());
         STEAM_DEBUG("Data snippet:" << data.left(100));
-        return;
+        return false;
     }
 
     if (!doc.isObject()) {
         STEAM_DEBUG("Game state is not a JSON object");
-        return;
+        return false;
     }
 
     QVariantMap gameState = doc.object().toVariantMap();
@@ -1012,31 +1011,27 @@ void SteamIntegration::handleGameState(const QByteArray& data) {
     STEAM_DEBUG("Received game state with keys:" << keys);
 
     emit gameStateReceived(gameState);
+
+    return true;
 }
 
-void SteamIntegration::handleSystemMessage(const QByteArray& data) {
+bool SteamIntegration::handleSystemMessage(const QByteArray& data) {
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
-
     if (parseError.error != QJsonParseError::NoError) {
         STEAM_DEBUG("Invalid system message JSON:" << parseError.errorString());
-        return;
+        return false;
     }
-
     if (!doc.isObject()) {
         STEAM_DEBUG("System message is not a JSON object");
-        return;
+        return false;
     }
-
     QVariantMap message = doc.object().toVariantMap();
     QString type = message["type"].toString();
-
     STEAM_DEBUG("Received system message type:" << type);
-
     if (type == "disconnect") {
         QString reason = message["reason"].toString();
         STEAM_DEBUG("Received disconnect message, reason:" << reason);
-
         updateConnectionState(Disconnected);
         cleanupMultiplayerSession();
         emit notifyConnectionLost(m_connectedPlayerName);
@@ -1048,7 +1043,6 @@ void SteamIntegration::handleSystemMessage(const QByteArray& data) {
     }
     else if (type == "reconnect_ack") {
         STEAM_DEBUG("Reconnection request acknowledged");
-
         m_heartbeatTimer.start();
         m_connectionHealthTimer.start();
         updateConnectionState(Connected);
@@ -1060,7 +1054,6 @@ void SteamIntegration::handleSystemMessage(const QByteArray& data) {
     else if (type == "ping_test") {
         QVariant timestamp = message["timestamp"];
         STEAM_DEBUG("Received ping test, echoing timestamp:" << timestamp.toLongLong());
-
         QVariantMap responseData;
         responseData["timestamp"] = timestamp;
         sendSystemMessage("ping_response", responseData);
@@ -1073,11 +1066,8 @@ void SteamIntegration::handleSystemMessage(const QByteArray& data) {
             if (ok) {
                 qint64 now = QDateTime::currentMSecsSinceEpoch();
                 m_pingTime = now - sentTime;
-
                 STEAM_DEBUG("Ping time calculated:" << m_pingTime << "ms");
-
                 emit pingTimeChanged(m_pingTime);
-
                 if (m_pingTime > 500 && m_connectionState == Connected) {
                     updateConnectionState(Unstable);
                     emit connectionUnstable();
@@ -1085,6 +1075,7 @@ void SteamIntegration::handleSystemMessage(const QByteArray& data) {
             }
         }
     }
+    return true;
 }
 
 void SteamIntegration::sendSystemMessage(const QString& type, const QVariantMap& data) {

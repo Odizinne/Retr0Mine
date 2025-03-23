@@ -121,9 +121,9 @@ private:
     void OnLobbyEntered(LobbyEnter_t* pCallback, bool bIOFailure);
 
     void processNetworkMessages();
-    void handleGameAction(const QByteArray& data);
-    void handleGameState(const QByteArray& data);
-    void handleSystemMessage(const QByteArray& data);
+    bool handleSystemMessage(const QByteArray& data);
+    bool handleGameAction(const QByteArray& data);
+    bool handleGameState(const QByteArray& data);
     void sendP2PInitPing();
     void sendHeartbeat();
     void sendSystemMessage(const QString& type, const QVariantMap& data = QVariantMap());
