@@ -161,7 +161,7 @@ Pane {
                 id: minesSpinBox
                 Layout.rightMargin: 5
                 from: 1
-                to: Math.floor((widthSpinBox.value * heightSpinBox.value) / 4)
+                to: Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3)
                 editable: true
                 value: GameSettings.customMines
                 onValueChanged: GameSettings.customMines = value

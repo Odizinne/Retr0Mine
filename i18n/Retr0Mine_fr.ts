@@ -182,14 +182,14 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>GameConstants</name>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="180"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="190"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="186"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="196"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="182"/>
         <location filename="../qml/Singletons/GameConstants.qml" line="188"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="194"/>
         <source>Reveal</source>
         <translation>Révéler</translation>
     </message>
