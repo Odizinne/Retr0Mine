@@ -607,76 +607,80 @@ Item {
         }
     }
 
-    Text {
-        id: cellText
+    Loader {
+        id: numberLoader
         anchors.centerIn: parent
-        text: {
-            if (!cellItem.revealed || cellItem.flagged) return ""
-            if (GameState.mines && GameState.mines.includes(cellItem.index)) return ""
-            const num = GameState.numbers && GameState.numbers[cellItem.index]
-            return num === undefined || num === 0 ? "" : num
-        }
-        font.family: GameConstants.numberFont.name
-        font.pixelSize: GameState.cellSize * 0.60
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        textFormat: Text.PlainText
-        opacity: {
-            if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
-            const num = GameState.numbers && GameState.numbers[cellItem.index]
-            if (num === 0) return 1
-            return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
-        }
+        active: cellItem.revealed && !GameState.mines.includes(cellItem.index) &&
+                GameState.numbers && GameState.numbers[cellItem.index] > 0
 
-        Behavior on opacity {
-            enabled: GameSettings.animations
-            NumberAnimation { duration: 200 }
-        }
+        sourceComponent: Text {
+            id: cellText
+            text: GameState.numbers ? GameState.numbers[cellItem.index] : ""
+            font.family: GameConstants.numberFont.name
+            font.pixelSize: GameState.cellSize * 0.60
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            textFormat: Text.PlainText
 
-        color: GameConstants.getNumberColor(
-                   cellItem.revealed,
-                   GameState.mines && GameState.mines.includes(cellItem.index),
-                   cellItem.index,
-                   GameState.numbers && GameState.numbers[cellItem.index]
+            property real xOffset: 0
+            x: xOffset  // Use x instead of anchors.horizontalCenterOffset
+
+            opacity: {
+                if (!GameSettings.dimSatisfied) return 1
+                return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
+            }
+
+            Behavior on opacity {
+                enabled: GameSettings.animations
+                NumberAnimation { duration: 200 }
+            }
+
+            color: GameConstants.getNumberColor(
+                       true,
+                       false,
+                       cellItem.index,
+                       GameState.numbers ? GameState.numbers[cellItem.index] : 0
                    )
 
-        SequentialAnimation {
-            id: shakeAnimation
-            running: cellItem.shakeConditionsMet && GridBridge.globalShakeActive && GameSettings.shakeUnifinishedNumbers
-            loops: 3
-            alwaysRunToEnd: true
+            // Include the shake animation within the Text component
+            SequentialAnimation {
+                id: shakeAnimation
+                running: cellItem.shakeConditionsMet && GridBridge.globalShakeActive && GameSettings.shakeUnifinishedNumbers
+                loops: 3
+                alwaysRunToEnd: true
 
-            NumberAnimation {
-                target: cellText
-                property: "anchors.horizontalCenterOffset"
-                from: 0
-                to: -2
-                duration: 50
-                easing.type: Easing.InOutQuad
-            }
-            NumberAnimation {
-                target: cellText
-                property: "anchors.horizontalCenterOffset"
-                from: -2
-                to: 2
-                duration: 100
-                easing.type: Easing.InOutQuad
-            }
-            NumberAnimation {
-                target: cellText
-                property: "anchors.horizontalCenterOffset"
-                from: 2
-                to: -2
-                duration: 100
-                easing.type: Easing.InOutQuad
-            }
-            NumberAnimation {
-                target: cellText
-                property: "anchors.horizontalCenterOffset"
-                from: -2
-                to: 0
-                duration: 50
-                easing.type: Easing.InOutQuad
+                NumberAnimation {
+                    target: cellText
+                    property: "xOffset"
+                    from: 0
+                    to: -2
+                    duration: 50
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: cellText
+                    property: "xOffset"
+                    from: -2
+                    to: 2
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: cellText
+                    property: "xOffset"
+                    from: 2
+                    to: -2
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: cellText
+                    property: "xOffset"
+                    from: -2
+                    to: 0
+                    duration: 50
+                    easing.type: Easing.InOutQuad
+                }
             }
         }
     }
