@@ -322,10 +322,11 @@ ApplicationWindow {
 
     Loader {
         anchors.fill: parent
-        active: GameCore.showWelcome
+        active: !GameSettings.welcomeMessageShown
         sourceComponent: Component {
             WelcomePopup {
                 anchors.centerIn: parent
+                visible: true
             }
         }
     }

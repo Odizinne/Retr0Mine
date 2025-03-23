@@ -1380,42 +1380,42 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>WelcomePopup</name>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="21"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="20"/>
         <source>Welcome to Retr0Mine</source>
         <translation>Bienvenue dans Retr0Mine</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="30"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="29"/>
         <source>Would you like to configure some quick settings to enhance your experience? Everything can still be adjusted later.</source>
         <translation>Voulez-vous configurer quelques réglages rapides pour améliorer votre expérience ? Tout pourra être réajusté plus tard.</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="40"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="39"/>
         <source>Later</source>
         <translation>Plus tard</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="48"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="47"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="77"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="76"/>
         <source>Mouse settings</source>
         <translation>Paramètres de souris</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="138"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="137"/>
         <source>Any click on satisfied number to reveal surroundings</source>
         <translation>N&apos;importe quel clic sur un chiffre satisfait pour réveler ses alentours</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="146"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="145"/>
         <source>Inverted</source>
         <translation>Inversé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="146"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="145"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>

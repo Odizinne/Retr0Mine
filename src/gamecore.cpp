@@ -39,8 +39,6 @@ GameCore::GameCore(QObject *parent)
     : QObject{parent}
     , settings("Odizinne", "Retr0Mine")
     , translator(new QTranslator(this))
-    , isRunningOnGamescope(false)
-    , shouldShowWelcomeMessage(false)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
     isRunningOnGamescope = desktop.toLower() == "gamescope";
@@ -53,14 +51,9 @@ GameCore::~GameCore() {
 }
 
 void GameCore::init() {
-    if (!settings.value("welcomeMessageShown", false).toBool()) {
-        resetSettings();
-    }
-
     int colorSchemeIndex = settings.value("colorSchemeIndex").toInt();
     int styleIndex = settings.value("themeIndex", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
-    bool systemAccent = settings.value("systemAccent", false).toBool();
 
     setThemeColorScheme(colorSchemeIndex);
     setQMLStyle(styleIndex);
@@ -109,7 +102,6 @@ void GameCore::setCustomPalette() {
     QColor highlight;
 
     bool isDarkMode = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    // If running on Gamescope, always use dark mode colors
     if (isRunningOnGamescope) {
         isDarkMode = true;
     }
@@ -144,49 +136,6 @@ void GameCore::setCustomPalette() {
     palette.setColor(QPalette::ColorRole::Accent, accentColor);
     palette.setColor(QPalette::ColorRole::Highlight, highlight);
     QGuiApplication::setPalette(palette);
-}
-
-void GameCore::resetSettings() {
-    settings.setValue("startFullScreen", isRunningOnGamescope ? true : false);
-    settings.setValue("themeIndex", 0);
-    settings.setValue("languageIndex", 0);
-    settings.setValue("difficulty", 0);
-    settings.setValue("invertLRClick", false);
-    settings.setValue("autoreveal", true);
-    settings.setValue("enableQuestionMarks", true);
-    settings.setValue("enableSafeQuestionMarks", false);
-    settings.setValue("loadLastGame", false);
-    settings.setValue("volume", 1.0);
-    settings.setValue("soundPackIndex", 2);
-    settings.setValue("animations", true);
-    settings.setValue("cellFrame", true);
-    settings.setValue("contrastFlag", false);
-    settings.setValue("customWidth", 8);
-    settings.setValue("customHeight", 8);
-    settings.setValue("customMines", 10);
-    settings.setValue("dimSatisfied", false);
-    settings.setValue("colorBlindness", 0);
-    settings.setValue("flagSkinIndex", 0);
-    settings.setValue("colorSchemeIndex", 0);
-    settings.setValue("gridResetAnimationIndex", 0);
-    settings.setValue("fontIndex", 0);
-    settings.setValue("satisfiedOpacity", 0.5);
-    settings.setValue("displayTimer", true);
-    settings.setValue("safeFirstClick", true);
-    settings.setValue("pingColorIndex", 0);
-    settings.setValue("mpPlayerColoredFlags", true);
-    settings.setValue("localFlagColorIndex", 4);
-    settings.setValue("remoteFlagColorIndex", 1);
-    settings.setValue("mpShowInviteNotificationInGame", true);
-    settings.setValue("mpAudioNotificationOnNewMessage", true);
-    settings.setValue("shakeUnifinishedNumbers", true);
-    settings.setValue("hintReasoningInChat", true);
-    settings.setValue("remoteVolume", 0.7);
-    settings.setValue("accentColorIndex", 2);
-    settings.setValue("gridScale", 1);
-
-    settings.setValue("welcomeMessageShown", true);
-    shouldShowWelcomeMessage = true;
 }
 
 void GameCore::setQMLStyle(int index) {
@@ -262,7 +211,7 @@ bool GameCore::loadLanguage(QString languageCode) {
 }
 
 void GameCore::resetRetr0Mine() {
-    settings.setValue("welcomeMessageShown", false);
+    settings.clear();
     QMetaObject::invokeMethod(this, [this]() {
         settings.sync();
         QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());

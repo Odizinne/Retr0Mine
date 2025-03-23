@@ -11,7 +11,6 @@ Popup {
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     modal: true
-    visible: true
 
     ColumnLayout {
         opacity: 1
@@ -152,6 +151,7 @@ Popup {
 
             NfSwitch {
                 id: gameplaySwitch
+                checked: GameSettings.invertLRClick
                 onCheckedChanged: {
                     GameSettings.invertLRClick = checked
                 }

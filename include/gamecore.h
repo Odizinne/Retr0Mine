@@ -9,7 +9,6 @@
 class GameCore : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool showWelcome READ getShowWelcome CONSTANT)
     Q_PROPERTY(bool gamescope READ isGamescope CONSTANT)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
     Q_PROPERTY(bool isFluent READ getIsFluent NOTIFY fluentChanged)
@@ -19,16 +18,9 @@ public:
     explicit GameCore(QObject *parent = nullptr);
     ~GameCore() override;
 
-    // Initial setup methods
     void init();
-    void setQMLStyle(int index);
     Q_INVOKABLE void setThemeColorScheme(int ColorSchemeIndex);
     Q_INVOKABLE void setLanguage(int index);
-
-    // Getter methods for engine setup
-    bool shouldResetSettings() const { return !settings.value("welcomeMessageShown", false).toBool(); }
-
-    // QML invokable methods
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
     Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename);
     Q_INVOKABLE QString loadGameState(const QString &filename) const;
@@ -37,11 +29,8 @@ public:
     Q_INVOKABLE void resetRetr0Mine();
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
-    Q_INVOKABLE void resetSettings();
     Q_INVOKABLE void setApplicationPalette(int systemAccent);
 
-    // Property getters
-    bool getShowWelcome() const { return shouldShowWelcomeMessage; }
     bool isGamescope() const { return isRunningOnGamescope; }
     int getLanguageIndex() const { return m_languageIndex; }
     bool getIsFluent() const { return m_isFluent; }
@@ -52,18 +41,15 @@ private:
     QTranslator *translator;
 
     bool isRunningOnGamescope;
-    bool shouldShowWelcomeMessage;
     bool loadLanguage(QString languageCode);
     QString getLeaderboardPath() const;
-    QString lightBlue = "#4cc2ff";
-    QString darkBlue = "#0067c0";
-    QString defaultBlue = "#0078d4";
     int m_languageIndex;
     int selectedAccentColor;
     bool m_isFluent = true;
     bool m_isUniversal = false;
     void setCustomPalette();
     void setSystemPalette();
+    void setQMLStyle(int index);
 
 signals:
     void languageIndexChanged();
@@ -80,7 +66,7 @@ struct GameCoreForeign
     QML_NAMED_ELEMENT(GameCore)
 public:
     inline static GameCore* s_singletonInstance = nullptr;
-    inline static QJSEngine* s_engine = nullptr;  // Moved to public
+    inline static QJSEngine* s_engine = nullptr;
 
     static GameCore* create(QQmlEngine*, QJSEngine* engine)
     {
