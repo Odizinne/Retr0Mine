@@ -60,7 +60,7 @@
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="57"/>
         <source>Grid scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Échelle de la grille</translation>
     </message>
 </context>
 <context>
