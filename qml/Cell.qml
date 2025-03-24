@@ -393,9 +393,9 @@ Item {
                 color: {
                     if (SteamIntegration.isInMultiplayerGame && GameSettings.mpPlayerColoredFlags) {
                         if (cellItem.localPlayerOwns) {
-                            return SteamIntegration.isHost ? GameConstants.localFlagColor : GameConstants.remoteFlagColor
+                            return GameConstants.localFlagColor
                         } else {
-                            return SteamIntegration.isHost ? GameConstants.remoteFlagColor : GameConstants.localFlagColor
+                            return GameConstants.remoteFlagColor
                         }
                     } else {
                         if (GameSettings.contrastFlag) return GameConstants.foregroundColor

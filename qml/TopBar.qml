@@ -12,7 +12,7 @@ Item {
         target: SteamIntegration
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string" && !ComponentsContext.multiplayerChatVisible) {
-                if (!chatButton.hasNewMessages && GameSettings.mpAudioNotificationOnNewMessage) {
+                if (!chatButton.hasNewMessages) {
                     GridBridge.audioEngine.playMessage()
                 }
                 chatButton.hasNewMessages = true

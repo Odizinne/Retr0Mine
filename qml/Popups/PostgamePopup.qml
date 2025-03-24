@@ -143,7 +143,10 @@ AnimatedPopup {
                 }
 
 
-                MenuSeparator {
+                ToolSeparator {
+                    orientation: Qt.Horizontal
+                    Layout.topMargin: -5
+                    Layout.bottomMargin: -5
                     Layout.fillWidth: true
                 }
 

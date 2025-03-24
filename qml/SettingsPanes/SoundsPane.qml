@@ -1,4 +1,3 @@
-import QtQuick
 import QtQuick.Controls.Universal
 import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
@@ -7,26 +6,6 @@ Pane {
     ColumnLayout {
         spacing: GameConstants.settingsColumnSpacing
         width: parent.width
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            Label {
-                text: qsTr("Notification for new messages")
-                Layout.fillWidth: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: mpAudioNotificationOnNewMessageSwitch.click()
-                }
-            }
-            NfSwitch {
-                id: mpAudioNotificationOnNewMessageSwitch
-                checked: GameSettings.mpAudioNotificationOnNewMessage
-                onCheckedChanged: {
-                    GameSettings.mpAudioNotificationOnNewMessage = checked
-                }
-            }
-        }
 
         RowLayout {
             Layout.fillWidth: true
