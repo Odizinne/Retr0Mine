@@ -122,7 +122,7 @@ Item {
                 color: "transparent"
                 opacity: 1
                 border.color: getPingColor(SteamIntegration.pingTime)
-                border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
+                border.width: GameConstants.isDarkMode ? 1 : 2
 
                 function getPingColor(ping) {
                     if (ping === 0) return GameConstants.foregroundColor

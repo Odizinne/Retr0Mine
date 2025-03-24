@@ -10,15 +10,11 @@ Item {
     }
 
     function getForegroundColor() {
-        if (GameCore.gamescope) {
-            return "white"
-        }
-        return Application.styleHints.colorScheme === Qt.Dark ? "white" : "black"
+        return isDarkMode ? "white" : "black"
     }
 
     function getFrameColor() {
-        console.log("theme is" + Universal.theme)
-        return Universal.theme === Universal.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+        return isDarkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
     }
 
     property int universalTheme: {
@@ -28,18 +24,18 @@ Item {
             case 2: return Universal.Light
         }
     }
-
+    property bool isDarkMode: true
     readonly property color accentColor: sysPalette.highlight
-    readonly property color foregroundColor: getForegroundColor()
-    readonly property color settingsPaneColor: Application.styleHints.colorScheme === Qt.Dark || GameCore.gamescope ? "#333333" : "#cccccc"
-    readonly property color frameColor: Universal.theme === Universal.Dark ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
+    readonly property color foregroundColor: isDarkMode ? "white" : "black"
+    readonly property color settingsPaneColor: isDarkMode ? "#333333" : "#cccccc"
+    readonly property color frameColor: isDarkMode ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(0, 0, 0, 0.15)
     readonly property var numberPalettes: ({
                                                /*==========================================
-         | 0: No correction                        |
-         | 1: Deuteranopia                         |
-         | 2: Protanopia                           |
-         | 3: Tritanopia                           |
-         ==========================================*/
+                                                | 0: No correction                        |
+                                                | 1: Deuteranopia                         |
+                                                | 2: Protanopia                           |
+                                                | 3: Tritanopia                           |
+                                                ==========================================*/
                                                1: {
                                                    1: "#377eb8", 2: "#4daf4a", 3: "#e41a1c",
                                                    4: "#984ea3", 5: "#ff7f00", 6: "#a65628",

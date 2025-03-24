@@ -51,8 +51,6 @@ private:
 
 signals:
     void languageIndexChanged();
-    void fluentChanged();
-    void universalChanged();
     void saveCompleted(bool success);
 };
 

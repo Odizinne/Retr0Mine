@@ -9,38 +9,6 @@ Pane {
         width: parent.width
 
         RowLayout {
-            enabled: !SteamIntegration.isInMultiplayerGame
-            Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            Label {
-                text: qsTr("Style")
-                Layout.fillWidth: true
-            }
-
-            InfoIcon {
-                tooltipText: qsTr("Application will restart on change\nCurrent game will be saved and restored")
-                Layout.rightMargin: 5
-            }
-
-            NfComboBox {
-                id: styleComboBox
-                model: ["Fluent", "Universal"]
-                Layout.rightMargin: 5
-                currentIndex: GameSettings.themeIndex
-                onActivated: {
-                    if (currentIndex !== GameSettings.themeIndex) {
-                        if (GameState.gameStarted && !GameState.gameOver) {
-                            SaveManager.saveGame("internalGameState.json")
-                        }
-                        GameState.bypassAutoSave = true
-                        GameCore.restartRetr0Mine(currentIndex)
-                    }
-                }
-            }
-        }
-
-        RowLayout {
-            enabled: Qt.platform.os === "windows"
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {

@@ -9,29 +9,18 @@ import QtQuick.Effects
 ApplicationWindow {
     id: root
     visibility: ApplicationWindow.Hidden
+    Universal.theme: GameConstants.universalTheme
+    Universal.accent: GameConstants.accentColor
+    property int currentTheme: Universal.theme
     property bool isSaving: false
     property bool isClosing: false
     property var startTime: null
-    Universal.theme: GameConstants.universalTheme
-    Universal.accent: GameConstants.accentColor
-    //Binding {
-    //    target: root
-    //    property: "Universal.theme"
-    //    value: GameConstants.universalTheme
-    //}
 
-    Button {
-        onClicked: {
-            if (root.Universal.theme === Universal.Dark) {
-                root.Universal.theme = Universal.Light
-                return
-            }
-
-            else if (root.Universal.theme === Universal.Light) {
-                root.Universal.theme = Universal.System
-                console.log(root.Universal.theme)
-                return
-            }
+    onCurrentThemeChanged: {
+        if (currentTheme === Universal.Light) {
+            GameConstants.isDarkMode = false
+        } else {
+            GameConstants.isDarkMode = true
         }
     }
 
@@ -240,7 +229,11 @@ ApplicationWindow {
             }
         }
 
-        console.log(GameConstants.universalTheme)
+        if (currentTheme === Universal.Light) {
+            GameConstants.isDarkMode = false
+        } else {
+            GameConstants.isDarkMode = true
+        }
 
         //root.Universal.theme = GameConstants.universalTheme
         GameCore.setApplicationPalette(GameSettings.accentColorIndex)

@@ -66,7 +66,7 @@ Popup {
                     color: "transparent"
                     opacity: 0.5
                     border.color: GameConstants.foregroundColor
-                    border.width: Application.styleHints.colorScheme == Qt.Dark ? 1 : 2
+                    border.width: GameConstants.isDarkMode ? 1 : 2
                 }
             }
 

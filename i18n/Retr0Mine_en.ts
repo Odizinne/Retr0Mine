@@ -50,74 +50,63 @@
 <context>
     <name>AdvancedPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="16"/>
-        <source>Style</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="21"/>
-        <source>Application will restart on change
-Current game will be saved and restored</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="47"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="15"/>
         <source>Color scheme</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="21"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>System</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="21"/>
         <source>Dark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="53"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="21"/>
         <source>Light</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="73"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="41"/>
         <source>Accent color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>Blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>Orange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="80"/>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="49"/>
         <source>Purple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="106"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
         <source>Qt version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -172,14 +161,14 @@ board generation on large grids</source>
 <context>
     <name>GameConstants</name>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="188"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="198"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="184"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="194"/>
         <source>Flag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="190"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="196"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="186"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="192"/>
         <source>Reveal</source>
         <translation type="unfinished"></translation>
     </message>
