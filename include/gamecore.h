@@ -13,6 +13,7 @@ class GameCore : public QObject
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
     Q_PROPERTY(bool isFluent READ getIsFluent NOTIFY fluentChanged)
     Q_PROPERTY(bool isUniversal READ getIsUniversal NOTIFY universalChanged)
+    Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
 
 public:
     explicit GameCore(QObject *parent = nullptr);
@@ -35,6 +36,7 @@ public:
     int getLanguageIndex() const { return m_languageIndex; }
     bool getIsFluent() const { return m_isFluent; }
     bool getIsUniversal() const { return m_isUniversal; }
+    QString getQtVersion() const { return QT_VERSION_STR; }
 
     QSettings settings;
 private:

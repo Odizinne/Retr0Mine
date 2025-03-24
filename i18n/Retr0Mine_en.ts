@@ -116,6 +116,11 @@ Current game will be saved and restored</source>
         <source>Purple</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="106"/>
+        <source>Qt version</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DifficultyPane</name>

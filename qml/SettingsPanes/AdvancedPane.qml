@@ -97,5 +97,20 @@ Pane {
                 }
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            enabled: false
+            Label {
+                text: qsTr("Qt version")
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: GameCore.qtVersion
+                Layout.rightMargin: 5
+            }
+        }
     }
 }

@@ -104,6 +104,11 @@ La partie en cours sera sauvegardée et restaurée</translation>
         <translation>Couleur d&apos;accent</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="106"/>
+        <source>Qt version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Use system accent color</source>
         <translation type="vanished">Couleur d&apos;accent du système</translation>
     </message>
