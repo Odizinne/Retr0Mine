@@ -30,6 +30,7 @@ Item {
 
     readonly property color accentColor: GameCore.isFluent ? sysPalette.accent : sysPalette.highlight
     readonly property color foregroundColor: getForegroundColor()
+    readonly property color settingsPaneColor: Application.styleHints.colorScheme === Qt.Dark ? "#333333" : "#cccccc"
     readonly property color frameColor: getFrameColor()
     readonly property var numberPalettes: ({
         /*==========================================

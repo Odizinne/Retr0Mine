@@ -57,17 +57,18 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
 
-        Pane {
+        Item {
             Layout.preferredWidth: 180
             Layout.fillHeight: true
-            padding: 0
-            z: 2
+            Rectangle {
+                anchors.fill: parent
+                color: GameConstants.settingsPaneColor
+                visible: GameCore.isUniversal
+            }
 
             ColumnLayout {
                 anchors.fill: parent
-                anchors.rightMargin: 10
                 spacing: 10
-
                 ListView {
                     id: sidebarList
                     Layout.fillWidth: true
@@ -164,21 +165,16 @@ ApplicationWindow {
                 }
             }
         }
-
         ToolSeparator {
             Layout.fillHeight: true
-            Layout.leftMargin: {
-                if (GameCore.isUniversal) return -15
-                else return -10
-            }
-
-            z: 2
+            visible: GameCore.isFluent
         }
 
         StackView {
             id: stackView
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.leftMargin: 5
             initialItem: difficultyPaneComponent
             property string direction: GameCore.isFluent ? "y" : "x"
             property int animationDuration: GameCore.isFluent ? 150 : 200

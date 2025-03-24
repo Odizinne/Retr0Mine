@@ -194,14 +194,14 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>GameConstants</name>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="186"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="196"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="187"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="197"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="188"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="194"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="189"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="195"/>
         <source>Reveal</source>
         <translation>Révéler</translation>
     </message>
@@ -1159,57 +1159,57 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="79"/>
+        <location filename="../qml/SettingsWindow.qml" line="90"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="83"/>
+        <location filename="../qml/SettingsWindow.qml" line="94"/>
         <source>Gameplay</source>
         <translation>Gameplay</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="87"/>
+        <location filename="../qml/SettingsWindow.qml" line="98"/>
         <source>Visuals</source>
         <translation>Visuels</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="91"/>
+        <location filename="../qml/SettingsWindow.qml" line="102"/>
         <source>Sound</source>
         <translation>Sons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="95"/>
+        <location filename="../qml/SettingsWindow.qml" line="106"/>
         <source>Shortcuts</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="99"/>
+        <location filename="../qml/SettingsWindow.qml" line="110"/>
         <source>Accessibility</source>
         <translation>Accessibilité</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="103"/>
+        <location filename="../qml/SettingsWindow.qml" line="114"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="107"/>
+        <location filename="../qml/SettingsWindow.qml" line="118"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="111"/>
+        <location filename="../qml/SettingsWindow.qml" line="122"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="145"/>
+        <location filename="../qml/SettingsWindow.qml" line="156"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="161"/>
+        <location filename="../qml/SettingsWindow.qml" line="172"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>
