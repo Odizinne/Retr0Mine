@@ -4,19 +4,28 @@ import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
 Pane {
-    ScrollView {
+    ScrollingArea {
         anchors.fill: parent
-
+        contentWidth: width - 12
+        contentHeight: list.contentHeight
         ListView {
+            id: list
             anchors.fill: parent
             spacing: GameConstants.settingsColumnSpacing
             clip: true
-            boundsBehavior: Flickable.StopAtBounds
-
+            interactive: false
             model: ListModel {
                 ListElement {
                     title: qsTr("Fullscreen")
                     shortcut: "F11"
+                }
+                ListElement {
+                    title: qsTr("Zoom")
+                    shortcut: qsTr("Ctrl + Wheel")
+                }
+                ListElement {
+                    title: qsTr("Signal a cell")
+                    shortcut: qsTr("G / Mouse middle")
                 }
                 ListElement {
                     title: qsTr("New game")
@@ -25,6 +34,10 @@ Pane {
                 ListElement {
                     title: qsTr("Save game")
                     shortcut: "Ctrl + S"
+                }
+                ListElement {
+                    title: qsTr("Load game")
+                    shortcut: "Ctrl + O"
                 }
                 ListElement {
                     title: qsTr("Open settings")

@@ -1177,37 +1177,62 @@ board generation on large grids</source>
 <context>
     <name>ShortcutsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="18"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="23"/>
+        <source>Zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="19"/>
         <source>Fullscreen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="22"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="24"/>
+        <source>Ctrl + Wheel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="28"/>
+        <source>G / Mouse middle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="31"/>
         <source>New game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="26"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="35"/>
         <source>Save game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="30"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="39"/>
+        <source>Load game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="43"/>
         <source>Open settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="34"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="47"/>
         <source>Hint</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="38"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="27"/>
+        <source>Signal a cell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="51"/>
         <source>Leaderboard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="42"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="55"/>
         <source>Quit</source>
         <translation></translation>
     </message>

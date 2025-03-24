@@ -106,7 +106,7 @@ La partie en cours sera sauvegardée et restaurée</translation>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="106"/>
         <source>Qt version</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Use system accent color</source>
@@ -1217,37 +1217,62 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>ShortcutsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="18"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="23"/>
+        <source>Zoom</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="19"/>
         <source>Fullscreen</source>
         <translation>Plein écran</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="22"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="24"/>
+        <source>Ctrl + Wheel</source>
+        <translation>Ctrl + Molette</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="28"/>
+        <source>G / Mouse middle</source>
+        <translation>G / Souris milieu</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="31"/>
         <source>New game</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="26"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="35"/>
         <source>Save game</source>
         <translation>Sauver</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="30"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="39"/>
+        <source>Load game</source>
+        <translation>Charger</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="43"/>
         <source>Open settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="34"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="47"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="38"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="27"/>
+        <source>Signal a cell</source>
+        <translation>Signaler une cellule</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="51"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="42"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="55"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
