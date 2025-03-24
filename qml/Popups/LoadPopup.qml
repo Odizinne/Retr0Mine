@@ -25,43 +25,6 @@ AnimatedPopup {
         }
     }
 
-    Shortcut {
-        sequence: "Up"
-        enabled: control.visible
-        onActivated: {
-            saveFilesList.currentIndex = Math.max(0, saveFilesList.currentIndex - 1)
-        }
-    }
-
-    Shortcut {
-        sequence: "Down"
-        enabled: control.visible
-        onActivated: {
-            saveFilesList.currentIndex = Math.min(saveFilesList.model.count - 1, saveFilesList.currentIndex + 1)
-        }
-    }
-
-    Shortcut {
-        sequence: "Return"
-        enabled: control.visible
-        onActivated: {
-            if (saveFilesList.currentIndex >= 0 &&
-                saveFilesList.currentIndex < saveFilesList.model.count &&
-                saveFilesList.model.count > 0) {
-
-                let saveFileName = saveFilesList.model.get(saveFilesList.currentIndex).name
-
-                let saveData = GameCore.loadGameState(saveFileName)
-                if (saveData) {
-                    if (!SaveManager.loadGame(saveData)) {
-                        errorWindow.visible = true
-                    }
-                    ComponentsContext.loadPopupVisible = false
-                }
-            }
-        }
-    }
-
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 6
@@ -99,7 +62,6 @@ AnimatedPopup {
                     height: 40
                     required property string name
                     required property int index
-                    highlighted: saveFilesList.currentIndex === index
                     text: name.replace(".json", "")
                     onClicked: {
                         saveFilesList.currentIndex = index
