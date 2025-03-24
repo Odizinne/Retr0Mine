@@ -72,7 +72,6 @@ ApplicationWindow {
                     id: sidebarList
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.margins: 10
                     interactive: false
                     model: [
                         {
@@ -115,13 +114,15 @@ ApplicationWindow {
                     currentIndex: ComponentsContext.settingsIndex
                     delegate: ItemDelegate {
                         width: parent.width
-                        height: 40
+                        height: 43
                         required property var modelData
                         required property int index
                         icon.source: modelData.icon
+                        icon.width: 16
+                        icon.height: 16
                         icon.color: GameConstants.foregroundColor
                         text: modelData.text
-                        highlighted: ListView.isCurrentItem
+                        property bool isCurrentItem: ListView.isCurrentItem
                         onClicked: {
                             if (sidebarList.currentIndex !== index) {
                                 ComponentsContext.settingsIndex = index
@@ -135,6 +136,22 @@ ApplicationWindow {
                                     case 6: stackView.push(languagePaneComponent); break;
                                     case 7: stackView.push(multiplayerPaneComponent); break;
                                     case 8: stackView.push(advancedPaneComponent); break;
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            height: 26
+                            width: 4
+                            opacity: parent.isCurrentItem ? 1 : 0
+                            color: GameConstants.accentColor
+
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 187
+                                    easing.type: Easing.InCubic
                                 }
                             }
                         }
