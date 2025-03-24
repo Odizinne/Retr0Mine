@@ -1,14 +1,12 @@
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLoggingCategory>
-#include <QQuickStyle>
 #include "gamecore.h"
 #include "steamintegration.h"
 
 int main(int argc, char *argv[]) {
     QLoggingCategory::setFilterRules("qt.multimedia.ffmpeg=false");
     QGuiApplication app(argc, argv);
-    QQuickStyle::setStyle("Universal");
     app.setOrganizationName("Odizinne");
     app.setApplicationName("Retr0Mine");
     QGuiApplication::setWindowIcon(QIcon(":/icons/icon.png"));

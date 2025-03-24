@@ -10,14 +10,10 @@ set(QT_QML_GENERATE_QMLLS_INI ON)
 set(CMAKE_DISABLE_FIND_PACKAGE_WrapVulkanHeaders TRUE)
 
 find_package(Qt6 REQUIRED COMPONENTS
-    Core
-    Gui
-    Qml
     Quick
     Multimedia
     LinguistTools
     Concurrent
-    QuickControls2
 )
 
 qt_standard_project_setup(REQUIRES 6.8)
@@ -128,13 +124,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-    Qt6::Core
-    Qt6::Gui
-    Qt6::Qml
     Qt6::Quick
     Qt6::Multimedia
     Qt6::Concurrent
-    Qt6::QuickControls2
 )
 
 qt_add_translations(${CMAKE_PROJECT_NAME}
