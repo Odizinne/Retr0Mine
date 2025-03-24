@@ -317,7 +317,6 @@ Item {
     Rectangle {
         anchors.fill: cellButton
         border.width: 2
-        radius: GameCore.isFluent ? 4 : 0
         border.color: GameConstants.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))

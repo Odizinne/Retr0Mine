@@ -63,7 +63,6 @@ ApplicationWindow {
             Rectangle {
                 anchors.fill: parent
                 color: GameConstants.settingsPaneColor
-                visible: GameCore.isUniversal
             }
 
             ColumnLayout {
@@ -121,7 +120,7 @@ ApplicationWindow {
                         required property int index
                         icon.source: modelData.icon
                         icon.color: GameConstants.foregroundColor
-                        text: GameCore.isFluent ? "  " + modelData.text : modelData.text
+                        text: modelData.text
                         highlighted: ListView.isCurrentItem
                         onClicked: {
                             if (sidebarList.currentIndex !== index) {
@@ -165,10 +164,6 @@ ApplicationWindow {
                 }
             }
         }
-        ToolSeparator {
-            Layout.fillHeight: true
-            visible: GameCore.isFluent
-        }
 
         StackView {
             id: stackView
@@ -176,41 +171,6 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.leftMargin: 5
             initialItem: difficultyPaneComponent
-            property string direction: GameCore.isFluent ? "y" : "x"
-            property int animationDuration: GameCore.isFluent ? 150 : 200
-
-            popEnter: Transition {
-                ParallelAnimation {
-                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: stackView.animationDuration; easing.type: Easing.InQuint }
-                    NumberAnimation { property: stackView.direction; from: (stackView.mirrored ? -0.3 : 0.3) * -stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
-                }
-            }
-
-            popExit: Transition {
-                NumberAnimation { property: "opacity"; from: 1; to: 0; duration: stackView.animationDuration; easing.type: Easing.OutQuint }
-            }
-
-            pushEnter: Transition {
-                ParallelAnimation {
-                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: stackView.animationDuration; easing.type: Easing.InQuint }
-                    NumberAnimation { property: stackView.direction; from: (stackView.mirrored ? -0.3 : 0.3) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
-                }
-            }
-
-            pushExit: Transition {
-                NumberAnimation { property: "opacity"; from: 1; to: 0; duration: stackView.animationDuration; easing.type: Easing.OutQuint }
-            }
-
-            replaceEnter: Transition {
-                ParallelAnimation {
-                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: stackView.animationDuration; easing.type: Easing.InQuint }
-                    NumberAnimation { property: stackView.direction; from: (stackView.mirrored ? -0.3 : 0.3) * stackView.width; to: 0; duration: 400; easing.type: Easing.OutCubic }
-                }
-            }
-
-            replaceExit: Transition {
-                NumberAnimation { property: "opacity"; from: 1; to: 0; duration: stackView.animationDuration; easing.type: Easing.OutQuint }
-            }
 
             Component {
                 id: difficultyPaneComponent

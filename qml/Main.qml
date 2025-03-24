@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Universal
 import QtQuick.Window
 import net.odizinne.retr0mine 1.0
 import QtQuick.Effects
@@ -12,6 +12,28 @@ ApplicationWindow {
     property bool isSaving: false
     property bool isClosing: false
     property var startTime: null
+    Universal.theme: GameConstants.universalTheme
+    Universal.accent: GameConstants.accentColor
+    //Binding {
+    //    target: root
+    //    property: "Universal.theme"
+    //    value: GameConstants.universalTheme
+    //}
+
+    Button {
+        onClicked: {
+            if (root.Universal.theme === Universal.Dark) {
+                root.Universal.theme = Universal.Light
+                return
+            }
+
+            else if (root.Universal.theme === Universal.Light) {
+                root.Universal.theme = Universal.System
+                console.log(root.Universal.theme)
+                return
+            }
+        }
+    }
 
     onClosing: function(close) {
         if (isClosing) {
@@ -218,12 +240,11 @@ ApplicationWindow {
             }
         }
 
+        console.log(GameConstants.universalTheme)
+
+        //root.Universal.theme = GameConstants.universalTheme
         GameCore.setApplicationPalette(GameSettings.accentColorIndex)
 
-        if (typeof Universal !== "undefined") {
-            Universal.theme = GameCore.gamescope ? Universal.Dark : Universal.System
-            Universal.accent = GameConstants.accentColor
-        }
 
         if (GameSettings.startFullScreen || GameCore.gamescope) {
             root.visibility = ApplicationWindow.FullScreen
@@ -446,8 +467,8 @@ ApplicationWindow {
             enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
                      !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
             opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) ? 1 : 0
-            ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
-            ScrollBar.horizontal: GameCore.isFluent ? fluentHorizontalScrollBar : defaultHorizontalScrollBar
+            ScrollBar.vertical: defaultVerticalScrollBar
+            ScrollBar.horizontal: defaultHorizontalScrollBar
             Behavior on opacity {
                 enabled: GameSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
                 NumberAnimation {
@@ -569,8 +590,8 @@ ApplicationWindow {
             anchors.rightMargin: -12
             anchors.top: gameView.top
             anchors.bottom: gameView.bottom
-            visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
-            active: !GameCore.isFluent
+            visible: policy === ScrollBar.AlwaysOn
+            active: true
             policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * gridContainer.scale > gameView.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
@@ -584,38 +605,8 @@ ApplicationWindow {
             anchors.right: gameView.right
             anchors.bottom: gameView.bottom
             anchors.bottomMargin: -12
-            visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
-            active: !GameCore.isFluent
-            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX) * gridContainer.scale > gameView.width ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        }
-
-        TempScrollBar {
-            id: fluentVerticalScrollBar
-            enabled: gameView.enabled
-            opacity: gameView.opacity
-            orientation: Qt.Vertical
-            anchors.right: gameView.right
-            anchors.rightMargin: -12
-            anchors.top: gameView.top
-            anchors.bottom: gameView.bottom
-            visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
-            active: GameCore.isFluent
-            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * gridContainer.scale > gameView.height ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-        }
-
-        TempScrollBar {
-            id: fluentHorizontalScrollBar
-            enabled: gameView.enabled
-            opacity: gameView.opacity
-            orientation: Qt.Horizontal
-            anchors.left: gameView.left
-            anchors.right: gameView.right
-            anchors.bottom: gameView.bottom
-            anchors.bottomMargin: -12
-            visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
-            active: GameCore.isFluent
+            visible: policy === ScrollBar.AlwaysOn
+            active: true
             policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX) * gridContainer.scale > gameView.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }

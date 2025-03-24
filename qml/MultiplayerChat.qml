@@ -40,18 +40,6 @@ Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredHeight: chatScrollView.height
-            TempScrollBar {
-                id: fluentVerticalScrollBar
-                enabled: chatScrollView.enabled
-                opacity: chatScrollView.opacity
-                orientation: Qt.Vertical
-                anchors.right: chatScrollView.right
-                anchors.top: chatScrollView.top
-                anchors.bottom: chatScrollView.bottom
-                visible: policy === ScrollBar.AlwaysOn && GameCore.isFluent
-                active: GameCore.isFluent
-                policy: (chatScrollView.contentHeight > chatScrollView.height) ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-            }
 
             ScrollBar {
                 id: defaultVerticalScrollBar
@@ -61,8 +49,8 @@ Frame {
                 anchors.right: chatScrollView.right
                 anchors.top: chatScrollView.top
                 anchors.bottom: chatScrollView.bottom
-                visible: policy === ScrollBar.AlwaysOn && !GameCore.isFluent
-                active: !GameCore.isFluent
+                visible: policy === ScrollBar.AlwaysOn
+                active: true
                 policy: (chatScrollView.contentHeight > chatScrollView.height) ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
 
@@ -70,7 +58,7 @@ Frame {
                 id: chatScrollView
                 anchors.fill: parent
                 clip: true
-                ScrollBar.vertical: GameCore.isFluent ? fluentVerticalScrollBar : defaultVerticalScrollBar
+                ScrollBar.vertical: defaultVerticalScrollBar
                 ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
                 ListView {
@@ -111,7 +99,6 @@ Frame {
                             Rectangle {
                                 width: 26
                                 height: 26
-                                radius: GameCore.isFluent ? 5 : 0
                                 anchors.centerIn: parent
                                 opacity: 0.5
                                 color: "transparent"

@@ -50,7 +50,6 @@ set(QML_FILES
     qml/SettingsWindow.qml
     qml/ErrorWindow.qml
     qml/TopBar.qml
-    qml/TempScrollBar.qml
     qml/InfoIcon.qml
     qml/GameGrid.qml
     qml/GameAudio.qml

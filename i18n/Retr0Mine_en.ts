@@ -172,16 +172,16 @@ board generation on large grids</source>
 <context>
     <name>GameConstants</name>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="187"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="197"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="188"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="198"/>
         <source>Flag</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="189"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="195"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="190"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="196"/>
         <source>Reveal</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -479,52 +479,52 @@ board generation on large grids</source>
 <context>
     <name>LeaderboardPopup</name>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="98"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="97"/>
         <source>Difficulty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="104"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="103"/>
         <source>Easy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="109"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="108"/>
         <source>Medium</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="114"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="113"/>
         <source>Hard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="119"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="118"/>
         <source>Retr0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="130"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="129"/>
         <source>Time</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="162"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="161"/>
         <source>Wins</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="195"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="194"/>
         <source>Clear</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="195"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="194"/>
         <source>Confirm?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="232"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="231"/>
         <source>Close</source>
         <translation></translation>
     </message>
@@ -713,7 +713,7 @@ board generation on large grids</source>
 <context>
     <name>MultiplayerChat</name>
     <message>
-        <location filename="../qml/MultiplayerChat.qml" line="165"/>
+        <location filename="../qml/MultiplayerChat.qml" line="152"/>
         <source>Type a message...</source>
         <translation></translation>
     </message>
@@ -1016,17 +1016,17 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="312"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="311"/>
         <source>Start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="334"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="333"/>
         <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="342"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="341"/>
         <source>Quit session</source>
         <translation></translation>
     </message>
@@ -1119,57 +1119,57 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="90"/>
+        <location filename="../qml/SettingsWindow.qml" line="79"/>
         <source>Difficulty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="94"/>
+        <location filename="../qml/SettingsWindow.qml" line="83"/>
         <source>Gameplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="98"/>
+        <location filename="../qml/SettingsWindow.qml" line="87"/>
         <source>Visuals</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="102"/>
+        <location filename="../qml/SettingsWindow.qml" line="91"/>
         <source>Sound</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="106"/>
+        <location filename="../qml/SettingsWindow.qml" line="95"/>
         <source>Shortcuts</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="110"/>
+        <location filename="../qml/SettingsWindow.qml" line="99"/>
         <source>Accessibility</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="114"/>
+        <location filename="../qml/SettingsWindow.qml" line="103"/>
         <source>Language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="118"/>
+        <location filename="../qml/SettingsWindow.qml" line="107"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="122"/>
+        <location filename="../qml/SettingsWindow.qml" line="111"/>
         <source>Advanced</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="156"/>
+        <location filename="../qml/SettingsWindow.qml" line="145"/>
         <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="172"/>
+        <location filename="../qml/SettingsWindow.qml" line="161"/>
         <source>Restore defaults</source>
         <translation></translation>
     </message>
@@ -1273,7 +1273,7 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="183"/>
+        <location filename="../qml/TopBar.qml" line="182"/>
         <source>Click to pause</source>
         <translation></translation>
     </message>
@@ -1409,62 +1409,62 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="253"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="252"/>
         <source>Dimm satisfied numbers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="274"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="273"/>
         <source>Show cell frame</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="295"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="294"/>
         <source>Colored flags</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="312"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="311"/>
         <source>Next</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="332"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="331"/>
         <source>Color correction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="390"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="388"/>
         <source>None</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="452"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="449"/>
         <source>Tritanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="518"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="514"/>
         <source>Protanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="579"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="574"/>
         <source>Deuteranopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="602"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="597"/>
         <source>You&apos;re all set!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="608"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="603"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="619"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="614"/>
         <source>Close</source>
         <translation></translation>
     </message>

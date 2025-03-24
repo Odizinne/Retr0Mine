@@ -56,7 +56,6 @@ void GameCore::init() {
     int languageIndex = settings.value("languageIndex", 0).toInt();
 
     setThemeColorScheme(colorSchemeIndex);
-    setQMLStyle(styleIndex);
     setLanguage(languageIndex);
 }
 
@@ -136,32 +135,6 @@ void GameCore::setCustomPalette() {
     palette.setColor(QPalette::ColorRole::Accent, accentColor);
     palette.setColor(QPalette::ColorRole::Highlight, highlight);
     QGuiApplication::setPalette(palette);
-}
-
-void GameCore::setQMLStyle(int index) {
-    QString style;
-    m_isFluent = false;
-    m_isUniversal = false;
-
-    switch(index) {
-    case 0:
-        style = "FluentWinUI3";
-        m_isFluent = true;
-        break;
-    case 1:
-        style = "Universal";
-        m_isUniversal = true;
-        break;
-    default:
-        style = "FluentWinUI3";
-        m_isFluent = true;
-        break;
-    }
-
-    QQuickStyle::setStyle(style);
-
-    emit fluentChanged();
-    emit universalChanged();
 }
 
 void GameCore::setLanguage(int index) {

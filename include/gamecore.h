@@ -11,9 +11,8 @@ class GameCore : public QObject
     Q_OBJECT
     Q_PROPERTY(bool gamescope READ isGamescope CONSTANT)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
-    Q_PROPERTY(bool isFluent READ getIsFluent NOTIFY fluentChanged)
-    Q_PROPERTY(bool isUniversal READ getIsUniversal NOTIFY universalChanged)
     Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
+    Q_PROPERTY(bool darkMode READ getDarkMode CONSTANT)
 
 public:
     explicit GameCore(QObject *parent = nullptr);
@@ -34,11 +33,11 @@ public:
 
     bool isGamescope() const { return isRunningOnGamescope; }
     int getLanguageIndex() const { return m_languageIndex; }
-    bool getIsFluent() const { return m_isFluent; }
-    bool getIsUniversal() const { return m_isUniversal; }
     QString getQtVersion() const { return QT_VERSION_STR; }
+    bool getDarkMode() const { return false; }
 
     QSettings settings;
+
 private:
     QTranslator *translator;
 
@@ -47,11 +46,8 @@ private:
     QString getLeaderboardPath() const;
     int m_languageIndex;
     int selectedAccentColor;
-    bool m_isFluent = true;
-    bool m_isUniversal = false;
     void setCustomPalette();
     void setSystemPalette();
-    void setQMLStyle(int index);
 
 signals:
     void languageIndexChanged();
