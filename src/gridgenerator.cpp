@@ -1,9 +1,5 @@
 #include <QQueue>
 #include <QRandomGenerator>
-#include <QtConcurrent>
-#include <QThreadPool>
-#include <QMutex>
-#include <QSemaphore>
 #include "gridgenerator.h"
 
 GridGenerator::GridGenerator(QObject *parent)
@@ -17,10 +13,6 @@ GridGenerator::~GridGenerator() {
 bool GridGenerator::generateBoard(int width, int height, int mineCount, int firstClickX, int firstClickY,
                                   QVector<int>& mines, QVector<int>& numbers, const std::atomic<bool>& cancelFlag,
                                   std::function<void(int, int)> progressCallback) {
-    // Start timing
-    QElapsedTimer timer;
-    timer.start();
-
     if (cancelFlag.load()) {
         return false;
     }
@@ -28,91 +20,62 @@ bool GridGenerator::generateBoard(int width, int height, int mineCount, int firs
     bool safeFirstClick = (firstClickX != -1 && firstClickY != -1);
     int firstClickIndex = safeFirstClick ? (firstClickY * width + firstClickX) : -1;
 
-    BoardState board(width, height);
-    int startIndex = safeFirstClick ? firstClickIndex : (width * height / 2);
-    board.createSafeArea(startIndex);
+    const int MAX_ATTEMPTS = 1;
 
-    QVector<int> candidates = board.getMineCandidates();
-    if (candidates.isEmpty() || cancelFlag.load()) {
-        return false;
-    }
-
-    // Shuffle candidates
-    for (int i = candidates.size() - 1; i > 0; --i) {
-        std::uniform_int_distribution<int> dist(0, i);
-        int j = dist(m_rng);
-        std::swap(candidates[i], candidates[j]);
-    }
-
-    QMutex mutex;
-    QAtomicInt validatedCount(0);
-    QAtomicInt validFoundCount(0);
-    QVector<bool> validMines(candidates.size(), false);
-
-    // Report initial progress state
-    if (progressCallback) {
-        progressCallback(0, mineCount);
-    }
-
-    // Validate all potential mine positions in parallel
-    QThreadPool::globalInstance()->setMaxThreadCount(QThread::idealThreadCount());
-
-    QtConcurrent::blockingMap(candidates, [&](int candidatePos) {
-        if (cancelFlag.load() || validFoundCount >= mineCount) {
-            return;
+    for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+        if (cancelFlag.load()) {
+            return false;
         }
 
-        BoardState testBoard = board;
-        testBoard.placeMine(candidatePos);
+        BoardState board(width, height);
 
-        if (testBoard.isFullySolvable(cancelFlag)) {
-            QMutexLocker locker(&mutex);
-            int idx = candidates.indexOf(candidatePos);
-            if (idx >= 0) {
-                validMines[idx] = true;
-                int found = validFoundCount.fetchAndAddRelaxed(1) + 1;
+        int startIndex = safeFirstClick ? firstClickIndex : (width * height / 2);
+        board.createSafeArea(startIndex);
 
-                // Update progress based on how many valid mines we've found
-                if (progressCallback && (found % 5 == 0 || found == 1 || found == mineCount)) {
-                    progressCallback(found, mineCount);
+        QVector<int> candidates = board.getMineCandidates();
+
+        if (cancelFlag.load()) {
+            return false;
+        }
+
+        for (int i = candidates.size() - 1; i > 0; --i) {
+            std::uniform_int_distribution<int> dist(0, i);
+            int j = dist(m_rng);
+            std::swap(candidates[i], candidates[j]);
+        }
+
+        int placedMines = 0;
+        for (int i = 0; i < candidates.size() && placedMines < mineCount; ++i) {
+            if (cancelFlag.load()) {
+                return false;
+            }
+
+            BoardState testBoard = board;
+            testBoard.placeMine(candidates[i]);
+
+            if (testBoard.isFullySolvable(cancelFlag)) {
+                board.placeMine(candidates[i]);
+                placedMines++;
+
+                if (progressCallback && (placedMines % 5 == 0 || placedMines == 1 || placedMines == mineCount)) {
+                    progressCallback(placedMines, mineCount);
                 }
             }
         }
 
-        // Update total validations counter for debugging
-        validatedCount.fetchAndAddRelaxed(1);
-    });
-
-    // Place mines sequentially based on pre-validated positions
-    int placed = 0;
-    for (int i = 0; i < candidates.size() && placed < mineCount; ++i) {
-        if (validMines[i]) {
-            board.placeMine(candidates[i]);
-            placed++;
-        }
-    }
-
-    if (cancelFlag.load()) {
-        return false;
-    }
-
-    if (placed == mineCount) {
-        if (progressCallback) {
-            progressCallback(mineCount, mineCount);
+        if (cancelFlag.load()) {
+            return false;
         }
 
-        mines = board.getMines();
-        numbers = board.calculateNumbers();
+        if (placedMines == mineCount) {
+            if (progressCallback) {
+                progressCallback(mineCount, mineCount);
+            }
 
-        // Calculate elapsed time and print it
-        qint64 elapsed = timer.elapsed();
-        qint64 seconds = elapsed / 1000;
-        qint64 milliseconds = elapsed % 1000;
-        qDebug() << "Board generation completed in" << seconds << "seconds and"
-                 << milliseconds << "milliseconds. Validated " << validatedCount
-                 << " positions to find " << validFoundCount << " valid mines.";
-
-        return true;
+            mines = board.getMines();
+            numbers = board.calculateNumbers();
+            return true;
+        }
     }
 
     return false;

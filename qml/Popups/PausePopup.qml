@@ -1,4 +1,4 @@
-import QtQuick.Controls
+import QtQuick.Controls.Universal
 import QtQuick.Layouts
 import net.odizinne.retr0mine
 
