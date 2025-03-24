@@ -81,112 +81,122 @@ AnimatedPopup {
             }
         }
 
-        Frame {
+        Item {
             Layout.preferredWidth: 350
             Layout.fillWidth: true
+            Layout.preferredHeight: frame.implicitHeight
 
-            RowLayout {
+            Rectangle {
                 anchors.fill: parent
-                spacing: 15
+                color: GameConstants.settingsPaneColor
+            }
 
-                ColumnLayout {
-                    Layout.preferredWidth: parent.width / 3
+            Frame {
+                anchors.fill: parent
+                id: frame
+
+                RowLayout {
+                    anchors.fill: parent
                     spacing: 15
 
-                    Label {
-                        text: qsTr("Difficulty")
-                        font.bold: true
-                        horizontalAlignment: Text.AlignLeft
-                        elide: Text.ElideRight
-                    }
-                    Label {
-                        text: qsTr("Easy")
-                        horizontalAlignment: Text.AlignLeft
-                        elide: Text.ElideRight
-                    }
-                    Label {
-                        text: qsTr("Medium")
-                        horizontalAlignment: Text.AlignLeft
-                        elide: Text.ElideRight
-                    }
-                    Label {
-                        text: qsTr("Hard")
-                        horizontalAlignment: Text.AlignLeft
-                        elide: Text.ElideRight
-                    }
-                    Label {
-                        text: qsTr("Retr0")
-                        horizontalAlignment: Text.AlignLeft
-                        elide: Text.ElideRight
-                    }
-                }
+                    ColumnLayout {
+                        Layout.preferredWidth: parent.width / 3
+                        spacing: 15
 
-                ColumnLayout {
-                    Layout.preferredWidth: parent.width / 3
-                    spacing: 15
+                        Label {
+                            text: qsTr("Difficulty")
+                            font.bold: true
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                        }
+                        Label {
+                            text: qsTr("Easy")
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                        }
+                        Label {
+                            text: qsTr("Medium")
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                        }
+                        Label {
+                            text: qsTr("Hard")
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                        }
+                        Label {
+                            text: qsTr("Retr0")
+                            horizontalAlignment: Text.AlignLeft
+                            elide: Text.ElideRight
+                        }
+                    }
 
-                    Label {
-                        text: qsTr("Time")
-                        font.bold: true
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                    Label {
-                        text: control.easyTime
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                    Label {
-                        text: control.mediumTime
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                    Label {
-                        text: control.hardTime
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                    Label {
-                        text: control.retr0Time
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-                }
+                    ColumnLayout {
+                        Layout.preferredWidth: parent.width / 3
+                        spacing: 15
 
-                ColumnLayout {
-                    Layout.preferredWidth: parent.width / 3
-                    spacing: 15
+                        Label {
+                            text: qsTr("Time")
+                            font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                        Label {
+                            text: control.easyTime
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                        Label {
+                            text: control.mediumTime
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                        Label {
+                            text: control.hardTime
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                        Label {
+                            text: control.retr0Time
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                    }
 
-                    Label {
-                        text: qsTr("Wins")
-                        font.bold: true
-                        horizontalAlignment: Text.AlignRight
-                        Layout.alignment: Qt.AlignRight
-                    }
-                    Label {
-                        text: control.easyWins.toString()
-                        horizontalAlignment: Text.AlignRight
-                        Layout.alignment: Qt.AlignRight
-                    }
-                    Label {
-                        text: control.mediumWins.toString()
-                        horizontalAlignment: Text.AlignRight
-                        Layout.alignment: Qt.AlignRight
-                    }
-                    Label {
-                        text: control.hardWins.toString()
-                        horizontalAlignment: Text.AlignRight
-                        Layout.alignment: Qt.AlignRight
-                    }
-                    Label {
-                        text: control.retr0Wins.toString()
-                        horizontalAlignment: Text.AlignRight
-                        Layout.alignment: Qt.AlignRight
+                    ColumnLayout {
+                        Layout.preferredWidth: parent.width / 3
+                        spacing: 15
+
+                        Label {
+                            text: qsTr("Wins")
+                            font.bold: true
+                            horizontalAlignment: Text.AlignRight
+                            Layout.alignment: Qt.AlignRight
+                        }
+                        Label {
+                            text: control.easyWins.toString()
+                            horizontalAlignment: Text.AlignRight
+                            Layout.alignment: Qt.AlignRight
+                        }
+                        Label {
+                            text: control.mediumWins.toString()
+                            horizontalAlignment: Text.AlignRight
+                            Layout.alignment: Qt.AlignRight
+                        }
+                        Label {
+                            text: control.hardWins.toString()
+                            horizontalAlignment: Text.AlignRight
+                            Layout.alignment: Qt.AlignRight
+                        }
+                        Label {
+                            text: control.retr0Wins.toString()
+                            horizontalAlignment: Text.AlignRight
+                            Layout.alignment: Qt.AlignRight
+                        }
                     }
                 }
             }
         }
-
         RowLayout {
             spacing: 10
             NfButton {
