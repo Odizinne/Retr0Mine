@@ -3,7 +3,6 @@ import QtQuick.Controls.Universal
 import QtQuick.Layouts
 import QtQuick.Controls.impl
 import net.odizinne.retr0mine 1.0
-import QtMultimedia
 
 Item {
     id: control
@@ -14,7 +13,7 @@ Item {
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string" && !ComponentsContext.multiplayerChatVisible) {
                 if (!chatButton.hasNewMessages && GameSettings.mpAudioNotificationOnNewMessage) {
-                    messageSound.play()
+                    GridBridge.audioEngine.playMessage()
                 }
                 chatButton.hasNewMessages = true
             }
