@@ -4,13 +4,14 @@ import QtQuick.Layouts
 import QtQuick.Controls.impl
 import net.odizinne.retr0mine 1.0
 
-Popup {
+AnimatedPopup {
     id: control
     height: 200
     width: 400
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     modal: true
+    property int buttonWidth: (Math.max(laterButton.implicitWidth, yesButton.implicitWidth, toVisualButton.implicitWidth, toAccessibilityButton.implicitWidth, closeButton.implicitWidth))
 
     ColumnLayout {
         opacity: 1
@@ -36,7 +37,9 @@ Popup {
             }
 
             NfButton {
+                id: laterButton
                 text: qsTr("Later")
+                Layout.preferredWidth: control.buttonWidth
                 onClicked: {
                     control.visible = false
                     GameSettings.welcomeMessageShown = true
@@ -44,7 +47,9 @@ Popup {
             }
 
             NfButton {
+                id: yesButton
                 text: qsTr("Yes")
+                Layout.preferredWidth: control.buttonWidth
                 highlighted: true
                 onClicked: {
                     control.visible = false
@@ -164,7 +169,9 @@ Popup {
             }
 
             NfButton {
-                text: "Next"
+                id: toVisualButton
+                Layout.preferredWidth: control.buttonWidth
+                text: qsTr("Next")
                 onClicked: {
                     control.visible = false
                     controlsConfig.visible = false
@@ -307,6 +314,8 @@ Popup {
         }
 
         NfButton {
+            id: toAccessibilityButton
+            Layout.preferredWidth: control.buttonWidth
             Layout.alignment: Qt.AlignRight
             text: qsTr("Next")
             onClicked: {
@@ -611,6 +620,8 @@ Popup {
             }
 
             NfButton {
+                id: closeButton
+                Layout.preferredWidth: control.buttonWidth
                 text: qsTr("Close")
                 onClicked: {
                     control.visible = false

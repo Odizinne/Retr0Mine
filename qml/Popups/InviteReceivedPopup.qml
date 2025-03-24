@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.impl
 import net.odizinne.retr0mine
 
-Popup {
+AnimatedPopup {
     id: invitePopup
     width: contentColumn.width + 30
     height: contentColumn.height + 30

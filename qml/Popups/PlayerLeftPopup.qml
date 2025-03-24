@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import net.odizinne.retr0mine
 
-Popup {
+AnimatedPopup {
     id: control
     property string playerName: ""
     modal: true

@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Popup {
+AnimatedPopup {
     id: control
     width: height + 12
     modal: true

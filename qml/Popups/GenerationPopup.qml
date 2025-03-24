@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import QtQuick 2.15
 import net.odizinne.retr0mine 1.0
 
-Popup {
+AnimatedPopup {
     id: control
     modal: true
     closePolicy: Popup.NoAutoClose

@@ -142,10 +142,10 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
         i18n/Retr0Mine_en.ts
         i18n/Retr0Mine_fr.ts
     RESOURCE_PREFIX "/i18n"
-    #LUPDATE_OPTIONS "-no-obsolete"
+    LUPDATE_OPTIONS "-no-obsolete"
 )
 
-add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
+#add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 
 if(WIN32)
     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE

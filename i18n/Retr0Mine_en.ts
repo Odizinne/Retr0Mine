@@ -175,89 +175,6 @@ board generation on large grids</source>
 </context>
 <context>
     <name>GameLogic</name>
-    <message numerus="yes">
-        <source>The number %1 at %2,%3 shows there are %n mine(s) left to find. Since there are exactly %n hidden cell(s) next to it, all of these cells must contain mines.</source>
-        <translation type="vanished">
-            <numerusform>The number %1 at %2,%3 shows there is %n mine left to find. Since there is exactly %n hidden cell next to it, this cell must contain a mine.</numerusform>
-            <numerusform>The number %1 at %2,%3 shows there are %n mines left to find. Since there are exactly %n hidden cells next to it, all of these cells must contain mines.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>The number %1 at %2,%3 already has all its %n mine(s) flagged. This means all remaining hidden cells around it must be safe.</source>
-        <translation type="vanished">
-            <numerusform>The number %1 at %2,%3 already has its %n mine flagged. This means all remaining hidden cells around it must be safe.</numerusform>
-            <numerusform>The number %1 at %2,%3 already has all its %n mines flagged. This means all remaining hidden cells around it must be safe.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</source>
-        <translation type="vanished">
-            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: The %n mine from the first number must be in a cell that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</numerusform>
-            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mines from the first number must be in cells that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</source>
-        <translation type="vanished">
-            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: The %n mine from the first number must be in a cell that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</numerusform>
-            <numerusform>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mines from the first number must be in cells that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mine(s). Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</source>
-        <translation type="vanished">
-            <numerusform>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mine. Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</numerusform>
-            <numerusform>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mines. Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the second number must all contain mines.</source>
-        <translation type="vanished">
-            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell around the second number must contain a mine.</numerusform>
-            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cells around the second number must all contain mines.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the second number only needs %8 mines total, its non-shared cells must be safe.</source>
-        <translation type="vanished">The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the second number only needs %8 mines total, its non-shared cells must be safe.</translation>
-    </message>
-    <message numerus="yes">
-        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the first number must all contain mines.</source>
-        <translation type="vanished">
-            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell around the first number must contain a mine.</numerusform>
-            <numerusform>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cells around the first number must all contain mines.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the first number only needs %8 mines total, its non-shared cells must be safe.</source>
-        <translation type="vanished">The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the first number only needs %8 mines total, its non-shared cells must be safe.</translation>
-    </message>
-    <message numerus="yes">
-        <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the first number, so they can&apos;t all be mines.</source>
-        <translation type="vanished">
-            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell around the first number, so it can&apos;t be a mine.</numerusform>
-            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cells around the first number, so they can&apos;t all be mines.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the second number, so they can&apos;t all be mines.</source>
-        <translation type="vanished">
-            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell around the second number, so it can&apos;t be a mine.</numerusform>
-            <numerusform>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cells around the second number, so they can&apos;t all be mines.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>If there is a mine at %1,%2, then certain cells that share multiple number constraints must be safe by process of elimination.</source>
-        <translation type="vanished">If there is a mine at %1,%2, then certain cells that share multiple number constraints must be safe by process of elimination.</translation>
-    </message>
-    <message>
-        <source>If the cell at %1,%2 is safe, then certain cells that share multiple number constraints must contain mines by process of elimination.</source>
-        <translation type="vanished">If the cell at %1,%2 is safe, then certain cells that share multiple number constraints must contain mines by process of elimination.</translation>
-    </message>
-    <message>
-        <source>I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</source>
-        <translation type="vanished">I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</translation>
-    </message>
     <message>
         <location filename="../src/gamelogic.cpp" line="212"/>
         <source>contain mines</source>
@@ -1358,102 +1275,103 @@ board generation on large grids</source>
 <context>
     <name>WelcomePopup</name>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="20"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="21"/>
         <source>Welcome to Retr0Mine</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="29"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="30"/>
         <source>Would you like to configure some quick settings to enhance your experience? Everything can still be adjusted later.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="39"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="41"/>
         <source>Later</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="47"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="51"/>
         <source>Yes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="76"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="81"/>
         <source>Mouse settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="137"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="142"/>
         <source>Any click on satisfied number to reveal surroundings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="145"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="150"/>
         <source>Inverted</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="145"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="150"/>
         <source>Normal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="252"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="259"/>
         <source>Dimm satisfied numbers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="273"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="280"/>
         <source>Show cell frame</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="294"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="301"/>
         <source>Colored flags</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="311"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="174"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="320"/>
         <source>Next</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="331"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="340"/>
         <source>Color correction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="388"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="397"/>
         <source>None</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="449"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="458"/>
         <source>Tritanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="514"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="523"/>
         <source>Protanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="574"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="583"/>
         <source>Deuteranopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="597"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="606"/>
         <source>You&apos;re all set!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="603"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="612"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="614"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="625"/>
         <source>Close</source>
         <translation></translation>
     </message>

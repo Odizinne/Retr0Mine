@@ -6,7 +6,7 @@ import QtQuick.Controls.impl
 import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
-Popup {
+AnimatedPopup {
     id: multiplayerPopup
     width: 350
     height: 350

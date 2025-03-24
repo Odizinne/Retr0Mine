@@ -5,7 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import net.odizinne.retr0mine 1.0
 
-Popup {
+AnimatedPopup {
     id: control
     closePolicy: Popup.NoAutoClose
     visible: ComponentsContext.leaderboardPopupVisible
