@@ -8,7 +8,7 @@ import net.odizinne.retr0mine 1.0
 ApplicationWindow {
     id: control
     title: qsTr("Settings")
-    readonly property int baseWidth: 700
+    readonly property int baseWidth: 740
     readonly property int baseHeight: 480
 
     width: GameCore.gamescope ? 1280 : baseWidth
@@ -58,7 +58,7 @@ ApplicationWindow {
         spacing: 0
 
         Item {
-            Layout.preferredWidth: 180
+            Layout.preferredWidth: 220
             Layout.fillHeight: true
             Rectangle {
                 anchors.fill: parent
