@@ -15,7 +15,6 @@ find_package(Qt6 REQUIRED COMPONENTS
     Qml
     Quick
     Multimedia
-    QuickControls2
     LinguistTools
     Concurrent
 )
@@ -133,7 +132,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
     Qt6::Qml
     Qt6::Quick
     Qt6::Multimedia
-    Qt6::QuickControls2
     Qt6::Concurrent
 )
 

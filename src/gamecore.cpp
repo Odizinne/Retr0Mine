@@ -3,7 +3,6 @@
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QProcessEnvironment>
-#include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
 #include "gamecore.h"
