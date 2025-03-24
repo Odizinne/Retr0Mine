@@ -63,21 +63,19 @@ Pane {
             }
 
             RowLayout {
+                enabled: GameCore.gamescope
                 Layout.fillWidth: true
                 Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
-                    enabled: !GameCore.gamescope
                     text: qsTr("Start in full screen")
                     Layout.fillWidth: true
                     MouseArea {
-                        enabled: !GameCore.gamescope
                         anchors.fill: parent
                         onClicked: startFullScreenSwitch.click()
                     }
                 }
                 NfSwitch {
                     id: startFullScreenSwitch
-                    enabled: !GameCore.gamescope
                     checked: GameSettings.startFullScreen || GameCore.gamescope
                     onCheckedChanged: {
                         GameSettings.startFullScreen = checked
