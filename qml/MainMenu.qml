@@ -1,11 +1,19 @@
 import QtQuick.Controls.Universal
 import net.odizinne.retr0mine
+import QtQuick
 
 Menu {
     topMargin: 58
     id: menu
     width: 150
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+    enter: Transition {
+        NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.Linear; duration: 110 }
+    }
+
+    exit: Transition {
+        NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.Linear; duration: 110 }
+    }
     MenuItem {
         height: implicitHeight - 6
         text: qsTr("New game")
