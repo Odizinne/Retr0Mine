@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls.impl
+import QtQuick.Controls.Universal
 import QtQuick.Controls.impl
 import net.odizinne.retr0mine 1.0
 
