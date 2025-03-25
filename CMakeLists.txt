@@ -95,6 +95,7 @@ set(QML_SINGLETONS
     qml/Singletons/GridBridge.qml
     qml/Singletons/ComponentsContext.qml
     qml/Singletons/NetworkManager.qml
+    qml/Singletons/SteamInputHandler.qml
 )
 
 set_source_files_properties(${QML_SINGLETONS}

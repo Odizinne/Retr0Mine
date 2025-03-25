@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls.Universal
 import QtQuick.Controls.impl
 import net.odizinne.retr0mine 1.0
 
@@ -588,6 +587,16 @@ Item {
             }
 
             onClicked: (mouse) => handleCellClick(mouse)
+        }
+
+        Connections {
+            target: SteamInputHandler
+            function onRequestSignal() {
+                if (cellMouseArea.isHovered && !pingCooldown.running) {
+                    NetworkManager.sendPing(cellItem.index)
+                    pingCooldown.start()
+                }
+            }
         }
 
         Shortcut {

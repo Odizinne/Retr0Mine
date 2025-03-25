@@ -399,12 +399,6 @@ ApplicationWindow {
             }
         }
 
-        Timer {
-            id: zoomingResetTimer
-            interval: 150
-            onTriggered: GameState.isZooming = false
-        }
-
         MouseArea {
             id: zoomHandler
             anchors.fill: gameView
@@ -417,16 +411,12 @@ ApplicationWindow {
                 if (wheel.modifiers & Qt.ControlModifier) {
                     if (wheel.angleDelta.y > 0) {
                         if (GameSettings.gridScale < 2) {
-                            GameState.isZooming = true;
                             GameSettings.gridScale = Math.min(2, GameSettings.gridScale + 0.1);
-                            zoomingResetTimer.restart();
                         }
                     }
                     else if (wheel.angleDelta.y < 0) {
                         if (GameSettings.gridScale > 1) {
-                            GameState.isZooming = true;
                             GameSettings.gridScale = Math.max(1, GameSettings.gridScale - 0.1);
-                            zoomingResetTimer.restart();
                         }
                     }
                     wheel.accepted = true;
@@ -477,7 +467,6 @@ ApplicationWindow {
                 height: Math.max(((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * scale, gameView.height)
 
                 Behavior on scale {
-                    enabled: GameState.isZooming
                     NumberAnimation {
                         duration: 100
                         easing.type: Easing.OutQuad

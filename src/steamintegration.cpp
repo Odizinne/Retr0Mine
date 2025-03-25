@@ -15,7 +15,7 @@
 #include "steamintegration.h"
 
 #define STEAM_DEBUG(msg) if (SteamIntegration::debugLoggingEnabled) qDebug() << "SteamIntegration: " << msg
-bool SteamIntegration::debugLoggingEnabled = false;
+bool SteamIntegration::debugLoggingEnabled = true;
 
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
@@ -32,7 +32,10 @@ SteamIntegration::SteamIntegration(QObject *parent)
     , m_missedHeartbeats(0)
     , m_connectionCheckFailCount(0)
     , m_attemptingReconnection(false)
-    , m_reconnectionAttempts(0) {
+    , m_reconnectionAttempts(0)
+    , m_steamInputInitialized(false)
+    , m_inputHandle(0)
+{
     QSettings settings("Odizinne", "Retr0Mine");
     m_difficulty = settings.value("difficulty", 0).toInt();
 
@@ -52,6 +55,8 @@ SteamIntegration::SteamIntegration(QObject *parent)
     m_heartbeatTimer.setInterval(HEARTBEAT_INTERVAL);
     m_connectionHealthTimer.setInterval(5000);
     m_reconnectionTimer.setInterval(3000);
+
+    connect(&m_inputTimer, &QTimer::timeout, this, &SteamIntegration::processInputEvents);
 }
 
 SteamIntegration::~SteamIntegration() {
@@ -71,6 +76,7 @@ bool SteamIntegration::initialize() {
         return false;
     }
     m_initialized = true;
+    initializeSteamInput();
     updatePlayerName();
     updateRichPresence();
 
@@ -1452,4 +1458,129 @@ int SteamIntegration::getAvatarHandleForPlayerName(const QString& playerName) {
     }
 
     return 0;
+}
+
+void SteamIntegration::initializeSteamInput() {
+    if (!m_initialized || m_steamInputInitialized)
+        return;
+
+    STEAM_DEBUG("Initializing Steam Input");
+
+    if (SteamInput() == nullptr) {
+        STEAM_DEBUG("Steam Input interface not available");
+        return;
+    }
+
+    // Initialize Steam Input API
+    bool inputInit = SteamInput()->Init(false);
+    if (!inputInit) {
+        STEAM_DEBUG("Steam Input Init failed");
+    }
+
+    // Try to get controllers
+    ControllerHandle_t controllers[STEAM_CONTROLLER_MAX_COUNT];
+    int numControllers = SteamInput()->GetConnectedControllers(controllers);
+
+    STEAM_DEBUG("Found " << numControllers << " controllers");
+
+    if (numControllers > 0) {
+        m_inputHandle = controllers[0];
+        STEAM_DEBUG("Using controller: " << m_inputHandle);
+    } else {
+        STEAM_DEBUG("No controllers connected, will use default handle");
+        // We'll still set up the actions in case a controller is connected later
+        m_inputHandle = 0;
+    }
+
+    // Get action set handles
+    m_gameActionSet = SteamInput()->GetActionSetHandle("GameControls");
+    STEAM_DEBUG("GameControls action set handle: " << m_gameActionSet);
+
+    // Get digital action handles
+    m_newGameAction = SteamInput()->GetDigitalActionHandle("new_game");
+    m_toggleSettingsAction = SteamInput()->GetDigitalActionHandle("toggle_settings");
+    m_zoomInAction = SteamInput()->GetDigitalActionHandle("zoom_in");
+    m_zoomOutAction = SteamInput()->GetDigitalActionHandle("zoom_out");
+    m_signalCellAction = SteamInput()->GetDigitalActionHandle("signal_cell");
+
+    STEAM_DEBUG("Action handles - new_game: " << m_newGameAction
+                                              << ", toggle_settings: " << m_toggleSettingsAction
+                                              << ", zoom_in: " << m_zoomInAction
+                                              << ", zoom_out: " << m_zoomOutAction
+                                              << ", signal_cell: " << m_signalCellAction);
+
+    m_steamInputInitialized = true;
+
+    // Start the input polling timer
+    m_inputTimer.setInterval(16); // 60Hz polling
+    m_inputTimer.start();
+
+    STEAM_DEBUG("Steam Input initialized");
+}
+
+void SteamIntegration::processInputEvents() {
+    if (!m_initialized || !m_steamInputInitialized)
+        return;
+
+    // Check if we have a controller handle, try to get one if we don't
+    if (m_inputHandle == 0) {
+        ControllerHandle_t controllers[STEAM_CONTROLLER_MAX_COUNT];
+        int numControllers = SteamInput()->GetConnectedControllers(controllers);
+        if (numControllers > 0) {
+            m_inputHandle = controllers[0];
+            STEAM_DEBUG("Controller connected! Handle: " << m_inputHandle);
+        }
+    }
+
+    if (m_inputHandle == 0) {
+        // Still no controller, so nothing to process
+        return;
+    }
+
+    // Activate the game action set
+    SteamInput()->ActivateActionSet(m_inputHandle, m_gameActionSet);
+
+    // Run Steam Input callbacks
+    SteamInput()->RunFrame();
+
+    // Process digital actions
+    static bool lastNewGameState = false;
+    InputDigitalActionData_t newGameData = SteamInput()->GetDigitalActionData(m_inputHandle, m_newGameAction);
+    if (newGameData.bState && newGameData.bActive && !lastNewGameState) {
+        STEAM_DEBUG("New Game action triggered");
+        emit newGameActionTriggered();
+    }
+    lastNewGameState = newGameData.bState && newGameData.bActive;
+
+    static bool lastToggleSettingsState = false;
+    InputDigitalActionData_t toggleSettingsData = SteamInput()->GetDigitalActionData(m_inputHandle, m_toggleSettingsAction);
+    if (toggleSettingsData.bState && toggleSettingsData.bActive && !lastToggleSettingsState) {
+        STEAM_DEBUG("Toggle Settings action triggered");
+        emit toggleSettingsActionTriggered();
+    }
+    lastToggleSettingsState = toggleSettingsData.bState && toggleSettingsData.bActive;
+
+    static bool lastZoomInState = false;
+    InputDigitalActionData_t zoomInData = SteamInput()->GetDigitalActionData(m_inputHandle, m_zoomInAction);
+    if (zoomInData.bState && zoomInData.bActive && !lastZoomInState) {
+        STEAM_DEBUG("Zoom In action triggered");
+        emit zoomInActionTriggered();
+    }
+    lastZoomInState = zoomInData.bState && zoomInData.bActive;
+
+    static bool lastZoomOutState = false;
+    InputDigitalActionData_t zoomOutData = SteamInput()->GetDigitalActionData(m_inputHandle, m_zoomOutAction);
+    if (zoomOutData.bState && zoomOutData.bActive && !lastZoomOutState) {
+        STEAM_DEBUG("Zoom Out action triggered");
+        emit zoomOutActionTriggered();
+    }
+    lastZoomOutState = zoomOutData.bState && zoomOutData.bActive;
+
+    static bool lastSignalCellState = false;
+    InputDigitalActionData_t signalCellData = SteamInput()->GetDigitalActionData(m_inputHandle, m_signalCellAction);
+    if (signalCellData.bState && signalCellData.bActive && !lastSignalCellState) {
+        STEAM_DEBUG("Signal Cell action triggered");
+        emit signalCellActionTriggered();
+    }
+    lastSignalCellState = signalCellData.bState && signalCellData.bActive;
 }

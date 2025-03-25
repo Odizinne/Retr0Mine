@@ -1,5 +1,6 @@
 #pragma once
 
+#include "isteaminput.h"
 #include <QObject>
 #include <QQmlEngine>
 #include <QTimer>
@@ -101,6 +102,9 @@ public:
 
     void startP2PInitialization();
 
+    Q_INVOKABLE void initializeSteamInput();
+    Q_INVOKABLE void processInputEvents();
+
 private:
     bool m_initialized;
     QString m_playerName;
@@ -163,6 +167,17 @@ private:
 
     void handlePingPongMessage(const QByteArray& messageData, const CSteamID& senderId);
 
+    //s_input
+    InputHandle_t m_inputHandle;
+    InputActionSetHandle_t m_gameActionSet;
+    InputDigitalActionHandle_t m_newGameAction;
+    InputDigitalActionHandle_t m_toggleSettingsAction;
+    InputDigitalActionHandle_t m_zoomInAction;
+    InputDigitalActionHandle_t m_zoomOutAction;
+    InputDigitalActionHandle_t m_signalCellAction;
+    bool m_steamInputInitialized;
+    QTimer m_inputTimer;
+
 signals:
     void playerNameChanged();
 
@@ -185,6 +200,12 @@ signals:
     void reconnectionFailed();
     void reconnectionSucceeded();
     void connectionUnstable();
+
+    void newGameActionTriggered();
+    void toggleSettingsActionTriggered();
+    void zoomInActionTriggered();
+    void zoomOutActionTriggered();
+    void signalCellActionTriggered();
 };
 
 struct SteamIntegrationForeign {

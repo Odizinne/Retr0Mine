@@ -69,7 +69,6 @@ QtObject {
     property int hostRevealed: 0
     property int clientRevealed: 0
     property int firstClickRevealed: 0
-    property bool isZooming: false
     signal botMessageSent()
 
     onPausedChanged: {
