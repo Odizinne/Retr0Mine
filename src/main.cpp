@@ -5,6 +5,7 @@
 #include "steamintegration.h"
 
 int main(int argc, char *argv[]) {
+    qputenv("QSG_RHI_BACKEND", "opengl");
     QLoggingCategory::setFilterRules("qt.multimedia.ffmpeg=false");
     QGuiApplication app(argc, argv);
     app.setOrganizationName("Odizinne");
