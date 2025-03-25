@@ -7,12 +7,12 @@ QtObject {
 
     signal requestSignal()
     Component.onCompleted: {
-        // Connect to the signals from SteamIntegration
         SteamIntegration.newGameActionTriggered.connect(startNewGame);
         SteamIntegration.toggleSettingsActionTriggered.connect(toggleSettings);
         SteamIntegration.zoomInActionTriggered.connect(zoomIn);
         SteamIntegration.zoomOutActionTriggered.connect(zoomOut);
         SteamIntegration.signalCellActionTriggered.connect(signalCell);
+        SteamIntegration.requestHintActionTriggered.connect(requestHint);
     }
 
     function startNewGame() {
@@ -40,5 +40,9 @@ QtObject {
 
     function signalCell() {
         requestSignal()
+    }
+
+    function requestHint() {
+        GridBridge.requestHint()
     }
 }

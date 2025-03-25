@@ -15,7 +15,7 @@
 #include "steamintegration.h"
 
 #define STEAM_DEBUG(msg) if (SteamIntegration::debugLoggingEnabled) qDebug() << "SteamIntegration: " << msg
-bool SteamIntegration::debugLoggingEnabled = true;
+bool SteamIntegration::debugLoggingEnabled = false;
 
 SteamIntegration::SteamIntegration(QObject *parent)
     : QObject(parent)
@@ -1466,53 +1466,33 @@ void SteamIntegration::initializeSteamInput() {
 
     STEAM_DEBUG("Initializing Steam Input");
 
-    if (SteamInput() == nullptr) {
-        STEAM_DEBUG("Steam Input interface not available");
-        return;
-    }
-
-    // Initialize Steam Input API
     bool inputInit = SteamInput()->Init(false);
     if (!inputInit) {
         STEAM_DEBUG("Steam Input Init failed");
     }
 
-    // Try to get controllers
     ControllerHandle_t controllers[STEAM_CONTROLLER_MAX_COUNT];
     int numControllers = SteamInput()->GetConnectedControllers(controllers);
 
-    STEAM_DEBUG("Found " << numControllers << " controllers");
 
     if (numControllers > 0) {
         m_inputHandle = controllers[0];
-        STEAM_DEBUG("Using controller: " << m_inputHandle);
     } else {
-        STEAM_DEBUG("No controllers connected, will use default handle");
-        // We'll still set up the actions in case a controller is connected later
         m_inputHandle = 0;
     }
 
-    // Get action set handles
     m_gameActionSet = SteamInput()->GetActionSetHandle("GameControls");
-    STEAM_DEBUG("GameControls action set handle: " << m_gameActionSet);
 
-    // Get digital action handles
     m_newGameAction = SteamInput()->GetDigitalActionHandle("new_game");
     m_toggleSettingsAction = SteamInput()->GetDigitalActionHandle("toggle_settings");
     m_zoomInAction = SteamInput()->GetDigitalActionHandle("zoom_in");
     m_zoomOutAction = SteamInput()->GetDigitalActionHandle("zoom_out");
     m_signalCellAction = SteamInput()->GetDigitalActionHandle("signal_cell");
-
-    STEAM_DEBUG("Action handles - new_game: " << m_newGameAction
-                                              << ", toggle_settings: " << m_toggleSettingsAction
-                                              << ", zoom_in: " << m_zoomInAction
-                                              << ", zoom_out: " << m_zoomOutAction
-                                              << ", signal_cell: " << m_signalCellAction);
+    m_requestHintAction = SteamInput()->GetDigitalActionHandle("requestHint");
 
     m_steamInputInitialized = true;
 
-    // Start the input polling timer
-    m_inputTimer.setInterval(16); // 60Hz polling
+    m_inputTimer.setInterval(16);
     m_inputTimer.start();
 
     STEAM_DEBUG("Steam Input initialized");
@@ -1522,7 +1502,6 @@ void SteamIntegration::processInputEvents() {
     if (!m_initialized || !m_steamInputInitialized)
         return;
 
-    // Check if we have a controller handle, try to get one if we don't
     if (m_inputHandle == 0) {
         ControllerHandle_t controllers[STEAM_CONTROLLER_MAX_COUNT];
         int numControllers = SteamInput()->GetConnectedControllers(controllers);
@@ -1533,17 +1512,13 @@ void SteamIntegration::processInputEvents() {
     }
 
     if (m_inputHandle == 0) {
-        // Still no controller, so nothing to process
         return;
     }
 
-    // Activate the game action set
     SteamInput()->ActivateActionSet(m_inputHandle, m_gameActionSet);
 
-    // Run Steam Input callbacks
     SteamInput()->RunFrame();
 
-    // Process digital actions
     static bool lastNewGameState = false;
     InputDigitalActionData_t newGameData = SteamInput()->GetDigitalActionData(m_inputHandle, m_newGameAction);
     if (newGameData.bState && newGameData.bActive && !lastNewGameState) {
@@ -1583,4 +1558,12 @@ void SteamIntegration::processInputEvents() {
         emit signalCellActionTriggered();
     }
     lastSignalCellState = signalCellData.bState && signalCellData.bActive;
+
+    static bool lastrequestHintState = false;
+    InputDigitalActionData_t requestHintData = SteamInput()->GetDigitalActionData(m_inputHandle, m_requestHintAction);
+    if (requestHintData.bState && requestHintData.bActive && !lastrequestHintState) {
+        STEAM_DEBUG("Signal Cell action triggered");
+        emit requestHintActionTriggered();
+    }
+    lastrequestHintState = requestHintData.bState && requestHintData.bActive;
 }
