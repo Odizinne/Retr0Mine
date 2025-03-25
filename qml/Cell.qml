@@ -295,7 +295,7 @@ Item {
         from: 1
         to: 0
         duration: 200
-        easing.type: Easing.Linear
+        easing.type: Easing.OutCubic
         onStarted: cellItem.animatingReveal = true
         onFinished: {
             cellItem.animatingReveal = false
