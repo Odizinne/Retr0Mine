@@ -1499,7 +1499,7 @@ void SteamIntegration::initializeSteamInput() {
     m_zoomInAction = SteamInput()->GetDigitalActionHandle("zoom_in");
     m_zoomOutAction = SteamInput()->GetDigitalActionHandle("zoom_out");
     m_signalCellAction = SteamInput()->GetDigitalActionHandle("signal_cell");
-    m_requestHintAction = SteamInput()->GetDigitalActionHandle("requestHint");
+    m_requestHintAction = SteamInput()->GetDigitalActionHandle("request_hint");
 
     m_steamInputInitialized = true;
 
