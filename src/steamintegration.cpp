@@ -1559,11 +1559,11 @@ void SteamIntegration::processInputEvents() {
     }
     lastSignalCellState = signalCellData.bState && signalCellData.bActive;
 
-    static bool lastrequestHintState = false;
+    static bool lastRequestHintState = false;
     InputDigitalActionData_t requestHintData = SteamInput()->GetDigitalActionData(m_inputHandle, m_requestHintAction);
-    if (requestHintData.bState && requestHintData.bActive && !lastrequestHintState) {
-        STEAM_DEBUG("Signal Cell action triggered");
+    if (requestHintData.bState && requestHintData.bActive && !lastRequestHintState) {
+        STEAM_DEBUG("Request Hint action triggered");
         emit requestHintActionTriggered();
     }
-    lastrequestHintState = requestHintData.bState && requestHintData.bActive;
+    lastRequestHintState = requestHintData.bState && requestHintData.bActive;
 }

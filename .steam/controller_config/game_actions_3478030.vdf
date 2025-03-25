@@ -1,0 +1,42 @@
+"In Game Actions"
+{
+    "actions"
+    {
+        "GameControls"
+        {
+            "title" "#GameControls_Title"
+            "Button"
+            {
+                "new_game" "#Action_NewGame"
+                "toggle_settings" "#Action_ToggleSettings"
+                "zoom_in" "#Action_ZoomIn"
+                "zoom_out" "#Action_ZoomOut"
+                "signal_cell" "#Action_SignalCell"
+                "request_hint" "#Action_RequestHint"
+            }
+        }
+    }
+    "localization"
+    {
+        "english"
+        {
+            "GameControls_Title" "Game Controls"
+            "Action_NewGame" "Start New Game"
+            "Action_ToggleSettings" "Toggle Settings"
+            "Action_ZoomIn" "Zoom In"
+            "Action_ZoomOut" "Zoom Out"
+            "Action_SignalCell" "Signal cell"
+            "Action_RequestHint" "Hint"
+        }
+        "french"
+        {
+            "GameControls_Title" "Contrôles du Jeu"
+            "Action_NewGame" "Nouvelle Partie"
+            "Action_ToggleSettings" "Paramètres"
+            "Action_ZoomIn" "Zoomer"
+            "Action_ZoomOut" "Dézoomer"
+            "Action_SignalCell" "Signaler cellule"
+            "Action_RequestHint" "Indice"
+        }
+    }
+}
