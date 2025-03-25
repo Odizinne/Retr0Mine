@@ -8,6 +8,9 @@
             "Button"
             {
                 "new_game" "#Action_NewGame"
+                "load_game" "#Action_LoadGame"
+                "save_game" "#Action_SaveGame"
+                "show_leaderboard" "#Action_ShowLeaderboard"
                 "toggle_settings" "#Action_ToggleSettings"
                 "zoom_in" "#Action_ZoomIn"
                 "zoom_out" "#Action_ZoomOut"
@@ -22,6 +25,9 @@
         {
             "GameControls_Title" "Game Controls"
             "Action_NewGame" "Start New Game"
+            "Action_LoadGame" "Load Game"
+            "Action_SaveGame" "Save Game"
+            "Action_ShowLeaderboard" "Leaderboard"
             "Action_ToggleSettings" "Toggle Settings"
             "Action_ZoomIn" "Zoom In"
             "Action_ZoomOut" "Zoom Out"
@@ -32,6 +38,9 @@
         {
             "GameControls_Title" "Contrôles du Jeu"
             "Action_NewGame" "Nouvelle Partie"
+            "Action_LoadGame" "Charger Partie"
+            "Action_SaveGame" "Sauvegarder Partie"
+            "Action_ShowLeaderboard" "Classement"
             "Action_ToggleSettings" "Paramètres"
             "Action_ZoomIn" "Zoomer"
             "Action_ZoomOut" "Dézoomer"

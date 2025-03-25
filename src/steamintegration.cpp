@@ -1495,6 +1495,9 @@ void SteamIntegration::initializeSteamInput() {
     m_gameActionSet = SteamInput()->GetActionSetHandle("GameControls");
 
     m_newGameAction = SteamInput()->GetDigitalActionHandle("new_game");
+    m_loadGameAction = SteamInput()->GetDigitalActionHandle("load_game");
+    m_saveGameAction = SteamInput()->GetDigitalActionHandle("save_game");
+    m_showLeaderboardAction = SteamInput()->GetDigitalActionHandle("show_leaderboard");
     m_toggleSettingsAction = SteamInput()->GetDigitalActionHandle("toggle_settings");
     m_zoomInAction = SteamInput()->GetDigitalActionHandle("zoom_in");
     m_zoomOutAction = SteamInput()->GetDigitalActionHandle("zoom_out");
@@ -1537,6 +1540,30 @@ void SteamIntegration::processInputEvents() {
         emit newGameActionTriggered();
     }
     lastNewGameState = newGameData.bState && newGameData.bActive;
+
+    static bool lastLoadGameState = false;
+    InputDigitalActionData_t loadGameData = SteamInput()->GetDigitalActionData(m_inputHandle, m_loadGameAction);
+    if (loadGameData.bState && loadGameData.bActive && !lastLoadGameState) {
+        STEAM_DEBUG("Load Game action triggered");
+        emit loadGameActionTriggered();
+    }
+    lastLoadGameState = loadGameData.bState && loadGameData.bActive;
+
+    static bool lastSaveGameState = false;
+    InputDigitalActionData_t saveGameData = SteamInput()->GetDigitalActionData(m_inputHandle, m_saveGameAction);
+    if (saveGameData.bState && saveGameData.bActive && !lastSaveGameState) {
+        STEAM_DEBUG("Save Game action triggered");
+        emit saveGameActionTriggered();
+    }
+    lastSaveGameState = saveGameData.bState && saveGameData.bActive;
+
+    static bool lastShowLeaderboardState = false;
+    InputDigitalActionData_t showLeaderboardData = SteamInput()->GetDigitalActionData(m_inputHandle, m_showLeaderboardAction);
+    if (showLeaderboardData.bState && showLeaderboardData.bActive && !lastShowLeaderboardState) {
+        STEAM_DEBUG("Show Leaderboard action triggered");
+        emit showLeaderboardActionTriggered();
+    }
+    lastShowLeaderboardState = showLeaderboardData.bState && showLeaderboardData.bActive;
 
     static bool lastToggleSettingsState = false;
     InputDigitalActionData_t toggleSettingsData = SteamInput()->GetDigitalActionData(m_inputHandle, m_toggleSettingsAction);

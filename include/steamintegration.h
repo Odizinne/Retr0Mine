@@ -177,6 +177,10 @@ private:
     InputDigitalActionHandle_t m_zoomOutAction;
     InputDigitalActionHandle_t m_signalCellAction;
     InputDigitalActionHandle_t m_requestHintAction;
+    InputDigitalActionHandle_t m_loadGameAction;
+    InputDigitalActionHandle_t m_saveGameAction;
+    InputDigitalActionHandle_t m_showLeaderboardAction;
+
     bool m_steamInputInitialized;
     QTimer m_inputTimer;
 
@@ -212,6 +216,9 @@ signals:
     void zoomOutActionTriggered();
     void signalCellActionTriggered();
     void requestHintActionTriggered();
+    void loadGameActionTriggered();
+    void saveGameActionTriggered();
+    void showLeaderboardActionTriggered();
 };
 
 struct SteamIntegrationForeign {
