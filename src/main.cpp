@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     qputenv("QSG_RHI_BACKEND", "opengl");
-    QLoggingCategory::setFilterRules("qt.multimedia.ffmpeg=false");
+    QLoggingCategory::setFilterRules("qt.multimedia.ffmpeg=false;qt.rhi.gles2=false");
     QGuiApplication app(argc, argv);
     app.setOrganizationName("Odizinne");
     app.setApplicationName("Retr0Mine");
