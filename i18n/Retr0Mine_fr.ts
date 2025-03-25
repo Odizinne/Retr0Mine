@@ -76,7 +76,19 @@
         <translation>Couleur d&apos;accent</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="75"/>
+        <source>Hide Steam overlay</source>
+        <translation>Masquer l&apos;overlay Steam</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="84"/>
+        <source>Trick steam overlay to an invisible window.
+This may or may not work</source>
+        <translation>Attache l&apos;overlay Steam sur une fenêtre invisible.
+Cela peut ne pas fonctionner</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="99"/>
         <source>Qt version</source>
         <translation></translation>
     </message>

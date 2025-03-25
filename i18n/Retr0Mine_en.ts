@@ -106,7 +106,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="75"/>
+        <source>Hide Steam overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="84"/>
+        <source>Trick steam overlay to an invisible window.
+This may or may not work</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="99"/>
         <source>Qt version</source>
         <translation type="unfinished"></translation>
     </message>

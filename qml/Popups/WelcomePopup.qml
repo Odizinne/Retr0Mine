@@ -6,17 +6,19 @@ import net.odizinne.retr0mine 1.0
 
 AnimatedPopup {
     id: control
-    height: 200
+    height: currentLayoutImplicitHeight + topPadding + bottomPadding + 16
     width: 400
     anchors.centerIn: parent
     closePolicy: Popup.NoAutoClose
     modal: true
-    property int buttonWidth: (Math.max(laterButton.implicitWidth, yesButton.implicitWidth, toVisualButton.implicitWidth, toAccessibilityButton.implicitWidth, closeButton.implicitWidth))
+    property int currentLayoutImplicitHeight: initialConfig.implicitHeight
+    property int buttonWidth: (Math.max(laterButton.implicitWidth, yesButton.implicitWidth, toVisualButton.implicitWidth, toAccessibilityButton.implicitWidth, closeButton.implicitWidth)) + 20
 
     ColumnLayout {
         opacity: 1
         id: initialConfig
         anchors.fill: parent
+        anchors.margins: 8
         Label {
             text: qsTr("Welcome to Retr0Mine")
             color: GameConstants.accentColor
@@ -55,7 +57,7 @@ AnimatedPopup {
                     control.visible = false
                     initialConfig.visible = false
                     controlsConfig.visible = true
-                    control.height = 400
+                    control.currentLayoutImplicitHeight = controlsConfig.implicitHeight
                     control.visible = true
                 }
             }
@@ -63,6 +65,7 @@ AnimatedPopup {
     }
 
     ColumnLayout {
+        anchors.margins: 8
         opacity: 1
         visible: false
         anchors.fill: parent
@@ -176,7 +179,7 @@ AnimatedPopup {
                     control.visible = false
                     controlsConfig.visible = false
                     visualsConfig.visible = true
-                    control.height = 350
+                    control.currentLayoutImplicitHeight = visualsConfig.implicitHeight
                     control.width = 350
                     control.visible = true
                 }
@@ -189,7 +192,8 @@ AnimatedPopup {
         visible: false
         anchors.fill: parent
         id: visualsConfig
-        spacing: 15
+        spacing: 10
+        anchors.margins: 8
 
         GridLayout {
             Layout.alignment: Qt.AlignHCenter
@@ -253,6 +257,7 @@ AnimatedPopup {
         }
 
         RowLayout {
+            Layout.topMargin: 30
             Layout.alignment: Qt.AlignHCenter
 
             Label {
@@ -322,9 +327,9 @@ AnimatedPopup {
                 control.visible = false
                 visualsConfig.visible = false
                 accessibilityConfig.visible = true
-                control.visible = true
-                control.height = 440
                 control.width = 400
+                control.currentLayoutImplicitHeight = accessibilityConfig.implicitHeight
+                control.visible = true
             }
         }
     }
@@ -333,6 +338,7 @@ AnimatedPopup {
         opacity: 1
         visible: false
         anchors.fill: parent
+        anchors.margins: 8
         id: accessibilityConfig
         spacing: 30
 
@@ -401,8 +407,8 @@ AnimatedPopup {
                         control.visible = false
                         GameSettings.colorBlindness = 0
                         accessibilityConfig.visible = false
+                        control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
-                        control.height = 150
                         control.visible = true
                     }
                 }
@@ -462,8 +468,8 @@ AnimatedPopup {
                         control.visible = false
                         GameSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
+                        control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
-                        control.height = 150
                         control.visible = true
                     }
                 }
@@ -527,8 +533,8 @@ AnimatedPopup {
                         control.visible = false
                         GameSettings.colorBlindness = 2
                         accessibilityConfig.visible = false
+                        control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
-                        control.height = 150
                         control.visible = true
                     }
                 }
@@ -587,8 +593,8 @@ AnimatedPopup {
                         control.visible = false
                         GameSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
+                        control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
-                        control.height = 150
                         control.visible = true
                     }
                 }
@@ -597,6 +603,7 @@ AnimatedPopup {
     }
 
     ColumnLayout {
+        anchors.margins: 8
         opacity: 1
         visible: false
         anchors.fill: parent

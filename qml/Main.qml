@@ -16,6 +16,15 @@ ApplicationWindow {
     property bool isClosing: false
     property var startTime: null
 
+    Window {
+        id: dummyOverlayWindow
+        visible: SteamIntegration.initialized && !GameCore.gamescope && GameSettings.hackHideSteamOverlay
+        opacity: 0
+        width: 1
+        height: 1
+        title: "Retr0Mine_Overlay_Target"
+    }
+
     onCurrentThemeChanged: {
         if (currentTheme === Universal.Light) {
             GameConstants.isDarkMode = false
@@ -357,6 +366,7 @@ ApplicationWindow {
 
     BusyIndicator {
         opacity: 0
+        visible: SteamIntegration.initialized && !GameCore.gamescope && !GameSettings.hackHideSteamOverlay
         /*==========================================
          | continous window update                 |
          | needed for steam overlay                |
