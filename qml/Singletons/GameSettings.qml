@@ -16,7 +16,6 @@ Settings {
      ==========================================*/
     property int colorSchemeIndex: 1
     property int accentColorIndex: 2
-    property bool hackHideSteamOverlay: true
 
     /*==========================================
      | Difficulty                              |

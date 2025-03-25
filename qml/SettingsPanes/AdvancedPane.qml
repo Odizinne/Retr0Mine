@@ -67,31 +67,6 @@ Pane {
         }
 
         RowLayout {
-            visible: SteamIntegration.initialized
-            enabled: !GameCore.gamescope
-            Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            Label {
-                text: qsTr("Hide Steam overlay")
-                Layout.fillWidth: true
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: disableSteamOverlaySwitch.click()
-                }
-            }
-
-            InfoIcon {
-                tooltipText: qsTr("Trick steam overlay to an invisible window.\nThis may or may not work")
-            }
-
-            NfSwitch {
-                id: disableSteamOverlaySwitch
-                checked: GameSettings.hackHideSteamOverlay
-                onCheckedChanged: GameSettings.hackHideSteamOverlay = checked
-            }
-        }
-
-        RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             enabled: false
