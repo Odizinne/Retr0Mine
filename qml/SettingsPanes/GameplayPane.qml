@@ -172,5 +172,20 @@ Pane {
                 }
             }
         }
+
+        RowLayout {
+            visible: SteamIntegration.isRunningOnSteamDeck && GameCore.gamescope
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("SteamDeck controls")
+                Layout.fillWidth: true
+            }
+            Button {
+                text: qsTr("Remap")
+                onClicked: SteamIntegration.showControllerBindingPanel()
+            }
+        }
     }
 }

@@ -83,6 +83,17 @@ bool SteamIntegration::initialize() {
     return true;
 }
 
+bool SteamIntegration::isRunningOnSteamDeck() const {
+    if (!m_initialized)
+        return false;
+
+    ISteamUtils* steamUtils = SteamUtils();
+    if (!steamUtils)
+        return false;
+
+    return steamUtils->IsSteamRunningOnSteamDeck();
+}
+
 void SteamIntegration::shutdown() {
     if (m_initialized) {
         m_networkTimer.stop();
@@ -1566,4 +1577,32 @@ void SteamIntegration::processInputEvents() {
         emit requestHintActionTriggered();
     }
     lastRequestHintState = requestHintData.bState && requestHintData.bActive;
+}
+
+bool SteamIntegration::showControllerBindingPanel() {
+    if (!m_initialized || !m_steamInputInitialized) {
+        STEAM_DEBUG("Cannot show binding panel - Steam Input not initialized");
+        return false;
+    }
+
+    if (m_inputHandle == 0) {
+        ControllerHandle_t controllers[STEAM_CONTROLLER_MAX_COUNT];
+        int numControllers = SteamInput()->GetConnectedControllers(controllers);
+        if (numControllers > 0) {
+            m_inputHandle = controllers[0];
+        } else {
+            STEAM_DEBUG("No controllers connected, cannot show binding panel");
+            return false;
+        }
+    }
+
+    bool result = SteamInput()->ShowBindingPanel(m_inputHandle);
+
+    if (!result) {
+        STEAM_DEBUG("Failed to show controller binding panel");
+    } else {
+        STEAM_DEBUG("Opened controller binding panel");
+    }
+
+    return result;
 }

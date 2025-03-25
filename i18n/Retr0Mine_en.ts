@@ -281,6 +281,16 @@ board generation on large grids</source>
         <source>Show hint reasoning in chat</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="182"/>
+        <source>SteamDeck controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="186"/>
+        <source>Remap</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GenerationPopup</name>
@@ -385,52 +395,52 @@ board generation on large grids</source>
 <context>
     <name>LeaderboardPopup</name>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="97"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="107"/>
         <source>Difficulty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="103"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="113"/>
         <source>Easy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="108"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="118"/>
         <source>Medium</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="113"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="123"/>
         <source>Hard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="118"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="128"/>
         <source>Retr0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="129"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="139"/>
         <source>Time</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="161"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="171"/>
         <source>Wins</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="194"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="204"/>
         <source>Clear</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="194"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="204"/>
         <source>Confirm?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="231"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="241"/>
         <source>Close</source>
         <translation></translation>
     </message>
@@ -438,12 +448,12 @@ board generation on large grids</source>
 <context>
     <name>LoadPopup</name>
     <message>
-        <location filename="../qml/Popups/LoadPopup.qml" line="76"/>
+        <location filename="../qml/Popups/LoadPopup.qml" line="39"/>
         <source>No saved games found</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LoadPopup.qml" line="139"/>
+        <location filename="../qml/Popups/LoadPopup.qml" line="101"/>
         <source>Cancel</source>
         <translation></translation>
     </message>
@@ -451,52 +461,52 @@ board generation on large grids</source>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="11"/>
+        <location filename="../qml/MainMenu.qml" line="19"/>
         <source>New game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="21"/>
+        <location filename="../qml/MainMenu.qml" line="29"/>
         <source>Save game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="28"/>
+        <location filename="../qml/MainMenu.qml" line="36"/>
         <source>Load game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="35"/>
+        <location filename="../qml/MainMenu.qml" line="43"/>
         <source>Hint</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="58"/>
+        <location filename="../qml/MainMenu.qml" line="66"/>
         <source>Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="44"/>
+        <location filename="../qml/MainMenu.qml" line="52"/>
         <source>Leaderboard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="50"/>
+        <location filename="../qml/MainMenu.qml" line="58"/>
         <source>About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="50"/>
+        <location filename="../qml/MainMenu.qml" line="58"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="66"/>
+        <location filename="../qml/MainMenu.qml" line="74"/>
         <source>Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="72"/>
+        <location filename="../qml/MainMenu.qml" line="80"/>
         <source>Exit</source>
         <translation></translation>
     </message>
@@ -789,82 +799,82 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="209"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="212"/>
         <source>%1 is the true minesweeper pro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="210"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="213"/>
         <source>%1 carried the team to victory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="211"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="214"/>
         <source>%1 has lightning-fast reflexes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="212"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="215"/>
         <source>%1 deserves all the credit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="213"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="216"/>
         <source>%1 has the fastest mouse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="214"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="217"/>
         <source>%1 should consider going pro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="222"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="225"/>
         <source>%1 was a bit sleepy today</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="225"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="228"/>
         <source>%1 will do better next time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="224"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="227"/>
         <source>%1 was the cautious one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="223"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="226"/>
         <source>%1 provided moral support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="226"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="229"/>
         <source>%1 was busy planning the strategy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="227"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="230"/>
         <source>%1 was just warming up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="237"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="240"/>
         <source>New record saved</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="245"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="248"/>
         <source>Waiting for host to start new game...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="256"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="259"/>
         <source>Retry</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PostgamePopup.qml" line="271"/>
+        <location filename="../qml/Popups/PostgamePopup.qml" line="274"/>
         <source>Close</source>
         <translation></translation>
     </message>
@@ -1025,57 +1035,57 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="79"/>
+        <location filename="../qml/SettingsWindow.qml" line="89"/>
         <source>Difficulty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="83"/>
+        <location filename="../qml/SettingsWindow.qml" line="93"/>
         <source>Gameplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="87"/>
+        <location filename="../qml/SettingsWindow.qml" line="97"/>
         <source>Visuals</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="91"/>
+        <location filename="../qml/SettingsWindow.qml" line="101"/>
         <source>Sound</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="95"/>
+        <location filename="../qml/SettingsWindow.qml" line="105"/>
         <source>Shortcuts</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="99"/>
+        <location filename="../qml/SettingsWindow.qml" line="109"/>
         <source>Accessibility</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="103"/>
+        <location filename="../qml/SettingsWindow.qml" line="113"/>
         <source>Language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="107"/>
+        <location filename="../qml/SettingsWindow.qml" line="117"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="111"/>
+        <location filename="../qml/SettingsWindow.qml" line="121"/>
         <source>Advanced</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="145"/>
+        <location filename="../qml/SettingsWindow.qml" line="181"/>
         <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="161"/>
+        <location filename="../qml/SettingsWindow.qml" line="197"/>
         <source>Restore defaults</source>
         <translation></translation>
     </message>
@@ -1146,27 +1156,22 @@ board generation on large grids</source>
 <context>
     <name>SoundsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="35"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="14"/>
         <source>Sound effects</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="57"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="36"/>
         <source>Sound effects (remote player)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="15"/>
-        <source>Notification for new messages</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="78"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="57"/>
         <source>Message received</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="99"/>
+        <location filename="../qml/SettingsPanes/SoundsPane.qml" line="78"/>
         <source>Soundpack</source>
         <translation></translation>
     </message>
@@ -1174,12 +1179,12 @@ board generation on large grids</source>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="88"/>
+        <location filename="../qml/TopBar.qml" line="87"/>
         <source>Next click will signal the cell</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="182"/>
+        <location filename="../qml/TopBar.qml" line="181"/>
         <source>Click to pause</source>
         <translation></translation>
     </message>
@@ -1202,72 +1207,72 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="92"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="90"/>
         <source>Revealed cells frame</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="112"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="110"/>
         <source>Shake partially satisfied cells</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="132"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="130"/>
         <source>Dim satisfied cells</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="153"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="151"/>
         <source>Dim level</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="169"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="167"/>
         <source>Numbers font</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="189"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="187"/>
         <source>Grid reset animation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="197"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="195"/>
         <source>Wave</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="198"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="196"/>
         <source>Fade</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="199"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="197"/>
         <source>Spin</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="227"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="225"/>
         <source>Unlocked with a secret achievement</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="249"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="247"/>
         <source>Flag</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="281"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="279"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="303"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="301"/>
         <source>Unlock Master Tactician achievement</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="325"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="323"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation></translation>
     </message>

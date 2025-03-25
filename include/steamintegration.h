@@ -33,6 +33,7 @@ class SteamIntegration : public QObject {
 
     Q_PROPERTY(ConnectionState connectionState READ getConnectionState NOTIFY connectionStateChanged)
     Q_PROPERTY(int pingTime READ getPingTime NOTIFY pingTimeChanged)
+    Q_PROPERTY(bool isRunningOnSteamDeck READ isRunningOnSteamDeck CONSTANT)
 
 public:
     static bool debugLoggingEnabled;
@@ -68,6 +69,9 @@ public:
     bool getUnlockedAnim1() const { return isAchievementUnlocked("ACH_HINT_MASTER"); }
     bool getUnlockedAnim2() const { return isAchievementUnlocked("ACH_SPEED_DEMON"); }
 
+    bool isRunningOnSteamDeck() const;
+
+    Q_INVOKABLE bool showControllerBindingPanel();
     Q_INVOKABLE void createLobby();
     Q_INVOKABLE void leaveLobby();
     Q_INVOKABLE void cleanupMultiplayerSession(bool isShuttingDown = false);
@@ -101,9 +105,6 @@ public:
     int getPingTime() const { return m_pingTime; }
 
     void startP2PInitialization();
-
-    Q_INVOKABLE void initializeSteamInput();
-    Q_INVOKABLE void processInputEvents();
 
 private:
     bool m_initialized;
@@ -178,6 +179,9 @@ private:
     InputDigitalActionHandle_t m_requestHintAction;
     bool m_steamInputInitialized;
     QTimer m_inputTimer;
+
+    void initializeSteamInput();
+    void processInputEvents();
 
 signals:
     void playerNameChanged();
