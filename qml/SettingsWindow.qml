@@ -20,6 +20,16 @@ ApplicationWindow {
     visible: ComponentsContext.settingsWindowVisible
     flags: Qt.Dialog
     onClosing: ComponentsContext.settingsWindowVisible = false
+    property bool initialAnimationPlayed: false
+
+    onVisibleChanged: {
+        if (visible && !initialAnimationPlayed) {
+            sidebarList.opacity = 1
+            stackView.push(difficultyPaneComponent)
+            ComponentsContext.settingsIndex = 0
+            initialAnimationPlayed = true
+        }
+    }
 
     MouseArea {
         /*==========================================
@@ -69,6 +79,7 @@ ApplicationWindow {
                 anchors.fill: parent
                 spacing: 10
                 ListView {
+                    opacity: 0
                     id: sidebarList
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -112,6 +123,14 @@ ApplicationWindow {
                         }
                     ]
                     currentIndex: ComponentsContext.settingsIndex
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 200
+                            easing.type: Easing.InCubic
+                        }
+                    }
+
                     delegate: ItemDelegate {
                         width: parent.width
                         height: 43
@@ -187,7 +206,12 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.leftMargin: 5
-            initialItem: difficultyPaneComponent
+            initialItem: emptyPaneComponent
+
+            Component {
+                id: emptyPaneComponent
+                Item {}
+            }
 
             Component {
                 id: difficultyPaneComponent
