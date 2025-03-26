@@ -55,10 +55,15 @@ Menu {
 
     MenuItem {
         height: implicitHeight - 6
-        text: SteamIntegration.initialized ? qsTr("Multiplayer") : qsTr("About")
-        onTriggered: {
-            SteamIntegration.initialized ? ComponentsContext.privateSessionPopupVisible = true : ComponentsContext.aboutPopupVisible = true
-        }
+        enabled: SteamIntegration.initialized
+        text: qsTr("Multiplayer")
+        onTriggered: ComponentsContext.privateSessionPopupVisible = true
+    }
+
+    MenuItem {
+        height: implicitHeight - 6
+        text: qsTr("About")
+        onTriggered: ComponentsContext.aboutPopupVisible = true
     }
 
     MenuItem {

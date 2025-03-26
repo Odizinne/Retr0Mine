@@ -2,14 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US" sourcelanguage="en_US">
 <context>
-    <name>AboutPopup</name>
-    <message>
-        <location filename="../qml/Popups/AboutPopup.qml" line="38"/>
-        <source>by Odizinne</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>AccessibilityPane</name>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="16"/>
@@ -505,7 +497,7 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="66"/>
+        <location filename="../qml/MainMenu.qml" line="71"/>
         <source>Settings</source>
         <translation></translation>
     </message>
@@ -515,22 +507,22 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="58"/>
+        <location filename="../qml/MainMenu.qml" line="65"/>
         <source>About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="58"/>
+        <location filename="../qml/MainMenu.qml" line="59"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="74"/>
+        <location filename="../qml/MainMenu.qml" line="79"/>
         <source>Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="80"/>
+        <location filename="../qml/MainMenu.qml" line="85"/>
         <source>Exit</source>
         <translation></translation>
     </message>
@@ -1053,6 +1045,11 @@ board generation on large grids</source>
 </context>
 <context>
     <name>SettingsWindow</name>
+    <message>
+        <location filename="../qml/SettingsWindow.qml" line="10"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../qml/SettingsWindow.qml" line="98"/>
         <source>Difficulty</source>

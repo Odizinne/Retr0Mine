@@ -2,14 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-    <name>AboutPopup</name>
-    <message>
-        <location filename="../qml/Popups/AboutPopup.qml" line="38"/>
-        <source>by Odizinne</source>
-        <translation>par Odizinne</translation>
-    </message>
-</context>
-<context>
     <name>AccessibilityPane</name>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="16"/>
@@ -510,7 +502,7 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="66"/>
+        <location filename="../qml/MainMenu.qml" line="71"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
@@ -520,22 +512,22 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="58"/>
+        <location filename="../qml/MainMenu.qml" line="65"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="58"/>
+        <location filename="../qml/MainMenu.qml" line="59"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="74"/>
+        <location filename="../qml/MainMenu.qml" line="79"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="80"/>
+        <location filename="../qml/MainMenu.qml" line="85"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -1076,6 +1068,11 @@ ralentir la génération sur les grilles larges</translation>
 </context>
 <context>
     <name>SettingsWindow</name>
+    <message>
+        <location filename="../qml/SettingsWindow.qml" line="10"/>
+        <source>Settings</source>
+        <translation type="unfinished">Paramètres</translation>
+    </message>
     <message>
         <location filename="../qml/SettingsWindow.qml" line="98"/>
         <source>Difficulty</source>
