@@ -29,8 +29,8 @@ Pane {
         }
 
         RowLayout {
+            enabled: SteamIntegration.initialized
             Layout.fillWidth: true
-            visible: SteamIntegration.initialized
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
                 text: qsTr("Sound effects (remote player)")

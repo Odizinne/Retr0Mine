@@ -21,6 +21,7 @@ Pane {
         width: parent.width
 
         RowLayout {
+            enabled: SteamIntegration.initialized
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
@@ -43,6 +44,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
+            enabled: SteamIntegration.initialized
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
             Label {
@@ -63,7 +65,7 @@ Pane {
         }
 
         RowLayout {
-            enabled: GameSettings.mpPlayerColoredFlags
+            enabled: GameSettings.mpPlayerColoredFlags && SteamIntegration.initialized
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
 
@@ -81,7 +83,7 @@ Pane {
         }
 
         RowLayout {
-            enabled: GameSettings.mpPlayerColoredFlags
+            enabled: GameSettings.mpPlayerColoredFlags && SteamIntegration.initialized
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
 

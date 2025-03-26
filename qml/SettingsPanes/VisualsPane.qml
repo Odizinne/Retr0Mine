@@ -180,7 +180,6 @@ Pane {
             }
 
             RowLayout {
-                visible: SteamIntegration.initialized
                 Layout.fillWidth: true
                 Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
@@ -233,7 +232,6 @@ Pane {
             }
 
             RowLayout {
-                visible: SteamIntegration.initialized
                 Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 spacing: 10
                 Layout.rightMargin: 5
@@ -249,8 +247,8 @@ Pane {
                 }
 
                 NfButton {
-                    Layout.preferredWidth: 35
-                    Layout.preferredHeight: 35
+                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
+                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     checkable: true
                     checked: GameSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
                     ButtonGroup.group: buttonGroup
@@ -264,12 +262,13 @@ Pane {
                         sourceSize.width: 20
                         sourceSize.height: 20
                         anchors.fill: parent
+                        opacity: enabled ? 1 : 0.5
                     }
                 }
 
                 NfButton {
-                    Layout.preferredWidth: 35
-                    Layout.preferredHeight: 35
+                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
+                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     enabled: GameState.flag1Unlocked
                     checkable: true
                     checked: GameState.flag1Unlocked && GameSettings.flagSkinIndex === 1
@@ -286,12 +285,13 @@ Pane {
                         sourceSize.width: 20
                         sourceSize.height: 20
                         anchors.fill: parent
+                        opacity: enabled ? 1 : 0.5
                     }
                 }
 
                 NfButton {
-                    Layout.preferredWidth: 35
-                    Layout.preferredHeight: 35
+                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
+                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     enabled: GameState.flag2Unlocked
                     checkable: true
                     checked: GameState.flag2Unlocked && GameSettings.flagSkinIndex === 2
@@ -308,12 +308,13 @@ Pane {
                         sourceSize.width: 20
                         sourceSize.height: 20
                         anchors.fill: parent
+                        opacity: enabled ? 1 : 0.5
                     }
                 }
 
                 NfButton {
-                    Layout.preferredWidth: 35
-                    Layout.preferredHeight: 35
+                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
+                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     enabled: GameState.flag3Unlocked
                     checkable: true
                     checked: GameState.flag3Unlocked && GameSettings.flagSkinIndex === 3
@@ -330,6 +331,7 @@ Pane {
                         sourceSize.width: 20
                         sourceSize.height: 20
                         anchors.fill: parent
+                        opacity: enabled ? 1 : 0.5
                     }
                 }
             }

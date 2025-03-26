@@ -2,7 +2,7 @@ import QtQuick.Controls.Universal
 import QtQuick.Layouts
 import net.odizinne.retr0mine
 
-Popup {
+AnimatedPopup {
     id: control
     modal: true
     width: Math.max(pauseLabel.width, resumeButton.width) + 40
