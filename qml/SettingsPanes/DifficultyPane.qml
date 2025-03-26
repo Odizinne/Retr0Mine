@@ -45,7 +45,6 @@ Pane {
 
                 NfRadioButton {
                     id: radioButton
-                    
                     Layout.preferredHeight: GameConstants.settingsComponentsHeight
                     Layout.preferredWidth: GameConstants.settingsComponentsHeight
                     Layout.alignment: Qt.AlignRight
@@ -55,14 +54,31 @@ Pane {
                         const idx = difficultyGroup.buttons.indexOf(this)
                         const difficultySet = GameState.difficultySettings[idx]
                         if (GameSettings.difficulty === idx) return
+
+                        const dimensionsMatch = (
+                            (idx !== 4 &&
+                             GameSettings.difficulty === 4 &&
+                             GameSettings.customWidth === difficultySet.x &&
+                             GameSettings.customHeight === difficultySet.y) ||
+                            (idx === 4 &&
+                             GameSettings.difficulty !== 4 &&
+                             GameSettings.customWidth === GameState.difficultySettings[GameSettings.difficulty].x &&
+                             GameSettings.customHeight === GameState.difficultySettings[GameSettings.difficulty].y)
+                        )
+
                         GameState.difficultyChanged = true
-                        GridBridge.cellsCreated = 0
+
+                        if (!dimensionsMatch) {
+                            GridBridge.cellsCreated = 0
+                        }
+
                         GameState.gridSizeX = difficultySet.x
                         GameState.gridSizeY = difficultySet.y
                         GameState.mineCount = difficultySet.mines
                         GridBridge.initGame()
                         GameSettings.difficulty = idx
                         SteamIntegration.difficulty = idx
+
                         /*==========================================
                          | bypass internalGameState loading        |
                          | if user manually change difficulty      |
