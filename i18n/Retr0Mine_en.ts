@@ -477,52 +477,52 @@ board generation on large grids</source>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="19"/>
+        <location filename="../qml/MainMenu.qml" line="18"/>
         <source>New game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="29"/>
+        <location filename="../qml/MainMenu.qml" line="27"/>
         <source>Save game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="36"/>
+        <location filename="../qml/MainMenu.qml" line="33"/>
         <source>Load game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="43"/>
+        <location filename="../qml/MainMenu.qml" line="39"/>
         <source>Hint</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="71"/>
+        <location filename="../qml/MainMenu.qml" line="63"/>
         <source>Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="52"/>
+        <location filename="../qml/MainMenu.qml" line="47"/>
         <source>Leaderboard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="65"/>
+        <location filename="../qml/MainMenu.qml" line="58"/>
         <source>About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="59"/>
+        <location filename="../qml/MainMenu.qml" line="53"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="79"/>
+        <location filename="../qml/MainMenu.qml" line="70"/>
         <source>Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="85"/>
+        <location filename="../qml/MainMenu.qml" line="75"/>
         <source>Exit</source>
         <translation></translation>
     </message>

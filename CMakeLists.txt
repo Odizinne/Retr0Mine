@@ -62,6 +62,7 @@ set(QML_FILES
     qml/Common/NfSpinBox.qml
     qml/Common/AnimatedPopup.qml
     qml/Common/CustomDelegate.qml
+    qml/Common/CustomMenuItem.qml
     qml/Debug/DebugFrame.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml
