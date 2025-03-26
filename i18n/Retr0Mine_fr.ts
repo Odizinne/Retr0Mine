@@ -1071,7 +1071,7 @@ ralentir la génération sur les grilles larges</translation>
     <message>
         <location filename="../qml/SettingsWindow.qml" line="10"/>
         <source>Settings</source>
-        <translation type="unfinished">Paramètres</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../qml/SettingsWindow.qml" line="98"/>
@@ -1233,87 +1233,87 @@ ralentir la génération sur les grilles larges</translation>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="24"/>
         <source>Animations</source>
-        <translation type="unfinished"></translation>
+        <translation>Animations</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="51"/>
         <source>Display timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le chrono</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="70"/>
         <source>Start in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Plein écran au lancement</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="90"/>
         <source>Revealed cells frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre des cellules</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="110"/>
         <source>Shake partially satisfied cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Secouer les cellules partiellement satisfaites</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="130"/>
         <source>Dim satisfied cells</source>
-        <translation type="unfinished"></translation>
+        <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="151"/>
         <source>Dim level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau d&apos;atténuation</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="167"/>
         <source>Numbers font</source>
-        <translation type="unfinished"></translation>
+        <translation>Police d&apos;affichage des chiffres</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="186"/>
         <source>Grid reset animation</source>
-        <translation type="unfinished"></translation>
+        <translation>Animation de réinitialisation</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="194"/>
         <source>Wave</source>
-        <translation type="unfinished"></translation>
+        <translation>Vague</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="195"/>
         <source>Fade</source>
-        <translation type="unfinished"></translation>
+        <translation>Fondu</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="196"/>
         <source>Spin</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotation</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="224"/>
         <source>Unlocked with a secret achievement</source>
-        <translation type="unfinished"></translation>
+        <translation>Se débloque avec un succès caché</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="245"/>
         <source>Flag</source>
-        <translation type="unfinished">Drapeau</translation>
+        <translation>Drapeau</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="278"/>
         <source>Unlock Trust Your Instincts achievement</source>
-        <translation type="unfinished"></translation>
+        <translation>Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="301"/>
         <source>Unlock Master Tactician achievement</source>
-        <translation type="unfinished"></translation>
+        <translation>Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="324"/>
         <source>Unlock Minefield Legend achievement</source>
-        <translation type="unfinished"></translation>
+        <translation>Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
     </message>
 </context>
 <context>
