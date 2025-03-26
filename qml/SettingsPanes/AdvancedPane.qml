@@ -69,6 +69,75 @@ Pane {
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("Rendering backend")
+                Layout.fillWidth: true
+            }
+
+            InfoIcon {
+                tooltipText: qsTr("You probably have next to no reason to change this\nApplication will restart on change\nCurrent game will be saved and restored")
+                Layout.rightMargin: 5
+            }
+
+            NfComboBox {
+                id: renderingBackendComboBox
+                model: Qt.platform.os === "linux" ?
+                           ["OpenGL", "Vulkan"] :
+                           ["OpenGL", "DirectX11", "DirectX12"]
+                Layout.rightMargin: 5
+                currentIndex: GameSettings.renderingBackend
+                onActivated: {
+                    GameSettings.renderingBackend  = currentIndex;
+                    GameCore.restartRetr0Mine()
+                }
+            }
+        }
+
+        RowLayout {
+            enabled: Qt.platform.os === "windows"
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("Enable custom titlebar")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: customTitlebarSwitch.click()
+                }
+            }
+
+            InfoIcon {
+                tooltipText: qsTr("Disable to use native windows titlebar color\nApplication will restart on change\nCurrent game will be saved and restored")
+                Layout.rightMargin: 5
+            }
+
+            NfSwitch {
+                id: customTitlebarSwitch
+                checked: GameSettings.customTitlebar
+                onCheckedChanged: {
+                    GameSettings.customTitlebar = checked
+                    if (checked) {
+                        if (GameConstants.isDarkMode) {
+                            GameCore.setTitlebarColor(0)
+                        } else {
+                            GameCore.setTitlebarColor(1)
+                        }
+                    } else {
+                        if (GameState.gameStarted && !GameState.gameOver) {
+                            SaveManager.saveGame("internalGameState.json")
+                        }
+                        GameState.bypassAutoSave = true
+                        GameCore.restartRetr0Mine()
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
             enabled: false
             Label {
                 text: qsTr("Qt version")

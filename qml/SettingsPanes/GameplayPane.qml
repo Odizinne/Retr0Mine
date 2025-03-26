@@ -167,9 +167,7 @@ Pane {
             NfSwitch {
                 id: hintReasoningInChatSwitch
                 checked: GameSettings.hintReasoningInChat
-                onCheckedChanged: {
-                    GameSettings.hintReasoningInChat = checked
-                }
+                onCheckedChanged: GameSettings.hintReasoningInChat = checked
             }
         }
 
@@ -182,6 +180,7 @@ Pane {
                 text: qsTr("SteamDeck controls")
                 Layout.fillWidth: true
             }
+
             Button {
                 text: qsTr("Remap")
                 onClicked: SteamIntegration.showControllerBindingPanel()

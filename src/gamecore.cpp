@@ -5,8 +5,15 @@
 #include <QProcessEnvironment>
 #include <QStandardPaths>
 #include <QStyleHints>
+#include <QWindow>
 #include "gamecore.h"
 #include "steamintegration.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib")
+#endif
 
 namespace {
 const QMap<QString, QString>& getSteamLanguageMap() {
@@ -191,8 +198,7 @@ void GameCore::resetRetr0Mine() {
     }, Qt::QueuedConnection);
 }
 
-void GameCore::restartRetr0Mine(int index) {
-    settings.setValue("themeIndex", index);
+void GameCore::restartRetr0Mine() {
     QMetaObject::invokeMethod(this, [this]() {
         settings.sync();
         QProcess::startDetached(QGuiApplication::applicationFilePath(), QGuiApplication::arguments());
@@ -282,4 +288,95 @@ QString GameCore::loadLeaderboard() const {
         return data;
     }
     return QString();
+}
+
+
+bool GameCore::setTitlebarColor(int colorMode) {
+#ifdef _WIN32
+    if (colorMode == m_titlebarColorMode) {
+        return true;
+    }
+
+    m_titlebarColorMode = colorMode;
+    bool success = true;
+
+    for (QWindow* window : QGuiApplication::topLevelWindows()) {
+        HWND hwnd = (HWND)window->winId();
+        if (!hwnd) {
+            success = false;
+            continue;
+        }
+
+        bool windowSuccess = false;
+
+        COLORREF color = (colorMode == 0) ? RGB(0, 0, 0) : RGB(255, 255, 255);
+        HRESULT hr = DwmSetWindowAttribute(hwnd, 35, &color, sizeof(color));
+
+        if (SUCCEEDED(hr)) {
+            windowSuccess = true;
+        } else {
+            BOOL darkMode = (colorMode == 0) ? TRUE : FALSE;
+            hr = DwmSetWindowAttribute(hwnd, 20, &darkMode, sizeof(darkMode));
+            windowSuccess = SUCCEEDED(hr);
+        }
+
+        if (!windowSuccess) {
+            success = false;
+        }
+    }
+
+    static bool connected = false;
+    if (!connected) {
+        connected = true;
+        QObject::connect(qApp, &QGuiApplication::focusWindowChanged, [this](QWindow* window) {
+            if (window) {
+                HWND hwnd = (HWND)window->winId();
+                if (hwnd) {
+                    COLORREF color = (m_titlebarColorMode == 0) ? RGB(0, 0, 0) : RGB(255, 255, 255);
+                    HRESULT hr = DwmSetWindowAttribute(hwnd, 35, &color, sizeof(color));
+
+                    if (!SUCCEEDED(hr)) {
+                        BOOL darkMode = (m_titlebarColorMode == 0) ? TRUE : FALSE;
+                        DwmSetWindowAttribute(hwnd, 20, &darkMode, sizeof(darkMode));
+                    }
+                }
+            }
+        });
+    }
+
+    return success;
+#else
+    // Not on Windows, so no effect
+    m_titlebarColorMode = colorMode;
+    return false;
+#endif
+}
+
+QString GameCore::getRenderingBackend() {
+    QSettings settings;
+    int backend = settings.value("renderingBackend", 0).toInt();
+
+#ifdef Q_OS_WIN
+    // Windows platform
+    switch (backend) {
+    case 0:
+        return "opengl";
+    case 1:
+        return "d3d11";
+    case 2:
+        return "d3d12";
+    default:
+        return "opengl";
+    }
+#else
+    // Linux and other platforms
+    switch (backend) {
+    case 0:
+        return "opengl";
+    case 1:
+        return "vulkan";
+    default:
+        return "opengl";
+    }
+#endif
 }

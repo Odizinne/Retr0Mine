@@ -19,8 +19,10 @@ ApplicationWindow {
     onCurrentThemeChanged: {
         if (currentTheme === Universal.Light) {
             GameConstants.isDarkMode = false
+            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(1)
         } else {
             GameConstants.isDarkMode = true
+            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(0)
         }
     }
 
@@ -231,13 +233,13 @@ ApplicationWindow {
 
         if (currentTheme === Universal.Light) {
             GameConstants.isDarkMode = false
+            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(1)
         } else {
             GameConstants.isDarkMode = true
+            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(0)
         }
 
-        //root.Universal.theme = GameConstants.universalTheme
         GameCore.setApplicationPalette(GameSettings.accentColorIndex)
-
 
         if (GameSettings.startFullScreen || GameCore.gamescope) {
             root.visibility = ApplicationWindow.FullScreen

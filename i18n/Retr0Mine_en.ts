@@ -106,18 +106,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="75"/>
-        <source>Hide Steam overlay</source>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="74"/>
+        <source>Rendering backend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="84"/>
-        <source>Trick steam overlay to an invisible window.
-This may or may not work</source>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="79"/>
+        <source>You probably have next to no reason to change this
+Application will restart on change
+Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="99"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="103"/>
+        <source>Enable custom titlebar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="112"/>
+        <source>Disable to use native windows titlebar color
+Application will restart on change
+Current game will be saved and restored</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="143"/>
         <source>Qt version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -293,12 +306,12 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="182"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="180"/>
         <source>SteamDeck controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="186"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="185"/>
         <source>Remap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1291,103 +1304,103 @@ board generation on large grids</source>
 <context>
     <name>WelcomePopup</name>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="21"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="23"/>
         <source>Welcome to Retr0Mine</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="30"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="32"/>
         <source>Would you like to configure some quick settings to enhance your experience? Everything can still be adjusted later.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="41"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="43"/>
         <source>Later</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="51"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="53"/>
         <source>Yes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="81"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="84"/>
         <source>Mouse settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="142"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="145"/>
         <source>Any click on satisfied number to reveal surroundings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="150"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="153"/>
         <source>Inverted</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="150"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="153"/>
         <source>Normal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="259"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="264"/>
         <source>Dimm satisfied numbers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="280"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="285"/>
         <source>Show cell frame</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="301"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="306"/>
         <source>Colored flags</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="174"/>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="320"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="177"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="325"/>
         <source>Next</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="340"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="346"/>
         <source>Color correction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="397"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="403"/>
         <source>None</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="458"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="464"/>
         <source>Tritanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="523"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="529"/>
         <source>Protanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="583"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="589"/>
         <source>Deuteranopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="606"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="613"/>
         <source>You&apos;re all set!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="612"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="619"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="625"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="632"/>
         <source>Close</source>
         <translation></translation>
     </message>

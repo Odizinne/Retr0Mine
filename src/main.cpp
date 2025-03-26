@@ -5,8 +5,7 @@
 #include "steamintegration.h"
 
 int main(int argc, char *argv[]) {
-    qputenv("QSG_RHI_BACKEND", "opengl");
-    QLoggingCategory::setFilterRules("qt.multimedia.ffmpeg=false;qt.rhi.gles2=false");
+
     QGuiApplication app(argc, argv);
     app.setOrganizationName("Odizinne");
     app.setApplicationName("Retr0Mine");
@@ -22,6 +21,8 @@ int main(int argc, char *argv[]) {
 
     gameCore->init();
 
+    QString renderingBackend = gameCore->getRenderingBackend();
+    qputenv("QSG_RHI_BACKEND", renderingBackend.toUtf8());
     engine.loadFromModule("net.odizinne.retr0mine", "Main");
 
     return app.exec();

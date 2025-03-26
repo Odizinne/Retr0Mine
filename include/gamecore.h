@@ -19,13 +19,15 @@ public:
     ~GameCore() override;
 
     void init();
+    QString getRenderingBackend();
+    Q_INVOKABLE bool setTitlebarColor(int colorMode);
     Q_INVOKABLE void setThemeColorScheme(int ColorSchemeIndex);
     Q_INVOKABLE void setLanguage(int index);
     Q_INVOKABLE void deleteSaveFile(const QString &filename);
     Q_INVOKABLE bool saveGameState(const QString &data, const QString &filename);
     Q_INVOKABLE QString loadGameState(const QString &filename) const;
     Q_INVOKABLE QStringList getSaveFiles() const;
-    Q_INVOKABLE void restartRetr0Mine(int index);
+    Q_INVOKABLE void restartRetr0Mine();
     Q_INVOKABLE void resetRetr0Mine();
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
@@ -48,6 +50,7 @@ private:
     int selectedAccentColor;
     void setCustomPalette();
     void setSystemPalette();
+    int m_titlebarColorMode = -1;
 
 signals:
     void languageIndexChanged();
