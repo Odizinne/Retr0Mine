@@ -114,7 +114,6 @@ add_executable(${CMAKE_PROJECT_NAME}
     resources/appicon.rc
 )
 
-# Add QML module before linking libraries
 qt_add_qml_module(${CMAKE_PROJECT_NAME}
     URI net.odizinne.retr0mine
     VERSION 1.0
@@ -162,6 +161,15 @@ elseif(UNIX AND NOT APPLE)
 elseif(APPLE)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/osx/libsteam_api.dylib
+    )
+endif()
+
+if(WIN32)
+    add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E $<$<CONFIG:Debug>:copy_if_different>
+            $<$<CONFIG:Debug>:"${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/win64/steam_api64.dll">
+            $<$<CONFIG:Debug>:"$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>">
+        COMMENT "Copying steam_api64.dll to build directory (Debug only)"
     )
 endif()
 

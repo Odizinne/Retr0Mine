@@ -1,11 +1,9 @@
 #include <QGuiApplication>
 #include <QIcon>
-#include <QLoggingCategory>
 #include "gamecore.h"
 #include "steamintegration.h"
 
 int main(int argc, char *argv[]) {
-
     QGuiApplication app(argc, argv);
     app.setOrganizationName("Odizinne");
     app.setApplicationName("Retr0Mine");
