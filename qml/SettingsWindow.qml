@@ -132,6 +132,7 @@ ApplicationWindow {
                     }
 
                     delegate: ItemDelegate {
+                        id: del
                         width: parent.width
                         height: 43
                         required property var modelData
@@ -140,6 +141,19 @@ ApplicationWindow {
                         icon.width: 16
                         icon.height: 16
                         icon.color: GameConstants.foregroundColor
+                        background: Rectangle {
+                            visible: enabled && (del.down || del.highlighted || del.visualFocus || del.hovered || del.isCurrentItem)
+                            color: del.down ? del.Universal.listMediumColor :
+                                   del.hovered || del.isCurrentItem ? del.Universal.listLowColor : del.Universal.altMediumLowColor
+                            Rectangle {
+                                width: parent.width
+                                height: parent.height
+                                visible: del.visualFocus || del.highlighted
+                                color: del.Universal.accent
+                                opacity: del.Universal.theme === Universal.Light ? 0.4 : 0.6
+                            }
+
+                        }
                         text: modelData.text
                         property bool isCurrentItem: ListView.isCurrentItem
                         onClicked: {

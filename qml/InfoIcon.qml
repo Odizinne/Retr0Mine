@@ -6,7 +6,7 @@ IconImage {
     id: control
     property string tooltipText: ""
     property int tooltipDelay: 500
-    property string iconColor: "#f6ae57"
+    property color iconColor: GameConstants.warningColor
     source: "qrc:/icons/info.png"
     color: iconColor
     sourceSize.height: 18

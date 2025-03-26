@@ -190,14 +190,14 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>GameConstants</name>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="184"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="194"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="185"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="195"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="186"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="192"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="187"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="193"/>
         <source>Reveal</source>
         <translation>Révéler</translation>
     </message>
@@ -1127,12 +1127,12 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="181"/>
+        <location filename="../qml/SettingsWindow.qml" line="195"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="197"/>
+        <location filename="../qml/SettingsWindow.qml" line="211"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>

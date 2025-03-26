@@ -25,6 +25,7 @@ Item {
         }
     }
     property bool isDarkMode: true
+    readonly property color warningColor: isDarkMode ? "#f6ae57" : "#d9931a"
     readonly property color accentColor: sysPalette.highlight
     readonly property color foregroundColor: isDarkMode ? "white" : "black"
     readonly property color settingsPaneColor: isDarkMode ? "#333333" : "#cccccc"

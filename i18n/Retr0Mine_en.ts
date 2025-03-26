@@ -185,14 +185,14 @@ board generation on large grids</source>
 <context>
     <name>GameConstants</name>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="184"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="194"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="185"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="195"/>
         <source>Flag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="186"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="192"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="187"/>
+        <location filename="../qml/Singletons/GameConstants.qml" line="193"/>
         <source>Reveal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1104,12 +1104,12 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="181"/>
+        <location filename="../qml/SettingsWindow.qml" line="195"/>
         <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="197"/>
+        <location filename="../qml/SettingsWindow.qml" line="211"/>
         <source>Restore defaults</source>
         <translation></translation>
     </message>
