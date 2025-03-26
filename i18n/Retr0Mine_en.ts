@@ -1054,62 +1054,57 @@ board generation on large grids</source>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="10"/>
-        <source>Settings</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsWindow.qml" line="89"/>
+        <location filename="../qml/SettingsWindow.qml" line="98"/>
         <source>Difficulty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="93"/>
+        <location filename="../qml/SettingsWindow.qml" line="102"/>
         <source>Gameplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="97"/>
+        <location filename="../qml/SettingsWindow.qml" line="106"/>
         <source>Visuals</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="101"/>
+        <location filename="../qml/SettingsWindow.qml" line="110"/>
         <source>Sound</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="105"/>
+        <location filename="../qml/SettingsWindow.qml" line="114"/>
         <source>Shortcuts</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="109"/>
+        <location filename="../qml/SettingsWindow.qml" line="118"/>
         <source>Accessibility</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="113"/>
+        <location filename="../qml/SettingsWindow.qml" line="122"/>
         <source>Language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="117"/>
+        <location filename="../qml/SettingsWindow.qml" line="126"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="121"/>
+        <location filename="../qml/SettingsWindow.qml" line="130"/>
         <source>Advanced</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="195"/>
+        <location filename="../qml/SettingsWindow.qml" line="191"/>
         <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="211"/>
+        <location filename="../qml/SettingsWindow.qml" line="207"/>
         <source>Restore defaults</source>
         <translation></translation>
     </message>

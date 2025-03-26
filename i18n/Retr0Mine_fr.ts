@@ -1077,62 +1077,57 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="10"/>
-        <source>Settings</source>
-        <translation>Paramètres</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsWindow.qml" line="89"/>
+        <location filename="../qml/SettingsWindow.qml" line="98"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="93"/>
+        <location filename="../qml/SettingsWindow.qml" line="102"/>
         <source>Gameplay</source>
         <translation>Gameplay</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="97"/>
+        <location filename="../qml/SettingsWindow.qml" line="106"/>
         <source>Visuals</source>
         <translation>Visuels</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="101"/>
+        <location filename="../qml/SettingsWindow.qml" line="110"/>
         <source>Sound</source>
         <translation>Sons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="105"/>
+        <location filename="../qml/SettingsWindow.qml" line="114"/>
         <source>Shortcuts</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="109"/>
+        <location filename="../qml/SettingsWindow.qml" line="118"/>
         <source>Accessibility</source>
         <translation>Accessibilité</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="113"/>
+        <location filename="../qml/SettingsWindow.qml" line="122"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="117"/>
+        <location filename="../qml/SettingsWindow.qml" line="126"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="121"/>
+        <location filename="../qml/SettingsWindow.qml" line="130"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="195"/>
+        <location filename="../qml/SettingsWindow.qml" line="191"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="211"/>
+        <location filename="../qml/SettingsWindow.qml" line="207"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>

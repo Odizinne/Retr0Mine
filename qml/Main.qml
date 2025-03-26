@@ -358,12 +358,12 @@ ApplicationWindow {
     }
 
     BusyIndicator {
-        opacity: 0
-        visible: SteamIntegration.initialized && !GameCore.gamescope
         /*==========================================
          | continous window update                 |
          | needed for steam overlay                |
          ==========================================*/
+        opacity: 0
+        visible: SteamIntegration.initialized && !GameCore.gamescope
     }
 
     SettingsWindow {
