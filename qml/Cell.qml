@@ -703,6 +703,12 @@ Item {
             return
         }
 
+        // First stop any running animations
+        fadeAnimation.stop()
+        resetFadeOutAnimation.stop()
+        resetFadeInAnimation.stop()
+        resetSpinAnimation.stop()
+
         switch (GameSettings.gridResetAnimationIndex) {
         case 0:
             GridBridge.initialAnimationPlayed = false
