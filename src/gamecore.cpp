@@ -380,3 +380,29 @@ QString GameCore::getRenderingBackend() {
     }
 #endif
 }
+
+void GameCore::setCursor(int cursorIndex, bool darkMode) {
+    if (cursorIndex == 0) {
+        QGuiApplication::setOverrideCursor(Qt::ArrowCursor);
+        return;
+    }
+
+    QPixmap cursorPixmap;
+
+    if (cursorIndex == 1) {
+        if (darkMode) {
+            cursorPixmap = QPixmap(":/cursors/Pointer_light.cur");
+        } else {
+            cursorPixmap = QPixmap(":/cursors/Pointer_dark.cur");
+        }
+    } else if (cursorIndex == 2) {
+        cursorPixmap = QPixmap(":/cursors/Pointer_dark.cur");
+    } else if (cursorIndex == 3) {
+        cursorPixmap = QPixmap(":/cursors/Pointer_light.cur");
+    } else {
+        cursorPixmap = QPixmap(":/cursors/Pointer_black.cur");
+    }
+
+    QCursor cursor(cursorPixmap, 2, 2);
+    QGuiApplication::setOverrideCursor(cursor);
+}

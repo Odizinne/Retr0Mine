@@ -109,6 +109,7 @@ add_executable(${CMAKE_PROJECT_NAME}
     resources/images/images.qrc
     resources/sounds/sounds.qrc
     resources/fonts/fonts.qrc
+    resources/cursors/cursors.qrc
     resources/appicon.rc
 )
 

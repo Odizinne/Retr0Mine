@@ -30,6 +30,11 @@ int main(int argc, char *argv[]) {
     QString renderingBackend = gameCore->getRenderingBackend();
     qputenv("QSG_RHI_BACKEND", renderingBackend.toUtf8());
 
+    QPixmap pixmap(":/cursors/Pointer.cur");
+
+    QCursor cursor(pixmap, 2, 2);
+    app.setOverrideCursor(cursor);
+
     engine.loadFromModule("net.odizinne.retr0mine", "Main");
 
     delete dummyWindow;

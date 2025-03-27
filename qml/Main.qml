@@ -238,6 +238,7 @@ ApplicationWindow {
         }
 
         GameCore.setApplicationPalette(GameSettings.accentColorIndex)
+        GameCore.setCursor(GameSettings.cursorIndex, GameConstants.isDarkMode)
 
         if (GameSettings.startFullScreen || GameCore.gamescope) {
             root.visibility = ApplicationWindow.FullScreen
