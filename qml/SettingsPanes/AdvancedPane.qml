@@ -9,6 +9,7 @@ Pane {
         width: parent.width
 
         RowLayout {
+            enabled: !GameCore.gamescope
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {

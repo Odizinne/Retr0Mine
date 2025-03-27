@@ -13,11 +13,11 @@ int main(int argc, char *argv[]) {
 
     QQuickWindow* dummyWindow = new QQuickWindow();
     /*==========================================
-    | Creating this dummy window seems        |
-    | to trick steam overlay notification     |
-    | and prevent it from displaying in       |
-    | settings window which cause flickers    |
-    | This is only an issue when using OpenGL |
+    | Creating this dummy window seems         |
+    | to trick steam overlay notification      |
+    | and prevent it from displaying in        |
+    | settings window which cause flickers     |
+    | This is only an issue when using OpenGL  |
     ==========================================*/
 
     SteamIntegration* steamIntegration = new SteamIntegration(&app);

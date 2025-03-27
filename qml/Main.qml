@@ -258,7 +258,7 @@ ApplicationWindow {
          ==========================================*/
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: Qt.BlankCursor
+        cursorShape: undefined
         propagateComposedEvents: true
         visible: GameCore.gamescope
         z: -1
