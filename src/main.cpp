@@ -11,11 +11,6 @@ int main(int argc, char *argv[]) {
     app.setApplicationName("Retr0Mine");
     QGuiApplication::setWindowIcon(QIcon(":/icons/icon.png"));
 
-    QPixmap customCursorPixmap(":/cursors/cursor.png");
-    QCursor customCursor(customCursorPixmap, 0, 0);
-    QGuiApplication::setOverrideCursor(customCursor);
-
-    //QGuiApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     QQuickWindow* dummyWindow = new QQuickWindow();
     /*==========================================
     | Creating this dummy window seems         |

@@ -238,6 +238,7 @@ ApplicationWindow {
         }
 
         GameCore.setApplicationPalette(GameSettings.accentColorIndex)
+        GameCore.setCursor(GameSettings.cursorIndex, GameConstants.isDarkMode)
 
         if (GameSettings.startFullScreen || GameCore.gamescope) {
             root.visibility = ApplicationWindow.FullScreen
@@ -250,21 +251,6 @@ ApplicationWindow {
         root.height = getIdealHeight()
         root.minimumHeight = getIdealHeight()
     }
-
-    //MouseArea {
-    //    /*==========================================
-    //     | Normalize cursor shape in gamescope     |
-    //     ==========================================*/
-    //    anchors.fill: parent
-    //    hoverEnabled: true
-    //    cursorShape: undefined
-    //    propagateComposedEvents: true
-    //    visible: GameCore.gamescope
-    //    z: -1
-    //    onPressed: function(mouse) { mouse.accepted = false; }
-    //    onReleased: function(mouse) { mouse.accepted = false; }
-    //    onClicked: function(mouse) { mouse.accepted = false; }
-    //}
 
     Shortcut {
         sequence: "Ctrl+Q"

@@ -384,3 +384,23 @@ QString GameCore::getRenderingBackend() {
     }
 #endif
 }
+
+void GameCore::setCursor(int cursorIndex, bool darkMode) {
+    if (cursorIndex == 0) {
+        QGuiApplication::setOverrideCursor(Qt::ArrowCursor);
+        return;
+    }
+
+    QPixmap cursorPixmap;
+
+    if (cursorIndex == 1) {
+        cursorPixmap = QPixmap(":/cursors/breeze_dark_48.png");
+    } else if (cursorIndex == 2) {
+        cursorPixmap = QPixmap(":/cursors/breeze_light_48.png");
+    } else {
+        cursorPixmap = QPixmap(":/cursors/breeze_black_48.png");
+    }
+
+    QCursor cursor(cursorPixmap, 8, 4);
+    QGuiApplication::setOverrideCursor(cursor);
+}

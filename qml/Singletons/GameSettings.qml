@@ -18,6 +18,7 @@ Settings {
     property int accentColorIndex: 2
     property int renderingBackend: 0
     property bool customTitlebar: true
+    property int cursorIndex: 1
 
     /*==========================================
      | Difficulty                              |
