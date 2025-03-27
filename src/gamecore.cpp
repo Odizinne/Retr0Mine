@@ -64,9 +64,11 @@ void GameCore::init() {
     int colorSchemeIndex = settings.value("colorSchemeIndex").toInt();
     int styleIndex = settings.value("themeIndex", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
+    bool customCursor = settings.value("customCursor", true).toBool();
 
     setThemeColorScheme(colorSchemeIndex);
     setLanguage(languageIndex);
+    setCursor(customCursor);
 }
 
 void GameCore::setThemeColorScheme(int colorSchemeIndex) {
@@ -385,22 +387,13 @@ QString GameCore::getRenderingBackend() {
 #endif
 }
 
-void GameCore::setCursor(int cursorIndex, bool darkMode) {
-    if (cursorIndex == 0) {
+void GameCore::setCursor(bool customCursor) {
+    if (!customCursor) {
         QGuiApplication::setOverrideCursor(Qt::ArrowCursor);
         return;
-    }
-
-    QPixmap cursorPixmap;
-
-    if (cursorIndex == 1) {
-        cursorPixmap = QPixmap(":/cursors/breeze_dark_48.png");
-    } else if (cursorIndex == 2) {
-        cursorPixmap = QPixmap(":/cursors/breeze_light_48.png");
     } else {
-        cursorPixmap = QPixmap(":/cursors/breeze_black_48.png");
+        QPixmap cursorPixmap(":/cursors/material.png");
+        QCursor cursor(cursorPixmap, 0, 0);
+        QGuiApplication::setOverrideCursor(cursor);
     }
-
-    QCursor cursor(cursorPixmap, 8, 4);
-    QGuiApplication::setOverrideCursor(cursor);
 }

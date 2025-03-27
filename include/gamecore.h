@@ -40,7 +40,7 @@ public:
     Q_INVOKABLE bool saveLeaderboard(const QString &data) const;
     Q_INVOKABLE QString loadLeaderboard() const;
     Q_INVOKABLE void setApplicationPalette(int systemAccent);
-    Q_INVOKABLE void setCursor(int cursorIndex, bool darkMode);
+    Q_INVOKABLE void setCursor(bool customCursor);
 
     bool isGamescope() const { return isRunningOnGamescope; }
     int getLanguageIndex() const { return m_languageIndex; }

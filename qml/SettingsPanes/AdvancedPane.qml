@@ -12,26 +12,6 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
-                text: qsTr("Cursor")
-                Layout.fillWidth: true
-            }
-
-            NfComboBox {
-                id: cursorIndexComboBox
-                model: [qsTr("System"), qsTr("Dark"), qsTr("Light"), qsTr("Black"),]
-                Layout.rightMargin: 5
-                currentIndex: GameSettings.cursorIndex
-                onActivated: {
-                    GameSettings.cursorIndex = currentIndex
-                    GameCore.setCursor(currentIndex, GameConstants.isDarkMode)
-                }
-            }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            Label {
                 text: qsTr("Color scheme")
                 Layout.fillWidth: true
             }
@@ -110,6 +90,28 @@ Pane {
                 onActivated: {
                     GameSettings.renderingBackend  = currentIndex;
                     GameCore.restartRetr0Mine()
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Label {
+                text: qsTr("Enable custom cursor")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: customCursorSwitch.click()
+                }
+            }
+
+            NfSwitch {
+                id: customCursorSwitch
+                checked: GameSettings.customCursor
+                onCheckedChanged: {
+                    GameSettings.customCursor = checked
+                    GameCore.setCursor(checked)
                 }
             }
         }

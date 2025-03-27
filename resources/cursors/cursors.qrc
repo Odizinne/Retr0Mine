@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/cursors">
-        <file>breeze_light_48.png</file>
-        <file>breeze_dark_48.png</file>
-        <file>breeze_black_48.png</file>
+        <file>material.png</file>
     </qresource>
 </RCC>
