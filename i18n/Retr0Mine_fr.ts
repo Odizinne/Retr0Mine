@@ -82,12 +82,17 @@ L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="103"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="101"/>
+        <source>Enable custom cursor</source>
+        <translation>Curseur personnalisé</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="125"/>
         <source>Enable custom titlebar</source>
         <translation>Bare de titre personnalisée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="112"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="134"/>
         <source>Disable to use native windows titlebar color
 Application will restart on change
 Current game will be saved and restored</source>
@@ -96,9 +101,14 @@ L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="143"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="165"/>
         <source>Qt version</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="180"/>
+        <source>QT_QPA_PLATFORM</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
@@ -134,29 +144,29 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="86"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="102"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="106"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="122"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="125"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="141"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="171"/>
         <source>Going above 25% may really slow down
 board generation on large grids</source>
         <translation>Une densité au dessus de 25% pourrait
 ralentir la génération sur les grilles larges</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="174"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="190"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -379,15 +389,15 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="461"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="468"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="475"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="459"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="466"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="473"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="485"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="491"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="483"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="489"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
