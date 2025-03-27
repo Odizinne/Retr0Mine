@@ -294,7 +294,7 @@ Item {
         from: 1
         to: 0
         duration: 200
-        easing.type: Easing.OutCubic
+        easing.type: Easing.Linear
         onStarted: cellItem.animatingReveal = true
         onFinished: {
             cellItem.animatingReveal = false
@@ -641,7 +641,10 @@ Item {
 
             Behavior on opacity {
                 enabled: GameSettings.animations
-                NumberAnimation { duration: 200 }
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.Linear
+                }
             }
 
             color: GameConstants.getNumberColor(
