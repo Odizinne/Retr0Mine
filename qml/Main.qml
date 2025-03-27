@@ -340,7 +340,7 @@ ApplicationWindow {
 
     Loader {
         anchors.fill: parent
-        active: !GameSettings.welcomeMessageShown
+        active: !GameSettings.firstRunCompleted
         sourceComponent: Component {
             WelcomePopup {
                 anchors.centerIn: parent

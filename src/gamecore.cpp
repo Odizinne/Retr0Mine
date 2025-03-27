@@ -48,6 +48,10 @@ GameCore::GameCore(QObject *parent)
 {
     QString desktop = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
     isRunningOnGamescope = desktop.toLower() == "gamescope";
+
+    if (!settings.contains("firstRunCompleted")) {
+        settings.setValue("firstRunCompleted", false);
+    }
 }
 
 GameCore::~GameCore() {

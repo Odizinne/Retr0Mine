@@ -78,6 +78,6 @@ Settings {
     /*==========================================
      | Misc                                    |
      ==========================================*/
-    property bool welcomeMessageShown: false
+    property bool firstRunCompleted: true
 }
 

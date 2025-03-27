@@ -44,7 +44,7 @@ AnimatedPopup {
                 Layout.preferredWidth: control.buttonWidth
                 onClicked: {
                     control.visible = false
-                    GameSettings.welcomeMessageShown = true
+                    GameSettings.firstRunCompleted = true
                 }
             }
 
@@ -632,7 +632,7 @@ AnimatedPopup {
                 text: qsTr("Close")
                 onClicked: {
                     control.visible = false
-                    GameSettings.welcomeMessageShown = true
+                    GameSettings.firstRunCompleted = true
                 }
             }
         }
