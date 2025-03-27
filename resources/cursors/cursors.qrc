@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/cursors">
-        <file>Pointer_light.cur</file>
-        <file>Pointer_dark.cur</file>
-        <file>Pointer_black.cur</file>
-    </qresource>
-</RCC>

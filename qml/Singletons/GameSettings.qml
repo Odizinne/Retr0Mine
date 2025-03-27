@@ -18,7 +18,6 @@ Settings {
     property int accentColorIndex: 2
     property int renderingBackend: 0
     property bool customTitlebar: true
-    property int cursorIndex: 1
 
     /*==========================================
      | Difficulty                              |
@@ -69,7 +68,7 @@ Settings {
     property int fontIndex: 0
     property real satisfiedOpacity: 0.50
     property bool displayTimer: true
-    property bool dimSatisfied: false
+    property bool dimSatisfied: true
     property bool animations: true
     property bool cellFrame: true
     property bool startFullScreen: GameCore.gamescope

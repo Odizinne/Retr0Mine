@@ -9,27 +9,6 @@ Pane {
         width: parent.width
 
         RowLayout {
-            enabled: !GameCore.gamescope
-            Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            Label {
-                text: qsTr("Cursor")
-                Layout.fillWidth: true
-            }
-
-            NfComboBox {
-                id: cursorIndexComboBox
-                model: [qsTr("System"), qsTr("Auto"), qsTr("Dark"), qsTr("Light"), qsTr("Black"),]
-                Layout.rightMargin: 5
-                currentIndex: GameSettings.cursorIndex
-                onActivated: {
-                    GameSettings.cursorIndex = currentIndex
-                    GameCore.setCursor(currentIndex, GameConstants.isDarkMode)
-                }
-            }
-        }
-
-        RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
             Label {
