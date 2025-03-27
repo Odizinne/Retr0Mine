@@ -35,6 +35,7 @@ After installation you can right click Retr0Mine in your application menu and se
 - Used PopOs sound effects from [PopOs GTK-Theme](https://github.com/pop-os/gtk-theme)
 - Used KDE ocean sound effects from [ocea-sound-theme](https://github.com/KDE/ocean-sound-theme)
 - Icons by Freepik downloaded on [flaticon](https://www.flaticon.com/authors/freepik)
+- Cursors from BreezeX_Cursor by [ful1e5](https://github.com/ful1e5/BreezeX_Cursor)
 
 Ocean sound effects used are licensed under [cc by sa 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 PopOs sound effects used are licensed under [cc by sa 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
