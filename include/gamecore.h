@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QTranslator>
 #include <QPalette>
+#include <QGuiApplication>
 
 class GameCore : public QObject
 {
@@ -13,10 +14,17 @@ class GameCore : public QObject
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageIndexChanged)
     Q_PROPERTY(QString qtVersion READ getQtVersion CONSTANT)
     Q_PROPERTY(bool darkMode READ getDarkMode CONSTANT)
+    Q_PROPERTY(QString platformPlugin READ getPlatformPlugin CONSTANT)
 
 public:
     explicit GameCore(QObject *parent = nullptr);
     ~GameCore() override;
+
+    QString getPlatformPlugin() const {
+        return qgetenv("QT_QPA_PLATFORM").isEmpty() ?
+                   QGuiApplication::platformName() :
+                   QString::fromUtf8(qgetenv("QT_QPA_PLATFORM"));
+    }
 
     void init();
     QString getRenderingBackend();

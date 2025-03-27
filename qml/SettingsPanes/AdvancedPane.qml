@@ -169,5 +169,20 @@ Pane {
                 Layout.rightMargin: 5
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            enabled: false
+            Label {
+                text: qsTr("QT_QPA_PLATFORM")
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: GameCore.platformPlugin
+                Layout.rightMargin: 5
+            }
+        }
     }
 }

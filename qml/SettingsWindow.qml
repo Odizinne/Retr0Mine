@@ -48,7 +48,7 @@ ApplicationWindow {
         hoverEnabled: true
         cursorShape: Qt.ArrowCursor
         propagateComposedEvents: true
-        visible: GameCore.gamescope
+        //visible: GameCore.gamescope
         z: -1
         onPressed: function(mouse) { mouse.accepted = false; }
         onReleased: function(mouse) { mouse.accepted = false; }
