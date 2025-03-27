@@ -14,8 +14,6 @@ Item {
     property bool idleShakeScheduled: false
     property bool globalShakeActive: false
 
-    property GridBridgeHelper helper: GridBridgeHelper
-
     function getCellForCallback(index) {
         return getCell(index)
     }
@@ -139,7 +137,7 @@ Item {
         const cell = getCell(index)
         if (!cell || !cell.revealed || GameState.numbers[index] <= 0) return
 
-        var cellsToReveal = helper.getAdjacentCellsToReveal(
+        var cellsToReveal = getAdjacentCellsToReveal(
             index,
             GameState.gridSizeX,
             GameState.gridSizeY,
@@ -252,7 +250,7 @@ Item {
             return
         }
 
-        var cellsToReveal = helper.performFloodFillReveal(
+        var cellsToReveal = performFloodFillReveal(
             index,
             GameState.gridSizeX,
             GameState.gridSizeY,
@@ -601,7 +599,7 @@ Item {
             return false
         }
 
-        return helper.hasUnrevealedNeighbors(
+        return checkUnrevealedNeighbors(
             index,
             GameState.gridSizeX,
             GameState.gridSizeY,
@@ -615,7 +613,7 @@ Item {
             return 0
         }
 
-        return helper.getNeighborFlagCount(
+        return countNeighborFlags(
             index,
             GameState.gridSizeX,
             GameState.gridSizeY,
@@ -670,5 +668,199 @@ Item {
         if (chatReference && typeof chatReference.addBotMessage === "function") {
             chatReference.addBotMessage(message)
         }
+    }
+
+    function performFloodFillReveal(index, gridSizeX, gridSizeY, mines, numbers, getCellCallback) {
+        let cellsToReveal = []
+
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+            console.warn("Invalid parameters in performFloodFillReveal")
+            return cellsToReveal
+        }
+
+        const cell = getCellCallback(index)
+        if (!cell) return cellsToReveal
+        if (cell.revealed || cell.flagged) return cellsToReveal
+
+        cellsToReveal.push(index)
+
+        if (mines.includes(index)) return cellsToReveal
+
+        const cellNumber = numbers[index] || 0
+        if (cellNumber > 0) return cellsToReveal
+
+        let cellsToProcess = [index]
+        let visited = new Set([index])
+
+        while (cellsToProcess.length > 0) {
+            const currentIndex = cellsToProcess.shift()
+            const row = Math.floor(currentIndex / gridSizeX)
+            const col = currentIndex % gridSizeX
+
+            for (let r = -1; r <= 1; r++) {
+                for (let c = -1; c <= 1; c++) {
+                    const newRow = row + r
+                    const newCol = col + c
+
+                    if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) {
+                        continue
+                    }
+
+                    const adjacentIndex = newRow * gridSizeX + newCol
+                    if (visited.has(adjacentIndex)) continue
+
+                    visited.add(adjacentIndex)
+
+                    const adjacentCell = getCellCallback(adjacentIndex)
+                    if (!adjacentCell) continue
+                    if (adjacentCell.flagged) continue
+
+                    if (!adjacentCell.revealed) {
+                        cellsToReveal.push(adjacentIndex)
+
+                        const adjacentNumber = numbers[adjacentIndex] || 0
+                        if (adjacentNumber === 0) {
+                            cellsToProcess.push(adjacentIndex)
+                        }
+                    }
+                }
+            }
+        }
+
+        return cellsToReveal
+    }
+
+    // Get cells to reveal when clicking on a numbered cell
+    function getAdjacentCellsToReveal(index, gridSizeX, gridSizeY, numbers, getCellCallback) {
+        let cellsToReveal = []
+
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+            console.warn("Invalid parameters in getAdjacentCellsToReveal")
+            return cellsToReveal
+        }
+
+        const cell = getCellCallback(index)
+        if (!cell || !cell.revealed) return cellsToReveal
+
+        const cellNumber = numbers[index] || 0
+        if (cellNumber <= 0) return cellsToReveal
+
+        const row = Math.floor(index / gridSizeX)
+        const col = index % gridSizeX
+        let flaggedCount = 0
+        let adjacentUnrevealed = []
+        let hasQuestionMark = false
+
+        for (let r = -1; r <= 1; r++) {
+            for (let c = -1; c <= 1; c++) {
+                if (r === 0 && c === 0) continue
+
+                const newRow = row + r
+                const newCol = col + c
+
+                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) {
+                    continue
+                }
+
+                const adjacentIndex = newRow * gridSizeX + newCol
+                const adjacentCell = getCellCallback(adjacentIndex)
+                if (!adjacentCell) continue
+
+                if (adjacentCell.questioned || adjacentCell.safeQuestioned) {
+                    hasQuestionMark = true
+                    break
+                }
+
+                if (adjacentCell.flagged) {
+                    flaggedCount++
+                } else if (!adjacentCell.revealed) {
+                    adjacentUnrevealed.push(adjacentIndex)
+                }
+            }
+
+            if (hasQuestionMark) break
+        }
+
+        if (!hasQuestionMark && flaggedCount === cellNumber && adjacentUnrevealed.length > 0) {
+            return adjacentUnrevealed
+        }
+
+        return cellsToReveal
+    }
+
+    // Check if a cell has unrevealed neighbors
+    function checkUnrevealedNeighbors(index, gridSizeX, gridSizeY, numbers, getCellCallback) {
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+            return false
+        }
+
+        const cellNumber = numbers[index] || 0
+        if (cellNumber === 0) return false
+
+        const row = Math.floor(index / gridSizeX)
+        const col = index % gridSizeX
+        let flagCount = 0
+        let hasUnrevealed = false
+
+        for (let r = -1; r <= 1; r++) {
+            for (let c = -1; c <= 1; c++) {
+                if (r === 0 && c === 0) continue
+
+                const newRow = row + r
+                const newCol = col + c
+
+                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) {
+                    continue
+                }
+
+                const adjacentIndex = newRow * gridSizeX + newCol
+                const adjacentCell = getCellCallback(adjacentIndex)
+                if (!adjacentCell) continue
+
+                if (adjacentCell.flagged) {
+                    flagCount++
+                }
+
+                if (!adjacentCell.revealed && !adjacentCell.flagged) {
+                    hasUnrevealed = true
+                }
+            }
+        }
+
+        return hasUnrevealed || flagCount !== cellNumber
+    }
+
+    // Count number of flagged neighbors
+    function countNeighborFlags(index, gridSizeX, gridSizeY, getCellCallback) {
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+            return 0
+        }
+
+        const row = Math.floor(index / gridSizeX)
+        const col = index % gridSizeX
+        let flagCount = 0
+
+        for (let r = -1; r <= 1; r++) {
+            for (let c = -1; c <= 1; c++) {
+                if (r === 0 && c === 0) continue
+
+                const newRow = row + r
+                const newCol = col + c
+
+                if (newRow < 0 || newRow >= gridSizeY || newCol < 0 || newCol >= gridSizeX) {
+                    continue
+                }
+
+                const adjacentIndex = newRow * gridSizeX + newCol
+                const adjacentCell = getCellCallback(adjacentIndex)
+                if (!adjacentCell) continue
+
+                if (adjacentCell.flagged) {
+                    flagCount++
+                }
+            }
+        }
+
+        return flagCount
     }
 }

@@ -25,7 +25,6 @@ set(SOURCES
     src/gamecore.cpp
     src/gamelogic.cpp
     src/steamintegration.cpp
-    src/gridbridgehelper.cpp
     src/gridgenerator.cpp
     src/minesweepersolver.cpp
 )
@@ -35,7 +34,6 @@ set(HEADERS
     include/gamecore.h
     include/gamelogic.h
     include/steamintegration.h
-    include/gridbridgehelper.h
     include/gridgenerator.h
     include/minesweepersolver.h
 )
@@ -164,43 +162,26 @@ elseif(APPLE)
     )
 endif()
 
-if(WIN32)
-    add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E $<$<CONFIG:Debug>:copy_if_different>
-            $<$<CONFIG:Debug>:"${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/win64/steam_api64.dll">
-            $<$<CONFIG:Debug>:"$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>">
-        COMMENT "Copying steam_api64.dll to build directory (Debug only)"
-    )
-endif()
-
-# Explicitly finalize the target
 qt_finalize_target(${CMAKE_PROJECT_NAME})
 
-# Include GNUInstallDirs to get standard installation directories
 include(GNUInstallDirs)
 
-# Installation configuration
 install(TARGETS ${CMAKE_PROJECT_NAME}
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# Platform-specific additional files to install
 if(WIN32)
-    # Install Steam API DLL
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/win64/steam_api64.dll
             DESTINATION ${CMAKE_INSTALL_BINDIR})
 elseif(UNIX AND NOT APPLE)
-    # Install Steam API shared library
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/linux64/libsteam_api.so
             DESTINATION ${CMAKE_INSTALL_BINDIR})
 elseif(APPLE)
-    # For macOS, bundle the Steam library
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/osx/libsteam_api.dylib
             DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
 
-# Generate deployment script for QML application
 qt_generate_deploy_qml_app_script(
     TARGET ${CMAKE_PROJECT_NAME}
     OUTPUT_SCRIPT deploy_script
@@ -208,5 +189,4 @@ qt_generate_deploy_qml_app_script(
     DEPLOY_TOOL_OPTIONS --no-compiler-runtime --no-opengl-sw --no-system-dxc-compiler --no-system-d3d-compiler --skip-plugin-types imageformats,designer,iconengines,qmllint,generic,networkinformation,help,qmltooling,sqldrivers,tls,qmlls
 )
 
-# Use the generated deployment script during installation
 install(SCRIPT ${deploy_script})

@@ -202,8 +202,6 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        startTime = new Date()
-
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (internalSaveData) {
             SaveManager.extractAndApplyGridSize(internalSaveData)
@@ -602,18 +600,7 @@ ApplicationWindow {
     }
 
     function checkInitialGameState() {
-        const endTime = new Date()
-        const elapsedMs = endTime - startTime
-        const seconds = Math.floor(elapsedMs / 1000)
-        const centiseconds = Math.floor((elapsedMs % 1000) / 10)
-        const formattedTime = seconds.toString().padStart(2, '0') + ":" +
-                            centiseconds.toString().padStart(2, '0')
-
-        console.log("Grid initialization performed in: " + formattedTime)
-
-
-
-        let internalSaveData = GameCore.loadGameState("internalGameState.json")
+    let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (GameState.ignoreInternalGameState) {
             /*==========================================
              | bypass internalGameState loading        |
