@@ -3,11 +3,8 @@ import net.odizinne.retr0mine 1.0
 
 GridView {
     id: grid
-    anchors.centerIn: parent
-    cellWidth: GameState.cellSize + GameState.cellSpacing
-    cellHeight: GameState.cellSize + GameState.cellSpacing
-    width: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX
-    height: (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY
+    cellWidth: GameState.cellSize
+    cellHeight: GameState.cellSize
     model: GameState.gridSizeX * GameState.gridSizeY
     interactive: false
     property bool initialAnimationPlayed: false

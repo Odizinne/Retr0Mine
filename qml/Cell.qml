@@ -27,8 +27,6 @@ Item {
     property bool inCooldown: false
     property bool localPlayerOwns: false
     property bool shakeConditionsMet: false
-
-    // Animation state tracking
     property bool animatingFlag: false
     property bool animatingQuestion: false
     property bool animatingSafeQuestion: false
@@ -218,6 +216,7 @@ Item {
         }
 
         Qt.callLater(updateShakeState);
+        console.log(height)
     }
 
     // Hint animation handling
@@ -346,7 +345,7 @@ Item {
     NfButton {
         id: cellButton
         anchors.fill: parent
-        anchors.margins: GameState.cellSpacing / 2
+        anchors.margins: 2
         enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !NetworkManager.allowClientReveal ? false : true
         Connections {
             target: cellItem

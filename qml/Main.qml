@@ -355,16 +355,14 @@ ApplicationWindow {
 
     Item {
         anchors.fill: parent
-
+        anchors.margins: 12
         TopBar {
             id: topBar
             anchors {
                 left: parent.left
                 right: rightPanel.visible ? rightPanel.left : parent.right
                 top: parent.top
-                topMargin: 12
-                leftMargin: 13
-                rightMargin: 15
+                rightMargin: ComponentsContext.multiplayerChatVisible ? 12 : 0
             }
         }
 
@@ -374,9 +372,6 @@ ApplicationWindow {
                 top: parent.top
                 right: parent.right
                 bottom: parent.bottom
-                topMargin: 10
-                rightMargin: 12
-                bottomMargin: 12
             }
             width: 300
             visible: ComponentsContext.multiplayerChatVisible
@@ -419,10 +414,8 @@ ApplicationWindow {
                 right: rightPanel.visible ? rightPanel.left : parent.right
                 bottom: parent.bottom
                 top: topBar.bottom
-                topMargin: 10
-                leftMargin: 12
-                rightMargin: 12
-                bottomMargin: 12
+                topMargin: 12
+                rightMargin: ComponentsContext.multiplayerChatVisible ? 12 : 0
             }
             layer.enabled: GameState.paused
             layer.effect: MultiEffect {
@@ -430,8 +423,8 @@ ApplicationWindow {
                 blur: GameState.paused ? 1 : 0
                 blurMultiplier: 0.3
             }
-            contentWidth: gridContainer.width
-            contentHeight: gridContainer.height
+            contentWidth: gridContainer.width - 4 // 4 = 2px cell left margin + 2px cell right margin (for first and last cell in row)
+            contentHeight: gridContainer.height - 4 // 4 = 2px cell top margin + 2px cell bottom margin (fir first and last cell in col
             clip: true
             enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
                      !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
@@ -449,8 +442,8 @@ ApplicationWindow {
                 id: gridContainer
                 anchors.centerIn: parent
                 scale: GameSettings.gridScale
-                width: Math.max(((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX) * scale, gameView.width)
-                height: Math.max(((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * scale, gameView.height)
+                width: Math.max(grid.width * scale, gameView.width)
+                height: Math.max(grid.height * scale, gameView.height)
 
                 Behavior on scale {
                     NumberAnimation {
@@ -461,6 +454,9 @@ ApplicationWindow {
 
                 GameGrid {
                     id: grid
+                    anchors.centerIn: parent
+                    width: ((GameState.cellSize) * GameState.gridSizeX)
+                    height: ((GameState.cellSize) * GameState.gridSizeY)
                     Component.onCompleted: {
                         GridBridge.setGrid(grid)
                     }
@@ -495,6 +491,7 @@ ApplicationWindow {
 
                         visible: isInViewport
                         sourceComponent: Cell {
+                            id: cell
                             index: cellLoader.index
                         }
                     }
@@ -560,7 +557,7 @@ ApplicationWindow {
             anchors.bottom: gameView.bottom
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY) * gridContainer.scale > gameView.height ?
+            policy: (((GameState.cellSize) * GameState.gridSizeY) - 4) * gridContainer.scale > gameView.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -575,7 +572,7 @@ ApplicationWindow {
             anchors.bottomMargin: -12
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: ((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX) * gridContainer.scale > gameView.width ?
+            policy: (((GameState.cellSize) * GameState.gridSizeX) - 4) * gridContainer.scale > gameView.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -589,7 +586,7 @@ ApplicationWindow {
         if (GameState.ignoreInternalGameState) {
             /*==========================================
              | bypass internalGameState loading        |
-             | f user manually change difficulty       |
+             | if user manually change difficulty      |
              | before initial game state check         |
              ==========================================*/
             GameCore.deleteSaveFile("internalGameState.json")
@@ -614,19 +611,19 @@ ApplicationWindow {
 
     function getIdealWidth() {
         if (root.visibility === ApplicationWindow.Windowed) {
-            let baseWidth = (GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeX + 24
+            let baseWidth = (GameState.cellSize * GameState.gridSizeX) + 24
             if (ComponentsContext.multiplayerChatVisible) {
                 baseWidth += rightPanel.width + 12
             }
 
-            return Math.min(baseWidth, Screen.desktopAvailableWidth * 0.9)
+            return Math.min(baseWidth -4, Screen.desktopAvailableWidth * 0.9)
         }
     }
 
     function getIdealHeight() {
         if (root.visibility === ApplicationWindow.Windowed) {
-            return Math.min((GameState.cellSize + GameState.cellSpacing) * GameState.gridSizeY + 69,
-                            Screen.desktopAvailableHeight * 0.9)
+            let baseHeight = (GameState.cellSize * GameState.gridSizeY) + 35 + 24 + 8 // not sure why 8, but it does work and im tired
+            return Math.min(baseHeight, Screen.desktopAvailableHeight * 0.9)
         }
     }
 }
