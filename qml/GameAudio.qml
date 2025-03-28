@@ -104,6 +104,20 @@ Item {
         volume: GameSettings.newChatMessageVolume
     }
 
+    SoundEffect {
+        /*==========================================
+         | prevent sound device sleeping           |
+         | useful for some BT devices              |
+         ==========================================*/
+        id: silentKeepAlive
+        source: "qrc:/sounds/empty.wav"
+        volume: 0.01
+        loops: SoundEffect.Infinite
+        Component.onCompleted: {
+            play()
+        }
+    }
+
     function getSoundPath(type) {
         const packs = {
             0: {

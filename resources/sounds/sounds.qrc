@@ -17,5 +17,6 @@
         <file>floraphonic/remoteClick.wav</file>
         <file>floraphonic/win.wav</file>
         <file>message_received.wav</file>
+        <file>empty.wav</file>
     </qresource>
 </RCC>
