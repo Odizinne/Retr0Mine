@@ -655,7 +655,12 @@ board generation on large grids</source>
 <context>
     <name>MultiplayerChat</name>
     <message>
-        <location filename="../qml/MultiplayerChat.qml" line="152"/>
+        <location filename="../qml/MultiplayerChat.qml" line="46"/>
+        <source>Hint reasoning will be displayed here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MultiplayerChat.qml" line="162"/>
         <source>Type a message...</source>
         <translation></translation>
     </message>

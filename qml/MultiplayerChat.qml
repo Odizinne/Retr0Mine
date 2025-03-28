@@ -41,6 +41,16 @@ Frame {
             Layout.fillHeight: true
             Layout.preferredHeight: chatScrollView.height
 
+            Label {
+                anchors.centerIn: parent
+                text: qsTr("Hint reasoning will be displayed here")
+                width: 150
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                opacity: 0.7
+                visible: chatPanel.chatMessages.count === 0
+            }
+
             ScrollBar {
                 id: defaultVerticalScrollBar
                 enabled: chatScrollView.enabled
