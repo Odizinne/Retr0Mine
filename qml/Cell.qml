@@ -216,7 +216,6 @@ Item {
         }
 
         Qt.callLater(updateShakeState);
-        console.log(height)
     }
 
     // Hint animation handling
