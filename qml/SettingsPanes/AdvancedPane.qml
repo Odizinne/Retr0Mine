@@ -97,6 +97,7 @@ Pane {
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            enabled: !GameCore.gamescope
             Label {
                 text: qsTr("Enable custom cursor")
                 Layout.fillWidth: true

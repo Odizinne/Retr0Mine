@@ -52,6 +52,8 @@ GameCore::GameCore(QObject *parent)
     if (!settings.contains("firstRunCompleted")) {
         settings.setValue("firstRunCompleted", false);
     }
+
+    QGuiApplication::instance()->installEventFilter(this);
 }
 
 GameCore::~GameCore() {
@@ -388,12 +390,66 @@ QString GameCore::getRenderingBackend() {
 }
 
 void GameCore::setCursor(bool customCursor) {
+    m_useCustomCursor = customCursor;
+
     if (!customCursor) {
-        QGuiApplication::setOverrideCursor(Qt::ArrowCursor);
+        QGuiApplication::restoreOverrideCursor();
         return;
-    } else {
-        QPixmap cursorPixmap(":/cursors/material.png");
-        QCursor cursor(cursorPixmap, 0, 0);
-        QGuiApplication::setOverrideCursor(cursor);
     }
+
+    // Create the custom cursor
+    QPixmap cursorPixmap(":/cursors/material.png");
+    m_customCursor = QCursor(cursorPixmap, 0, 0);
+
+    // Apply to current windows
+    for (QWindow* window : QGuiApplication::topLevelWindows()) {
+        applyCustomCursorForWindow(window);
+    }
+}
+
+void GameCore::resetCursorForWindow(QWindow* window) {
+    if (window) {
+        window->unsetCursor();
+    }
+}
+
+void GameCore::applyCustomCursorForWindow(QWindow* window) {
+    if (window && m_useCustomCursor) {
+        window->setCursor(m_customCursor);
+    }
+}
+
+bool GameCore::eventFilter(QObject *watched, QEvent *event) {
+    if (!m_useCustomCursor) {
+        return QObject::eventFilter(watched, event);
+    }
+
+    QWindow *window = qobject_cast<QWindow*>(watched);
+    if (!window) {
+        return QObject::eventFilter(watched, event);
+    }
+
+    if (event->type() == QEvent::CursorChange) {
+        Qt::CursorShape shape = window->cursor().shape();
+
+        // If it's a resize cursor, let it be (don't override)
+        if (shape == Qt::SizeHorCursor ||
+            shape == Qt::SizeVerCursor ||
+            shape == Qt::SizeFDiagCursor ||
+            shape == Qt::SizeBDiagCursor ||
+            shape == Qt::SizeAllCursor) {
+            return false; // Let the system handle resize cursors
+        }
+
+        // For other cursors, apply our custom cursor
+        if (shape == Qt::ArrowCursor) {
+            applyCustomCursorForWindow(window);
+            return true; // We handled it
+        }
+    } else if (event->type() == QEvent::HoverEnter || event->type() == QEvent::Enter) {
+        // Reset to default cursor when leaving a resize handle
+        applyCustomCursorForWindow(window);
+    }
+
+    return QObject::eventFilter(watched, event);
 }
