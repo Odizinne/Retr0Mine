@@ -74,6 +74,7 @@ Settings {
     property bool cellFrame: true
     property bool startFullScreen: GameCore.gamescope
     property bool shakeUnifinishedNumbers: true
+    property int cellSpacing: 2
 
     /*==========================================
      | Misc                                    |

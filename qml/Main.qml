@@ -156,6 +156,18 @@ ApplicationWindow {
     }
 
     Connections {
+        target: GameSettings
+        function onCellSpacingChanged() {
+            if (root.visibility === ApplicationWindow.Windowed) {
+                root.minimumWidth = root.getIdealWidth()
+                root.minimumHeight = root.getIdealHeight()
+                root.width = root.minimumWidth
+                root.height = root.minimumHeight
+            }
+        }
+    }
+
+    Connections {
         target: ComponentsContext
         function onMultiplayerChatVisibleChanged() {
             if (root.visibility === ApplicationWindow.Windowed) {
@@ -423,8 +435,8 @@ ApplicationWindow {
                 blur: GameState.paused ? 1 : 0
                 blurMultiplier: 0.3
             }
-            contentWidth: gridContainer.width - 4 // 4 = 2px cell left margin + 2px cell right margin (for first and last cell in row)
-            contentHeight: gridContainer.height - 4 // 4 = 2px cell top margin + 2px cell bottom margin (fir first and last cell in col
+            contentWidth: gridContainer.width - (GameSettings.cellSpacing * 2)
+            contentHeight: gridContainer.height - (GameSettings.cellSpacing * 2)
             clip: true
             enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
                      !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
@@ -455,8 +467,8 @@ ApplicationWindow {
                 GameGrid {
                     id: grid
                     anchors.centerIn: parent
-                    width: ((GameState.cellSize) * GameState.gridSizeX)
-                    height: ((GameState.cellSize) * GameState.gridSizeY)
+                    width: GameState.cellSize * GameState.gridSizeX
+                    height: GameState.cellSize * GameState.gridSizeY
                     Component.onCompleted: {
                         GridBridge.setGrid(grid)
                     }
@@ -464,10 +476,9 @@ ApplicationWindow {
                         id: cellLoader
                         asynchronous: true
                         required property int index
-
                         readonly property int row: Math.floor(index / GameState.gridSizeX)
                         readonly property int col: index % GameState.gridSizeX
-                        readonly property real cellSize: GameState.cellSize + GameState.cellSpacing
+                        readonly property real cellSize: GameState.cellSize
                         readonly property real xPos: col * cellSize
                         readonly property real yPos: row * cellSize
 
@@ -557,7 +568,7 @@ ApplicationWindow {
             anchors.bottom: gameView.bottom
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: (((GameState.cellSize) * GameState.gridSizeY) - 4) * gridContainer.scale > gameView.height ?
+            policy: ((GameState.cellSize * GameState.gridSizeY) - (GameSettings.cellSpacing * 2)) * gridContainer.scale > gameView.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -572,7 +583,7 @@ ApplicationWindow {
             anchors.bottomMargin: -12
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: (((GameState.cellSize) * GameState.gridSizeX) - 4) * gridContainer.scale > gameView.width ?
+            policy: ((GameState.cellSize * GameState.gridSizeX) - (GameSettings.cellSpacing * 2)) * gridContainer.scale > gameView.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -610,19 +621,28 @@ ApplicationWindow {
     }
 
     function getIdealWidth() {
+        /*==========================================
+         | 24 = main item left + right margin      |
+         | 12 = multiplayer chat margin            |
+         ==========================================*/
         if (root.visibility === ApplicationWindow.Windowed) {
-            let baseWidth = (GameState.cellSize * GameState.gridSizeX) + 24
+            let baseWidth = (GameState.cellSize * GameState.gridSizeX) - (GameSettings.cellSpacing * 2) + 24
             if (ComponentsContext.multiplayerChatVisible) {
                 baseWidth += rightPanel.width + 12
             }
 
-            return Math.min(baseWidth -4, Screen.desktopAvailableWidth * 0.9)
+            return Math.min(baseWidth, Screen.desktopAvailableWidth * 0.9)
         }
     }
 
     function getIdealHeight() {
+        /*==========================================
+         | 35 = topBar height                      |
+         | 24 = main item top + bottom margin      |
+         | 12 = topBar margin                      |
+         ==========================================*/
         if (root.visibility === ApplicationWindow.Windowed) {
-            let baseHeight = (GameState.cellSize * GameState.gridSizeY) + 35 + 24 + 8 // not sure why 8, but it does work and im tired
+            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (GameSettings.cellSpacing * 2) + 35 + 24 + 12
             return Math.min(baseHeight, Screen.desktopAvailableHeight * 0.9)
         }
     }

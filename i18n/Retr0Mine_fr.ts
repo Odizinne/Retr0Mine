@@ -82,17 +82,17 @@ L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="101"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="102"/>
         <source>Enable custom cursor</source>
         <translation>Curseur personnalisé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="125"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="126"/>
         <source>Enable custom titlebar</source>
         <translation>Bare de titre personnalisée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="134"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="135"/>
         <source>Disable to use native windows titlebar color
 Application will restart on change
 Current game will be saved and restored</source>
@@ -101,12 +101,12 @@ L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="165"/>
-        <source>Qt version</source>
-        <translation></translation>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="166"/>
+        <source>QT_VERSION</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="180"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="181"/>
         <source>QT_QPA_PLATFORM</source>
         <translation type="unfinished"></translation>
     </message>
@@ -512,32 +512,32 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="63"/>
+        <location filename="../qml/MainMenu.qml" line="66"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="47"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="58"/>
+        <location filename="../qml/MainMenu.qml" line="61"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="53"/>
+        <location filename="../qml/MainMenu.qml" line="56"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="70"/>
+        <location filename="../qml/MainMenu.qml" line="76"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="75"/>
+        <location filename="../qml/MainMenu.qml" line="81"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -759,12 +759,12 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>PausePopup</name>
     <message>
-        <location filename="../qml/Popups/PausePopup.qml" line="17"/>
+        <location filename="../qml/Popups/PausePopup.qml" line="21"/>
         <source>Paused</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PausePopup.qml" line="23"/>
+        <location filename="../qml/Popups/PausePopup.qml" line="28"/>
         <source>Resume</source>
         <translation>Reprendre</translation>
     </message>
@@ -1282,51 +1282,56 @@ ralentir la génération sur les grilles larges</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="167"/>
+        <source>Cell density</source>
+        <translation>Densité des cellules</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="185"/>
         <source>Numbers font</source>
         <translation>Police d&apos;affichage des chiffres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="186"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="204"/>
         <source>Grid reset animation</source>
         <translation>Animation de réinitialisation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="194"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="212"/>
         <source>Wave</source>
         <translation>Vague</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="195"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="213"/>
         <source>Fade</source>
         <translation>Fondu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="196"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="214"/>
         <source>Spin</source>
         <translation>Rotation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="224"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="242"/>
         <source>Unlocked with a secret achievement</source>
         <translation>Se débloque avec un succès caché</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="245"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="263"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="278"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="296"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation>Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="301"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="319"/>
         <source>Unlock Master Tactician achievement</source>
         <translation>Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="324"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="342"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation>Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
     </message>

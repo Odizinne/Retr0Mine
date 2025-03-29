@@ -164,6 +164,24 @@ Pane {
                 Layout.fillWidth: true
                 Layout.preferredHeight: GameConstants.settingsComponentsHeight
                 Label {
+                    text: qsTr("Cell density")
+                    Layout.fillWidth: true
+                }
+
+                NfSpinBox {
+                    id: cellSpacingSpinBox
+                    Layout.rightMargin: 5
+                    from: 1
+                    to: 3
+                    value: GameSettings.cellSpacing
+                    onValueChanged: GameSettings.cellSpacing = value
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Label {
                     text: qsTr("Numbers font")
                     Layout.fillWidth: true
                 }

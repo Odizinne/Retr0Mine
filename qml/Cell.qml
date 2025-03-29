@@ -344,7 +344,7 @@ Item {
     NfButton {
         id: cellButton
         anchors.fill: parent
-        anchors.margins: 2
+        anchors.margins: GameSettings.cellSpacing
         enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !NetworkManager.allowClientReveal ? false : true
         Connections {
             target: cellItem
@@ -372,8 +372,8 @@ Item {
             sourceComponent: IconImage {
                 source: "qrc:/icons/bomb.png"
                 color: GameConstants.foregroundColor
-                width: cellItem.width / 2.1
-                height: cellItem.height / 2.1
+                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width / 2.1) * 2
                 sourceSize.height: (cellItem.height / 2.1) * 2
                 mipmap: false
@@ -399,8 +399,8 @@ Item {
                         else return GameConstants.accentColor
                     }
                 }
-                width: cellItem.width / 1.8
-                height: cellItem.height / 1.8
+                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 1.8
+                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 1.8
                 sourceSize.width: (cellItem.width / 1.8) * 2
                 sourceSize.height: (cellItem.height / 1.8) * 2
                 opacity: 0
@@ -437,8 +437,8 @@ Item {
                 id: questionImage
                 source: "qrc:/icons/questionmark.png"
                 color: GameConstants.foregroundColor
-                width: cellItem.width / 2.1
-                height: cellItem.height / 2.1
+                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width / 2.1) * 2
                 sourceSize.height: (cellItem.height / 2.1) * 2
                 opacity: 0
@@ -475,8 +475,8 @@ Item {
                 id: safeQuestionImage
                 source: "qrc:/icons/questionmark.png"
                 color: "green"
-                width: cellItem.width / 2.1
-                height: cellItem.height / 2.1
+                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width / 2.1) * 2
                 sourceSize.height: (cellItem.height / 2.1) * 2
                 opacity: 0
@@ -511,8 +511,8 @@ Item {
             anchors.centerIn: parent
             active: false
             sourceComponent: Image {
-                width: cellItem.width / 2.1
-                height: cellItem.height / 2.1
+                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width / 2.1) * 2
                 sourceSize.height: (cellItem.height / 2.1) * 2
                 mipmap: false
@@ -624,7 +624,7 @@ Item {
             id: cellText
             text: GameState.numbers ? GameState.numbers[cellItem.index] : ""
             font.family: GameConstants.numberFont.name
-            font.pixelSize: GameState.cellSize * 0.60
+            font.pixelSize: (GameState.cellSize - GameSettings.cellSpacing * 2) * 0.60
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             textFormat: Text.PlainText
