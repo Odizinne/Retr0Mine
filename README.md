@@ -15,7 +15,7 @@ You'll get access to exclusive features relying on Steam, such as 2 player coop,
 ![image](.assets/screenshot.png)
 
 
-# Download
+## Download
 
 **Note:** Steam deck users with firefox should right click on `Download` -> `save file as` and save to desktop.  
 Remove `.download` extension after downloading.  
@@ -29,7 +29,11 @@ After installation you can right click Retr0Mine in your application menu and se
 | Linux Bundle           | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Linux.zip)                 |
 | SteamDeck installer    | x64       | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/refs/heads/main/tools/Retr0Mine_SteamDeckInstaller.desktop)     |
 
-# Resources
+## Build
+
+- Follow [build instructions for Windows 64bit](https://github.com/Odizinne/Retr0Mine/blob/main/BUILD.md)
+
+## Resources
 
 - Used [Floraphonic](https://www.floraphonic.com/) sound effects 
 - Used PopOs sound effects from [PopOs GTK-Theme](https://github.com/pop-os/gtk-theme)
