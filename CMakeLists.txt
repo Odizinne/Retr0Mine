@@ -17,7 +17,6 @@ find_package(Qt6 REQUIRED COMPONENTS
 )
 
 qt_standard_project_setup(REQUIRES 6.8)
-qt_policy(SET QTP0004 NEW)
 
 set(SOURCES
     src/main.cpp
@@ -102,7 +101,7 @@ set_source_files_properties(${QML_SINGLETONS}
     PROPERTIES QT_QML_SINGLETON_TYPE TRUE
 )
 
-add_executable(${CMAKE_PROJECT_NAME}
+qt_add_executable(${CMAKE_PROJECT_NAME}
     ${SOURCES}
     ${HEADERS}
     resources/icons/icons.qrc
@@ -162,8 +161,6 @@ elseif(APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/osx/libsteam_api.dylib
     )
 endif()
-
-qt_finalize_target(${CMAKE_PROJECT_NAME})
 
 include(GNUInstallDirs)
 
