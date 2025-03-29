@@ -374,9 +374,8 @@ Item {
                 color: GameConstants.foregroundColor
                 width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
                 height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
-                sourceSize.width: (cellItem.width / 2.1) * 2
-                sourceSize.height: (cellItem.height / 2.1) * 2
-                mipmap: false
+                sourceSize.width: (cellItem.width - 4) / 2.1
+                sourceSize.height: (cellItem.height - 4) / 2.1
             }
         }
 
@@ -401,14 +400,14 @@ Item {
                 }
                 width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 1.8
                 height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 1.8
-                sourceSize.width: (cellItem.width / 1.8) * 2
-                sourceSize.height: (cellItem.height / 1.8) * 2
+                sourceSize.width: (cellItem.width - 4) / 1.8
+                sourceSize.height: (cellItem.height - 4) / 1.8
                 opacity: 0
                 scale: 1.3
-                mipmap: false
                 Component.onCompleted: {
                     opacity = Qt.binding(function() { return cellItem.flagged ? 1 : 0; })
                     scale = Qt.binding(function() { return cellItem.flagged ? 1 : 1.3; })
+                    asynchronous = true
                 }
 
                 Behavior on opacity {
@@ -439,11 +438,10 @@ Item {
                 color: GameConstants.foregroundColor
                 width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
                 height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
-                sourceSize.width: (cellItem.width / 2.1) * 2
-                sourceSize.height: (cellItem.height / 2.1) * 2
+                sourceSize.width: (cellItem.width - 4) / 2.1
+                sourceSize.height: (cellItem.height - 4) / 2.1
                 opacity: 0
                 scale: 1.3
-                mipmap: false
                 Component.onCompleted: {
                     opacity = Qt.binding(function() { return cellItem.questioned ? 1 : 0; })
                     scale = Qt.binding(function() { return cellItem.questioned ? 1 : 1.3; })
@@ -477,11 +475,10 @@ Item {
                 color: "green"
                 width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
                 height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
-                sourceSize.width: (cellItem.width / 2.1) * 2
-                sourceSize.height: (cellItem.height / 2.1) * 2
+                sourceSize.width: (cellItem.width - 4) / 2.1
+                sourceSize.height: (cellItem.height - 4) / 2.1
                 opacity: 0
                 scale: 1.3
-                mipmap: false
                 Component.onCompleted: {
                     // Create new bindings that match the original ones
                     opacity = Qt.binding(function() { return cellItem.safeQuestioned ? 1 : 0; })
@@ -513,9 +510,8 @@ Item {
             sourceComponent: Image {
                 width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
                 height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
-                sourceSize.width: (cellItem.width / 2.1) * 2
-                sourceSize.height: (cellItem.height / 2.1) * 2
-                mipmap: false
+                sourceSize.width: (cellItem.width - 4) / 2.1
+                sourceSize.height: (cellItem.height - 4) / 2.1
                 opacity: 0
                 visible: !cellItem.flagged && !cellItem.questioned && !cellItem.revealed
                 source: GameState.mines.includes(cellItem.index) ? "qrc:/icons/warning.png" : "qrc:/icons/safe.png"
