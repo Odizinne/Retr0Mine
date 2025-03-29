@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     QString renderingBackend = gameCore->getRenderingBackend();
     qputenv("QSG_RHI_BACKEND", renderingBackend.toUtf8());
 
-    engine.loadFromModule("net.odizinne.retr0mine", "Main");
+    engine.loadFromModule("Odizinne.Retr0Mine", "Main");
 
     delete dummyWindow;
 

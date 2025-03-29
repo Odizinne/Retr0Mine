@@ -1,5 +1,5 @@
 import QtQuick
-import net.odizinne.retr0mine
+import Odizinne.Retr0Mine
 
 Item {
     Component.onCompleted: {

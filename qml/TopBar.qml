@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls.Universal
 import QtQuick.Layouts
 import QtQuick.Controls.impl
-import net.odizinne.retr0mine 1.0
+import Odizinne.Retr0Mine
 
 Item {
     id: control

@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls.Universal
 import QtQuick.Layouts
-import net.odizinne.retr0mine
+import Odizinne.Retr0Mine
 
 Popup {
     modal: true

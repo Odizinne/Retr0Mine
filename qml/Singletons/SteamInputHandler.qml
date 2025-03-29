@@ -1,6 +1,6 @@
 pragma Singleton
 import QtQuick
-import net.odizinne.retr0mine 1.0
+import Odizinne.Retr0Mine
 QtObject {
     id: steamInput
     signal requestSignal()

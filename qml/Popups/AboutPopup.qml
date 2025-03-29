@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import net.odizinne.retr0mine
+import Odizinne.Retr0Mine
 
 AnimatedPopup {
     id: control

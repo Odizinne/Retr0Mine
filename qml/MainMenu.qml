@@ -1,5 +1,5 @@
 import QtQuick.Controls.Universal
-import net.odizinne.retr0mine
+import Odizinne.Retr0Mine
 import QtQuick
 
 Menu {

@@ -114,7 +114,7 @@ add_executable(${CMAKE_PROJECT_NAME}
 )
 
 qt_add_qml_module(${CMAKE_PROJECT_NAME}
-    URI net.odizinne.retr0mine
+    URI Odizinne.Retr0Mine
     VERSION 1.0
     QML_FILES ${QML_FILES} ${QML_SINGLETONS}
 )

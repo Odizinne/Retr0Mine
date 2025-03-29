@@ -1,6 +1,6 @@
 import QtQuick
 import QtMultimedia
-import net.odizinne.retr0mine
+import Odizinne.Retr0Mine
 Item {
     id: control
     property int packIndex: GameSettings.soundPackIndex

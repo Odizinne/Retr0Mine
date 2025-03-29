@@ -1,7 +1,7 @@
 pragma Singleton
 import QtQuick
 import QtQuick.Controls.Universal
-import net.odizinne.retr0mine 1.0
+import Odizinne.Retr0Mine
 
 Item {
     SystemPalette {
