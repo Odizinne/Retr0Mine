@@ -285,7 +285,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: StandardKey.New
-        enabled: !(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)
+        enabled: (!(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)) && (GameState.gameStarted || GameState.gameOver)
         autoRepeat: false
         onActivated: {
             GameState.difficultyChanged = false

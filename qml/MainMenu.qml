@@ -16,7 +16,7 @@ Menu {
     }
     CustomMenuItem {
         text: qsTr("New game")
-        enabled: !(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)
+        enabled: (!(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)) && (GameState.gameStarted || GameState.gameOver)
         onTriggered: {
             GameState.difficultyChanged = false
             GridBridge.initGame()
