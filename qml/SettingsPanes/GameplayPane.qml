@@ -184,6 +184,7 @@ Pane {
             Button {
                 text: qsTr("Remap")
                 onClicked: SteamIntegration.showControllerBindingPanel()
+                Layout.rightMargin: 5
             }
         }
     }

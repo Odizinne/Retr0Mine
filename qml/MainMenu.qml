@@ -41,7 +41,10 @@ Menu {
         onTriggered: GridBridge.requestHint()
     }
 
-    MenuSeparator { }
+    MenuSeparator {
+        topPadding: 3
+        bottomPadding: 4
+    }
 
     CustomMenuItem {
         text: qsTr("Leaderboard")
@@ -64,7 +67,10 @@ Menu {
         onTriggered: ComponentsContext.settingsWindowVisible = true
     }
 
-    MenuSeparator { }
+    MenuSeparator {
+        topPadding: 3
+        bottomPadding: 4
+    }
 
     CustomMenuItem {
         text: qsTr("Help")

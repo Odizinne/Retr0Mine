@@ -161,22 +161,22 @@ Pane {
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            enabled: false
+            opacity: 0.5
             Label {
-                text: qsTr("Qt version")
+                text: qsTr("QT_VERSION")
                 Layout.fillWidth: true
             }
 
             Label {
                 text: GameCore.qtVersion
-                Layout.rightMargin: 5
+                Layout.rightMargin: 8
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: GameConstants.settingsComponentsHeight
-            enabled: false
+            opacity: 0.5
             Label {
                 text: qsTr("QT_QPA_PLATFORM")
                 Layout.fillWidth: true
@@ -184,7 +184,7 @@ Pane {
 
             Label {
                 text: GameCore.platformPlugin
-                Layout.rightMargin: 5
+                Layout.rightMargin: 8
             }
         }
     }
