@@ -808,7 +808,7 @@ QtObject {
                         }
                     })
 
-                    if (hintData.explanation && GridBridge.chatReference) {
+                    if (hintData.explanation) {
                         GridBridge.botMessageSent(hintData.explanation)
                     }
                 }

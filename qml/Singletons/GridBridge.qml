@@ -14,6 +14,10 @@ Item {
     signal botMessageSent(string explanation)
     signal leaderboardUpdated(string timeField, string timeValue, int winsField, int winsValue)
 
+    function safeArrayIncludes(array, value) {
+        return Array.isArray(array) && array !== null && array.includes(value)
+    }
+
     function getCell(index) {
         if (!grid) return null
 
@@ -655,7 +659,7 @@ Item {
 
         cellsToReveal.push(index)
 
-        if (mines.includes(index)) return cellsToReveal
+        if (safeArrayIncludes(mines, index)) return cellsToReveal
 
         const cellNumber = numbers[index] || 0
         if (cellNumber > 0) return cellsToReveal
