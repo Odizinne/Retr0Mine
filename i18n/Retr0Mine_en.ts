@@ -1243,72 +1243,77 @@ board generation on large grids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="110"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="112"/>
+        <source>Hover animation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="132"/>
         <source>Shake partially satisfied cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="130"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="152"/>
         <source>Dim satisfied cells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="151"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="173"/>
         <source>Dim level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="167"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="189"/>
         <source>Cell density</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="185"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="207"/>
         <source>Numbers font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="204"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="226"/>
         <source>Grid reset animation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="212"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="234"/>
         <source>Wave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="213"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="235"/>
         <source>Fade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="214"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="236"/>
         <source>Spin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="242"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="264"/>
         <source>Unlocked with a secret achievement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="263"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="285"/>
         <source>Flag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="296"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="318"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="319"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="341"/>
         <source>Unlock Master Tactician achievement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="342"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="364"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation type="unfinished"></translation>
     </message>

@@ -14,13 +14,14 @@ GridView {
     Item {
         id: mouseTracker
         anchors.fill: parent
-        z: 0
+        visible: GameSettings.cellFrameHoverAnimation
+        enabled: GameSettings.cellFrameHoverAnimation
 
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
             propagateComposedEvents: true
-            acceptedButtons: Qt.NoButton // Don't steal clicks
+            acceptedButtons: Qt.NoButton
 
             onPositionChanged: (mouse) => {
                 MouseTracker.globalMousePos = mapToGlobal(Qt.point(mouse.x, mouse.y))

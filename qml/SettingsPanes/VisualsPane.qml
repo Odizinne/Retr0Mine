@@ -99,6 +99,28 @@ Pane {
                     checked: GameSettings.cellFrame
                     onCheckedChanged: {
                         GameSettings.cellFrame = checked
+                        if (!checked) GameSettings.cellFrameHoverAnimation = false
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                enabled: GameSettings.cellFrame
+                Label {
+                    text: qsTr("Hover animation")
+                    Layout.fillWidth: true
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: cellFrameHoverAnimationSwitch.click()
+                    }
+                }
+                NfSwitch {
+                    id: cellFrameHoverAnimationSwitch
+                    checked: GameSettings.cellFrameHoverAnimation
+                    onCheckedChanged: {
+                        GameSettings.cellFrameHoverAnimation = checked
                     }
                 }
             }
