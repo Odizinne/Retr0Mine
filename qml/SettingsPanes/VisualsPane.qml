@@ -14,11 +14,11 @@ Pane {
 
         ColumnLayout {
             id: lyt
-            spacing: GameConstants.settingsColumnSpacing
+            spacing: Constants.settingsColumnSpacing
             anchors.fill: parent
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
 
                 Label {
                     text: qsTr("Animations")
@@ -30,9 +30,9 @@ Pane {
                 }
                 NfSwitch {
                     id: animationsSwitch
-                    checked: GameSettings.animations
+                    checked: UserSettings.animations
                     onCheckedChanged: {
-                        GameSettings.animations = checked
+                        UserSettings.animations = checked
                         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                             let cell = GridBridge.grid.itemAtIndex(i) as Cell
                             if (cell) {
@@ -45,7 +45,7 @@ Pane {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
 
                 Label {
                     text: qsTr("Display timer")
@@ -57,15 +57,15 @@ Pane {
                 }
                 NfSwitch {
                     id: displayTimerSwitch
-                    checked: GameSettings.displayTimer
-                    onCheckedChanged: GameSettings.displayTimer = checked
+                    checked: UserSettings.displayTimer
+                    onCheckedChanged: UserSettings.displayTimer = checked
                 }
             }
 
             RowLayout {
                 enabled: !GameCore.gamescope
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 Label {
                     text: qsTr("Start in full screen")
                     Layout.fillWidth: true
@@ -76,16 +76,16 @@ Pane {
                 }
                 NfSwitch {
                     id: startFullScreenSwitch
-                    checked: GameSettings.startFullScreen || GameCore.gamescope
+                    checked: UserSettings.startFullScreen || GameCore.gamescope
                     onCheckedChanged: {
-                        GameSettings.startFullScreen = checked
+                        UserSettings.startFullScreen = checked
                     }
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 Label {
                     text: qsTr("Revealed cells frame")
                     Layout.fillWidth: true
@@ -96,18 +96,18 @@ Pane {
                 }
                 NfSwitch {
                     id: cellFrameSwitch
-                    checked: GameSettings.cellFrame
+                    checked: UserSettings.cellFrame
                     onCheckedChanged: {
-                        GameSettings.cellFrame = checked
-                        if (!checked) GameSettings.cellFrameHoverAnimation = false
+                        UserSettings.cellFrame = checked
+                        if (!checked) UserSettings.cellFrameHoverAnimation = false
                     }
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
-                enabled: GameSettings.cellFrame
+                Layout.preferredHeight: Constants.settingsComponentsHeight
+                enabled: UserSettings.cellFrame
                 Label {
                     text: qsTr("Hover animation")
                     Layout.fillWidth: true
@@ -118,16 +118,16 @@ Pane {
                 }
                 NfSwitch {
                     id: cellFrameHoverAnimationSwitch
-                    checked: GameSettings.cellFrameHoverAnimation
+                    checked: UserSettings.cellFrameHoverAnimation
                     onCheckedChanged: {
-                        GameSettings.cellFrameHoverAnimation = checked
+                        UserSettings.cellFrameHoverAnimation = checked
                     }
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 Label {
                     text: qsTr("Shake partially satisfied cells")
                     Layout.fillWidth: true
@@ -138,16 +138,16 @@ Pane {
                 }
                 NfSwitch {
                     id: shakeUnifinishedNumbersSwitch
-                    checked: GameSettings.shakeUnifinishedNumbers
+                    checked: UserSettings.shakeUnifinishedNumbers
                     onCheckedChanged: {
-                        GameSettings.shakeUnifinishedNumbers = checked
+                        UserSettings.shakeUnifinishedNumbers = checked
                     }
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 Label {
                     text: qsTr("Dim satisfied cells")
                     Layout.fillWidth: true
@@ -158,17 +158,17 @@ Pane {
                 }
                 NfSwitch {
                     id: dimSatisfiedSwitch
-                    checked: GameSettings.dimSatisfied
+                    checked: UserSettings.dimSatisfied
                     onCheckedChanged: {
-                        GameSettings.dimSatisfied = checked
+                        UserSettings.dimSatisfied = checked
                     }
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
-                enabled: GameSettings.dimSatisfied
+                Layout.preferredHeight: Constants.settingsComponentsHeight
+                enabled: UserSettings.dimSatisfied
                 Label {
                     text: qsTr("Dim level")
                     Layout.fillWidth: true
@@ -177,14 +177,14 @@ Pane {
                     id: dimmedOpacitySlider
                     from: 0.3
                     to: 0.8
-                    value: GameSettings.satisfiedOpacity
-                    onValueChanged: GameSettings.satisfiedOpacity = value
+                    value: UserSettings.satisfiedOpacity
+                    onValueChanged: UserSettings.satisfiedOpacity = value
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 Label {
                     text: qsTr("Cell density")
                     Layout.fillWidth: true
@@ -195,14 +195,14 @@ Pane {
                     Layout.rightMargin: 5
                     from: 1
                     to: 3
-                    value: GameSettings.cellSpacing
-                    onValueChanged: GameSettings.cellSpacing = value
+                    value: UserSettings.cellSpacing
+                    onValueChanged: UserSettings.cellSpacing = value
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 Label {
                     text: qsTr("Numbers font")
                     Layout.fillWidth: true
@@ -212,16 +212,16 @@ Pane {
                     id: colorSchemeComboBox
                     model: ["Fira Sans", "Noto Serif", "Space Mono", "Orbitron", "Pixelify"]
                     Layout.rightMargin: 5
-                    currentIndex: GameSettings.fontIndex
+                    currentIndex: UserSettings.fontIndex
                     onActivated: {
-                        GameSettings.fontIndex = currentIndex
+                        UserSettings.fontIndex = currentIndex
                     }
                 }
             }
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 Label {
                     text: qsTr("Grid reset animation")
                     Layout.fillWidth: true
@@ -264,15 +264,15 @@ Pane {
                         ToolTip.text: qsTr("Unlocked with a secret achievement")
                         ToolTip.delay: 1000
                     }
-                    currentIndex: GameSettings.gridResetAnimationIndex
+                    currentIndex: UserSettings.gridResetAnimationIndex
                     onActivated: {
-                        GameSettings.gridResetAnimationIndex = currentIndex
+                        UserSettings.gridResetAnimationIndex = currentIndex
                     }
                 }
             }
 
             RowLayout {
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 spacing: 10
                 Layout.rightMargin: 5
 
@@ -287,14 +287,14 @@ Pane {
                 }
 
                 NfButton {
-                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
-                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                    Layout.preferredWidth: Constants.settingsComponentsHeight
+                    Layout.preferredHeight: Constants.settingsComponentsHeight
                     checkable: true
-                    checked: GameSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
+                    checked: UserSettings.flagSkinIndex === 0 || !SteamIntegration.initialized
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     onCheckedChanged: {
-                        if (checked) GameSettings.flagSkinIndex = 0
+                        if (checked) UserSettings.flagSkinIndex = 0
                     }
 
                     IconImage {
@@ -307,17 +307,17 @@ Pane {
                 }
 
                 NfButton {
-                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
-                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                    Layout.preferredWidth: Constants.settingsComponentsHeight
+                    Layout.preferredHeight: Constants.settingsComponentsHeight
                     enabled: GameState.flag1Unlocked
                     checkable: true
-                    checked: GameState.flag1Unlocked && GameSettings.flagSkinIndex === 1
+                    checked: GameState.flag1Unlocked && UserSettings.flagSkinIndex === 1
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     ToolTip.visible: hovered && !enabled
                     ToolTip.text: qsTr("Unlock Trust Your Instincts achievement")
                     onCheckedChanged: {
-                        if (checked) GameSettings.flagSkinIndex = 1
+                        if (checked) UserSettings.flagSkinIndex = 1
                     }
 
                     IconImage {
@@ -330,17 +330,17 @@ Pane {
                 }
 
                 NfButton {
-                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
-                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                    Layout.preferredWidth: Constants.settingsComponentsHeight
+                    Layout.preferredHeight: Constants.settingsComponentsHeight
                     enabled: GameState.flag2Unlocked
                     checkable: true
-                    checked: GameState.flag2Unlocked && GameSettings.flagSkinIndex === 2
+                    checked: GameState.flag2Unlocked && UserSettings.flagSkinIndex === 2
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     ToolTip.visible: hovered && !enabled
                     ToolTip.text: qsTr("Unlock Master Tactician achievement")
                     onCheckedChanged: {
-                        if (checked) GameSettings.flagSkinIndex = 2
+                        if (checked) UserSettings.flagSkinIndex = 2
                     }
 
                     IconImage {
@@ -353,17 +353,17 @@ Pane {
                 }
 
                 NfButton {
-                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
-                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                    Layout.preferredWidth: Constants.settingsComponentsHeight
+                    Layout.preferredHeight: Constants.settingsComponentsHeight
                     enabled: GameState.flag3Unlocked
                     checkable: true
-                    checked: GameState.flag3Unlocked && GameSettings.flagSkinIndex === 3
+                    checked: GameState.flag3Unlocked && UserSettings.flagSkinIndex === 3
                     ButtonGroup.group: buttonGroup
                     Layout.alignment: Qt.AlignHCenter
                     ToolTip.visible: hovered && !enabled
                     ToolTip.text: qsTr("Unlock Minefield Legend achievement")
                     onCheckedChanged: {
-                        if (checked) GameSettings.flagSkinIndex = 3
+                        if (checked) UserSettings.flagSkinIndex = 3
                     }
 
                     IconImage {

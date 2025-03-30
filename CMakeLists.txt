@@ -86,8 +86,8 @@ set(QML_FILES
 )
 
 set(QML_SINGLETONS
-    qml/Singletons/GameSettings.qml
-    qml/Singletons/GameConstants.qml
+    qml/Singletons/UserSettings.qml
+    qml/Singletons/Constants.qml
     qml/Singletons/GameState.qml
     qml/Singletons/SaveManager.qml
     qml/Singletons/GridBridge.qml
@@ -95,7 +95,7 @@ set(QML_SINGLETONS
     qml/Singletons/NetworkManager.qml
     qml/Singletons/SteamInputHandler.qml
     qml/Singletons/MouseTracker.qml
-    qml/Singletons/GameAudio.qml
+    qml/Singletons/AudioEngine.qml
 
 )
 

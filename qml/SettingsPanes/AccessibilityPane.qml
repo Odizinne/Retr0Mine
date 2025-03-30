@@ -5,12 +5,12 @@ import Odizinne.Retr0Mine
 
 Pane {
     ColumnLayout {
-        spacing: GameConstants.settingsColumnSpacing
+        spacing: Constants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Color correction")
@@ -25,16 +25,16 @@ Pane {
                     qsTr("Tritanopia")
                 ]
                 Layout.rightMargin: 5
-                currentIndex: GameSettings.colorBlindness
+                currentIndex: UserSettings.colorBlindness
                 onActivated: {
-                    GameSettings.colorBlindness = currentIndex
+                    UserSettings.colorBlindness = currentIndex
                 }
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("High contrast flags")
                 Layout.fillWidth: true
@@ -45,14 +45,14 @@ Pane {
             }
             NfSwitch {
                 id: highContrastFlagSwitch
-                checked: GameSettings.contrastFlag
-                onCheckedChanged: GameSettings.contrastFlag = checked
+                checked: UserSettings.contrastFlag
+                onCheckedChanged: UserSettings.contrastFlag = checked
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Grid scale")
                 Layout.fillWidth: true
@@ -61,8 +61,8 @@ Pane {
                 id: gridScaleSlider
                 from: 1
                 to: 2
-                value: GameSettings.gridScale
-                onValueChanged: GameSettings.gridScale = value
+                value: UserSettings.gridScale
+                onValueChanged: UserSettings.gridScale = value
             }
         }
     }

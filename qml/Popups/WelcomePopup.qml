@@ -21,7 +21,7 @@ AnimatedPopup {
         anchors.margins: 8
         Label {
             text: qsTr("Welcome to Retr0Mine")
-            color: GameConstants.accentColor
+            color: Constants.accentColor
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: 22
         }
@@ -44,7 +44,7 @@ AnimatedPopup {
                 Layout.preferredWidth: control.buttonWidth
                 onClicked: {
                     control.visible = false
-                    GameSettings.firstRunCompleted = true
+                    UserSettings.firstRunCompleted = true
                 }
             }
 
@@ -92,7 +92,7 @@ AnimatedPopup {
                     id: leftCLabel
                     Layout.alignment: Qt.AlignTop
                     horizontalAlignment:  Text.AlignRight
-                    text: GameConstants.leftClickExplanation
+                    text: Constants.leftClickExplanation
                     Layout.fillWidth: true
                     Layout.preferredWidth: parent.labelSize
                     wrapMode: Text.Wrap
@@ -103,14 +103,14 @@ AnimatedPopup {
                     id: mouseBase
                     Layout.alignment: Qt.AlignHCenter
                     source: "qrc:/images/mouse_base.png"
-                    color: GameConstants.foregroundColor
+                    color: Constants.foregroundColor
                     sourceSize.height: 164
                     sourceSize.width: 164
                     IconImage {
                         id: mouseLeft
                         anchors.fill: parent
                         source: "qrc:/images/mouse_left.png"
-                        color: GameSettings.invertLRClick ? GameConstants.foregroundColor : GameConstants.accentColor
+                        color: UserSettings.invertLRClick ? Constants.foregroundColor : Constants.accentColor
                         sourceSize.height: 164
                         sourceSize.width: 164
                     }
@@ -119,7 +119,7 @@ AnimatedPopup {
                         id: mouseRight
                         anchors.fill: parent
                         source: "qrc:/images/mouse_right.png"
-                        color: GameSettings.invertLRClick ? GameConstants.accentColor : GameConstants.foregroundColor
+                        color: UserSettings.invertLRClick ? Constants.accentColor : Constants.foregroundColor
                         sourceSize.height: 164
                         sourceSize.width: 164
 
@@ -130,7 +130,7 @@ AnimatedPopup {
                     id: rightCLabel
                     Layout.alignment: Qt.AlignTop
                     horizontalAlignment:  Text.AlignLeft
-                    text: GameConstants.rightClickExplanation
+                    text: Constants.rightClickExplanation
                     Layout.fillWidth: true
                     wrapMode: Text.Wrap
                     font.pixelSize: 16
@@ -159,9 +159,9 @@ AnimatedPopup {
 
             NfSwitch {
                 id: gameplaySwitch
-                checked: GameSettings.invertLRClick
+                checked: UserSettings.invertLRClick
                 onCheckedChanged: {
-                    GameSettings.invertLRClick = checked
+                    UserSettings.invertLRClick = checked
                 }
             }
         }
@@ -223,17 +223,17 @@ AnimatedPopup {
                     Rectangle {
                         anchors.fill: parent
                         border.width: 2
-                        visible: cell.modelData.type === "number" && GameSettings.cellFrame
+                        visible: cell.modelData.type === "number" && UserSettings.cellFrame
                         color: "transparent"
-                        border.color: GameConstants.frameColor
-                        opacity: cell.modelData.dimWhenSatisfied && GameSettings.dimSatisfied ? GameSettings.satisfiedOpacity : 1
+                        border.color: Constants.frameColor
+                        opacity: cell.modelData.dimWhenSatisfied && UserSettings.dimSatisfied ? UserSettings.satisfiedOpacity : 1
                     }
 
                     Text {
                         anchors.centerIn: parent
                         text: cell.modelData.value || ""
                         color: cell.modelData.color || ""
-                        opacity: cell.modelData.dimWhenSatisfied && GameSettings.dimSatisfied ? 0.25 : 1
+                        opacity: cell.modelData.dimWhenSatisfied && UserSettings.dimSatisfied ? 0.25 : 1
                         font.pixelSize: 35 * 0.60
                         font.bold: true
                         horizontalAlignment: Text.AlignHCenter
@@ -245,8 +245,8 @@ AnimatedPopup {
                         anchors.centerIn: parent
                         source: "qrc:/icons/flag.png"
                         color: {
-                            if (GameSettings.contrastFlag) return GameConstants.foregroundColor
-                            else return GameConstants.accentColor
+                            if (UserSettings.contrastFlag) return Constants.foregroundColor
+                            else return Constants.accentColor
                         }
                         visible: cell.modelData.type === "flag"
                         sourceSize.width: 35 / 1.8
@@ -271,9 +271,9 @@ AnimatedPopup {
 
             NfSwitch {
                 id: dimSwitch
-                checked: GameSettings.dimSatisfied
+                checked: UserSettings.dimSatisfied
                 onCheckedChanged: {
-                    GameSettings.dimSatisfied = checked
+                    UserSettings.dimSatisfied = checked
                 }
             }
         }
@@ -292,9 +292,9 @@ AnimatedPopup {
 
             NfSwitch {
                 id: frameSwitch
-                checked: GameSettings.cellFrame
+                checked: UserSettings.cellFrame
                 onCheckedChanged: {
-                    GameSettings.cellFrame = checked
+                    UserSettings.cellFrame = checked
                 }
             }
         }
@@ -310,10 +310,10 @@ AnimatedPopup {
             NfSwitch {
                 id: accentFlagSwitch
                 onCheckedChanged: {
-                    GameSettings.contrastFlag = !checked
+                    UserSettings.contrastFlag = !checked
                 }
                 Component.onCompleted: {
-                    checked = !GameSettings.contrastFlag
+                    checked = !UserSettings.contrastFlag
                 }
             }
         }
@@ -368,7 +368,7 @@ AnimatedPopup {
                         { type: "number", value: "5", color: "#ebc034" },
                         { type: "number", value: "6", color: "#34ebb1" },
                         { type: "number", value: "7", color: "#eb8634" },
-                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                        { type: "number", value: "8", color: Constants.foregroundColor }
                     ]
 
                     delegate: NfButton {
@@ -382,8 +382,8 @@ AnimatedPopup {
                             anchors.fill: parent
                             border.width: 2
                             color: "transparent"
-                            border.color: GameConstants.frameColor
-                            visible: noneCell.modelData.type === "number" && GameSettings.cellFrame
+                            border.color: Constants.frameColor
+                            visible: noneCell.modelData.type === "number" && UserSettings.cellFrame
                         }
 
                         Text {
@@ -405,7 +405,7 @@ AnimatedPopup {
                     Layout.columnSpan: 3
                     onClicked: {
                         control.visible = false
-                        GameSettings.colorBlindness = 0
+                        UserSettings.colorBlindness = 0
                         accessibilityConfig.visible = false
                         control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
@@ -429,7 +429,7 @@ AnimatedPopup {
                         { type: "number", value: "5", color: "#ff7f00" },
                         { type: "number", value: "6", color: "#f781bf" },
                         { type: "number", value: "7", color: "#a65628" },
-                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                        { type: "number", value: "8", color: Constants.foregroundColor }
                     ]
 
                     delegate: NfButton {
@@ -443,8 +443,8 @@ AnimatedPopup {
                             anchors.fill: parent
                             border.width: 2
                             color: "transparent"
-                            border.color: GameConstants.frameColor
-                            visible: tritCell.modelData.type === "number" && GameSettings.cellFrame
+                            border.color: Constants.frameColor
+                            visible: tritCell.modelData.type === "number" && UserSettings.cellFrame
                         }
 
                         Text {
@@ -466,7 +466,7 @@ AnimatedPopup {
                     Layout.columnSpan: 3
                     onClicked: {
                         control.visible = false
-                        GameSettings.colorBlindness = 3
+                        UserSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
@@ -494,7 +494,7 @@ AnimatedPopup {
                         { type: "number", value: "5", color: "#a6d854" },
                         { type: "number", value: "6", color: "#ffd92f" },
                         { type: "number", value: "7", color: "#e5c494" },
-                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                        { type: "number", value: "8", color: Constants.foregroundColor }
                     ]
 
                     delegate: NfButton {
@@ -508,8 +508,8 @@ AnimatedPopup {
                             anchors.fill: parent
                             border.width: 2
                             color: "transparent"
-                            border.color: GameConstants.frameColor
-                            visible: protCell.modelData.type === "number" && GameSettings.cellFrame
+                            border.color: Constants.frameColor
+                            visible: protCell.modelData.type === "number" && UserSettings.cellFrame
                         }
 
                         Text {
@@ -531,7 +531,7 @@ AnimatedPopup {
                     Layout.columnSpan: 3
                     onClicked: {
                         control.visible = false
-                        GameSettings.colorBlindness = 2
+                        UserSettings.colorBlindness = 2
                         accessibilityConfig.visible = false
                         control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
@@ -554,7 +554,7 @@ AnimatedPopup {
                         { type: "number", value: "5", color: "#ff7f00" },
                         { type: "number", value: "6", color: "#a65628" },
                         { type: "number", value: "7", color: "#f781bf" },
-                        { type: "number", value: "8", color: GameConstants.foregroundColor }
+                        { type: "number", value: "8", color: Constants.foregroundColor }
                     ]
 
                     delegate: NfButton {
@@ -568,8 +568,8 @@ AnimatedPopup {
                             anchors.fill: parent
                             border.width: 2
                             color: "transparent"
-                            border.color: GameConstants.frameColor
-                            visible: deutCell.modelData.type === "number" && GameSettings.cellFrame
+                            border.color: Constants.frameColor
+                            visible: deutCell.modelData.type === "number" && UserSettings.cellFrame
                         }
 
                         Text {
@@ -591,7 +591,7 @@ AnimatedPopup {
                     Layout.fillWidth: true
                     onClicked: {
                         control.visible = false
-                        GameSettings.colorBlindness = 3
+                        UserSettings.colorBlindness = 3
                         accessibilityConfig.visible = false
                         control.currentLayoutImplicitHeight = finishedConfig.implicitHeight
                         finishedConfig.visible = true
@@ -611,7 +611,7 @@ AnimatedPopup {
 
         Label {
             text: qsTr("You're all set!")
-            color: GameConstants.accentColor
+            color: Constants.accentColor
             font.pixelSize: 20
         }
 
@@ -632,7 +632,7 @@ AnimatedPopup {
                 text: qsTr("Close")
                 onClicked: {
                     control.visible = false
-                    GameSettings.firstRunCompleted = true
+                    UserSettings.firstRunCompleted = true
                 }
             }
         }

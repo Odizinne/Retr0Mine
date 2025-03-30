@@ -85,7 +85,7 @@ QtObject {
             return
         }
 
-        const difficultySet = GameState.difficultySettings[GameSettings.difficulty]
+        const difficultySet = GameState.difficultySettings[UserSettings.difficulty]
         const gridSyncData = {
             gridSync: true,
             gridSizeX: difficultySet.x,
@@ -203,12 +203,12 @@ QtObject {
         }
 
         if (matchedDifficulty >= 0) {
-            GameSettings.difficulty = matchedDifficulty
+            UserSettings.difficulty = matchedDifficulty
         } else {
-            GameSettings.customWidth = data.gridSizeX
-            GameSettings.customHeight = data.gridSizeY
-            GameSettings.customMines = data.mineCount
-            GameSettings.difficulty = 4
+            UserSettings.customWidth = data.gridSizeX
+            UserSettings.customHeight = data.gridSizeY
+            UserSettings.customMines = data.mineCount
+            UserSettings.difficulty = 4
         }
 
         if (!SteamIntegration.isHost) {
@@ -759,9 +759,9 @@ QtObject {
             GameTimer.stop()
 
             if (GameState.gameWon) {
-                GameAudio.playWin()
+                AudioEngine.playWin()
             } else {
-                GameAudio.playLoose()
+                AudioEngine.playLoose()
                 GridBridge.revealAllMines()
             }
 
@@ -848,7 +848,7 @@ QtObject {
 
         case "prepareDifficultyChange":
             if (cellIndex >= 0 && cellIndex < GameState.difficultySettings.length) {
-                GameSettings.difficulty = cellIndex
+                UserSettings.difficulty = cellIndex
 
                 const difficultySet = GameState.difficultySettings[cellIndex]
                 GameState.gridSizeX = difficultySet.x
@@ -1079,7 +1079,7 @@ QtObject {
             return false
         }
 
-        GameSettings.difficulty = difficultyIndex
+        UserSettings.difficulty = difficultyIndex
         const difficultySet = GameState.difficultySettings[difficultyIndex]
         SteamIntegration.sendGameAction("prepareDifficultyChange", difficultyIndex)
 

@@ -81,12 +81,12 @@ Item {
         )
         if (foundDifficulty === 0 || foundDifficulty === 1 ||
             foundDifficulty === 2 || foundDifficulty === 3) {
-            GameSettings.difficulty = foundDifficulty
+            UserSettings.difficulty = foundDifficulty
         } else {
-            GameSettings.difficulty = 4
-            GameSettings.customWidth = GameState.gridSizeX
-            GameSettings.customHeight = GameState.gridSizeY
-            GameSettings.customMines = GameState.mineCount
+            UserSettings.difficulty = 4
+            UserSettings.customWidth = GameState.gridSizeX
+            UserSettings.customHeight = GameState.gridSizeY
+            UserSettings.customMines = GameState.mineCount
         }
 
         GameTimer.resumeFrom(savedCentiseconds)
@@ -176,6 +176,6 @@ Item {
 
         GameCore.saveGameState(JSON.stringify(saveData), filename)
         SaveManager.manualSave = false
-        SteamIntegration.difficulty = GameSettings.difficulty
+        SteamIntegration.difficulty = UserSettings.difficulty
     }
 }

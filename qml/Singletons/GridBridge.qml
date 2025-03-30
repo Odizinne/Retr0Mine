@@ -110,7 +110,7 @@ Item {
                 cell.highlightHint()
             })
 
-            if (GameSettings.hintReasoningInChat && chatReference && explanation && typeof explanation === "string" && explanation.length > 0) {
+            if (UserSettings.hintReasoningInChat && chatReference && explanation && typeof explanation === "string" && explanation.length > 0) {
                 chatReference.addBotMessage(explanation)
             }
         }
@@ -127,7 +127,7 @@ Item {
     }
 
     function performRevealConnectedCells(index, playerIdentifier) {
-        if (!GameSettings.autoreveal || !GameState.gameStarted || GameState.gameOver) return
+        if (!UserSettings.autoreveal || !GameState.gameStarted || GameState.gameOver) return
 
         const cell = getCell(index)
         if (!cell || !cell.revealed || GameState.numbers[index] <= 0) return
@@ -183,7 +183,7 @@ Item {
                     GameLogic.boardGenerationCompleted.connect(onBoardGenerated)
 
                     let row = -1, col = -1
-                    if (GameSettings.safeFirstClick) {
+                    if (UserSettings.safeFirstClick) {
                         row = Math.floor(GameState.firstClickIndex / GameState.gridSizeX)
                         col = GameState.firstClickIndex % GameState.gridSizeX
                     }
@@ -206,7 +206,7 @@ Item {
         generationCancelled = false
 
         var row, col
-        if (GameSettings.safeFirstClick) {
+        if (UserSettings.safeFirstClick) {
             row = Math.floor(index / GameState.gridSizeX)
             col = index % GameState.gridSizeX
         } else {
@@ -276,7 +276,7 @@ Item {
 
                 GameTimer.stop()
                 revealAllMines()
-                GameAudio.playLoose()
+                AudioEngine.playLoose()
                 GameState.displayPostGame = true
 
                 if (NetworkManager.onGameLost(currentIndex)) {
@@ -301,12 +301,12 @@ Item {
         if (!GameState.gameOver) {
             if (SteamIntegration.isInMultiplayerGame) {
                 if (playerIdentifier !== SteamIntegration.playerName && playerIdentifier !== "firstClick") {
-                    GameAudio.playRemoteClick()
+                    AudioEngine.playRemoteClick()
                 } else {
-                    GameAudio.playClick()
+                    AudioEngine.playClick()
                 }
             } else {
-                GameAudio.playClick()
+                AudioEngine.playClick()
             }
         }
     }
@@ -363,7 +363,7 @@ Item {
         }
 
         GameState.noAnimReset = false
-        if (GameSettings.animations && !GameState.difficultyChanged) {
+        if (UserSettings.animations && !GameState.difficultyChanged) {
             for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                 withCell(i, function(cell) {
                     cell.startGridResetAnimation()
@@ -399,7 +399,7 @@ Item {
 
             if (NetworkManager.onGameWon()) {
                 GameState.displayPostGame = true
-                GameAudio.playWin()
+                AudioEngine.playWin()
                 return
             }
 
@@ -492,7 +492,7 @@ Item {
             }
 
             GameState.displayPostGame = true
-            GameAudio.playWin()
+            AudioEngine.playWin()
         }
     }
 
@@ -543,22 +543,22 @@ Item {
                             cell.questioned = false
                             cell.safeQuestioned = false
                             GameState.flaggedCount++
-                        } else if (GameSettings.enableQuestionMarks) {
+                        } else if (UserSettings.enableQuestionMarks) {
                             cell.flagged = false
                             cell.questioned = true
                             cell.safeQuestioned = false
-                        } else if (GameSettings.enableSafeQuestionMarks) {
+                        } else if (UserSettings.enableSafeQuestionMarks) {
                             cell.flagged = false
                             cell.questioned = false
                             cell.safeQuestioned = true
                         }
                     } else if (cell.flagged) {
-                        if (GameSettings.enableQuestionMarks) {
+                        if (UserSettings.enableQuestionMarks) {
                             cell.flagged = false
                             cell.questioned = true
                             cell.safeQuestioned = false
                             GameState.flaggedCount--
-                        } else if (GameSettings.enableSafeQuestionMarks) {
+                        } else if (UserSettings.enableSafeQuestionMarks) {
                             cell.flagged = false
                             cell.questioned = false
                             cell.safeQuestioned = true
@@ -571,7 +571,7 @@ Item {
                             flagCompletelyRemoved = true
                         }
                     } else if (cell.questioned) {
-                        if (GameSettings.enableSafeQuestionMarks) {
+                        if (UserSettings.enableSafeQuestionMarks) {
                             cell.questioned = false
                             cell.safeQuestioned = true
                         } else {
@@ -640,7 +640,7 @@ Item {
             }
         }
 
-        if (anyCellNeedsShake && !GameState.gameOver && GameSettings.shakeUnifinishedNumbers) {
+        if (anyCellNeedsShake && !GameState.gameOver && UserSettings.shakeUnifinishedNumbers) {
             globalShakeActive = true
 
             shakeTimer.restart()

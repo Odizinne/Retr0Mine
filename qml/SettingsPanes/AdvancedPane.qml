@@ -5,12 +5,12 @@ import Odizinne.Retr0Mine
 
 Pane {
     ColumnLayout {
-        spacing: GameConstants.settingsColumnSpacing
+        spacing: Constants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Color scheme")
                 Layout.fillWidth: true
@@ -20,15 +20,15 @@ Pane {
                 id: colorSchemeComboBox
                 model: [qsTr("System"), qsTr("Dark"), qsTr("Light")]
                 Layout.rightMargin: 5
-                currentIndex: GameSettings.colorSchemeIndex
+                currentIndex: UserSettings.colorSchemeIndex
                 onActivated: {
-                    if (GameSettings.accentColorIndex !== 0) {
-                        GameCore.setApplicationPalette(GameSettings.accentColorIndex)
+                    if (UserSettings.accentColorIndex !== 0) {
+                        GameCore.setApplicationPalette(UserSettings.accentColorIndex)
                     }
-                    GameSettings.colorSchemeIndex = currentIndex
+                    UserSettings.colorSchemeIndex = currentIndex
                     GameCore.setThemeColorScheme(currentIndex)
-                    if (GameSettings.accentColorIndex !== 0) {
-                        GameCore.setApplicationPalette(GameSettings.accentColorIndex)
+                    if (UserSettings.accentColorIndex !== 0) {
+                        GameCore.setApplicationPalette(UserSettings.accentColorIndex)
                     }
                 }
             }
@@ -36,7 +36,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Accent color")
                 Layout.fillWidth: true
@@ -50,25 +50,25 @@ Pane {
                 Layout.rightMargin: 5
                 currentIndex: {
                     if (Qt.platform.os === "linux") {
-                        return GameSettings.accentColorIndex - 1;
+                        return UserSettings.accentColorIndex - 1;
                     } else {
-                        return GameSettings.accentColorIndex;
+                        return UserSettings.accentColorIndex;
                     }
                 }
                 onActivated: {
                     if (Qt.platform.os === "linux") {
-                        GameSettings.accentColorIndex = currentIndex + 1;
+                        UserSettings.accentColorIndex = currentIndex + 1;
                     } else {
-                        GameSettings.accentColorIndex = currentIndex;
+                        UserSettings.accentColorIndex = currentIndex;
                     }
-                    GameCore.setApplicationPalette(GameSettings.accentColorIndex)
+                    GameCore.setApplicationPalette(UserSettings.accentColorIndex)
                 }
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Rendering backend")
@@ -86,9 +86,9 @@ Pane {
                            ["OpenGL", "Vulkan"] :
                            ["OpenGL", "DirectX11", "DirectX12"]
                 Layout.rightMargin: 5
-                currentIndex: GameSettings.renderingBackend
+                currentIndex: UserSettings.renderingBackend
                 onActivated: {
-                    GameSettings.renderingBackend  = currentIndex;
+                    UserSettings.renderingBackend  = currentIndex;
                     GameCore.restartRetr0Mine()
                 }
             }
@@ -96,7 +96,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             enabled: !GameCore.gamescope
             Label {
                 text: qsTr("Enable custom cursor")
@@ -109,9 +109,9 @@ Pane {
 
             NfSwitch {
                 id: customCursorSwitch
-                checked: GameSettings.customCursor
+                checked: UserSettings.customCursor
                 onCheckedChanged: {
-                    GameSettings.customCursor = checked
+                    UserSettings.customCursor = checked
                     GameCore.setCursor(checked)
                 }
             }
@@ -120,7 +120,7 @@ Pane {
         RowLayout {
             enabled: Qt.platform.os === "windows"
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Enable custom titlebar")
@@ -138,11 +138,11 @@ Pane {
 
             NfSwitch {
                 id: customTitlebarSwitch
-                checked: GameSettings.customTitlebar
+                checked: UserSettings.customTitlebar
                 onCheckedChanged: {
-                    GameSettings.customTitlebar = checked
+                    UserSettings.customTitlebar = checked
                     if (checked) {
-                        if (GameConstants.isDarkMode) {
+                        if (Constants.isDarkMode) {
                             GameCore.setTitlebarColor(0)
                         } else {
                             GameCore.setTitlebarColor(1)
@@ -160,7 +160,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             opacity: 0.5
             Label {
                 text: qsTr("QT_VERSION")
@@ -175,7 +175,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             opacity: 0.5
             Label {
                 text: qsTr("QT_QPA_PLATFORM")

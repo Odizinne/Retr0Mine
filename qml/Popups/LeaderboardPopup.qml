@@ -65,8 +65,8 @@ AnimatedPopup {
                     anchors.centerIn: parent
                     color: "transparent"
                     opacity: 0.5
-                    border.color: GameConstants.foregroundColor
-                    border.width: GameConstants.isDarkMode ? 1 : 2
+                    border.color: Constants.foregroundColor
+                    border.width: Constants.isDarkMode ? 1 : 2
                 }
             }
 
@@ -88,7 +88,7 @@ AnimatedPopup {
 
             Rectangle {
                 anchors.fill: parent
-                color: GameConstants.settingsPaneColor
+                color: Constants.settingsPaneColor
             }
 
             Frame {

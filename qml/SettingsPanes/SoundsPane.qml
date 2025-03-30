@@ -4,12 +4,12 @@ import Odizinne.Retr0Mine
 
 Pane {
     ColumnLayout {
-        spacing: GameConstants.settingsColumnSpacing
+        spacing: Constants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Sound effects")
                 Layout.fillWidth: true
@@ -18,11 +18,11 @@ Pane {
                 id: soundVolumeSlider
                 from: 0
                 to: 1
-                value: GameSettings.volume
-                onValueChanged: GameSettings.volume = value
+                value: UserSettings.volume
+                onValueChanged: UserSettings.volume = value
                 onPressedChanged: {
                     if (!pressed) {
-                        GameAudio.playClick()
+                        AudioEngine.playClick()
                     }
                 }
             }
@@ -31,7 +31,7 @@ Pane {
         RowLayout {
             enabled: SteamIntegration.initialized
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Sound effects (remote player)")
                 Layout.fillWidth: true
@@ -40,11 +40,11 @@ Pane {
                 id: remoteSoundVolumeSlider
                 from: 0
                 to: 1
-                value: GameSettings.remoteVolume
-                onValueChanged: GameSettings.remoteVolume = value
+                value: UserSettings.remoteVolume
+                onValueChanged: UserSettings.remoteVolume = value
                 onPressedChanged: {
                     if (!pressed) {
-                        GameAudio.playRemoteClick()
+                        AudioEngine.playRemoteClick()
                     }
                 }
             }
@@ -52,7 +52,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Message received")
                 Layout.fillWidth: true
@@ -61,11 +61,11 @@ Pane {
                 id: newChatMessageVolumeeSlider
                 from: 0
                 to: 1
-                value: GameSettings.newChatMessageVolume
-                onValueChanged: GameSettings.newChatMessageVolume = value
+                value: UserSettings.newChatMessageVolume
+                onValueChanged: UserSettings.newChatMessageVolume = value
                 onPressedChanged: {
                     if (!pressed) {
-                        GameAudio.playMessage()
+                        AudioEngine.playMessage()
                     }
                 }
             }
@@ -73,7 +73,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Soundpack")
                 Layout.fillWidth: true
@@ -82,9 +82,9 @@ Pane {
                 id: soundpackComboBox
                 Layout.rightMargin: 5
                 model: ["Pop", "Windows", "KDE", "Floraphonic"]
-                currentIndex: GameSettings.soundPackIndex
+                currentIndex: UserSettings.soundPackIndex
                 onActivated: {
-                    GameSettings.soundPackIndex = currentIndex
+                    UserSettings.soundPackIndex = currentIndex
                 }
             }
         }

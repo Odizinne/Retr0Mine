@@ -17,13 +17,13 @@ Pane {
     ]
 
     ColumnLayout {
-        spacing: GameConstants.settingsColumnSpacing
+        spacing: Constants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             enabled: SteamIntegration.initialized
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Show notification on invite received")
@@ -35,9 +35,9 @@ Pane {
             }
             NfSwitch {
                 id: mpShowInviteNotificationInGameSwitch
-                checked: GameSettings.mpShowInviteNotificationInGame
+                checked: UserSettings.mpShowInviteNotificationInGame
                 onCheckedChanged: {
-                    GameSettings.mpShowInviteNotificationInGame = checked
+                    UserSettings.mpShowInviteNotificationInGame = checked
                 }
             }
         }
@@ -45,7 +45,7 @@ Pane {
         RowLayout {
             Layout.fillWidth: true
             enabled: SteamIntegration.initialized
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Player colored flags")
@@ -57,17 +57,17 @@ Pane {
             }
             NfSwitch {
                 id: mpPlayerColoredFlagsSwitch
-                checked: GameSettings.mpPlayerColoredFlags
+                checked: UserSettings.mpPlayerColoredFlags
                 onCheckedChanged: {
-                    GameSettings.mpPlayerColoredFlags = checked
+                    UserSettings.mpPlayerColoredFlags = checked
                 }
             }
         }
 
         RowLayout {
-            enabled: GameSettings.mpPlayerColoredFlags && SteamIntegration.initialized
+            enabled: UserSettings.mpPlayerColoredFlags && SteamIntegration.initialized
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Local player")
@@ -77,15 +77,15 @@ Pane {
             NfComboBox {
                 Layout.rightMargin: 5
                 model: mpPane.colorModel
-                currentIndex: GameSettings.localFlagColorIndex
-                onActivated: GameSettings.localFlagColorIndex = currentIndex
+                currentIndex: UserSettings.localFlagColorIndex
+                onActivated: UserSettings.localFlagColorIndex = currentIndex
             }
         }
 
         RowLayout {
-            enabled: GameSettings.mpPlayerColoredFlags && SteamIntegration.initialized
+            enabled: UserSettings.mpPlayerColoredFlags && SteamIntegration.initialized
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Remote player")
@@ -95,14 +95,14 @@ Pane {
             NfComboBox {
                 Layout.rightMargin: 5
                 model: mpPane.colorModel
-                currentIndex: GameSettings.remoteFlagColorIndex
-                onActivated: GameSettings.remoteFlagColorIndex = currentIndex
+                currentIndex: UserSettings.remoteFlagColorIndex
+                onActivated: UserSettings.remoteFlagColorIndex = currentIndex
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Ping color")
@@ -112,8 +112,8 @@ Pane {
             NfComboBox {
                 Layout.rightMargin: 5
                 model: mpPane.colorModel
-                currentIndex: GameSettings.pingColorIndex
-                onActivated: GameSettings.pingColorIndex = currentIndex
+                currentIndex: UserSettings.pingColorIndex
+                onActivated: UserSettings.pingColorIndex = currentIndex
             }
         }
     }

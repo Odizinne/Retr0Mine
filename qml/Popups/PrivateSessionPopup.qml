@@ -252,8 +252,8 @@ AnimatedPopup {
                                     anchors.centerIn: parent
                                     color: "transparent"
                                     opacity: 0.3
-                                    border.color: GameConstants.foregroundColor
-                                    border.width: GameConstants.isDarkMode ? 1 : 2
+                                    border.color: Constants.foregroundColor
+                                    border.width: Constants.isDarkMode ? 1 : 2
                                 }
                             }
 
@@ -285,7 +285,7 @@ AnimatedPopup {
                                 IconImage {
                                     anchors.centerIn: parent
                                     source: "qrc:/icons/mail.png"
-                                    color: GameConstants.foregroundColor
+                                    color: Constants.foregroundColor
                                     opacity: parent.enabled? 1 : 0.5
                                     sourceSize.height: 16
                                     sourceSize.width: 16

@@ -14,8 +14,8 @@ GridView {
     Item {
         id: mouseTracker
         anchors.fill: parent
-        visible: GameSettings.cellFrameHoverAnimation
-        enabled: GameSettings.cellFrameHoverAnimation
+        visible: UserSettings.cellFrameHoverAnimation
+        enabled: UserSettings.cellFrameHoverAnimation
 
         MouseArea {
             anchors.fill: parent

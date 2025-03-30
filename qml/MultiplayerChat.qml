@@ -112,7 +112,7 @@ Frame {
                                 anchors.centerIn: parent
                                 opacity: 0.5
                                 color: "transparent"
-                                border.color: GameConstants.foregroundColor
+                                border.color: Constants.foregroundColor
                                 border.width: 1
                             }
                         }
@@ -130,7 +130,7 @@ Frame {
                                                                          (msgContainer.modelData.isLocalPlayer ? SteamIntegration.playerName : SteamIntegration.connectedPlayerName)
                                     font.pixelSize: 13
                                     font.bold: true
-                                    color: msgContainer.modelData.isBot ? GameConstants.accentColor : GameConstants.foregroundColor
+                                    color: msgContainer.modelData.isBot ? Constants.accentColor : Constants.foregroundColor
                                 }
 
                                 Label {
@@ -138,7 +138,7 @@ Frame {
                                     text: msgContainer.modelData.message
                                     wrapMode: Text.WordWrap
                                     Layout.fillWidth: true
-                                    color: GameConstants.foregroundColor
+                                    color: Constants.foregroundColor
                                     opacity: msgContainer.modelData.isBot ? 0.85 :
                                                                             (msgContainer.modelData.isLocalPlayer ? 0.5 : 0.8)
                                 }
@@ -174,7 +174,7 @@ Frame {
                 IconImage {
                     anchors.fill: parent
                     source: "qrc:/icons/send.png"
-                    color: GameConstants.foregroundColor
+                    color: Constants.foregroundColor
                     sourceSize.height: 15
                     sourceSize.width: 15
                 }

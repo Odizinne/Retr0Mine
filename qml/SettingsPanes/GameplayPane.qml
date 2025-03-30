@@ -5,12 +5,12 @@ import Odizinne.Retr0Mine
 
 Pane {
     ColumnLayout {
-        spacing: GameConstants.settingsColumnSpacing
+        spacing: Constants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("First click protection")
                 Layout.fillWidth: true
@@ -26,16 +26,16 @@ Pane {
 
             NfSwitch {
                 id: safeFirstClickSwitch
-                checked: GameSettings.safeFirstClick
+                checked: UserSettings.safeFirstClick
                 onCheckedChanged: {
-                    GameSettings.safeFirstClick = checked
+                    UserSettings.safeFirstClick = checked
                 }
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Invert left and right click")
                 Layout.fillWidth: true
@@ -46,16 +46,16 @@ Pane {
             }
             NfSwitch {
                 id: invertLRSwitch
-                checked: GameSettings.invertLRClick
+                checked: UserSettings.invertLRClick
                 onCheckedChanged: {
-                    GameSettings.invertLRClick = checked
+                    UserSettings.invertLRClick = checked
                 }
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Quick reveal connected cells")
                 Layout.fillWidth: true
@@ -66,9 +66,9 @@ Pane {
             }
             NfSwitch {
                 id: autorevealSwitch
-                checked: GameSettings.autoreveal
+                checked: UserSettings.autoreveal
                 onCheckedChanged: {
-                    GameSettings.autoreveal = checked
+                    UserSettings.autoreveal = checked
                 }
             }
         }
@@ -76,7 +76,7 @@ Pane {
         RowLayout {
             enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Enable question marks")
                 Layout.fillWidth: true
@@ -87,9 +87,9 @@ Pane {
             }
             NfSwitch {
                 id: questionMarksSwitch
-                checked: GameSettings.enableQuestionMarks
+                checked: UserSettings.enableQuestionMarks
                 onCheckedChanged: {
-                    GameSettings.enableQuestionMarks = checked
+                    UserSettings.enableQuestionMarks = checked
                     if (!checked) {
                         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                             let cell = GridBridge.grid.itemAtIndex(i) as Cell
@@ -105,7 +105,7 @@ Pane {
         RowLayout {
             enabled: !SteamIntegration.isInMultiplayerGame
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Enable green question marks")
                 Layout.fillWidth: true
@@ -116,9 +116,9 @@ Pane {
             }
             NfSwitch {
                 id: safeQuestionMarksSwitch
-                checked: GameSettings.enableSafeQuestionMarks
+                checked: UserSettings.enableSafeQuestionMarks
                 onCheckedChanged: {
-                    GameSettings.enableSafeQuestionMarks = checked
+                    UserSettings.enableSafeQuestionMarks = checked
                     if (!checked) {
                         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
                             let cell = GridBridge.grid.itemAtIndex(i) as Cell
@@ -133,7 +133,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Load last game on start")
@@ -145,16 +145,16 @@ Pane {
             }
             NfSwitch {
                 id: loadLastGameSwitch
-                checked: GameSettings.loadLastGame
+                checked: UserSettings.loadLastGame
                 onCheckedChanged: {
-                    GameSettings.loadLastGame = checked
+                    UserSettings.loadLastGame = checked
                 }
             }
         }
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Show hint reasoning in chat")
@@ -166,15 +166,15 @@ Pane {
             }
             NfSwitch {
                 id: hintReasoningInChatSwitch
-                checked: GameSettings.hintReasoningInChat
-                onCheckedChanged: GameSettings.hintReasoningInChat = checked
+                checked: UserSettings.hintReasoningInChat
+                onCheckedChanged: UserSettings.hintReasoningInChat = checked
             }
         }
 
         RowLayout {
             visible: SteamIntegration.isRunningOnSteamDeck && GameCore.gamescope
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("SteamDeck controls")

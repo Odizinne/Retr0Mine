@@ -81,7 +81,7 @@ ApplicationWindow {
             Layout.fillHeight: true
             Rectangle {
                 anchors.fill: parent
-                color: GameConstants.settingsPaneColor
+                color: Constants.settingsPaneColor
             }
 
             ColumnLayout {
@@ -149,7 +149,7 @@ ApplicationWindow {
                         icon.source: modelData.icon
                         icon.width: 16
                         icon.height: 16
-                        icon.color: GameConstants.foregroundColor
+                        icon.color: Constants.foregroundColor
                         text: modelData.text
                         isCurrentItem: ListView.isCurrentItem
                         onClicked: {
@@ -175,7 +175,7 @@ ApplicationWindow {
                             height: 26
                             width: 4
                             opacity: parent.isCurrentItem ? 1 : 0
-                            color: GameConstants.accentColor
+                            color: Constants.accentColor
 
                             Behavior on opacity {
                                 NumberAnimation {

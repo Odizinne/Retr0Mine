@@ -9,5 +9,5 @@ QtObject {
     property real effectRadius: GameState.cellSize * 2
 
     // Color for the hover effect
-    property color hoverColor: GameConstants.accentColor
+    property color hoverColor: Constants.accentColor
 }

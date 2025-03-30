@@ -56,7 +56,7 @@ AnimatedPopup {
                   : GameState.postgameText;
 
             color: GameState.postgameColor
-            font.family: GameConstants.numberFont.name
+            font.family: Constants.numberFont.name
             font.pixelSize: 16
         }
 

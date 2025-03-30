@@ -18,7 +18,7 @@ Item {
 
         Image {
             id: logo
-            source: GameConstants.retr0mineLogo
+            source: Constants.retr0mineLogo
             sourceSize.width: 756 * 0.35
             sourceSize.height: 110 * 0.35
             Layout.alignment: Qt.AlignCenter

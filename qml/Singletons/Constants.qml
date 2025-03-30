@@ -18,7 +18,7 @@ Item {
     }
 
     property int universalTheme: {
-        switch (GameSettings.colorSchemeIndex){
+        switch (UserSettings.colorSchemeIndex){
             case 0: return Universal.System
             case 1: return Universal.Dark
             case 2: return Universal.Light
@@ -62,12 +62,12 @@ Item {
     function getNumberColor(revealed, isMine, index, number) {
         if (!revealed) return "black"
         if (isMine) return "transparent"
-        const palette = numberPalettes[GameSettings.colorBlindness] || numberPalettes[0]
+        const palette = numberPalettes[UserSettings.colorBlindness] || numberPalettes[0]
         return palette[number] || "black"
     }
 
     readonly property FontLoader numberFont: FontLoader {
-        source: switch (GameSettings.fontIndex) {
+        source: switch (UserSettings.fontIndex) {
             case 0:
             "qrc:/fonts/FiraSans-SemiBold.ttf"
             break
@@ -89,9 +89,9 @@ Item {
     }
 
     property string localFlagColor: {
-        switch(GameSettings.localFlagColorIndex) {
+        switch(UserSettings.localFlagColorIndex) {
             case 0:
-            GameConstants.foregroundColor
+            Constants.foregroundColor
             break
             case 1:
             "#ff7747"
@@ -118,9 +118,9 @@ Item {
     }
 
     property string remoteFlagColor: {
-        switch(GameSettings.remoteFlagColorIndex) {
+        switch(UserSettings.remoteFlagColorIndex) {
             case 0:
-            GameConstants.foregroundColor
+            Constants.foregroundColor
             break
             case 1:
             "#ff7747"
@@ -147,9 +147,9 @@ Item {
     }
 
     property string pingColor: {
-        switch(GameSettings.pingColorIndex) {
+        switch(UserSettings.pingColorIndex) {
             case 0:
-            GameConstants.foregroundColor
+            Constants.foregroundColor
             break
             case 1:
             "#E95420"
@@ -181,7 +181,7 @@ Item {
     property string retr0mineLogo: getForegroundColor() === "white" ? "qrc:/images/retr0mine_logo.png" : "qrc:/images/retr0mine_logo_dark.png"
 
     function getRightClickExplanation() {
-        if (!GameSettings.invertLRClick) {
+        if (!UserSettings.invertLRClick) {
             return qsTr("Flag")
         } else {
             return qsTr("Reveal")
@@ -189,7 +189,7 @@ Item {
     }
 
     function getLeftClickExplanation() {
-        if (!GameSettings.invertLRClick) {
+        if (!UserSettings.invertLRClick) {
             return qsTr("Reveal")
         } else {
             return qsTr("Flag")

@@ -9,8 +9,8 @@ import QtQuick.Effects
 ApplicationWindow {
     id: root
     visibility: ApplicationWindow.Hidden
-    Universal.theme: GameConstants.universalTheme
-    Universal.accent: GameConstants.accentColor
+    Universal.theme: Constants.universalTheme
+    Universal.accent: Constants.accentColor
     property int currentTheme: Universal.theme
     property bool isSaving: false
     property bool isClosing: false
@@ -18,11 +18,11 @@ ApplicationWindow {
 
     onCurrentThemeChanged: {
         if (currentTheme === Universal.Light) {
-            GameConstants.isDarkMode = false
-            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(1)
+            Constants.isDarkMode = false
+            if (UserSettings.customTitlebar) GameCore.setTitlebarColor(1)
         } else {
-            GameConstants.isDarkMode = true
-            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(0)
+            Constants.isDarkMode = true
+            if (UserSettings.customTitlebar) GameCore.setTitlebarColor(0)
         }
     }
 
@@ -35,7 +35,7 @@ ApplicationWindow {
             GameState.bypassAutoSave = true
             SteamIntegration.cleanupMultiplayerSession(true)
         }
-        if (GameSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver && !GameState.bypassAutoSave) {
+        if (UserSettings.loadLastGame && GameState.gameStarted && !GameState.gameOver && !GameState.bypassAutoSave) {
             close.accepted = false
             if (!isSaving) {
                 isClosing = true
@@ -51,7 +51,7 @@ ApplicationWindow {
         target: SteamIntegration
 
         function onInviteReceived(name, connectData) {
-            if (GameSettings.mpShowInviteNotificationInGame) {
+            if (UserSettings.mpShowInviteNotificationInGame) {
                 inviteToast.showInvite(name, connectData);
             }
         }
@@ -65,7 +65,7 @@ ApplicationWindow {
         function onLobbyReadyChanged() {
             if (SteamIntegration.isLobbyReady) {
                 if (SteamIntegration.isHost) {
-                    const difficultySet = GameState.difficultySettings[GameSettings.difficulty];
+                    const difficultySet = GameState.difficultySettings[UserSettings.difficulty];
 
                     const gridSyncData = {
                         gridSync: true,
@@ -156,7 +156,7 @@ ApplicationWindow {
     }
 
     Connections {
-        target: GameSettings
+        target: UserSettings
         function onCellSpacingChanged() {
             if (root.visibility === ApplicationWindow.Windowed) {
                 root.minimumWidth = root.getIdealWidth()
@@ -218,7 +218,7 @@ ApplicationWindow {
         if (internalSaveData) {
             SaveManager.extractAndApplyGridSize(internalSaveData)
         } else {
-            const difficultySet = GameState.difficultySettings[GameSettings.difficulty]
+            const difficultySet = GameState.difficultySettings[UserSettings.difficulty]
             GameState.gridSizeX = difficultySet.x
             GameState.gridSizeY = difficultySet.y
             GameState.mineCount = difficultySet.mines
@@ -242,16 +242,16 @@ ApplicationWindow {
         }
 
         if (currentTheme === Universal.Light) {
-            GameConstants.isDarkMode = false
-            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(1)
+            Constants.isDarkMode = false
+            if (UserSettings.customTitlebar) GameCore.setTitlebarColor(1)
         } else {
-            GameConstants.isDarkMode = true
-            if (GameSettings.customTitlebar) GameCore.setTitlebarColor(0)
+            Constants.isDarkMode = true
+            if (UserSettings.customTitlebar) GameCore.setTitlebarColor(0)
         }
 
-        GameCore.setApplicationPalette(GameSettings.accentColorIndex)
+        GameCore.setApplicationPalette(UserSettings.accentColorIndex)
 
-        if (GameSettings.startFullScreen || GameCore.gamescope) {
+        if (UserSettings.startFullScreen || GameCore.gamescope) {
             root.visibility = ApplicationWindow.FullScreen
         } else {
             root.visibility = ApplicationWindow.Windowed
@@ -262,7 +262,7 @@ ApplicationWindow {
         root.height = getIdealHeight()
         root.minimumHeight = getIdealHeight()
 
-        GameAudio.playSilent()
+        AudioEngine.playSilent()
     }
 
     Shortcut {
@@ -338,7 +338,7 @@ ApplicationWindow {
 
     Loader {
         anchors.fill: parent
-        active: !GameSettings.firstRunCompleted
+        active: !UserSettings.firstRunCompleted
         sourceComponent: Component {
             WelcomePopup {
                 anchors.centerIn: parent
@@ -405,13 +405,13 @@ ApplicationWindow {
             onWheel: function(wheel) {
                 if (wheel.modifiers & Qt.ControlModifier) {
                     if (wheel.angleDelta.y > 0) {
-                        if (GameSettings.gridScale < 2) {
-                            GameSettings.gridScale = Math.min(2, GameSettings.gridScale + 0.1);
+                        if (UserSettings.gridScale < 2) {
+                            UserSettings.gridScale = Math.min(2, UserSettings.gridScale + 0.1);
                         }
                     }
                     else if (wheel.angleDelta.y < 0) {
-                        if (GameSettings.gridScale > 1) {
-                            GameSettings.gridScale = Math.max(1, GameSettings.gridScale - 0.1);
+                        if (UserSettings.gridScale > 1) {
+                            UserSettings.gridScale = Math.max(1, UserSettings.gridScale - 0.1);
                         }
                     }
                     wheel.accepted = true;
@@ -437,8 +437,8 @@ ApplicationWindow {
                 blur: GameState.paused ? 1 : 0
                 blurMultiplier: 0.3
             }
-            contentWidth: gridContainer.width - (GameSettings.cellSpacing * 2)
-            contentHeight: gridContainer.height - (GameSettings.cellSpacing * 2)
+            contentWidth: gridContainer.width - (UserSettings.cellSpacing * 2)
+            contentHeight: gridContainer.height - (UserSettings.cellSpacing * 2)
             clip: true
             enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
                      !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
@@ -446,7 +446,7 @@ ApplicationWindow {
             ScrollBar.vertical: defaultVerticalScrollBar
             ScrollBar.horizontal: defaultHorizontalScrollBar
             Behavior on opacity {
-                enabled: GameSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
+                enabled: UserSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
                 NumberAnimation {
                     duration: 300
                     easing.type: Easing.InOutQuad
@@ -455,7 +455,7 @@ ApplicationWindow {
             Item {
                 id: gridContainer
                 anchors.centerIn: parent
-                scale: GameSettings.gridScale
+                scale: UserSettings.gridScale
                 width: Math.max(grid.width * scale, gameView.width)
                 height: Math.max(grid.height * scale, gameView.height)
 
@@ -570,7 +570,7 @@ ApplicationWindow {
             anchors.bottom: gameView.bottom
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: ((GameState.cellSize * GameState.gridSizeY) - (GameSettings.cellSpacing * 2)) * gridContainer.scale > gameView.height ?
+            policy: ((GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2)) * gridContainer.scale > gameView.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -585,7 +585,7 @@ ApplicationWindow {
             anchors.bottomMargin: -12
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: ((GameState.cellSize * GameState.gridSizeX) - (GameSettings.cellSpacing * 2)) * gridContainer.scale > gameView.width ?
+            policy: ((GameState.cellSize * GameState.gridSizeX) - (UserSettings.cellSpacing * 2)) * gridContainer.scale > gameView.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -628,7 +628,7 @@ ApplicationWindow {
          | 12 = multiplayer chat margin            |
          ==========================================*/
         if (root.visibility === ApplicationWindow.Windowed) {
-            let baseWidth = (GameState.cellSize * GameState.gridSizeX) - (GameSettings.cellSpacing * 2) + 24
+            let baseWidth = (GameState.cellSize * GameState.gridSizeX) - (UserSettings.cellSpacing * 2) + 24
             if (ComponentsContext.multiplayerChatVisible) {
                 baseWidth += rightPanel.width + 12
             }
@@ -644,7 +644,7 @@ ApplicationWindow {
          | 12 = topBar margin                      |
          ==========================================*/
         if (root.visibility === ApplicationWindow.Windowed) {
-            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (GameSettings.cellSpacing * 2) + 35 + 24 + 12
+            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 35 + 24 + 12
             return Math.min(baseHeight, Screen.desktopAvailableHeight * 0.9)
         }
     }

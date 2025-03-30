@@ -5,12 +5,12 @@ import Odizinne.Retr0Mine
 
 Pane {
     ColumnLayout {
-        spacing: GameConstants.settingsColumnSpacing
+        spacing: Constants.settingsColumnSpacing
         width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Language")
@@ -26,12 +26,12 @@ Pane {
                 property int previousLanguageIndex: currentIndex
                 property int previousSettingsIndex: 0
                 Layout.rightMargin: 5
-                currentIndex: GameSettings.languageIndex
+                currentIndex: UserSettings.languageIndex
                 onActivated: {
                     previousSettingsIndex = ComponentsContext.settingsIndex
                     ComponentsContext.settingsIndex = 0
                     previousLanguageIndex = currentIndex
-                    GameSettings.languageIndex = currentIndex
+                    UserSettings.languageIndex = currentIndex
                     GameCore.setLanguage(currentIndex)
                     currentIndex = previousLanguageIndex
                     ComponentsContext.settingsIndex = previousSettingsIndex

@@ -35,13 +35,13 @@ QtObject {
         ComponentsContext.leaderboardPopupVisible = true
     }
     function zoomIn() {
-        if (GameSettings.gridScale < 2) {
-            GameSettings.gridScale = Math.min(2, GameSettings.gridScale + 0.1);
+        if (UserSettings.gridScale < 2) {
+            UserSettings.gridScale = Math.min(2, UserSettings.gridScale + 0.1);
         }
     }
     function zoomOut() {
-        if (GameSettings.gridScale > 1) {
-            GameSettings.gridScale = Math.max(1, GameSettings.gridScale - 0.1);
+        if (UserSettings.gridScale > 1) {
+            UserSettings.gridScale = Math.max(1, UserSettings.gridScale - 0.1);
         }
     }
     function toggleSettings() {

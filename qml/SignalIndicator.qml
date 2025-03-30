@@ -15,7 +15,7 @@ Item {
         anchors.centerIn: parent
         radius: width / 2
         border.width: 4
-        border.color: GameConstants.pingColor
+        border.color: Constants.pingColor
         color: "transparent"
 
         ParallelAnimation {

@@ -138,6 +138,21 @@ Current game will be saved and restored</source>
     </message>
 </context>
 <context>
+    <name>Constants</name>
+    <message>
+        <location filename="../qml/Singletons/Constants.qml" line="185"/>
+        <location filename="../qml/Singletons/Constants.qml" line="195"/>
+        <source>Flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Singletons/Constants.qml" line="187"/>
+        <location filename="../qml/Singletons/Constants.qml" line="193"/>
+        <source>Reveal</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DifficultyPane</name>
     <message>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="102"/>
@@ -182,21 +197,6 @@ board generation on large grids</source>
         <location filename="../qml/ErrorWindow.qml" line="26"/>
         <source>OK</source>
         <translation></translation>
-    </message>
-</context>
-<context>
-    <name>GameConstants</name>
-    <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="185"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="195"/>
-        <source>Flag</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/Singletons/GameConstants.qml" line="187"/>
-        <location filename="../qml/Singletons/GameConstants.qml" line="193"/>
-        <source>Reveal</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

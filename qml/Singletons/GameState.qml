@@ -27,7 +27,7 @@ QtObject {
         { text: qsTr("Medium"), x: 16, y: 16, mines: 40 },
         { text: qsTr("Hard"), x: 30, y: 16, mines: 99 },
         { text: "Retr0", x: 50, y: 32, mines: 320 },
-        { text: qsTr("Custom"), x: GameSettings.customWidth, y: GameSettings.customHeight, mines: GameSettings.customMines },
+        { text: qsTr("Custom"), x: UserSettings.customWidth, y: UserSettings.customHeight, mines: UserSettings.customMines },
     ]
     property bool flag1Unlocked: SteamIntegration.unlockedFlag1
     property bool flag2Unlocked: SteamIntegration.unlockedFlag2
@@ -35,9 +35,9 @@ QtObject {
     property bool anim1Unlocked: SteamIntegration.unlockedAnim1
     property bool anim2Unlocked: SteamIntegration.unlockedAnim2
     readonly property string flagPath: {
-        if (SteamIntegration.initialized && GameSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
-        if (SteamIntegration.initialized && GameSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
-        if (SteamIntegration.initialized && GameSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
+        if (SteamIntegration.initialized && UserSettings.flagSkinIndex === 1) return "qrc:/icons/flag1.png"
+        if (SteamIntegration.initialized && UserSettings.flagSkinIndex === 2) return "qrc:/icons/flag2.png"
+        if (SteamIntegration.initialized && UserSettings.flagSkinIndex === 3) return "qrc:/icons/flag3.png"
         else return "qrc:/icons/flag.png"
     }
 

@@ -80,7 +80,7 @@ AnimatedPopup {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.rightMargin: 10
                         source: "qrc:/icons/delete.png"
-                        color: GameConstants.foregroundColor
+                        color: Constants.foregroundColor
                         height: 16
                         width: 40
                         MouseArea {

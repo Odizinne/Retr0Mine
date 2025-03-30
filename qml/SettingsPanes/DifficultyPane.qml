@@ -9,7 +9,7 @@ Pane {
     ColumnLayout {
         enabled: !(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)
         width: parent.width
-        spacing: GameConstants.settingsColumnSpacing
+        spacing: Constants.settingsColumnSpacing
 
         ButtonGroup {
             id: difficultyGroup
@@ -21,7 +21,7 @@ Pane {
             RowLayout {
                 id: difficultyRow
                 Layout.fillWidth: true
-                Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                Layout.preferredHeight: Constants.settingsComponentsHeight
                 required property var modelData
                 required property int index
 
@@ -45,25 +45,25 @@ Pane {
 
                 NfRadioButton {
                     id: radioButton
-                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
-                    Layout.preferredWidth: GameConstants.settingsComponentsHeight
+                    Layout.preferredHeight: Constants.settingsComponentsHeight
+                    Layout.preferredWidth: Constants.settingsComponentsHeight
                     Layout.alignment: Qt.AlignRight
                     ButtonGroup.group: difficultyGroup
-                    checked: GameSettings.difficulty === parent.index
+                    checked: UserSettings.difficulty === parent.index
                     onClicked: {
                         const idx = difficultyGroup.buttons.indexOf(this)
                         const difficultySet = GameState.difficultySettings[idx]
-                        if (GameSettings.difficulty === idx) return
+                        if (UserSettings.difficulty === idx) return
 
                         const dimensionsMatch = (
                             (idx !== 4 &&
-                             GameSettings.difficulty === 4 &&
-                             GameSettings.customWidth === difficultySet.x &&
-                             GameSettings.customHeight === difficultySet.y) ||
+                             UserSettings.difficulty === 4 &&
+                             UserSettings.customWidth === difficultySet.x &&
+                             UserSettings.customHeight === difficultySet.y) ||
                             (idx === 4 &&
-                             GameSettings.difficulty !== 4 &&
-                             GameSettings.customWidth === GameState.difficultySettings[GameSettings.difficulty].x &&
-                             GameSettings.customHeight === GameState.difficultySettings[GameSettings.difficulty].y)
+                             UserSettings.difficulty !== 4 &&
+                             UserSettings.customWidth === GameState.difficultySettings[UserSettings.difficulty].x &&
+                             UserSettings.customHeight === GameState.difficultySettings[UserSettings.difficulty].y)
                         )
 
                         GameState.difficultyChanged = true
@@ -76,7 +76,7 @@ Pane {
                         GameState.gridSizeY = difficultySet.y
                         GameState.mineCount = difficultySet.mines
                         GridBridge.initGame()
-                        GameSettings.difficulty = idx
+                        UserSettings.difficulty = idx
                         SteamIntegration.difficulty = idx
 
                         /*==========================================
@@ -95,9 +95,9 @@ Pane {
         }
 
         RowLayout {
-            enabled: GameSettings.difficulty === 4
+            enabled: UserSettings.difficulty === 4
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Width:")
                 Layout.fillWidth: true
@@ -109,15 +109,15 @@ Pane {
                 from: 8
                 to: 50
                 editable: true
-                value: GameSettings.customWidth
-                onValueChanged: GameSettings.customWidth = value
+                value: UserSettings.customWidth
+                onValueChanged: UserSettings.customWidth = value
             }
         }
 
         RowLayout {
-            enabled: GameSettings.difficulty === 4
+            enabled: UserSettings.difficulty === 4
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Height:")
                 Layout.fillWidth: true
@@ -128,15 +128,15 @@ Pane {
                 from: 8
                 to: 50
                 editable: true
-                value: GameSettings.customHeight
-                onValueChanged: GameSettings.customHeight = value
+                value: UserSettings.customHeight
+                onValueChanged: UserSettings.customHeight = value
             }
         }
 
         RowLayout {
-            enabled: GameSettings.difficulty === 4
+            enabled: UserSettings.difficulty === 4
             Layout.fillWidth: true
-            Layout.preferredHeight: GameConstants.settingsComponentsHeight
+            Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
                 text: qsTr("Mines:")
                 Layout.fillWidth: true
@@ -179,29 +179,29 @@ Pane {
                 from: 1
                 to: Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3)
                 editable: true
-                value: GameSettings.customMines
-                onValueChanged: GameSettings.customMines = value
+                value: UserSettings.customMines
+                onValueChanged: UserSettings.customMines = value
             }
         }
 
         NfButton {
-            enabled: GameSettings.difficulty === 4
+            enabled: UserSettings.difficulty === 4
             Layout.rightMargin: 5
             text: qsTr("Apply")
             Layout.alignment: Qt.AlignRight
             property int previousCustomWidth: 0
             property int previousCustomHeight: 0
             onClicked: {
-                if (previousCustomWidth !== GameSettings.customWidth || previousCustomHeight !== GameSettings.customHeight) {
+                if (previousCustomWidth !== UserSettings.customWidth || previousCustomHeight !== UserSettings.customHeight) {
                     GridBridge.cellsCreated = 0
                 }
 
-                GameState.gridSizeX = GameSettings.customWidth
-                GameState.gridSizeY = GameSettings.customHeight
-                GameState.mineCount = GameSettings.customMines
+                GameState.gridSizeX = UserSettings.customWidth
+                GameState.gridSizeY = UserSettings.customHeight
+                GameState.mineCount = UserSettings.customMines
 
-                previousCustomWidth = GameSettings.customWidth
-                previousCustomHeight = GameSettings.customHeight
+                previousCustomWidth = UserSettings.customWidth
+                previousCustomHeight = UserSettings.customHeight
 
                 /*==========================================
                  | bypass internalGameState loading        |
@@ -218,8 +218,8 @@ Pane {
             }
 
             Component.onCompleted: {
-                previousCustomWidth = GameSettings.customWidth
-                previousCustomHeight = GameSettings.customHeight
+                previousCustomWidth = UserSettings.customWidth
+                previousCustomHeight = UserSettings.customHeight
             }
         }
     }

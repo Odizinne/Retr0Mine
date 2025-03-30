@@ -43,7 +43,7 @@ Item {
     }
 
     function updateShakeState() {
-        if (!GameSettings.shakeUnifinishedNumbers) {
+        if (!UserSettings.shakeUnifinishedNumbers) {
             shakeConditionsMet = false;
             return;
         }
@@ -92,7 +92,7 @@ Item {
             animatingFlag = true;
             flagAnimTimer.restart();
         } else {
-            if (GameSettings.animations) {
+            if (UserSettings.animations) {
                 flagRemovalTimer.start();
             } else {
                 localPlayerOwns = false;
@@ -106,7 +106,7 @@ Item {
         if (questioned) {
             animatingQuestion = true;
             questionAnimTimer.restart();
-        } else if (GameSettings.animations) {
+        } else if (UserSettings.animations) {
             questionFadeOutTimer.restart();
         } else {
             animatingQuestion = false;
@@ -117,7 +117,7 @@ Item {
         if (safeQuestioned) {
             animatingSafeQuestion = true;
             safeQuestionAnimTimer.restart();
-        } else if (GameSettings.animations) {
+        } else if (UserSettings.animations) {
             safeQuestionFadeOutTimer.restart();
         } else {
             animatingSafeQuestion = false;
@@ -211,7 +211,7 @@ Item {
             })
         }
 
-        if (GameSettings.animations && !GridBridge.initialAnimationPlayed && !GameState.blockAnim && !GameState.difficultyChanged) {
+        if (UserSettings.animations && !GridBridge.initialAnimationPlayed && !GameState.blockAnim && !GameState.difficultyChanged) {
             startGridResetAnimation()
         }
 
@@ -306,7 +306,7 @@ Item {
         interval: cellItem.diagonalSum * 20
         repeat: false
         onTriggered: {
-            if (GameSettings.animations) {
+            if (UserSettings.animations) {
                 fadeAnimation.start()
             }
         }
@@ -315,29 +315,29 @@ Item {
     Rectangle {
         anchors.fill: cellButton
         border.width: 2
-        border.color: GameConstants.frameColor
+        border.color: Constants.frameColor
         visible: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
                 return true
-            if (cellItem.animatingReveal && GameSettings.cellFrame)
+            if (cellItem.animatingReveal && UserSettings.cellFrame)
                 return true
-            return cellButton.flat && GameSettings.cellFrame
+            return cellButton.flat && UserSettings.cellFrame
         }
         color: {
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
-                return GameConstants.accentColor
+                return Constants.accentColor
             return "transparent"
         }
 
         Behavior on opacity {
-            enabled: GameSettings.animations
+            enabled: UserSettings.animations
             NumberAnimation { duration: 200 }
         }
 
         opacity: {
-            if (!GameSettings.dimSatisfied || !cellItem.revealed) return 1
+            if (!UserSettings.dimSatisfied || !cellItem.revealed) return 1
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index)) return 1
-            return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity
+            return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : UserSettings.satisfiedOpacity
         }
     }
 
@@ -346,15 +346,15 @@ Item {
         opacity: 0.3
         anchors.fill: cellButton
         visible: {
-            if (!GameSettings.cellFrame) return false
+            if (!UserSettings.cellFrame) return false
             if (!MouseTracker.isHovering) return false
-            if (!GameSettings.cellFrameHoverAnimation) return false
+            if (!UserSettings.cellFrameHoverAnimation) return false
 
             if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
                 return true
-            if (cellItem.animatingReveal && GameSettings.cellFrame)
+            if (cellItem.animatingReveal && UserSettings.cellFrame)
                 return true
-            return cellButton.flat && GameSettings.cellFrame
+            return cellButton.flat && UserSettings.cellFrame
         }
 
         Rectangle {
@@ -409,13 +409,13 @@ Item {
     NfButton {
         id: cellButton
         anchors.fill: parent
-        anchors.margins: GameSettings.cellSpacing
+        anchors.margins: UserSettings.cellSpacing
         enabled: SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost && !NetworkManager.allowClientReveal ? false : true
         Connections {
             target: cellItem
             function onRevealedChanged() {
                 if (cellItem.revealed) {
-                    if (GameSettings.animations) {
+                    if (UserSettings.animations) {
                         cellItem.shouldBeFlat = true
                         revealFadeAnimation.start()
                     } else {
@@ -436,9 +436,9 @@ Item {
             active: cellItem.revealed && GameState.mines.includes(cellItem.index)
             sourceComponent: IconImage {
                 source: "qrc:/icons/bomb.png"
-                color: GameConstants.foregroundColor
-                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
-                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
+                color: Constants.foregroundColor
+                width: (cellItem.width - (UserSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (UserSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width - 4) / 2.1
                 sourceSize.height: (cellItem.height - 4) / 2.1
             }
@@ -452,19 +452,19 @@ Item {
                 id: flagImage
                 source: GameState.flagPath
                 color: {
-                    if (SteamIntegration.isInMultiplayerGame && GameSettings.mpPlayerColoredFlags) {
+                    if (SteamIntegration.isInMultiplayerGame && UserSettings.mpPlayerColoredFlags) {
                         if (cellItem.localPlayerOwns) {
-                            return GameConstants.localFlagColor
+                            return Constants.localFlagColor
                         } else {
-                            return GameConstants.remoteFlagColor
+                            return Constants.remoteFlagColor
                         }
                     } else {
-                        if (GameSettings.contrastFlag) return GameConstants.foregroundColor
-                        else return GameConstants.accentColor
+                        if (UserSettings.contrastFlag) return Constants.foregroundColor
+                        else return Constants.accentColor
                     }
                 }
-                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 1.8
-                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 1.8
+                width: (cellItem.width - (UserSettings.cellSpacing * 2)) / 1.8
+                height: (cellItem.height - (UserSettings.cellSpacing * 2)) / 1.8
                 sourceSize.width: (cellItem.width - 4) / 1.8
                 sourceSize.height: (cellItem.height - 4) / 1.8
                 opacity: 0
@@ -476,7 +476,7 @@ Item {
                 }
 
                 Behavior on opacity {
-                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    enabled: UserSettings.animations && !GameState.noAnimReset
                     OpacityAnimator {
                         duration: 300
                         easing.type: Easing.OutQuad
@@ -484,7 +484,7 @@ Item {
                 }
 
                 Behavior on scale {
-                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    enabled: UserSettings.animations && !GameState.noAnimReset
                     NumberAnimation {
                         duration: 300
                         easing.type: Easing.OutBack
@@ -500,9 +500,9 @@ Item {
             sourceComponent: IconImage {
                 id: questionImage
                 source: "qrc:/icons/questionmark.png"
-                color: GameConstants.foregroundColor
-                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
-                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
+                color: Constants.foregroundColor
+                width: (cellItem.width - (UserSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (UserSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width - 4) / 2.1
                 sourceSize.height: (cellItem.height - 4) / 2.1
                 opacity: 0
@@ -513,7 +513,7 @@ Item {
                 }
 
                 Behavior on opacity {
-                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    enabled: UserSettings.animations && !GameState.noAnimReset
                     OpacityAnimator {
                         duration: 300
                         easing.type: Easing.OutQuad
@@ -521,7 +521,7 @@ Item {
                 }
 
                 Behavior on scale {
-                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    enabled: UserSettings.animations && !GameState.noAnimReset
                     NumberAnimation {
                         duration: 300
                         easing.type: Easing.OutBack
@@ -538,8 +538,8 @@ Item {
                 id: safeQuestionImage
                 source: "qrc:/icons/questionmark.png"
                 color: "green"
-                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
-                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
+                width: (cellItem.width - (UserSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (UserSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width - 4) / 2.1
                 sourceSize.height: (cellItem.height - 4) / 2.1
                 opacity: 0
@@ -551,7 +551,7 @@ Item {
                 }
 
                 Behavior on opacity {
-                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    enabled: UserSettings.animations && !GameState.noAnimReset
                     OpacityAnimator {
                         duration: 300
                         easing.type: Easing.OutQuad
@@ -559,7 +559,7 @@ Item {
                 }
 
                 Behavior on scale {
-                    enabled: GameSettings.animations && !GameState.noAnimReset
+                    enabled: UserSettings.animations && !GameState.noAnimReset
                     NumberAnimation {
                         duration: 300
                         easing.type: Easing.OutBack
@@ -573,8 +573,8 @@ Item {
             anchors.centerIn: parent
             active: false
             sourceComponent: Image {
-                width: (cellItem.width - (GameSettings.cellSpacing * 2)) / 2.1
-                height: (cellItem.height - (GameSettings.cellSpacing * 2)) / 2.1
+                width: (cellItem.width - (UserSettings.cellSpacing * 2)) / 2.1
+                height: (cellItem.height - (UserSettings.cellSpacing * 2)) / 2.1
                 sourceSize.width: (cellItem.width - 4) / 2.1
                 sourceSize.height: (cellItem.height - 4) / 2.1
                 opacity: 0
@@ -607,7 +607,7 @@ Item {
 
                 GridBridge.registerPlayerAction()
 
-                const isRevealClick = GameSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
+                const isRevealClick = UserSettings.invertLRClick ? mouse.button === Qt.RightButton : mouse.button === Qt.LeftButton;
                 const isFlagClick = !isRevealClick;
 
                 if (cellItem.inCooldown && isFlagClick) {
@@ -684,8 +684,8 @@ Item {
         sourceComponent: Text {
             id: cellText
             text: GameState.numbers ? GameState.numbers[cellItem.index] : ""
-            font.family: GameConstants.numberFont.name
-            font.pixelSize: (GameState.cellSize - GameSettings.cellSpacing * 2) * 0.60
+            font.family: Constants.numberFont.name
+            font.pixelSize: (GameState.cellSize - UserSettings.cellSpacing * 2) * 0.60
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             textFormat: Text.PlainText
@@ -694,19 +694,19 @@ Item {
             x: xOffset  // Use x instead of anchors.horizontalCenterOffset
 
             opacity: {
-                if (!GameSettings.dimSatisfied) return 1
-                return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : GameSettings.satisfiedOpacity - 0.25
+                if (!UserSettings.dimSatisfied) return 1
+                return GridBridge.hasUnrevealedNeighbors(cellItem.index) ? 1 : UserSettings.satisfiedOpacity - 0.25
             }
 
             Behavior on opacity {
-                enabled: GameSettings.animations
+                enabled: UserSettings.animations
                 NumberAnimation {
                     duration: 200
                     easing.type: Easing.Linear
                 }
             }
 
-            color: GameConstants.getNumberColor(
+            color: Constants.getNumberColor(
                        true,
                        false,
                        cellItem.index,
@@ -716,7 +716,7 @@ Item {
             // Include the shake animation within the Text component
             SequentialAnimation {
                 id: shakeAnimation
-                running: cellItem.shakeConditionsMet && GridBridge.globalShakeActive && GameSettings.shakeUnifinishedNumbers
+                running: cellItem.shakeConditionsMet && GridBridge.globalShakeActive && UserSettings.shakeUnifinishedNumbers
                 loops: 3
                 alwaysRunToEnd: true
 
@@ -757,7 +757,7 @@ Item {
     }
 
     function startGridResetAnimation() {
-        if (!GameSettings.animations) {
+        if (!UserSettings.animations) {
             opacity = 1
             return
         }
@@ -768,7 +768,7 @@ Item {
         resetFadeInAnimation.stop()
         resetSpinAnimation.stop()
 
-        switch (GameSettings.gridResetAnimationIndex) {
+        switch (UserSettings.gridResetAnimationIndex) {
         case 0:
             GridBridge.initialAnimationPlayed = false
             opacity = 0

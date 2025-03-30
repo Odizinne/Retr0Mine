@@ -13,7 +13,7 @@ Item {
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string" && !ComponentsContext.multiplayerChatVisible) {
                 if (!chatButton.hasNewMessages) {
-                    GameAudio.playMessage()
+                    AudioEngine.playMessage()
                 }
                 chatButton.hasNewMessages = true
             }
@@ -31,7 +31,7 @@ Item {
         function onBotMessageSent() {
             if (!ComponentsContext.multiplayerChatVisible) {
                 if (!chatButton.hasNewMessages) {
-                    GameAudio.playMessage()
+                    AudioEngine.playMessage()
                 }
                 chatButton.hasNewMessages = true
             }
@@ -61,7 +61,7 @@ Item {
                 IconImage {
                     anchors.fill: parent
                     source: "qrc:/icons/menu.png"
-                    color: GameConstants.foregroundColor
+                    color: Constants.foregroundColor
                     sourceSize.height: 18
                     sourceSize.width: 18
                 }
@@ -77,7 +77,7 @@ Item {
                 IconImage {
                     anchors.fill: parent
                     source: "qrc:/icons/signal.png"
-                    color: GameState.nextClickIsSignal ? GameConstants.accentColor : GameConstants.foregroundColor
+                    color: GameState.nextClickIsSignal ? Constants.accentColor : Constants.foregroundColor
                     sourceSize.height: 16
                     sourceSize.width: 16
                 }
@@ -121,10 +121,10 @@ Item {
                 color: "transparent"
                 opacity: 1
                 border.color: getPingColor(SteamIntegration.pingTime)
-                border.width: GameConstants.isDarkMode ? 1 : 2
+                border.width: Constants.isDarkMode ? 1 : 2
 
                 function getPingColor(ping) {
-                    if (ping === 0) return GameConstants.foregroundColor
+                    if (ping === 0) return Constants.foregroundColor
                     if (ping <= 100) return "#28d13c"
                     if (ping <= 150) return "#a0d128"
                     if (ping <= 200) return "#d1a128"
@@ -154,7 +154,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: SteamIntegration.connectedPlayerName
             font.pixelSize: 14
-            font.family: GameConstants.numberFont.name
+            font.family: Constants.numberFont.name
         }
     }
 
@@ -162,14 +162,14 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: timeLabel.implicitWidth + 20
-        visible: GameSettings.displayTimer && !SteamIntegration.isInMultiplayerGame
+        visible: UserSettings.displayTimer && !SteamIntegration.isInMultiplayerGame
         enabled: GameState.gameStarted && !GameState.gameOver
         flat: true
 
         Label {
             id: timeLabel
             anchors.centerIn: parent
-            font.family: GameConstants.numberFont.name
+            font.family: Constants.numberFont.name
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 18
             text: GameTimer.displayTime
@@ -203,7 +203,7 @@ Item {
                 id: mineButton
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: mineCounter.implicitWidth + 20
-                icon.color: GameConstants.foregroundColor
+                icon.color: Constants.foregroundColor
                 font.pixelSize: 18
                 font.bold: true
                 enabled: GameState.gameStarted && !GameState.gameOver
@@ -214,7 +214,7 @@ Item {
                     id: mineCounter
                     anchors.centerIn: parent
                     IconImage {
-                        color: GameConstants.foregroundColor
+                        color: Constants.foregroundColor
                         source: "qrc:/icons/bomb.png"
                         opacity: enabled ? 1 : 0.5
                         sourceSize.height: 18
@@ -232,7 +232,7 @@ Item {
             NfButton {
                 id: chatButton
                 Layout.preferredHeight: 35
-                visible: SteamIntegration.isP2PConnected || GameSettings.hintReasoningInChat
+                visible: SteamIntegration.isP2PConnected || UserSettings.hintReasoningInChat
                 Layout.preferredWidth: 35
                 onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
                 highlighted: ComponentsContext.multiplayerChatVisible
@@ -271,7 +271,7 @@ Item {
                 IconImage {
                     anchors.fill: parent
                     source: "qrc:/icons/chat.png"
-                    color: chatButton.hasNewMessages ? GameConstants.accentColor : GameConstants.foregroundColor
+                    color: chatButton.hasNewMessages ? Constants.accentColor : Constants.foregroundColor
                     sourceSize.height: 16
                     sourceSize.width: 16
                 }

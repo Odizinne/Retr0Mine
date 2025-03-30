@@ -11,7 +11,7 @@ Pane {
         ListView {
             id: list
             anchors.fill: parent
-            spacing: GameConstants.settingsColumnSpacing
+            spacing: Constants.settingsColumnSpacing
             clip: true
             interactive: false
             model: ListModel {
@@ -63,14 +63,14 @@ Pane {
                 width: ListView.view.width -5
 
                 RowLayout {
-                    Layout.preferredHeight: GameConstants.settingsComponentsHeight
+                    Layout.preferredHeight: Constants.settingsComponentsHeight
                     anchors.fill: parent
                     Label {
                         text: shortcutLine.model.title
                         Layout.fillWidth: true
                     }
                     Label {
-                        color: GameConstants.accentColor
+                        color: Constants.accentColor
                         text: shortcutLine.model.shortcut
                         font.bold: true
                     }

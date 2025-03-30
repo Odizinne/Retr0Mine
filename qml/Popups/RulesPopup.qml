@@ -53,7 +53,7 @@ AnimatedPopup {
                     textFormat: Text.StyledText
                     lineHeight: 1.2
                     font.pixelSize: 14
-                    color: GameConstants.foregroundColor
+                    color: Constants.foregroundColor
                     text: qsTr(`<h2>Objective</h2>
 <p>Find all the mines on the board without detonating any of them.</p>
 <h3>Game Elements</h3>

@@ -6,7 +6,7 @@ import Odizinne.Retr0Mine
 
 Item {
     id: control
-    property int packIndex: GameSettings.soundPackIndex
+    property int packIndex: UserSettings.soundPackIndex
     property bool enabled: true
     property bool clickCooldown: false
     property bool remoteClickCooldown: false
@@ -66,49 +66,49 @@ Item {
     property list<SoundEffect> clickPool: [
         SoundEffect {
             source: control.getSoundPath("click")
-            volume: GameSettings.volume
+            volume: UserSettings.volume
         },
         SoundEffect {
             source: control.getSoundPath("click")
-            volume: GameSettings.volume
+            volume: UserSettings.volume
         },
         SoundEffect {
             source: control.getSoundPath("click")
-            volume: GameSettings.volume
+            volume: UserSettings.volume
         }
     ]
 
     property list<SoundEffect> remoteClickPool: [
         SoundEffect {
             source: control.getSoundPath("remoteClick")
-            volume: GameSettings.remoteVolume
+            volume: UserSettings.remoteVolume
         },
         SoundEffect {
             source: control.getSoundPath("remoteClick")
-            volume: GameSettings.remoteVolume
+            volume: UserSettings.remoteVolume
         },
         SoundEffect {
             source: control.getSoundPath("remoteClick")
-            volume: GameSettings.remoteVolume
+            volume: UserSettings.remoteVolume
         }
     ]
 
     SoundEffect {
         id: winEffect
         source: control.getSoundPath("win")
-        volume: GameSettings.volume
+        volume: UserSettings.volume
     }
 
     SoundEffect {
         id: looseEffect
         source: control.getSoundPath("bomb")
-        volume: GameSettings.volume
+        volume: UserSettings.volume
     }
 
     SoundEffect {
         id: messageSound
         source: "qrc:/sounds/message_received.wav"
-        volume: GameSettings.newChatMessageVolume
+        volume: UserSettings.newChatMessageVolume
     }
 
     SoundEffect {
@@ -153,27 +153,27 @@ Item {
     }
 
     function playClick() {
-        if (GameSettings.volume === 0 || clickCooldown) return
+        if (UserSettings.volume === 0 || clickCooldown) return
         clickDelayTimer.start()
     }
 
     function playRemoteClick() {
-        if (GameSettings.remoteVolume === 0 || remoteClickCooldown) return
+        if (UserSettings.remoteVolume === 0 || remoteClickCooldown) return
         remoteClickDelayTimer.start()
     }
 
     function playWin() {
-        if (GameSettings.volume === 0) return
+        if (UserSettings.volume === 0) return
         winEffect.play()
     }
 
     function playLoose() {
-        if (GameSettings.volume === 0) return
+        if (UserSettings.volume === 0) return
         looseEffect.play()
     }
 
     function playMessage() {
-        if (GameSettings.newChatMessageVolume === 0) return
+        if (UserSettings.newChatMessageVolume === 0) return
         messageSound.play()
     }
 
