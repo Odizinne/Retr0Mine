@@ -247,6 +247,7 @@ Item {
             getCellForCallback
         )
 
+        const mineSet = new Set(GameState.mines)
         let cellsRevealed = 0
 
         for (let i = 0; i < cellsToReveal.length; i++) {
@@ -256,17 +257,17 @@ Item {
             if (!cell || cell.revealed || cell.flagged) continue
 
             cell.revealed = true
-            GameState.revealedCount++
             cellsRevealed++
 
-            if (GameState.mines.includes(currentIndex)) {
+            if (mineSet.has(currentIndex)) {
                 cell.isBombClicked = true
                 GameState.gameOver = true
                 GameState.gameWon = false
                 GameState.bombClickedBy = playerIdentifier || SteamIntegration.playerName
 
-                attributeRevealedCells(cellsRevealed, playerIdentifier)
+                GameState.revealedCount += cellsRevealed
 
+                attributeRevealedCells(cellsRevealed, playerIdentifier)
                 GameTimer.stop()
                 revealAllMines()
                 AudioEngine.playLoose()
@@ -286,6 +287,8 @@ Item {
                 cell.safeQuestioned = false
             }
         }
+
+        GameState.revealedCount += cellsRevealed
 
         attributeRevealedCells(cellsRevealed, playerIdentifier)
         if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {

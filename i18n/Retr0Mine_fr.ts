@@ -389,15 +389,15 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="446"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="453"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="460"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="449"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="456"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="463"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="476"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="473"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="479"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
