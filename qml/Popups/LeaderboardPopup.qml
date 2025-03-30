@@ -27,6 +27,25 @@ AnimatedPopup {
         }
     }
 
+    Connections {
+        target: GridBridge
+        function onLeaderboardUpdated(timeField, timeValue, winsField, winsValue) {
+            if (timeField === "easyTime") {
+                control.easyTime = timeValue
+                control.easyWins = winsValue
+            } else if (timeField === "mediumTime") {
+                control.mediumTime = timeValue
+                control.mediumWins = winsValue
+            } else if (timeField === "hardTime") {
+                control.hardTime = timeValue
+                control.hardWins = winsValue
+            } else if (timeField === "retr0Time") {
+                control.retr0Time = timeValue
+                control.retr0Wins = winsValue
+            }
+        }
+    }
+
     Shortcut {
         sequence: "Esc"
         enabled: control.visible

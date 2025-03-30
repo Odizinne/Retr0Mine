@@ -4,7 +4,6 @@ import Odizinne.Retr0Mine
 
 Item {
     property var grid: null
-    property var leaderboardWindow: null
     property int generationAttempt
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
@@ -13,6 +12,7 @@ Item {
     property bool globalShakeActive: false
 
     signal botMessageSent(string explanation)
+    signal leaderboardUpdated(string timeField, string timeValue, int winsField, int winsValue)
 
     function getCellForCallback(index) {
         return getCell(index)
@@ -39,10 +39,6 @@ Item {
 
     function setGrid(gridReference) {
         grid = gridReference
-    }
-
-    function setLeaderboardWindow(leaderboardWindowReference) {
-        leaderboardWindow = leaderboardWindowReference
     }
 
     function cancelGeneration() {
@@ -424,16 +420,15 @@ Item {
                 }
 
                 leaderboard[winsField]++
-                if (leaderboardWindow) {
-                    leaderboardWindow[winsField] = leaderboard[winsField]
-                }
+
+                leaderboardUpdated(timeField, leaderboard[timeField], winsField, leaderboard[winsField])
 
                 if (!leaderboard[centisecondsField] || centiseconds < leaderboard[centisecondsField]) {
                     leaderboard[timeField] = formattedTime
                     leaderboard[centisecondsField] = centiseconds
-                    if (leaderboardWindow) {
-                        leaderboardWindow[timeField] = formattedTime
-                    }
+
+                    leaderboardUpdated(timeField, formattedTime, winsField, leaderboard[winsField])
+
                     GameState.displayNewRecord = true
                 }
             }

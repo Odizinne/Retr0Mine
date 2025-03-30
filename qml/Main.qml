@@ -552,7 +552,6 @@ ApplicationWindow {
             LeaderboardPopup {
                 id: leaderboardWindow
                 anchors.centerIn: gameView
-                Component.onCompleted: GridBridge.setLeaderboardWindow(leaderboardWindow)
             }
         }
 

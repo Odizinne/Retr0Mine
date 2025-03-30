@@ -384,15 +384,15 @@ board generation on large grids</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="456"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="463"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="451"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="458"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="465"/>
         <source>New flag unlocked!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="480"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="486"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="475"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="481"/>
         <source>New grid animation unlocked!</source>
         <translation></translation>
     </message>
@@ -421,52 +421,52 @@ board generation on large grids</source>
 <context>
     <name>LeaderboardPopup</name>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="107"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="126"/>
         <source>Difficulty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="113"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="132"/>
         <source>Easy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="118"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="137"/>
         <source>Medium</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="123"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="142"/>
         <source>Hard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="128"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="147"/>
         <source>Retr0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="139"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="158"/>
         <source>Time</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="171"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="190"/>
         <source>Wins</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="204"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="223"/>
         <source>Clear</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="204"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="223"/>
         <source>Confirm?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/LeaderboardPopup.qml" line="241"/>
+        <location filename="../qml/Popups/LeaderboardPopup.qml" line="260"/>
         <source>Close</source>
         <translation></translation>
     </message>
