@@ -5,7 +5,6 @@ import Odizinne.Retr0Mine
 Item {
     property var grid: null
     property var leaderboardWindow: null
-    property var chatReference: null
     property int generationAttempt
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
@@ -13,12 +12,10 @@ Item {
     property bool idleShakeScheduled: false
     property bool globalShakeActive: false
 
+    signal botMessageSent(string explanation)
+
     function getCellForCallback(index) {
         return getCell(index)
-    }
-
-    function setChatReference(chatPanel) {
-        chatReference = chatPanel
     }
 
     function getCell(index) {
@@ -110,8 +107,8 @@ Item {
                 cell.highlightHint()
             })
 
-            if (UserSettings.hintReasoningInChat && chatReference && explanation && typeof explanation === "string" && explanation.length > 0) {
-                chatReference.addBotMessage(explanation)
+            if (UserSettings.hintReasoningInChat && explanation && typeof explanation === "string" && explanation.length > 0) {
+                botMessageSent(explanation)
             }
         }
 
@@ -656,12 +653,6 @@ Item {
             GridBridge.globalShakeActive = false
 
             idleTimer.restart()
-        }
-    }
-
-    function addBotHint(message) {
-        if (chatReference && typeof chatReference.addBotMessage === "function") {
-            chatReference.addBotMessage(message)
         }
     }
 

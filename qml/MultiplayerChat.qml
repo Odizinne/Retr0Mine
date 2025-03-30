@@ -31,6 +31,14 @@ Frame {
         }
     }
 
+    Connections {
+        target: GridBridge
+
+        function onBotMessageSent(message) {
+            chatPanel.addBotMessage(message)
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 8

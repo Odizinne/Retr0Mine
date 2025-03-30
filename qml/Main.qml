@@ -389,9 +389,6 @@ ApplicationWindow {
             }
             width: 300
             visible: ComponentsContext.multiplayerChatVisible
-            Component.onCompleted: {
-                GridBridge.setChatReference(this);
-            }
         }
 
         MouseArea {

@@ -384,15 +384,15 @@ board generation on large grids</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="454"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="461"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="468"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="456"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="463"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
         <source>New flag unlocked!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="478"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="484"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="480"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="486"/>
         <source>New grid animation unlocked!</source>
         <translation></translation>
     </message>
@@ -655,12 +655,12 @@ board generation on large grids</source>
 <context>
     <name>MultiplayerChat</name>
     <message>
-        <location filename="../qml/MultiplayerChat.qml" line="46"/>
+        <location filename="../qml/MultiplayerChat.qml" line="54"/>
         <source>Hint reasoning will be displayed here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MultiplayerChat.qml" line="162"/>
+        <location filename="../qml/MultiplayerChat.qml" line="170"/>
         <source>Type a message...</source>
         <translation></translation>
     </message>

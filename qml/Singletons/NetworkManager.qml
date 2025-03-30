@@ -809,7 +809,7 @@ QtObject {
                     })
 
                     if (hintData.explanation && GridBridge.chatReference) {
-                        GridBridge.chatReference.addBotMessage(hintData.explanation)
+                        GridBridge.botMessageSent(hintData.explanation)
                     }
                 }
             } catch (e) {
