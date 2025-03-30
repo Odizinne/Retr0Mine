@@ -22,7 +22,7 @@ Pane {
                 onValueChanged: GameSettings.volume = value
                 onPressedChanged: {
                     if (!pressed) {
-                        GridBridge.audioEngine.playClick()
+                        GameAudio.playClick()
                     }
                 }
             }
@@ -44,7 +44,7 @@ Pane {
                 onValueChanged: GameSettings.remoteVolume = value
                 onPressedChanged: {
                     if (!pressed) {
-                        GridBridge.audioEngine.playRemoteClick()
+                        GameAudio.playRemoteClick()
                     }
                 }
             }
@@ -65,7 +65,7 @@ Pane {
                 onValueChanged: GameSettings.newChatMessageVolume = value
                 onPressedChanged: {
                     if (!pressed) {
-                        GridBridge.audioEngine.playMessage()
+                        GameAudio.playMessage()
                     }
                 }
             }

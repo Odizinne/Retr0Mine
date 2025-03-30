@@ -261,6 +261,8 @@ ApplicationWindow {
         root.minimumWidth = getIdealWidth()
         root.height = getIdealHeight()
         root.minimumHeight = getIdealHeight()
+
+        GameAudio.playSilent()
     }
 
     Shortcut {

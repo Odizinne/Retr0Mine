@@ -4,7 +4,6 @@ import Odizinne.Retr0Mine
 
 Item {
     property var grid: null
-    property var audioEngine: null
     property var leaderboardWindow: null
     property var chatReference: null
     property int generationAttempt
@@ -43,10 +42,6 @@ Item {
 
     function setGrid(gridReference) {
         grid = gridReference
-    }
-
-    function setAudioEngine(audioEngineReference) {
-        audioEngine = audioEngineReference
     }
 
     function setLeaderboardWindow(leaderboardWindowReference) {
@@ -281,7 +276,7 @@ Item {
 
                 GameTimer.stop()
                 revealAllMines()
-                audioEngine.playLoose()
+                GameAudio.playLoose()
                 GameState.displayPostGame = true
 
                 if (NetworkManager.onGameLost(currentIndex)) {
@@ -306,12 +301,12 @@ Item {
         if (!GameState.gameOver) {
             if (SteamIntegration.isInMultiplayerGame) {
                 if (playerIdentifier !== SteamIntegration.playerName && playerIdentifier !== "firstClick") {
-                    audioEngine.playRemoteClick()
+                    GameAudio.playRemoteClick()
                 } else {
-                    audioEngine.playClick()
+                    GameAudio.playClick()
                 }
             } else {
-                audioEngine.playClick()
+                GameAudio.playClick()
             }
         }
     }
@@ -404,7 +399,7 @@ Item {
 
             if (NetworkManager.onGameWon()) {
                 GameState.displayPostGame = true
-                audioEngine.playWin()
+                GameAudio.playWin()
                 return
             }
 
@@ -497,7 +492,7 @@ Item {
             }
 
             GameState.displayPostGame = true
-            audioEngine.playWin()
+            GameAudio.playWin()
         }
     }
 

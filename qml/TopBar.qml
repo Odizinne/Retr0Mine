@@ -13,7 +13,7 @@ Item {
         function onGameActionReceived(actionType, parameter) {
             if (actionType === "chat" && typeof parameter === "string" && !ComponentsContext.multiplayerChatVisible) {
                 if (!chatButton.hasNewMessages) {
-                    GridBridge.audioEngine.playMessage()
+                    GameAudio.playMessage()
                 }
                 chatButton.hasNewMessages = true
             }
@@ -31,7 +31,7 @@ Item {
         function onBotMessageSent() {
             if (!ComponentsContext.multiplayerChatVisible) {
                 if (!chatButton.hasNewMessages) {
-                    GridBridge.audioEngine.playMessage()
+                    GameAudio.playMessage()
                 }
                 chatButton.hasNewMessages = true
             }

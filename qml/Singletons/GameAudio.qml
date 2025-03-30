@@ -1,12 +1,19 @@
+pragma Singleton
+
 import QtQuick
 import QtMultimedia
 import Odizinne.Retr0Mine
+
 Item {
     id: control
     property int packIndex: GameSettings.soundPackIndex
     property bool enabled: true
     property bool clickCooldown: false
     property bool remoteClickCooldown: false
+
+    Component.onCompleted: {
+
+    }
 
     Timer {
         id: cooldownTimer
@@ -113,9 +120,6 @@ Item {
         source: "qrc:/sounds/empty.wav"
         volume: 0.01
         loops: SoundEffect.Infinite
-        Component.onCompleted: {
-            play()
-        }
     }
 
     function getSoundPath(type) {
@@ -171,5 +175,9 @@ Item {
     function playMessage() {
         if (GameSettings.newChatMessageVolume === 0) return
         messageSound.play()
+    }
+
+    function playSilent() {
+        silentKeepAlive.play()
     }
 }

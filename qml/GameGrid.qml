@@ -33,11 +33,4 @@ GridView {
             }
         }
     }
-
-    GameAudio {
-        id: audioEngine
-        Component.onCompleted: {
-            GridBridge.setAudioEngine(audioEngine)
-        }
-    }
 }

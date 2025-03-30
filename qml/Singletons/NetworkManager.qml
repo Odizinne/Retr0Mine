@@ -759,9 +759,9 @@ QtObject {
             GameTimer.stop()
 
             if (GameState.gameWon) {
-                if (GridBridge.audioEngine) GridBridge.audioEngine.playWin()
+                GameAudio.playWin()
             } else {
-                if (GridBridge.audioEngine) GridBridge.audioEngine.playLoose()
+                GameAudio.playLoose()
                 GridBridge.revealAllMines()
             }
 

@@ -45,7 +45,6 @@ set(QML_FILES
     qml/TopBar.qml
     qml/InfoIcon.qml
     qml/GameGrid.qml
-    qml/GameAudio.qml
     qml/ScrollingArea.qml
     qml/MainMenu.qml
     qml/GridLoadingIndicator.qml
@@ -96,6 +95,8 @@ set(QML_SINGLETONS
     qml/Singletons/NetworkManager.qml
     qml/Singletons/SteamInputHandler.qml
     qml/Singletons/MouseTracker.qml
+    qml/Singletons/GameAudio.qml
+
 )
 
 set_source_files_properties(${QML_SINGLETONS}
