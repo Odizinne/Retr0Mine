@@ -374,14 +374,14 @@ ApplicationWindow {
             id: topBar
             anchors {
                 left: parent.left
-                right: rightPanel.visible ? rightPanel.left : parent.right
+                right: multiplayerChat.visible ? multiplayerChat.left : parent.right
                 top: parent.top
                 rightMargin: ComponentsContext.multiplayerChatVisible ? 12 : 0
             }
         }
 
         MultiplayerChat {
-            id: rightPanel
+            id: multiplayerChat
             anchors {
                 top: parent.top
                 right: parent.right
@@ -422,7 +422,7 @@ ApplicationWindow {
             id: gameView
             anchors {
                 left: parent.left
-                right: rightPanel.visible ? rightPanel.left : parent.right
+                right: multiplayerChat.visible ? multiplayerChat.left : parent.right
                 bottom: parent.bottom
                 top: topBar.bottom
                 topMargin: 12
@@ -566,7 +566,7 @@ ApplicationWindow {
             anchors.bottom: gameView.bottom
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: ((GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2)) * gridContainer.scale > gameView.height ?
+            policy: gameView.contentHeight * gridContainer.scale > gameView.height ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
@@ -581,7 +581,7 @@ ApplicationWindow {
             anchors.bottomMargin: -12
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: ((GameState.cellSize * GameState.gridSizeX) - (UserSettings.cellSpacing * 2)) * gridContainer.scale > gameView.width ?
+            policy: gameView.contentWidth * gridContainer.scale > gameView.width ?
                         ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
         }
 
