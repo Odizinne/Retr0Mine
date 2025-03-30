@@ -10,27 +10,4 @@ GridView {
     property bool initialAnimationPlayed: false
     property int cellsCreated: 0
     property int generationAttempt
-
-    Item {
-        id: mouseTracker
-        anchors.fill: parent
-        visible: UserSettings.cellFrameHoverAnimation
-        enabled: UserSettings.cellFrameHoverAnimation
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            propagateComposedEvents: true
-            acceptedButtons: Qt.NoButton
-
-            onPositionChanged: (mouse) => {
-                MouseTracker.globalMousePos = mapToGlobal(Qt.point(mouse.x, mouse.y))
-                MouseTracker.isHovering = true
-            }
-
-            onExited: {
-                MouseTracker.isHovering = false
-            }
-        }
-    }
 }

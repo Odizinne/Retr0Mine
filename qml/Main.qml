@@ -252,15 +252,15 @@ ApplicationWindow {
         GameCore.setApplicationPalette(UserSettings.accentColorIndex)
 
         if (UserSettings.startFullScreen || GameCore.gamescope) {
-            root.visibility = ApplicationWindow.FullScreen
+            visibility = ApplicationWindow.FullScreen
         } else {
-            root.visibility = ApplicationWindow.Windowed
+            visibility = ApplicationWindow.Windowed
         }
 
-        root.width = getIdealWidth()
-        root.minimumWidth = getIdealWidth()
-        root.height = getIdealHeight()
-        root.minimumHeight = getIdealHeight()
+        width = getIdealWidth()
+        minimumWidth = getIdealWidth()
+        height = getIdealHeight()
+        minimumHeight = getIdealHeight()
 
         AudioEngine.playSilent()
     }
@@ -625,12 +625,13 @@ ApplicationWindow {
     function getIdealWidth() {
         /*==========================================
          | 24 = main item left + right margin      |
+         | 300 = multiplayer chat width            |
          | 12 = multiplayer chat margin            |
          ==========================================*/
-        if (root.visibility === ApplicationWindow.Windowed) {
+        if (visibility === ApplicationWindow.Windowed) {
             let baseWidth = (GameState.cellSize * GameState.gridSizeX) - (UserSettings.cellSpacing * 2) + 24
             if (ComponentsContext.multiplayerChatVisible) {
-                baseWidth += rightPanel.width + 12
+                baseWidth += 300 + 12
             }
 
             return Math.min(baseWidth, Screen.desktopAvailableWidth * 0.9)
@@ -643,7 +644,7 @@ ApplicationWindow {
          | 24 = main item top + bottom margin      |
          | 12 = topBar margin                      |
          ==========================================*/
-        if (root.visibility === ApplicationWindow.Windowed) {
+        if (visibility === ApplicationWindow.Windowed) {
             let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 35 + 24 + 12
             return Math.min(baseHeight, Screen.desktopAvailableHeight * 0.9)
         }

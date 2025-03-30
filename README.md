@@ -8,7 +8,7 @@
 ### Modern UI minesweeper with a lot of configuration that runs on windows and linux.  
 
 **If you like my work, consider supporting me by buying Retr0Mine on Steam!**  
-You'll get access to exclusive features relying on Steam, such as 2 player coop, achievemnts etc.
+You'll get access to exclusive features relying on Steam, such as 2 player coop, achievements etc.
 
 [![Available on STEAM](/.assets/available_on_steam.png)](https://store.steampowered.com/app/3478030/Retr0Mine/)
 
@@ -37,9 +37,9 @@ After installation you can right click Retr0Mine in your application menu and se
 
 - Used [Floraphonic](https://www.floraphonic.com/) sound effects 
 - Used PopOs sound effects from [PopOs GTK-Theme](https://github.com/pop-os/gtk-theme)
-- Used KDE ocean sound effects from [ocea-sound-theme](https://github.com/KDE/ocean-sound-theme)
+- Used KDE ocean sound effects from [ocean-sound-theme](https://github.com/KDE/ocean-sound-theme)
 - Icons by Freepik downloaded on [flaticon](https://www.flaticon.com/authors/freepik)
-- Used Material cursor from [jepricreations](https://www.deviantart.com/jepricreations);
+- Used Material cursor from [jepricreations](https://www.deviantart.com/jepricreations)
 
 Ocean sound effects used are licensed under [cc by sa 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 PopOs sound effects used are licensed under [cc by sa 4.0](https://creativecommons.org/licenses/by-sa/4.0/).

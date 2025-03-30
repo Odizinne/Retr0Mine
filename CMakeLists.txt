@@ -94,9 +94,7 @@ set(QML_SINGLETONS
     qml/Singletons/ComponentsContext.qml
     qml/Singletons/NetworkManager.qml
     qml/Singletons/SteamInputHandler.qml
-    qml/Singletons/MouseTracker.qml
     qml/Singletons/AudioEngine.qml
-
 )
 
 set_source_files_properties(${QML_SINGLETONS}

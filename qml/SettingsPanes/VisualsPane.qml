@@ -97,31 +97,7 @@ Pane {
                 NfSwitch {
                     id: cellFrameSwitch
                     checked: UserSettings.cellFrame
-                    onCheckedChanged: {
-                        UserSettings.cellFrame = checked
-                        if (!checked) UserSettings.cellFrameHoverAnimation = false
-                    }
-                }
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Constants.settingsComponentsHeight
-                enabled: UserSettings.cellFrame
-                Label {
-                    text: qsTr("Hover animation")
-                    Layout.fillWidth: true
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: cellFrameHoverAnimationSwitch.click()
-                    }
-                }
-                NfSwitch {
-                    id: cellFrameHoverAnimationSwitch
-                    checked: UserSettings.cellFrameHoverAnimation
-                    onCheckedChanged: {
-                        UserSettings.cellFrameHoverAnimation = checked
-                    }
+                    onCheckedChanged: UserSettings.cellFrame = checked
                 }
             }
 
