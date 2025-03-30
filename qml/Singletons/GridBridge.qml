@@ -14,10 +14,6 @@ Item {
     signal botMessageSent(string explanation)
     signal leaderboardUpdated(string timeField, string timeValue, int winsField, int winsValue)
 
-    function getCellForCallback(index) {
-        return getCell(index)
-    }
-
     function getCell(index) {
         if (!grid) return null
 
@@ -31,7 +27,6 @@ Item {
         const cell = getCell(index)
         if (cell) {
             operation(cell)
-
             return true
         }
         return false
@@ -87,10 +82,8 @@ Item {
         const mineCell = hintResult.cell
         const explanation = hintResult.explanation
 
-
         if (mineCell !== -1) {
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
-
                 const hintData = {
                     cell: mineCell,
                     explanation: explanation
@@ -129,8 +122,7 @@ Item {
             index,
             GameState.gridSizeX,
             GameState.gridSizeY,
-            GameState.numbers,
-            getCellForCallback
+            GameState.numbers
         )
 
         for (let i = 0; i < cellsToReveal.length; i++) {
@@ -243,8 +235,7 @@ Item {
             GameState.gridSizeX,
             GameState.gridSizeY,
             GameState.mines,
-            GameState.numbers,
-            getCellForCallback
+            GameState.numbers
         )
 
         const mineSet = new Set(GameState.mines)
@@ -593,8 +584,7 @@ Item {
             index,
             GameState.gridSizeX,
             GameState.gridSizeY,
-            GameState.numbers,
-            getCellForCallback
+            GameState.numbers
         )
     }
 
@@ -606,8 +596,7 @@ Item {
         return countNeighborFlags(
             index,
             GameState.gridSizeX,
-            GameState.gridSizeY,
-            getCellForCallback
+            GameState.gridSizeY
         )
     }
 
@@ -637,7 +626,6 @@ Item {
 
         if (anyCellNeedsShake && !GameState.gameOver && UserSettings.shakeUnifinishedNumbers) {
             globalShakeActive = true
-
             shakeTimer.restart()
         } else {
             idleTimer.restart()
@@ -649,20 +637,19 @@ Item {
         interval: 1500
         onTriggered: {
             GridBridge.globalShakeActive = false
-
             idleTimer.restart()
         }
     }
 
-    function performFloodFillReveal(index, gridSizeX, gridSizeY, mines, numbers, getCellCallback) {
+    function performFloodFillReveal(index, gridSizeX, gridSizeY, mines, numbers) {
         let cellsToReveal = []
 
-        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0) {
             console.warn("Invalid parameters in performFloodFillReveal")
             return cellsToReveal
         }
 
-        const cell = getCellCallback(index)
+        const cell = getCell(index)
         if (!cell) return cellsToReveal
         if (cell.revealed || cell.flagged) return cellsToReveal
 
@@ -695,7 +682,7 @@ Item {
 
                     visited.add(adjacentIndex)
 
-                    const adjacentCell = getCellCallback(adjacentIndex)
+                    const adjacentCell = getCell(adjacentIndex)
                     if (!adjacentCell) continue
                     if (adjacentCell.flagged) continue
 
@@ -715,15 +702,15 @@ Item {
     }
 
     // Get cells to reveal when clicking on a numbered cell
-    function getAdjacentCellsToReveal(index, gridSizeX, gridSizeY, numbers, getCellCallback) {
+    function getAdjacentCellsToReveal(index, gridSizeX, gridSizeY, numbers) {
         let cellsToReveal = []
 
-        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0) {
             console.warn("Invalid parameters in getAdjacentCellsToReveal")
             return cellsToReveal
         }
 
-        const cell = getCellCallback(index)
+        const cell = getCell(index)
         if (!cell || !cell.revealed) return cellsToReveal
 
         const cellNumber = numbers[index] || 0
@@ -747,7 +734,7 @@ Item {
                 }
 
                 const adjacentIndex = newRow * gridSizeX + newCol
-                const adjacentCell = getCellCallback(adjacentIndex)
+                const adjacentCell = getCell(adjacentIndex)
                 if (!adjacentCell) continue
 
                 if (adjacentCell.questioned || adjacentCell.safeQuestioned) {
@@ -773,8 +760,8 @@ Item {
     }
 
     // Check if a cell has unrevealed neighbors
-    function checkUnrevealedNeighbors(index, gridSizeX, gridSizeY, numbers, getCellCallback) {
-        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+    function checkUnrevealedNeighbors(index, gridSizeX, gridSizeY, numbers) {
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0) {
             return false
         }
 
@@ -798,7 +785,7 @@ Item {
                 }
 
                 const adjacentIndex = newRow * gridSizeX + newCol
-                const adjacentCell = getCellCallback(adjacentIndex)
+                const adjacentCell = getCell(adjacentIndex)
                 if (!adjacentCell) continue
 
                 if (adjacentCell.flagged) {
@@ -815,8 +802,8 @@ Item {
     }
 
     // Count number of flagged neighbors
-    function countNeighborFlags(index, gridSizeX, gridSizeY, getCellCallback) {
-        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0 || typeof getCellCallback !== 'function') {
+    function countNeighborFlags(index, gridSizeX, gridSizeY) {
+        if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0) {
             return 0
         }
 
@@ -836,7 +823,7 @@ Item {
                 }
 
                 const adjacentIndex = newRow * gridSizeX + newCol
-                const adjacentCell = getCellCallback(adjacentIndex)
+                const adjacentCell = getCell(adjacentIndex)
                 if (!adjacentCell) continue
 
                 if (adjacentCell.flagged) {

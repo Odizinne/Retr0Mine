@@ -384,15 +384,15 @@ board generation on large grids</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="449"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="456"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="463"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="440"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="447"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="454"/>
         <source>New flag unlocked!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="473"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="479"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="464"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
         <source>New grid animation unlocked!</source>
         <translation></translation>
     </message>
