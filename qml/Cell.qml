@@ -341,6 +341,85 @@ Item {
         }
     }
 
+    Item {
+        id: hoverEffect
+        opacity: 0.2
+        anchors.fill: cellButton
+
+        // Only visible when the original frame is visible and we're hovering
+        visible: {
+            if (!GameSettings.cellFrame) return false
+            if (!MouseTracker.isHovering) return false
+
+            // Match the visibility conditions of the original frame
+            if (cellItem.revealed && cellItem.isBombClicked && GameState.mines.includes(cellItem.index))
+                return true
+            if (cellItem.animatingReveal && GameSettings.cellFrame)
+                return true
+            return cellButton.flat && GameSettings.cellFrame
+        }
+
+        // Top border
+        Rectangle {
+            x: 0
+            y: 0
+            width: parent.width
+            height: 2
+            color: hoverEffect.getGradientColor(x + width/2, y)
+        }
+
+        // Right border
+        Rectangle {
+            x: parent.width - 2
+            y: 0
+            width: 2
+            height: parent.height
+            color: hoverEffect.getGradientColor(x, y + height/2)
+        }
+
+        // Bottom border
+        Rectangle {
+            x: 0
+            y: parent.height - 2
+            width: parent.width
+            height: 2
+            color: hoverEffect.getGradientColor(x + width/2, y)
+        }
+
+        // Left border
+        Rectangle {
+            x: 0
+            y: 0
+            width: 2
+            height: parent.height
+            color: hoverEffect.getGradientColor(x, y + height/2)
+        }
+
+        // Function to calculate color based on distance from cursor
+        function getGradientColor(pointX, pointY) {
+            // Get absolute position of this point in the grid
+            let absolutePos = cellItem.mapToItem(GridBridge.grid, pointX, pointY)
+
+            // Get mouse position relative to the grid
+            let gridMousePos = GridBridge.grid.mapFromGlobal(MouseTracker.globalMousePos.x, MouseTracker.globalMousePos.y)
+
+            // Calculate distance from mouse to this point
+            let dx = gridMousePos.x - absolutePos.x
+            let dy = gridMousePos.y - absolutePos.y
+            let distance = Math.sqrt(dx*dx + dy*dy)
+
+            // Calculate intensity based on distance
+            let intensity = Math.max(0, 1.0 - distance / MouseTracker.effectRadius)
+
+            return Qt.rgba(
+                MouseTracker.hoverColor.r,
+                MouseTracker.hoverColor.g,
+                MouseTracker.hoverColor.b,
+                intensity
+            )
+        }
+    }
+
     NfButton {
         id: cellButton
         anchors.fill: parent
