@@ -319,69 +319,6 @@ board generation on large grids</source>
     </message>
 </context>
 <context>
-    <name>GenerationPopup</name>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="16"/>
-        <source>Generating board...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
-        <source>Placing mines in corners...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
-        <source>Checking if 1 + 1 = 2...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
-        <source>Counting digits very carefully...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
-        <source>Asking mines to play fair...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
-        <source>Calibrating mine detectors...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
-        <source>Convincing mines not to move...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
-        <source>Consulting probability experts...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
-        <source>Hiding mines under suspicious squares...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
-        <source>Calculation of multipliers based on colors...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="26"/>
-        <source>Running out of clever loading messages...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="91"/>
-        <source>Cancel</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>GridBridge</name>
     <message>
         <location filename="../qml/Singletons/GridBridge.qml" line="444"/>
@@ -1215,7 +1152,7 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="181"/>
+        <location filename="../qml/TopBar.qml" line="189"/>
         <source>Click to pause</source>
         <translation></translation>
     </message>

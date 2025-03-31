@@ -158,11 +158,19 @@ Item {
         }
     }
 
+    BusyIndicator {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        visible: GameState.isGeneratingGrid
+        height: 35
+        width: 35
+    }
+
     NfButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: timeLabel.implicitWidth + 20
-        visible: UserSettings.displayTimer && !SteamIntegration.isInMultiplayerGame
+        visible: UserSettings.displayTimer && !SteamIntegration.isInMultiplayerGame && !GameState.isGeneratingGrid
         enabled: GameState.gameStarted && !GameState.gameOver
         flat: true
 

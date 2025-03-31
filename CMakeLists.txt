@@ -76,7 +76,6 @@ set(QML_FILES
     qml/Popups/SavePopup.qml
     qml/Popups/LeaderboardPopup.qml
     qml/Popups/WelcomePopup.qml
-    qml/Popups/GenerationPopup.qml
     qml/Popups/RulesPopup.qml
     qml/Popups/PausePopup.qml
     qml/Popups/PrivateSessionPopup.qml

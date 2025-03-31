@@ -516,10 +516,6 @@ ApplicationWindow {
                 anchors.centerIn: gameView
             }
 
-            GenerationPopup {
-                anchors.centerIn: gameView
-            }
-
             PostgamePopup {
                 anchors.centerIn: gameView
             }

@@ -324,69 +324,6 @@ ralentir la génération sur les grilles larges</translation>
     </message>
 </context>
 <context>
-    <name>GenerationPopup</name>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="16"/>
-        <source>Generating board...</source>
-        <translation>Création de la grille en cours...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="17"/>
-        <source>Placing mines in corners...</source>
-        <translation>Placement des mines dans les coins...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="18"/>
-        <source>Checking if 1 + 1 = 2...</source>
-        <translation>Vérification du calcul 1 + 1 = 2...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="19"/>
-        <source>Counting digits very carefully...</source>
-        <translation>Comptage précis des chiffres...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="20"/>
-        <source>Asking mines to play fair...</source>
-        <translation>Négociation avec les mines pour jouer fair-play...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="21"/>
-        <source>Calibrating mine detectors...</source>
-        <translation>Étalonnage des détecteurs en cours...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="22"/>
-        <source>Convincing mines not to move...</source>
-        <translation>Demande aux mines de ne pas se déplacer...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="23"/>
-        <source>Consulting probability experts...</source>
-        <translation>Consultation des experts en probabilités...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="24"/>
-        <source>Hiding mines under suspicious squares...</source>
-        <translation>Camouflage des mines sous les cases louches...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="25"/>
-        <source>Calculation of multipliers based on colors...</source>
-        <translation>Calcul des multiplicateurs en fonction des couleurs...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="26"/>
-        <source>Running out of clever loading messages...</source>
-        <translation>Plus d&apos;inspiration pour les messages de chargement...</translation>
-    </message>
-    <message>
-        <location filename="../qml/Popups/GenerationPopup.qml" line="91"/>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
-    </message>
-</context>
-<context>
     <name>GridBridge</name>
     <message>
         <location filename="../qml/Singletons/GridBridge.qml" line="444"/>
@@ -1238,7 +1175,7 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="181"/>
+        <location filename="../qml/TopBar.qml" line="189"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
