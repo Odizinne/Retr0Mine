@@ -303,17 +303,17 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="161"/>
         <source>Show hint reasoning in chat</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="180"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="186"/>
         <source>SteamDeck controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="185"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="191"/>
         <source>Remap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1147,12 +1147,12 @@ board generation on large grids</source>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="87"/>
+        <location filename="../qml/TopBar.qml" line="88"/>
         <source>Next click will signal the cell</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="189"/>
+        <location filename="../qml/TopBar.qml" line="190"/>
         <source>Click to pause</source>
         <translation></translation>
     </message>

@@ -308,17 +308,17 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Charger la dernière partie au démarrage</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="161"/>
         <source>Show hint reasoning in chat</source>
         <translation>Expliquer la logique des indices dans le chat</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="180"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="186"/>
         <source>SteamDeck controls</source>
         <translation>Contrôles SteamDeck</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="185"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="191"/>
         <source>Remap</source>
         <translation>Réassigner</translation>
     </message>
@@ -1170,12 +1170,12 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="87"/>
+        <location filename="../qml/TopBar.qml" line="88"/>
         <source>Next click will signal the cell</source>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="189"/>
+        <location filename="../qml/TopBar.qml" line="190"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
