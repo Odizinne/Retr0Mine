@@ -13,24 +13,16 @@ Item {
 
     Item {
         anchors.centerIn: parent
-        width: logo.sourceSize.width + 50
-        height: width
+        width: sourceSize.width * 0.35
+        height: sourceSize.height * 0.35
 
-        CircularProgressBar {
+        property var sourceSize: Qt.size(756, 110)
+
+        ImageProgressBar {
             anchors.fill: parent
             from: 0
             to: (GameState.gridSizeX * GameState.gridSizeY)
             value: GridBridge.cellsCreated
-        }
-
-        Image {
-            id: logo
-            anchors.centerIn: parent
-            source: Constants.retr0mineLogo
-            sourceSize.width: 756 * 0.25
-            sourceSize.height: 110 * 0.25
-            antialiasing: true
-            mipmap: true
         }
     }
 }
