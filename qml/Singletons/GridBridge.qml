@@ -479,7 +479,6 @@ Item {
                 SteamIntegration.incrementTotalWin()
             }
 
-
             GameState.displayPostGame = true
             AudioEngine.playWin()
         }

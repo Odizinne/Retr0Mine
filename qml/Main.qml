@@ -442,6 +442,7 @@ ApplicationWindow {
             opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) ? 1 : 0
             ScrollBar.vertical: defaultVerticalScrollBar
             ScrollBar.horizontal: defaultHorizontalScrollBar
+            interactive: contentHeight * gridContainer.scale > height
             Behavior on opacity {
                 enabled: UserSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
                 NumberAnimation {
