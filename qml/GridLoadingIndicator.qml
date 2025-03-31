@@ -1,10 +1,9 @@
 import QtQuick
-import QtQuick.Controls.Universal
-import QtQuick.Layouts
 import Odizinne.Retr0Mine
 
 Item {
     opacity: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) ? 0 : 1
+    visible: opacity !== 0
     Behavior on opacity {
         NumberAnimation {
             duration: 100
@@ -12,26 +11,26 @@ Item {
         }
     }
 
-    ColumnLayout {
+    Item {
         anchors.centerIn: parent
-        spacing: 8
+        width: logo.sourceSize.width + 50
+        height: width
 
-        Image {
-            id: logo
-            source: Constants.retr0mineLogo
-            sourceSize.width: 756 * 0.35
-            sourceSize.height: 110 * 0.35
-            Layout.alignment: Qt.AlignCenter
-            antialiasing: true
-            mipmap: true
-        }
-
-        ProgressBar {
-            Layout.preferredWidth: logo.sourceSize.width - 6
-            Layout.alignment: Qt.AlignCenter
+        CircularProgressBar {
+            anchors.fill: parent
             from: 0
             to: (GameState.gridSizeX * GameState.gridSizeY)
             value: GridBridge.cellsCreated
+        }
+
+        Image {
+            id: logo
+            anchors.centerIn: parent
+            source: Constants.retr0mineLogo
+            sourceSize.width: 756 * 0.25
+            sourceSize.height: 110 * 0.25
+            antialiasing: true
+            mipmap: true
         }
     }
 }

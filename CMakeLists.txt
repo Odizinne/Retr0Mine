@@ -59,6 +59,7 @@ set(QML_FILES
     qml/Common/AnimatedPopup.qml
     qml/Common/CustomDelegate.qml
     qml/Common/CustomMenuItem.qml
+    qml/Common/CircularProgressBar.qml
     qml/Debug/DebugFrame.qml
     qml/SettingsPanes/AccessibilityPane.qml
     qml/SettingsPanes/AdvancedPane.qml
