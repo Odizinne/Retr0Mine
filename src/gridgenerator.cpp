@@ -1,5 +1,6 @@
 #include <QQueue>
 #include <QRandomGenerator>
+#include <QMap>
 #include "gridgenerator.h"
 
 GridGenerator::GridGenerator(QObject *parent)
@@ -20,62 +21,102 @@ bool GridGenerator::generateBoard(int width, int height, int mineCount, int firs
     bool safeFirstClick = (firstClickX != -1 && firstClickY != -1);
     int firstClickIndex = safeFirstClick ? (firstClickY * width + firstClickX) : -1;
 
-    const int MAX_ATTEMPTS = 1;
+    BoardState board(width, height);
+    int startIndex = safeFirstClick ? firstClickIndex : (width * height / 2);
+    board.createSafeArea(startIndex);
 
-    for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    QVector<int> candidates = board.getMineCandidates();
+
+    if (cancelFlag.load()) {
+        return false;
+    }
+
+    // Shuffle candidates for randomness
+    for (int i = candidates.size() - 1; i > 0; --i) {
+        std::uniform_int_distribution<int> dist(0, i);
+        int j = dist(m_rng);
+        std::swap(candidates[i], candidates[j]);
+    }
+
+    // Calculate adaptive batch size based on mine density
+    float mineDensity = static_cast<float>(mineCount) / (width * height);
+    int batchSize = std::max(1, std::min(5, static_cast<int>(10 * (1.0f - mineDensity))));
+
+    int placedMines = 0;
+    int candidateIndex = 0;
+
+    while (placedMines < mineCount && candidateIndex < candidates.size()) {
         if (cancelFlag.load()) {
             return false;
         }
 
-        BoardState board(width, height);
+        // Try to place a batch of mines
+        int currentBatchSize = std::min(batchSize,
+                                        std::min(mineCount - placedMines,
+                                                 static_cast<int>(candidates.size() - candidateIndex)));
 
-        int startIndex = safeFirstClick ? firstClickIndex : (width * height / 2);
-        board.createSafeArea(startIndex);
+        if (currentBatchSize <= 0) break;
 
-        QVector<int> candidates = board.getMineCandidates();
+        BoardState testBoard = board;
+        bool batchValid = true;
 
-        if (cancelFlag.load()) {
-            return false;
+        // Place the batch of mines on the test board
+        for (int i = 0; i < currentBatchSize; ++i) {
+            testBoard.placeMine(candidates[candidateIndex + i]);
         }
 
-        for (int i = candidates.size() - 1; i > 0; --i) {
-            std::uniform_int_distribution<int> dist(0, i);
-            int j = dist(m_rng);
-            std::swap(candidates[i], candidates[j]);
-        }
-
-        int placedMines = 0;
-        for (int i = 0; i < candidates.size() && placedMines < mineCount; ++i) {
-            if (cancelFlag.load()) {
-                return false;
+        // Check if the board is still solvable with this batch
+        if (testBoard.isFullySolvable(cancelFlag)) {
+            // Apply the batch to the real board
+            for (int i = 0; i < currentBatchSize; ++i) {
+                board.placeMine(candidates[candidateIndex + i]);
             }
 
-            BoardState testBoard = board;
-            testBoard.placeMine(candidates[i]);
+            placedMines += currentBatchSize;
+            candidateIndex += currentBatchSize;
 
-            if (testBoard.isFullySolvable(cancelFlag)) {
-                board.placeMine(candidates[i]);
-                placedMines++;
-
-                if (progressCallback && (placedMines % 5 == 0 || placedMines == 1 || placedMines == mineCount)) {
-                    progressCallback(placedMines, mineCount);
-                }
-            }
-        }
-
-        if (cancelFlag.load()) {
-            return false;
-        }
-
-        if (placedMines == mineCount) {
             if (progressCallback) {
-                progressCallback(mineCount, mineCount);
+                progressCallback(placedMines, mineCount);
+            }
+        } else {
+            // Try placing mines one by one from this batch
+            bool anyPlaced = false;
+            for (int i = 0; i < currentBatchSize; ++i) {
+                if (cancelFlag.load()) {
+                    return false;
+                }
+
+                BoardState singleTestBoard = board;
+                singleTestBoard.placeMine(candidates[candidateIndex]);
+
+                if (singleTestBoard.isFullySolvable(cancelFlag)) {
+                    board.placeMine(candidates[candidateIndex]);
+                    placedMines++;
+                    anyPlaced = true;
+
+                    if (progressCallback && (placedMines % 5 == 0 || placedMines == 1 || placedMines == mineCount)) {
+                        progressCallback(placedMines, mineCount);
+                    }
+                }
+
+                candidateIndex++;
             }
 
-            mines = board.getMines();
-            numbers = board.calculateNumbers();
-            return true;
+            // If we couldn't place any mines from this batch, reduce the batch size
+            if (!anyPlaced && batchSize > 1) {
+                batchSize = std::max(1, batchSize / 2);
+            }
         }
+    }
+
+    if (placedMines == mineCount) {
+        if (progressCallback) {
+            progressCallback(mineCount, mineCount);
+        }
+
+        mines = board.getMines();
+        numbers = board.calculateNumbers();
+        return true;
     }
 
     return false;
@@ -261,7 +302,10 @@ bool GridGenerator::BoardState::solveWithCSP(const std::atomic<bool>& cancelFlag
         return false;
     }
 
+    // Find boundary cells more efficiently
     QVector<int> boundaryCells;
+    QSet<int> frontierCellsSet;
+
     for (int i = 0; i < m_cells.size(); ++i) {
         if (!m_cells[i].revealed) continue;
 
@@ -269,7 +313,7 @@ bool GridGenerator::BoardState::solveWithCSP(const std::atomic<bool>& cancelFlag
         for (int neighbor : m_cells[i].neighbors) {
             if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged) {
                 hasBoundary = true;
-                break;
+                frontierCellsSet.insert(neighbor);
             }
         }
 
@@ -279,63 +323,52 @@ bool GridGenerator::BoardState::solveWithCSP(const std::atomic<bool>& cancelFlag
     }
 
     if (boundaryCells.isEmpty()) return false;
+    QVector<int> frontierCells(frontierCellsSet.begin(), frontierCellsSet.end());
 
-    QSet<int> frontierCells;
-    for (int cell : boundaryCells) {
-        for (int neighbor : m_cells[cell].neighbors) {
-            if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged) {
-                frontierCells.insert(neighbor);
+    // For smaller frontiers, use the standard approach
+    if (frontierCells.size() <= 12) {
+        // Limit the number of configurations to evaluate
+        QVector<QVector<bool>> possibleConfigs;
+        QVector<bool> currentConfig(frontierCells.size(), false);
+
+        // Set a limit on configurations to explore
+        const int maxConfigs = 500;
+        generateValidConfigurations(boundaryCells, frontierCells, currentConfig, 0, possibleConfigs, cancelFlag, maxConfigs);
+
+        if (cancelFlag.load() || possibleConfigs.isEmpty()) {
+            return false;
+        }
+
+        // Process the results more efficiently
+        QVector<bool> definitelyMines(frontierCells.size(), true);
+        QVector<bool> definitelySafe(frontierCells.size(), true);
+
+        for (const auto& config : possibleConfigs) {
+            for (int i = 0; i < config.size(); ++i) {
+                if (!config[i]) definitelyMines[i] = false;
+                if (config[i]) definitelySafe[i] = false;
             }
         }
-    }
 
-    if (cancelFlag.load()) {
-        return false;
-    }
+        bool progress = false;
+        for (int i = 0; i < frontierCells.size(); ++i) {
+            int cellIndex = frontierCells[i];
 
-    if (frontierCells.size() > 12) {
-        return solveLargeCSP(boundaryCells, QVector<int>(frontierCells.begin(), frontierCells.end()), cancelFlag);
-    }
-
-    QVector<QVector<bool>> possibleConfigs;
-    QVector<bool> currentConfig(frontierCells.size(), false);
-    QVector<int> frontierList(frontierCells.begin(), frontierCells.end());
-
-    generateValidConfigurations(boundaryCells, frontierList, currentConfig, 0, possibleConfigs, cancelFlag);
-
-    if (cancelFlag.load()) {
-        return false;
-    }
-
-    if (possibleConfigs.isEmpty()) {
-        return false;
-    }
-
-    QVector<bool> definitelyMines(frontierList.size(), true);
-    QVector<bool> definitelySafe(frontierList.size(), true);
-
-    for (const auto& config : possibleConfigs) {
-        for (int i = 0; i < config.size(); ++i) {
-            if (!config[i]) definitelyMines[i] = false;
-            if (config[i]) definitelySafe[i] = false;
+            if (definitelyMines[i]) {
+                m_cells[cellIndex].flagged = true;
+                progress = true;
+            }
+            else if (definitelySafe[i]) {
+                m_cells[cellIndex].revealed = true;
+                progress = true;
+            }
         }
+
+        return progress;
+    } else {
+        // For larger frontiers, use the component-based approach
+        return solveLargeCSP(boundaryCells, frontierCells, cancelFlag);
     }
-
-    bool progress = false;
-    for (int i = 0; i < frontierList.size(); ++i) {
-        int cellIndex = frontierList[i];
-
-        if (definitelyMines[i]) {
-            m_cells[cellIndex].flagged = true;
-            progress = true;
-        }
-        else if (definitelySafe[i]) {
-            m_cells[cellIndex].revealed = true;
-            progress = true;
-        }
-    }
-
-    return progress;
 }
 
 bool GridGenerator::BoardState::solveLargeCSP(const QVector<int>& boundaryCells, const QVector<int>& frontierCells, const std::atomic<bool>& cancelFlag) {
@@ -343,14 +376,25 @@ bool GridGenerator::BoardState::solveLargeCSP(const QVector<int>& boundaryCells,
         return false;
     }
 
+    // Find connected components of the boundary cells
     QVector<QSet<int>> components;
     QSet<int> visitedBoundary;
+    QMap<int, QSet<int>> frontierByBoundary;
 
+    // Pre-compute frontier cells for each boundary cell
     for (int cell : boundaryCells) {
-        if (cancelFlag.load()) {
-            return false;
+        QSet<int> cellFrontier;
+        for (int neighbor : m_cells[cell].neighbors) {
+            if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged) {
+                cellFrontier.insert(neighbor);
+            }
         }
+        frontierByBoundary[cell] = cellFrontier;
+    }
 
+    // Build connected components
+    for (int cell : boundaryCells) {
+        if (cancelFlag.load()) return false;
         if (visitedBoundary.contains(cell)) continue;
 
         QSet<int> component;
@@ -359,33 +403,16 @@ bool GridGenerator::BoardState::solveLargeCSP(const QVector<int>& boundaryCells,
         visitedBoundary.insert(cell);
 
         while (!queue.isEmpty()) {
-            if (cancelFlag.load()) {
-                return false;
-            }
-
             int current = queue.dequeue();
             component.insert(current);
-
-            QSet<int> currentFrontier;
-            for (int neighbor : m_cells[current].neighbors) {
-                if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged) {
-                    currentFrontier.insert(neighbor);
-                }
-            }
 
             for (int otherCell : boundaryCells) {
                 if (visitedBoundary.contains(otherCell)) continue;
 
-                bool connected = false;
-                for (int neighbor : m_cells[otherCell].neighbors) {
-                    if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged &&
-                        currentFrontier.contains(neighbor)) {
-                        connected = true;
-                        break;
-                    }
-                }
-
-                if (connected) {
+                // Check if these boundary cells share any frontier cells
+                if (!frontierByBoundary[current].isEmpty() &&
+                    !frontierByBoundary[otherCell].isEmpty() &&
+                    !frontierByBoundary[current].intersect(frontierByBoundary[otherCell]).isEmpty()) {
                     queue.enqueue(otherCell);
                     visitedBoundary.insert(otherCell);
                 }
@@ -395,21 +422,18 @@ bool GridGenerator::BoardState::solveLargeCSP(const QVector<int>& boundaryCells,
         components.append(component);
     }
 
+    // Process each component separately
     bool progress = false;
     for (const auto& component : components) {
-        if (cancelFlag.load()) {
-            return false;
-        }
+        if (cancelFlag.load()) return false;
 
+        // Get frontier for this component
         QSet<int> componentFrontier;
         for (int cell : component) {
-            for (int neighbor : m_cells[cell].neighbors) {
-                if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged) {
-                    componentFrontier.insert(neighbor);
-                }
-            }
+            componentFrontier.unite(frontierByBoundary[cell]);
         }
 
+        // Only solve small enough components
         if (componentFrontier.size() <= 12) {
             QVector<int> compBoundary(component.begin(), component.end());
             QVector<int> compFrontier(componentFrontier.begin(), componentFrontier.end());
@@ -419,13 +443,7 @@ bool GridGenerator::BoardState::solveLargeCSP(const QVector<int>& boundaryCells,
 
             generateValidConfigurations(compBoundary, compFrontier, currentConfig, 0, possibleConfigs, cancelFlag);
 
-            if (cancelFlag.load()) {
-                return false;
-            }
-
-            if (possibleConfigs.isEmpty()) {
-                return false;
-            }
+            if (cancelFlag.load() || possibleConfigs.isEmpty()) continue;
 
             QVector<bool> definitelyMines(compFrontier.size(), true);
             QVector<bool> definitelySafe(compFrontier.size(), true);
@@ -463,8 +481,11 @@ void GridGenerator::BoardState::generateValidConfigurations(
     QVector<QVector<bool>>& validConfigs,
     const std::atomic<bool>& cancelFlag,
     int maxConfigs) {
+
+    // Early exit conditions
     if (cancelFlag.load() || validConfigs.size() >= maxConfigs) return;
 
+    // Reached the end, check if configuration is valid
     if (index == frontierCells.size()) {
         bool valid = true;
         for (int boundaryCell : boundaryCells) {
@@ -494,11 +515,42 @@ void GridGenerator::BoardState::generateValidConfigurations(
         return;
     }
 
+    // Early pruning: check every few steps if we can already rule out this path
+    if (index > 0 && index % 3 == 0) {
+        for (int boundaryCell : boundaryCells) {
+            int flagCount = 0;
+            int possibleFlags = 0;
+            int expectedMines = m_cells[boundaryCell].adjacentMines;
+
+            for (int neighbor : m_cells[boundaryCell].neighbors) {
+                if (m_cells[neighbor].flagged) {
+                    flagCount++;
+                } else if (!m_cells[neighbor].revealed) {
+                    int frontierIndex = frontierCells.indexOf(neighbor);
+                    if (frontierIndex != -1) {
+                        if (frontierIndex < index) {
+                            if (currentConfig[frontierIndex]) flagCount++;
+                        } else {
+                            possibleFlags++;
+                        }
+                    }
+                }
+            }
+
+            // Already too many flags or not enough potential flags remaining
+            if (flagCount > expectedMines || (flagCount + possibleFlags) < expectedMines) {
+                return; // Prune this branch
+            }
+        }
+    }
+
+    // Try setting current cell as not a mine
     currentConfig[index] = false;
     generateValidConfigurations(boundaryCells, frontierCells, currentConfig, index + 1, validConfigs, cancelFlag, maxConfigs);
 
     if (cancelFlag.load()) return;
 
+    // Try setting current cell as a mine
     currentConfig[index] = true;
     generateValidConfigurations(boundaryCells, frontierCells, currentConfig, index + 1, validConfigs, cancelFlag, maxConfigs);
 }
