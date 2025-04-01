@@ -8,6 +8,7 @@ AnimatedPopup {
     id: control
     visible: ComponentsContext.restorePopupVisible
     modal: true
+    closePolicy: Popup.NoAutoClose
     property int buttonWidth: Math.max(restoreButton.implicitWidth, cancelButton.implicitWidth)
 
     ColumnLayout {

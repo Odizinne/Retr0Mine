@@ -466,6 +466,7 @@ ApplicationWindow {
 
                 GameGrid {
                     id: grid
+                    visible: UserSettings.firstRunCompleted
                     anchors.centerIn: parent
                     width: GameState.cellSize * GameState.gridSizeX
                     height: GameState.cellSize * GameState.gridSizeY

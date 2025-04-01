@@ -45,6 +45,7 @@ AnimatedPopup {
                 onClicked: {
                     control.visible = false
                     UserSettings.firstRunCompleted = true
+                    GridBridge.initGame()
                 }
             }
 
@@ -633,6 +634,7 @@ AnimatedPopup {
                 onClicked: {
                     control.visible = false
                     UserSettings.firstRunCompleted = true
+                    GridBridge.initGame()
                 }
             }
         }

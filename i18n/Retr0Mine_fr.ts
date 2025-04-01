@@ -207,32 +207,32 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>GameLogic</name>
     <message>
-        <location filename="../src/gamelogic.cpp" line="212"/>
+        <location filename="../src/gamelogic.cpp" line="216"/>
         <source>contain mines</source>
         <translation>contenir des mines</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="213"/>
+        <location filename="../src/gamelogic.cpp" line="217"/>
         <source>mines must</source>
         <translation>mines doivent</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="214"/>
+        <location filename="../src/gamelogic.cpp" line="218"/>
         <source>must contain</source>
         <translation>doit contenir</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="215"/>
+        <location filename="../src/gamelogic.cpp" line="219"/>
         <source>must all contain</source>
         <translation>doivent toutes contenir</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="220"/>
+        <location filename="../src/gamelogic.cpp" line="224"/>
         <source>I think there&apos;s a mine at position (%1,%2). %3</source>
         <translation>Je pense qu&apos;il y a une mine à la position (%1,%2). %3</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="223"/>
+        <location filename="../src/gamelogic.cpp" line="227"/>
         <source>I believe the cell at position (%1,%2) is safe. %3</source>
         <translation>Je crois que la cellule à la position (%1,%2) est sûre. %3</translation>
     </message>
@@ -1291,88 +1291,88 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Plus tard</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="53"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="54"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="84"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="85"/>
         <source>Mouse settings</source>
         <translation>Paramètres de souris</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="145"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="146"/>
         <source>Any click on satisfied number to reveal surroundings</source>
         <translation>N&apos;importe quel clic sur un chiffre satisfait pour réveler ses alentours</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="153"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="154"/>
         <source>Inverted</source>
         <translation>Inversé</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="153"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="154"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="264"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="265"/>
         <source>Dimm satisfied numbers</source>
         <translation>Assombrir les chiffres satisfaits</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="285"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="286"/>
         <source>Show cell frame</source>
         <translation>Afficher le cadre des cellules</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="306"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="307"/>
         <source>Colored flags</source>
         <translation>Drapeaux colorés</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="177"/>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="325"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="178"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="326"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="346"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="347"/>
         <source>Color correction</source>
         <translation>Correction de couleur</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="403"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="404"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="464"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="465"/>
         <source>Tritanopia</source>
         <translation>Tritanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="529"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="530"/>
         <source>Protanopia</source>
         <translation>Protanopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="589"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="590"/>
         <source>Deuteranopia</source>
         <translation>Deuteranopie</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="613"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="614"/>
         <source>You&apos;re all set!</source>
         <translation>Tout est prêt!</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="619"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="620"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation>Vous pouvez modifier ces changements à tout moment dans les paramètres.</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="632"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="633"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

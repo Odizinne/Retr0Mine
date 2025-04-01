@@ -202,32 +202,32 @@ board generation on large grids</source>
 <context>
     <name>GameLogic</name>
     <message>
-        <location filename="../src/gamelogic.cpp" line="212"/>
+        <location filename="../src/gamelogic.cpp" line="216"/>
         <source>contain mines</source>
         <translation>contain mines</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="213"/>
+        <location filename="../src/gamelogic.cpp" line="217"/>
         <source>mines must</source>
         <translation>mines must</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="214"/>
+        <location filename="../src/gamelogic.cpp" line="218"/>
         <source>must contain</source>
         <translation>must contain</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="215"/>
+        <location filename="../src/gamelogic.cpp" line="219"/>
         <source>must all contain</source>
         <translation>must all contain</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="220"/>
+        <location filename="../src/gamelogic.cpp" line="224"/>
         <source>I think there&apos;s a mine at position (%1,%2). %3</source>
         <translation>I think there&apos;s a mine at position (%1,%2). %3</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="223"/>
+        <location filename="../src/gamelogic.cpp" line="227"/>
         <source>I believe the cell at position (%1,%2) is safe. %3</source>
         <translation>I believe the cell at position (%1,%2) is safe. %3</translation>
     </message>
@@ -1268,88 +1268,88 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="53"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="54"/>
         <source>Yes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="84"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="85"/>
         <source>Mouse settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="145"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="146"/>
         <source>Any click on satisfied number to reveal surroundings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="153"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="154"/>
         <source>Inverted</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="153"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="154"/>
         <source>Normal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="264"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="265"/>
         <source>Dimm satisfied numbers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="285"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="286"/>
         <source>Show cell frame</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="306"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="307"/>
         <source>Colored flags</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="177"/>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="325"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="178"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="326"/>
         <source>Next</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="346"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="347"/>
         <source>Color correction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="403"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="404"/>
         <source>None</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="464"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="465"/>
         <source>Tritanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="529"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="530"/>
         <source>Protanopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="589"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="590"/>
         <source>Deuteranopia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="613"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="614"/>
         <source>You&apos;re all set!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="619"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="620"/>
         <source>You can edit these changes anytime in settings.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Popups/WelcomePopup.qml" line="632"/>
+        <location filename="../qml/Popups/WelcomePopup.qml" line="633"/>
         <source>Close</source>
         <translation></translation>
     </message>
