@@ -207,32 +207,32 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>GameLogic</name>
     <message>
-        <location filename="../src/gamelogic.cpp" line="216"/>
+        <location filename="../src/gamelogic.cpp" line="212"/>
         <source>contain mines</source>
         <translation>contenir des mines</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="217"/>
+        <location filename="../src/gamelogic.cpp" line="213"/>
         <source>mines must</source>
         <translation>mines doivent</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="218"/>
+        <location filename="../src/gamelogic.cpp" line="214"/>
         <source>must contain</source>
         <translation>doit contenir</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="219"/>
+        <location filename="../src/gamelogic.cpp" line="215"/>
         <source>must all contain</source>
         <translation>doivent toutes contenir</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="224"/>
+        <location filename="../src/gamelogic.cpp" line="220"/>
         <source>I think there&apos;s a mine at position (%1,%2). %3</source>
         <translation>Je pense qu&apos;il y a une mine à la position (%1,%2). %3</translation>
     </message>
     <message>
-        <location filename="../src/gamelogic.cpp" line="227"/>
+        <location filename="../src/gamelogic.cpp" line="223"/>
         <source>I believe the cell at position (%1,%2) is safe. %3</source>
         <translation>Je crois que la cellule à la position (%1,%2) est sûre. %3</translation>
     </message>
@@ -923,17 +923,17 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>RestorePopup</name>
     <message>
-        <location filename="../qml/Popups/RestorePopup.qml" line="21"/>
+        <location filename="../qml/Popups/RestorePopup.qml" line="22"/>
         <source>Restore all settings to default?</source>
         <translation>Restaurer les paramètres par défaut?</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/RestorePopup.qml" line="33"/>
+        <location filename="../qml/Popups/RestorePopup.qml" line="34"/>
         <source>Restore</source>
         <translation>Restaurer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/RestorePopup.qml" line="44"/>
+        <location filename="../qml/Popups/RestorePopup.qml" line="45"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
