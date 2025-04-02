@@ -159,12 +159,13 @@ Item {
         }
     }
 
-    BusyIndicator {
+    ProgressBar {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         visible: GameState.isGeneratingGrid
-        height: 35
-        width: 35
+        from: 0
+        to: GameState.mineCount
+        value: GameLogic.minesPlaced
     }
 
     NfButton {
