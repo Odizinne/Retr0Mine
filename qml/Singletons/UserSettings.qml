@@ -9,6 +9,7 @@ Settings {
      ==========================================*/
     property int colorBlindness: 0
     property bool contrastFlag: false
+    property bool contrastedNumbers: false
     property real gridScale: 1
 
     /*==========================================

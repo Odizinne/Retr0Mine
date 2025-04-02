@@ -62,6 +62,7 @@ Item {
     function getNumberColor(revealed, isMine, index, number) {
         if (!revealed) return "black"
         if (isMine) return "transparent"
+        if (UserSettings.contrastedNumbers) return isDarkMode ? "white" : "black"
         const palette = numberPalettes[UserSettings.colorBlindness] || numberPalettes[0]
         return palette[number] || "black"
     }

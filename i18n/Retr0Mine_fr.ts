@@ -35,6 +35,11 @@
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="57"/>
+        <source>High contrast numbers</source>
+        <translation>Chiffres contrastés</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="75"/>
         <source>Grid scale</source>
         <translation>Échelle de la grille</translation>
     </message>
@@ -144,14 +149,14 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>Constants</name>
     <message>
-        <location filename="../qml/Singletons/Constants.qml" line="185"/>
-        <location filename="../qml/Singletons/Constants.qml" line="195"/>
+        <location filename="../qml/Singletons/Constants.qml" line="186"/>
+        <location filename="../qml/Singletons/Constants.qml" line="196"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/Constants.qml" line="187"/>
-        <location filename="../qml/Singletons/Constants.qml" line="193"/>
+        <location filename="../qml/Singletons/Constants.qml" line="188"/>
+        <location filename="../qml/Singletons/Constants.qml" line="194"/>
         <source>Reveal</source>
         <translation>Révéler</translation>
     </message>

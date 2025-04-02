@@ -54,6 +54,24 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
+                text: qsTr("High contrast numbers")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: contrastedNumbersSwitch.click()
+                }
+            }
+            NfSwitch {
+                id: contrastedNumbersSwitch
+                checked: UserSettings.contrastedNumbers
+                onCheckedChanged: UserSettings.contrastedNumbers = checked
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+            Label {
                 text: qsTr("Grid scale")
                 Layout.fillWidth: true
             }
