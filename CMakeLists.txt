@@ -140,14 +140,9 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
 #add_dependencies(${CMAKE_PROJECT_NAME} update_translations)
 
 if(WIN32)
-    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-        *CRT*SECURE_NO_WARNINGS
-    )
-    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
-        /wd4828
-    )
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/win64/steam_api64.lib
+        dwmapi
     )
     set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
         WIN32_EXECUTABLE TRUE
