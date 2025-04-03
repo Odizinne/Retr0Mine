@@ -198,20 +198,7 @@ ApplicationWindow {
         }
     }
 
-    onVisibilityChanged: function(visibility) {
-        if (visibility === ApplicationWindow.Windowed) {
-            minimumWidth = getIdealWidth()
-            minimumHeight = getIdealHeight()
-            width = minimumWidth
-            height = minimumHeight
-
-            if (height >= Screen.desktopAvailableHeight * 0.9 ||
-                    width >= Screen.desktopAvailableWidth * 0.9) {
-                x = Screen.width / 2 - width / 2
-                y = Screen.height / 2 - height / 2
-            }
-        }
-    }
+    onVisibilityChanged: setWindowInitialSizeAndPos()
 
     Component.onCompleted: {
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
@@ -257,10 +244,7 @@ ApplicationWindow {
             visibility = ApplicationWindow.Windowed
         }
 
-        width = getIdealWidth()
-        minimumWidth = getIdealWidth()
-        height = getIdealHeight()
-        minimumHeight = getIdealHeight()
+        setWindowInitialSizeAndPos()
 
         AudioEngine.playSilent()
     }
@@ -590,7 +574,7 @@ ApplicationWindow {
     }
 
     function checkInitialGameState() {
-    let internalSaveData = GameCore.loadGameState("internalGameState.json")
+        let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (GameState.ignoreInternalGameState) {
             /*==========================================
              | bypass internalGameState loading        |
@@ -642,6 +626,18 @@ ApplicationWindow {
         if (visibility === ApplicationWindow.Windowed) {
             let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 35 + 24 + 12
             return Math.min(baseHeight, Screen.desktopAvailableHeight * 0.9)
+        }
+    }
+
+    function setWindowInitialSizeAndPos() {
+        if (visibility === 2) {
+            minimumWidth = getIdealWidth()
+            minimumHeight = getIdealHeight()
+            width = minimumWidth
+            height = minimumHeight
+
+            x = Screen.width / 2 - width / 2
+            y = Screen.height / 2 - height / 2
         }
     }
 }
