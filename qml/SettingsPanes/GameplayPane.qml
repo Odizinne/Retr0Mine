@@ -193,5 +193,57 @@ Pane {
                 Layout.rightMargin: 5
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+            Label {
+                text: qsTr("Reveal key")
+                Layout.fillWidth: true
+            }
+            TextField {
+                id: revealKeyField
+                text: UserSettings.revealShortcut
+                Layout.rightMargin: 5
+                maximumLength: 1
+                inputMethodHints: Qt.ImhUppercaseOnly
+                implicitWidth: 50
+                horizontalAlignment: TextInput.AlignHCenter
+                font.pixelSize: 16
+                onEditingFinished: {
+                    if (text.length > 0) {
+                        UserSettings.revealShortcut = text.toUpperCase()
+                    } else {
+                        text = UserSettings.revealShortcut
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+            Label {
+                text: qsTr("Flag key")
+                Layout.fillWidth: true
+            }
+            TextField {
+                id: flagKeyField
+                text: UserSettings.flagShortcut
+                Layout.rightMargin: 5
+                maximumLength: 1
+                inputMethodHints: Qt.ImhUppercaseOnly
+                implicitWidth: 50
+                horizontalAlignment: TextInput.AlignHCenter
+                font.pixelSize: 16
+                onEditingFinished: {
+                    if (text.length > 0) {
+                        UserSettings.flagShortcut = text.toUpperCase()
+                    } else {
+                        text = UserSettings.flagShortcut
+                    }
+                }
+            }
+        }
     }
 }

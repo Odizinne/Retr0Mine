@@ -603,6 +603,38 @@ Item {
             }
         }
 
+        Shortcut {
+            sequence: UserSettings.revealShortcut
+            autoRepeat: false
+            enabled: cellMouseArea.isHovered
+            onActivated: {
+                if (!GameState.gameStarted) return
+                GridBridge.toggleFlag(cellItem.index);
+            }
+        }
+
+        Shortcut {
+            sequence: UserSettings.flagShortcut
+            autoRepeat: false
+            enabled: cellMouseArea.isHovered
+            onActivated: {
+                if (!GameState.gameStarted) {
+                    GridBridge.reveal(cellItem.index, "firstClick")
+                }
+
+                if (cellItem.revealed) {
+                    GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
+                    return;
+                }
+
+                const canReveal = !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned;
+
+                if (canReveal) {
+                    GridBridge.reveal(cellItem.index, SteamIntegration.playerName);
+                }
+            }
+        }
+
         Timer {
             id: pingCooldown
             interval: 500

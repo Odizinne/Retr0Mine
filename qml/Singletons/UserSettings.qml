@@ -39,6 +39,8 @@ Settings {
     property bool autoreveal: true
     property bool enableQuestionMarks: true
     property bool enableSafeQuestionMarks: false
+    property string revealShortcut: "Q"
+    property string flagShortcut: "W"
 
     /*==========================================
      | Language                                |
