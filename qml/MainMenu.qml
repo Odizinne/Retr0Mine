@@ -10,39 +10,51 @@ Menu {
     enter: Transition {
         NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.Linear; duration: 110 }
     }
-
     exit: Transition {
         NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.Linear; duration: 110 }
     }
-    CustomMenuItem {
-        text: qsTr("New game")
-        enabled: (!(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)) && (GameState.gameStarted || GameState.gameOver)
-        onTriggered: {
-            GameState.difficultyChanged = false
-            GridBridge.initGame()
+
+    Menu {
+        id: gameSubmenu
+        title: qsTr("Game")
+        width: 150
+        enter: Transition {
+            NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; easing.type: Easing.Linear; duration: 110 }
+        }
+        exit: Transition {
+            NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; easing.type: Easing.Linear; duration: 110 }
+        }
+
+        CustomMenuItem {
+            text: qsTr("New game")
+            enabled: (!(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)) && (GameState.gameStarted || GameState.gameOver)
+            onTriggered: {
+                GameState.difficultyChanged = false
+                GridBridge.initGame()
+            }
+        }
+
+        CustomMenuItem {
+            text: qsTr("Save game")
+            enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
+            onTriggered: ComponentsContext.savePopupVisible = true
+        }
+
+        CustomMenuItem {
+            text: qsTr("Load game")
+            enabled: !SteamIntegration.isInMultiplayerGame
+            onTriggered: ComponentsContext.loadPopupVisible = true
+        }
+
+        CustomMenuItem {
+            text: qsTr("Hint")
+            enabled: GameState.gameStarted && !GameState.gameOver
+            onTriggered: GridBridge.requestHint()
         }
     }
 
-    CustomMenuItem {
-        text: qsTr("Save game")
-        enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
-        onTriggered: ComponentsContext.savePopupVisible = true
-    }
-
-    CustomMenuItem {
-        text: qsTr("Load game")
-        enabled: !SteamIntegration.isInMultiplayerGame
-        onTriggered: ComponentsContext.loadPopupVisible = true
-    }
-
-    CustomMenuItem {
-        text: qsTr("Hint")
-        enabled: GameState.gameStarted && !GameState.gameOver
-        onTriggered: GridBridge.requestHint()
-    }
-
     MenuSeparator {
-        topPadding: 3
+        topPadding: 4
         bottomPadding: 4
     }
 
@@ -68,7 +80,7 @@ Menu {
     }
 
     MenuSeparator {
-        topPadding: 3
+        topPadding: 4
         bottomPadding: 4
     }
 

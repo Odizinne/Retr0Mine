@@ -160,28 +160,37 @@ Current game will be saved and restored</source>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="102"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="97"/>
         <source>Width:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="122"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="117"/>
         <source>Height:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="141"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="136"/>
         <source>Mines:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="171"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="225"/>
         <source>Going above 25% may really slow down
 board generation on large grids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="190"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="201"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="206"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="212"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="218"/>
+        <source>mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="282"/>
         <source>Apply</source>
         <translation></translation>
     </message>
@@ -322,6 +331,16 @@ board generation on large grids</source>
         <source>Remap</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="201"/>
+        <source>Reveal key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="227"/>
+        <source>Flag key</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>GridBridge</name>
@@ -429,52 +448,57 @@ board generation on large grids</source>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="18"/>
+        <location filename="../qml/MainMenu.qml" line="29"/>
         <source>New game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="27"/>
+        <location filename="../qml/MainMenu.qml" line="38"/>
         <source>Save game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="33"/>
+        <location filename="../qml/MainMenu.qml" line="44"/>
         <source>Load game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="39"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
         <source>Hint</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="66"/>
+        <location filename="../qml/MainMenu.qml" line="78"/>
         <source>Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="50"/>
+        <location filename="../qml/MainMenu.qml" line="62"/>
         <source>Leaderboard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="61"/>
+        <location filename="../qml/MainMenu.qml" line="73"/>
         <source>About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="56"/>
+        <location filename="../qml/MainMenu.qml" line="68"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="76"/>
+        <location filename="../qml/MainMenu.qml" line="19"/>
+        <source>Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="88"/>
         <source>Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="81"/>
+        <location filename="../qml/MainMenu.qml" line="93"/>
         <source>Exit</source>
         <translation></translation>
     </message>
@@ -1157,7 +1181,7 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="190"/>
+        <location filename="../qml/TopBar.qml" line="191"/>
         <source>Click to pause</source>
         <translation></translation>
     </message>

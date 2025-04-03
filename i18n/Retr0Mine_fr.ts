@@ -164,29 +164,38 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="102"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="97"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="122"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="117"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="141"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="136"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="171"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="225"/>
         <source>Going above 25% may really slow down
 board generation on large grids</source>
         <translation>Une densité au dessus de 25% pourrait
 ralentir la génération sur les grilles larges</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="190"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="201"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="206"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="212"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="218"/>
+        <source>mines</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="282"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -327,6 +336,16 @@ ralentir la génération sur les grilles larges</translation>
         <source>Remap</source>
         <translation>Réassigner</translation>
     </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="201"/>
+        <source>Reveal key</source>
+        <translation>Touche pour révéler</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="227"/>
+        <source>Flag key</source>
+        <translation>Touche pour poser un drapeau</translation>
+    </message>
 </context>
 <context>
     <name>GridBridge</name>
@@ -434,52 +453,57 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="18"/>
+        <location filename="../qml/MainMenu.qml" line="29"/>
         <source>New game</source>
-        <translation>Nouveau</translation>
+        <translation>Nouvelle</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="27"/>
+        <location filename="../qml/MainMenu.qml" line="38"/>
         <source>Save game</source>
-        <translation>Sauver</translation>
+        <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="33"/>
+        <location filename="../qml/MainMenu.qml" line="44"/>
         <source>Load game</source>
         <translation>Charger</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="39"/>
+        <location filename="../qml/MainMenu.qml" line="50"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="66"/>
+        <location filename="../qml/MainMenu.qml" line="78"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="50"/>
+        <location filename="../qml/MainMenu.qml" line="62"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="61"/>
+        <location filename="../qml/MainMenu.qml" line="73"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="56"/>
+        <location filename="../qml/MainMenu.qml" line="68"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="76"/>
+        <location filename="../qml/MainMenu.qml" line="19"/>
+        <source>Game</source>
+        <translation>Partie</translation>
+    </message>
+    <message>
+        <location filename="../qml/MainMenu.qml" line="88"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="81"/>
+        <location filename="../qml/MainMenu.qml" line="93"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -1180,7 +1204,7 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="190"/>
+        <location filename="../qml/TopBar.qml" line="191"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
