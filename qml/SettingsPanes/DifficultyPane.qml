@@ -79,11 +79,6 @@ Pane {
                         UserSettings.difficulty = idx
                         SteamIntegration.difficulty = idx
 
-                        /*==========================================
-                         | bypass internalGameState loading        |
-                         | if user manually change difficulty      |
-                         | before initial game state check         |
-                         ==========================================*/
                         GameState.ignoreInternalGameState = true
 
                         if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
@@ -142,45 +137,142 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            Label {
-                id: densityLabel
-                font.bold: true
-                visible: enabled
-                Layout.rightMargin: 5
-                property real density: (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1)
-                text: {
-                    return density + "%";
+            // Count mode controls
+            RowLayout {
+                visible: !UserSettings.mineDensity
+                Layout.alignment: Qt.AlignRight
+
+                Label {
+                    id: countDensityLabel
+                    font.bold: true
+                    Layout.rightMargin: 5
+                    property real density: (countSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1)
+                    text: density + "%"
                 }
 
-                Connections {
-                    target: minesSpinBox
-                    function onValueChanged() { densityLabel.text = Qt.binding(function() { return (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1) + "%"; }); }
+                InfoIcon {
+                    visible: countDensityLabel.density >= 25
+                    tooltipText: qsTr("Going above 25% may really slow down\nboard generation on large grids")
+                    Layout.rightMargin: 5
+                    Layout.leftMargin: 5
                 }
-                Connections {
-                    target: widthSpinBox
-                    function onValueChanged() { densityLabel.text = Qt.binding(function() { return (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1) + "%"; }); }
+
+                NfButton {
+                    Layout.preferredWidth: height
+                    text: "%"
+                    checkable: true
+                    checked: UserSettings.mineDensity
+                    onCheckedChanged: {
+                        if (checked) {
+                            // Calculate percentage from current mine count
+                            const percentage = Math.round((countSpinBox.value / (widthSpinBox.value * heightSpinBox.value)) * 100)
+                            percentSpinBox.value = Math.min(Math.max(percentage, 1), 30)
+                        } else {
+                            // Calculate mine count from current percentage
+                            const mineCount = Math.round((widthSpinBox.value * heightSpinBox.value) * percentSpinBox.value / 100)
+                            countSpinBox.value = Math.min(Math.max(mineCount, 1),
+                                Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3))
+                        }
+                        UserSettings.mineDensity = checked
+                    }
                 }
-                Connections {
-                    target: heightSpinBox
-                    function onValueChanged() { densityLabel.text = Qt.binding(function() { return (minesSpinBox.value / (widthSpinBox.value * heightSpinBox.value) * 100).toFixed(1) + "%"; }); }
+
+                NfSpinBox {
+                    id: countSpinBox
+                    Layout.rightMargin: 5
+                    from: 1
+                    to: Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3)
+                    editable: true
+                    value: UserSettings.customMines
+                    onValueChanged: UserSettings.customMines = value
                 }
             }
 
-            InfoIcon {
-                visible: densityLabel.density >= 25
-                tooltipText: qsTr("Going above 25% may really slow down\nboard generation on large grids")
-                Layout.rightMargin: 5
-                Layout.leftMargin: 5
-            }
+            // Percentage mode controls
+            RowLayout {
+                visible: UserSettings.mineDensity
+                Layout.alignment: Qt.AlignRight
 
-            NfSpinBox {
-                id: minesSpinBox
-                Layout.rightMargin: 5
-                from: 1
-                to: Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3)
-                editable: true
-                value: UserSettings.customMines
-                onValueChanged: UserSettings.customMines = value
+                Label {
+                    id: percentMineCountLabel
+                    font.bold: true
+                    Layout.rightMargin: 5
+                    property int mineCount: Math.round((widthSpinBox.value * heightSpinBox.value) * percentSpinBox.value / 100)
+                    text: mineCount + " " + qsTr("mines")
+
+                    Connections {
+                        target: percentSpinBox
+                        function onValueChanged() {
+                            percentMineCountLabel.text = Math.round((widthSpinBox.value * heightSpinBox.value) * percentSpinBox.value / 100) + " " + qsTr("mines")
+                        }
+                    }
+                    Connections {
+                        target: widthSpinBox
+                        function onValueChanged() {
+                            percentMineCountLabel.text = Math.round((widthSpinBox.value * heightSpinBox.value) * percentSpinBox.value / 100) + " " + qsTr("mines")
+                        }
+                    }
+                    Connections {
+                        target: heightSpinBox
+                        function onValueChanged() {
+                            percentMineCountLabel.text = Math.round((widthSpinBox.value * heightSpinBox.value) * percentSpinBox.value / 100) + " " + qsTr("mines")
+                        }
+                    }
+                }
+
+                InfoIcon {
+                    visible: percentSpinBox.value >= 25
+                    tooltipText: qsTr("Going above 25% may really slow down\nboard generation on large grids")
+                    Layout.rightMargin: 5
+                    Layout.leftMargin: 5
+                }
+
+                NfButton {
+                    Layout.preferredWidth: height
+                    text: "%"
+                    checkable: true
+                    checked: UserSettings.mineDensity
+                    onCheckedChanged: {
+                        if (checked) {
+                            // Calculate percentage from current mine count
+                            const percentage = Math.round((countSpinBox.value / (widthSpinBox.value * heightSpinBox.value)) * 100)
+                            percentSpinBox.value = Math.min(Math.max(percentage, 1), 30)
+                        } else {
+                            // Calculate mine count from current percentage
+                            const mineCount = Math.round((widthSpinBox.value * heightSpinBox.value) * percentSpinBox.value / 100)
+                            countSpinBox.value = Math.min(Math.max(mineCount, 1),
+                                Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3))
+                        }
+                        UserSettings.mineDensity = checked
+                    }
+                }
+
+                NfSpinBox {
+                    id: percentSpinBox
+                    Layout.rightMargin: 5
+                    from: 1
+                    to: 30
+                    editable: true
+
+                    Component.onCompleted: {
+                        // Initial percentage based on UserSettings.customMines
+                        value = Math.round((UserSettings.customMines / (widthSpinBox.value * heightSpinBox.value)) * 100)
+                    }
+
+                    onValueChanged: {
+                        // Calculate mines based on percentage and update UserSettings
+                        const mineCount = Math.round((widthSpinBox.value * heightSpinBox.value) * value / 100)
+                        UserSettings.customMines = mineCount
+                    }
+
+                    textFromValue: function(value, locale) {
+                        return value + "%"
+                    }
+
+                    valueFromText: function(text, locale) {
+                        return parseInt(text.replace("%", ""))
+                    }
+                }
             }
         }
 
@@ -203,11 +295,6 @@ Pane {
                 previousCustomWidth = UserSettings.customWidth
                 previousCustomHeight = UserSettings.customHeight
 
-                /*==========================================
-                 | bypass internalGameState loading        |
-                 | if user manually change difficulty      |
-                 | before initial game state check         |
-                 ==========================================*/
                 GameState.ignoreInternalGameState = true
 
                 GridBridge.initGame()

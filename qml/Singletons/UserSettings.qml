@@ -28,6 +28,7 @@ Settings {
     property int customWidth: 8
     property int customHeight: 8
     property int customMines: 10
+    property bool mineDensity: true
 
     /*==========================================
      | Gameplay                                |
