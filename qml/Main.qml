@@ -443,6 +443,7 @@ ApplicationWindow {
             ScrollBar.vertical: defaultVerticalScrollBar
             ScrollBar.horizontal: defaultHorizontalScrollBar
             interactive: true
+            boundsBehavior: Flickable.StopAtBounds
             Behavior on opacity {
                 enabled: UserSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
                 NumberAnimation {
