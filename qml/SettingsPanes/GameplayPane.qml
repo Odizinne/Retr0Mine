@@ -195,6 +195,7 @@ Pane {
         }
 
         RowLayout {
+            enabled: !GameCore.gamescope
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
@@ -221,6 +222,7 @@ Pane {
         }
 
         RowLayout {
+            enabled: !GameCore.gamescope
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
