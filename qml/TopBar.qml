@@ -93,7 +93,7 @@ Item {
     }
 
     Item {
-        visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== ""
+        visible: SteamIntegration.isInMultiplayerGame && SteamIntegration.connectedPlayerName !== "" && !GameState.isGeneratingGrid
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: coopFriendLabel.width + coopAvatarImage.width + 8
