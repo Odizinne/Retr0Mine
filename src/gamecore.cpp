@@ -80,7 +80,6 @@ GameCore::~GameCore() {
 
 void GameCore::init() {
     int colorSchemeIndex = settings.value("colorSchemeIndex").toInt();
-    int styleIndex = settings.value("themeIndex", 0).toInt();
     int languageIndex = settings.value("languageIndex", 0).toInt();
     bool customCursor = settings.value("customCursor", true).toBool();
 

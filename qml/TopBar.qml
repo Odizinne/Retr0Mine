@@ -212,7 +212,6 @@ Item {
                 id: mineButton
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: mineCounter.implicitWidth + 20
-                icon.color: Constants.foregroundColor
                 font.pixelSize: 18
                 font.bold: true
                 enabled: GameState.gameStarted && !GameState.gameOver

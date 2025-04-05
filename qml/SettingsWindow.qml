@@ -138,7 +138,6 @@ ApplicationWindow {
                         icon.source: modelData.icon
                         icon.width: 16
                         icon.height: 16
-                        icon.color: Constants.foregroundColor
                         text: modelData.text
                         isCurrentItem: ListView.isCurrentItem
                         onClicked: {
