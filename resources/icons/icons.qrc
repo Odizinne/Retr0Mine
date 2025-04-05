@@ -30,5 +30,6 @@
         <file>send.png</file>
         <file>signal.png</file>
         <file>menu.png</file>
+        <file>logs.png</file>
     </qresource>
 </RCC>

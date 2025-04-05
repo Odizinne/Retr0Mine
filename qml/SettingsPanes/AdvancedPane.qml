@@ -171,26 +171,17 @@ Pane {
                 }
             }
 
+            Button {
+                icon.source: "qrc:/icons/logs.png"
+                Layout.preferredWidth: height
+                enabled: UserSettings.logs
+                onClicked: ComponentsContext.logWindowVisible = true
+            }
+
             NfSwitch {
                 id: enableLogsSwitch
                 checked: UserSettings.logs
                 onCheckedChanged: UserSettings.logs = checked
-            }
-        }
-
-        RowLayout {
-            enabled: UserSettings.logs
-            Layout.fillWidth: true
-            Layout.preferredHeight: Constants.settingsComponentsHeight
-
-            Item {
-                Layout.fillWidth: true
-            }
-
-            Button {
-                text: qsTr("Log viewer")
-                onClicked: ComponentsContext.logWindowVisible = true
-                Layout.rightMargin: 5
             }
         }
 
