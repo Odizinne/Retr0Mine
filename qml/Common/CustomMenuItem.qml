@@ -3,7 +3,7 @@ import QtQuick
 
 MenuItem {
     id: control
-    height: implicitHeight - 6
+    height: implicitHeight
     background: Rectangle {
         implicitWidth: 200
         implicitHeight: 40

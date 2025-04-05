@@ -53,10 +53,7 @@ Menu {
         }
     }
 
-    MenuSeparator {
-        topPadding: 4
-        bottomPadding: 4
-    }
+    MenuSeparator {}
 
     CustomMenuItem {
         text: qsTr("Leaderboard")
@@ -79,10 +76,7 @@ Menu {
         onTriggered: ComponentsContext.settingsWindowVisible = true
     }
 
-    MenuSeparator {
-        topPadding: 4
-        bottomPadding: 4
-    }
+    MenuSeparator {}
 
     CustomMenuItem {
         text: qsTr("Help")
