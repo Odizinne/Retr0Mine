@@ -112,6 +112,14 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
     resources/appicon.rc
 )
 
+if(WIN32)
+    add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/lib/steam/win64/steam_api64.dll"
+        $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>
+    )
+endif()
+
 qt_add_qml_module(${CMAKE_PROJECT_NAME}
     URI Odizinne.Retr0Mine
     VERSION 1.0
