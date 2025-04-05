@@ -61,7 +61,7 @@ GameCore::GameCore(QObject *parent)
     }
 
     QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss");
-    m_currentLogFile = logPath + "/Retr0Mine-" + timestamp + ".log";
+    m_currentLogFile = QDir(logPath).filePath(timestamp + ".log");
 
     cleanupOldLogFiles(10);
 
@@ -503,7 +503,7 @@ QStringList GameCore::getLogFiles() const {
     }
 
     // Sort by modified date, newest first
-    QStringList files = logDir.entryList(QStringList() << "Retr0Mine-*.log", QDir::Files, QDir::Time);
+    QStringList files = logDir.entryList(QStringList() << "*.log", QDir::Files, QDir::Time);
     return files;
 }
 
