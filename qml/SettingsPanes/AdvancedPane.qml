@@ -191,14 +191,34 @@ Pane {
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
-            opacity: 0.5
+
+            Label {
+                text: qsTr("Logging")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: enableLogsSwitch.click()
+                }
+            }
+
+            NfSwitch {
+                id: enableLogsSwitch
+                checked: UserSettings.logs
+                onCheckedChanged: UserSettings.logs = checked
+            }
+        }
+
+        RowLayout {
+            enabled: UserSettings.logs
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Item {
                 Layout.fillWidth: true
             }
 
             Button {
-                text: qsTr("Open log window")
+                text: qsTr("Log viewer")
                 onClicked: ComponentsContext.logWindowVisible = true
                 Layout.rightMargin: 5
             }

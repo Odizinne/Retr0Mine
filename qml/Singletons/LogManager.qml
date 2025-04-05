@@ -5,11 +5,10 @@ import Odizinne.Retr0Mine
 
 QtObject {
     property var logBuffer: []
-    property bool logToConsole: true
-    property bool logToFile: true
     property int maxBufferSize: 1000
 
     function log(message) {
+        if (!UserSettings.logs) return
         const timestamp = new Date().toISOString().replace('T', ' ').substr(0, 19);
         const formattedMessage = timestamp + " | " + message;
 
@@ -19,13 +18,8 @@ QtObject {
             logBuffer.shift();
         }
 
-        if (logToConsole) {
-            console.log(formattedMessage);
-        }
-
-        if (logToFile) {
-            GameCore.writeToLogFile(formattedMessage);
-        }
+        console.log(formattedMessage);
+        GameCore.writeToLogFile(formattedMessage);
     }
 
     function error(message) {

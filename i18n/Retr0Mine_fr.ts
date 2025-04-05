@@ -106,9 +106,14 @@ L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="201"/>
-        <source>Open log window</source>
-        <translation>Ouvrir la fenêtre de log</translation>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="196"/>
+        <source>Logging</source>
+        <translation>Journalisation</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="221"/>
+        <source>Log viewer</source>
+        <translation>Visionneur de journaux</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
@@ -352,15 +357,15 @@ Peut être imprécis</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="443"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="450"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="457"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="464"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="471"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="478"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="467"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="473"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="488"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="494"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -456,36 +461,36 @@ Peut être imprécis</translation>
     <name>LogWindow</name>
     <message>
         <location filename="../qml/LogWindow.qml" line="10"/>
-        <source>Log Viewer</source>
-        <translation>Visionneur de logs</translation>
+        <source>Log viewer</source>
+        <translation>Visionneur de journaux</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="76"/>
+        <location filename="../qml/LogWindow.qml" line="74"/>
         <source>Log Files:</source>
         <translation>Fichiers:</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="91"/>
+        <location filename="../qml/LogWindow.qml" line="89"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="96"/>
+        <location filename="../qml/LogWindow.qml" line="94"/>
         <source>Live Log</source>
         <translation>Session en cours</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="111"/>
+        <location filename="../qml/LogWindow.qml" line="109"/>
         <source>Auto-scroll</source>
         <translation>Défilement automatique</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="148"/>
+        <location filename="../qml/LogWindow.qml" line="146"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="154"/>
+        <location filename="../qml/LogWindow.qml" line="152"/>
         <source>Clear Buffer</source>
         <translation>Effacer la mémoire tampon</translation>
     </message>

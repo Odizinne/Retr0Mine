@@ -20,6 +20,7 @@ Settings {
     property int renderingBackend: 0
     property bool customTitlebar: true
     property bool customCursor: true
+    property bool logs: false
 
     /*==========================================
      | Difficulty                              |

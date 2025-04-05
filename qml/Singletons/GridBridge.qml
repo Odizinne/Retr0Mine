@@ -10,6 +10,7 @@ Item {
     property bool generationCancelled: false
     property bool idleShakeScheduled: false
     property bool globalShakeActive: false
+    property var boardGenerationStartTime: null
 
     signal botMessageSent(string explanation)
     signal leaderboardUpdated(string timeField, string timeValue, int winsField, int winsValue)
@@ -41,6 +42,7 @@ Item {
     }
 
     function cancelGeneration() {
+        LogManager.info("Cancelling board generation")
         generationCancelled = true
         GameState.isGeneratingGrid = false
 
@@ -136,6 +138,7 @@ Item {
 
     function onBoardGenerated(success) {
         if (generationCancelled) {
+            LogManager.info("Board generation was cancelled")
             generationCancelled = false
             try {
                 GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
@@ -146,6 +149,13 @@ Item {
         }
 
         if (success) {
+            const endTime = new Date()
+            const timeDiff = endTime - boardGenerationStartTime
+            const seconds = Math.floor(timeDiff / 1000)
+            const centiseconds = Math.floor((timeDiff % 1000) / 10)
+
+            LogManager.info(`Board generation completed successfully in ${seconds}.${centiseconds.toString().padStart(2, '0')} seconds (attempt ${generationAttempt+1})`)
+
             GameState.mines = GameLogic.getMines()
             GameState.numbers = GameLogic.getNumbers()
             GameState.gameStarted = true
@@ -162,13 +172,21 @@ Item {
 
             GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
         } else {
-            console.error("Failed to place mines, trying again...")
+            const endTime = new Date()
+            const timeDiff = endTime - boardGenerationStartTime
+            const seconds = Math.floor(timeDiff / 1000)
+            const centiseconds = Math.floor((timeDiff % 1000) / 10)
+
+            LogManager.warn(`Failed to place mines after ${seconds}.${centiseconds.toString().padStart(2, '0')} seconds, trying again... (attempt ${generationAttempt+1})`)
+
             if (generationAttempt < 100 && !generationCancelled) {
                 generationAttempt++
 
                 GameLogic.boardGenerationCompleted.disconnect(onBoardGenerated)
 
                 if (!generationCancelled) {
+                    boardGenerationStartTime = new Date()
+
                     GameLogic.boardGenerationCompleted.connect(onBoardGenerated)
 
                     let row = -1, col = -1
@@ -180,7 +198,7 @@ Item {
                     GameLogic.generateBoardAsync(col, row)
                 }
             } else {
-                console.warn("Maximum attempts reached or generation cancelled")
+                LogManager.error(`Maximum attempts reached (${generationAttempt}) or generation cancelled`)
                 if (!generationCancelled) {
                     GameState.isGeneratingGrid = false
                 }
@@ -194,6 +212,9 @@ Item {
         GameState.firstClickIndex = index
         generationCancelled = false
 
+        boardGenerationStartTime = new Date()
+        LogManager.info(`Requesting board generation for index ${index} (${GameState.gridSizeX}x${GameState.gridSizeY}, ${GameState.mineCount} mines)`)
+
         var row, col
         if (UserSettings.safeFirstClick) {
             row = Math.floor(index / GameState.gridSizeX)
@@ -204,7 +225,7 @@ Item {
         }
 
         if (!GameLogic.initializeGame(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount)) {
-            console.error("Failed to initialize game")
+            LogManager.error("Failed to initialize game")
             return false
         }
 

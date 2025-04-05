@@ -7,7 +7,7 @@ import Odizinne.Retr0Mine
 
 ApplicationWindow {
     id: control
-    title: qsTr("Log Viewer")
+    title: qsTr("Log viewer")
     width: GameCore.gamescope ? 1280 : 800
     height: GameCore.gamescope ? 800 : 600
     visible: ComponentsContext.logWindowVisible
@@ -24,7 +24,6 @@ ApplicationWindow {
         if (visible) {
             refreshLogFilesList();
             if (followLive) {
-                // Set the current log file to the latest
                 const files = logFilesList.model;
                 if (files.length > 0) {
                     currentLogFile = files[0];
@@ -39,16 +38,39 @@ ApplicationWindow {
     }
 
     function loadLogContent(filename) {
-        currentLogFile = filename;
+        currentLogFile = filename
         if (followLive) {
-            logTextArea.text = LogManager.getBuffer().join("\n");
+            const logLines = LogManager.getBuffer()
+            const colorizedLines = []
+
+            logLines.forEach(line => {
+                // Extract time only (assuming log format has date and time)
+                const timeMatch = line.match(/\d{2}:\d{2}:\d{2}/)
+                const timeOnly = timeMatch ? timeMatch[0] : ""
+
+                // Remove date part if present, keeping the rest of the line
+                const restOfLine = line.replace(/\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}/, "").trim()
+
+                // Start with just the time part
+                let formattedLine = timeOnly ? timeOnly + " " : ""
+
+                // Color coding only for the keywords
+                formattedLine += restOfLine
+                    .replace(/\[ERROR\]|ERROR:/g, '<font color="#FF5252">$&</font>')
+                    .replace(/\[WARNING\]|WARN:/g, '<font color="#FFD740">$&</font>')
+                    .replace(/\[INFO\]|INFO:/g, '<font color="#69F0AE">$&</font>')
+                    .replace(/\[DEBUG\]|DEBUG:/g, '<font color="#90CAF9">$&</font>')
+
+                colorizedLines.push(formattedLine)
+            })
+
+            logTextArea.text = colorizedLines.join("<br>")
         } else {
-            logTextArea.text = GameCore.readLogFile(filename);
+            logTextArea.text = GameCore.readLogFile(filename)
         }
 
-        // Auto scroll to bottom
         if (autoScroll) {
-            logTextArea.cursorPosition = logTextArea.length;
+            logTextArea.cursorPosition = logTextArea.length
         }
     }
 
@@ -130,6 +152,7 @@ ApplicationWindow {
                 font.family: "Courier New, Courier, monospace"
                 selectByMouse: true
                 color: Constants.foregroundColor
+                textFormat: TextEdit.RichText
 
                 background: Rectangle {
                     color: Constants.settingsPaneColor

@@ -226,6 +226,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         LogManager.info("Application started");
+        LogManager.info("Steam initialized: " + SteamIntegration.initialized)
 
         root.startTime = new Date();
         LogManager.info("Starting initial grid creation...");

@@ -132,8 +132,13 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="201"/>
-        <source>Open log window</source>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="196"/>
+        <source>Logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="221"/>
+        <source>Log viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -346,15 +351,15 @@ Can be inaccurate</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="443"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="450"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="457"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="464"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="471"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="478"/>
         <source>New flag unlocked!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="467"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="473"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="488"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="494"/>
         <source>New grid animation unlocked!</source>
         <translation></translation>
     </message>
@@ -450,36 +455,36 @@ Can be inaccurate</source>
     <name>LogWindow</name>
     <message>
         <location filename="../qml/LogWindow.qml" line="10"/>
-        <source>Log Viewer</source>
+        <source>Log viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="76"/>
+        <location filename="../qml/LogWindow.qml" line="74"/>
         <source>Log Files:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="91"/>
+        <location filename="../qml/LogWindow.qml" line="89"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="96"/>
+        <location filename="../qml/LogWindow.qml" line="94"/>
         <source>Live Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="111"/>
+        <location filename="../qml/LogWindow.qml" line="109"/>
         <source>Auto-scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="148"/>
+        <location filename="../qml/LogWindow.qml" line="146"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="154"/>
+        <location filename="../qml/LogWindow.qml" line="152"/>
         <source>Clear Buffer</source>
         <translation type="unfinished"></translation>
     </message>
