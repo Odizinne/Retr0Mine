@@ -41,6 +41,7 @@ set(QML_FILES
     qml/Main.qml
     qml/Cell.qml
     qml/SettingsWindow.qml
+    qml/LogWindow.qml
     qml/ErrorWindow.qml
     qml/TopBar.qml
     qml/InfoIcon.qml
@@ -95,6 +96,7 @@ set(QML_SINGLETONS
     qml/Singletons/NetworkManager.qml
     qml/Singletons/SteamInputHandler.qml
     qml/Singletons/AudioEngine.qml
+    qml/Singletons/LogManager.qml
 )
 
 set_source_files_properties(${QML_SINGLETONS}

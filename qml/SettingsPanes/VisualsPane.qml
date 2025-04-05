@@ -76,7 +76,7 @@ Pane {
                 }
                 NfSwitch {
                     id: startFullScreenSwitch
-                    checked: UserSettings.startFullScreen || GameCore.gamescope
+                    checked: UserSettings.startFullScreen
                     onCheckedChanged: {
                         UserSettings.startFullScreen = checked
                     }

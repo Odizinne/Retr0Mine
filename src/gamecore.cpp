@@ -53,6 +53,25 @@ GameCore::GameCore(QObject *parent)
     }
 
     QGuiApplication::instance()->installEventFilter(this);
+
+    QString logPath = getLogFilePath();
+    QDir logDir(logPath);
+    if (!logDir.exists()) {
+        logDir.mkpath(".");
+    }
+
+    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss");
+    m_currentLogFile = logPath + "/Retr0Mine-" + timestamp + ".log";
+
+    // Clean up old log files
+    cleanupOldLogFiles(10);
+
+    // Write initial log entry
+    writeToLogFile("=== Retr0Mine Log Started: " + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") + " ===");
+    writeToLogFile("App Version: 1.0");
+    writeToLogFile("Qt Version: " + QString(QT_VERSION_STR));
+    writeToLogFile("Platform: " + QGuiApplication::platformName());
+    writeToLogFile("==============================================");
 }
 
 GameCore::~GameCore() {
@@ -451,4 +470,69 @@ bool GameCore::eventFilter(QObject *watched, QEvent *event) {
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+QString GameCore::getLogFilePath() const {
+    QString logPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/logs";
+    QDir logDir(logPath);
+    if (!logDir.exists()) {
+        logDir.mkpath(".");
+    }
+
+    return logDir.absolutePath();
+}
+
+bool GameCore::writeToLogFile(const QString &logMessage) const {
+    if (m_currentLogFile.isEmpty()) {
+        return false;
+    }
+
+    QFile file(m_currentLogFile);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << logMessage << "\n";
+        file.close();
+        return true;
+    }
+    return false;
+}
+
+QStringList GameCore::getLogFiles() const {
+    QString logPath = getLogFilePath();
+    QDir logDir(logPath);
+    if (!logDir.exists()) {
+        return QStringList();
+    }
+
+    // Sort by modified date, newest first
+    QStringList files = logDir.entryList(QStringList() << "Retr0Mine-*.log", QDir::Files, QDir::Time);
+    return files;
+}
+
+QString GameCore::readLogFile(const QString &filename) const {
+    QString logPath = getLogFilePath();
+    QFile file(logPath + "/" + filename);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        QString content = stream.readAll();
+        file.close();
+        return content;
+    }
+
+    return QString();
+}
+
+void GameCore::cleanupOldLogFiles(int maxFiles) {
+    QStringList files = getLogFiles();
+    if (files.size() <= maxFiles) {
+        return;
+    }
+
+    QString logPath = getLogFilePath();
+
+    // Remove oldest log files
+    for (int i = maxFiles; i < files.size(); i++) {
+        QFile::remove(logPath + "/" + files[i]);
+    }
 }

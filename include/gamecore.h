@@ -47,6 +47,12 @@ public:
     // Add event filter to handle cursor changes
     bool eventFilter(QObject *watched, QEvent *event) override;
 
+    Q_INVOKABLE QString getLogFilePath() const;
+    Q_INVOKABLE bool writeToLogFile(const QString &logMessage) const;
+    Q_INVOKABLE QStringList getLogFiles() const;
+    Q_INVOKABLE QString readLogFile(const QString &filename) const;
+    Q_INVOKABLE void cleanupOldLogFiles(int maxFiles = 10);
+
 private:
     QTranslator *translator;
     bool isRunningOnGamescope;
@@ -63,6 +69,8 @@ private:
     QCursor m_customCursor;
     void applyCustomCursorForWindow(QWindow* window);
     void resetCursorForWindow(QWindow* window);
+
+    QString m_currentLogFile;
 
 signals:
     void languageIndexChanged();

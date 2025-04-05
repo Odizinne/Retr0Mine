@@ -30,7 +30,7 @@ Item {
                                      GameState.gridSizeY !== data.gameState.gridSizeY)
 
             if (gridSizeChanged) {
-                console.log("Grid dimensions changed, resetting cellsCreated counter")
+                LogManager.info("Grid dimensions changed, resetting cellsCreated counter")
                 GridBridge.cellsCreated = 0
             }
 
@@ -70,7 +70,6 @@ Item {
         const savedCentiseconds = saveManager.savedCentiseconds
 
         if (!GameState.numbers || GameState.numbers !== data.gameState.numbers) {
-            console.log("Restoring numbers in finishLoading")
             GameState.numbers = data.gameState.numbers
         }
 

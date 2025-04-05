@@ -136,6 +136,30 @@ ApplicationWindow {
     }
 
     Connections {
+        target: GridBridge
+        function onCellsCreatedChanged() {
+            if (GridBridge.cellsCreated === 0) {
+                if (root.startTime === null) {
+                    root.startTime = new Date();
+                    LogManager.info("Starting grid creation...");
+                }
+            } else if (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) {
+                if (root.startTime) {
+                    const endTime = new Date();
+                    const timeDiff = endTime - root.startTime;
+                    const seconds = Math.floor(timeDiff / 1000);
+                    const centiseconds = Math.floor((timeDiff % 1000) / 10);
+
+                    LogManager.info(`Grid created in ${seconds}.${centiseconds.toString().padStart(2, '0')} seconds ` +
+                                    `(${GameState.gridSizeX}x${GameState.gridSizeY}, ${GridBridge.cellsCreated} cells)`);
+
+                    root.startTime = null;
+                }
+            }
+        }
+    }
+
+    Connections {
         target: GameState
         function onGridSizeXChanged() {
             if (root.visibility === ApplicationWindow.Windowed) {
@@ -201,6 +225,11 @@ ApplicationWindow {
     onVisibilityChanged: setWindowInitialSizeAndPos()
 
     Component.onCompleted: {
+        LogManager.info("Application started");
+
+        root.startTime = new Date();
+        LogManager.info("Starting initial grid creation...");
+
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (internalSaveData) {
             SaveManager.extractAndApplyGridSize(internalSaveData)
@@ -224,7 +253,7 @@ ApplicationWindow {
                 leaderboardWindow.hardWins = leaderboard.hardWins || 0
                 leaderboardWindow.retr0Wins = leaderboard.retr0Wins || 0
             } catch (e) {
-                console.error("Failed to parse leaderboard data:", e)
+                LogManager.error("Failed to parse leaderboard data: " + e.toString());
             }
         }
 
@@ -349,6 +378,10 @@ ApplicationWindow {
 
     SettingsWindow {
         id: settingsWindow
+    }
+
+    LogWindow {
+        id: logWindow
     }
 
     Item {

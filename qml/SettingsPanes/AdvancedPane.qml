@@ -187,5 +187,21 @@ Pane {
                 Layout.rightMargin: 8
             }
         }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+            opacity: 0.5
+
+            Item {
+                Layout.fillWidth: true
+            }
+
+            Button {
+                text: qsTr("Open log window")
+                onClicked: ComponentsContext.logWindowVisible = true
+                Layout.rightMargin: 5
+            }
+        }
     }
 }
