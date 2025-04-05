@@ -132,13 +132,8 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="166"/>
-        <source>QT_VERSION</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="181"/>
-        <source>QT_QPA_PLATFORM</source>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="201"/>
+        <source>Open log window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -317,17 +312,23 @@ board generation on large grids</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="161"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
         <source>Show hint reasoning in chat</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="186"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="169"/>
+        <source>Work in progress
+Can be inaccurate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="185"/>
         <source>SteamDeck controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="191"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="190"/>
         <source>Remap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -337,7 +338,7 @@ board generation on large grids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="227"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="228"/>
         <source>Flag key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -443,6 +444,44 @@ board generation on large grids</source>
         <location filename="../qml/Popups/LoadPopup.qml" line="101"/>
         <source>Cancel</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>LogWindow</name>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="10"/>
+        <source>Log Viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="76"/>
+        <source>Log Files:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="91"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="96"/>
+        <source>Live Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="111"/>
+        <source>Auto-scroll</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="148"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="154"/>
+        <source>Clear Buffer</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1176,12 +1215,12 @@ board generation on large grids</source>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="88"/>
+        <location filename="../qml/TopBar.qml" line="87"/>
         <source>Next click will signal the cell</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="191"/>
+        <location filename="../qml/TopBar.qml" line="190"/>
         <source>Click to pause</source>
         <translation></translation>
     </message>

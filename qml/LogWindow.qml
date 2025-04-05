@@ -7,7 +7,7 @@ import Odizinne.Retr0Mine
 
 ApplicationWindow {
     id: control
-    title: qsTr("Retr0Mine Log Viewer")
+    title: qsTr("Log Viewer")
     width: GameCore.gamescope ? 1280 : 800
     height: GameCore.gamescope ? 800 : 600
     visible: ComponentsContext.logWindowVisible

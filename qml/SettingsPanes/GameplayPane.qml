@@ -153,7 +153,6 @@ Pane {
         }
 
         RowLayout {
-            enabled: false
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
 
@@ -167,7 +166,7 @@ Pane {
             }
 
             InfoIcon {
-                tooltipText: "Disabled for now as it is inacurate\nRework is needed"
+                tooltipText: qsTr("Work in progress\nCan be inaccurate")
             }
 
             NfSwitch {

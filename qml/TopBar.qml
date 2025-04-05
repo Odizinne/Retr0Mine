@@ -29,7 +29,6 @@ Item {
     Connections {
         target: GameState
         function onBotMessageSent() {
-            if (UserSettings.hintContextDisabled) return
             if (!ComponentsContext.multiplayerChatVisible) {
                 if (!chatButton.hasNewMessages) {
                     AudioEngine.playMessage()
@@ -242,7 +241,7 @@ Item {
             NfButton {
                 id: chatButton
                 Layout.preferredHeight: 35
-                visible: SteamIntegration.isP2PConnected || UserSettings.hintReasoningInChat && !UserSettings.hintContextDisabled
+                visible: SteamIntegration.isP2PConnected || UserSettings.hintReasoningInChat
                 Layout.preferredWidth: 35
                 onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
                 highlighted: ComponentsContext.multiplayerChatVisible

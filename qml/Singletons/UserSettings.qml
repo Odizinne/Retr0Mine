@@ -84,6 +84,5 @@ Settings {
      | Misc                                    |
      ==========================================*/
     property bool firstRunCompleted: true
-    property bool hintContextDisabled: true
 }
 

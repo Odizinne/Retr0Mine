@@ -163,7 +163,7 @@ Pane {
             Layout.preferredHeight: Constants.settingsComponentsHeight
             opacity: 0.5
             Label {
-                text: qsTr("QT_VERSION")
+                text: "QT_VERSION"
                 Layout.fillWidth: true
             }
 
@@ -178,7 +178,7 @@ Pane {
             Layout.preferredHeight: Constants.settingsComponentsHeight
             opacity: 0.5
             Label {
-                text: qsTr("QT_QPA_PLATFORM")
+                text: "QT_QPA_PLATFORM"
                 Layout.fillWidth: true
             }
 

@@ -106,14 +106,9 @@ L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="166"/>
-        <source>QT_VERSION</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="181"/>
-        <source>QT_QPA_PLATFORM</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="201"/>
+        <source>Open log window</source>
+        <translation>Ouvrir la fenêtre de log</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
@@ -322,17 +317,24 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Charger la dernière partie au démarrage</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="161"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
         <source>Show hint reasoning in chat</source>
         <translation>Expliquer la logique des indices dans le chat</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="186"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="169"/>
+        <source>Work in progress
+Can be inaccurate</source>
+        <translation>En cours de réalisation
+Peut être imprécis</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="185"/>
         <source>SteamDeck controls</source>
         <translation>Contrôles SteamDeck</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="191"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="190"/>
         <source>Remap</source>
         <translation>Réassigner</translation>
     </message>
@@ -342,7 +344,7 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Touche pour révéler</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="227"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="228"/>
         <source>Flag key</source>
         <translation>Touche pour poser un drapeau</translation>
     </message>
@@ -448,6 +450,44 @@ ralentir la génération sur les grilles larges</translation>
         <location filename="../qml/Popups/LoadPopup.qml" line="101"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>LogWindow</name>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="10"/>
+        <source>Log Viewer</source>
+        <translation>Visionneur de logs</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="76"/>
+        <source>Log Files:</source>
+        <translation>Fichiers:</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="91"/>
+        <source>Refresh</source>
+        <translation>Rafraîchir</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="96"/>
+        <source>Live Log</source>
+        <translation>Session en cours</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="111"/>
+        <source>Auto-scroll</source>
+        <translation>Défilement automatique</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="148"/>
+        <source>Close</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <location filename="../qml/LogWindow.qml" line="154"/>
+        <source>Clear Buffer</source>
+        <translation>Effacer la mémoire tampon</translation>
     </message>
 </context>
 <context>
@@ -1199,12 +1239,12 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="88"/>
+        <location filename="../qml/TopBar.qml" line="87"/>
         <source>Next click will signal the cell</source>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="191"/>
+        <location filename="../qml/TopBar.qml" line="190"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
