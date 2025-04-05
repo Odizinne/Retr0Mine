@@ -47,25 +47,17 @@ ApplicationWindow {
             const colorizedLines = []
 
             logLines.forEach(line => {
-                // Extract time only (assuming log format has date and time)
-                const timeMatch = line.match(/\d{2}:\d{2}:\d{2}/)
-                const timeOnly = timeMatch ? timeMatch[0] : ""
-
-                // Remove date part if present, keeping the rest of the line
-                const restOfLine = line.replace(/\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}/, "").trim()
-
-                // Start with just the time part
-                let formattedLine = timeOnly ? timeOnly + " " : ""
-
-                // Color coding only for the keywords
-                formattedLine += restOfLine
-                    .replace(/\[ERROR\]|ERROR:/g, '<font color="#FF5252">$&</font>')
-                    .replace(/\[WARNING\]|WARN:/g, '<font color="#FFD740">$&</font>')
-                    .replace(/\[INFO\]|INFO:/g, '<font color="#69F0AE">$&</font>')
-                    .replace(/\[DEBUG\]|DEBUG:/g, '<font color="#90CAF9">$&</font>')
-
-                colorizedLines.push(formattedLine)
-            })
+                                 const timeMatch = line.match(/\d{2}:\d{2}:\d{2}/)
+                                 const timeOnly = timeMatch ? timeMatch[0] : ""
+                                 const restOfLine = line.replace(/\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}/, "").trim()
+                                 let formattedLine = timeOnly ? timeOnly + " " : ""
+                                 formattedLine += restOfLine
+                                 .replace(/\[ ERROR \]/g, '[ <font color="red">ERROR</font> ]')
+                                 .replace(/\[ WARNING \]/g, '[ <font color="orange">WARNING</font> ]')
+                                 .replace(/\[ INFO \]/g, '[ <font color="green">INFO</font> ]')
+                                 .replace(/\[ DEBUG \]/g, '[ <font color="blue">DEBUG</font> ]')
+                                 colorizedLines.push(formattedLine)
+                             })
 
             logTextArea.text = colorizedLines.join("<br>")
         } else {

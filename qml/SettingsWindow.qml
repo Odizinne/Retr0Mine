@@ -44,21 +44,6 @@ ApplicationWindow {
         visible: SteamIntegration.initialized && !GameCore.gamescope
     }
 
-    //MouseArea {
-    //    /*==========================================
-    //     | Normalize cursor shape in gamescope     |
-    //     ==========================================*/
-    //    anchors.fill: parent
-    //    hoverEnabled: true
-    //    cursorShape: Qt.ArrowCursor
-    //    propagateComposedEvents: true
-    //    //visible: GameCore.gamescope
-    //    z: -1
-    //    onPressed: function(mouse) { mouse.accepted = false; }
-    //    onReleased: function(mouse) { mouse.accepted = false; }
-    //    onClicked: function(mouse) { mouse.accepted = false; }
-    //}
-
     Shortcut {
         sequence: "Esc"
         enabled: control.visible
@@ -119,16 +104,16 @@ ApplicationWindow {
                             icon: "qrc:/icons/keyboard.png",
                         },
                         {
+                            text: qsTr("Multiplayer"),
+                            icon: "qrc:/icons/multiplayer.png",
+                        },
+                        {
                             text: qsTr("Accessibility"),
                             icon: "qrc:/icons/accessibility.png",
                         },
                         {
                             text: qsTr("Language"),
                             icon: "qrc:/icons/language.png",
-                        },
-                        {
-                            text: qsTr("Multiplayer"),
-                            icon: "qrc:/icons/multiplayer.png",
                         },
                         {
                             text: qsTr("Advanced"),
@@ -263,6 +248,13 @@ ApplicationWindow {
             }
 
             Component {
+                id: multiplayerPaneComponent
+                MultiplayerPane {
+                    enabled: !GameState.isGeneratingGrid
+                }
+            }
+
+            Component {
                 id: accessibilityPaneComponent
                 AccessibilityPane {
                     enabled: !GameState.isGeneratingGrid
@@ -272,13 +264,6 @@ ApplicationWindow {
             Component {
                 id: languagePaneComponent
                 LanguagePane {
-                    enabled: !GameState.isGeneratingGrid
-                }
-            }
-
-            Component {
-                id: multiplayerPaneComponent
-                MultiplayerPane {
                     enabled: !GameState.isGeneratingGrid
                 }
             }

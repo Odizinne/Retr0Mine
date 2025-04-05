@@ -161,36 +161,6 @@ Pane {
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
-            opacity: 0.5
-            Label {
-                text: "QT_VERSION"
-                Layout.fillWidth: true
-            }
-
-            Label {
-                text: GameCore.qtVersion
-                Layout.rightMargin: 8
-            }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Constants.settingsComponentsHeight
-            opacity: 0.5
-            Label {
-                text: "QT_QPA_PLATFORM"
-                Layout.fillWidth: true
-            }
-
-            Label {
-                text: GameCore.platformPlugin
-                Layout.rightMargin: 8
-            }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.preferredHeight: Constants.settingsComponentsHeight
 
             Label {
                 text: qsTr("Logging")
@@ -221,6 +191,36 @@ Pane {
                 text: qsTr("Log viewer")
                 onClicked: ComponentsContext.logWindowVisible = true
                 Layout.rightMargin: 5
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+            opacity: 0.5
+            Label {
+                text: "QT_VERSION"
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: GameCore.qtVersion
+                Layout.rightMargin: 8
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+            opacity: 0.5
+            Label {
+                text: "QT_QPA_PLATFORM"
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: GameCore.platformPlugin
+                Layout.rightMargin: 8
             }
         }
     }

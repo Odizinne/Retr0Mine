@@ -23,19 +23,19 @@ QtObject {
     }
 
     function error(message) {
-        log("[ERROR] " + message);
+        log("[ ERROR ] " + message);
     }
 
     function warn(message) {
-        log("[WARN] " + message);
+        log("[ WARN ] " + message);
     }
 
     function info(message) {
-        log("[INFO] " + message);
+        log("[ INFO ] " + message);
     }
 
     function debug(message) {
-        log("[DEBUG] " + message);
+        log("[ DEBUG ] " + message);
     }
 
     function getBuffer() {
