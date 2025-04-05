@@ -19,6 +19,10 @@ ApplicationWindow {
     maximumHeight: height
     visible: ComponentsContext.settingsWindowVisible
     flags: Qt.Dialog
+    transientParent: null
+    Universal.theme: Constants.universalTheme
+    Universal.accent: Constants.accentColor
+
     onClosing: ComponentsContext.settingsWindowVisible = false
     property bool initialAnimationPlayed: false
 

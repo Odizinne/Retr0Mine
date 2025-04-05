@@ -11,6 +11,9 @@ ApplicationWindow {
     width: GameCore.gamescope ? 1280 : 800
     height: GameCore.gamescope ? 800 : 600
     visible: ComponentsContext.logWindowVisible
+    transientParent: null
+    Universal.theme: Constants.universalTheme
+    Universal.accent: Constants.accentColor
 
     onClosing: {
         ComponentsContext.logWindowVisible = false

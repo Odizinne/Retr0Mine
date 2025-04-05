@@ -63,10 +63,8 @@ GameCore::GameCore(QObject *parent)
     QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss");
     m_currentLogFile = logPath + "/Retr0Mine-" + timestamp + ".log";
 
-    // Clean up old log files
     cleanupOldLogFiles(10);
 
-    // Write initial log entry
     writeToLogFile("=== Retr0Mine Log Started: " + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") + " ===");
     writeToLogFile("App Version: 1.0");
     writeToLogFile("Qt Version: " + QString(QT_VERSION_STR));
