@@ -149,9 +149,9 @@ ApplicationWindow {
                                     case 2: stackView.push(visualsPaneComponent); break;
                                     case 3: stackView.push(soundPaneComponent); break;
                                     case 4: stackView.push(shortcutsPaneComponent); break;
-                                    case 5: stackView.push(accessibilityPaneComponent); break;
-                                    case 6: stackView.push(languagePaneComponent); break;
-                                    case 7: stackView.push(multiplayerPaneComponent); break;
+                                    case 5: stackView.push(multiplayerPaneComponent); break;
+                                    case 6: stackView.push(accessibilityPaneComponent); break;
+                                    case 7: stackView.push(languagePaneComponent); break;
                                     case 8: stackView.push(advancedPaneComponent); break;
                                 }
                             }
