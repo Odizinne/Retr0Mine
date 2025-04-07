@@ -222,7 +222,9 @@ ApplicationWindow {
         }
     }
 
-    onVisibilityChanged: setWindowInitialSizeAndPos()
+    onVisibilityChanged: {
+        if (visibility === ApplicationWindow.Windowed) setWindowInitialSizeAndPos()
+    }
 
     Component.onCompleted: {
         LogManager.info("Application started");
@@ -274,7 +276,7 @@ ApplicationWindow {
             visibility = ApplicationWindow.Windowed
         }
 
-        setWindowInitialSizeAndPos()
+        centerWindowToScreen()
 
         AudioEngine.playSilent()
     }
@@ -646,8 +648,9 @@ ApplicationWindow {
             if (ComponentsContext.multiplayerChatVisible) {
                 baseWidth += 300 + 12
             }
+            let availableWidth = GameCore.getCurrentMonitorAvailableWidth(root)
 
-            return Math.min(baseWidth, Screen.desktopAvailableWidth * 0.9)
+            return Math.min(baseWidth, availableWidth * 0.9)
         }
     }
 
@@ -659,20 +662,23 @@ ApplicationWindow {
          ==========================================*/
         if (visibility === ApplicationWindow.Windowed) {
             let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 35 + 24 + 12
-            return Math.min(baseHeight, Screen.desktopAvailableHeight * 0.9)
+            let availableHeight = GameCore.getCurrentMonitorAvailableHeight(root)
+            return Math.min(baseHeight, availableHeight * 0.9)
         }
     }
 
     function setWindowInitialSizeAndPos() {
-        if (visibility === 2) {
+        if (visibility === ApplicationWindow.Windowed) {
             minimumWidth = getIdealWidth()
             minimumHeight = getIdealHeight()
             width = minimumWidth
             height = minimumHeight
-
-            x = Screen.width / 2 - width / 2
-            y = Screen.height / 2 - height / 2
         }
+    }
+
+    function centerWindowToScreen() {
+        x = Screen.width / 2 - width / 2
+        y = Screen.height / 2 - height / 2
     }
 }
 

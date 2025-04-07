@@ -53,6 +53,9 @@ public:
     Q_INVOKABLE QString readLogFile(const QString &filename) const;
     Q_INVOKABLE void cleanupOldLogFiles(int maxFiles = 10);
 
+    Q_INVOKABLE int getCurrentMonitorAvailableHeight(QWindow* window = nullptr) const;
+    Q_INVOKABLE int getCurrentMonitorAvailableWidth(QWindow* window = nullptr) const;
+
 private:
     QTranslator *translator;
     bool isRunningOnGamescope;

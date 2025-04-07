@@ -6,6 +6,7 @@
 #include <QStandardPaths>
 #include <QStyleHints>
 #include <QWindow>
+#include <QScreen>
 #include "gamecore.h"
 #include "steamintegration.h"
 
@@ -532,4 +533,48 @@ void GameCore::cleanupOldLogFiles(int maxFiles) {
     for (int i = maxFiles; i < files.size(); i++) {
         QFile::remove(logPath + "/" + files[i]);
     }
+}
+
+int GameCore::getCurrentMonitorAvailableHeight(QWindow* window) const {
+    if (!window) {
+        for (QWindow* activeWindow : QGuiApplication::topLevelWindows()) {
+            if (activeWindow->isVisible()) {
+                window = activeWindow;
+                break;
+            }
+        }
+    }
+
+    if (!window) {
+        return QGuiApplication::primaryScreen()->availableGeometry().height();
+    }
+
+    QScreen* screen = window->screen();
+    if (!screen) {
+        screen = QGuiApplication::primaryScreen();
+    }
+
+    return screen->availableGeometry().height();
+}
+
+int GameCore::getCurrentMonitorAvailableWidth(QWindow* window) const {
+    if (!window) {
+        for (QWindow* activeWindow : QGuiApplication::topLevelWindows()) {
+            if (activeWindow->isVisible()) {
+                window = activeWindow;
+                break;
+            }
+        }
+    }
+
+    if (!window) {
+        return QGuiApplication::primaryScreen()->availableGeometry().width();
+    }
+
+    QScreen* screen = window->screen();
+    if (!screen) {
+        screen = QGuiApplication::primaryScreen();
+    }
+
+    return screen->availableGeometry().width();
 }
