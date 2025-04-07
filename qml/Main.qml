@@ -43,7 +43,7 @@ ApplicationWindow {
                 SaveManager.saveGame("internalGameState.json")
             }
         } else {
-            close.accepted = true
+            Qt.quit()
         }
     }
 
