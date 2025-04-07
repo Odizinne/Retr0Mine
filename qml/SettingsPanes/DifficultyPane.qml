@@ -93,6 +93,7 @@ Pane {
             enabled: UserSettings.difficulty === 4
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
+
             Label {
                 text: qsTr("Width:")
                 Layout.fillWidth: true
@@ -113,10 +114,12 @@ Pane {
             enabled: UserSettings.difficulty === 4
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
+
             Label {
                 text: qsTr("Height:")
                 Layout.fillWidth: true
             }
+
             NfSpinBox {
                 id: heightSpinBox
                 Layout.rightMargin: 5
@@ -132,12 +135,12 @@ Pane {
             enabled: UserSettings.difficulty === 4
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
+
             Label {
                 text: qsTr("Mines:")
                 Layout.fillWidth: true
             }
 
-            // Count mode controls
             RowLayout {
                 visible: !UserSettings.mineDensity
                 Layout.alignment: Qt.AlignRight
@@ -164,11 +167,9 @@ Pane {
                     checked: UserSettings.mineDensity
                     onCheckedChanged: {
                         if (checked) {
-                            // Calculate percentage from current mine count
                             const percentage = Math.round((countSpinBox.value / (widthSpinBox.value * heightSpinBox.value)) * 100)
                             percentSpinBox.value = Math.min(Math.max(percentage, 1), 30)
                         } else {
-                            // Calculate mine count from current percentage
                             const mineCount = Math.round((widthSpinBox.value * heightSpinBox.value) * percentSpinBox.value / 100)
                             countSpinBox.value = Math.min(Math.max(mineCount, 1),
                                 Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3))
@@ -181,14 +182,13 @@ Pane {
                     id: countSpinBox
                     Layout.rightMargin: 5
                     from: 1
-                    to: Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.3)
+                    to: Math.floor((widthSpinBox.value * heightSpinBox.value) * 0.25)
                     editable: true
                     value: UserSettings.customMines
                     onValueChanged: UserSettings.customMines = value
                 }
             }
 
-            // Percentage mode controls
             RowLayout {
                 visible: UserSettings.mineDensity
                 Layout.alignment: Qt.AlignRight
@@ -251,16 +251,14 @@ Pane {
                     id: percentSpinBox
                     Layout.rightMargin: 5
                     from: 1
-                    to: 30
+                    to: 25
                     editable: true
 
                     Component.onCompleted: {
-                        // Initial percentage based on UserSettings.customMines
                         value = Math.round((UserSettings.customMines / (widthSpinBox.value * heightSpinBox.value)) * 100)
                     }
 
                     onValueChanged: {
-                        // Calculate mines based on percentage and update UserSettings
                         const mineCount = Math.round((widthSpinBox.value * heightSpinBox.value) * value / 100)
                         UserSettings.customMines = mineCount
                     }
