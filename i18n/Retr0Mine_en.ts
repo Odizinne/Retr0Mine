@@ -277,73 +277,73 @@ board generation on large grids</source>
 <context>
     <name>GameplayPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="15"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="21"/>
         <source>First click protection</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="24"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="30"/>
         <source>First click always lands on a safe tile</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="40"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="46"/>
         <source>Invert left and right click</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="60"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="66"/>
         <source>Quick reveal connected cells</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="87"/>
         <source>Enable question marks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="110"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="116"/>
         <source>Enable green question marks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="139"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="145"/>
         <source>Load last game on start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="166"/>
         <source>Show hint reasoning in chat</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="169"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="175"/>
         <source>Work in progress
 Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="185"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="191"/>
         <source>SteamDeck controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="190"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="196"/>
         <source>Remap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="202"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="208"/>
         <source>Haptic fedback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="228"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="234"/>
         <source>Reveal key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="255"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="261"/>
         <source>Flag key</source>
         <translation type="unfinished"></translation>
     </message>

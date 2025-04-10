@@ -282,74 +282,74 @@ ralentir la génération sur les grilles larges</translation>
 <context>
     <name>GameplayPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="15"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="21"/>
         <source>First click protection</source>
         <translation>Protection du premier clic</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="24"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="30"/>
         <source>First click always lands on a safe tile</source>
         <translation>Premier clic toujours sur une case sûre</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="40"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="46"/>
         <source>Invert left and right click</source>
         <translation>Inverser clic gauche et droit</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="60"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="66"/>
         <source>Quick reveal connected cells</source>
         <translation>Révéler cellules adjacentes</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="81"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="87"/>
         <source>Enable question marks</source>
         <translation>Activer les points d&apos;intérrogation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="110"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="116"/>
         <source>Enable green question marks</source>
         <translation>Activer les points d&apos;intérrogation verts</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="139"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="145"/>
         <source>Load last game on start</source>
         <translation>Charger la dernière partie au démarrage</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="160"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="166"/>
         <source>Show hint reasoning in chat</source>
         <translation>Expliquer la logique des indices dans le chat</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="169"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="175"/>
         <source>Work in progress
 Can be inaccurate</source>
         <translation>En cours de réalisation
 Peut être imprécis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="185"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="191"/>
         <source>SteamDeck controls</source>
         <translation>Contrôles SteamDeck</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="190"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="196"/>
         <source>Remap</source>
         <translation>Réassigner</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="202"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="208"/>
         <source>Haptic fedback</source>
         <translation>Vibrations</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="228"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="234"/>
         <source>Reveal key</source>
         <translation>Touche pour révéler</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="255"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="261"/>
         <source>Flag key</source>
         <translation>Touche pour poser un drapeau</translation>
     </message>
