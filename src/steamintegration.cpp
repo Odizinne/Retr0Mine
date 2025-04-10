@@ -1633,3 +1633,33 @@ bool SteamIntegration::showControllerBindingPanel() {
 
     return result;
 }
+
+bool SteamIntegration::triggerRumble(float leftIntensity, float rightIntensity, float duration) {
+    if (!m_initialized || !m_steamInputInitialized || m_inputHandle == 0) {
+        return false;
+    }
+
+    leftIntensity = qBound(0.0f, leftIntensity, 1.0f);
+    rightIntensity = qBound(0.0f, rightIntensity, 1.0f);
+    duration = qBound(0.0f, duration, 5.0f);
+
+    unsigned short leftMotor = static_cast<unsigned short>(leftIntensity * 65535);
+    unsigned short rightMotor = static_cast<unsigned short>(rightIntensity * 65535);
+
+    InputHandle_t controllers[STEAM_INPUT_MAX_COUNT];
+    int numControllers = SteamInput()->GetConnectedControllers(controllers);
+
+    if (numControllers <= 0) {
+        return false;
+    }
+
+    SteamInput()->TriggerVibration(controllers[0], leftMotor, rightMotor);
+
+    if (duration > 0) {
+        QTimer::singleShot(duration * 1000, this, [this, controllers]() {
+            SteamInput()->TriggerVibration(controllers[0], 0, 0);
+        });
+    }
+
+    return true;
+}

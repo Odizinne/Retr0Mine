@@ -132,13 +132,8 @@ Current game will be saved and restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="196"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="166"/>
         <source>Logging</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="221"/>
-        <source>Log viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -160,22 +155,22 @@ Current game will be saved and restored</source>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="97"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="98"/>
         <source>Width:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="117"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="119"/>
         <source>Height:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="136"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="140"/>
         <source>Mines:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="158"/>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="225"/>
         <source>Going above 25% may really slow down
 board generation on large grids</source>
@@ -190,7 +185,7 @@ board generation on large grids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="282"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="280"/>
         <source>Apply</source>
         <translation></translation>
     </message>
@@ -338,12 +333,17 @@ Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="201"/>
-        <source>Reveal key</source>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="202"/>
+        <source>Haptic fedback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="228"/>
+        <source>Reveal key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="255"/>
         <source>Flag key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -351,15 +351,15 @@ Can be inaccurate</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="464"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="471"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="478"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="484"/>
         <source>New flag unlocked!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="488"/>
         <location filename="../qml/Singletons/GridBridge.qml" line="494"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="500"/>
         <source>New grid animation unlocked!</source>
         <translation></translation>
     </message>
@@ -459,32 +459,32 @@ Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="74"/>
+        <location filename="../qml/LogWindow.qml" line="93"/>
         <source>Log Files:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="89"/>
+        <location filename="../qml/LogWindow.qml" line="108"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="94"/>
+        <location filename="../qml/LogWindow.qml" line="113"/>
         <source>Live Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="109"/>
+        <location filename="../qml/LogWindow.qml" line="128"/>
         <source>Auto-scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="146"/>
+        <location filename="../qml/LogWindow.qml" line="166"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="152"/>
+        <location filename="../qml/LogWindow.qml" line="172"/>
         <source>Clear Buffer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -512,22 +512,22 @@ Can be inaccurate</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="78"/>
+        <location filename="../qml/MainMenu.qml" line="75"/>
         <source>Settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="62"/>
+        <location filename="../qml/MainMenu.qml" line="59"/>
         <source>Leaderboard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="73"/>
+        <location filename="../qml/MainMenu.qml" line="70"/>
         <source>About</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="68"/>
+        <location filename="../qml/MainMenu.qml" line="65"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
@@ -537,12 +537,12 @@ Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="88"/>
+        <location filename="../qml/MainMenu.qml" line="82"/>
         <source>Help</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="93"/>
+        <location filename="../qml/MainMenu.qml" line="87"/>
         <source>Exit</source>
         <translation></translation>
     </message>
@@ -1076,57 +1076,57 @@ Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="98"/>
+        <location filename="../qml/SettingsWindow.qml" line="87"/>
         <source>Difficulty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="102"/>
+        <location filename="../qml/SettingsWindow.qml" line="91"/>
         <source>Gameplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="106"/>
+        <location filename="../qml/SettingsWindow.qml" line="95"/>
         <source>Visuals</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="110"/>
+        <location filename="../qml/SettingsWindow.qml" line="99"/>
         <source>Sound</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="114"/>
+        <location filename="../qml/SettingsWindow.qml" line="103"/>
         <source>Shortcuts</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="118"/>
+        <location filename="../qml/SettingsWindow.qml" line="111"/>
         <source>Accessibility</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="122"/>
+        <location filename="../qml/SettingsWindow.qml" line="115"/>
         <source>Language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="126"/>
+        <location filename="../qml/SettingsWindow.qml" line="107"/>
         <source>Multiplayer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="130"/>
+        <location filename="../qml/SettingsWindow.qml" line="119"/>
         <source>Advanced</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="191"/>
+        <location filename="../qml/SettingsWindow.qml" line="179"/>
         <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="207"/>
+        <location filename="../qml/SettingsWindow.qml" line="195"/>
         <source>Restore defaults</source>
         <translation></translation>
     </message>

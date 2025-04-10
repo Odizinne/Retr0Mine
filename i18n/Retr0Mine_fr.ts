@@ -106,14 +106,9 @@ L&apos;application redémarrera après le changement
 La partie en cours sera sauvegardée et restaurée</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="196"/>
+        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="166"/>
         <source>Logging</source>
         <translation>Journalisation</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="221"/>
-        <source>Log viewer</source>
-        <translation>Visionneur de journaux</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AdvancedPane.qml" line="48"/>
@@ -164,22 +159,22 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="97"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="98"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="117"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="119"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="136"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="140"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="155"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="158"/>
         <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="225"/>
         <source>Going above 25% may really slow down
 board generation on large grids</source>
@@ -195,7 +190,7 @@ ralentir la génération sur les grilles larges</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="282"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="280"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -344,12 +339,17 @@ Peut être imprécis</translation>
         <translation>Réassigner</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="201"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="202"/>
+        <source>Haptic fedback</source>
+        <translation>Vibrations</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="228"/>
         <source>Reveal key</source>
         <translation>Touche pour révéler</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="228"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="255"/>
         <source>Flag key</source>
         <translation>Touche pour poser un drapeau</translation>
     </message>
@@ -357,15 +357,15 @@ Peut être imprécis</translation>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="464"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="471"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="478"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="484"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="488"/>
         <location filename="../qml/Singletons/GridBridge.qml" line="494"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="500"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -465,32 +465,32 @@ Peut être imprécis</translation>
         <translation>Visionneur de journaux</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="74"/>
+        <location filename="../qml/LogWindow.qml" line="93"/>
         <source>Log Files:</source>
         <translation>Fichiers:</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="89"/>
+        <location filename="../qml/LogWindow.qml" line="108"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="94"/>
+        <location filename="../qml/LogWindow.qml" line="113"/>
         <source>Live Log</source>
         <translation>Session en cours</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="109"/>
+        <location filename="../qml/LogWindow.qml" line="128"/>
         <source>Auto-scroll</source>
         <translation>Défilement automatique</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="146"/>
+        <location filename="../qml/LogWindow.qml" line="166"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="152"/>
+        <location filename="../qml/LogWindow.qml" line="172"/>
         <source>Clear Buffer</source>
         <translation>Effacer la mémoire tampon</translation>
     </message>
@@ -518,22 +518,22 @@ Peut être imprécis</translation>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="78"/>
+        <location filename="../qml/MainMenu.qml" line="75"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="62"/>
+        <location filename="../qml/MainMenu.qml" line="59"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="73"/>
+        <location filename="../qml/MainMenu.qml" line="70"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="68"/>
+        <location filename="../qml/MainMenu.qml" line="65"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
@@ -543,12 +543,12 @@ Peut être imprécis</translation>
         <translation>Partie</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="88"/>
+        <location filename="../qml/MainMenu.qml" line="82"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="93"/>
+        <location filename="../qml/MainMenu.qml" line="87"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -1100,57 +1100,57 @@ Peut être imprécis</translation>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="98"/>
+        <location filename="../qml/SettingsWindow.qml" line="87"/>
         <source>Difficulty</source>
         <translation>Difficulté</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="102"/>
+        <location filename="../qml/SettingsWindow.qml" line="91"/>
         <source>Gameplay</source>
         <translation>Gameplay</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="106"/>
+        <location filename="../qml/SettingsWindow.qml" line="95"/>
         <source>Visuals</source>
         <translation>Visuels</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="110"/>
+        <location filename="../qml/SettingsWindow.qml" line="99"/>
         <source>Sound</source>
         <translation>Sons</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="114"/>
+        <location filename="../qml/SettingsWindow.qml" line="103"/>
         <source>Shortcuts</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="118"/>
+        <location filename="../qml/SettingsWindow.qml" line="111"/>
         <source>Accessibility</source>
         <translation>Accessibilité</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="122"/>
+        <location filename="../qml/SettingsWindow.qml" line="115"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="126"/>
+        <location filename="../qml/SettingsWindow.qml" line="107"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="130"/>
+        <location filename="../qml/SettingsWindow.qml" line="119"/>
         <source>Advanced</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="191"/>
+        <location filename="../qml/SettingsWindow.qml" line="179"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWindow.qml" line="207"/>
+        <location filename="../qml/SettingsWindow.qml" line="195"/>
         <source>Restore defaults</source>
         <translation>Par défaut</translation>
     </message>

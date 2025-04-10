@@ -287,6 +287,9 @@ Item {
                 GameTimer.stop()
                 revealAllMines()
                 AudioEngine.playLoose()
+                if (UserSettings.rumble) {
+                    SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                }
                 GameState.displayPostGame = true
 
                 if (NetworkManager.onGameLost(currentIndex)) {
@@ -412,6 +415,9 @@ Item {
             if (NetworkManager.onGameWon()) {
                 GameState.displayPostGame = true
                 AudioEngine.playWin()
+                if (UserSettings.rumble) {
+                    SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                }
                 return
             }
 
@@ -502,6 +508,9 @@ Item {
 
             GameState.displayPostGame = true
             AudioEngine.playWin()
+            if (UserSettings.rumble) {
+                SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+            }
         }
     }
 

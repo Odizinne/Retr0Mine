@@ -186,10 +186,37 @@ Pane {
                 Layout.fillWidth: true
             }
 
-            Button {
+            NfButton {
                 text: qsTr("Remap")
                 onClicked: SteamIntegration.showControllerBindingPanel()
                 Layout.rightMargin: 5
+            }
+        }
+
+        RowLayout {
+            visible: SteamIntegration.isRunningOnSteamDeck
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+
+            Label {
+                text: qsTr("Haptic fedback")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: rumbleSwitch.click()
+                }
+            }
+
+            NfSwitch {
+                id: rumbleSwitch
+                checked: UserSettings.rumble
+                onCheckedChanged: {
+                    UserSettings.rumble = checked
+                    if (checked) {
+                        SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                    }
+                }
+
             }
         }
 

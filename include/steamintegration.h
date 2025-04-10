@@ -93,6 +93,8 @@ public:
 
     Q_INVOKABLE void runCallbacks();
 
+    Q_INVOKABLE bool triggerRumble(float leftIntensity, float rightIntensity, float duration);
+
     bool isInMultiplayerGame() const { return m_inMultiplayerGame; }
     bool isHost() const { return m_isHost; }
     bool isConnecting() const { return m_isConnecting; }

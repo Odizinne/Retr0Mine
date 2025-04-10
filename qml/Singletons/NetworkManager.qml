@@ -760,8 +760,15 @@ QtObject {
 
             if (GameState.gameWon) {
                 AudioEngine.playWin()
+                if (UserSettings.rumble) {
+                    SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                }
             } else {
                 AudioEngine.playLoose()
+                if (UserSettings.rumble) {
+                    SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                }
+
                 GridBridge.revealAllMines()
             }
 

@@ -154,6 +154,9 @@ ApplicationWindow {
                                     `(${GameState.gridSizeX}x${GameState.gridSizeY}, ${GridBridge.cellsCreated} cells)`);
 
                     root.startTime = null;
+                    if (UserSettings.rumble) {
+                        SteamIntegration.triggerRumble(0.4, 0.4, 0.3)
+                    }
                 }
             }
         }
