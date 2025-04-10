@@ -219,7 +219,7 @@ Pane {
                     onCheckedChanged: {
                         UserSettings.rumble = checked
                         if (checked) {
-                            SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                            SteamIntegration.triggerRumble(1, 1, 0.5)
                         }
                     }
 

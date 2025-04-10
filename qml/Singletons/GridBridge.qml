@@ -288,7 +288,7 @@ Item {
                 revealAllMines()
                 AudioEngine.playLoose()
                 if (UserSettings.rumble) {
-                    SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                    SteamIntegration.triggerRumble(1, 1, 0.5)
                 }
                 GameState.displayPostGame = true
 
@@ -416,7 +416,7 @@ Item {
                 GameState.displayPostGame = true
                 AudioEngine.playWin()
                 if (UserSettings.rumble) {
-                    SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                    SteamIntegration.triggerRumble(1, 1, 0.5)
                 }
                 return
             }
@@ -509,7 +509,7 @@ Item {
             GameState.displayPostGame = true
             AudioEngine.playWin()
             if (UserSettings.rumble) {
-                SteamIntegration.triggerRumble(0.7, 0.7, 0.5)
+                SteamIntegration.triggerRumble(1, 1, 0.5)
             }
         }
     }

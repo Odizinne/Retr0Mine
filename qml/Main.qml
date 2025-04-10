@@ -155,7 +155,7 @@ ApplicationWindow {
 
                     root.startTime = null;
                     if (UserSettings.rumble) {
-                        SteamIntegration.triggerRumble(0.4, 0.4, 0.3)
+                        SteamIntegration.triggerRumble(0.8, 0.8, 0.3)
                     }
                 }
             }
