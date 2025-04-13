@@ -291,6 +291,12 @@ ApplicationWindow {
     }
 
     Shortcut {
+        sequence: "Ctrl+D"
+        autoRepeat: false
+        onActivated: ComponentsContext.logWindowVisible = !ComponentsContext.logWindowVisible
+    }
+
+    Shortcut {
         sequence: StandardKey.Save
         enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
         autoRepeat: false

@@ -15,6 +15,12 @@ ApplicationWindow {
     Universal.theme: Constants.universalTheme
     Universal.accent: Constants.accentColor
 
+    Shortcut {
+        sequence: "Ctrl+D"
+        autoRepeat: false
+        onActivated: ComponentsContext.logWindowVisible = false
+    }
+
     onClosing: {
         ComponentsContext.logWindowVisible = false
     }
