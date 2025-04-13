@@ -421,90 +421,11 @@ Item {
                 return
             }
 
-            let leaderboardData = GameCore.loadGameState("leaderboard.json")
-            let leaderboard = {}
+            // Update leaderboard
+            updateLeaderboard()
 
-            if (leaderboardData) {
-                try {
-                    leaderboard = JSON.parse(leaderboardData)
-                } catch (e) {
-                    console.error("Failed to parse leaderboard data:", e)
-                }
-            }
-
-            const difficulty = GameState.getDifficultyLevel()
-            if (difficulty) {
-                const timeField = difficulty + 'Time'
-                const winsField = difficulty + 'Wins'
-                const centisecondsField = difficulty + 'Centiseconds'
-                const formattedTime = GameTimer.getDetailedTime()
-                const centiseconds = GameTimer.centiseconds
-
-                if (!leaderboard[winsField]) {
-                    leaderboard[winsField] = 0
-                }
-
-                leaderboard[winsField]++
-
-                leaderboardUpdated(timeField, leaderboard[timeField], winsField, leaderboard[winsField])
-
-                if (!leaderboard[centisecondsField] || centiseconds < leaderboard[centisecondsField]) {
-                    leaderboard[timeField] = formattedTime
-                    leaderboard[centisecondsField] = centiseconds
-
-                    leaderboardUpdated(timeField, formattedTime, winsField, leaderboard[winsField])
-
-                    GameState.displayNewRecord = true
-                }
-            }
-
-            GameCore.saveLeaderboard(JSON.stringify(leaderboard))
-
-            if (SteamIntegration.initialized) {
-                const difficulty = GameState.getDifficultyLevel()
-
-                if (GameState.currentHintCount === 0) {
-                    if (difficulty === 'easy') {
-                        if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
-                            SteamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
-                            GameState.notificationText = qsTr("New flag unlocked!")
-                            GameState.displayNotification = true
-                            GameState.flag1Unlocked = true
-                        }
-                    } else if (difficulty === 'medium') {
-                        if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
-                            SteamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
-                            GameState.notificationText = qsTr("New flag unlocked!")
-                            GameState.displayNotification = true
-                            GameState.flag2Unlocked = true
-                        }
-                    } else if (difficulty === 'hard') {
-                        if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
-                            SteamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
-                            GameState.notificationText = qsTr("New flag unlocked!")
-                            GameState.displayNotification = true
-                            GameState.flag3Unlocked = true
-                        }
-                    }
-                }
-
-                if (difficulty === 'easy') {
-                    if (Math.floor(GameTimer.centiseconds / 100) < 15 && !SteamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
-                        SteamIntegration.unlockAchievement("ACH_SPEED_DEMON")
-                        GameState.notificationText = qsTr("New grid animation unlocked!")
-                        GameState.displayNotification = true
-                        GameState.anim2Unlocked = true
-                    }
-                    if (GameState.currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
-                        SteamIntegration.unlockAchievement("ACH_HINT_MASTER")
-                        GameState.notificationText = qsTr("New grid animation unlocked!")
-                        GameState.displayNotification = true
-                        GameState.anim1Unlocked = true
-                    }
-                }
-
-                SteamIntegration.incrementTotalWin()
-            }
+            // Update achievements
+            updateSteamAchievements()
 
             GameState.displayPostGame = true
             AudioEngine.playWin()
@@ -512,6 +433,97 @@ Item {
                 SteamIntegration.triggerRumble(1, 1, 0.5)
             }
         }
+    }
+
+    function updateLeaderboard() {
+        let leaderboardData = GameCore.loadGameState("leaderboard.json")
+        let leaderboard = {}
+
+        if (leaderboardData) {
+            try {
+                leaderboard = JSON.parse(leaderboardData)
+            } catch (e) {
+                console.error("Failed to parse leaderboard data:", e)
+            }
+        }
+
+        const difficulty = GameState.getDifficultyLevel()
+        if (difficulty) {
+            const timeField = difficulty + 'Time'
+            const winsField = difficulty + 'Wins'
+            const centisecondsField = difficulty + 'Centiseconds'
+            const formattedTime = GameTimer.getDetailedTime()
+            const centiseconds = GameTimer.centiseconds
+
+            if (!leaderboard[winsField]) {
+                leaderboard[winsField] = 0
+            }
+
+            leaderboard[winsField]++
+
+            leaderboardUpdated(timeField, leaderboard[timeField], winsField, leaderboard[winsField])
+
+            if (!leaderboard[centisecondsField] || centiseconds < leaderboard[centisecondsField]) {
+                leaderboard[timeField] = formattedTime
+                leaderboard[centisecondsField] = centiseconds
+
+                leaderboardUpdated(timeField, formattedTime, winsField, leaderboard[winsField])
+
+                GameState.displayNewRecord = true
+            }
+        }
+
+        GameCore.saveLeaderboard(JSON.stringify(leaderboard))
+    }
+
+    function updateSteamAchievements() {
+        if (!SteamIntegration.initialized) {
+            return
+        }
+
+        const difficulty = GameState.getDifficultyLevel()
+
+        if (GameState.currentHintCount === 0) {
+            if (difficulty === 'easy') {
+                if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_EASY")) {
+                    SteamIntegration.unlockAchievement("ACH_NO_HINT_EASY")
+                    GameState.notificationText = qsTr("New flag unlocked!")
+                    GameState.displayNotification = true
+                    GameState.flag1Unlocked = true
+                }
+            } else if (difficulty === 'medium') {
+                if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_MEDIUM")) {
+                    SteamIntegration.unlockAchievement("ACH_NO_HINT_MEDIUM")
+                    GameState.notificationText = qsTr("New flag unlocked!")
+                    GameState.displayNotification = true
+                    GameState.flag2Unlocked = true
+                }
+            } else if (difficulty === 'hard') {
+                if (!SteamIntegration.isAchievementUnlocked("ACH_NO_HINT_HARD")) {
+                    SteamIntegration.unlockAchievement("ACH_NO_HINT_HARD")
+                    GameState.notificationText = qsTr("New flag unlocked!")
+                    GameState.displayNotification = true
+                    GameState.flag3Unlocked = true
+                }
+            }
+        }
+
+        if (difficulty === 'easy') {
+            if (Math.floor(GameTimer.centiseconds / 100) < 15 && !SteamIntegration.isAchievementUnlocked("ACH_SPEED_DEMON")) {
+                SteamIntegration.unlockAchievement("ACH_SPEED_DEMON")
+                GameState.notificationText = qsTr("New grid animation unlocked!")
+                GameState.displayNotification = true
+                GameState.anim2Unlocked = true
+            }
+            if (GameState.currentHintCount >= 20 && !SteamIntegration.isAchievementUnlocked("ACH_HINT_MASTER")) {
+                SteamIntegration.unlockAchievement("ACH_HINT_MASTER")
+                GameState.notificationText = qsTr("New grid animation unlocked!")
+                GameState.displayNotification = true
+                GameState.anim1Unlocked = true
+            }
+        }
+
+        SteamIntegration.incrementTotalWin()
     }
 
     function toggleFlag(index) {
