@@ -6,7 +6,7 @@ import QtQuick
 AnimatedPopup {
     id: control
     modal: true
-    width: Math.max(pauseLabel.width, resumeButton.width) + 60
+    width: Math.max(pauseLabel.implicitWidth, resumeButton.implicitWidth) + 60
     height: lyt.implicitHeight + 40
     closePolicy: Popup.NoAutoClose
     visible: GameState.paused
