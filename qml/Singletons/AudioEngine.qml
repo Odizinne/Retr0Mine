@@ -5,26 +5,66 @@ import QtMultimedia
 import Odizinne.Retr0Mine
 
 Item {
-    id: control
     property int packIndex: UserSettings.soundPackIndex
     property bool enabled: true
     property bool clickCooldown: false
     property bool remoteClickCooldown: false
+    property string currentAudioDevice: ""
+    property var currentAudioOutput: null
 
     Component.onCompleted: {
+        updateAudioDevice()
+        playSilent()
+    }
 
+    MediaDevices {
+        id: mediaDevices
+        onAudioOutputsChanged: {
+            AudioEngine.updateAudioDevice()
+        }
+    }
+
+    function updateAudioDevice() {
+        const device = mediaDevices.defaultAudioOutput
+
+        if (device.id !== (currentAudioOutput ? currentAudioOutput.id : "")) {
+            LogManager.info("Audio device changed to: " + device.description)
+
+            currentAudioDevice = device.description
+            currentAudioOutput = device
+
+            applyAudioDeviceToAllPlayers(device)
+        }
+    }
+
+    function applyAudioDeviceToAllPlayers(device) {
+        for (let i = 0; i < clickPool.length; i++) {
+            clickPool[i].audioOutput.device = device
+        }
+
+        for (let i = 0; i < remoteClickPool.length; i++) {
+            remoteClickPool[i].audioOutput.device = device
+        }
+
+        winPlayer.audioOutput.device = device
+        loosePlayer.audioOutput.device = device
+        messagePlayer.audioOutput.device = device
+        silentKeepAlive.audioOutput.device = device
+
+        silentKeepAlive.stop()
+        silentKeepAlive.play()
     }
 
     Timer {
         id: cooldownTimer
         interval: 25
-        onTriggered: control.clickCooldown = false
+        onTriggered: AudioEngine.clickCooldown = false
     }
 
     Timer {
         id: remoteCooldownTimer
         interval: 25
-        onTriggered: control.remoteClickCooldown = false
+        onTriggered: AudioEngine.remoteClickCooldown = false
     }
 
     Timer {
@@ -33,10 +73,10 @@ Item {
         repeat: false
         onTriggered: {
             if (!GameState.gameOver) {
-                for (let effect of control.clickPool) {
-                    if (!effect.playing) {
-                        effect.play()
-                        control.clickCooldown = true
+                for (let player of AudioEngine.clickPool) {
+                    if (player.playbackState !== MediaPlayer.PlayingState) {
+                        player.play()
+                        AudioEngine.clickCooldown = true
                         cooldownTimer.restart()
                         return
                     }
@@ -51,10 +91,10 @@ Item {
         repeat: false
         onTriggered: {
             if (!GameState.gameOver) {
-                for (let effect of control.remoteClickPool) {
-                    if (!effect.playing) {
-                        effect.play()
-                        control.remoteClickCooldown = true
+                for (let player of AudioEngine.remoteClickPool) {
+                    if (player.playbackState !== MediaPlayer.PlayingState) {
+                        player.play()
+                        AudioEngine.remoteClickCooldown = true
                         remoteCooldownTimer.restart()
                         return
                     }
@@ -63,63 +103,93 @@ Item {
         }
     }
 
-    property list<SoundEffect> clickPool: [
-        SoundEffect {
-            source: control.getSoundPath("click")
-            volume: UserSettings.volume
+    property list<MediaPlayer> clickPool: [
+        MediaPlayer {
+            source: AudioEngine.getSoundPath("click")
+            audioOutput: AudioOutput {
+                volume: UserSettings.volume
+                device: mediaDevices.defaultAudioOutput
+            }
         },
-        SoundEffect {
-            source: control.getSoundPath("click")
-            volume: UserSettings.volume
+        MediaPlayer {
+            source: AudioEngine.getSoundPath("click")
+            audioOutput: AudioOutput {
+                volume: UserSettings.volume
+                device: mediaDevices.defaultAudioOutput
+            }
         },
-        SoundEffect {
-            source: control.getSoundPath("click")
-            volume: UserSettings.volume
+        MediaPlayer {
+            source: AudioEngine.getSoundPath("click")
+            audioOutput: AudioOutput {
+                volume: UserSettings.volume
+                device: mediaDevices.defaultAudioOutput
+            }
         }
     ]
 
-    property list<SoundEffect> remoteClickPool: [
-        SoundEffect {
-            source: control.getSoundPath("remoteClick")
-            volume: UserSettings.remoteVolume
+    property list<MediaPlayer> remoteClickPool: [
+        MediaPlayer {
+            source: AudioEngine.getSoundPath("remoteClick")
+            audioOutput: AudioOutput {
+                volume: UserSettings.remoteVolume
+                device: mediaDevices.defaultAudioOutput
+            }
         },
-        SoundEffect {
-            source: control.getSoundPath("remoteClick")
-            volume: UserSettings.remoteVolume
+        MediaPlayer {
+            source: AudioEngine.getSoundPath("remoteClick")
+            audioOutput: AudioOutput {
+                volume: UserSettings.remoteVolume
+                device: mediaDevices.defaultAudioOutput
+            }
         },
-        SoundEffect {
-            source: control.getSoundPath("remoteClick")
-            volume: UserSettings.remoteVolume
+        MediaPlayer {
+            source: AudioEngine.getSoundPath("remoteClick")
+            audioOutput: AudioOutput {
+                volume: UserSettings.remoteVolume
+                device: mediaDevices.defaultAudioOutput
+            }
         }
     ]
 
-    SoundEffect {
-        id: winEffect
-        source: control.getSoundPath("win")
-        volume: UserSettings.volume
+    MediaPlayer {
+        id: winPlayer
+        source: AudioEngine.getSoundPath("win")
+        audioOutput: AudioOutput {
+            id: winAudio
+            volume: UserSettings.volume
+            device: mediaDevices.defaultAudioOutput
+        }
     }
 
-    SoundEffect {
-        id: looseEffect
-        source: control.getSoundPath("bomb")
-        volume: UserSettings.volume
+    MediaPlayer {
+        id: loosePlayer
+        source: AudioEngine.getSoundPath("bomb")
+        audioOutput: AudioOutput {
+            id: looseAudio
+            volume: UserSettings.volume
+            device: mediaDevices.defaultAudioOutput
+        }
     }
 
-    SoundEffect {
-        id: messageSound
+    MediaPlayer {
+        id: messagePlayer
         source: "qrc:/sounds/message_received.wav"
-        volume: UserSettings.newChatMessageVolume
+        audioOutput: AudioOutput {
+            id: messageAudio
+            volume: UserSettings.newChatMessageVolume
+            device: mediaDevices.defaultAudioOutput
+        }
     }
 
-    SoundEffect {
-        /*==========================================
-         | prevent sound device sleeping           |
-         | useful for some BT devices              |
-         ==========================================*/
+    MediaPlayer {
         id: silentKeepAlive
         source: "qrc:/sounds/empty.wav"
-        volume: 0.01
-        loops: SoundEffect.Infinite
+        audioOutput: AudioOutput {
+            id: silentAudio
+            volume: 0.01
+            device: mediaDevices.defaultAudioOutput
+        }
+        loops: MediaPlayer.Infinite
     }
 
     function getSoundPath(type) {
@@ -164,17 +234,20 @@ Item {
 
     function playWin() {
         if (UserSettings.volume === 0) return
-        winEffect.play()
+        winPlayer.stop()
+        winPlayer.play()
     }
 
     function playLoose() {
         if (UserSettings.volume === 0) return
-        looseEffect.play()
+        loosePlayer.stop()
+        loosePlayer.play()
     }
 
     function playMessage() {
         if (UserSettings.newChatMessageVolume === 0) return
-        messageSound.play()
+        messagePlayer.stop()
+        messagePlayer.play()
     }
 
     function playSilent() {
