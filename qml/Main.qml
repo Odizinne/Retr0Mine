@@ -420,29 +420,47 @@ ApplicationWindow {
             visible: ComponentsContext.multiplayerChatVisible
         }
 
-        MouseArea {
-            id: zoomHandler
+        PinchArea {
+            id: pinchHandler
             anchors.fill: gameView
             z: gameView.z + 1
-            acceptedButtons: Qt.NoButton
-            propagateComposedEvents: true
-            hoverEnabled: false
 
-            onWheel: function(wheel) {
-                if (wheel.modifiers & Qt.ControlModifier) {
-                    if (wheel.angleDelta.y > 0) {
-                        if (UserSettings.gridScale < 2) {
-                            UserSettings.gridScale = Math.min(2, UserSettings.gridScale + 0.1);
+            property real initialScale: UserSettings.gridScale
+            property real minScale: 1.0
+            property real maxScale: 2.0
+
+            onPinchStarted: {
+                initialScale = UserSettings.gridScale
+            }
+
+            onPinchUpdated: (pinch) => {
+                let newScale = Math.min(maxScale, Math.max(minScale, initialScale * pinch.scale))
+                UserSettings.gridScale = newScale
+            }
+
+            MouseArea {
+                id: zoomHandler
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                propagateComposedEvents: true
+                hoverEnabled: false
+
+                onWheel: function(wheel) {
+                    if (wheel.modifiers & Qt.ControlModifier) {
+                        if (wheel.angleDelta.y > 0) {
+                            if (UserSettings.gridScale < 2) {
+                                UserSettings.gridScale = Math.min(2, UserSettings.gridScale + 0.1)
+                            }
                         }
-                    }
-                    else if (wheel.angleDelta.y < 0) {
-                        if (UserSettings.gridScale > 1) {
-                            UserSettings.gridScale = Math.max(1, UserSettings.gridScale - 0.1);
+                        else if (wheel.angleDelta.y < 0) {
+                            if (UserSettings.gridScale > 1) {
+                                UserSettings.gridScale = Math.max(1, UserSettings.gridScale - 0.1)
+                            }
                         }
+                        wheel.accepted = true
+                    } else {
+                        wheel.accepted = false
                     }
-                    wheel.accepted = true;
-                } else {
-                    wheel.accepted = false;
                 }
             }
         }
