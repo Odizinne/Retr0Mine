@@ -52,7 +52,8 @@ ApplicationWindow {
 
         function onInviteReceived(name, connectData) {
             if (UserSettings.mpShowInviteNotificationInGame) {
-                inviteToast.showInvite(name, connectData);
+                inviteToast.showInvite(name, connectData)
+                root.alert(0)
             }
         }
 
