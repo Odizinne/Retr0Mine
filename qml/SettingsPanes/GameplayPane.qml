@@ -96,14 +96,6 @@ Pane {
                     checked: UserSettings.enableQuestionMarks
                     onCheckedChanged: {
                         UserSettings.enableQuestionMarks = checked
-                        if (!checked) {
-                            for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                                let cell = GridBridge.grid.itemAtIndex(i) as Cell
-                                if (cell && cell.questioned) {
-                                    cell.questioned = false
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -125,14 +117,6 @@ Pane {
                     checked: UserSettings.enableSafeQuestionMarks
                     onCheckedChanged: {
                         UserSettings.enableSafeQuestionMarks = checked
-                        if (!checked) {
-                            for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                                let cell = GridBridge.grid.itemAtIndex(i) as Cell
-                                if (cell && cell.safeQuestioned) {
-                                    cell.safeQuestioned = false
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -275,6 +259,60 @@ Pane {
                             UserSettings.flagShortcut = text.toUpperCase()
                         } else {
                             text = UserSettings.flagShortcut
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                enabled: !GameCore.gamescope
+                Layout.fillWidth: true
+                Layout.preferredHeight: Constants.settingsComponentsHeight
+                Label {
+                    text: qsTr("Question mark key")
+                    Layout.fillWidth: true
+                }
+                TextField {
+                    id: questionmarkKeyField
+                    text: UserSettings.questionedShortcut
+                    Layout.rightMargin: 5
+                    maximumLength: 1
+                    inputMethodHints: Qt.ImhUppercaseOnly
+                    implicitWidth: 50
+                    horizontalAlignment: TextInput.AlignHCenter
+                    font.pixelSize: 16
+                    onEditingFinished: {
+                        if (text.length > 0) {
+                            UserSettings.questionedShortcut = text.toUpperCase()
+                        } else {
+                            text = UserSettings.questionedShortcut
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                enabled: !GameCore.gamescope
+                Layout.fillWidth: true
+                Layout.preferredHeight: Constants.settingsComponentsHeight
+                Label {
+                    text: qsTr("Green question mark key")
+                    Layout.fillWidth: true
+                }
+                TextField {
+                    id: safeQuestionmarkKeyField
+                    text: UserSettings.safeQuestionedShortcut
+                    Layout.rightMargin: 5
+                    maximumLength: 1
+                    inputMethodHints: Qt.ImhUppercaseOnly
+                    implicitWidth: 50
+                    horizontalAlignment: TextInput.AlignHCenter
+                    font.pixelSize: 16
+                    onEditingFinished: {
+                        if (text.length > 0) {
+                            UserSettings.safeQuestionedShortcut = text.toUpperCase()
+                        } else {
+                            text = UserSettings.safeQuestionedShortcut
                         }
                     }
                 }

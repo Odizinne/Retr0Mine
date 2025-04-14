@@ -43,6 +43,8 @@ Settings {
     property bool enableSafeQuestionMarks: false
     property string revealShortcut: "Q"
     property string flagShortcut: "W"
+    property string questionedShortcut: "E"
+    property string safeQuestionedShortcut: "R"
     property bool rumble: true
 
     /*==========================================

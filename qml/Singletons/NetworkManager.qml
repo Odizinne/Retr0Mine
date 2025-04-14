@@ -596,8 +596,20 @@ QtObject {
             handleMultiplayerReveal(cellIndex, NetworkManager.clientName)
             break
 
-        case "flag":
-            handleMultiplayerToggleFlag(cellIndex, true)
+        case "setFlag":
+            handleMultiplayerSetFlagAction(cellIndex, true)
+            break
+
+        case "setQuestionned":
+            handleMultiplayerSetQuestionnedAction(cellIndex, true)
+            break
+
+        case "setSafeQuestionned":
+            handleMultiplayerSetSafeQuestionnedAction(cellIndex, true)
+            break
+
+        case "clearCell":
+            handleMultiplayerClearCellAction(cellIndex, true)
             break
 
         case "revealConnected":
@@ -694,7 +706,7 @@ QtObject {
         }
 
         switch(actionType) {
-        case "flagDenied":
+        case "cellAccessDenied":
             isProcessingNetworkAction = false
             break
 
@@ -729,9 +741,33 @@ QtObject {
             }
             break
 
-        case "flag":
+        case "setFlag":
             try {
-                GridBridge.performToggleFlag(cellIndex)
+                GridBridge.performSetFlag(cellIndex)
+            } catch (e) {
+                console.error("Error processing flag action:", e)
+            }
+            break
+
+        case "setQuestionned":
+            try {
+                GridBridge.performSetQuestionned(cellIndex)
+            } catch (e) {
+                console.error("Error processing flag action:", e)
+            }
+            break
+
+        case "setSafeQuestionned":
+            try {
+                GridBridge.performSetSafeQuestionned(cellIndex)
+            } catch (e) {
+                console.error("Error processing flag action:", e)
+            }
+            break
+
+        case "clearCell":
+            try {
+                GridBridge.performClearCell(cellIndex)
             } catch (e) {
                 console.error("Error processing flag action:", e)
             }
@@ -934,23 +970,72 @@ QtObject {
         return true
     }
 
-    function handleMultiplayerToggleFlag(index, isClientRequest = false) {
+    function handleMultiplayerClearCellAction(index, isClientRequest = false) {
         if (!SteamIntegration.isInMultiplayerGame) {
             return false
         }
 
         if (SteamIntegration.isHost) {
             if (checkCellOwnership(index, isClientRequest)) {
-                GridBridge.performToggleFlag(index)
-                sendCellUpdateToClient(index, "flag")
+                GridBridge.performClearCell(index)
+                sendCellUpdateToClient(index, "clearCell")
             } else if (isClientRequest) {
-                SteamIntegration.sendGameAction("flagDenied", index)
+                SteamIntegration.sendGameAction("cellAccessDenied", index)
             }
         } else {
-            SteamIntegration.sendGameAction("flag", index)
+            SteamIntegration.sendGameAction("clearCell", index)
+        }
+    }
+
+    function handleMultiplayerSetFlagAction(index, isClientRequest = false) {
+        if (!SteamIntegration.isInMultiplayerGame) {
+            return false
         }
 
-        return true
+        if (SteamIntegration.isHost) {
+            if (checkCellOwnership(index, isClientRequest)) {
+                GridBridge.performSetFlag(index)
+                sendCellUpdateToClient(index, "setFlag")
+            } else if (isClientRequest) {
+                SteamIntegration.sendGameAction("cellAccessDenied", index)
+            }
+        } else {
+            SteamIntegration.sendGameAction("setFlag", index)
+        }
+    }
+
+    function handleMultiplayerSetQuestionnedAction(index, isClientRequest = false) {
+        if (!SteamIntegration.isInMultiplayerGame) {
+            return false
+        }
+
+        if (SteamIntegration.isHost) {
+            if (checkCellOwnership(index, isClientRequest)) {
+                GridBridge.performSetQuestionned(index)
+                sendCellUpdateToClient(index, "setQuestionned")
+            } else if (isClientRequest) {
+                SteamIntegration.sendGameAction("cellAccessDenied", index)
+            }
+        } else {
+            SteamIntegration.sendGameAction("setQuestionned", index)
+        }
+    }
+
+    function handleMultiplayerSetSafeQuestionnedAction(index, isClientRequest = false) {
+        if (!SteamIntegration.isInMultiplayerGame) {
+            return false
+        }
+
+        if (SteamIntegration.isHost) {
+            if (checkCellOwnership(index, isClientRequest)) {
+                GridBridge.performSetSafeQuestionned(index)
+                sendCellUpdateToClient(index, "setSafeQuestionned")
+            } else if (isClientRequest) {
+                SteamIntegration.sendGameAction("cellAccessDenied", index)
+            }
+        } else {
+            SteamIntegration.sendGameAction("setSafeQuestionned", index)
+        }
     }
 
     function handleMultiplayerHintRequest() {

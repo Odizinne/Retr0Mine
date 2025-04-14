@@ -526,97 +526,96 @@ Item {
         SteamIntegration.incrementTotalWin()
     }
 
-    function toggleFlag(index) {
+    function clearCell(index) {
         registerPlayerAction()
-        if (NetworkManager.handleMultiplayerToggleFlag(index)) {
+        if (NetworkManager.handleMultiplayerClearCellAction(index)) {
             return
         }
 
-        performToggleFlag(index)
+        performClearCell(index)
     }
 
-    function performToggleFlag(index) {
+    function performClearCell(index) {
         if (GameState.gameOver) return false
-
-        let flagCompletelyRemoved = false
-
         withCell(index, function(cell) {
             if (!cell.revealed) {
-                if (SteamIntegration.isInMultiplayerGame) {
-                    if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
-                        if (GameState.flaggedCount < GameState.mineCount) {
-                            cell.flagged = true
-                            cell.questioned = false
-                            cell.safeQuestioned = false
-                            GameState.flaggedCount++
-                        } else {
-                            cell.flagged = false
-                            cell.questioned = true
-                            cell.safeQuestioned = false
-                        }
-                    } else if (cell.flagged) {
-                        cell.flagged = false
-                        cell.questioned = true
-                        cell.safeQuestioned = false
-                        GameState.flaggedCount--
-                    } else if (cell.questioned) {
-                        cell.questioned = false
-                        flagCompletelyRemoved = true
-                    } else if (cell.safeQuestioned) {
-                        cell.safeQuestioned = false
-                        flagCompletelyRemoved = true
-                    }
+                cell.questioned = false
+                cell.safeQuestioned = false
+                cell.flagged = false
+            }
+        })
+    }
+
+    function setFlag(index) {
+        registerPlayerAction()
+        if (NetworkManager.handleMultiplayerSetFlagAction(index)) {
+            return
+        }
+
+        performSetFlag(index)
+    }
+
+    function performSetFlag(index) {
+        if (GameState.gameOver) return false
+        withCell(index, function(cell) {
+            if (!cell.revealed) {
+                if (!cell.flagged) {
+                    cell.questioned = false
+                    cell.safeQuestioned = false
+                    cell.flagged = true
                 } else {
-                    if (!cell.flagged && !cell.questioned && !cell.safeQuestioned) {
-                        if (GameState.flaggedCount < GameState.mineCount) {
-                            cell.flagged = true
-                            cell.questioned = false
-                            cell.safeQuestioned = false
-                            GameState.flaggedCount++
-                        } else if (UserSettings.enableQuestionMarks) {
-                            cell.flagged = false
-                            cell.questioned = true
-                            cell.safeQuestioned = false
-                        } else if (UserSettings.enableSafeQuestionMarks) {
-                            cell.flagged = false
-                            cell.questioned = false
-                            cell.safeQuestioned = true
-                        }
-                    } else if (cell.flagged) {
-                        if (UserSettings.enableQuestionMarks) {
-                            cell.flagged = false
-                            cell.questioned = true
-                            cell.safeQuestioned = false
-                            GameState.flaggedCount--
-                        } else if (UserSettings.enableSafeQuestionMarks) {
-                            cell.flagged = false
-                            cell.questioned = false
-                            cell.safeQuestioned = true
-                            GameState.flaggedCount--
-                        } else {
-                            cell.flagged = false
-                            cell.questioned = false
-                            cell.safeQuestioned = false
-                            GameState.flaggedCount--
-                            flagCompletelyRemoved = true
-                        }
-                    } else if (cell.questioned) {
-                        if (UserSettings.enableSafeQuestionMarks) {
-                            cell.questioned = false
-                            cell.safeQuestioned = true
-                        } else {
-                            cell.questioned = false
-                            flagCompletelyRemoved = true
-                        }
-                    } else if (cell.safeQuestioned) {
-                        cell.safeQuestioned = false
-                        flagCompletelyRemoved = true
-                    }
+                    cell.flagged = false
                 }
             }
         })
+    }
 
-        return flagCompletelyRemoved
+    function setQuestionned(index) {
+        registerPlayerAction()
+        if (NetworkManager.handleMultiplayerSetQuestionnedAction(index)) {
+            return
+        }
+
+        performSetQuestionned(index)
+    }
+
+    function performSetQuestionned(index) {
+        if (GameState.gameOver) return false
+        withCell(index, function(cell) {
+            if (!cell.revealed) {
+                if (!cell.questioned) {
+                    cell.questioned = true
+                    cell.safeQuestioned = false
+                    cell.flagged = false
+                } else {
+                    cell.questioned = false
+                }
+            }
+        })
+    }
+
+    function setSafeQuestionned(index) {
+        registerPlayerAction()
+        if (NetworkManager.handleMultiplayerSetSafeQuestionnedAction(index)) {
+            return
+        }
+
+        performSetSafeQuestionned(index)
+    }
+
+    function performSetSafeQuestionned(index) {
+        if (GameState.gameOver) return false
+        withCell(index, function(cell) {
+            if (!cell.revealed) {
+                if (!cell.safeQuestioned) {
+                    cell.questioned = false
+                    cell.safeQuestioned = true
+                    cell.flagged = false
+                } else {
+                    cell.safeQuestioned = false
+                }
+            }
+        })
     }
 
     function hasUnrevealedNeighbors(index) {

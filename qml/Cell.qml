@@ -38,6 +38,21 @@ Item {
         }
     }
 
+    Connections {
+        target: UserSettings
+        function onEnableQuestionMarksChanged() {
+            if (!UserSettings.enableQuestionMarks) {
+                cellItem.questioned = false
+            }
+        }
+
+        function onEnableSafeQuestionMarksChanged() {
+            if (!UserSettings.enableQuestionMarks) {
+                cellItem.safeQuestioned = false
+            }
+        }
+    }
+
     function highlightHint() {
         hintAnimation.start();
     }
@@ -568,7 +583,15 @@ Item {
                 if (isRevealClick && canReveal) {
                     GridBridge.reveal(cellItem.index, SteamIntegration.playerName);
                 } else if (isFlagClick) {
-                    GridBridge.toggleFlag(cellItem.index);
+                    if (!cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
+                        GridBridge.setFlag(cellItem.index)
+                    } else if (cellItem.flagged && UserSettings.enableQuestionMarks) {
+                        GridBridge.setQuestionned(cellItem.index)
+                    } else if ((cellItem.questioned && UserSettings.enableSafeQuestionMarks) || (cellItem.flagged && !UserSettings.enableQuestionMarks)) {
+                        GridBridge.setSafeQuestionned(cellItem.index)
+                    } else {
+                        GridBridge.clearCell(cellItem.index)
+                    }
                 }
             }
 
@@ -609,7 +632,27 @@ Item {
             enabled: cellMouseArea.isHovered
             onActivated: {
                 if (!GameState.gameStarted) return
-                GridBridge.toggleFlag(cellItem.index);
+                GridBridge.setFlag(cellItem.index);
+            }
+        }
+
+        Shortcut {
+            sequence: UserSettings.questionedShortcut
+            autoRepeat: false
+            enabled: cellMouseArea.isHovered && UserSettings.enableQuestionMarks
+            onActivated: {
+                if (!GameState.gameStarted) return
+                GridBridge.setQuestionned(cellItem.index);
+            }
+        }
+
+        Shortcut {
+            sequence: UserSettings.safeQuestionedShortcut
+            autoRepeat: false
+            enabled: cellMouseArea.isHovered && UserSettings.enableSafeQuestionMarks
+            onActivated: {
+                if (!GameState.gameStarted) return
+                GridBridge.setSafeQuestionned(cellItem.index);
             }
         }
 
