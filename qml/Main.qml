@@ -612,8 +612,11 @@ ApplicationWindow {
             anchors.bottom: gameView.bottom
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: gameView.contentHeight * gridContainer.scale > gameView.height ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+            policy: {
+                return gameView.contentHeight * gridContainer.scale > gameView.height &&
+                       gameView.contentHeight > gameView.height ?
+                       ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+            }
         }
 
         ScrollBar {
@@ -627,8 +630,11 @@ ApplicationWindow {
             anchors.bottomMargin: -12
             visible: policy === ScrollBar.AlwaysOn
             active: true
-            policy: gameView.contentWidth * gridContainer.scale > gameView.width ?
-                        ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+            policy: {
+                return gameView.contentWidth * gridContainer.scale > gameView.width &&
+                       gameView.contentWidth > gameView.width ?
+                       ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+            }
         }
 
         GridLoadingIndicator {
