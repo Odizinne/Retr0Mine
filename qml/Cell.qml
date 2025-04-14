@@ -604,7 +604,7 @@ Item {
         }
 
         Shortcut {
-            sequence: UserSettings.revealShortcut
+            sequence: UserSettings.flagShortcut
             autoRepeat: false
             enabled: cellMouseArea.isHovered
             onActivated: {
@@ -614,7 +614,7 @@ Item {
         }
 
         Shortcut {
-            sequence: UserSettings.flagShortcut
+            sequence: UserSettings.revealShortcut
             autoRepeat: false
             enabled: cellMouseArea.isHovered
             onActivated: {
