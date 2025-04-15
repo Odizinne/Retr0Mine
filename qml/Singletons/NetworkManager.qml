@@ -985,6 +985,8 @@ QtObject {
         } else {
             SteamIntegration.sendGameAction("clearCell", index)
         }
+
+        return true
     }
 
     function handleMultiplayerSetFlagAction(index, isClientRequest = false) {
@@ -994,6 +996,7 @@ QtObject {
 
         if (SteamIntegration.isHost) {
             if (checkCellOwnership(index, isClientRequest)) {
+                console.log("about to perform local flag")
                 GridBridge.performSetFlag(index)
                 sendCellUpdateToClient(index, "setFlag")
             } else if (isClientRequest) {
@@ -1002,6 +1005,8 @@ QtObject {
         } else {
             SteamIntegration.sendGameAction("setFlag", index)
         }
+
+        return true
     }
 
     function handleMultiplayerSetQuestionedAction(index, isClientRequest = false) {
@@ -1019,6 +1024,8 @@ QtObject {
         } else {
             SteamIntegration.sendGameAction("setQuestioned", index)
         }
+
+        return true
     }
 
     function handleMultiplayerSetSafeQuestionedAction(index, isClientRequest = false) {
@@ -1036,6 +1043,8 @@ QtObject {
         } else {
             SteamIntegration.sendGameAction("setSafeQuestioned", index)
         }
+
+        return true
     }
 
     function handleMultiplayerHintRequest() {
