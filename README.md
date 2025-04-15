@@ -7,22 +7,21 @@
 
 ### Modern UI minesweeper with a lot of configuration that runs on windows and linux.  
 
+![image](.assets/screenshot.png)
+
 **If you like my work, consider supporting me by buying Retr0Mine on Steam!**  
 You'll get access to exclusive features relying on Steam, such as 2 player coop, achievements etc.
 
 [![Available on STEAM](/.assets/available_on_steam.png)](https://store.steampowered.com/app/3478030/Retr0Mine/)
 
-![image](.assets/screenshot.png)
-
-
 ## Download
 
-| OS                     | Platform  | Download                                                                                                       |
-|------------------------|-----------|----------------------------------------------------------------------------------------------------------------|
-| Windows Installer      | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
-| Windows Portable       | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)               |
-| Linux Bundle           | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Linux.zip)                 |
-| SteamDeck installer    | x64       | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/refs/heads/main/tools/Retr0Mine_SteamDeckInstaller.desktop)     |
+| OS                     | Platform  | Compiler   | Download                                                                                                       |
+|------------------------|-----------|------------|----------------------------------------------------------------------------------------------------------------|
+| Windows Installer      | x64       | MSVC 2022  | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
+| Windows Portable       | x64       | MSVC 2022  | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_msvc_64.zip)               |
+| Linux Bundle           | x64       | GCC        | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Linux.zip)                 |
+| SteamDeck installer    | x64       |            | [Download](https://raw.githubusercontent.com/Odizinne/Retr0Mine/refs/heads/main/tools/Retr0Mine_SteamDeckInstaller.desktop)     |
 
 ## Build
 
