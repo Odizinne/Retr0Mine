@@ -17,11 +17,6 @@ You'll get access to exclusive features relying on Steam, such as 2 player coop,
 
 ## Download
 
-**Note:** Steam deck users with firefox should right click on `Download` -> `save file as` and save to desktop.  
-Remove `.download` extension after downloading.  
-You can then click the installer on your desktop.
-After installation you can right click Retr0Mine in your application menu and select `Add to steam` if you want to be able to run it from gamemode.
-
 | OS                     | Platform  | Download                                                                                                       |
 |------------------------|-----------|----------------------------------------------------------------------------------------------------------------|
 | Windows Installer      | x64       | [Download](https://github.com/Odizinne/Retr0Mine/releases/latest/download/Retr0Mine_Installer.exe)             |
