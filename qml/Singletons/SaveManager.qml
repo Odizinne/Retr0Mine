@@ -20,7 +20,7 @@ Item {
         try {
             let data = JSON.parse(saveData)
             if (!data.version || !data.version.startsWith("1.")) {
-                console.error("Incompatible save version")
+                LogManager.error("Incompatible save version")
                 return false
             }
 
@@ -40,7 +40,7 @@ Item {
             GameState.mines = data.gameState.mines
 
             if (!GameLogic.initializeFromSave(GameState.gridSizeX, GameState.gridSizeY, GameState.mineCount, GameState.mines)) {
-                console.error("Failed to initialize game logic from save")
+                LogManager.error("Failed to initialize game logic from save")
                 return false
             }
 
@@ -53,7 +53,7 @@ Item {
             return true
 
         } catch (e) {
-            console.error("Error loading save:", e)
+            LogManager.error("Error loading save: " + e)
             return false
         }
     }

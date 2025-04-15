@@ -692,7 +692,7 @@ Item {
         let cellsToReveal = []
 
         if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0) {
-            console.warn("Invalid parameters in performFloodFillReveal")
+            LogManager.warn("Invalid parameters in performFloodFillReveal")
             return cellsToReveal
         }
 
@@ -753,7 +753,7 @@ Item {
         let cellsToReveal = []
 
         if (index < 0 || gridSizeX <= 0 || gridSizeY <= 0) {
-            console.warn("Invalid parameters in getAdjacentCellsToReveal")
+            LogManager.warn("Invalid parameters in getAdjacentCellsToReveal")
             return cellsToReveal
         }
 
