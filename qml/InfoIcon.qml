@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls.Universal
 import QtQuick.Controls.impl
+import Odizinne.Retr0Mine
 
 IconImage {
     id: control
