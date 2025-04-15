@@ -1,11 +1,13 @@
 #include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
+#include <QLoggingCategory>
 #include <QQuickWindow>
 #include "gamecore.h"
 #include "steamintegration.h"
 
 int main(int argc, char *argv[]) {
+    QLoggingCategory::setFilterRules("qt.multimedia.*=false");
     QGuiApplication app(argc, argv);
     app.setOrganizationName("Odizinne");
     app.setApplicationName("Retr0Mine");
