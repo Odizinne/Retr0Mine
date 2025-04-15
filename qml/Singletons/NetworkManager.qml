@@ -108,7 +108,7 @@ QtObject {
                 }
             }
         } else {
-            console.error(name + " is empty or invalid")
+            LogManager.error(name + " is empty or invalid")
         }
         return resultArray
     }
@@ -139,13 +139,13 @@ QtObject {
 
     function showPingAtCell(cellIndex) {
         if (cellIndex < 0 || cellIndex >= GameState.gridSizeX * GameState.gridSizeY) {
-            console.error("Invalid cell index for ping:", cellIndex)
+            LogManager.error("Invalid cell index for ping: " + cellIndex)
             return
         }
 
         const cell = GridBridge.getCell(cellIndex)
         if (!cell) {
-            console.error("Cannot find cell for ping:", cellIndex)
+            LogManager.error("Cannot find cell for ping: " + cellIndex)
             return
         }
 
@@ -164,7 +164,7 @@ QtObject {
                 pingTimer.destroy()
             })
         } else {
-            console.error("Error creating ping indicator:", pingComponent.errorString())
+            LogManager.error("Error creating ping indicator: " + pingComponent.errorString())
         }
     }
 
@@ -262,7 +262,7 @@ QtObject {
         }
 
         if (!GameState.mines || GameState.mines.length === 0) {
-            console.error("Cannot send empty mines list")
+            LogManager.error("Cannot send empty mines list")
             return
         }
 
@@ -310,7 +310,7 @@ QtObject {
 
     function applyMinesAndCalculateNumbers(minesData) {
         if (!minesData || !minesData.mines) {
-            console.error("Received invalid mines data")
+            LogManager.error("Received invalid mines data")
             lastSyncError = "Invalid mines data"
             syncErrorCount++
             return false
@@ -348,7 +348,7 @@ QtObject {
                 }
             }
         } catch (e) {
-            console.error("Error extracting mines:", e)
+            LogManager.error("Error extracting mines: " + e)
             lastSyncError = "Error extracting mines: " + e.toString()
             syncErrorCount++
             return false
@@ -362,20 +362,20 @@ QtObject {
                     }
                 }
             } catch (e) {
-                console.error("Error in direct property access:", e)
+                LogManager.error("Error in direct property access: " + e)
             }
         }
 
         if (cleanMinesArray.length === 0) {
-            console.error("Failed to extract any valid mine positions")
+            LogManager.error("Failed to extract any valid mine positions")
             lastSyncError = "No valid mine positions extracted"
             syncErrorCount++
             return false
         }
 
         if (cleanMinesArray.length !== Number(minesData.mineCount)) {
-            console.warn("Extracted mine count", cleanMinesArray.length,
-                         "doesn't match expected mine count", minesData.mineCount)
+            LogManager.warn("Extracted mine count " + cleanMinesArray.length +
+                            " doesn't match expected mine count " + minesData.mineCount)
         }
 
         GameState.mineCount = Number(minesData.mineCount) || cleanMinesArray.length
@@ -391,15 +391,15 @@ QtObject {
             if (calculatedNumbers && calculatedNumbers.length === GameState.gridSizeX * GameState.gridSizeY) {
                 GameState.numbers = calculatedNumbers
             } else {
-                console.error("Invalid numbers calculated, expected length:",
-                              GameState.gridSizeX * GameState.gridSizeY,
-                              "got:", calculatedNumbers ? calculatedNumbers.length : 0)
+                LogManager.error("Invalid numbers calculated, expected length: " +
+                                 (GameState.gridSizeX * GameState.gridSizeY) +
+                                 " got: " + (calculatedNumbers ? calculatedNumbers.length : 0))
                 lastSyncError = "Invalid numbers calculated"
                 syncErrorCount++
                 return false
             }
         } catch (e) {
-            console.error("Error calculating numbers:", e)
+            LogManager.error("Error calculating numbers: " + e)
             lastSyncError = "Error calculating numbers: " + e.toString()
             syncErrorCount++
             return false
@@ -432,7 +432,7 @@ QtObject {
 
     function applyGameState(gameState) {
         if (!gameState) {
-            console.error("Received invalid game state")
+            LogManager.error("Received invalid game state")
             lastSyncError = "Received invalid game state"
             syncErrorCount++
             isProcessingNetworkAction = false
@@ -496,7 +496,7 @@ QtObject {
                 }
             }
         } catch (e) {
-            console.error("Error processing chunk:", e)
+            LogManager.error("Error processing chunk: " + e)
         }
 
         receivedChunks++
@@ -556,7 +556,7 @@ QtObject {
                 }
             }
         } else if (syncErrorCount >= maxConsecutiveSyncErrors) {
-            console.error("Too many consecutive sync errors, requesting full sync")
+            LogManager.error("Too many consecutive sync errors, requesting full sync")
             requestFullSync()
         }
     }
@@ -658,7 +658,7 @@ QtObject {
             break
 
         default:
-            console.error("Host received unknown action type:", actionType)
+            LogManager.error("Host received unknown action type: " + actionType)
         }
     }
 
@@ -692,7 +692,7 @@ QtObject {
                 pendingActions.push({type: actionType, index: cellIndex, timestamp: Date.now()})
 
                 if (pendingActions.length > 10) {
-                    console.error("Too many pending actions, requesting mines data again")
+                    LogManager.error("Too many pending actions, requesting mines data again")
                     SteamIntegration.sendGameAction("requestMines", 0)
 
                     if (pendingActions.length > 50) {
@@ -736,7 +736,7 @@ QtObject {
                     GameTimer.start()
                 }
             } catch (e) {
-                console.error("Error processing reveal action:", e)
+                LogManager.error("Error processing reveal action: " + e)
             }
             break
 
@@ -744,7 +744,7 @@ QtObject {
             try {
                 GridBridge.performSetFlag(cellIndex)
             } catch (e) {
-                console.error("Error processing flag action:", e)
+                LogManager.error("Error processing flag action: " + e)
             }
             break
 
@@ -752,7 +752,7 @@ QtObject {
             try {
                 GridBridge.performSetQuestioned(cellIndex)
             } catch (e) {
-                console.error("Error processing flag action:", e)
+                LogManager.error("Error processing flag action: " + e)
             }
             break
 
@@ -760,7 +760,7 @@ QtObject {
             try {
                 GridBridge.performSetSafeQuestioned(cellIndex)
             } catch (e) {
-                console.error("Error processing flag action:", e)
+                LogManager.error("Error processing flag action: " + e)
             }
             break
 
@@ -768,7 +768,7 @@ QtObject {
             try {
                 GridBridge.performClearCell(cellIndex)
             } catch (e) {
-                console.error("Error processing flag action:", e)
+                LogManager.error("Error processing flag action: " + e)
             }
             break
 
@@ -776,7 +776,7 @@ QtObject {
             try {
                 GridBridge.performRevealConnectedCells(cellIndex, NetworkManager.hostName)
             } catch (e) {
-                console.error("Error processing revealConnected action:", e)
+                LogManager.error("Error processing revealConnected action: " + e)
             }
             break
 
@@ -823,7 +823,7 @@ QtObject {
             try {
                 GridBridge.performInitGame()
             } catch (e) {
-                console.error("Error resetting game:", e)
+                LogManager.error("Error resetting game: " + e)
                 GridBridge.initGame()
             }
             break
@@ -846,7 +846,7 @@ QtObject {
                     if (cell && typeof cell.highlightHint === 'function') {
                         cell.highlightHint()
                     } else {
-                        console.warn("Cannot highlight hint for cell", hintData.cell)
+                        LogManager.warn("Cannot highlight hint for cell " + hintData.cell)
                     }
 
                     if (hintData.explanation) {
@@ -858,7 +858,7 @@ QtObject {
                 if (cell && typeof cell.highlightHint === 'function') {
                     cell.highlightHint()
                 } else {
-                    console.warn("Cannot highlight hint for cell", cellIndex)
+                    LogManager.warn("Cannot highlight hint for cell " + cellIndex)
                 }
             }
             GameState.currentHintCount++
@@ -907,7 +907,7 @@ QtObject {
 
                 GridBridge.initGame()
             } else {
-                console.error("Received invalid difficulty index:", cellIndex)
+                LogManager.error("Received invalid difficulty index: " + cellIndex)
             }
             break
 
@@ -920,7 +920,7 @@ QtObject {
             break
 
         default:
-            console.error("Client received unknown action type:", actionType)
+            LogManager.error("Client received unknown action type: " + actionType)
         }
 
         isProcessingNetworkAction = false
