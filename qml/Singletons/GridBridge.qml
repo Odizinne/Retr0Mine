@@ -559,8 +559,6 @@ Item {
         const cell = getCell(index)
         if (cell) {
             if (!cell.revealed) {
-                console.log("performing local flag")
-
                 if (!cell.flagged) {
                     cell.questioned = false
                     cell.safeQuestioned = false

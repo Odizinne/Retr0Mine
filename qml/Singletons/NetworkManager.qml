@@ -993,7 +993,6 @@ QtObject {
 
         if (SteamIntegration.isHost) {
             if (checkCellOwnership(index, isClientRequest)) {
-                console.log("about to perform local flag")
                 GridBridge.performSetFlag(index)
                 sendCellUpdateToClient(index, "setFlag")
             } else if (isClientRequest) {
