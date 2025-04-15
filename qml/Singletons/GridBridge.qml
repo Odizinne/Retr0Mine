@@ -28,15 +28,6 @@ Item {
         return loader.item
     }
 
-    function withCell(index, operation) {
-        const cell = getCell(index)
-        if (cell) {
-            operation(cell)
-            return true
-        }
-        return false
-    }
-
     function setGrid(gridReference) {
         grid = gridReference
     }
@@ -98,9 +89,10 @@ Item {
                 SteamIntegration.sendGameAction("sendHint", JSON.stringify(hintData))
             }
 
-            withCell(mineCell, function(cell) {
+            const cell = getCell(mineCell)
+            if (cell) {
                 cell.highlightHint()
-            })
+            }
 
             if (UserSettings.hintReasoningInChat && explanation && typeof explanation === "string" && explanation.length > 0) {
                 botMessageSent(explanation)
@@ -368,29 +360,32 @@ Item {
         GameState.firstClickRevealed = 0
 
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            withCell(i, function(cell) {
+            const cell = getCell(i)
+            if (cell) {
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
                 cell.safeQuestioned = false
                 cell.isBombClicked = false
                 cell.localPlayerOwns = false
-            })
+            }
         }
 
         GameState.noAnimReset = false
         if (UserSettings.animations && !GameState.difficultyChanged) {
             for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-                withCell(i, function(cell) {
+                const cell = getCell(i)
+                if (cell) {
                     cell.startGridResetAnimation()
-                })
+                }
             }
         }
     }
 
     function revealAllMines() {
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            withCell(i, function(cell) {
+            const cell = getCell(i)
+            if (cell) {
                 if (GameState.mines.includes(i)) {
                     if (!cell.flagged) {
                         cell.questioned = false
@@ -403,7 +398,7 @@ Item {
                         cell.flagged = false
                     }
                 }
-            })
+            }
         }
     }
 
@@ -538,13 +533,15 @@ Item {
 
     function performClearCell(index) {
         if (GameState.gameOver) return false
-        withCell(index, function(cell) {
+
+        const cell = getCell(index)
+        if (cell) {
             if (!cell.revealed) {
                 cell.questioned = false
                 cell.safeQuestioned = false
                 cell.flagged = false
             }
-        })
+        }
     }
 
     function setFlag(index) {
@@ -558,7 +555,9 @@ Item {
 
     function performSetFlag(index) {
         if (GameState.gameOver) return false
-        withCell(index, function(cell) {
+
+        const cell = getCell(index)
+        if (cell) {
             if (!cell.revealed) {
                 console.log("performing local flag")
 
@@ -570,7 +569,7 @@ Item {
                     cell.flagged = false
                 }
             }
-        })
+        }
     }
 
     function setQuestioned(index) {
@@ -584,7 +583,9 @@ Item {
 
     function performSetQuestioned(index) {
         if (GameState.gameOver) return false
-        withCell(index, function(cell) {
+
+        const cell = getCell(index)
+        if (cell) {
             if (!cell.revealed) {
                 if (!cell.questioned) {
                     cell.questioned = true
@@ -594,7 +595,7 @@ Item {
                     cell.questioned = false
                 }
             }
-        })
+        }
     }
 
     function setSafeQuestioned(index) {
@@ -608,7 +609,9 @@ Item {
 
     function performSetSafeQuestioned(index) {
         if (GameState.gameOver) return false
-        withCell(index, function(cell) {
+
+        const cell = getCell(index)
+        if (cell) {
             if (!cell.revealed) {
                 if (!cell.safeQuestioned) {
                     cell.questioned = false
@@ -618,7 +621,7 @@ Item {
                     cell.safeQuestioned = false
                 }
             }
-        })
+        }
     }
 
     function hasUnrevealedNeighbors(index) {

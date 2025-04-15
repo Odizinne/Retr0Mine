@@ -248,7 +248,7 @@ QtObject {
         isReconnecting = false
         syncErrorCount = 0
         lastSyncError = null
-        cellOwnership = ([])
+        cellOwnership = ({})
 
         if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost &&
                 SteamIntegration.connectionState === SteamIntegration.Connected) {
@@ -711,22 +711,21 @@ QtObject {
             break
 
         case "finalReveal":
-            GridBridge.withCell(cellIndex, function(cell) {
-                if (!cell.revealed) {
-                    cell.revealed = true
-                    cell.shouldBeFlat = true
-                    if (cell.button) {
-                        cell.button.flat = true
-                        cell.button.opacity = 1
-                    }
-
-                    if (NetworkManager.safeArrayIncludes(GameState.mines, cellIndex)) {
-                        cell.isBombClicked = true
-                    }
-
-                    GameState.revealedCount++
+            const cell = GridBridge.getCell(cellIndex)
+            if (cell && !cell.revealed) {
+                cell.revealed = true
+                cell.shouldBeFlat = true
+                if (cell.button) {
+                    cell.button.flat = true
+                    cell.button.opacity = 1
                 }
-            })
+
+                if (NetworkManager.safeArrayIncludes(GameState.mines, cellIndex)) {
+                    cell.isBombClicked = true
+                }
+
+                GameState.revealedCount++
+            }
             break
 
         case "reveal":
@@ -819,7 +818,7 @@ QtObject {
             allowClientReveal = false
             pendingActions = []
             isProcessingNetworkAction = false
-            cellOwnership = ([])
+            cellOwnership = ({})
 
             try {
                 GridBridge.performInitGame()
@@ -843,26 +842,24 @@ QtObject {
                 const hintData = JSON.parse(cellIndex)
 
                 if (hintData && hintData.cell !== undefined) {
-                    GridBridge.withCell(hintData.cell, function(cell) {
-                        if (cell && typeof cell.highlightHint === 'function') {
-                            cell.highlightHint()
-                        } else {
-                            console.warn("Cannot highlight hint for cell", hintData.cell)
-                        }
-                    })
+                    const cell = GridBridge.getCell(hintData.cell)
+                    if (cell && typeof cell.highlightHint === 'function') {
+                        cell.highlightHint()
+                    } else {
+                        console.warn("Cannot highlight hint for cell", hintData.cell)
+                    }
 
                     if (hintData.explanation) {
                         GridBridge.botMessageSent(hintData.explanation)
                     }
                 }
             } catch (e) {
-                GridBridge.withCell(cellIndex, function(cell) {
-                    if (cell && typeof cell.highlightHint === 'function') {
-                        cell.highlightHint()
-                    } else {
-                        console.warn("Cannot highlight hint for cell", cellIndex)
-                    }
-                })
+                const cell = GridBridge.getCell(cellIndex)
+                if (cell && typeof cell.highlightHint === 'function') {
+                    cell.highlightHint()
+                } else {
+                    console.warn("Cannot highlight hint for cell", cellIndex)
+                }
             }
             GameState.currentHintCount++
             isProcessingNetworkAction = false
@@ -881,7 +878,7 @@ QtObject {
             allowClientReveal = false
             pendingActions = []
             isProcessingNetworkAction = false
-            cellOwnership = ([])
+            cellOwnership = ({})
 
             GameState.difficultyChanged = true
             GridBridge.initGame()
@@ -906,7 +903,7 @@ QtObject {
                 sessionRunning = false
                 pendingActions = []
                 isProcessingNetworkAction = false
-                cellOwnership = ([])
+                cellOwnership = ({})
 
                 GridBridge.initGame()
             } else {
@@ -1215,7 +1212,7 @@ QtObject {
         pendingInitialActions = []
         pendingActions = []
         isProcessingNetworkAction = false
-        cellOwnership = ([])
+        cellOwnership = ({})
 
         GameState.difficultyChanged = true
         GridBridge.initGame()
@@ -1257,4 +1254,3 @@ QtObject {
         }
     }
 }
-

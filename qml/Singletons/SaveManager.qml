@@ -95,39 +95,44 @@ Item {
         GameState.currentHintCount = data.gameState.currentHintCount || 0
 
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
-            GridBridge.withCell(i, function(cell) {
+            const cell = GridBridge.getCell(i)
+            if (cell) {
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
                 cell.safeQuestioned = false
-            })
+            }
         }
 
         data.gameState.revealedCells.forEach(index => {
-            GridBridge.withCell(index, function(cell) {
+            const cell = GridBridge.getCell(index)
+            if (cell) {
                 cell.revealed = true
-            })
+            }
         })
 
         data.gameState.flaggedCells.forEach(index => {
-            GridBridge.withCell(index, function(cell) {
+            const cell = GridBridge.getCell(index)
+            if (cell) {
                 cell.flagged = true
-            })
+            }
         })
 
         if (data.gameState.questionedCells) {
             data.gameState.questionedCells.forEach(index => {
-                GridBridge.withCell(index, function(cell) {
+                const cell = GridBridge.getCell(index)
+                if (cell) {
                     cell.questioned = true
-                })
+                }
             })
         }
 
         if (data.gameState.safeQuestionedCells) {
             data.gameState.safeQuestionedCells.forEach(index => {
-                GridBridge.withCell(index, function(cell) {
+                const cell = GridBridge.getCell(index)
+                if (cell) {
                     cell.safeQuestioned = true
-                })
+                }
             })
         }
 
