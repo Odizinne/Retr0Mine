@@ -307,65 +307,55 @@ ralentir la génération sur les grilles larges</translation>
         <translation>Activer les points d&apos;intérrogation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="116"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="108"/>
         <source>Enable green question marks</source>
         <translation>Activer les points d&apos;intérrogation verts</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="145"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="129"/>
         <source>Load last game on start</source>
         <translation>Charger la dernière partie au démarrage</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="166"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="150"/>
         <source>Show hint reasoning in chat</source>
         <translation>Expliquer la logique des indices dans le chat</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="175"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="159"/>
         <source>Work in progress
 Can be inaccurate</source>
         <translation>En cours de réalisation
 Peut être imprécis</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="191"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="175"/>
         <source>SteamDeck controls</source>
         <translation>Contrôles SteamDeck</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="196"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="180"/>
         <source>Remap</source>
         <translation>Réassigner</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="208"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="192"/>
         <source>Haptic fedback</source>
         <translation>Vibrations</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="234"/>
-        <source>Reveal key</source>
-        <translation>Touche pour révéler</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="261"/>
-        <source>Flag key</source>
-        <translation>Touche pour poser un drapeau</translation>
     </message>
 </context>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="470"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="477"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="484"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="486"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="493"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="500"/>
         <source>New flag unlocked!</source>
         <translation>Nouveau drapeau débloqué!</translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="494"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="500"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="510"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="516"/>
         <source>New grid animation unlocked!</source>
         <translation>Nouvelle animation de grille débloquée!</translation>
     </message>
@@ -465,32 +455,32 @@ Peut être imprécis</translation>
         <translation>Visionneur de journaux</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="93"/>
+        <location filename="../qml/LogWindow.qml" line="99"/>
         <source>Log Files:</source>
         <translation>Fichiers:</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="108"/>
+        <location filename="../qml/LogWindow.qml" line="114"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="113"/>
+        <location filename="../qml/LogWindow.qml" line="119"/>
         <source>Live Log</source>
         <translation>Session en cours</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="128"/>
+        <location filename="../qml/LogWindow.qml" line="134"/>
         <source>Auto-scroll</source>
         <translation>Défilement automatique</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="166"/>
+        <location filename="../qml/LogWindow.qml" line="172"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/LogWindow.qml" line="172"/>
+        <location filename="../qml/LogWindow.qml" line="178"/>
         <source>Clear Buffer</source>
         <translation>Effacer la mémoire tampon</translation>
     </message>
@@ -1158,62 +1148,92 @@ Peut être imprécis</translation>
 <context>
     <name>ShortcutsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="23"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="158"/>
         <source>Zoom</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="19"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="154"/>
         <source>Fullscreen</source>
         <translation>Plein écran</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="24"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="18"/>
+        <source>Gameplay</source>
+        <translation>Gameplay</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="145"/>
+        <source>Global</source>
+        <translation>Raccourcis globaux</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="159"/>
         <source>Ctrl + Wheel</source>
         <translation>Ctrl + Molette</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="28"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="163"/>
         <source>G / Mouse middle</source>
         <translation>G / Souris milieu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="31"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="166"/>
         <source>New game</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="35"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="170"/>
         <source>Save game</source>
         <translation>Sauver</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="39"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="174"/>
         <source>Load game</source>
         <translation>Charger</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="43"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="178"/>
         <source>Open settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="47"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="182"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="27"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="162"/>
         <source>Signal a cell</source>
         <translation>Signaler une cellule</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="51"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="31"/>
+        <source>Reveal</source>
+        <translation>Révéler</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="61"/>
+        <source>Flag</source>
+        <translation>Drapeau</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="91"/>
+        <source>Question mark</source>
+        <translation>Point d&apos;interrogation</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="121"/>
+        <source>Green question mark</source>
+        <translation>Point d&apos;interrogation vert</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="186"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="55"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="190"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
@@ -1249,7 +1269,7 @@ Peut être imprécis</translation>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="190"/>
+        <location filename="../qml/TopBar.qml" line="194"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
