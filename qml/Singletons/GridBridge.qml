@@ -111,6 +111,7 @@ Item {
     }
 
     function revealConnectedCells(index) {
+        registerPlayerAction()
         if (NetworkManager.handleMultiplayerRevealConnected(index)) {
             return
         }
