@@ -571,16 +571,16 @@ Item {
         })
     }
 
-    function setQuestionned(index) {
+    function setQuestioned(index) {
         registerPlayerAction()
-        if (NetworkManager.handleMultiplayerSetQuestionnedAction(index)) {
+        if (NetworkManager.handleMultiplayerSetQuestionedAction(index)) {
             return
         }
 
-        performSetQuestionned(index)
+        performSetQuestioned(index)
     }
 
-    function performSetQuestionned(index) {
+    function performSetQuestioned(index) {
         if (GameState.gameOver) return false
         withCell(index, function(cell) {
             if (!cell.revealed) {
@@ -595,16 +595,16 @@ Item {
         })
     }
 
-    function setSafeQuestionned(index) {
+    function setSafeQuestioned(index) {
         registerPlayerAction()
-        if (NetworkManager.handleMultiplayerSetSafeQuestionnedAction(index)) {
+        if (NetworkManager.handleMultiplayerSetSafeQuestionedAction(index)) {
             return
         }
 
-        performSetSafeQuestionned(index)
+        performSetSafeQuestioned(index)
     }
 
-    function performSetSafeQuestionned(index) {
+    function performSetSafeQuestioned(index) {
         if (GameState.gameOver) return false
         withCell(index, function(cell) {
             if (!cell.revealed) {

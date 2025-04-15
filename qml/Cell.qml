@@ -586,9 +586,9 @@ Item {
                     if (!cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
                         GridBridge.setFlag(cellItem.index)
                     } else if (cellItem.flagged && UserSettings.enableQuestionMarks) {
-                        GridBridge.setQuestionned(cellItem.index)
+                        GridBridge.setQuestioned(cellItem.index)
                     } else if ((cellItem.questioned && UserSettings.enableSafeQuestionMarks) || (cellItem.flagged && !UserSettings.enableQuestionMarks)) {
-                        GridBridge.setSafeQuestionned(cellItem.index)
+                        GridBridge.setSafeQuestioned(cellItem.index)
                     } else {
                         GridBridge.clearCell(cellItem.index)
                     }
@@ -642,7 +642,7 @@ Item {
             enabled: cellMouseArea.isHovered && UserSettings.enableQuestionMarks
             onActivated: {
                 if (!GameState.gameStarted) return
-                GridBridge.setQuestionned(cellItem.index);
+                GridBridge.setQuestioned(cellItem.index);
             }
         }
 
@@ -652,7 +652,7 @@ Item {
             enabled: cellMouseArea.isHovered && UserSettings.enableSafeQuestionMarks
             onActivated: {
                 if (!GameState.gameStarted) return
-                GridBridge.setSafeQuestionned(cellItem.index);
+                GridBridge.setSafeQuestioned(cellItem.index);
             }
         }
 
