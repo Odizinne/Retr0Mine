@@ -165,6 +165,10 @@ Item {
         from: 0
         to: GameState.mineCount
         value: GameLogic.minesPlaced
+        MouseArea {
+            anchors.fill: parent
+            onClicked: GridBridge.cancelGeneration()
+        }
     }
 
     NfButton {
