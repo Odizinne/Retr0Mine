@@ -3,7 +3,7 @@ import Odizinne.Retr0Mine
 import QtQuick
 
 Menu {
-    topMargin: 58
+    topMargin: 35
     id: menu
     width: 150
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent

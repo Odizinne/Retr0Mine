@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.impl
 import Odizinne.Retr0Mine
 
-Item {
+ToolBar {
     id: control
     height: 35
 
@@ -46,10 +46,12 @@ Item {
 
         RowLayout {
             id: leftLayout
-            NfButton {
+            ToolButton {
                 id: menuButton
                 Layout.preferredWidth: 35
                 Layout.preferredHeight: 35
+                text: "≡"
+                font.pixelSize: 34
                 
                 onClicked: {
                     mainMenu.visible = !mainMenu.visible
@@ -57,17 +59,9 @@ Item {
                 MainMenu {
                     id: mainMenu
                 }
-
-                IconImage {
-                    anchors.fill: parent
-                    source: "qrc:/icons/menu.png"
-                    color: Constants.foregroundColor
-                    sourceSize.height: 18
-                    sourceSize.width: 18
-                }
             }
 
-            NfButton {
+            ToolButton {
                 id: signalButton
                 visible: SteamIntegration.isP2PConnected
                 Layout.preferredHeight: 35
@@ -212,7 +206,7 @@ Item {
         RowLayout {
             id: rightLayout
 
-            NfButton {
+            ToolButton {
                 id: mineButton
                 Layout.preferredHeight: 35
                 Layout.preferredWidth: mineCounter.implicitWidth + 20
@@ -241,7 +235,7 @@ Item {
                 }
             }
 
-            NfButton {
+            ToolButton {
                 id: chatButton
                 Layout.preferredHeight: 35
                 visible: SteamIntegration.isP2PConnected || UserSettings.hintReasoningInChat

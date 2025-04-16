@@ -399,7 +399,7 @@ ApplicationWindow {
 
     Item {
         anchors.fill: parent
-        anchors.margins: 12
+        anchors.bottomMargin: 12
         TopBar {
             id: topBar
             anchors {
@@ -474,7 +474,8 @@ ApplicationWindow {
                 bottom: parent.bottom
                 top: topBar.bottom
                 topMargin: 12
-                rightMargin: ComponentsContext.multiplayerChatVisible ? 12 : 0
+                rightMargin: ComponentsContext.multiplayerChatVisible ? 24 : 12
+                leftMargin: 12
             }
             layer.enabled: GameState.paused
             layer.effect: MultiEffect {
@@ -695,7 +696,7 @@ ApplicationWindow {
          | 12 = topBar margin                      |
          ==========================================*/
         if (visibility === ApplicationWindow.Windowed) {
-            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 35 + 24 + 12
+            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 35 + 24
             let availableHeight = GameCore.getCurrentMonitorAvailableHeight(root)
             return Math.min(baseHeight, availableHeight * 0.9)
         }
