@@ -56,8 +56,9 @@ ToolBar {
                 font.pixelSize: 34
 
                 onClicked: {
-                    mainMenu.visible = !mainMenu.visible
+                    ComponentsContext.mainMenuVisible = !ComponentsContext.mainMenuVisible
                 }
+
                 MainMenu {
                     id: mainMenu
                 }

@@ -430,10 +430,10 @@ ApplicationWindow {
                     leftMargin: 12
                     rightMargin: multiplayerChat.visible ? 12 : 12
                 }
-                layer.enabled: GameState.paused
+                layer.enabled: GameState.paused || ComponentsContext.mainMenuVisible
                 layer.effect: MultiEffect {
                     blurEnabled: true
-                    blur: GameState.paused ? 1 : 0
+                    blur: GameState.paused || ComponentsContext.mainMenuVisible ? 1 : 0
                     blurMultiplier: 0.3
                 }
                 contentWidth: gridContainer.width - (UserSettings.cellSpacing * 2)
