@@ -400,247 +400,213 @@ ApplicationWindow {
     Item {
         anchors.fill: parent
         anchors.bottomMargin: 12
+
         TopBar {
             id: topBar
             anchors {
                 left: parent.left
-                right: multiplayerChat.visible ? multiplayerChat.left : parent.right
-                top: parent.top
-                rightMargin: ComponentsContext.multiplayerChatVisible ? 12 : 0
-            }
-        }
-
-        MultiplayerChat {
-            id: multiplayerChat
-            anchors {
-                top: parent.top
                 right: parent.right
-                bottom: parent.bottom
-            }
-            width: 300
-            visible: ComponentsContext.multiplayerChatVisible
-        }
-
-        PinchArea {
-            id: pinchHandler
-            anchors.fill: gameView
-            z: gameView.z + 1
-
-            property real initialScale: UserSettings.gridScale
-            property real minScale: 1.0
-            property real maxScale: 2.0
-
-            onPinchStarted: {
-                initialScale = UserSettings.gridScale
-            }
-
-            onPinchUpdated: (pinch) => {
-                let newScale = Math.min(maxScale, Math.max(minScale, initialScale * pinch.scale))
-                UserSettings.gridScale = newScale
-            }
-
-            MouseArea {
-                id: zoomHandler
-                anchors.fill: parent
-                acceptedButtons: Qt.NoButton
-                propagateComposedEvents: true
-                hoverEnabled: false
-
-                onWheel: function(wheel) {
-                    if (wheel.modifiers & Qt.ControlModifier) {
-                        if (wheel.angleDelta.y > 0) {
-                            if (UserSettings.gridScale < 2) {
-                                UserSettings.gridScale = Math.min(2, UserSettings.gridScale + 0.1)
-                            }
-                        }
-                        else if (wheel.angleDelta.y < 0) {
-                            if (UserSettings.gridScale > 1) {
-                                UserSettings.gridScale = Math.max(1, UserSettings.gridScale - 0.1)
-                            }
-                        }
-                        wheel.accepted = true
-                    } else {
-                        wheel.accepted = false
-                    }
-                }
+                top: parent.top
             }
         }
 
-        Flickable {
-            id: gameView
+        Item {
+            id: contentArea
             anchors {
                 left: parent.left
-                right: multiplayerChat.visible ? multiplayerChat.left : parent.right
-                bottom: parent.bottom
+                right: parent.right
                 top: topBar.bottom
+                bottom: parent.bottom
                 topMargin: 12
-                rightMargin: ComponentsContext.multiplayerChatVisible ? 24 : 12
-                leftMargin: 12
             }
-            layer.enabled: GameState.paused
-            layer.effect: MultiEffect {
-                blurEnabled: true
-                blur: GameState.paused ? 1 : 0
-                blurMultiplier: 0.3
-            }
-            contentWidth: gridContainer.width - (UserSettings.cellSpacing * 2)
-            contentHeight: gridContainer.height - (UserSettings.cellSpacing * 2)
-            clip: true
-            enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
-                     !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
-            opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) ? 1 : 0
-            ScrollBar.vertical: defaultVerticalScrollBar
-            ScrollBar.horizontal: defaultHorizontalScrollBar
-            interactive: true
-            boundsBehavior: Flickable.StopAtBounds
-            Behavior on opacity {
-                enabled: UserSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
-                NumberAnimation {
-                    duration: 300
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            Item {
-                id: gridContainer
-                anchors.centerIn: parent
-                scale: UserSettings.gridScale
-                width: Math.max(grid.width * scale, gameView.width)
-                height: Math.max(grid.height * scale, gameView.height)
 
-                Behavior on scale {
+            Flickable {
+                id: gameView
+                anchors {
+                    left: parent.left
+                    right: multiplayerChat.visible ? multiplayerChat.left : parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                    leftMargin: 12
+                    rightMargin: multiplayerChat.visible ? 12 : 12
+                }
+                layer.enabled: GameState.paused
+                layer.effect: MultiEffect {
+                    blurEnabled: true
+                    blur: GameState.paused ? 1 : 0
+                    blurMultiplier: 0.3
+                }
+                contentWidth: gridContainer.width - (UserSettings.cellSpacing * 2)
+                contentHeight: gridContainer.height - (UserSettings.cellSpacing * 2)
+                clip: true
+                enabled: GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY) &&
+                         !(SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost && !NetworkManager.clientGridReady)
+                opacity: (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) ? 1 : 0
+                ScrollBar.vertical: defaultVerticalScrollBar
+                ScrollBar.horizontal: defaultHorizontalScrollBar
+                interactive: true
+                boundsBehavior: Flickable.StopAtBounds
+                Behavior on opacity {
+                    enabled: UserSettings.animations && (gameView.opacity === 0 || GameState.paused || gameView.opacity === 1)
                     NumberAnimation {
-                        duration: 100
-                        easing.type: Easing.OutQuad
+                        duration: 300
+                        easing.type: Easing.InOutQuad
                     }
                 }
-
-                GameGrid {
-                    id: grid
-                    visible: UserSettings.firstRunCompleted
+                Item {
+                    id: gridContainer
                     anchors.centerIn: parent
-                    width: GameState.cellSize * GameState.gridSizeX
-                    height: GameState.cellSize * GameState.gridSizeY
-                    Component.onCompleted: {
-                        GridBridge.setGrid(grid)
-                    }
-                    delegate: Loader {
-                        id: cellLoader
-                        asynchronous: true
-                        required property int index
-                        readonly property int row: Math.floor(index / GameState.gridSizeX)
-                        readonly property int col: index % GameState.gridSizeX
-                        readonly property real cellSize: GameState.cellSize
-                        readonly property real xPos: col * cellSize
-                        readonly property real yPos: row * cellSize
+                    scale: UserSettings.gridScale
+                    width: Math.max(grid.width * scale, gameView.width)
+                    height: Math.max(grid.height * scale, gameView.height)
 
-                        readonly property bool isInViewport: {
-                            let viewportLeft = gameView.contentX / gridContainer.scale
-                            let viewportTop = gameView.contentY / gridContainer.scale
-                            let viewportRight = viewportLeft + (gameView.width / gridContainer.scale)
-                            let viewportBottom = viewportTop + (gameView.height / gridContainer.scale)
-
-                            let margin = 3 * cellSize
-                            viewportLeft -= margin
-                            viewportTop -= margin
-                            viewportRight += margin
-                            viewportBottom += margin
-
-                            return (xPos + cellSize > viewportLeft &&
-                                    xPos < viewportRight &&
-                                    yPos + cellSize > viewportTop &&
-                                    yPos < viewportBottom)
+                    Behavior on scale {
+                        NumberAnimation {
+                            duration: 100
+                            easing.type: Easing.OutQuad
                         }
+                    }
 
-                        visible: isInViewport
-                        sourceComponent: Cell {
-                            id: cell
-                            index: cellLoader.index
+                    GameGrid {
+                        id: grid
+                        visible: UserSettings.firstRunCompleted
+                        anchors.centerIn: parent
+                        width: GameState.cellSize * GameState.gridSizeX
+                        height: GameState.cellSize * GameState.gridSizeY
+                        Component.onCompleted: {
+                            GridBridge.setGrid(grid)
+                        }
+                        delegate: Loader {
+                            id: cellLoader
+                            asynchronous: true
+                            required property int index
+                            readonly property int row: Math.floor(index / GameState.gridSizeX)
+                            readonly property int col: index % GameState.gridSizeX
+                            readonly property real cellSize: GameState.cellSize
+                            readonly property real xPos: col * cellSize
+                            readonly property real yPos: row * cellSize
+
+                            readonly property bool isInViewport: {
+                                let viewportLeft = gameView.contentX / gridContainer.scale
+                                let viewportTop = gameView.contentY / gridContainer.scale
+                                let viewportRight = viewportLeft + (gameView.width / gridContainer.scale)
+                                let viewportBottom = viewportTop + (gameView.height / gridContainer.scale)
+
+                                let margin = 3 * cellSize
+                                viewportLeft -= margin
+                                viewportTop -= margin
+                                viewportRight += margin
+                                viewportBottom += margin
+
+                                return (xPos + cellSize > viewportLeft &&
+                                        xPos < viewportRight &&
+                                        yPos + cellSize > viewportTop &&
+                                        yPos < viewportBottom)
+                            }
+
+                            visible: isInViewport
+                            sourceComponent: Cell {
+                                id: cell
+                                index: cellLoader.index
+                            }
                         }
                     }
                 }
+
+                MultiplayerErrorPopup {
+                    anchors.centerIn: gameView
+                }
+
+                RulesPopup {
+                    anchors.centerIn: gameView
+                }
+
+                PostgamePopup {
+                    anchors.centerIn: gameView
+                }
+
+                LoadPopup {
+                    anchors.centerIn: gameView
+                }
+
+                SavePopup {
+                    anchors.centerIn: gameView
+                }
+
+                PausePopup {
+                    anchors.centerIn: gameView
+                }
+
+                PrivateSessionPopup {
+                    anchors.centerIn: gameView
+                }
+
+                AboutPopup {
+                    anchors.centerIn: gameView
+                }
+
+                PlayerLeftPopup {
+                    id: playerLeftPopup
+                    anchors.centerIn: gameView
+                }
+
+                LeaderboardPopup {
+                    id: leaderboardWindow
+                    anchors.centerIn: gameView
+                }
             }
 
-            MultiplayerErrorPopup {
-                anchors.centerIn: gameView
+            MultiplayerChat {
+                id: multiplayerChat
+                anchors {
+                    right: parent.right
+                    top: parent.top
+                    bottom: parent.bottom
+                    rightMargin: 12
+                }
+                width: 300
+                visible: ComponentsContext.multiplayerChatVisible
             }
 
-            RulesPopup {
-                anchors.centerIn: gameView
+            ScrollBar {
+                id: defaultVerticalScrollBar
+                enabled: gameView.enabled
+                opacity: gameView.opacity
+                orientation: Qt.Vertical
+                anchors.right: gameView.right
+                anchors.rightMargin: -12
+                anchors.top: gameView.top
+                anchors.bottom: gameView.bottom
+                visible: policy === ScrollBar.AlwaysOn
+                active: true
+                policy: {
+                    return gameView.contentHeight * gridContainer.scale > gameView.height &&
+                           gameView.contentHeight > gameView.height ?
+                           ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                }
             }
 
-            PostgamePopup {
-                anchors.centerIn: gameView
+            ScrollBar {
+                id: defaultHorizontalScrollBar
+                enabled: gameView.enabled
+                opacity: gameView.opacity
+                orientation: Qt.Horizontal
+                anchors.left: gameView.left
+                anchors.right: gameView.right
+                anchors.bottom: gameView.bottom
+                anchors.bottomMargin: -12
+                visible: policy === ScrollBar.AlwaysOn
+                active: true
+                policy: {
+                    return gameView.contentWidth * gridContainer.scale > gameView.width &&
+                           gameView.contentWidth > gameView.width ?
+                           ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                }
             }
 
-            LoadPopup {
-                anchors.centerIn: gameView
+            GridLoadingIndicator {
+                anchors.fill: gameView
             }
-
-            SavePopup {
-                anchors.centerIn: gameView
-            }
-
-            PausePopup {
-                anchors.centerIn: gameView
-            }
-
-            PrivateSessionPopup {
-                anchors.centerIn: gameView
-            }
-
-            AboutPopup {
-                anchors.centerIn: gameView
-            }
-
-            PlayerLeftPopup {
-                id: playerLeftPopup
-                anchors.centerIn: gameView
-            }
-
-            LeaderboardPopup {
-                id: leaderboardWindow
-                anchors.centerIn: gameView
-            }
-        }
-
-        ScrollBar {
-            id: defaultVerticalScrollBar
-            enabled: gameView.enabled
-            opacity: gameView.opacity
-            orientation: Qt.Vertical
-            anchors.right: gameView.right
-            anchors.rightMargin: -12
-            anchors.top: gameView.top
-            anchors.bottom: gameView.bottom
-            visible: policy === ScrollBar.AlwaysOn
-            active: true
-            policy: {
-                return gameView.contentHeight * gridContainer.scale > gameView.height &&
-                       gameView.contentHeight > gameView.height ?
-                       ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-            }
-        }
-
-        ScrollBar {
-            id: defaultHorizontalScrollBar
-            enabled: gameView.enabled
-            opacity: gameView.opacity
-            orientation: Qt.Horizontal
-            anchors.left: gameView.left
-            anchors.right: gameView.right
-            anchors.bottom: gameView.bottom
-            anchors.bottomMargin: -12
-            visible: policy === ScrollBar.AlwaysOn
-            active: true
-            policy: {
-                return gameView.contentWidth * gridContainer.scale > gameView.width &&
-                       gameView.contentWidth > gameView.width ?
-                       ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-            }
-        }
-
-        GridLoadingIndicator {
-            anchors.fill: gameView
         }
     }
 
