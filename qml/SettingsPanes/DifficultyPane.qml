@@ -252,7 +252,6 @@ Pane {
                     Layout.rightMargin: 5
                     from: 1
                     to: 25
-                    editable: true
 
                     Component.onCompleted: {
                         value = Math.round((UserSettings.customMines / (widthSpinBox.value * heightSpinBox.value)) * 100)
@@ -261,14 +260,6 @@ Pane {
                     onValueChanged: {
                         const mineCount = Math.round((widthSpinBox.value * heightSpinBox.value) * value / 100)
                         UserSettings.customMines = mineCount
-                    }
-
-                    textFromValue: function(value, locale) {
-                        return value + "%"
-                    }
-
-                    valueFromText: function(text, locale) {
-                        return parseInt(text.replace("%", ""))
                     }
                 }
             }
@@ -284,6 +275,11 @@ Pane {
             onClicked: {
                 if (previousCustomWidth !== UserSettings.customWidth || previousCustomHeight !== UserSettings.customHeight) {
                     GridBridge.cellsCreated = 0
+                }
+
+                if (UserSettings.mineDensity) {
+                    const mineCount = Math.round((UserSettings.customWidth * UserSettings.customHeight) * percentSpinBox.value / 100)
+                    UserSettings.customMines = mineCount
                 }
 
                 GameState.gridSizeX = UserSettings.customWidth
