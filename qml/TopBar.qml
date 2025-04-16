@@ -6,7 +6,7 @@ import Odizinne.Retr0Mine
 
 ToolBar {
     id: control
-    height: 35
+    height: 40
 
     Connections {
         target: SteamIntegration
@@ -46,13 +46,15 @@ ToolBar {
 
         RowLayout {
             id: leftLayout
+            anchors.fill: parent // Add this to properly fill the parent item
+
             ToolButton {
                 id: menuButton
-                Layout.preferredWidth: 35
-                Layout.preferredHeight: 35
+                Layout.preferredWidth: 40
+                Layout.preferredHeight: 40
                 text: "≡"
                 font.pixelSize: 34
-                
+
                 onClicked: {
                     mainMenu.visible = !mainMenu.visible
                 }
@@ -64,8 +66,8 @@ ToolBar {
             ToolButton {
                 id: signalButton
                 visible: SteamIntegration.isP2PConnected
-                Layout.preferredHeight: 35
-                Layout.preferredWidth: 35
+                Layout.preferredHeight: 40
+                Layout.preferredWidth: 40
                 onClicked: GameState.nextClickIsSignal = !GameState.nextClickIsSignal
 
                 IconImage {
@@ -90,7 +92,7 @@ ToolBar {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: coopFriendLabel.width + coopAvatarImage.width + 8
-        height: 35
+        height: 40
 
         Image {
             id: coopAvatarImage
@@ -205,10 +207,12 @@ ToolBar {
 
         RowLayout {
             id: rightLayout
+            anchors.fill: parent // Add this to properly fill the parent item
+            anchors.rightMargin: 0 // Ensures the layout properly aligns to the right edge
 
             ToolButton {
                 id: mineButton
-                Layout.preferredHeight: 35
+                Layout.preferredHeight: 40
                 Layout.preferredWidth: mineCounter.implicitWidth + 20
                 font.pixelSize: 18
                 font.bold: true
@@ -237,9 +241,9 @@ ToolBar {
 
             ToolButton {
                 id: chatButton
-                Layout.preferredHeight: 35
+                Layout.preferredHeight: 40
                 visible: SteamIntegration.isP2PConnected || UserSettings.hintReasoningInChat
-                Layout.preferredWidth: 35
+                Layout.preferredWidth: 40
                 onClicked: ComponentsContext.multiplayerChatVisible = !ComponentsContext.multiplayerChatVisible
                 highlighted: ComponentsContext.multiplayerChatVisible
                 property bool hasNewMessages: false

@@ -696,7 +696,7 @@ ApplicationWindow {
          | 12 = topBar margin                      |
          ==========================================*/
         if (visibility === ApplicationWindow.Windowed) {
-            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 35 + 24
+            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 40 + 24
             let availableHeight = GameCore.getCurrentMonitorAvailableHeight(root)
             return Math.min(baseHeight, availableHeight * 0.9)
         }
