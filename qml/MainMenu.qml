@@ -8,9 +8,12 @@ import QtQuick.Templates as T
 
 Drawer {
     id: menuDrawer
-    width: 220
+    width: 190
     height: parent.height
     edge: Qt.LeftEdge
+    background: Rectangle {
+        color: Constants.settingsPaneColor
+    }
 
     T.Overlay.modal: Rectangle {
         color: menuDrawer.Universal.altMediumLowColor
@@ -19,11 +22,6 @@ Drawer {
     T.Overlay.modeless: Rectangle {
         color: menuDrawer.Universal.baseLowColor
     }
-
-    //background: Rectangle {
-    //    color: Universal.background
-    //    anchors.fill: parent
-    //}
 
     ScrollView {
         anchors.fill: parent
@@ -34,94 +32,62 @@ Drawer {
             width: parent.width
             spacing: 2
 
-            // Header
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 40
-                color: Universal.accent
-
-                Label {
-                    anchors.centerIn: parent
-                    text: qsTr("Menu")
-                    font.pixelSize: 18
-                    font.bold: true
-                    color: Universal.foreground
-                }
-            }
-
-            // Game section
             ItemDelegate {
                 Layout.fillWidth: true
-                text: qsTr("Game")
-                font.bold: true
-
-                onClicked: gameSubmenu.visible = !gameSubmenu.visible
-            }
-
-            // Game submenu items
-            Column {
-                id: gameSubmenu
-                Layout.fillWidth: true
-                visible: false
-                leftPadding: 20
-
-                ItemDelegate {
-                    width: parent.width - parent.leftPadding
-                    text: qsTr("New game")
-                    enabled: (!(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)) && (GameState.gameStarted || GameState.gameOver)
-
-                    onClicked: {
-                        GameState.difficultyChanged = false
-                        GridBridge.initGame()
-                        menuDrawer.close()
-                    }
-                }
-
-                ItemDelegate {
-                    width: parent.width - parent.leftPadding
-                    text: qsTr("Save game")
-                    enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
-
-                    onClicked: {
-                        ComponentsContext.savePopupVisible = true
-                        menuDrawer.close()
-                    }
-                }
-
-                ItemDelegate {
-                    width: parent.width - parent.leftPadding
-                    text: qsTr("Load game")
-                    enabled: !SteamIntegration.isInMultiplayerGame
-
-                    onClicked: {
-                        ComponentsContext.loadPopupVisible = true
-                        menuDrawer.close()
-                    }
-                }
-
-                ItemDelegate {
-                    width: parent.width - parent.leftPadding
-                    text: qsTr("Hint")
-                    enabled: GameState.gameStarted && !GameState.gameOver
-
-                    onClicked: {
-                        GridBridge.requestHint()
-                        menuDrawer.close()
-                    }
+                text: qsTr("New game")
+                enabled: (!(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)) && (GameState.gameStarted || GameState.gameOver)
+                Layout.preferredHeight: 40
+                onClicked: {
+                    GameState.difficultyChanged = false
+                    GridBridge.initGame()
+                    menuDrawer.close()
                 }
             }
 
-            Rectangle {
+            ItemDelegate {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: Universal.accent
-                opacity: 0.3
+                text: qsTr("Save game")
+                enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
+                Layout.preferredHeight: 40
+                onClicked: {
+                    ComponentsContext.savePopupVisible = true
+                    menuDrawer.close()
+                }
+            }
+
+            ItemDelegate {
+                Layout.fillWidth: true
+                text: qsTr("Load game")
+                enabled: !SteamIntegration.isInMultiplayerGame
+                Layout.preferredHeight: 40
+                onClicked: {
+                    ComponentsContext.loadPopupVisible = true
+                    menuDrawer.close()
+                }
+            }
+
+            ItemDelegate {
+                Layout.fillWidth: true
+                text: qsTr("Hint")
+                enabled: GameState.gameStarted && !GameState.gameOver
+                Layout.preferredHeight: 40
+                onClicked: {
+                    GridBridge.requestHint()
+                    menuDrawer.close()
+                }
+            }
+
+            ToolSeparator {
+                orientation: Qt.Horizontal
+                Layout.fillWidth: true
+                Layout.topMargin: -10
+                Layout.bottomMargin: -10
             }
 
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Leaderboard")
-
+                Layout.preferredHeight: 40
                 onClicked: {
                     ComponentsContext.leaderboardPopupVisible = true
                     menuDrawer.close()
@@ -132,7 +98,7 @@ Drawer {
                 Layout.fillWidth: true
                 text: qsTr("Multiplayer")
                 enabled: SteamIntegration.initialized
-
+                Layout.preferredHeight: 40
                 onClicked: {
                     ComponentsContext.privateSessionPopupVisible = true
                     menuDrawer.close()
@@ -152,24 +118,24 @@ Drawer {
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Settings")
-
+                Layout.preferredHeight: 40
                 onClicked: {
                     ComponentsContext.settingsWindowVisible = true
                     menuDrawer.close()
                 }
             }
 
-            Rectangle {
+            ToolSeparator {
+                orientation: Qt.Horizontal
                 Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: Universal.accent
-                opacity: 0.3
+                Layout.topMargin: -10
+                Layout.bottomMargin: -10
             }
 
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Help")
-
+                Layout.preferredHeight: 40
                 onClicked: {
                     ComponentsContext.rulesPopupVisible = true
                     menuDrawer.close()
@@ -179,14 +145,8 @@ Drawer {
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("Exit")
-
+                Layout.preferredHeight: 40
                 onClicked: Qt.quit()
-            }
-
-            // Space at the bottom for better scrolling
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 20
             }
         }
     }

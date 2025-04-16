@@ -159,38 +159,38 @@ La partie en cours sera sauvegardée et restaurée</translation>
 <context>
     <name>DifficultyPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="98"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="89"/>
         <source>Width:</source>
         <translation>Largeur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="119"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="110"/>
         <source>Height:</source>
         <translation>Hauteur:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="140"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="131"/>
         <source>Mines:</source>
         <translation>Mines:</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="158"/>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="225"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="149"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="216"/>
         <source>Going above 25% may really slow down
 board generation on large grids</source>
         <translation>Une densité au dessus de 25% pourrait
 ralentir la génération sur les grilles larges</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="201"/>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="206"/>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="212"/>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="218"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="192"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="197"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="203"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="209"/>
         <source>mines</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="280"/>
+        <location filename="../qml/SettingsPanes/DifficultyPane.qml" line="262"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
@@ -488,57 +488,52 @@ Peut être imprécis</translation>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="29"/>
+        <location filename="../qml/MainMenu.qml" line="34"/>
         <source>New game</source>
-        <translation>Nouvelle</translation>
+        <translation>Nouvelle partie</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="38"/>
+        <location filename="../qml/MainMenu.qml" line="46"/>
         <source>Save game</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="44"/>
+        <location filename="../qml/MainMenu.qml" line="57"/>
         <source>Load game</source>
         <translation>Charger</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="50"/>
+        <location filename="../qml/MainMenu.qml" line="68"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="75"/>
+        <location filename="../qml/MainMenu.qml" line="117"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="59"/>
+        <location filename="../qml/MainMenu.qml" line="86"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="70"/>
+        <location filename="../qml/MainMenu.qml" line="107"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="65"/>
+        <location filename="../qml/MainMenu.qml" line="96"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="19"/>
-        <source>Game</source>
-        <translation>Partie</translation>
-    </message>
-    <message>
-        <location filename="../qml/MainMenu.qml" line="82"/>
+        <location filename="../qml/MainMenu.qml" line="134"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="87"/>
+        <location filename="../qml/MainMenu.qml" line="144"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -546,7 +541,7 @@ Peut être imprécis</translation>
 <context>
     <name>MinesweeperSolver</name>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="68"/>
+        <location filename="../src/minesweepersolver.cpp" line="66"/>
         <source>The number %1 at %2,%3 shows there are %n mine(s) left to find. Since there are exactly %n hidden cell(s) next to it, all of these cells must contain mines.</source>
         <translation>
             <numerusform>Le chiffre %1 en %2,%3 indique qu&apos;il reste %n mine à trouver. Comme il y a exactement %n cellule cachée à côté, cette cellule doit contenir une mine.</numerusform>
@@ -554,7 +549,7 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="102"/>
+        <location filename="../src/minesweepersolver.cpp" line="98"/>
         <source>The number %1 at %2,%3 already has all its %n mine(s) flagged. This means all remaining hidden cells around it must be safe.</source>
         <translation>
             <numerusform>Le chiffre %1 en %2,%3 a déjà sa %n mine marquée d&apos;un drapeau. Cela signifie que toutes les cellules cachées restantes autour doivent être sûres.</numerusform>
@@ -562,7 +557,7 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="174"/>
+        <location filename="../src/minesweepersolver.cpp" line="170"/>
         <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. This means the remaining cells around the second number must contain the remaining mines.</source>
         <translation>
             <numerusform>En examinant les chiffres %1 en %2,%3 et %4 en %5,%6 : La %n mine du premier chiffre doit se trouver dans des cellules que le second chiffre touche également. Cela signifie que les cellules restantes autour du second chiffre doivent contenir les mines restantes.</numerusform>
@@ -570,7 +565,7 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="190"/>
+        <location filename="../src/minesweepersolver.cpp" line="186"/>
         <source>Looking at the numbers %1 at %2,%3 and %4 at %5,%6: All %n mine(s) from the first number must be in cells that the second number also touches. Since the second number only needs the same number of mines, the other cells around it must be safe.</source>
         <translation>
             <numerusform>En examinant les chiffres %1 en %2,%3 et %4 en %5,%6 : La %n mine du premier chiffre doit se trouver dans des cellules que le second chiffre touche également. Comme le second chiffre a besoin du même nombre de mines, les autres cellules autour doivent être sûres.</numerusform>
@@ -578,7 +573,7 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="208"/>
+        <location filename="../src/minesweepersolver.cpp" line="204"/>
         <source>The numbers %1 at %2,%3 and %4 at %5,%6 both need %n mine(s). Since all cells around the first number are also around the second number, the extra cells around the second number must be safe.</source>
         <translation>
             <numerusform>Les chiffres %1 en %2,%3 et %4 en %5,%6 ont tous deux besoin de %n mine. Comme toutes les cellules autour du premier chiffre sont également autour du second, les cellules supplémentaires autour du second chiffre doivent être sûres.</numerusform>
@@ -586,7 +581,7 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="259"/>
+        <location filename="../src/minesweepersolver.cpp" line="255"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the second number must all contain mines.</source>
         <translation>
             <numerusform>Le chiffre %1 en %2,%3 a besoin d&apos;au moins %4 de ses mines dans les cellules qu&apos;il partage avec le chiffre %5 en %6,%7. Cela signifie que la %n cellule non partagée restante autour du second chiffre doit contenir une mine.</numerusform>
@@ -594,12 +589,12 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="276"/>
+        <location filename="../src/minesweepersolver.cpp" line="272"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the second number only needs %8 mines total, its non-shared cells must be safe.</source>
         <translation>Le chiffre %1 en %2,%3 a besoin d&apos;au moins %4 de ses mines dans les cellules qu&apos;il partage avec le chiffre %5 en %6,%7. Comme le second chiffre n&apos;a besoin que de %8 mines au total, ses cellules non partagées doivent être sûres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="298"/>
+        <location filename="../src/minesweepersolver.cpp" line="294"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. This means the remaining %n non-shared cell(s) around the first number must all contain mines.</source>
         <translation>
             <numerusform>Le chiffre %1 en %2,%3 a besoin d&apos;au moins %4 de ses mines dans les cellules qu&apos;il partage avec le chiffre %5 en %6,%7. Cela signifie que la %n cellule non partagée restante autour du premier chiffre doit contenir une mine.</numerusform>
@@ -607,12 +602,12 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="315"/>
+        <location filename="../src/minesweepersolver.cpp" line="311"/>
         <source>The number %1 at %2,%3 needs at least %4 of its mines to be in the cells it shares with number %5 at %6,%7. Since the first number only needs %8 mines total, its non-shared cells must be safe.</source>
         <translation>Le chiffre %1 en %2,%3 a besoin d&apos;au moins %4 de ses mines dans les cellules qu&apos;il partage avec le chiffre %5 en %6,%7. Comme le premier chiffre n&apos;a besoin que de %8 mines au total, ses cellules non partagées doivent être sûres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="341"/>
+        <location filename="../src/minesweepersolver.cpp" line="336"/>
         <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the first number, so they can&apos;t all be mines.</source>
         <translation>
             <numerusform>En examinant les chiffres %1 en %2,%3 et %4 en %5,%6 : au moins %7 mines doivent être dans leurs %8 cellules partagées. Cela signifie qu&apos;il peut y avoir au maximum %9 mine dans la %n cellule non partagée autour du premier chiffre, donc elle ne peut pas toutes être des mines.</numerusform>
@@ -620,7 +615,7 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/minesweepersolver.cpp" line="360"/>
+        <location filename="../src/minesweepersolver.cpp" line="355"/>
         <source>Looking at numbers %1 at %2,%3 and %4 at %5,%6: at least %7 mines must be in their %8 shared cells. This means at most %9 mines can be in the %n non-shared cell(s) around the second number, so they can&apos;t all be mines.</source>
         <translation>
             <numerusform>En examinant les chiffres %1 en %2,%3 et %4 en %5,%6 : au moins %7 mines doivent être dans leurs %8 cellules partagées. Cela signifie qu&apos;il peut y avoir au maximum %9 mine dans la %n cellule non partagée autour du second chiffre, donc elle ne peut pas toutes être des mines.</numerusform>
@@ -628,32 +623,32 @@ Peut être imprécis</translation>
         </translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="429"/>
+        <location filename="../src/minesweepersolver.cpp" line="424"/>
         <source>If there is a mine at %1,%2, then certain cells that share multiple number constraints must be safe by process of elimination.</source>
         <translation>S&apos;il y a une mine en %1,%2, alors certaines cellules qui partagent plusieurs contraintes de chiffres doivent être sûres par élimination.</translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="456"/>
+        <location filename="../src/minesweepersolver.cpp" line="451"/>
         <source>If the cell at %1,%2 is safe, then certain cells that share multiple number constraints must contain mines by process of elimination.</source>
         <translation>Si la cellule en %1,%2 est sûre, alors certaines cellules qui partagent plusieurs contraintes de chiffres doivent contenir des mines par élimination.</translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="490"/>
+        <location filename="../src/minesweepersolver.cpp" line="483"/>
         <source>Through constraint satisfaction analysis, I&apos;ve determined this cell must contain a mine.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="492"/>
+        <location filename="../src/minesweepersolver.cpp" line="485"/>
         <source>Through constraint satisfaction analysis, I&apos;ve determined this cell must be safe.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="503"/>
+        <location filename="../src/minesweepersolver.cpp" line="493"/>
         <source>Based on analyzing the pattern of revealed numbers, this is the most informative cell to click next.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/minesweepersolver.cpp" line="509"/>
+        <location filename="../src/minesweepersolver.cpp" line="499"/>
         <source>I couldn&apos;t find any definite safe moves or mines through logical analysis at this time.</source>
         <translation>Je n&apos;ai pas pu trouver de mouvements sûrs ou de mines définitifs par analyse logique pour le moment.</translation>
     </message>
@@ -1264,12 +1259,12 @@ Peut être imprécis</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="87"/>
+        <location filename="../qml/TopBar.qml" line="83"/>
         <source>Next click will signal the cell</source>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="194"/>
+        <location filename="../qml/TopBar.qml" line="190"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>

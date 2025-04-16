@@ -180,6 +180,7 @@ ToolBar {
             anchors.centerIn: parent
             font.family: Constants.numberFont.name
             horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             font.pixelSize: 18
             text: GameTimer.displayTime
         }
@@ -213,30 +214,16 @@ ToolBar {
             ToolButton {
                 id: mineButton
                 Layout.preferredHeight: 40
-                Layout.preferredWidth: mineCounter.implicitWidth + 20
+                //Layout.preferredWidth: mineCounter.implicitWidth + 20
                 font.pixelSize: 18
                 font.bold: true
                 enabled: GameState.gameStarted && !GameState.gameOver
                 highlighted: GameState.flaggedCount === GameState.mineCount
                 onClicked: GridBridge.requestHint()
-
-                RowLayout {
-                    id: mineCounter
-                    anchors.centerIn: parent
-                    IconImage {
-                        color: Constants.foregroundColor
-                        source: "qrc:/icons/bomb.png"
-                        opacity: enabled ? 1 : 0.5
-                        sourceSize.height: 18
-                        sourceSize.width: 18
-                    }
-
-                    Label {
-                        text: ": " + (GameState.mineCount - GameState.flaggedCount)
-                        font.pixelSize: 18
-                        font.bold: true
-                    }
-                }
+                icon.source: "qrc:/icons/bomb.png"
+                text: ": " + (GameState.mineCount - GameState.flaggedCount)
+                icon.width: 18
+                icon.height: 18
             }
 
             ToolButton {
@@ -248,6 +235,9 @@ ToolBar {
                 highlighted: ComponentsContext.multiplayerChatVisible
                 property bool hasNewMessages: false
 
+                icon.source: "qrc:/icons/chat.png"
+                icon.width: 16
+                icon.height: 16
                 SequentialAnimation {
                     id: notificationAnimation
                     running: chatButton.hasNewMessages && !ComponentsContext.multiplayerChatVisible
@@ -276,14 +266,6 @@ ToolBar {
                         hasNewMessages = false
                         opacity = 1
                     }
-                }
-
-                IconImage {
-                    anchors.fill: parent
-                    source: "qrc:/icons/chat.png"
-                    color: chatButton.hasNewMessages ? Constants.accentColor : Constants.foregroundColor
-                    sourceSize.height: 16
-                    sourceSize.width: 16
                 }
             }
         }
