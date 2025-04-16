@@ -149,11 +149,11 @@ void GridGenerator::BoardState::createSafeArea(int center) {
     m_cells[center].safe = true;
     m_cells[center].revealed = true;
 
-    for (int neighbor : m_cells[center].neighbors) {
+    for (int neighbor : std::as_const(m_cells[center].neighbors)) {
         m_cells[neighbor].safe = true;
 
         if (QRandomGenerator::global()->bounded(100) < 50) {
-            for (int secondNeighbor : m_cells[neighbor].neighbors) {
+            for (int secondNeighbor : std::as_const(m_cells[neighbor].neighbors)) {
                 m_cells[secondNeighbor].safe = true;
             }
         }
@@ -164,7 +164,7 @@ void GridGenerator::BoardState::placeMine(int index) {
     m_cells[index].isMine = true;
     m_mines.append(index);
 
-    for (int neighbor : m_cells[index].neighbors) {
+    for (int neighbor : std::as_const(m_cells[index].neighbors)) {
         m_cells[neighbor].adjacentMines++;
     }
 }
@@ -246,7 +246,7 @@ bool GridGenerator::BoardState::solveCompletely(const std::atomic<bool>& cancelF
             if (!m_cells[i].revealed || processedCells.contains(i)) continue;
 
             bool hasUnrevealedNeighbors = false;
-            for (int neighbor : m_cells[i].neighbors) {
+            for (int neighbor : std::as_const(m_cells[i].neighbors)) {
                 if (!m_cells[neighbor].revealed) {
                     hasUnrevealedNeighbors = true;
                     break;
@@ -261,7 +261,7 @@ bool GridGenerator::BoardState::solveCompletely(const std::atomic<bool>& cancelF
             int flagCount = 0;
             QVector<int> unrevealed;
 
-            for (int neighbor : m_cells[i].neighbors) {
+            for (int neighbor : std::as_const(m_cells[i].neighbors)) {
                 if (m_cells[neighbor].flagged) {
                     flagCount++;
                 } else if (!m_cells[neighbor].revealed) {
@@ -310,7 +310,7 @@ bool GridGenerator::BoardState::solveWithCSP(const std::atomic<bool>& cancelFlag
         if (!m_cells[i].revealed) continue;
 
         bool hasBoundary = false;
-        for (int neighbor : m_cells[i].neighbors) {
+        for (int neighbor : std::as_const(m_cells[i].neighbors)) {
             if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged) {
                 hasBoundary = true;
                 frontierCellsSet.insert(neighbor);
@@ -343,7 +343,7 @@ bool GridGenerator::BoardState::solveWithCSP(const std::atomic<bool>& cancelFlag
         QVector<bool> definitelyMines(frontierCells.size(), true);
         QVector<bool> definitelySafe(frontierCells.size(), true);
 
-        for (const auto& config : possibleConfigs) {
+        for (const auto& config : std::as_const(possibleConfigs)) {
             for (int i = 0; i < config.size(); ++i) {
                 if (!config[i]) definitelyMines[i] = false;
                 if (config[i]) definitelySafe[i] = false;
@@ -384,7 +384,7 @@ bool GridGenerator::BoardState::solveLargeCSP(const QVector<int>& boundaryCells,
     // Pre-compute frontier cells for each boundary cell
     for (int cell : boundaryCells) {
         QSet<int> cellFrontier;
-        for (int neighbor : m_cells[cell].neighbors) {
+        for (int neighbor : std::as_const(m_cells[cell].neighbors)) {
             if (!m_cells[neighbor].revealed && !m_cells[neighbor].flagged) {
                 cellFrontier.insert(neighbor);
             }
@@ -448,7 +448,7 @@ bool GridGenerator::BoardState::solveLargeCSP(const QVector<int>& boundaryCells,
             QVector<bool> definitelyMines(compFrontier.size(), true);
             QVector<bool> definitelySafe(compFrontier.size(), true);
 
-            for (const auto& config : possibleConfigs) {
+            for (const auto& config : std::as_const(possibleConfigs)) {
                 for (int i = 0; i < config.size(); ++i) {
                     if (!config[i]) definitelyMines[i] = false;
                     if (config[i]) definitelySafe[i] = false;
@@ -492,7 +492,7 @@ void GridGenerator::BoardState::generateValidConfigurations(
             int flagCount = 0;
             int expectedMines = m_cells[boundaryCell].adjacentMines;
 
-            for (int neighbor : m_cells[boundaryCell].neighbors) {
+            for (int neighbor : std::as_const(m_cells[boundaryCell].neighbors)) {
                 if (m_cells[neighbor].flagged) {
                     flagCount++;
                 } else if (!m_cells[neighbor].revealed) {
@@ -522,7 +522,7 @@ void GridGenerator::BoardState::generateValidConfigurations(
             int possibleFlags = 0;
             int expectedMines = m_cells[boundaryCell].adjacentMines;
 
-            for (int neighbor : m_cells[boundaryCell].neighbors) {
+            for (int neighbor : std::as_const(m_cells[boundaryCell].neighbors)) {
                 if (m_cells[neighbor].flagged) {
                     flagCount++;
                 } else if (!m_cells[neighbor].revealed) {

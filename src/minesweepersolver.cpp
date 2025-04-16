@@ -48,7 +48,7 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         int flagCount = 0;
         QSet<int> unrevealedCells;
 
-        for (int neighbor : neighbors) {
+        for (int neighbor : std::as_const(neighbors)) {
             if (flagged.contains(neighbor)) {
                 flagCount++;
             } else if (!revealed.contains(neighbor)) {
@@ -62,8 +62,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
                 if (!flagged.contains(minePos)) {
                     int row = pos / width;
                     int col = pos % width;
-                    int mineRow = minePos / width;
-                    int mineCol = minePos % width;
 
                     QString reason = tr("The number %1 at %2,%3 shows there are %n mine(s) left to find. Since there are exactly %n hidden cell(s) next to it, all of these cells must contain mines.", "", remainingMines)
                                          .arg(numbers[pos])
@@ -84,7 +82,7 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         int flagCount = 0;
         QSet<int> unknowns;
 
-        for (int neighbor : neighbors) {
+        for (int neighbor : std::as_const(neighbors)) {
             if (flagged.contains(neighbor)) {
                 flagCount++;
             } else if (!revealed.contains(neighbor)) {
@@ -96,8 +94,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
             int safePos = *unknowns.begin();
             int row = pos / width;
             int col = pos % width;
-            int safeRow = safePos / width;
-            int safeCol = safePos % width;
 
             QString reason = tr("The number %1 at %2,%3 already has all its %n mine(s) flagged. This means all remaining hidden cells around it must be safe.", "", numbers[pos])
                                  .arg(numbers[pos])
@@ -117,7 +113,7 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
         QSet<int> unknownNeighbors;
         int minesRequired = numbers[pos];
 
-        for (int neighbor : neighbors) {
+        for (int neighbor : std::as_const(neighbors)) {
             if (flagged.contains(neighbor)) {
                 minesRequired--;
             } else if (!revealed.contains(neighbor)) {
@@ -132,7 +128,7 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
             c.unknowns = unknownNeighbors;
             constraints.append(c);
 
-            for (int cell : unknownNeighbors) {
+            for (int cell : std::as_const(unknownNeighbors)) {
                 frontier.insert(cell);
             }
         }
@@ -326,7 +322,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
 
             int minSharedMines1 = c1.minesRequired - onlyInC1.size();
             int minSharedMines2 = c2.minesRequired - onlyInC2.size();
-            int minSharedMines = qMax(0, qMax(minSharedMines1, minSharedMines2));
 
             int maxMinesC1Exclusive = c1.minesRequired - minSharedMines2;
             int maxMinesC2Exclusive = c2.minesRequired - minSharedMines1;
@@ -374,7 +369,7 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
     if (frontier.size() <= 20) {
         for (int cell : frontier) {
             QVector<Constraint> relevantConstraints;
-            for (const Constraint& c : constraints) {
+            for (const Constraint& c : std::as_const(constraints)) {
                 if (c.unknowns.contains(cell)) {
                     relevantConstraints.append(c);
                 }
@@ -465,15 +460,13 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
     if (frontier.size() > 8 && frontier.size() <= 32) {
         int cell = solveFrontierCSP(width, height, constraints, QList<int>(frontier.begin(), frontier.end()));
         if (cell != -1) {
-            int row = cell / width;
-            int col = cell % width;
-
             bool isMine = false;
-            for (const Constraint& c : constraints) {
+            for (const Constraint& c : std::as_const(constraints)) {
                 if (c.unknowns.contains(cell)) {
                     int flaggedCount = 0;
-                    for (int neighbor : getNeighbors(c.cell, width, height)) {
-                        if (flagged.contains(neighbor)) {
+                    QSet<int> neighbors = getNeighbors(c.cell, width, height);
+                    for (QSet<int>::const_iterator it = neighbors.constBegin(); it != neighbors.constEnd(); ++it) {
+                        if (flagged.contains(*it)) {
                             flaggedCount++;
                         }
                     }
@@ -497,9 +490,6 @@ SolverResult MinesweeperSolver::solveForHint(int width, int height, const QVecto
     } else if (frontier.size() > 32) {
         int cell = solveWithConstraintIntersection(width, height, constraints, QList<int>(frontier.begin(), frontier.end()));
         if (cell != -1) {
-            int row = cell / width;
-            int col = cell % width;
-
             QString reason = tr("Based on analyzing the pattern of revealed numbers, this is the most informative cell to click next.");
 
             return {cell, reason};
@@ -678,7 +668,7 @@ int MinesweeperSolver::solveWithConstraintIntersection(int width, int height,
         int col = mostConstrainedCell % width;
 
         QStringList constraintDescriptions;
-        for (int constraintIdx : cellsToConstraints[mostConstrainedCell]) {
+        for (int constraintIdx : std::as_const(cellsToConstraints[mostConstrainedCell])) {
             const Constraint &c = constraints[constraintIdx];
             int cRow = c.cell / width;
             int cCol = c.cell % width;
