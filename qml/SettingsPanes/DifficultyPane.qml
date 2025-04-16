@@ -55,23 +55,14 @@ Pane {
                         const difficultySet = GameState.difficultySettings[idx]
                         if (UserSettings.difficulty === idx) return
 
-                        const dimensionsMatch = (
-                            (idx !== 4 &&
-                             UserSettings.difficulty === 4 &&
-                             UserSettings.customWidth === difficultySet.x &&
-                             UserSettings.customHeight === difficultySet.y) ||
-                            (idx === 4 &&
-                             UserSettings.difficulty !== 4 &&
-                             UserSettings.customWidth === GameState.difficultySettings[UserSettings.difficulty].x &&
-                             UserSettings.customHeight === GameState.difficultySettings[UserSettings.difficulty].y)
-                        )
-
-                        GameState.difficultyChanged = true
-
-                        if (!dimensionsMatch) {
+                        // Simplified check - if actual dimensions are changing, reset cells
+                        if (GameState.gridSizeX !== difficultySet.x ||
+                            GameState.gridSizeY !== difficultySet.y) {
                             GridBridge.cellsCreated = 0
+                            LogManager.info("Resetting cellsCreated due to dimension change in difficulty selection")
                         }
 
+                        GameState.difficultyChanged = true
                         GameState.gridSizeX = difficultySet.x
                         GameState.gridSizeY = difficultySet.y
                         GameState.mineCount = difficultySet.mines
@@ -273,8 +264,10 @@ Pane {
             property int previousCustomWidth: 0
             property int previousCustomHeight: 0
             onClicked: {
-                if (previousCustomWidth !== UserSettings.customWidth || previousCustomHeight !== UserSettings.customHeight) {
+                if (GameState.gridSizeX !== UserSettings.customWidth ||
+                    GameState.gridSizeY !== UserSettings.customHeight) {
                     GridBridge.cellsCreated = 0
+                    LogManager.info("Resetting cellsCreated due to custom dimension change")
                 }
 
                 if (UserSettings.mineDensity) {
