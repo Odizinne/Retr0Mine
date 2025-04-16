@@ -99,15 +99,17 @@ def download_github_artifacts(github_token):
         return None, None, None
     
     artifacts = artifacts_response.json()["artifacts"]
-    
-    windows_dir = r"C:\Users\Flora\Documents\ContentBuilder\Content\Retr0Mine_Windows"
-    linux_dir = r"C:\Users\Flora\Documents\ContentBuilder\Content\Retr0Mine_Linux"
-    
+
+    user_home = os.path.expanduser("~")
+    base_cb_dir = os.path.join(user_home, "Documents", "ContentBuilder", "Content")
+    windows_dir = os.path.join(base_cb_dir, "Retr0Mine_Windows")
+    linux_dir = os.path.join(base_cb_dir, "Retr0Mine_Linux")
+
     for directory in [windows_dir, linux_dir]:
         if os.path.exists(directory):
             shutil.rmtree(directory)
-        os.makedirs(directory)
-    
+        os.makedirs(directory, exist_ok=True)
+
     windows_artifact_path = None
     linux_artifact_path = None
     
@@ -175,7 +177,6 @@ def update_env_variable(variable_name, value):
     
     # Update or add the variable
     if f"{variable_name}=" in env_content:
-        # Variable exists, update it
         lines = env_content.split("\n")
         updated_lines = []
         for line in lines:
@@ -185,66 +186,66 @@ def update_env_variable(variable_name, value):
                 updated_lines.append(line)
         env_content = "\n".join(updated_lines)
     else:
-        # Variable doesn't exist, add it
         if env_content and not env_content.endswith("\n"):
             env_content += "\n"
         env_content += f"{variable_name}={value}"
     
-    # Create directory if it doesn't exist
     env_dir = os.path.dirname(env_path)
     if env_dir and not os.path.exists(env_dir):
         os.makedirs(env_dir)
         
-    # Write updated content back to file
     with open(env_path, "w") as env_file:
         env_file.write(env_content)
     
     return env_path
 
 def get_username_from_env():
-    # Load from user's home directory
     load_dotenv(get_env_path())
     username = os.getenv("STEAM_USERNAME")
     
     if not username:
         print(Fore.YELLOW + "Steam username not found in .env file" + Style.RESET_ALL)
         username = input("Enter your Steam username: ")
-        
         env_path = update_env_variable("STEAM_USERNAME", username)
         print(Fore.GREEN + f"Username saved to .env file: {env_path}" + Style.RESET_ALL)
     
     return username
 
 def get_password_from_env():
-    # Load from user's home directory
     load_dotenv(get_env_path())
     password = os.getenv("STEAM_PASSWORD")
 
     if not password:
         print(Fore.YELLOW + "Steam password not found in .env file" + Style.RESET_ALL)
         password = getpass.getpass("Enter your Steam password: ")
-
         env_path = update_env_variable("STEAM_PASSWORD", password)
         print(Fore.GREEN + f"Password saved to .env file: {env_path}" + Style.RESET_ALL)
 
     return password
 
 def get_github_token_from_env():
-    # Load from user's home directory
     load_dotenv(get_env_path())
     token = os.getenv("GITHUB_TOKEN")
     
     if not token:
         print(Fore.YELLOW + "Github token not found in .env file" + Style.RESET_ALL)
         token = input("Enter your github token: ")
-        
         env_path = update_env_variable("GITHUB_TOKEN", token)
         print(Fore.GREEN + f"Github token saved to .env file: {env_path}" + Style.RESET_ALL)
     
     return token
 
+def find_steamcmd():
+    """Check if steamcmd is in the system PATH or use the hardcoded path."""
+    try:
+        subprocess.run(["steamcmd", "+quit"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return "steamcmd"  # steamcmd found in PATH
+    except FileNotFoundError:
+        # Fallback to the hardcoded path if not found in PATH
+        return r"C:\Users\Flora\Documents\ContentBuilder\builder\steamcmd.exe"
+
 def apply_drm_and_upload(windows_exe, username, password, commit_info=None):
-    steam_cmd = r"C:\Users\Flora\Documents\ContentBuilder\builder\steamcmd.exe"
+    steamcmd_path = find_steamcmd()
     app_build = r"C:\Users\Flora\Documents\ContentBuilder\scripts\app_3478030.vdf"
     
     # Create build description based on commit info
@@ -256,7 +257,7 @@ def apply_drm_and_upload(windows_exe, username, password, commit_info=None):
             build_desc = build_desc[:47] + "..."
     
     upload_command = [
-        steam_cmd,
+        steamcmd_path,
         "+login", username, password,
         "+drm_wrap", "3478030", windows_exe, windows_exe, "drmtoolp", "0",
         "+run_app_build", "-desc", build_desc, app_build,
