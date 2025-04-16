@@ -631,8 +631,16 @@ Item {
             autoRepeat: false
             enabled: cellMouseArea.isHovered
             onActivated: {
-                if (!GameState.gameStarted) return
-                GridBridge.setFlag(cellItem.index);
+                if (!GameState.gameStarted) {
+                    GridBridge.reveal(cellItem.index, "firstClick")
+                    return
+                }
+
+                if (!cellItem.revealed) {
+                    GridBridge.setFlag(cellItem.index);
+                } else {
+                    GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
+                }
             }
         }
 
@@ -641,8 +649,16 @@ Item {
             autoRepeat: false
             enabled: cellMouseArea.isHovered && UserSettings.enableQuestionMarks
             onActivated: {
-                if (!GameState.gameStarted) return
-                GridBridge.setQuestioned(cellItem.index);
+                if (!GameState.gameStarted) {
+                    GridBridge.reveal(cellItem.index, "firstClick")
+                    return
+                }
+
+                if (!cellItem.revealed) {
+                    GridBridge.setQuestioned(cellItem.index);
+                } else {
+                    GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
+                }
             }
         }
 
@@ -651,8 +667,16 @@ Item {
             autoRepeat: false
             enabled: cellMouseArea.isHovered && UserSettings.enableSafeQuestionMarks
             onActivated: {
-                if (!GameState.gameStarted) return
-                GridBridge.setSafeQuestioned(cellItem.index);
+                if (!GameState.gameStarted) {
+                    GridBridge.reveal(cellItem.index, "firstClick")
+                    return
+                }
+
+                if (!cellItem.revealed) {
+                    GridBridge.setSafeQuestioned(cellItem.index);
+                } else {
+                    GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
+                }
             }
         }
 
@@ -663,6 +687,7 @@ Item {
             onActivated: {
                 if (!GameState.gameStarted) {
                     GridBridge.reveal(cellItem.index, "firstClick")
+                    return
                 }
 
                 if (cellItem.revealed) {
@@ -675,6 +700,17 @@ Item {
                 if (canReveal) {
                     GridBridge.reveal(cellItem.index, SteamIntegration.playerName);
                 }
+            }
+        }
+
+        function performRevealConnectedShortcut() {
+            if (!GameState.gameStarted) {
+                GridBridge.reveal(cellItem.index, "firstClick")
+            }
+
+            if (cellItem.revealed) {
+                GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
+                return;
             }
         }
 
