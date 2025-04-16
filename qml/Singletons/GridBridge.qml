@@ -537,6 +537,9 @@ Item {
         const cell = getCell(index)
         if (cell) {
             if (!cell.revealed) {
+                if (cell.flagged) {
+                    GameState.flaggedCount--
+                }
                 cell.questioned = false
                 cell.safeQuestioned = false
                 cell.flagged = false
@@ -563,8 +566,10 @@ Item {
                     cell.questioned = false
                     cell.safeQuestioned = false
                     cell.flagged = true
+                    GameState.flaggedCount++
                 } else {
                     cell.flagged = false
+                    GameState.flaggedCount--
                 }
             }
         }
@@ -586,6 +591,9 @@ Item {
         if (cell) {
             if (!cell.revealed) {
                 if (!cell.questioned) {
+                    if (cell.flagged) {
+                        GameState.flaggedCount--
+                    }
                     cell.questioned = true
                     cell.safeQuestioned = false
                     cell.flagged = false
@@ -612,6 +620,9 @@ Item {
         if (cell) {
             if (!cell.revealed) {
                 if (!cell.safeQuestioned) {
+                    if (cell.flagged) {
+                        GameState.flaggedCount--
+                    }
                     cell.questioned = false
                     cell.safeQuestioned = true
                     cell.flagged = false
