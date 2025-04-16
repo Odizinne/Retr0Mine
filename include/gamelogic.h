@@ -7,7 +7,7 @@
 #include <QQmlEngine>
 #include <QFuture>
 #include <QFutureWatcher>
-#include <QtConcurrent>
+#include <QtConcurrent/QtConcurrentRun>
 #include <random>
 #include <atomic>
 #include "gridgenerator.h"
