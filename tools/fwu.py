@@ -215,6 +215,20 @@ def get_username_from_env():
     
     return username
 
+def get_password_from_env():
+    # Load from user's home directory
+    load_dotenv(get_env_path())
+    password = os.getenv("STEAM_PASSWORD")
+
+    if not password:
+        print(Fore.YELLOW + "Steam password not found in .env file" + Style.RESET_ALL)
+        password = getpass.getpass("Enter your Steam password: ")
+
+        env_path = update_env_variable("STEAM_PASSWORD", password)
+        print(Fore.GREEN + f"Password saved to .env file: {env_path}" + Style.RESET_ALL)
+
+    return password
+
 def get_github_token_from_env():
     # Load from user's home directory
     load_dotenv(get_env_path())
@@ -259,7 +273,7 @@ if __name__ == "__main__":
     print(Fore.MAGENTA + "Retr0Mine FWU - Fetch / Wrap / Upload" + Style.RESET_ALL)
     token = get_github_token_from_env()
     username = get_username_from_env()
-    password = getpass.getpass("Enter your Steam password: ")
+    password = get_password_from_env()
 
     print(Fore.MAGENTA + "Starting GitHub artifacts download..." + Style.RESET_ALL)
     windows_exe, linux_exe, commit_info = download_github_artifacts(token)
