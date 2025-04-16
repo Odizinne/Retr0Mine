@@ -673,6 +673,13 @@ Item {
     }
 
     function playShakeAnimationIfNeeded() {
+        for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
+            const cell = getCell(i)
+            if (cell && typeof cell.updateShakeState === 'function') {
+                cell.updateShakeState()
+            }
+        }
+
         let anyCellNeedsShake = false
         for (let i = 0; i < GameState.gridSizeX * GameState.gridSizeY; i++) {
             const cell = getCell(i)
