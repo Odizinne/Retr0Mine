@@ -137,28 +137,28 @@ void GameCore::setCustomPalette() {
 
     switch (selectedAccentColor) {
     case 1:
-        accentColor = isDarkMode ? "#4CC2FF" : "#003E92";
-        highlight = "#0078D4";
+        accentColor = isDarkMode ? QColor(76, 194, 255) : QColor(0, 62, 146);  // #4CC2FF : #003E92
+        highlight = QColor(0, 120, 212);  // #0078D4
         break;
     case 2:
-        accentColor = isDarkMode ? "#FFB634" : "#A14600";
-        highlight = "#FF8C00";
+        accentColor = isDarkMode ? QColor(255, 182, 52) : QColor(161, 70, 0);  // #FFB634 : #A14600
+        highlight = QColor(255, 140, 0);  // #FF8C00
         break;
     case 3:
-        accentColor = isDarkMode ? "#F46762" : "#9E0912";
-        highlight = "#E81123";
+        accentColor = isDarkMode ? QColor(244, 103, 98) : QColor(158, 9, 18);  // #F46762 : #9E0912
+        highlight = QColor(232, 17, 35);  // #E81123
         break;
     case 4:
-        accentColor = isDarkMode ? "#45E532" : "#084B08";
-        highlight = "#107C10";
+        accentColor = isDarkMode ? QColor(69, 229, 50) : QColor(8, 75, 8);  // #45E532 : #084B08
+        highlight = QColor(16, 124, 16);  // #107C10
         break;
     case 5:
-        accentColor = isDarkMode ? "#D88DE1" : "#6F2382";
-        highlight = "#B146C2";
+        accentColor = isDarkMode ? QColor(216, 141, 225) : QColor(111, 35, 130);  // #D88DE1 : #6F2382
+        highlight = QColor(177, 70, 194);  // #B146C2
         break;
     default:
-        accentColor = isDarkMode ? "#4CC2FF" : "#003E92";
-        highlight = "#0078D4";
+        accentColor = isDarkMode ? QColor(76, 194, 255) : QColor(0, 62, 146);  // #4CC2FF : #003E92
+        highlight = QColor(0, 120, 212);  // #0078D4
         break;
     }
 
@@ -417,8 +417,8 @@ void GameCore::setCursor(bool customCursor) {
     QPixmap cursorPixmap(":/cursors/material.png");
     m_customCursor = QCursor(cursorPixmap, 0, 0);
 
-    // Apply to current windows
-    for (QWindow* window : QGuiApplication::topLevelWindows()) {
+    const QWindowList& windows = QGuiApplication::topLevelWindows();
+    for (QWindow* window : windows) {
         applyCustomCursorForWindow(window);
     }
 }
@@ -537,7 +537,8 @@ void GameCore::cleanupOldLogFiles(int maxFiles) {
 
 int GameCore::getCurrentMonitorAvailableHeight(QWindow* window) const {
     if (!window) {
-        for (QWindow* activeWindow : QGuiApplication::topLevelWindows()) {
+        const QWindowList& windows = QGuiApplication::topLevelWindows();
+        for (QWindow* activeWindow : windows) {
             if (activeWindow->isVisible()) {
                 window = activeWindow;
                 break;
@@ -559,7 +560,8 @@ int GameCore::getCurrentMonitorAvailableHeight(QWindow* window) const {
 
 int GameCore::getCurrentMonitorAvailableWidth(QWindow* window) const {
     if (!window) {
-        for (QWindow* activeWindow : QGuiApplication::topLevelWindows()) {
+        const QWindowList& windows = QGuiApplication::topLevelWindows();
+        for (QWindow* activeWindow : windows) {
             if (activeWindow->isVisible()) {
                 window = activeWindow;
                 break;

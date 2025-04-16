@@ -77,7 +77,7 @@ QVector<int> GameLogic::calculateNumbersFromMines(int width, int height, const Q
         numbers[mine] = -1;
 
         QSet<int> neighbors = getNeighbors(mine);
-        for (int neighbor : neighbors) {
+        for (int neighbor : std::as_const(neighbors)) {
             if (neighbor < 0 || neighbor >= width * height) {
                 continue;
             }
@@ -104,11 +104,11 @@ QVector<int> GameLogic::calculateNumbersFromMines(int width, int height, const Q
 void GameLogic::calculateNumbers() {
     m_numbers.fill(0, m_width * m_height);
 
-    for (int mine : m_mines) {
+    for (int mine : std::as_const(m_mines)) {
         m_numbers[mine] = -1;
 
         QSet<int> neighbors = getNeighbors(mine);
-        for (int neighbor : neighbors) {
+        for (int neighbor : std::as_const(neighbors)) {
             if (m_numbers[neighbor] >= 0) {
                 m_numbers[neighbor]++;
             }

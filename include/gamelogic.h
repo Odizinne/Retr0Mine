@@ -49,7 +49,10 @@ public:
 
     Q_INVOKABLE bool initializeGame(int width, int height, int mineCount);
     Q_INVOKABLE bool initializeFromSave(int width, int height, int mineCount, const QVector<int> &mines);
-    Q_INVOKABLE QVector<int> calculateNumbersFromMines(int width, int height, const QVector<int> &mines);
+    void extracted(int &width, int &height, QVector<int> &numbers,
+                   QSet<int> &neighbors);
+    Q_INVOKABLE QVector<int>
+    calculateNumbersFromMines(int width, int height, const QVector<int> &mines);
     Q_INVOKABLE QVector<int> getMines() const { return m_mines; }
     Q_INVOKABLE QVector<int> getNumbers() const { return m_numbers; }
     Q_INVOKABLE void generateBoardAsync(int firstClickX, int firstClickY);
