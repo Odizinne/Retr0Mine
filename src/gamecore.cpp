@@ -324,7 +324,8 @@ bool GameCore::setTitlebarColor(int colorMode) {
     m_titlebarColorMode = colorMode;
     bool success = true;
 
-    for (QWindow* window : QGuiApplication::topLevelWindows()) {
+    const QWindowList &windows = QGuiApplication::topLevelWindows();
+    for (QWindow* window : windows) {
         HWND hwnd = (HWND)window->winId();
         if (!hwnd) {
             success = false;
@@ -352,7 +353,7 @@ bool GameCore::setTitlebarColor(int colorMode) {
     static bool connected = false;
     if (!connected) {
         connected = true;
-        QObject::connect(qApp, &QGuiApplication::focusWindowChanged, [this](QWindow* window) {
+        QObject::connect(qApp, &QGuiApplication::focusWindowChanged, this, [this](QWindow* window) {
             if (window) {
                 HWND hwnd = (HWND)window->winId();
                 if (hwnd) {

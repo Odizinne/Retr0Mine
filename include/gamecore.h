@@ -19,7 +19,7 @@ public:
     explicit GameCore(QObject *parent = nullptr);
     ~GameCore() override;
     QString getPlatformPlugin() const {
-        return qgetenv("QT_QPA_PLATFORM").isEmpty() ?
+        return qEnvironmentVariableIsEmpty("QT_QPA_PLATFORM") ?
                    QGuiApplication::platformName() :
                    QString::fromUtf8(qgetenv("QT_QPA_PLATFORM"));
     }

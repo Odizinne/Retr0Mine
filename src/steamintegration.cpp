@@ -746,7 +746,7 @@ void SteamIntegration::OnGameLobbyJoinRequested(GameLobbyJoinRequested_t *pCallb
         STEAM_DEBUG("Already in a game, leaving first");
         leaveLobby();
 
-        QTimer::singleShot(500, [this, lobbyID]() {
+        QTimer::singleShot(500, this, [this, lobbyID]() {
             m_isConnecting = true;
             updateConnectionState(Connecting);
             emit connectingStatusChanged();
@@ -1302,7 +1302,7 @@ void SteamIntegration::tryReconnect() {
     SteamNetworking()->CloseP2PSessionWithUser(m_connectedPlayerId);
     SteamAPI_RunCallbacks();
 
-    QTimer::singleShot(500, [this]() {
+    QTimer::singleShot(500, this, [this]() {
         if (m_attemptingReconnection) {
             m_p2pInitialized = false;
             startP2PInitialization();
