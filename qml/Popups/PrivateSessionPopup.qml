@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls.Universal
-import QtQuick.Controls.impl
 import QtQuick.Layouts
 import Odizinne.Retr0Mine
 
@@ -265,10 +264,12 @@ AnimatedPopup {
 
                             NfButton {
                                 Layout.preferredWidth: height
-                                
                                 enabled: SteamIntegration.canInviteFriend &&
                                          !SteamIntegration.isLobbyReady &&
                                          !delegate.inviteDisabled
+                                icon.source: "qrc:/icons/mail.png"
+                                icon.height: 16
+                                icon.width: 16
                                 onClicked: {
                                     for (var i = 0; i < friendsList.count; i++) {
                                         friendsListView.itemAtIndex(i).inviteDisabled = true;
@@ -280,17 +281,6 @@ AnimatedPopup {
                                     inviteSentToolTipTimer.start()
                                     inviteDisableTimer.restart();
                                     invitedPersonTimer.restart();
-                                }
-
-                                IconImage {
-                                    anchors.centerIn: parent
-                                    source: "qrc:/icons/mail.png"
-                                    color: Constants.foregroundColor
-                                    opacity: parent.enabled? 1 : 0.5
-                                    sourceSize.height: 16
-                                    sourceSize.width: 16
-                                    Layout.preferredHeight: 16
-                                    Layout.preferredWidth: 16
                                 }
                             }
                         }

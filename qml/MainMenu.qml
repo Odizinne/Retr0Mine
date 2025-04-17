@@ -39,6 +39,7 @@ Drawer {
                 text: qsTr("New game")
                 enabled: (!(SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost)) && (GameState.gameStarted || GameState.gameOver)
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     GameState.difficultyChanged = false
                     GridBridge.initGame()
@@ -51,6 +52,7 @@ Drawer {
                 text: qsTr("Save game")
                 enabled: GameState.gameStarted && !GameState.gameOver && !SteamIntegration.isInMultiplayerGame
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     ComponentsContext.savePopupVisible = true
                     menuDrawer.close()
@@ -62,6 +64,7 @@ Drawer {
                 text: qsTr("Load game")
                 enabled: !SteamIntegration.isInMultiplayerGame
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     ComponentsContext.loadPopupVisible = true
                     menuDrawer.close()
@@ -73,6 +76,7 @@ Drawer {
                 text: qsTr("Hint")
                 enabled: GameState.gameStarted && !GameState.gameOver
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     GridBridge.requestHint()
                     menuDrawer.close()
@@ -90,6 +94,7 @@ Drawer {
                 Layout.fillWidth: true
                 text: qsTr("Leaderboard")
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     ComponentsContext.leaderboardPopupVisible = true
                     menuDrawer.close()
@@ -101,6 +106,7 @@ Drawer {
                 text: qsTr("Multiplayer")
                 enabled: SteamIntegration.initialized
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     ComponentsContext.privateSessionPopupVisible = true
                     menuDrawer.close()
@@ -110,7 +116,8 @@ Drawer {
             ItemDelegate {
                 Layout.fillWidth: true
                 text: qsTr("About")
-
+                Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     ComponentsContext.aboutPopupVisible = true
                     menuDrawer.close()
@@ -121,6 +128,7 @@ Drawer {
                 Layout.fillWidth: true
                 text: qsTr("Settings")
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     ComponentsContext.settingsWindowVisible = true
                     menuDrawer.close()
@@ -138,6 +146,7 @@ Drawer {
                 Layout.fillWidth: true
                 text: qsTr("Help")
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: {
                     ComponentsContext.rulesPopupVisible = true
                     menuDrawer.close()
@@ -148,6 +157,7 @@ Drawer {
                 Layout.fillWidth: true
                 text: qsTr("Exit")
                 Layout.preferredHeight: 40
+                highlighted: hovered
                 onClicked: Qt.quit()
             }
         }

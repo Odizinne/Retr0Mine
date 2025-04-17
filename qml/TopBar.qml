@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls.Universal
 import QtQuick.Layouts
-import QtQuick.Controls.impl
 import Odizinne.Retr0Mine
 
 ToolBar {
@@ -52,8 +51,11 @@ ToolBar {
                 id: menuButton
                 Layout.preferredWidth: 40
                 Layout.preferredHeight: 40
-                text: "≡"
+                Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 34
+                icon.source: "qrc:/icons/menu.png"
+                icon.height: 20
+                icon.width: 20
 
                 onClicked: {
                     ComponentsContext.mainMenuVisible = !ComponentsContext.mainMenuVisible
@@ -66,14 +68,9 @@ ToolBar {
                 Layout.preferredHeight: 40
                 Layout.preferredWidth: 40
                 onClicked: GameState.nextClickIsSignal = !GameState.nextClickIsSignal
-
-                IconImage {
-                    anchors.fill: parent
-                    source: "qrc:/icons/signal.png"
-                    color: GameState.nextClickIsSignal ? Constants.accentColor : Constants.foregroundColor
-                    sourceSize.height: 16
-                    sourceSize.width: 16
-                }
+                icon.source: "qrc:/icons/signal.png"
+                icon.width: 16
+                icon.height: 16
 
                 ToolTip {
                     visible: signalButton.hovered
@@ -205,13 +202,12 @@ ToolBar {
 
         RowLayout {
             id: rightLayout
-            anchors.fill: parent // Add this to properly fill the parent item
-            anchors.rightMargin: 0 // Ensures the layout properly aligns to the right edge
+            anchors.fill: parent
+            anchors.rightMargin: 0
 
             ToolButton {
                 id: mineButton
                 Layout.preferredHeight: 40
-                //Layout.preferredWidth: mineCounter.implicitWidth + 20
                 font.pixelSize: 18
                 font.bold: true
                 enabled: GameState.gameStarted && !GameState.gameOver

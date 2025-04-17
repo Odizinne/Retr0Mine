@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls.Universal
 import QtQuick.Layouts
-import QtQuick.Controls.impl
 import Odizinne.Retr0Mine
 
 Frame {
@@ -178,14 +177,10 @@ Frame {
             NfButton {
                 Layout.preferredHeight: 30
                 Layout.preferredWidth: 30
+                icon.source: "qrc:/icons/send.png"
+                icon.height: 15
+                icon.width: 15
                 id: sendButton
-                IconImage {
-                    anchors.fill: parent
-                    source: "qrc:/icons/send.png"
-                    color: Constants.foregroundColor
-                    sourceSize.height: 15
-                    sourceSize.width: 15
-                }
                 enabled: messageInput.text.trim() !== "" && SteamIntegration.isP2PConnected
                 onClicked: {
                     if (messageInput.text.trim() !== "") {
