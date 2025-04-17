@@ -16,6 +16,8 @@ ApplicationWindow {
     property bool isClosing: false
     property var startTime: null
 
+    header: TopBar {}
+
     onCurrentThemeChanged: {
         if (currentTheme === Universal.Light) {
             Constants.isDarkMode = false
@@ -59,23 +61,23 @@ ApplicationWindow {
 
         function onGameStateReceived(gameState) {
             if (gameState.gridSync) {
-                NetworkManager.handleMultiplayerGridSync(gameState);
+                NetworkManager.handleMultiplayerGridSync(gameState)
             }
         }
 
         function onLobbyReadyChanged() {
             if (SteamIntegration.isLobbyReady) {
                 if (SteamIntegration.isHost) {
-                    const difficultySet = GameState.difficultySettings[UserSettings.difficulty];
+                    const difficultySet = GameState.difficultySettings[UserSettings.difficulty]
 
                     const gridSyncData = {
                         gridSync: true,
                         gridSizeX: difficultySet.x,
                         gridSizeY: difficultySet.y,
                         mineCount: difficultySet.mines
-                    };
+                    }
 
-                    SteamIntegration.sendGameState(gridSyncData);
+                    SteamIntegration.sendGameState(gridSyncData)
                 }
             }
         }
@@ -88,29 +90,29 @@ ApplicationWindow {
 
         function onIsInMultiplayerGameChanged() {
             if (SteamIntegration.isInMultiplayerGame) {
-                NetworkManager.allowClientReveal = false;
-                GridBridge.initGame();
+                NetworkManager.allowClientReveal = false
+                GridBridge.initGame()
             } else {
                 if (NetworkManager.isProcessingNetworkAction) {
-                    NetworkManager.isProcessingNetworkAction = false;
+                    NetworkManager.isProcessingNetworkAction = false
                 }
-                NetworkManager.sessionRunning = false;
-                NetworkManager.mpPopupCloseButtonVisible = false;
-                ComponentsContext.privateSessionPopupVisible = false;
+                NetworkManager.sessionRunning = false
+                NetworkManager.mpPopupCloseButtonVisible = false
+                ComponentsContext.privateSessionPopupVisible = false
             }
         }
 
         function onConnectedPlayerChanged() {
             if (SteamIntegration.connectedPlayerName) {
             } else if (SteamIntegration.isInMultiplayerGame) {
-                NetworkManager.sessionRunning = false;
-                NetworkManager.mpPopupCloseButtonVisible = false;
+                NetworkManager.sessionRunning = false
+                NetworkManager.mpPopupCloseButtonVisible = false
             }
         }
 
         function onConnectionFailed(reason) {
-            ComponentsContext.mpErrorReason = reason;
-            ComponentsContext.multiplayerErrorPopupVisible = true;
+            ComponentsContext.mpErrorReason = reason
+            ComponentsContext.multiplayerErrorPopupVisible = true
         }
 
         function onNotifyConnectionLost(message) {
@@ -125,13 +127,13 @@ ApplicationWindow {
 
             if (SteamIntegration.isInMultiplayerGame && !SteamIntegration.isHost) {
                 if (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) {
-                    NetworkManager.notifyGridReady();
+                    NetworkManager.notifyGridReady()
                 }
             }
 
             if (!SteamIntegration.isInMultiplayerGame && GameState.firstRun) {
                 GameState.firstRun = false
-                root.checkInitialGameState();
+                root.checkInitialGameState()
             }
         }
     }
@@ -141,20 +143,20 @@ ApplicationWindow {
         function onCellsCreatedChanged() {
             if (GridBridge.cellsCreated === 0) {
                 if (root.startTime === null) {
-                    root.startTime = new Date();
-                    LogManager.info("Starting grid creation...");
+                    root.startTime = new Date()
+                    LogManager.info("Starting grid creation...")
                 }
             } else if (GridBridge.cellsCreated === (GameState.gridSizeX * GameState.gridSizeY)) {
                 if (root.startTime) {
-                    const endTime = new Date();
-                    const timeDiff = endTime - root.startTime;
-                    const seconds = Math.floor(timeDiff / 1000);
-                    const centiseconds = Math.floor((timeDiff % 1000) / 10);
+                    const endTime = new Date()
+                    const timeDiff = endTime - root.startTime
+                    const seconds = Math.floor(timeDiff / 1000)
+                    const centiseconds = Math.floor((timeDiff % 1000) / 10)
 
                     LogManager.info(`Grid created in ${seconds}.${centiseconds.toString().padStart(2, '0')} seconds ` +
-                                    `(${GameState.gridSizeX}x${GameState.gridSizeY}, ${GridBridge.cellsCreated} cells)`);
+                                    `(${GameState.gridSizeX}x${GameState.gridSizeY}, ${GridBridge.cellsCreated} cells)`)
 
-                    root.startTime = null;
+                    root.startTime = null
                     if (UserSettings.rumble) {
                         SteamIntegration.triggerRumble(0.8, 0.8, 0.3)
                     }
@@ -220,7 +222,7 @@ ApplicationWindow {
         function onClientGridReadyChanged() {
             if (SteamIntegration.isInMultiplayerGame && SteamIntegration.isHost) {
                 if (!NetworkManager.clientGridReady) {
-                    ComponentsContext.privateSessionPopupVisible = true;
+                    ComponentsContext.privateSessionPopupVisible = true
                 }
             }
         }
@@ -231,11 +233,11 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        LogManager.info("Application started");
+        LogManager.info("Application started")
         LogManager.info("Steam initialized: " + SteamIntegration.initialized)
 
-        root.startTime = new Date();
-        LogManager.info("Starting initial grid creation...");
+        root.startTime = new Date()
+        LogManager.info("Starting initial grid creation...")
 
         let internalSaveData = GameCore.loadGameState("internalGameState.json")
         if (internalSaveData) {
@@ -260,7 +262,7 @@ ApplicationWindow {
                 leaderboardWindow.hardWins = leaderboard.hardWins || 0
                 leaderboardWindow.retr0Wins = leaderboard.retr0Wins || 0
             } catch (e) {
-                LogManager.error("Failed to parse leaderboard data: " + e.toString());
+                LogManager.error("Failed to parse leaderboard data: " + e.toString())
             }
         }
 
@@ -349,9 +351,9 @@ ApplicationWindow {
         autoRepeat: false
         onActivated: {
             if (root.visibility === ApplicationWindow.FullScreen) {
-                root.visibility = ApplicationWindow.Windowed;
+                root.visibility = ApplicationWindow.Windowed
             } else {
-                root.visibility = ApplicationWindow.FullScreen;
+                root.visibility = ApplicationWindow.FullScreen
             }
         }
     }
@@ -405,21 +407,12 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.bottomMargin: 12
 
-        TopBar {
-            id: topBar
-            anchors {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-            }
-        }
-
         Item {
             id: contentArea
             anchors {
                 left: parent.left
                 right: parent.right
-                top: topBar.bottom
+                top: parent.top
                 bottom: parent.bottom
                 topMargin: 12
             }
@@ -434,10 +427,10 @@ ApplicationWindow {
                     leftMargin: 12
                     rightMargin: multiplayerChat.visible ? 12 : 12
                 }
-                layer.enabled: GameState.paused || ComponentsContext.mainMenuVisible
+                layer.enabled: UserSettings.blur && (GameState.paused || ComponentsContext.mainMenuVisible)
                 layer.effect: MultiEffect {
                     blurEnabled: true
-                    blur: GameState.paused || ComponentsContext.mainMenuVisible ? 1 : 0
+                    blur: UserSettings.blur && (GameState.paused || ComponentsContext.mainMenuVisible) ? 1 : 0
                     blurMultiplier: 0.3
                 }
                 contentWidth: gridContainer.width - (UserSettings.cellSpacing * 2)
@@ -661,12 +654,12 @@ ApplicationWindow {
 
     function getIdealHeight() {
         /*==========================================
-         | 35 = topBar height                      |
          | 24 = main item top + bottom margin      |
-         | 12 = topBar margin                      |
+         | 40 = topBar height                      |
          ==========================================*/
         if (visibility === ApplicationWindow.Windowed) {
-            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 40 + 24
+            // Removed the TopBar height (35) and its margin (12) from the calculation
+            let baseHeight = (GameState.cellSize * GameState.gridSizeY) - (UserSettings.cellSpacing * 2) + 24 + 40
             let availableHeight = GameCore.getCurrentMonitorAvailableHeight(root)
             return Math.min(baseHeight, availableHeight * 0.9)
         }
@@ -686,4 +679,3 @@ ApplicationWindow {
         y = Screen.height / 2 - height / 2
     }
 }
-

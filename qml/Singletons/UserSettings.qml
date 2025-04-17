@@ -79,6 +79,7 @@ Settings {
     property bool displayTimer: true
     property bool dimSatisfied: true
     property bool animations: true
+    property bool blur: true
     property bool cellFrame: true
     property bool startFullScreen: GameCore.gamescope
     property bool shakeUnifinishedNumbers: true

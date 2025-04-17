@@ -48,6 +48,25 @@ Pane {
                 Layout.preferredHeight: Constants.settingsComponentsHeight
 
                 Label {
+                    text: qsTr("Blur effects")
+                    Layout.fillWidth: true
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: blurSwitch.click()
+                    }
+                }
+                NfSwitch {
+                    id: blurSwitch
+                    checked: UserSettings.blur
+                    onCheckedChanged: UserSettings.blur = checked
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.preferredHeight: Constants.settingsComponentsHeight
+
+                Label {
                     text: qsTr("Display timer")
                     Layout.fillWidth: true
                     MouseArea {

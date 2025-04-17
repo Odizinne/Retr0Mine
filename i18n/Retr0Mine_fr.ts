@@ -488,52 +488,52 @@ Peut être imprécis</translation>
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/MainMenu.qml" line="34"/>
+        <location filename="../qml/MainMenu.qml" line="39"/>
         <source>New game</source>
         <translation>Nouvelle partie</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="46"/>
+        <location filename="../qml/MainMenu.qml" line="52"/>
         <source>Save game</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="57"/>
+        <location filename="../qml/MainMenu.qml" line="64"/>
         <source>Load game</source>
         <translation>Charger</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="68"/>
+        <location filename="../qml/MainMenu.qml" line="76"/>
         <source>Hint</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="117"/>
+        <location filename="../qml/MainMenu.qml" line="129"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="86"/>
+        <location filename="../qml/MainMenu.qml" line="95"/>
         <source>Leaderboard</source>
         <translation>Classement</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="107"/>
+        <location filename="../qml/MainMenu.qml" line="118"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="96"/>
+        <location filename="../qml/MainMenu.qml" line="106"/>
         <source>Multiplayer</source>
         <translation>Multijoueur</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="134"/>
+        <location filename="../qml/MainMenu.qml" line="147"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/MainMenu.qml" line="144"/>
+        <location filename="../qml/MainMenu.qml" line="158"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -656,12 +656,12 @@ Peut être imprécis</translation>
 <context>
     <name>MultiplayerChat</name>
     <message>
-        <location filename="../qml/MultiplayerChat.qml" line="54"/>
+        <location filename="../qml/MultiplayerChat.qml" line="53"/>
         <source>Hint reasoning will be displayed here</source>
         <translation>Des détails à propos des indices s&apos;afficheront ici</translation>
     </message>
     <message>
-        <location filename="../qml/MultiplayerChat.qml" line="170"/>
+        <location filename="../qml/MultiplayerChat.qml" line="169"/>
         <source>Type a message...</source>
         <translation>Écrire un message...</translation>
     </message>
@@ -914,67 +914,67 @@ Peut être imprécis</translation>
 <context>
     <name>PrivateSessionPopup</name>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="101"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="100"/>
         <source> is generating grid...</source>
         <translation> génère la grille...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="102"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="101"/>
         <source>Establishing connection with </source>
         <translation>Connexion en cours avec </translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="112"/>
         <source>Session in progress</source>
         <translation>Session en cours</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="112"/>
         <source>Ready</source>
         <translation>Prêt</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="112"/>
         <source>Creating cells...</source>
         <translation>Création des cellules...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="113"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="112"/>
         <source>Waiting for host</source>
         <translation>En attente de l&apos;hôte</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="133"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="132"/>
         <source>Press G or middle-click mouse while hovering a cell to signal it</source>
         <translation>Appuyez sur G ou sur le bouton central de la souris en survolant une cellule pour la signaler</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="149"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="148"/>
         <source>Invite sent</source>
         <translation>Invitation envoyée</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="184"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="183"/>
         <source>Filter...</source>
         <translation>Filtrer...</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="192"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="191"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="311"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="301"/>
         <source>Start</source>
         <translation>Lancer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="333"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="323"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="341"/>
+        <location filename="../qml/Popups/PrivateSessionPopup.qml" line="331"/>
         <source>Quit session</source>
         <translation>Quitter la session</translation>
     </message>
@@ -1259,12 +1259,12 @@ Peut être imprécis</translation>
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../qml/TopBar.qml" line="83"/>
+        <location filename="../qml/TopBar.qml" line="77"/>
         <source>Next click will signal the cell</source>
         <translation>Le prochain clic signal la cellule</translation>
     </message>
     <message>
-        <location filename="../qml/TopBar.qml" line="190"/>
+        <location filename="../qml/TopBar.qml" line="185"/>
         <source>Click to pause</source>
         <translation>Cliquer pour mettre en pause</translation>
     </message>
@@ -1278,86 +1278,91 @@ Peut être imprécis</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/VisualsPane.qml" line="51"/>
+        <source>Blur effects</source>
+        <translation>Effets de flou</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="70"/>
         <source>Display timer</source>
         <translation>Afficher le chrono</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="70"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="89"/>
         <source>Start in full screen</source>
         <translation>Plein écran au lancement</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="90"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="109"/>
         <source>Revealed cells frame</source>
         <translation>Cadre des cellules</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="108"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="127"/>
         <source>Shake partially satisfied cells</source>
         <translation>Secouer les cellules partiellement satisfaites</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="128"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="147"/>
         <source>Dim satisfied cells</source>
         <translation>Atténuer les cellules résolues</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="149"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="168"/>
         <source>Dim level</source>
         <translation>Niveau d&apos;atténuation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="165"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="184"/>
         <source>Cell density</source>
         <translation>Densité des cellules</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="183"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="202"/>
         <source>Numbers font</source>
         <translation>Police d&apos;affichage des chiffres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="202"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="221"/>
         <source>Grid reset animation</source>
         <translation>Animation de réinitialisation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="210"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="229"/>
         <source>Wave</source>
         <translation>Vague</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="211"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="230"/>
         <source>Fade</source>
         <translation>Fondu</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="212"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="231"/>
         <source>Spin</source>
         <translation>Rotation</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="240"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="259"/>
         <source>Unlocked with a secret achievement</source>
         <translation>Se débloque avec un succès caché</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="261"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="280"/>
         <source>Flag</source>
         <translation>Drapeau</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="294"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="313"/>
         <source>Unlock Trust Your Instincts achievement</source>
         <translation>Débloquer le succès &quot;Faites confiance à votre instinct&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="317"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="336"/>
         <source>Unlock Master Tactician achievement</source>
         <translation>Débloquer le succès &quot;Tacticien chevronné&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="340"/>
+        <location filename="../qml/SettingsPanes/VisualsPane.qml" line="359"/>
         <source>Unlock Minefield Legend achievement</source>
         <translation>Débloquer le succès &quot;Légende du champ de mines&quot;</translation>
     </message>
