@@ -46,7 +46,7 @@ ToolBar {
 
         RowLayout {
             id: leftLayout
-            anchors.fill: parent // Add this to properly fill the parent item
+            anchors.fill: parent
 
             ToolButton {
                 id: menuButton
@@ -57,10 +57,6 @@ ToolBar {
 
                 onClicked: {
                     ComponentsContext.mainMenuVisible = !ComponentsContext.mainMenuVisible
-                }
-
-                MainMenu {
-                    id: mainMenu
                 }
             }
 

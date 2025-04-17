@@ -357,7 +357,7 @@ bool GameCore::setTitlebarColor(int colorMode) {
             if (window) {
                 HWND hwnd = (HWND)window->winId();
                 if (hwnd) {
-                    COLORREF color = (m_titlebarColorMode == 0) ? RGB(0, 0, 0) : RGB(255, 255, 255);
+                    COLORREF color = (m_titlebarColorMode == 0) ? RGB(31, 31, 31) : RGB(230, 230, 230);
                     HRESULT hr = DwmSetWindowAttribute(hwnd, 35, &color, sizeof(color));
 
                     if (!SUCCEEDED(hr)) {

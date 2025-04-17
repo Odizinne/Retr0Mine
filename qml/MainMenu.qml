@@ -8,7 +8,7 @@ import QtQuick.Templates as T
 
 Drawer {
     id: menuDrawer
-    width: 190
+    implicitWidth: 190
     visible: ComponentsContext.mainMenuVisible
     height: parent.height
     edge: Qt.LeftEdge

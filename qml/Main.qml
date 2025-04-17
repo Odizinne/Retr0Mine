@@ -373,6 +373,10 @@ ApplicationWindow {
         }
     }
 
+    MainMenu {
+        id: mainMenu
+    }
+
     InviteReceivedPopup {
         id: inviteToast
         x: 13
