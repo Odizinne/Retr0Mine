@@ -8,7 +8,6 @@ import Odizinne.Retr0Mine
 
 Popup {
     id: control
-
     width: 180
     height: 180
     modal: true
@@ -25,16 +24,16 @@ Popup {
     enter: Transition {
         ParallelAnimation {
             NumberAnimation {
-                property: "scale";
-                from: 0.5;
-                to: 1.0;
-                duration: 200;
+                property: "scale"
+                from: 0.5
+                to: 1.0
+                duration: 200
                 easing.type: Easing.OutQuad
             }
             NumberAnimation {
-                property: "opacity";
-                from: 0.0;
-                to: 1.0;
+                property: "opacity"
+                from: 0.0
+                to: 1.0
                 duration: 150
             }
         }
@@ -43,16 +42,16 @@ Popup {
     exit: Transition {
         ParallelAnimation {
             NumberAnimation {
-                property: "scale";
-                from: 1.0;
-                to: 0.8;
-                duration: 150;
+                property: "scale"
+                from: 1.0
+                to: 0.8
+                duration: 150
                 easing.type: Easing.InQuad
             }
             NumberAnimation {
-                property: "opacity";
-                from: 1.0;
-                to: 0.0;
+                property: "opacity"
+                from: 1.0
+                to: 0.0
                 duration: 100
             }
         }
@@ -105,8 +104,22 @@ Popup {
                     var centerX = width / 2
                     var centerY = height / 2
 
-                    var startAngle = (segmentIndex * 2 * Math.PI / 4) - Math.PI / 2
-                    var endAngle = ((segmentIndex + 1) * 2 * Math.PI / 4) - Math.PI / 2
+                    // Define angles for cardinal directions
+                    var startAngle, endAngle
+
+                    if (segmentIndex === 0) { // North
+                        startAngle = -Math.PI / 4 - Math.PI / 2
+                        endAngle = Math.PI / 4 - Math.PI / 2
+                    } else if (segmentIndex === 1) { // East
+                        startAngle = -Math.PI / 4
+                        endAngle = Math.PI / 4
+                    } else if (segmentIndex === 2) { // South
+                        startAngle = -Math.PI / 4 + Math.PI / 2
+                        endAngle = Math.PI / 4 + Math.PI / 2
+                    } else { // West
+                        startAngle = -Math.PI / 4 + Math.PI
+                        endAngle = Math.PI / 4 + Math.PI
+                    }
 
                     ctx.beginPath()
                     ctx.arc(centerX, centerY, control.outerRadius, startAngle, endAngle, false)
@@ -142,7 +155,14 @@ Popup {
                     "qrc:/icons/signal.png"
                 ]
 
-                property real angle: ((index * 2 * Math.PI / 4) + ((index + 1) * 2 * Math.PI / 4)) / 2 - Math.PI / 2
+                // Cardinal positions for icons
+                property real angle: {
+                    if (index === 0) return -Math.PI / 2  // North
+                    if (index === 1) return 0             // East
+                    if (index === 2) return Math.PI / 2   // South
+                    return Math.PI                        // West
+                }
+
                 property real iconRadius: (control.innerRadius + control.outerRadius) / 2
                 x: (parent.width / 2) + iconRadius * Math.cos(angle) - width/2
                 y: (parent.height / 2) + iconRadius * Math.sin(angle) - height/2
@@ -193,10 +213,19 @@ Popup {
                 var distance = Math.sqrt(dx * dx + dy * dy)
 
                 if (distance <= control.outerRadius && distance >= control.innerRadius) {
-                    var angle = Math.atan2(dy, dx) + Math.PI / 2
-                    if (angle < 0) angle += 2 * Math.PI
+                    var angle = Math.atan2(dy, dx)
 
-                    var segment = Math.floor(angle / (2 * Math.PI / 4))
+                    // Convert angle to segment index based on cardinal directions
+                    var segment
+                    if (angle > -Math.PI/4 && angle <= Math.PI/4) {
+                        segment = 1 // East
+                    } else if (angle > Math.PI/4 && angle <= 3*Math.PI/4) {
+                        segment = 2 // South
+                    } else if (angle > 3*Math.PI/4 || angle <= -3*Math.PI/4) {
+                        segment = 3 // West
+                    } else {
+                        segment = 0 // North
+                    }
 
                     if (segment !== hoveredSegment) {
                         hoveredSegment = segment
