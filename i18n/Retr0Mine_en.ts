@@ -40,6 +40,16 @@
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="75"/>
+        <source>Radial menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="84"/>
+        <source>Hold flag click on a cell to open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="98"/>
         <source>Grid scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -298,42 +308,32 @@ board generation on large grids</source>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/GameplayPane.qml" line="87"/>
-        <source>Enable question marks</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="108"/>
-        <source>Enable green question marks</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="129"/>
         <source>Load last game on start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="150"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="108"/>
         <source>Show hint reasoning in chat</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="159"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="117"/>
         <source>Work in progress
 Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="175"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="133"/>
         <source>SteamDeck controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="180"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="138"/>
         <source>Remap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="192"/>
+        <location filename="../qml/SettingsPanes/GameplayPane.qml" line="150"/>
         <source>Haptic fedback</source>
         <translation type="unfinished"></translation>
     </message>
@@ -341,15 +341,15 @@ Can be inaccurate</source>
 <context>
     <name>GridBridge</name>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="486"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="493"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="500"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="482"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="489"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="496"/>
         <source>New flag unlocked!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Singletons/GridBridge.qml" line="510"/>
-        <location filename="../qml/Singletons/GridBridge.qml" line="516"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="506"/>
+        <location filename="../qml/Singletons/GridBridge.qml" line="512"/>
         <source>New grid animation unlocked!</source>
         <translation></translation>
     </message>
@@ -1119,12 +1119,12 @@ Can be inaccurate</source>
 <context>
     <name>ShortcutsPane</name>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="158"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="128"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="154"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="124"/>
         <source>Fullscreen</source>
         <translation></translation>
     </message>
@@ -1134,47 +1134,47 @@ Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="145"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="115"/>
         <source>Global</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="159"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="129"/>
         <source>Ctrl + Wheel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="163"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="133"/>
         <source>G / Mouse middle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="166"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="136"/>
         <source>New game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="170"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="140"/>
         <source>Save game</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="174"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="144"/>
         <source>Load game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="178"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="148"/>
         <source>Open settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="182"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="152"/>
         <source>Hint</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="162"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="132"/>
         <source>Signal a cell</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1194,17 +1194,12 @@ Can be inaccurate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="121"/>
-        <source>Green question mark</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="186"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="156"/>
         <source>Leaderboard</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="190"/>
+        <location filename="../qml/SettingsPanes/ShortcutsPane.qml" line="160"/>
         <source>Quit</source>
         <translation></translation>
     </message>
