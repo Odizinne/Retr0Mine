@@ -50,6 +50,30 @@ ApplicationWindow {
     }
 
     Connections {
+        target: CellRadialHelper
+        function onLongPressDetected(cellIndex, globalX, globalY, isFlagged, isQuestioned, isSafeQuestioned, isRevealed) {
+            var localPos = gameView.mapFromGlobal(globalX, globalY)
+
+            radialMenu.cellIndex = cellIndex
+            radialMenu.isFlagged = isFlagged
+            radialMenu.isQuestioned = isQuestioned
+            radialMenu.isSafeQuestioned = isSafeQuestioned
+            radialMenu.isRevealed = isRevealed
+
+            radialMenu.x = localPos.x - radialMenu.width/2
+            radialMenu.y = localPos.y - radialMenu.height/2
+
+            radialMenu.open()
+        }
+    }
+
+    RadialMenu {
+        id: radialMenu
+        parent: gameView
+        visible: false
+    }
+
+    Connections {
         target: SteamIntegration
 
         function onInviteReceived(name, connectData) {

@@ -31,5 +31,6 @@
         <file>signal.png</file>
         <file>menu.png</file>
         <file>logs.png</file>
+        <file>reveal.png</file>
     </qresource>
 </RCC>

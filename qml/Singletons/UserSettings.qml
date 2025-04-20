@@ -11,6 +11,7 @@ Settings {
     property bool contrastFlag: false
     property bool contrastedNumbers: false
     property real gridScale: 1
+    property bool radialMenu: true
 
     /*==========================================
      | Advanced                                |

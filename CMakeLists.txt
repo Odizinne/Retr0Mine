@@ -51,6 +51,7 @@ set(QML_FILES
     qml/GridLoadingIndicator.qml
     qml/SignalIndicator.qml
     qml/MultiplayerChat.qml
+    qml/RadialMenu.qml
     qml/Common/NfButton.qml
     qml/Common/NfRadioButton.qml
     qml/Common/NfSwitch.qml
@@ -97,6 +98,7 @@ set(QML_SINGLETONS
     qml/Singletons/SteamInputHandler.qml
     qml/Singletons/AudioEngine.qml
     qml/Singletons/LogManager.qml
+    qml/Singletons/CellRadialHelper.qml
 )
 
 set_source_files_properties(${QML_SINGLETONS}

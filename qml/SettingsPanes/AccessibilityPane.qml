@@ -72,6 +72,29 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
+                text: qsTr("Radial menu")
+                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: radialMenuSwitch.click()
+                }
+            }
+
+            InfoIcon {
+                tooltipText: qsTr("Hold flag click on a cell to open")
+            }
+
+            NfSwitch {
+                id: radialMenuSwitch
+                checked: UserSettings.radialMenu
+                onCheckedChanged: UserSettings.radialMenu = checked
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: Constants.settingsComponentsHeight
+            Label {
                 text: qsTr("Grid scale")
                 Layout.fillWidth: true
             }

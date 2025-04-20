@@ -31,6 +31,31 @@ Item {
     property bool animatingQuestion: false
     property bool animatingSafeQuestion: false
 
+    property bool longPressInProgress: false
+    property bool ignoreNextClick: false
+
+    Timer {
+        id: longPressTimer
+        interval: 750
+        repeat: false
+        onTriggered: {
+            cellItem.longPressInProgress = true
+            cellItem.ignoreNextClick = true
+
+            var cellCenterPos = cellButton.mapToGlobal(cellButton.width/2, cellButton.height/2)
+
+            CellRadialHelper.longPressDetected(
+                cellItem.index,
+                cellCenterPos.x,
+                cellCenterPos.y,
+                cellItem.flagged,
+                cellItem.questioned,
+                cellItem.safeQuestioned,
+                cellItem.revealed
+            )
+        }
+    }
+
     Connections {
         target: GameState
         function onGameOverChanged() {
@@ -542,6 +567,11 @@ Item {
             property bool isHovered: false
 
             function handleCellClick(mouse) {
+                if (cellItem.ignoreNextClick) {
+                    cellItem.ignoreNextClick = false
+                    return
+                }
+
                 if (mouse.button === Qt.MiddleButton && !pingCooldown.running) {
                     NetworkManager.sendPing(cellItem.index)
                     pingCooldown.start()
@@ -604,6 +634,20 @@ Item {
             }
 
             onClicked: (mouse) => handleCellClick(mouse)
+
+            onPressed: function(mouse) {
+                if (GameState.gameOver || !GameState.gameStarted) return
+                var isFlagButton = UserSettings.invertLRClick ?
+                                  (mouse.button === Qt.LeftButton) :
+                                  (mouse.button === Qt.RightButton)
+                if (isFlagButton && !cellItem.revealed && UserSettings.radialMenu) {
+                    longPressTimer.start()
+                }
+            }
+
+            onReleased: {
+                longPressTimer.stop()
+            }
         }
 
         Connections {
