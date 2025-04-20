@@ -111,36 +111,6 @@ Pane {
                 }
             }
 
-            Frame {
-                Layout.fillWidth: true
-                RowLayout {
-                    enabled: !GameCore.gamescope
-                    anchors.fill: parent
-                    Layout.preferredHeight: Constants.settingsComponentsHeight
-                    Label {
-                        text: qsTr("Green question mark")
-                        Layout.fillWidth: true
-                    }
-                    TextField {
-                        id: safeQuestionmarkKeyField
-                        text: UserSettings.safeQuestionedShortcut
-                        Layout.rightMargin: 5
-                        maximumLength: 1
-                        inputMethodHints: Qt.ImhUppercaseOnly
-                        implicitWidth: 50
-                        horizontalAlignment: TextInput.AlignHCenter
-                        font.pixelSize: 16
-                        onEditingFinished: {
-                            if (text.length > 0) {
-                                UserSettings.safeQuestionedShortcut = text.toUpperCase()
-                            } else {
-                                text = UserSettings.safeQuestionedShortcut
-                            }
-                        }
-                    }
-                }
-            }
-
             Label {
                 text: qsTr("Global")
                 font.bold: true

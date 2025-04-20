@@ -40,12 +40,6 @@ Settings {
     property bool loadLastGame: false
     property bool invertLRClick: false
     property bool autoreveal: true
-    property bool enableQuestionMarks: true
-    property bool enableSafeQuestionMarks: false
-    property string revealShortcut: "Q"
-    property string flagShortcut: "W"
-    property string questionedShortcut: "E"
-    property string safeQuestionedShortcut: "R"
     property bool rumble: true
 
     /*==========================================
@@ -69,6 +63,13 @@ Settings {
     property real remoteVolume: 0.7
     property real newChatMessageVolume: 1
     property int soundPackIndex: 2
+
+    /*==========================================
+     | Shortcuts                               |
+     ==========================================*/
+    property string revealShortcut: "Q"
+    property string flagShortcut: "W"
+    property string questionedShortcut: "E"
 
     /*==========================================
      | Visual                                  |

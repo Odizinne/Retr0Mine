@@ -604,10 +604,6 @@ QtObject {
             handleMultiplayerSetQuestionedAction(cellIndex, true)
             break
 
-        case "setSafeQuestioned":
-            handleMultiplayerSetSafeQuestionedAction(cellIndex, true)
-            break
-
         case "clearCell":
             handleMultiplayerClearCellAction(cellIndex, true)
             break
@@ -751,14 +747,6 @@ QtObject {
         case "setQuestioned":
             try {
                 GridBridge.performSetQuestioned(cellIndex)
-            } catch (e) {
-                LogManager.error("Error processing flag action: " + e)
-            }
-            break
-
-        case "setSafeQuestioned":
-            try {
-                GridBridge.performSetSafeQuestioned(cellIndex)
             } catch (e) {
                 LogManager.error("Error processing flag action: " + e)
             }
@@ -1019,25 +1007,6 @@ QtObject {
             }
         } else {
             SteamIntegration.sendGameAction("setQuestioned", index)
-        }
-
-        return true
-    }
-
-    function handleMultiplayerSetSafeQuestionedAction(index, isClientRequest = false) {
-        if (!SteamIntegration.isInMultiplayerGame) {
-            return false
-        }
-
-        if (SteamIntegration.isHost) {
-            if (checkCellOwnership(index, isClientRequest)) {
-                GridBridge.performSetSafeQuestioned(index)
-                sendCellUpdateToClient(index, "setSafeQuestioned")
-            } else if (isClientRequest) {
-                SteamIntegration.sendGameAction("cellAccessDenied", index)
-            }
-        } else {
-            SteamIntegration.sendGameAction("setSafeQuestioned", index)
         }
 
         return true

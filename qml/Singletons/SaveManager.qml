@@ -100,7 +100,6 @@ Item {
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
-                cell.safeQuestioned = false
             }
         }
 
@@ -123,15 +122,6 @@ Item {
                 const cell = GridBridge.getCell(index)
                 if (cell) {
                     cell.questioned = true
-                }
-            })
-        }
-
-        if (data.gameState.safeQuestionedCells) {
-            data.gameState.safeQuestionedCells.forEach(index => {
-                const cell = GridBridge.getCell(index)
-                if (cell) {
-                    cell.safeQuestioned = true
                 }
             })
         }
@@ -159,7 +149,6 @@ Item {
                 revealedCells: [],
                 flaggedCells: [],
                 questionedCells: [],
-                safeQuestionedCells: [],
                 centiseconds: GameTimer.centiseconds,
                 gameOver: GameState.gameOver,
                 gameStarted: GameState.gameStarted,
@@ -175,7 +164,6 @@ Item {
             if (cell.revealed) saveData.gameState.revealedCells.push(i)
             if (cell.flagged) saveData.gameState.flaggedCells.push(i)
             if (cell.questioned) saveData.gameState.questionedCells.push(i)
-            if (cell.safeQuestioned) saveData.gameState.safeQuestionedCells.push(i)
         }
 
         GameCore.saveGameState(JSON.stringify(saveData), filename)

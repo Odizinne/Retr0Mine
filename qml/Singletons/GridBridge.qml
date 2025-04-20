@@ -295,9 +295,6 @@ Item {
             if (cell.questioned) {
                 cell.questioned = false
             }
-            if (cell.safeQuestioned) {
-                cell.safeQuestioned = false
-            }
         }
 
         GameState.revealedCount += cellsRevealed
@@ -365,7 +362,6 @@ Item {
                 cell.revealed = false
                 cell.flagged = false
                 cell.questioned = false
-                cell.safeQuestioned = false
                 cell.isBombClicked = false
                 cell.localPlayerOwns = false
             }
@@ -541,7 +537,6 @@ Item {
                     GameState.flaggedCount--
                 }
                 cell.questioned = false
-                cell.safeQuestioned = false
                 cell.flagged = false
             }
         }
@@ -564,7 +559,6 @@ Item {
             if (!cell.revealed) {
                 if (!cell.flagged) {
                     cell.questioned = false
-                    cell.safeQuestioned = false
                     cell.flagged = true
                     GameState.flaggedCount++
                 } else {
@@ -595,39 +589,9 @@ Item {
                         GameState.flaggedCount--
                     }
                     cell.questioned = true
-                    cell.safeQuestioned = false
                     cell.flagged = false
                 } else {
                     cell.questioned = false
-                }
-            }
-        }
-    }
-
-    function setSafeQuestioned(index) {
-        registerPlayerAction()
-        if (NetworkManager.handleMultiplayerSetSafeQuestionedAction(index)) {
-            return
-        }
-
-        performSetSafeQuestioned(index)
-    }
-
-    function performSetSafeQuestioned(index) {
-        if (GameState.gameOver) return false
-
-        const cell = getCell(index)
-        if (cell) {
-            if (!cell.revealed) {
-                if (!cell.safeQuestioned) {
-                    if (cell.flagged) {
-                        GameState.flaggedCount--
-                    }
-                    cell.questioned = false
-                    cell.safeQuestioned = true
-                    cell.flagged = false
-                } else {
-                    cell.safeQuestioned = false
                 }
             }
         }
@@ -802,7 +766,7 @@ Item {
                 const adjacentCell = getCell(adjacentIndex)
                 if (!adjacentCell) continue
 
-                if (adjacentCell.questioned || adjacentCell.safeQuestioned) {
+                if (adjacentCell.questioned) {
                     hasQuestionMark = true
                     break
                 }

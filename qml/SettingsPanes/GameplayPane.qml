@@ -80,48 +80,6 @@ Pane {
             }
 
             RowLayout {
-                enabled: !SteamIntegration.isInMultiplayerGame
-                Layout.fillWidth: true
-                Layout.preferredHeight: Constants.settingsComponentsHeight
-                Label {
-                    text: qsTr("Enable question marks")
-                    Layout.fillWidth: true
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: questionMarksSwitch.click()
-                    }
-                }
-                NfSwitch {
-                    id: questionMarksSwitch
-                    checked: UserSettings.enableQuestionMarks
-                    onCheckedChanged: {
-                        UserSettings.enableQuestionMarks = checked
-                    }
-                }
-            }
-
-            RowLayout {
-                enabled: !SteamIntegration.isInMultiplayerGame
-                Layout.fillWidth: true
-                Layout.preferredHeight: Constants.settingsComponentsHeight
-                Label {
-                    text: qsTr("Enable green question marks")
-                    Layout.fillWidth: true
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: safeQuestionMarksSwitch.click()
-                    }
-                }
-                NfSwitch {
-                    id: safeQuestionMarksSwitch
-                    checked: UserSettings.enableSafeQuestionMarks
-                    onCheckedChanged: {
-                        UserSettings.enableSafeQuestionMarks = checked
-                    }
-                }
-            }
-
-            RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredHeight: Constants.settingsComponentsHeight
 

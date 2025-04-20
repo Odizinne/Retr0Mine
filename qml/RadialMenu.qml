@@ -61,7 +61,6 @@ Popup {
     property int cellIndex: -1
     property bool isFlagged: false
     property bool isQuestioned: false
-    property bool isSafeQuestioned: false
     property bool isRevealed: false
 
     property real innerRadius: 30
@@ -73,7 +72,7 @@ Popup {
         anchors.fill: parent
 
         Repeater {
-            model: 5
+            model: 4
 
             Canvas {
                 id: segmentCanvas
@@ -82,8 +81,7 @@ Popup {
                 property int segmentIndex: index
                 property bool isSelected: segmentIndex === menuMouseArea.hoveredSegment
                 property bool isActive: (segmentIndex === 1 && control.isFlagged) ||
-                                       (segmentIndex === 2 && control.isQuestioned) ||
-                                       (segmentIndex === 3 && control.isSafeQuestioned)
+                                       (segmentIndex === 2 && control.isQuestioned)
 
                 renderTarget: Canvas.FramebufferObject
                 renderStrategy: Canvas.Cooperative
@@ -107,8 +105,8 @@ Popup {
                     var centerX = width / 2
                     var centerY = height / 2
 
-                    var startAngle = (segmentIndex * 2 * Math.PI / 5) - Math.PI / 2
-                    var endAngle = ((segmentIndex + 1) * 2 * Math.PI / 5) - Math.PI / 2
+                    var startAngle = (segmentIndex * 2 * Math.PI / 4) - Math.PI / 2
+                    var endAngle = ((segmentIndex + 1) * 2 * Math.PI / 4) - Math.PI / 2
 
                     ctx.beginPath()
                     ctx.arc(centerX, centerY, control.outerRadius, startAngle, endAngle, false)
@@ -130,7 +128,7 @@ Popup {
         }
 
         Repeater {
-            model: 5
+            model: 4
 
             IconImage {
                 id: icon
@@ -141,11 +139,10 @@ Popup {
                     "qrc:/icons/reveal.png",
                     GameState.flagPath,
                     "qrc:/icons/questionmark.png",
-                    "qrc:/icons/questionmark.png",
                     "qrc:/icons/signal.png"
                 ]
 
-                property real angle: ((index * 2 * Math.PI / 5) + ((index + 1) * 2 * Math.PI / 5)) / 2 - Math.PI / 2
+                property real angle: ((index * 2 * Math.PI / 4) + ((index + 1) * 2 * Math.PI / 4)) / 2 - Math.PI / 2
                 property real iconRadius: (control.innerRadius + control.outerRadius) / 2
                 x: (parent.width / 2) + iconRadius * Math.cos(angle) - width/2
                 y: (parent.height / 2) + iconRadius * Math.sin(angle) - height/2
@@ -162,10 +159,6 @@ Popup {
                 }
 
                 color: {
-                    if (index === 3) {
-                        return "green"
-                    }
-
                     if ((index === 1 && control.isFlagged) ||
                         (index === 2 && control.isQuestioned)) {
                         return Constants.accentColor
@@ -203,7 +196,7 @@ Popup {
                     var angle = Math.atan2(dy, dx) + Math.PI / 2
                     if (angle < 0) angle += 2 * Math.PI
 
-                    var segment = Math.floor(angle / (2 * Math.PI / 5))
+                    var segment = Math.floor(angle / (2 * Math.PI / 4))
 
                     if (segment !== hoveredSegment) {
                         hoveredSegment = segment
@@ -227,7 +220,7 @@ Popup {
                 var distance = Math.sqrt(dx * dx + dy * dy)
 
                 if (distance <= control.outerRadius && distance >= control.innerRadius && hoveredSegment >= 0) {
-                    var action = ["reveal", "flag", "question", "safeQuestion", "signal"][hoveredSegment]
+                    var action = ["reveal", "flag", "question", "signal"][hoveredSegment]
                     control.executeAction(action)
                     control.close()
                 } else if (distance < control.innerRadius) {
@@ -248,12 +241,7 @@ Popup {
                 GridBridge.setFlag(cellIndex)
                 break
             case "question":
-                if (UserSettings.enableQuestionMarks)
-                    GridBridge.setQuestioned(cellIndex)
-                break
-            case "safeQuestion":
-                if (UserSettings.enableSafeQuestionMarks)
-                    GridBridge.setSafeQuestioned(cellIndex)
+                GridBridge.setQuestioned(cellIndex)
                 break
             case "signal":
                 NetworkManager.sendPing(cellIndex)

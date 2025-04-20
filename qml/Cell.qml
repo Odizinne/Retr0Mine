@@ -17,7 +17,6 @@ Item {
     property bool revealed: false
     property bool flagged: false
     property bool questioned: false
-    property bool safeQuestioned: false
     property bool isBombClicked: false
     property bool animatingReveal: false
     property bool shouldBeFlat: false
@@ -29,7 +28,6 @@ Item {
     property bool shakeConditionsMet: false
     property bool animatingFlag: false
     property bool animatingQuestion: false
-    property bool animatingSafeQuestion: false
 
     property bool longPressInProgress: false
     property bool ignoreNextClick: false
@@ -50,7 +48,6 @@ Item {
                 cellCenterPos.y,
                 cellItem.flagged,
                 cellItem.questioned,
-                cellItem.safeQuestioned,
                 cellItem.revealed
             )
         }
@@ -60,21 +57,6 @@ Item {
         target: GameState
         function onGameOverChanged() {
             pingCooldown.stop()
-        }
-    }
-
-    Connections {
-        target: UserSettings
-        function onEnableQuestionMarksChanged() {
-            if (!UserSettings.enableQuestionMarks) {
-                cellItem.questioned = false
-            }
-        }
-
-        function onEnableSafeQuestionMarksChanged() {
-            if (!UserSettings.enableQuestionMarks) {
-                cellItem.safeQuestioned = false
-            }
         }
     }
 
@@ -153,18 +135,6 @@ Item {
         }
     }
 
-    onSafeQuestionedChanged: {
-        if (safeQuestioned) {
-            animatingSafeQuestion = true;
-            safeQuestionAnimTimer.restart();
-        } else if (UserSettings.animations) {
-            safeQuestionFadeOutTimer.restart();
-        } else {
-            animatingSafeQuestion = false;
-        }
-    }
-
-    // Animation timers
     Timer {
         id: flagAnimTimer
         interval: 400
@@ -203,26 +173,6 @@ Item {
         repeat: false
         onTriggered: {
             cellItem.animatingQuestion = false;
-        }
-    }
-
-    Timer {
-        id: safeQuestionAnimTimer
-        interval: 400
-        repeat: false
-        onTriggered: {
-            if (!cellItem.safeQuestioned) {
-                cellItem.animatingSafeQuestion = false;
-            }
-        }
-    }
-
-    Timer {
-        id: safeQuestionFadeOutTimer
-        interval: 350
-        repeat: false
-        onTriggered: {
-            cellItem.animatingSafeQuestion = false;
         }
     }
 
@@ -506,44 +456,6 @@ Item {
         }
 
         Loader {
-            id: safeQuestionLoader
-            anchors.centerIn: parent
-            active: cellItem.safeQuestioned || cellItem.animatingSafeQuestion
-            sourceComponent: IconImage {
-                id: safeQuestionImage
-                source: "qrc:/icons/questionmark.png"
-                color: "green"
-                width: (cellItem.width - (UserSettings.cellSpacing * 2)) / 2.1
-                height: (cellItem.height - (UserSettings.cellSpacing * 2)) / 2.1
-                sourceSize.width: (cellItem.width - 4) / 2.1
-                sourceSize.height: (cellItem.height - 4) / 2.1
-                opacity: 0
-                scale: 1.3
-                Component.onCompleted: {
-                    // Create new bindings that match the original ones
-                    opacity = Qt.binding(function() { return cellItem.safeQuestioned ? 1 : 0; })
-                    scale = Qt.binding(function() { return cellItem.safeQuestioned ? 1 : 1.3; })
-                }
-
-                Behavior on opacity {
-                    enabled: UserSettings.animations && !GameState.noAnimReset
-                    OpacityAnimator {
-                        duration: 300
-                        easing.type: Easing.OutQuad
-                    }
-                }
-
-                Behavior on scale {
-                    enabled: UserSettings.animations && !GameState.noAnimReset
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.OutBack
-                    }
-                }
-            }
-        }
-
-        Loader {
             id: hintLoader
             anchors.centerIn: parent
             active: false
@@ -608,17 +520,15 @@ Item {
                     return;
                 }
 
-                const canReveal = !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned;
+                const canReveal = !cellItem.flagged && !cellItem.questioned
 
                 if (isRevealClick && canReveal) {
                     GridBridge.reveal(cellItem.index, SteamIntegration.playerName);
                 } else if (isFlagClick) {
-                    if (!cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned) {
+                    if (!cellItem.flagged && !cellItem.questioned) {
                         GridBridge.setFlag(cellItem.index)
-                    } else if (cellItem.flagged && UserSettings.enableQuestionMarks) {
+                    } else if (cellItem.flagged) {
                         GridBridge.setQuestioned(cellItem.index)
-                    } else if ((cellItem.questioned && UserSettings.enableSafeQuestionMarks) || (cellItem.flagged && !UserSettings.enableQuestionMarks)) {
-                        GridBridge.setSafeQuestioned(cellItem.index)
                     } else {
                         GridBridge.clearCell(cellItem.index)
                     }
@@ -691,7 +601,7 @@ Item {
         Shortcut {
             sequence: UserSettings.questionedShortcut
             autoRepeat: false
-            enabled: cellMouseArea.isHovered && UserSettings.enableQuestionMarks
+            enabled: cellMouseArea.isHovered
             onActivated: {
                 if (!GameState.gameStarted) {
                     GridBridge.reveal(cellItem.index, "firstClick")
@@ -700,24 +610,6 @@ Item {
 
                 if (!cellItem.revealed) {
                     GridBridge.setQuestioned(cellItem.index);
-                } else {
-                    GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
-                }
-            }
-        }
-
-        Shortcut {
-            sequence: UserSettings.safeQuestionedShortcut
-            autoRepeat: false
-            enabled: cellMouseArea.isHovered && UserSettings.enableSafeQuestionMarks
-            onActivated: {
-                if (!GameState.gameStarted) {
-                    GridBridge.reveal(cellItem.index, "firstClick")
-                    return
-                }
-
-                if (!cellItem.revealed) {
-                    GridBridge.setSafeQuestioned(cellItem.index);
                 } else {
                     GridBridge.revealConnectedCells(cellItem.index, SteamIntegration.playerName);
                 }
@@ -739,7 +631,7 @@ Item {
                     return;
                 }
 
-                const canReveal = !cellItem.flagged && !cellItem.questioned && !cellItem.safeQuestioned;
+                const canReveal = !cellItem.flagged && !cellItem.questioned;
 
                 if (canReveal) {
                     GridBridge.reveal(cellItem.index, SteamIntegration.playerName);

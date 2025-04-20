@@ -51,13 +51,12 @@ ApplicationWindow {
 
     Connections {
         target: CellRadialHelper
-        function onLongPressDetected(cellIndex, globalX, globalY, isFlagged, isQuestioned, isSafeQuestioned, isRevealed) {
+        function onLongPressDetected(cellIndex, globalX, globalY, isFlagged, isQuestioned, isRevealed) {
             var localPos = gameView.mapFromGlobal(globalX, globalY)
 
             radialMenu.cellIndex = cellIndex
             radialMenu.isFlagged = isFlagged
             radialMenu.isQuestioned = isQuestioned
-            radialMenu.isSafeQuestioned = isSafeQuestioned
             radialMenu.isRevealed = isRevealed
 
             radialMenu.x = localPos.x - radialMenu.width/2
