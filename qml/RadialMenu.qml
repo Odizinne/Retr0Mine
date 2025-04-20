@@ -64,7 +64,7 @@ Popup {
     property bool isRevealed: false
 
     property real innerRadius: 30
-    property real outerRadius: width / 2 - 10
+    property real outerRadius: width / 2 - 20
 
     background: Item { }
 
@@ -148,8 +148,8 @@ Popup {
                 y: (parent.height / 2) + iconRadius * Math.sin(angle) - height/2
 
                 source: iconSources[index]
-                sourceSize.width: 26
-                sourceSize.height: 26
+                sourceSize.width: 20
+                sourceSize.height: 20
 
                 NumberAnimation on opacity {
                     from: 0
