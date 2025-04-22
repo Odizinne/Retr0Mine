@@ -50,6 +50,11 @@
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="98"/>
+        <source>Delay before opening</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="121"/>
         <source>Grid scale</source>
         <translation type="unfinished"></translation>
     </message>

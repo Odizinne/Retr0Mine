@@ -34,7 +34,7 @@ Item {
 
     Timer {
         id: longPressTimer
-        interval: 750
+        interval: UserSettings.radialDelay
         repeat: false
         onTriggered: {
             cellItem.longPressInProgress = true

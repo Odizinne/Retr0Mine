@@ -12,6 +12,7 @@ Settings {
     property bool contrastedNumbers: false
     property real gridScale: 1
     property bool radialMenu: true
+    property real radialDelay: 1000
 
     /*==========================================
      | Advanced                                |
