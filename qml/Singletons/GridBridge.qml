@@ -297,9 +297,18 @@ Item {
             }
         }
 
+        if (SteamIntegration.initialized && !SteamIntegration.isAchievementUnlocked("ACH_7ON7")) {
+            const date = new Date();
+            const day = date.getDate();
+            if (day === 7 && GameState.numbers[index] === 7) {
+                SteamIntegration.unlockAchievement("ACH_7ON7")
+            }
+        }
+
         GameState.revealedCount += cellsRevealed
 
         attributeRevealedCells(cellsRevealed, playerIdentifier)
+
         if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
             checkWin()
         }
