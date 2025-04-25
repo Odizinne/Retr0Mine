@@ -72,7 +72,7 @@ Pane {
             Layout.fillWidth: true
             Layout.preferredHeight: Constants.settingsComponentsHeight
             Label {
-                text: qsTr("Radial menu")
+                text: qsTr("Floating menu")
                 Layout.fillWidth: true
                 MouseArea {
                     anchors.fill: parent

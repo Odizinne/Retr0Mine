@@ -40,7 +40,7 @@
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="75"/>
-        <source>Radial menu</source>
+        <source>Floating menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

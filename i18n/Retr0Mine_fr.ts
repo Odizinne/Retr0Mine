@@ -40,8 +40,8 @@
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="75"/>
-        <source>Radial menu</source>
-        <translation>Menu radial</translation>
+        <source>Floating menu</source>
+        <translation>Menu flottant</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPanes/AccessibilityPane.qml" line="84"/>

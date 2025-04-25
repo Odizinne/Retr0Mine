@@ -51,7 +51,7 @@ set(QML_FILES
     qml/GridLoadingIndicator.qml
     qml/SignalIndicator.qml
     qml/MultiplayerChat.qml
-    qml/RadialMenu.qml
+    qml/OverlayMenu.qml
     qml/Common/NfButton.qml
     qml/Common/NfRadioButton.qml
     qml/Common/NfSwitch.qml

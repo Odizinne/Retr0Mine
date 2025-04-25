@@ -54,20 +54,20 @@ ApplicationWindow {
         function onLongPressDetected(cellIndex, globalX, globalY, isFlagged, isQuestioned, isRevealed) {
             var localPos = gameView.mapFromGlobal(globalX, globalY)
 
-            radialMenu.cellIndex = cellIndex
-            radialMenu.isFlagged = isFlagged
-            radialMenu.isQuestioned = isQuestioned
-            radialMenu.isRevealed = isRevealed
+            overlayMenu.cellIndex = cellIndex
+            overlayMenu.isFlagged = isFlagged
+            overlayMenu.isQuestioned = isQuestioned
+            overlayMenu.isRevealed = isRevealed
 
-            radialMenu.x = localPos.x - radialMenu.width/2
-            radialMenu.y = localPos.y - radialMenu.height/2
+            overlayMenu.x = localPos.x - overlayMenu.width/2
+            overlayMenu.y = localPos.y - overlayMenu.height/2
 
-            radialMenu.open()
+            overlayMenu.open()
         }
     }
 
-    RadialMenu {
-        id: radialMenu
+    OverlayMenu {
+        id: overlayMenu
         parent: gameView
         visible: false
     }
