@@ -50,29 +50,6 @@ ApplicationWindow {
     }
 
     Connections {
-        target: CellRadialHelper
-        function onLongPressDetected(cellIndex, globalX, globalY, isFlagged, isQuestioned, isRevealed) {
-            var localPos = gameView.mapFromGlobal(globalX, globalY)
-
-            overlayMenu.cellIndex = cellIndex
-            overlayMenu.isFlagged = isFlagged
-            overlayMenu.isQuestioned = isQuestioned
-            overlayMenu.isRevealed = isRevealed
-
-            overlayMenu.x = localPos.x - overlayMenu.width/2
-            overlayMenu.y = localPos.y - overlayMenu.height/2
-
-            overlayMenu.open()
-        }
-    }
-
-    OverlayMenu {
-        id: overlayMenu
-        parent: gameView
-        visible: false
-    }
-
-    Connections {
         target: SteamIntegration
 
         function onInviteReceived(name, connectData) {
