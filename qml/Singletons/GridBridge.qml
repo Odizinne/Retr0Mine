@@ -312,6 +312,7 @@ Item {
         if (!SteamIntegration.isInMultiplayerGame || SteamIntegration.isHost) {
             checkWin()
         }
+
         if (!GameState.gameOver) {
             if (SteamIntegration.isInMultiplayerGame) {
                 if (playerIdentifier !== SteamIntegration.playerName && playerIdentifier !== "firstClick") {

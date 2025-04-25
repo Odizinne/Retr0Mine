@@ -231,6 +231,7 @@ ToolBar {
                 icon.source: "qrc:/icons/chat.png"
                 icon.width: 16
                 icon.height: 16
+                icon.color: hasNewMessages ? Constants.accentColor : Constants.foregroundColor
                 SequentialAnimation {
                     id: notificationAnimation
                     running: chatButton.hasNewMessages && !ComponentsContext.multiplayerChatVisible
